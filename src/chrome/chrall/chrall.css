@@ -29,13 +29,13 @@ div.chrall > span[status=TP], div.chrall > a[status=INVI] {
 div.chrall > a[status=MORT] {
 	text-decoration:line-through;
 }
-span.monster {
-	color: brown;
+a.ch_monster, a.ch_monster:hover {
+	color: brown !important;
 }
-span.troll {
-	color: blue;
+a.ch_troll, a.ch_troll:hover {
+	color: blue  !important;
 }
-span.player {
+span.ch_player {
 	color: green;
 	font-weight: bold;
 }

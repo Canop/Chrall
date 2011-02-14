@@ -20,18 +20,18 @@ function Chrall_makeGridHtml() {
 			var hdist = playerLocation.hdist(x, y)
 			html += "<td class=d"+(hdist%2)+" title='case X="+x+" Y="+y+" \nDistance horizontale: "+hdist+"'>";
 			if (x==playerLocation.x && y==playerLocation.y) {
-				html += "<span class=player>"+playerLocation.z+":Vous êtes ici</span><br>"
+				html += "<span class=ch_player>"+playerLocation.z+":Vous êtes ici</span><br>"
 			}
 			for (var i=0; i<trollsInView.length; i++) {
 				var t = trollsInView[i];
 				if (t.x==x && t.y==y) {
-					html += "<span class=troll>"+t.z+":"+t.name+"</span><br>";
+					html += "<a class=ch_troll href=\"javascript:EPV("+t.id+");\">"+t.z+": "+t.name+"</a><br>";
 				}
 			}
 			for (var i=0; i<monstersInView.length; i++) {
 				var m = monstersInView[i];
 				if (m.x==x && m.y==y) {
-					html += "<span class=monster>"+m.z+":"+m.name+"</span><br>";
+					html += "<a class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\">"+m.z+": "+m.name+"</a><br>";
 				}
 			}
 			html += "</td>";
