@@ -18,7 +18,7 @@ var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
 var playerLocation = null; // position du joueur : instance de Point
 var playerProfile = new TrollProfile();
 
-
+var didSomething = true; 
 if (pageName=="Play_vue.php") { 
 	//> on vire la frise latérale
 	$($("td[width=55]")).remove();
@@ -81,5 +81,10 @@ if (pageName=="Play_vue.php") {
 		//> on analyse la vue
 	Chrall_analyseProfile();
 
+} else {
+	didSomething = false;
 }
 
+//> on signale à google analytics qu'on est passé par là
+//   Mais uniquement si on est réellement intervenu
+if (didSomething) _gaq.push(['_trackPageview']);
