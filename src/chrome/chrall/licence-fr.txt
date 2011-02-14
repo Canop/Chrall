@@ -6,7 +6,7 @@ Il est à noter que les librairies utilisées peuvent être soumises à d'autres
 
 - vous avez le droit d'utiliser ce code source pour construire ce que vous voulez, à des fins commerciales ou non.
 - vous avez le droit de conserver secret l'usage de ce code source et de ne pas inclure cette licence (de toutes façons je suis sûr que vous n'iriez pas la montrer à votre boss).
-- vous avez le droit d'utiliser tout ça pour des usages critiques tels que pilotage de centrale nucléaire ou de fusée intergalactique ou bien programmation de nano-robots pour réguler le rythme cardiaque mais j'avoue que je suis un peu dubitatif.
+- vous avez le droit d'utiliser tout ça pour des usages critiques tels que pilotage de centrale nucléaire ou de fusée intergalactique ou bien programmation de nano-robots pour réguler le rythme cardiaque mais j'avoue que je suis dubitatif.
 - vous avez le droit d'exploiter ce code pour faciliter volontairement la réelection de Sarkozy mais dans ce cas je vous octroie en prime celui de mourir dans d'atroces souffrances.
 
 C'est tout pour aujourd'hui, vous pouvez sortir.
