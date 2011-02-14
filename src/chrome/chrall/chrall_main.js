@@ -3,6 +3,7 @@
  * Il contient aussi les variables globales.
  */
 
+
 var monstersInView = new Array();
 var trollsInView = new Array();
 var placesInView = new Array();
@@ -13,9 +14,13 @@ var cenotaphsInView = new Array();
 var splitedPathname = document.location.pathname.split('/');
 var pageName = splitedPathname[splitedPathname.length-1];
 
+
 // étendue de la vue
 var viewIsEmpty=true;
 var xmin, xmax, ymin, ymax, zmin, zmax;
+
+// position du joueur
+var playerLocation = null; // instance de Point
 
 
 if (pageName=="Play_vue.php") { 
@@ -83,19 +88,3 @@ if (pageName=="Play_vue.php") {
 	});
 }
 
-/*
-
-TODO
-* virer la décoration latérale
-* couleurs concentriques
-
-
-
-
-
-
-
-
-
-
-*/

@@ -1,8 +1,11 @@
 
-function Position(x, y, z) {
+function Point(x, y, z) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
+}
+Point.prototype.hdist = function(x, y) { // distance horizontale
+	return Math.max(Math.abs(this.x-x), Math.abs(this.y-y));
 }
 
 
@@ -13,13 +16,10 @@ function Position(x, y, z) {
  *  - id
  *  - fullName
  *  - name
- *  - x
- *  - y
- *  - z
  */
 function Thing() {
 }
-
+Thing.prototype = new Point(); // oui, je sais, c'est pas bien beau du point de vue sémantique...
 
 /**
  * Monster hérite de Thing.

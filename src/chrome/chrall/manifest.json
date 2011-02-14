@@ -2,6 +2,7 @@
 	"name": "Chrall",
 	"version": "0.1",
 	"description": "Chrome Hall Extension, by Canopée",
+	"background_page": "background.html",
 	"content_scripts": [
 		{
 			"matches": ["http://games.mountyhall.com/*"],
@@ -13,6 +14,7 @@
 			"js": [
 				"jquery.js",
 				"chrall_things.js",
+				"chrall_general.js",
 				"chrall_view.js",
 				"chrall_main.js"
 			]

@@ -30,10 +30,23 @@ div.chrall > a[status=MORT] {
 	text-decoration:line-through;
 }
 span.monster {
-	display: inline-block;
 	color: brown;
 }
 span.troll {
-	display: inline-block;
 	color: blue;
+}
+span.player {
+	color: green;
+	font-weight: bold;
+}
+table.grid td.grad {
+	text-align: center;
+	min-width: 25px;
+	min-height: 25px;
+}
+table.grid td.d0 {
+	background-color:#ffe1bd;
+}
+table.grid td.d1 {
+	background-color:white;
 }

@@ -8,16 +8,20 @@ function Chrall_makeGridHtml() {
 	html += "<td nowrap rowspan="+(ymax-ymin+3)+" title=\"Oxhykan (X-)\"><span style='display:block;-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-moz-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;'>Oxhykan&nbsp;(X-)</span></td>";
 	html += "<td align=center height=30 width=30>y\\x</td>";
 	for (var x=xmin; x<=xmax; x++) {
-		html += "<td>"+x+"</td>";
+		html += "<td class=grad>"+x+"</td>";
 	}
 	html += "<td align=center height=30 width=30>x/y</td>";
 	html += "<td rowspan="+(ymax-ymin+3)+" title='Orhykan (X+)'><span style='display:block;transform:rotate(90deg);-webkit-transform:rotate(90deg);-moz-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;'>Orhykan&nbsp;(X+)</span></td>";
 	html += "</tr>";
 	// TODO optimiser ça, ça fait vraiment beaucoup d'itérations... Peut-être construire la grille en donnant des id(genre x|y) aux cellules et les remplir en itérant une seule fois sur les monstres ?
 	for (var y=ymax; y>=ymin; y--) {
-		html += "<tr><td align=center height=30>"+ y + "</td>";
-		for (var x=xmin; x<=xmax; x++) {			
-			html += "<td title='X="+x+" Y="+y+"'><br>";
+		html += "<tr><td class=grad height=30>"+ y + "</td>";
+		for (var x=xmin; x<=xmax; x++) {
+			var hdist = playerLocation.hdist(x, y)
+			html += "<td class=d"+(hdist%2)+" title='case X="+x+" Y="+y+" \nDistance horizontale: "+hdist+"'>";
+			if (x==playerLocation.x && y==playerLocation.y) {
+				html += "<span class=player>"+playerLocation.z+":Vous êtes ici</span><br>"
+			}
 			for (var i=0; i<trollsInView.length; i++) {
 				var t = trollsInView[i];
 				if (t.x==x && t.y==y) {
@@ -32,12 +36,12 @@ function Chrall_makeGridHtml() {
 			}
 			html += "</td>";
 		}
-		html += "<td align=center height=30>"+ y + "</td></tr>";
+		html += "<td class=grad height=30>"+ y + "</td></tr>";
 	}
 	html += "<tr>";
 	html += "<td align=center height=30 width=30>y/x</td>";
 	for (var x=xmin; x<=xmax; x++) {
-		html += "<td>"+x+"</td>";
+		html += "<td class=grad>"+x+"</td>";
 	}
 	html += "<td align=center height=30 width=30>x\\y</td>";
 	html += "</tr>";
@@ -127,6 +131,18 @@ function Chrall_enlargeView(thingList) {
 
 function Chrall_analyseView() {
 	var tables = $("table.mh_tdborder");
+
+	//> recherche de la position du joueur
+	var positionSentenceText = $($(tables[0]).find("li")[0]).text();
+	var positionSentenceTokens = positionSentenceText.split(new RegExp("[ ,:=]+", "g"));
+	playerLocation = new Point(
+		parseInt(positionSentenceTokens[5]), parseInt(positionSentenceTokens[8]), parseInt(positionSentenceTokens[10])
+	);
+	//~ alert("x="+playerLocation.x);
+	//~ alert("y="+playerLocation.y);
+	//~ alert("z="+playerLocation.z);
+	
+	//> chargement des trucs en vue (monstres, trolls, etc.)
 	Chrall_analyseMonsterTable(tables[1]);
 	Chrall_analyseTrollTable(tables[2]);
 	Chrall_analyseThingTable(tables[3], objectsInView);
@@ -134,6 +150,7 @@ function Chrall_analyseView() {
 	Chrall_analyseThingTable(tables[5], placesInView);
 	Chrall_analyseThingTable(tables[6], cenotaphsInView);
 	
+	//> on détermine la zone visible (en fait on pourrait aussi utiliser la portée et la position...TODO)
 	Chrall_enlargeView(monstersInView);
 	Chrall_enlargeView(trollsInView);
 }
