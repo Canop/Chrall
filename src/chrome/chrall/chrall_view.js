@@ -25,7 +25,7 @@ function Chrall_makeGridHtml() {
 			for (var i=0; i<trollsInView.length; i++) {
 				var t = trollsInView[i];
 				if (t.x==x && t.y==y) {
-					html += "<a class=ch_troll href=\"javascript:EPV("+t.id+");\">"+t.z+": "+t.name+" "+t.race[0]+t.level+"</a><br>";
+					html += "<a class=ch_troll href=\"javascript:EPV("+t.id+");\">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a><br>";
 				}
 			}
 			for (var i=0; i<monstersInView.length; i++) {

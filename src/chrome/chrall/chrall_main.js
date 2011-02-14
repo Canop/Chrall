@@ -1,5 +1,5 @@
 /*
- * ce script lance les actions (les autres ne contiennent que des fonctions appelées depuis ici).
+ * ce script lance les actions (les autres ne contiennent que des classes et des fonctions appelées depuis ici).
  * Il contient aussi les variables globales.
  */
 
@@ -10,24 +10,20 @@ var placesInView = new Array();
 var objectsInView = new Array();
 var mushroomsInView = new Array();
 var cenotaphsInView = new Array();
- 
+
 var splitedPathname = document.location.pathname.split('/');
 var pageName = splitedPathname[splitedPathname.length-1];
-
-
-// étendue de la vue
-var viewIsEmpty=true;
-var xmin, xmax, ymin, ymax, zmin, zmax;
-
-// position du joueur
-var playerLocation = null; // instance de Point
+var viewIsEmpty=true; // correspond à un état d'analyse de la vue
+var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
+var playerLocation = null; // position du joueur : instance de Point
+var playerProfile = new TrollProfile();
 
 
 if (pageName=="Play_vue.php") { 
-	//> on vire la "décoration" latérale
+	//> on vire la frise latérale
 	$($("td[width=55]")).remove();
 	
-	//> on vire la grosse et moche banière "Mounty Hall la terre des trolls"
+	//> on vire la bannière "Mounty Hall la terre des trolls" qu'on a vu pendant 5 ans déjà...
 	$($("tr")[0]).remove();
 	
 	//> on vire le titre "Ma Vue" et les liens vers les tableaux
@@ -37,9 +33,8 @@ if (pageName=="Play_vue.php") {
 	//> on analyse la vue
 	Chrall_analyseView();
 	
-	//> on ajoute la grille
-	//Chrall_insertViewGrid();
-	
+	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
+	var tables = $("table.mh_tdborder");
 	var html="<ul class=tabs>";
 	html += "<li><a href=#tabGrid>Grille</a></li>";
 	html += "<li><a href=#tabMonsters>Monstres ("+monstersInView.length+")</a></li>";
@@ -62,10 +57,7 @@ if (pageName=="Play_vue.php") {
 	html += "<div id=tabCenotaphs class=tab_content></div>";
 	html += "<div id=tabSettings class=tab_content></div>";
 	html += "</div>";
-	$($(document).find("table.mh_tdborder")[0]).parent().parent().prepend(html);
-	
-	var tables = $("table.mh_tdborder");
-	
+	$($(document).find("table.mh_tdborder")[0]).parent().parent().prepend(html);	
 	$("div#tabSettings").append(tables[0]);
 	$("div#tabMonsters").append(tables[1]);
 	$("div#tabTrolls").append(tables[2]);
@@ -73,18 +65,21 @@ if (pageName=="Play_vue.php") {
 	$("div#tabMushrooms").append(tables[4]);
 	$("div#tabPlaces").append(tables[5]);
 	$("div#tabCenotaphs").append(tables[6]);
-	
-	$(".tab_content").hide(); //Hide all content
-	$("ul.tabs li:first").addClass("active").show(); //Activate first tab
-	$(".tab_content:first").show(); //Show first tab content
-	//On Click Event
+	$(".tab_content").hide();
+	$("ul.tabs li:first").addClass("active").show();
+	$(".tab_content:first").show(); 
 	$("ul.tabs li").click(function() {
-		$("ul.tabs li").removeClass("active"); //Remove any "active" class
-		$(this).addClass("active"); //Add "active" class to selected tab
-		$(".tab_content").hide(); //Hide all tab content
-		var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
-		$(activeTab).fadeIn(); //Fade in the active ID content
+		$("ul.tabs li").removeClass("active");
+		$(this).addClass("active");
+		$(".tab_content").hide();
+		var activeTab = $(this).find("a").attr("href");
+		$(activeTab).fadeIn();
 		return false;
 	});
+	
+} else if (pageName=="Play_profil.php") { 
+		//> on analyse la vue
+	Chrall_analyseProfile();
+
 }
 

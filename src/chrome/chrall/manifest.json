@@ -13,8 +13,10 @@
 			],
 			"js": [
 				"jquery.js",
+				"date-fr-FR.js",
 				"chrall_things.js",
 				"chrall_general.js",
+				"chrall_profile.js",
 				"chrall_view.js",
 				"chrall_main.js"
 			]
