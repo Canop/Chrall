@@ -9,6 +9,7 @@ TODO :
 ======
 * [Canop] fatigue du kastar, cout des accélérations
 * calculs en roll-over sur les sorts & compétences
+* rendre les parsings plus robustes en privilégiant les expressions régulières plutôt que le comptage des lignes ou cellules
 * [Canop] affichage (optionnel) des trésors, champis et lieux sur la grille
 * moyenne des caractéristiques
 * site web : détection browser (indiquer qu'il faut Chrome, si nécessaire)

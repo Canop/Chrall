@@ -65,7 +65,7 @@ function Chrall_extractFatigue(text) {
 	//~ for (var i=0; i<lines.length; i++) {
 		//~ alert("lines["+i+"]=***"+lines[i]+"***");
 	//~ }
-	var strainLine = lines[16];
+	var strainLine = lines[16]; // c'est la ligne qui contient "Fatigue............:"
 	
 }
 
@@ -74,7 +74,6 @@ function Chrall_analyseAndReformatProfile() {
 	//alert(cells.length);
 	
 	Chrall_extractDlaInfos($(cells[4]).text()); // cells[4] est la cellule en face de "Echeance du tour"
-	alert("toooo");
 	Chrall_extractFatigue($(cells[10]).text());
 	
 	//> on affiche la date du prochain cumul
