@@ -1,8 +1,10 @@
 {
 	"name": "Chrall",
-	"version": "0.1",
-	"description": "Chrome Hall Extension, by Canopée",
-	"background_page": "background.html",
+	"version": "0.2",
+	"description": "Une extension Chrome pour Mounty Hall, par Canopée",
+	"homepage_url": "http://canop.org/chrall",
+	"update_url": "http://canop.org/chrall/updates.xml",
+	"background_page": "chrome-extension.html",
 	"content_scripts": [
 		{
 			"matches": ["http://games.mountyhall.com/*"],

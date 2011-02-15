@@ -1,0 +1,17 @@
+RECENTS / A TESTER :
+====================
+* fichier background.html renommé "chrome-extension" pour faciliter la lecture sur google analytics (à vérifier)
+* [Canop] stats analytics
+* mise à jour automatique de l'extension
+
+TODO :
+======
+* [Canop+Taip] gestion des forks et contributions dans github
+* récupération d'un bestiaire
+* icône (un troll qui nage le crawl ?)
+* interface d'équipe (ralliement, infos des autres, etc.)
+* grille : profils, chances au combat, etc. des monstres au hover
+* grille : trolls amis/ennemis
+* fatigue du kastar, cout des accélérations
+* moyenne des caractéristiques
+* [Canop] grille magique (technologie secrete)

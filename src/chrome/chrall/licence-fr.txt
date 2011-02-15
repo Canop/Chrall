@@ -1,5 +1,5 @@
 
-= licence "dys" version 20110214 =
+= licence "canop" version 20110214 =
 
 Ce document que je vais essayer de garder sobre et simple pour ne pas embrouiller vos avocats liste vos droits liés à l'usage du code source de ce logiciel.
 Il est à noter que les librairies utilisées peuvent être soumises à d'autres licences que la licence "dys".
@@ -11,4 +11,4 @@ Il est à noter que les librairies utilisées peuvent être soumises à d'autres
 
 C'est tout pour aujourd'hui, vous pouvez sortir.
 
-Contact : denys.seguret@gmail.com
+Contact : cano.petrole@gmail.com

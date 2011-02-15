@@ -6,8 +6,15 @@
  */
 function TrollProfile() {	
 }
-TrollProfile.prototype.getCumul = function() { // celui qui me donne une traduction en anglais de "cumul" gagne une licence gratuite de Chrall
-	return this.dla.add({seconds: this.turnDuration}); 
+/**
+ * getDla(0) est la DLA en cours (getDla() est pareil)
+ * getDla(1) est le prochain cumul
+ * getDla(2) est le cumul suivant
+ * je vous laisse deviner pour la suite
+ */
+TrollProfile.prototype.getDla = function(nbTurnsToAdd) {
+	if (arguments.length==0) return this.dla;
+	return this.dla.add({seconds: nbTurnsToAdd*this.turnDuration}); 
 }
 
 /**
@@ -62,7 +69,7 @@ function Chrall_analyseProfile() {
 	Chrall_extractDlaInfos($(cells[4]).text()); // cells[4] est la cellule en face de "Echeance du tour"
 	
 	//> on affiche la date du prochain cumul
-	//alert("Prochain cumul : " + playerProfile.getCumul());
-	$(cells[4]).append("<b>---&gt;&nbsp;Prochain cumul : " + playerProfile.getCumul().toString("d/M/yyyy HH:mm:ss") + "</b>");
+	$(cells[4]).append("<b>---&gt;&nbsp;Prochain cumul : " + playerProfile.getDla(1).toString("d/M/yyyy HH:mm:ss") + "</b>");
+	$(cells[4]).append("<br>(cumul suivant : " + playerProfile.getDla(2).toString("d/M/yyyy HH:mm:ss") + ")");
 	
 }
