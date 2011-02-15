@@ -32,7 +32,7 @@ Chrall est une extension Chrome pour le jeu <a href=www.mountyhall.com>Mounty Ha
 <h2>Développement</h2>
 <p>
 Chrall est open-source.<br>
-Vous pouvez participer au développement, signaler des bugs, ou simplement consulter les sources par curiosité via <a href=www.github.com/Canop/Chrall>github</a>.
+Vous pouvez participer au développement, signaler des bugs, ou simplement consulter les sources par curiosité via <a href=http://www.github.com/Canop/Chrall>github</a>.
 </p>
 
 </div> <!-- content_wrapper -->
