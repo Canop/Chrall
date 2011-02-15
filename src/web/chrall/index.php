@@ -23,7 +23,7 @@ ini_set('default_charset', 'utf-8');
 <div id="content_wrapper">
 
 <p>
-Chrall est une extension Chrome pour le jeu <a href=www.mountyhall.com>Mounty Hall</a>.
+Chrall est une extension Chrome pour le jeu <a href=http://www.mountyhall.com>Mounty Hall</a>.
 </p>
 
 <h2>Téléchargement</h2>

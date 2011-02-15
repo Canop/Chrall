@@ -17,8 +17,17 @@ var viewIsEmpty=true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
 var playerLocation = null; // position du joueur : instance de Point
 var playerProfile = new TrollProfile();
+var horizontalViewLimit = -1;
 
-var didSomething = true; 
+//> pour google analytics (ça ne marche pas...)
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-15064357-4']);	
+(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = 'https://ssl.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
 if (pageName=="Play_vue.php") { 
 	//> on vire la frise latérale
 	$($("td[width=55]")).remove();
@@ -58,7 +67,7 @@ if (pageName=="Play_vue.php") {
 	html += "<div id=tabSettings class=tab_content></div>";
 	html += "</div>";
 	$($(document).find("table.mh_tdborder")[0]).parent().parent().prepend(html);	
-	$("div#tabSettings").append(tables[0]);
+	$("div#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 	$("div#tabMonsters").append(tables[1]);
 	$("div#tabTrolls").append(tables[2]);
 	$("div#tabObjects").append(tables[3]);
@@ -76,15 +85,11 @@ if (pageName=="Play_vue.php") {
 		$(activeTab).fadeIn();
 		return false;
 	});
+	_gaq.push(['_trackEvent', 'page ' + pageName, 'done']); // pour google analytics
 	
 } else if (pageName=="Play_profil.php") { 
 		//> on analyse la vue
-	Chrall_analyseProfile();
-
-} else {
-	didSomething = false;
+	Chrall_analyseAndReformatProfile();
+	_gaq.push(['_trackEvent', 'page ' + pageName, 'done']); // pour google analytics
 }
 
-//> on signale à google analytics qu'on est passé par là
-//   Mais uniquement si on est réellement intervenu
-if (didSomething) _gaq.push(['_trackPageview']);

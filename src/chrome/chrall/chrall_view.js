@@ -18,22 +18,26 @@ function Chrall_makeGridHtml() {
 		html += "<tr><td class=grad height=30>"+ y + "</td>";
 		for (var x=xmin; x<=xmax; x++) {
 			var hdist = playerLocation.hdist(x, y)
-			html += "<td class=d"+(hdist%2)+" title='case X="+x+" Y="+y+" \nDistance horizontale: "+hdist+"'>";
+			var cellContent = "";
 			if (x==playerLocation.x && y==playerLocation.y) {
-				html += "<span class=ch_player>"+playerLocation.z+":Vous êtes ici</span><br>"
+				cellContent += "<span class=ch_player>"+playerLocation.z+":Vous êtes ici</span><br>"
 			}
 			for (var i=0; i<trollsInView.length; i++) {
 				var t = trollsInView[i];
 				if (t.x==x && t.y==y) {
-					html += "<a class=ch_troll href=\"javascript:EPV("+t.id+");\">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a><br>";
+					cellContent += "<a class=ch_troll href=\"javascript:EPV("+t.id+");\">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a><br>";
 				}
 			}
 			for (var i=0; i<monstersInView.length; i++) {
 				var m = monstersInView[i];
 				if (m.x==x && m.y==y) {
-					html += "<a class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\">"+m.z+": "+m.name+"</a><br>";
+					cellContent += "<a class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\">"+m.z+": "+m.name+"</a><br>";
 				}
 			}
+			html += "<td class=d"+((hdist-horizontalViewLimit+20001)%2)+" title='case X="+x+" Y="+y+" \nDistance horizontale: "+hdist+"'";
+			if (cellContent.length>0) html += " hasContent"; 
+			html += ">";
+			html += cellContent;
 			html += "</td>";
 		}
 		html += "<td class=grad height=30>"+ y + "</td></tr>";
@@ -138,9 +142,13 @@ function Chrall_analyseView() {
 	playerLocation = new Point(
 		parseInt(positionSentenceTokens[5]), parseInt(positionSentenceTokens[8]), parseInt(positionSentenceTokens[10])
 	);
-	//~ alert("x="+playerLocation.x);
-	//~ alert("y="+playerLocation.y);
-	//~ alert("z="+playerLocation.z);
+
+	//> recherche de la limite de vue horizontale (pour dessiner la grille ensuite)
+	try {
+		horizontalViewLimit = parseInt(document.getElementsByName("ai_MaxVue")[0].value);
+	} catch(error) {
+	}
+	horizontalViewLimit = Math.max(horizontalViewLimit, 0); // on utilise ça plus tard dans la construction de la grille (pour que le bord de la vue ne soit pas blanc)
 	
 	//> chargement des trucs en vue (monstres, trolls, etc.)
 	Chrall_analyseMonsterTable(tables[1]);
@@ -150,7 +158,15 @@ function Chrall_analyseView() {
 	Chrall_analyseThingTable(tables[5], placesInView);
 	Chrall_analyseThingTable(tables[6], cenotaphsInView);
 	
-	//> on détermine la zone visible (en fait on pourrait aussi utiliser la portée et la position...TODO)
-	Chrall_enlargeView(monstersInView);
-	Chrall_enlargeView(trollsInView);
+	//> on détermine la zone visible 
+	if (horizontalViewLimit>=0) {
+		xmin = playerLocation.x-horizontalViewLimit;
+		xmax = playerLocation.x+horizontalViewLimit;
+		ymin = playerLocation.y-horizontalViewLimit;
+		ymax = playerLocation.y+horizontalViewLimit;
+	} else {
+		// si on n'a pas la portée on regarde les monstres (je garde ça car plus tard je ferai sans doute une fonction pour tom d'auto-adaptation de la vue en fonction de certains critères)
+		Chrall_enlargeView(monstersInView);
+		Chrall_enlargeView(trollsInView);
+	}
 }

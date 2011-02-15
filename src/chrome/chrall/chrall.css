@@ -45,8 +45,11 @@ table.grid td.grad {
 	min-height: 25px;
 }
 table.grid td.d0 {
-	background-color:#ffe1bd;
+	background-color:white;
 }
 table.grid td.d1 {
-	background-color:white;
+	background-color:#ffe1bd;
+}
+table.grid td[hasContent]{
+	min-width:100px;
 }

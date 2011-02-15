@@ -3,6 +3,8 @@
  * Params :
  *  - dla (instance de Date)
  *  - turnDuration (en secondes)
+ *  - strainBase (la fatigue de base)
+ *  - strainMalus (le malus de fatigue)
  */
 function TrollProfile() {	
 }
@@ -53,23 +55,30 @@ function Chrall_extractDlaInfos(text) {
 	var lines = text.split('\n');
 	var dlaString = lines[1].substring(8, lines[1].length).trim();
 	playerProfile.dla = Date.parse(dlaString); // remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js (le javascript est un truc de sadiques)
-	//alert("playerProfile.dla=" + playerProfile.dla);
 	var turnDurationLine = lines[lines.length-1].trim();
 	var turnDurationString = turnDurationLine.split(':')[1];
-	//alert("#"+turnDurationString+"#");
 	playerProfile.turnDuration = Chrall_parseDuration(turnDurationString);
-	//alert(playerProfile.turnDuration);
 }
 
+function Chrall_extractFatigue(text) {
+	var lines = text.split('\n');
+	//~ for (var i=0; i<lines.length; i++) {
+		//~ alert("lines["+i+"]=***"+lines[i]+"***");
+	//~ }
+	var strainLine = lines[16];
+	
+}
 
-function Chrall_analyseProfile() {
+function Chrall_analyseAndReformatProfile() {
 	var cells = $("table table table.mh_tdborder tr.mh_tdpage td");
 	//alert(cells.length);
 	
 	Chrall_extractDlaInfos($(cells[4]).text()); // cells[4] est la cellule en face de "Echeance du tour"
+	alert("toooo");
+	Chrall_extractFatigue($(cells[10]).text());
 	
 	//> on affiche la date du prochain cumul
-	$(cells[4]).append("<b>---&gt;&nbsp;Prochain cumul : " + playerProfile.getDla(1).toString("d/M/yyyy HH:mm:ss") + "</b>");
-	$(cells[4]).append("<br>(cumul suivant : " + playerProfile.getDla(2).toString("d/M/yyyy HH:mm:ss") + ")");
+	$(cells[4]).append("<b>---&gt;&nbsp;Prochain cumul : " + playerProfile.getDla(1).toString("dd/MM/yyyy HH:mm:ss") + "</b>");
+	$(cells[4]).append("<br>(cumul suivant : " + playerProfile.getDla(2).toString("dd/MM/yyyy HH:mm:ss") + ")");
 	
 }
