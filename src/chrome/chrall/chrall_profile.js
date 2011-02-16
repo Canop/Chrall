@@ -66,7 +66,65 @@ function Chrall_extractFatigue(text) {
 		//~ alert("lines["+i+"]=***"+lines[i]+"***");
 	//~ }
 	var strainLine = lines[16]; // c'est la ligne qui contient "Fatigue............:"
-	
+	var tokens = strainLine.split(new RegExp("[\)\( ,:=\.\+]+", "g"));
+	var strainBaseFound = false;
+	playerProfile.strainMalus = 0; // il n'est pas toujours mentionné. Si on trouve deux nombres c'est que le deuxième est le malus
+	for (var i=2; i<tokens.length; i++) {
+		try {
+			var v = parseInt(tokens[i]);
+			if (!isNaN(v)) {
+				if (strainBaseFound) {
+					playerProfile.strainMalus = v;
+					break;
+				} else {
+					playerProfile.strainBase = v;
+					strainBaseFound = true;
+				}
+			}
+		} catch (error) {
+		}
+	}
+	//alert("playerProfile.strainBase="+playerProfile.strainBase);
+	//alert("playerProfile.strainMalus="+playerProfile.strainMalus);
+}
+
+/**
+ * construit un certain nombre de tables donnant des infos sur la fatigue
+ */
+function Chrall_makeStrainInfos() {
+	//playerProfile.strainMalus = 15;
+	var html = "<div class=profileInfos>";
+	html += "<table border=0><tr><td valign=top>";
+	if (playerProfile.strainBase>0) {
+		html += "<table class=infos><tr><th>DLA</th><th>Fatigue</th></tr>";
+		var s = playerProfile.strainBase;
+		for (var i=0;i<20;i++) {
+			html += "<tr><td align=center>";
+			if (i==0) html += "en cours";
+			else if (i==1) html += "prochaine";
+			else html += "+ " + i;
+			var v = s;
+			if (playerProfile.strainMalus>0) {
+				if (i==0)  v += playerProfile.strainMalus;
+				else if (i==1) v += " ou " + (s+playerProfile.strainMalus);
+				// au delà les malus auront sans doute totalement disparu...
+			}
+			html += "</td><td align=center>" + v + "</td></tr>";
+			s = Math.floor(s - s/5);
+			if (s<=0) break;
+		}
+		html += "</table>";
+		html += "</td><td valign=top>";
+	}
+	if (true) { // TODO vérifier qu'il s'agit bien d'un kastar (suggérer la réincarnation sinon ?)
+		var totalStrain = playerProfile.strainBase + playerProfile.strainMalus;
+		var pvGain = Math.min(30, Math.floor(120/(totalStrain*(1+Math.floor(totalStrain/10)))));
+		html += "Accélération du métabolisme : un PV fait gagner " + pvGain + " minutes.";
+		html += "</td><td align=top>";
+	}
+	html += "</td></tr></table>";
+	html += "</div>";
+	return html;
 }
 
 function Chrall_analyseAndReformatProfile() {
@@ -79,5 +137,7 @@ function Chrall_analyseAndReformatProfile() {
 	//> on affiche la date du prochain cumul
 	$(cells[4]).append("<b>---&gt;&nbsp;Prochain cumul : " + playerProfile.getDla(1).toString("dd/MM/yyyy HH:mm:ss") + "</b>");
 	$(cells[4]).append("<br>(cumul suivant : " + playerProfile.getDla(2).toString("dd/MM/yyyy HH:mm:ss") + ")");
-	
+
+	//> on affiche les infos liées à la fatigue
+	$(cells[10]).append(Chrall_makeStrainInfos());
 }

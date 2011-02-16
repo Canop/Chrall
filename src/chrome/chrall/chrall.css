@@ -65,3 +65,12 @@ table.grid td[hasContent]{
 }
 form#gridFiltersForm {
 }
+div.profileInfos table.infos {
+	border-collapse: collapse;
+	border: thin solid #333333;
+	font-size:12px;
+	text-align:center;
+}
+div.profileInfos table.infos td {
+	border: thin solid #333333;
+}
