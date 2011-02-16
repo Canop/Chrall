@@ -1,8 +1,37 @@
 
+function Chrall_toggleFilter(key) {
+	viewFilters[key] = !viewFilters[key];
+	$("div#grid_holder").html(Chrall_makeGridHtml());
+}
 
+function Chrall_makeFiltersHtml() {
+	var html = "<script>";
+	html += "function ChrallEmbedded_show(key, display){";
+	//~ html += " alert('key='+key);";
+	//~ html += " alert('display='+display);";
+	html += " var os = document.getElementsByName(key);";
+	html += " for (var i=0; i<os.length; i++) {";
+	html += "  os[i].style.display=display;";
+	html += " }";
+	html += "}";
+	html += "";
+	html += "</script>";
+	html += "<form id=gridFiltersForm> Montrer : ";
+	for (var key in viewFilters) {
+		html += "<span><input type=checkbox id='"+key+"'";
+		if (viewFilters[key]) html += " checked";
+		html += " onClick=\"ChrallEmbedded_show('"+key+"', this.checked?'block':'none');\"";
+		html += ">"+key+"</span>";
+	}
+	html += "</form>";
+	return html;
+}
+
+/**
+ * cette fonction construit le HTML de la grille. Ce HTML est construit une fois pour toute, le filtrage opérant via des modifications de style.
+ */ 
 function Chrall_makeGridHtml() {
-	var html = "<div class=chrall>";
-	html += "<table class=grid>";
+	var html = "<table class=grid>";
 	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center title=\"Nordhikan (Y+)\">Nordhikan (Y+)</td><td bgcolor=#BABABA></td></tr>";
 	html += "<tr>";
 	html += "<td nowrap rowspan="+(ymax-ymin+3)+" title=\"Oxhykan (X-)\"><span style='display:block;-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-moz-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;'>Oxhykan&nbsp;(X-)</span></td>";
@@ -13,7 +42,6 @@ function Chrall_makeGridHtml() {
 	html += "<td align=center height=30 width=30>x/y</td>";
 	html += "<td rowspan="+(ymax-ymin+3)+" title='Orhykan (X+)'><span style='display:block;transform:rotate(90deg);-webkit-transform:rotate(90deg);-moz-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;'>Orhykan&nbsp;(X+)</span></td>";
 	html += "</tr>";
-	// TODO optimiser ça, ça fait vraiment beaucoup d'itérations... Peut-être construire la grille en donnant des id(genre x|y) aux cellules et les remplir en itérant une seule fois sur les monstres ?
 	for (var y=ymax; y>=ymin; y--) {
 		html += "<tr><td class=grad height=30>"+ y + "</td>";
 		for (var x=xmin; x<=xmax; x++) {
@@ -25,13 +53,41 @@ function Chrall_makeGridHtml() {
 			for (var i=0; i<trollsInView.length; i++) {
 				var t = trollsInView[i];
 				if (t.x==x && t.y==y) {
-					cellContent += "<a class=ch_troll href=\"javascript:EPV("+t.id+");\">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a><br>";
+					cellContent += "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a>";
 				}
 			}
 			for (var i=0; i<monstersInView.length; i++) {
 				var m = monstersInView[i];
 				if (m.x==x && m.y==y) {
-					cellContent += "<a class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\">"+m.z+": "+m.name+"</a><br>";
+					if (m.isGowap) {
+						cellContent += "<a name='gowaps' class=ch_gowap href=\"javascript:EMV("+m.id+",750,550);\">"+m.z+": "+m.name+"</a>";
+					} else {
+						cellContent += "<a name='monstres' class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\">"+m.z+": "+m.name+"</a>";
+					}
+				}
+			}
+			for (var i=0; i<placesInView.length; i++) {
+				var t = placesInView[i];
+				if (t.x==x && t.y==y) {
+					cellContent += "<a name='lieux' class=ch_place>"+t.z+": "+t.name+"</a>";
+				}
+			}
+			for (var i=0; i<objectsInView.length; i++) {
+				var t = objectsInView[i];
+				if (t.x==x && t.y==y) {
+					cellContent += "<a name='objets' class=ch_object>"+t.z+": "+t.name+"</a>";
+				}
+			}
+			for (var i=0; i<mushroomsInView.length; i++) {
+				var t = mushroomsInView[i];
+				if (t.x==x && t.y==y) {
+					cellContent += "<a name='champignons' class=ch_mushroom>"+t.z+": "+t.name+"</a>";
+				}
+			}
+			for (var i=0; i<cenotaphsInView.length; i++) {
+				var t = cenotaphsInView[i];
+				if (t.x==x && t.y==y) {
+					cellContent += "<a name='cénotaphes' class=ch_cenotaph>"+t.z+": "+t.name+"</a>";
 				}
 			}
 			html += "<td class=d"+((hdist-horizontalViewLimit+20001)%2)+" title='case X="+x+" Y="+y+" \nDistance horizontale: "+hdist+"'";
@@ -51,7 +107,6 @@ function Chrall_makeGridHtml() {
 	html += "</tr>";
 	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center title=\"Midikan (Y-)\">Midikan (Y-)</td><td bgcolor=#BABABA></td></tr>";
 	html += "</table>";
-	html += "</div><br>";
 	return html;
 }
 
@@ -169,4 +224,66 @@ function Chrall_analyseView() {
 		Chrall_enlargeView(monstersInView);
 		Chrall_enlargeView(trollsInView);
 	}
+}
+
+function Chrall_analyseAndReformatView() {
+	//> on vire la frise latérale
+	$($("td[width=55]")).remove();
+	
+	//> on vire la bannière "Mounty Hall la terre des trolls" qu'on a vu pendant 5 ans déjà...
+	$($("tr")[0]).remove();
+	
+	//> on vire le titre "Ma Vue" et les liens vers les tableaux
+	$($("table table table")[0]).remove();
+	$($("table table center")[0]).remove();
+	
+	//> on analyse la vue
+	Chrall_analyseView();
+	
+	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
+	var tables = $("table.mh_tdborder");
+	var html="<ul class=tabs>";
+	html += "<li><a href=#tabGrid>Grille</a></li>";
+	html += "<li><a href=#tabTrolls>Trolls ("+trollsInView.length+")</a></li>";
+	html += "<li><a href=#tabMonsters>Monstres ("+monstersInView.length+")</a></li>";
+	html += "<li><a href=#tabPlaces>Lieux ("+placesInView.length+")</a></li>";
+	html += "<li><a href=#tabObjects>Trésors ("+objectsInView.length+")</a></li>";
+	html += "<li><a href=#tabMushrooms>Champignons ("+mushroomsInView.length+")</a></li>";
+	html += "<li><a href=#tabCenotaphs>Cénotaphes ("+cenotaphsInView.length+")</a></li>";
+	html += "<li><a href=#tabSettings>Réglages</a></li>";
+	html += "</ul>";
+	html += "<div class=tab_container>";
+	html += "<div id=tabGrid class=tab_content>";
+	html += Chrall_makeFiltersHtml();
+	html += "<div class=grid_holder>";
+	html += Chrall_makeGridHtml();
+	html += "</div>";
+	html += "</div>";
+	html += "<div id=tabTrolls class=tab_content></div>";
+	html += "<div id=tabMonsters class=tab_content></div>";
+	html += "<div id=tabPlaces class=tab_content></div>";
+	html += "<div id=tabObjects class=tab_content></div>";
+	html += "<div id=tabMushrooms class=tab_content></div>";
+	html += "<div id=tabCenotaphs class=tab_content></div>";
+	html += "<div id=tabSettings class=tab_content></div>";
+	html += "</div>";
+	$($(document).find("table.mh_tdborder")[0]).parent().parent().prepend(html);	
+	$("div#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
+	$("div#tabMonsters").append(tables[1]);
+	$("div#tabTrolls").append(tables[2]);
+	$("div#tabObjects").append(tables[3]);
+	$("div#tabMushrooms").append(tables[4]);
+	$("div#tabPlaces").append(tables[5]);
+	$("div#tabCenotaphs").append(tables[6]);
+	$(".tab_content").hide();
+	$("ul.tabs li:first").addClass("active").show();
+	$(".tab_content:first").show(); 
+	$("ul.tabs li").click(function() {
+		$("ul.tabs li").removeClass("active");
+		$(this).addClass("active");
+		$(".tab_content").hide();
+		var activeTab = $(this).find("a").attr("href");
+		$(activeTab).fadeIn();
+		return false;
+	});
 }

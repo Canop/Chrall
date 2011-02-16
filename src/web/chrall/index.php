@@ -9,6 +9,7 @@ ini_set('default_charset', 'utf-8');
 	<link rel="stylesheet" type="text/css" href="chrall.css"/>
 	<meta name="description" content="Chrall, une extension Chrome pour Mounty Hall"/>
 	<meta name="keywords" content="chrome, extension, mounty hall">
+	<script src="jquery.js"></script>
 </head>
 <body class=very_short>
 
@@ -28,6 +29,7 @@ Chrall est une extension Chrome pour le jeu <a href=http://www.mountyhall.com>Mo
 
 <h2>Téléchargement</h2>
 <p><a href=chrall_v000_003.crx>installer Chrall dans Chrome</a>. Les mises à jour seront automatiques.</p>
+<p id=browserInfos></p>
 
 <h2>Développement</h2>
 <p>
@@ -42,6 +44,7 @@ Vous pouvez participer au développement, signaler des bugs, ou simplement consu
 
 <script type="text/javascript">
 
+//> google analytics
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-15064357-4']);
   _gaq.push(['_trackPageview']);
@@ -51,6 +54,10 @@ Vous pouvez participer au développement, signaler des bugs, ou simplement consu
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
+  
+//> détection du navigateur
+var is_chrome = navigator.userAgent.toLowerCase().indexOf('chrome') >= 0;
+if (!is_chrome) $("p#browserInfos").html("<font color=red>Sauf erreur, vous n'êtes pas sous Chrome. Vous devriez revenir sur cette page après avoir changé de navigateur.</font>");
 
 </script>
 

@@ -2,22 +2,30 @@ RECENTS / A TESTER :
 ====================
 * fichier background.html renommé "chrome-extension" pour faciliter la lecture sur google analytics (à vérifier)
 * [Canop] stats analytics
-* mise à jour automatique de l'extension
+* {Ne marche pas ?} mise à jour automatique de l'extension
 * taille de grille basée sur la vue paramétrée
+* [Canop] affichage (optionnel) des trésors, champis et lieux sur la grille
+* site web : détection browser (indiquer qu'il faut Chrome, si nécessaire)
+* [Canop] site web : détecter si l'extension est installée
+
+EN COURS :
+==========
+* [Canop+Taip] gestion des forks et contributions dans github
+* [Canop] améliorer les couleurs de la grille
 
 TODO :
 ======
 * [Canop] fatigue du kastar, cout des accélérations
+* mettre en place des stats Google Analytics détaillées (affichage des différentes pages)
+* mettre en place une détection de problèmes unifiée (incapacité à analyser ou formater) et transmettre l'événement à google analytics (page incluse)
 * calculs en roll-over sur les sorts & compétences
-* rendre les parsings plus robustes en privilégiant les expressions régulières plutôt que le comptage des lignes ou cellules
-* [Canop] affichage (optionnel) des trésors, champis et lieux sur la grille
-* moyenne des caractéristiques
-* site web : détection browser (indiquer qu'il faut Chrome, si nécessaire)
-* [Canop] site web : détecter si l'extension est installée
-* [Canop+Taip] gestion des forks et contributions dans github
+* [Canop] condenser la page d'accueil pour épargner le scroll sur petit écran
 * récupération d'un bestiaire
+* rendre les parsings plus robustes en privilégiant les expressions régulières plutôt que le comptage des lignes ou cellules
+* moyenne des caractéristiques
 * icône (un troll qui nage le crawl ?)
 * interface d'équipe (ralliement, infos des autres, etc.)
 * grille : profils, chances au combat, etc. des monstres au hover
 * grille : trolls amis/ennemis
 * [Canop] grille magique (technologie secrete)
+* ajouter quelque part (sur la page d'accueil?) la mention que les pages sont modifiées par chrall et un lien vers le site web (et un mode d'emploi de désinstallation ?)

@@ -25,6 +25,7 @@ Thing.prototype = new Point(); // oui, je sais, c'est pas bien beau du point de 
  * Monster hérite de Thing.
  * Params :
  *  - fullName
+ *  - isGowap
  */ 
 function Monster() {
 }
@@ -39,6 +40,7 @@ Monster.prototype.setName = function(fullName){
 	} else {
 		this.name = fullName;
 	}
+	this.isGowap = this.name.indexOf("Gowap")==0;
 }
 
 

@@ -1,40 +1,50 @@
-div.chrall {
+div.grid_holder {
 	padding:0px;
 	margin:0px;
 	width:100%;
 }
-div.chrall > table.grid {
+table.grid {
 	background: white;
 	border-collapse: collapse;
 	border: thin solid #333333;
 	font-size:14px;
 	text-align:center;
 }
-div.chrall > table.grid th {
+table.grid th {
 	border: thin solid #333333;
 }
-div.chrall > table.grid td {
+table.grid td {
 	border: thin solid #333333;
-}
-div.chrall > a[team=B] {
-	color:red;
-}
-div.chrall > span[status=INVI], div.chrall > a[status=INVI] {
-	font-style:italic;
-	color:red;
-}
-div.chrall > span[status=TP], div.chrall > a[status=INVI] {
-	color:#873622;
-}
-div.chrall > a[status=MORT] {
-	text-decoration:line-through;
 }
 a.ch_monster, a.ch_monster:hover {
 	color: brown !important;
+	display: block;
+}
+a.ch_gowap, a.ch_gowap:hover {
+	color: #e5ad15 !important;
+	display: block;
 }
 a.ch_troll, a.ch_troll:hover {
 	color: blue  !important;
+	display: block;
 }
+a.ch_place, a.ch_place:hover {
+	color: black  !important;
+	display: block;
+}
+a.ch_object, a.ch_object:hover {
+	color: grey  !important;
+	display: none;
+}
+a.ch_mushroom, a.ch_mushroom:hover {
+	color: #6d7e44  !important;
+	display: none;
+}
+a.ch_cenotaph, a.ch_cenotaph:hover {
+	color: #3fbbbc  !important;
+	display: none;
+}
+
 span.ch_player {
 	color: green;
 	font-weight: bold;
@@ -48,8 +58,10 @@ table.grid td.d0 {
 	background-color:white;
 }
 table.grid td.d1 {
-	background-color:#ffe1bd;
+	background-color:#e5decb;
 }
 table.grid td[hasContent]{
 	min-width:100px;
+}
+form#gridFiltersForm {
 }
