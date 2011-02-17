@@ -17,9 +17,11 @@ RECENTS / A TESTER :
 EN COURS :
 ==========
 * [Canop+Taip] gestion des forks et contributions dans github
+* détection des gowaps malades
 
 TODO :
 ======
+* détection des trolls malades
 * calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquant pour entrainement
 * fatigue & am : calcul du cout en pv pour rejouer de suite, et suggestion d'attente
 * mettre en place des stats Google Analytics détaillées (affichage des différentes pages)

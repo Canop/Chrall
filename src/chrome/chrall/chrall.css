@@ -44,7 +44,9 @@ a.ch_cenotaph, a.ch_cenotaph:hover {
 	color: #3fbbbc  !important;
 	display: none;
 }
-
+span.ch_tag {
+	color: black !important;
+}
 span.ch_player {
 	color: green;
 	font-weight: bold;

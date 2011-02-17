@@ -63,6 +63,7 @@ Thing.prototype.hdist = function(x, y) { // distance horizontale
  * Params :
  *  - fullName
  *  - isGowap
+ *  - isSick (a priori pour les gowaps)
  */ 
 function Monster(x, y, z) {
 	Thing.call(this, x, y, z); // appel du constructeur de la super-classe (il n'y a pas de 'super' en javascript)
@@ -70,11 +71,19 @@ function Monster(x, y, z) {
 Monster.prototype = new Thing();
 Monster.prototype.setName = function(fullName){
 	this.fullName = fullName;
+	this.isSick = false;
 	var i1 = fullName.indexOf('[');
 	var i2 = fullName.indexOf(']');
 	if (i1>0 && i2>i1) {
 		this.name = fullName.substring(0, i1-1); // le -1 car il y a un espace à virer également
 		this.ageTag = fullName.substring(i1+1, i2);
+		// on va regarder si on a un deuxième truc entre crochets (maladie)
+		var remainingString = fullName.substring(i2+1, fullName.length);
+		i1 = remainingString.indexOf('[');
+		i2 = remainingString.indexOf(']');
+		if (i1>0 && i2>i1) {
+			this.isSick = true; // notons que ce test n'est pas super fiable... ça pourrait être autre chose... peut-être même un taggage par un joueur !
+		}
 	} else {
 		this.name = fullName;
 	}

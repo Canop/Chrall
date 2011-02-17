@@ -7,8 +7,6 @@ function Chrall_toggleFilter(key) {
 function Chrall_makeFiltersHtml() {
 	var html = "<script>";
 	html += "function ChrallEmbedded_show(key, display){";
-	//~ html += " alert('key='+key);";
-	//~ html += " alert('display='+display);";
 	html += " var os = document.getElementsByName(key);";
 	html += " for (var i=0; i<os.length; i++) {";
 	html += "  os[i].style.display=display;";
@@ -60,7 +58,9 @@ function Chrall_makeGridHtml() {
 				var m = monstersInView[i];
 				if (m.x==x && m.y==y) {
 					if (m.isGowap) {
-						cellContent += "<a name='gowaps' class=ch_gowap href=\"javascript:EMV("+m.id+",750,550);\">"+m.z+": "+m.name+"</a>";
+						cellContent += "<a name='gowaps' class=ch_gowap href=\"javascript:EMV("+m.id+",750,550);\">"+m.z+": "+m.name+"";
+						if (m.isSick) cellContent += "<span class=ch_tag>[M]</span>";
+						cellContent += "</a>";
 					} else {
 						cellContent += "<a name='monstres' class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\">"+m.z+": "+m.name+"</a>";
 					}
