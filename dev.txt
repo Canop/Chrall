@@ -9,7 +9,6 @@ RECENTS / A TESTER :
 * [Canop] site web : détecter si l'extension est installée
 * [Canop] améliorer les couleurs de la grille
 * [Canop] fatigue et récupération, cout en pv des accélérations
-
 * [Canop] condenser la page d'accueil pour épargner le scroll sur petit écran
 * [Canop] login : décocher "activer la DLA"
 * moyenne des caractéristiques
