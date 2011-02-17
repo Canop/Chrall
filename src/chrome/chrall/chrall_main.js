@@ -15,8 +15,7 @@ var splitedPathname = document.location.pathname.split('/');
 var pageName = splitedPathname[splitedPathname.length-1];
 var viewIsEmpty=true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
-var playerLocation = null; // position du joueur : instance de Point
-var playerProfile = new TrollProfile();
+var player = new Troll();
 var horizontalViewLimit = -1;
 
 // note : pour l'instant il faut que ces valeurs de départ soient cohérentes avec le css (display='block' ou display='none');
@@ -35,5 +34,7 @@ if (pageName=="Play_vue.php") {
 	Chrall_analyseAndReformatView();	
 } else if (pageName=="Play_profil.php") { 
 	Chrall_analyseAndReformatProfile();
+} else if (pageName=="PlayStart.php") { 
+	Chrall_analyseAndReformatStartPage();
 }
 

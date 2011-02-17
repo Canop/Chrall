@@ -5,10 +5,15 @@ RECENTS / A TESTER :
 * {Ne marche pas ?} mise à jour automatique de l'extension
 * taille de grille basée sur la vue paramétrée
 * [Canop] affichage (optionnel) des trésors, champis et lieux sur la grille
-* site web : détection browser (indiquer qu'il faut Chrome, si nécessaire)
+* [Canop] site web : détection browser (indiquer qu'il faut Chrome, si nécessaire)
 * [Canop] site web : détecter si l'extension est installée
 * [Canop] améliorer les couleurs de la grille
 * [Canop] fatigue et récupération, cout en pv des accélérations
+
+* [Canop] condenser la page d'accueil pour épargner le scroll sur petit écran
+* [Canop] login : décocher "activer la DLA"
+* moyenne des caractéristiques
+* profil : moyenne de dégâts en critique
 
 EN COURS :
 ==========
@@ -16,17 +21,36 @@ EN COURS :
 
 TODO :
 ======
+* calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquant pour entrainement
 * fatigue & am : calcul du cout en pv pour rejouer de suite, et suggestion d'attente
 * mettre en place des stats Google Analytics détaillées (affichage des différentes pages)
 * mettre en place une détection de problèmes unifiée (incapacité à analyser ou formater) et transmettre l'événement à google analytics (page incluse)
 * calculs en roll-over sur les sorts & compétences
-* [Canop] condenser la page d'accueil pour épargner le scroll sur petit écran
-* récupération d'un bestiaire
+* profil : affichage à côté des dégâts moyens des dégâts avec les différentes compétences (CDB4 par exemple)
+* bestiaire : modèle de données en bd
+* bestiaire : modèle de données des CDM, parseur de CDM
+* bestiaire : envoi des CDM depuis l'extension
+* bestiaire : batch d'analyse des CDM pour construire le bestiaire
 * rendre les parsings plus robustes en privilégiant les expressions régulières plutôt que le comptage des lignes ou cellules
-* moyenne des caractéristiques
+* [Canop] valider l'utilisation de go pour le codage du serveur
 * icône (un troll qui nage le crawl ?)
-* interface d'équipe (ralliement, infos des autres, etc.)
+* interface de troll (suivants identifiés)
 * grille : profils, chances au combat, etc. des monstres au hover
 * grille : trolls amis/ennemis
+* grille : mise en place d'un menu contextuel
+* grille/menu contextuel : lancement d'action déplacement
+* grille/menu contextuel : ajout de notes sur des cases ou des things pour l'équipe (par exemple "passer CE portail" ou bien "C'est ce mouch'oo qui m'a piqué mes mouches" ou encore "à finir 90%").
+* profil : un onglet pour lister les notes (de soi et de ceux qui partagent avec nous). Ceci aura l'effet de bord d'offrir des "bookmarks" des trolls et monstres annotés
+* liste des trolls : envoi de MP par case à cocher
+* profil : affichage rapport tués/décés
+* profil/actions programmées : afficher la moyenne de la parade
+* chat d'équipe
+* poids de l'équipement : détailler ce qui est porté et ce qui est en besace
+* [Canop] options : séparer via des onglets en "Options standard" et "Options Chrall"
 * [Canop] grille magique (technologie secrete)
 * ajouter quelque part (sur la page d'accueil?) la mention que les pages sont modifiées par chrall et un lien vers le site web (et un mode d'emploi de désinstallation ?)
+* site web : aide détaillée/tutorial pour assurer que toutes les fonctions soient connues
+
+NOTES :
+=======
+* pas de vrai concept d'équipe : chaque troll choisit un par un les trolls à qui il donne accés en lecture à ce qu'il monte. Et il doit être possible de bloquer les infos d'un autre joueur.

@@ -45,10 +45,10 @@ function Chrall_makeGridHtml() {
 	for (var y=ymax; y>=ymin; y--) {
 		html += "<tr><td class=grad height=30>"+ y + "</td>";
 		for (var x=xmin; x<=xmax; x++) {
-			var hdist = playerLocation.hdist(x, y)
+			var hdist = player.hdist(x, y)
 			var cellContent = "";
-			if (x==playerLocation.x && y==playerLocation.y) {
-				cellContent += "<span class=ch_player>"+playerLocation.z+":Vous êtes ici</span><br>"
+			if (x==player.x && y==player.y) {
+				cellContent += "<span class=ch_player>"+player.z+":Vous êtes ici</span><br>"
 			}
 			for (var i=0; i<trollsInView.length; i++) {
 				var t = trollsInView[i];
@@ -194,9 +194,9 @@ function Chrall_analyseView() {
 	//> recherche de la position du joueur
 	var positionSentenceText = $($(tables[0]).find("li")[0]).text();
 	var positionSentenceTokens = positionSentenceText.split(new RegExp("[ ,:=]+", "g"));
-	playerLocation = new Point(
-		parseInt(positionSentenceTokens[5]), parseInt(positionSentenceTokens[8]), parseInt(positionSentenceTokens[10])
-	);
+	player.x = parseInt(positionSentenceTokens[5]);
+	player.y = parseInt(positionSentenceTokens[8]);
+	player.z = parseInt(positionSentenceTokens[10]);
 
 	//> recherche de la limite de vue horizontale (pour dessiner la grille ensuite)
 	try {
@@ -215,10 +215,10 @@ function Chrall_analyseView() {
 	
 	//> on détermine la zone visible 
 	if (horizontalViewLimit>=0) {
-		xmin = playerLocation.x-horizontalViewLimit;
-		xmax = playerLocation.x+horizontalViewLimit;
-		ymin = playerLocation.y-horizontalViewLimit;
-		ymax = playerLocation.y+horizontalViewLimit;
+		xmin = player.x-horizontalViewLimit;
+		xmax = player.x+horizontalViewLimit;
+		ymin = player.y-horizontalViewLimit;
+		ymax = player.y+horizontalViewLimit;
 	} else {
 		// si on n'a pas la portée on regarde les monstres (je garde ça car plus tard je ferai sans doute une fonction pour tom d'auto-adaptation de la vue en fonction de certains critères)
 		Chrall_enlargeView(monstersInView);
