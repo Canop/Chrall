@@ -82,7 +82,9 @@ Monster.prototype.setName = function(fullName){
 		i1 = remainingString.indexOf('[');
 		i2 = remainingString.indexOf(']');
 		if (i1>0 && i2>i1) {
-			this.isSick = true; // notons que ce test n'est pas super fiable... ça pourrait être autre chose... peut-être même un taggage par un joueur !
+			// notons que ce test n'est pas super fiable... ça pourrait être autre chose... peut-être même un taggage par un joueur !
+			// à terme il faudra utiliser le fait que le tag de maladie n'est pas dans le <a></a>
+			this.isSick = true;
 		}
 	} else {
 		this.name = fullName;
@@ -106,7 +108,6 @@ Monster.prototype.setName = function(fullName){
  */ 
 function Troll(x, y, z) {
 	Thing.call(this, x, y, z); // appel du constructeur de la super-classe (il n'y a pas de 'super' en javascript)
-	//this.characteristics = {}; // on va utiliser ça comme map avec pour clés les noms en français des caractéristiques
 }
 Troll.prototype = new Thing();
 /**
@@ -116,6 +117,6 @@ Troll.prototype = new Thing();
  * je vous laisse deviner pour la suite
  */
 Troll.prototype.getDla = function(nbTurnsToAdd) {
-	if (arguments.length==0) return this.dla;
-	return this.dla.add({seconds: nbTurnsToAdd*this.turnDuration}); 
+	if (!nbTurnsToAdd) return this.dla;
+	return this.dla.clone().add({seconds: nbTurnsToAdd*this.turnDuration});
 }

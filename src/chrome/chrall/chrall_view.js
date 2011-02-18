@@ -1,9 +1,7 @@
 
-function Chrall_toggleFilter(key) {
-	viewFilters[key] = !viewFilters[key];
-	$("div#grid_holder").html(Chrall_makeGridHtml());
-}
-
+/**
+ * construit la ligne de boites à cocher permettant de filtrer la grille
+ */
 function Chrall_makeFiltersHtml() {
 	var html = "<script>";
 	html += "function ChrallEmbedded_show(key, display){";

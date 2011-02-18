@@ -1,7 +1,5 @@
 RECENTS / A TESTER :
 ====================
-* fichier background.html renommé "chrome-extension" pour faciliter la lecture sur google analytics (à vérifier)
-* [Canop] stats analytics
 * {Ne marche pas ?} mise à jour automatique de l'extension
 * taille de grille basée sur la vue paramétrée
 * [Canop] affichage (optionnel) des trésors, champis et lieux sur la grille
@@ -11,13 +9,15 @@ RECENTS / A TESTER :
 * [Canop] fatigue et récupération, cout en pv des accélérations
 * [Canop] condenser la page d'accueil pour épargner le scroll sur petit écran
 * [Canop] login : décocher "activer la DLA"
-* moyenne des caractéristiques
-* profil : moyenne de dégâts en critique
+* [Canop] moyenne des caractéristiques
+* [Canop] profil : moyenne de dégâts en critique
+* détection des gowaps malades
 
 EN COURS :
 ==========
 * [Canop+Taip] gestion des forks et contributions dans github
-* détection des gowaps malades
+* [Canop] apprendre le langage go
+* [Canop] choisir une librairie go/mysql
 
 TODO :
 ======
@@ -51,7 +51,10 @@ TODO :
 * [Canop] grille magique (technologie secrete)
 * ajouter quelque part (sur la page d'accueil?) la mention que les pages sont modifiées par chrall et un lien vers le site web (et un mode d'emploi de désinstallation ?)
 * site web : aide détaillée/tutorial pour assurer que toutes les fonctions soient connues
+* préférences détaillées : transformation ou pas de la page d'accueil
+
 
 NOTES :
 =======
 * pas de vrai concept d'équipe : chaque troll choisit un par un les trolls à qui il donne accés en lecture à ce qu'il monte. Et il doit être possible de bloquer les infos d'un autre joueur.
+* superbe liste de technos : extensions chrome, git, javascript, ajax, github, mysql, go, mercurial, php, css

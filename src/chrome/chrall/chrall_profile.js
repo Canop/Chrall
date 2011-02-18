@@ -30,7 +30,6 @@ function Chrall_parseDuration(text) {
 }
 
 function Chrall_extractBasicInfos(text) {
-	//alert(text);
 	var tokens = Chrall_tokenize(text);
 	player.id = parseInt(tokens[1]);
 	player.name = tokens[3];
@@ -41,7 +40,6 @@ function Chrall_extractBasicInfos(text) {
 }
 	
 function Chrall_extractDlaInfos(text) {
-	//alert(text);
 	// pour comprendre le code qui suit il faut savoir que la page générée est segmentée en bien plus de lignes que ce qui est visible
 	var lines = text.split('\n');
 	var dlaString = lines[1].substring(8, lines[1].length).trim();
@@ -83,7 +81,6 @@ function Chrall_extractFatigue(text) {
  * construit un certain nombre de tables donnant des infos sur la fatigue
  */
 function Chrall_makeStrainInfos() {
-	//player.strainMalus = 15;
 	var html = "<div class=profileInfos>";
 	html += "<table border=0><tr><td valign=top>";
 	if (player.strainBase>0) {
@@ -115,7 +112,7 @@ function Chrall_makeStrainInfos() {
 			else html += "Pas de malus de charge (car fatigue inférieure à 5).";
 		}
 	}
-	if (true) { // TODO vérifier qu'il s'agit bien d'un kastar (suggérer la réincarnation sinon ?)
+	if (true) {
 		var pvGain = Math.min(30, Math.floor(120/(totalStrain*(1+Math.floor(totalStrain/10)))));
 		html += "Accélération du métabolisme : un PV fait gagner " + pvGain + (pvGain>1 ? " minutes" : " minute") + ".<br>";
 		if (player.race!="Kastar") html+="<small>Je sais bien que vous êtes un "+player.race+", mais je laisse ça pour la phase de tests.</small><br>";
