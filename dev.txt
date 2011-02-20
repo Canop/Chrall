@@ -12,6 +12,7 @@ RECENTS / A TESTER :
 * [Canop] moyenne des caractéristiques
 * [Canop] profil : moyenne de dégâts en critique
 * détection des gowaps malades
+* alarmes automatique 2 minutes avant fin de DLA détection de fin de DLA (pas besoin que MH soit encore ouvert, juste Chrome)
 
 EN COURS :
 ==========
@@ -49,6 +50,11 @@ TODO :
 * poids de l'équipement : détailler ce qui est porté et ce qui est en besace
 * [Canop] options : séparer via des onglets en "Options standard" et "Options Chrall"
 * [Canop] grille magique (technologie secrete)
+* ? icône pour indiquer directement sur la carte quels monstres voient le caché
+* alarmes : ne pas perdre les alarmes (ajouter ?) quand on se loggue sur un autre troll
+* alarmes : fenêtre de popup dans le navigateur pour visualiser les alarmes, les désactiver et régler le délai avant DLA
+* alarmes : sauver les alarmes en cookies (ou ailleurs ? sur le serveur ?) pour les retrouver au lancement de Chrome même si on ne va pas sur MH
+* alarmes : proposer une librairie de sonneries (et les mettre en téléchargement sur téléphone pour se faire des pépétes ! non j'déconne...)
 * ajouter quelque part (sur la page d'accueil?) la mention que les pages sont modifiées par chrall et un lien vers le site web (et un mode d'emploi de désinstallation ?)
 * site web : aide détaillée/tutorial pour assurer que toutes les fonctions soient connues
 * préférences détaillées : transformation ou pas de la page d'accueil

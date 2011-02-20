@@ -152,4 +152,7 @@ function Chrall_analyseAndReformatProfile() {
 
 	//> on affiche les infos liées à la fatigue
 	$(cells[10]).append(Chrall_makeStrainInfos());
+	
+	//> on signale à l'extension la date de la fin de DLA, pour qu'elle programme éventuellement une alarme
+	Chrall_sendDlaToExtension(player.getDla(0).getTime(), player.getDla(1).getTime());
 }
