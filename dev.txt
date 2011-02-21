@@ -12,7 +12,6 @@ RECENTS / A TESTER :
 * [Canop] profil : moyenne de dégâts en critique
 * détection des gowaps malades
 * alarmes automatique 2 minutes avant fin de DLA détection de fin de DLA (pas besoin que MH soit encore ouvert, juste Chrome)
-
 * grille : quand une case contient beaucoup d'objets, afficher simplement un truc comme "2343 trésors" avec un lien pour ouvrir (ne pas mélanger les niveaux)
 * grille : ne pas afficher tous les trous de météorite (ceux de chaque niveau) mais simplement un seul
 * grille : ne jamais masquer les trous de météorite
@@ -60,6 +59,7 @@ TODO :
 * profil : affichage rapport tués/décés
 * profil/actions programmées : afficher la moyenne de la parade
 * chat d'équipe
+* tableaux standards MH (monstres, événements, tableau de chasse, etc.) : surligner la ligne de la souris pour faciliter le rapprochement gauche/droite.
 * poids de l'équipement : détailler ce qui est porté et ce qui est en besace
 * [Canop] options : séparer via des onglets en "Options standard" et "Options Chrall"
 * ? icône pour indiquer directement sur la carte quels monstres voient le caché

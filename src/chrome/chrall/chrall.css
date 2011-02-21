@@ -70,7 +70,7 @@ table.grid td[hasContent]{
 }
 form#gridFiltersForm {
 	position: fixed;
-	left: 5px;
+	left: 15px;
 	top: 40px;
 	background-color: #EBEBEB;
 	border: 1px solid grey;
