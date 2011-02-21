@@ -1,7 +1,7 @@
 div.grid_holder {
 	padding:0px;
 	margin:0px;
-	width:100%;
+	width: 100%;
 }
 table.grid {
 	background: white;
@@ -69,6 +69,17 @@ table.grid td[hasContent]{
 	min-width:100px;
 }
 form#gridFiltersForm {
+	position: fixed;
+	left: 5px;
+	top: 40px;
+	background-color: #EBEBEB;
+	border: 1px solid grey;
+	margin : 4px;
+	padding-left: 8px;
+	padding-right: 8px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
 }
 div.profileInfos table.infos {
 	border-collapse: collapse;

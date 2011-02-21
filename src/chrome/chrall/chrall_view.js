@@ -49,7 +49,8 @@ function Chrall_makeGridHtml() {
 	for (var y=ymax; y>=ymin; y--) {
 		html += "<tr><td class=grad height=30>"+ y + "</td>\n";
 		for (var x=xmin; x<=xmax; x++) {
-			var hdist = player.hdist(x, y)
+			var hdist = player.hdist(x, y);
+			var hasHole = false;
 			var cellContent = "";
 			if (x==player.x && y==player.y) {
 				cellContent += "<span class=ch_player>"+player.z+":Vous êtes ici</span><br>"
@@ -75,7 +76,11 @@ function Chrall_makeGridHtml() {
 			for (var i=0; i<placesInView.length; i++) {
 				var t = placesInView[i];
 				if (t.x==x && t.y==y) {
-					cellContent += "<a name='lieux' class=ch_place>"+t.z+": "+t.name+"</a>";
+					if (t.isHole) {
+						hasHole = true;
+					} else {
+						cellContent += "<a name='lieux' class=ch_place>"+t.z+": "+t.name+"</a>";
+					}
 				}
 			}
 			//> on regroupe les objets par étage et pour chaque étage on les compte afin de ne pas afficher des milliers de lignes quand une tanière est écroulée
@@ -124,6 +129,7 @@ function Chrall_makeGridHtml() {
 			html += "<td class=d"+((hdist-horizontalViewLimit+20001)%2)+" title='case X="+x+" Y="+y+" \nDistance horizontale: "+hdist+"'";
 			if (cellContent.length>0) html += " hasContent"; 
 			html += ">";
+			if (hasHole==true) html += "<span class=ch_place>Trou de Météorite</span>";
 			html += cellContent;
 			html += "</td>\n";
 		}
@@ -195,6 +201,22 @@ function Chrall_analyseThingTable(table, list) {
 	);
 }
 
+function Chrall_analysePlaceTable(table, list) {
+	$(table).find("tr.mh_tdpage").each(
+		function(){
+			var thing = new Place();
+			var cells = $(this).find("td");
+			var i=1;
+			thing.id = parseInt($(cells[i++]).text());
+			thing.setName($(cells[i++]).text());
+			thing.x = parseInt($(cells[i++]).text());
+			thing.y = parseInt($(cells[i++]).text());
+			thing.z = parseInt($(cells[i++]).text());
+			list.push(thing);
+		}
+	);
+}
+
 function Chrall_enlargeView(thingList) {
 	var t;
 	var i=0;
@@ -241,7 +263,7 @@ function Chrall_analyseView() {
 	Chrall_analyseTrollTable(tables[2]);
 	Chrall_analyseThingTable(tables[3], objectsInView);
 	Chrall_analyseThingTable(tables[4], mushroomsInView);
-	Chrall_analyseThingTable(tables[5], placesInView);
+	Chrall_analysePlaceTable(tables[5], placesInView);
 	Chrall_analyseThingTable(tables[6], cenotaphsInView);
 	
 	//> on détermine la zone visible 
@@ -283,8 +305,8 @@ function Chrall_analyseAndReformatView() {
 	html += "<li><a href=#tabCenotaphs>Cénotaphes ("+cenotaphsInView.length+")</a></li>";
 	html += "<li><a href=#tabSettings>Réglages</a></li>";
 	html += "</ul>";
-	html += "<div class=tab_container>";
-	html += "<div id=tabGrid class=tab_content>";
+	html += "<div class=tab_container><br><br>";
+	html += "<div id=tabGrid class=tab_content><br><br>";
 	html += Chrall_makeFiltersHtml();
 	html += "<div class=grid_holder>";
 	html += Chrall_makeGridHtml();

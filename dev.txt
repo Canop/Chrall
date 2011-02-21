@@ -15,6 +15,8 @@ RECENTS / A TESTER :
 * alarmes automatique 2 minutes avant fin de DLA détection de fin de DLA (pas besoin que MH soit encore ouvert, juste Chrome)
 
 * grille : quand une case contient beaucoup d'objets, afficher simplement un truc comme "2343 trésors" avec un lien pour ouvrir (ne pas mélanger les niveaux)
+* grille : ne pas afficher tous les trous de météorite (ceux de chaque niveau) mais simplement un seul
+* grille : ne jamais masquer les trous de météorite
 
 EN COURS :
 ==========
@@ -24,7 +26,7 @@ EN COURS :
 
 TODO :
 ======
-* grille : ne pas afficher tous les trous de météorite (ceux de chaque niveau) mais simplement un seul
+* vue : toujours garder visibles les onglets et le filtre de vue (je pense qu'il faut donner une position:fixed aux onglets et au filtre)
 * détection des trolls malades
 * calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquant pour entrainement
 * fatigue & am : calcul du cout en pv pour rejouer de suite, et suggestion d'attente

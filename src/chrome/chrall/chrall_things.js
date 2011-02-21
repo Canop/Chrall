@@ -42,7 +42,6 @@ Characteristic.prototype.getCriticalMean = function() {
  *  un id, un nom et une position (les x, y et z directement)
  * Params :
  *  - id
- *  - fullName
  *  - name
  */
 function Thing(x, y, z) {
@@ -53,7 +52,9 @@ function Thing(x, y, z) {
 Thing.prototype.hdist = function(x, y) { // distance horizontale
 	return Math.max(Math.abs(this.x-x), Math.abs(this.y-y));
 }
-
+Thing.prototype.setName = function(name) { // méthode surchargée pour les monstres et les lieux
+	this.name = name;
+}
 
 //////////////////////////////////////////////////////////////////////// Monstre
 
@@ -119,4 +120,21 @@ Troll.prototype = new Thing();
 Troll.prototype.getDla = function(nbTurnsToAdd) {
 	if (!nbTurnsToAdd) return this.dla;
 	return this.dla.clone().add({seconds: nbTurnsToAdd*this.turnDuration});
+}
+
+//////////////////////////////////////////////////////////////////////// Place (lieu)
+
+/**
+ * Place hérite de Thing.
+ * Params :
+ *  - isHole (trou de météorite)
+ */ 
+function Place(x, y, z) {
+	Thing.call(this, x, y, z); // appel du constructeur de la super-classe (il n'y a pas de 'super' en javascript)
+}
+Place.prototype = new Thing();
+
+Place.prototype.setName = function(fullName){
+	this.name = fullName;
+	this.isHole = fullName.indexOf("Trou de Météorite")>=0;
 }
