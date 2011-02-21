@@ -1,6 +1,5 @@
 RECENTS / A TESTER :
 ====================
-* {Ne marche pas ?} mise à jour automatique de l'extension
 * taille de grille basée sur la vue paramétrée
 * [Canop] affichage (optionnel) des trésors, champis et lieux sur la grille
 * [Canop] site web : détection browser (indiquer qu'il faut Chrome, si nécessaire)
@@ -17,6 +16,7 @@ RECENTS / A TESTER :
 * grille : quand une case contient beaucoup d'objets, afficher simplement un truc comme "2343 trésors" avec un lien pour ouvrir (ne pas mélanger les niveaux)
 * grille : ne pas afficher tous les trous de météorite (ceux de chaque niveau) mais simplement un seul
 * grille : ne jamais masquer les trous de météorite
+* vue : toujours garder visibles les onglets et le filtre de vue (je pense qu'il faut donner une position:fixed aux onglets et au filtre)
 
 EN COURS :
 ==========
@@ -24,9 +24,12 @@ EN COURS :
 * [Canop] apprendre le langage go
 * [Canop] choisir une librairie go/mysql
 
+TACHES EN RECHERCHE DE VOLONTAIRES :
+====================================
+* BUG: la mise à jour automatique de l'extension ne fonctionne pas
+
 TODO :
 ======
-* vue : toujours garder visibles les onglets et le filtre de vue (je pense qu'il faut donner une position:fixed aux onglets et au filtre)
 * détection des trolls malades
 * calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquant pour entrainement
 * fatigue & am : calcul du cout en pv pour rejouer de suite, et suggestion d'attente
