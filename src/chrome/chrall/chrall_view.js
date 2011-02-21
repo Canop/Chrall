@@ -336,6 +336,7 @@ function Chrall_analyseAndReformatView() {
 		$(this).addClass("active");
 		$(".tab_content").hide();
 		var activeTab = $(this).find("a").attr("href");
+		window.scroll(0, 0);
 		$(activeTab).fadeIn();
 		return false;
 	});
