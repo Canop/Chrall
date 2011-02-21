@@ -32,9 +32,12 @@ a.ch_place, a.ch_place:hover {
 	color: black  !important;
 	display: block;
 }
-a.ch_object, a.ch_object:hover {
+span.ch_object, span.ch_object:hover {
 	color: grey  !important;
 	display: none;
+}
+a.ch_objects_toggler {
+	color: grey  !important;
 }
 a.ch_mushroom, a.ch_mushroom:hover {
 	color: #6d7e44  !important;
@@ -75,4 +78,7 @@ div.profileInfos table.infos {
 }
 div.profileInfos table.infos td {
 	border: thin solid #333333;
+}
+div.hiddenDiv {
+	display: none;
 }

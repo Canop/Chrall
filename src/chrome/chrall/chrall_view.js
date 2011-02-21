@@ -4,10 +4,16 @@
  */
 function Chrall_makeFiltersHtml() {
 	var html = "<script>";
-	html += "function ChrallEmbedded_show(key, display){";
+	html += "function ChrallEmbedded_toggleDisplayByName(key, display){";
 	html += " var os = document.getElementsByName(key);";
 	html += " for (var i=0; i<os.length; i++) {";
-	html += "  os[i].style.display=display;";
+	//html += "  if (i<2) alert('display=='+os[i].style.display);";
+	html += "  if (!display) {";
+	html += "   if (os[i].style.display=='block') os[i].style.display='none';";
+	html += "   else os[i].style.display='block';";
+	html += "  } else {";
+	html += "   os[i].style.display=display;";
+	html += "  }";
 	html += " }";
 	html += "}";
 	html += "";
@@ -16,7 +22,7 @@ function Chrall_makeFiltersHtml() {
 	for (var key in viewFilters) {
 		html += "<span><input type=checkbox id='"+key+"'";
 		if (viewFilters[key]) html += " checked";
-		html += " onClick=\"ChrallEmbedded_show('"+key+"', this.checked?'block':'none');\"";
+		html += " onClick=\"ChrallEmbedded_toggleDisplayByName('"+key+"', this.checked?'block':'none');\"";
 		html += ">"+key+"</span>";
 	}
 	html += "</form>";
@@ -27,6 +33,8 @@ function Chrall_makeFiltersHtml() {
  * cette fonction construit le HTML de la grille. Ce HTML est construit une fois pour toute, le filtrage opérant via des modifications de style.
  */ 
 function Chrall_makeGridHtml() {
+	var grey_closed_png_url = chrome.extension.getURL("grey_closed.png");
+	var grey_open_png_url = chrome.extension.getURL("grey_open.png");
 	var html = "<table class=grid>";
 	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center title=\"Nordhikan (Y+)\">Nordhikan (Y+)</td><td bgcolor=#BABABA></td></tr>";
 	html += "<tr>";
@@ -37,9 +45,9 @@ function Chrall_makeGridHtml() {
 	}
 	html += "<td align=center height=30 width=30>x/y</td>";
 	html += "<td rowspan="+(ymax-ymin+3)+" title='Orhykan (X+)'><span style='display:block;transform:rotate(90deg);-webkit-transform:rotate(90deg);-moz-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;'>Orhykan&nbsp;(X+)</span></td>";
-	html += "</tr>";
+	html += "</tr>\n";
 	for (var y=ymax; y>=ymin; y--) {
-		html += "<tr><td class=grad height=30>"+ y + "</td>";
+		html += "<tr><td class=grad height=30>"+ y + "</td>\n";
 		for (var x=xmin; x<=xmax; x++) {
 			var hdist = player.hdist(x, y)
 			var cellContent = "";
@@ -70,11 +78,36 @@ function Chrall_makeGridHtml() {
 					cellContent += "<a name='lieux' class=ch_place>"+t.z+": "+t.name+"</a>";
 				}
 			}
+			//> on regroupe les objets par étage et pour chaque étage on les compte afin de ne pas afficher des milliers de lignes quand une tanière est écroulée
+			var objectsByLevel = {};
 			for (var i=0; i<objectsInView.length; i++) {
 				var t = objectsInView[i];
-				if (t.x==x && t.y==y) {
-					cellContent += "<a name='objets' class=ch_object>"+t.z+": "+t.name+"</a>";
+				if (t.x!=x || t.y!=y) continue;
+				if (!objectsByLevel[t.z]) {
+					objectsByLevel[t.z] = new Array();
 				}
+				objectsByLevel[t.z].push(t);
+			}
+			for (var level in objectsByLevel) {
+				var list = objectsByLevel[level];
+				var merge = list.length>3;				
+				if (merge) {
+					var divName = "objects_"+(x<0?"_"+(-x):x)+"_"+(y<0?"_"+(-y):y)+"_"+(-level);
+					cellContent += "<span name='objets' class=ch_object>" + level + " : ";
+					// ligne suivante : début de tentative de mettre un triangle d'ouverture
+					//cellContent += "<img border=0 src=\""+grey_closed_png_url+"\">";
+					cellContent += "<a class=ch_objects_toggler href=\"javascript:ChrallEmbedded_toggleDisplayByName('"+divName+"');\">";
+					cellContent += "<b>"+list.length+" trésors</b>";
+					cellContent += "</a>";
+					cellContent += "<div name="+divName+" class=hiddenDiv>";
+				}
+				for (var i=0; i<list.length; i++) {
+					var t = list[i];
+					cellContent += "<span name='objets' class=ch_object>"+t.z+": "+t.name+"</span>";
+				}
+				if (merge) {
+					cellContent += "</div></span>";
+				}		
 			}
 			for (var i=0; i<mushroomsInView.length; i++) {
 				var t = mushroomsInView[i];
@@ -92,7 +125,7 @@ function Chrall_makeGridHtml() {
 			if (cellContent.length>0) html += " hasContent"; 
 			html += ">";
 			html += cellContent;
-			html += "</td>";
+			html += "</td>\n";
 		}
 		html += "<td class=grad height=30>"+ y + "</td></tr>";
 	}

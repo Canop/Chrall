@@ -14,6 +14,8 @@ RECENTS / A TESTER :
 * détection des gowaps malades
 * alarmes automatique 2 minutes avant fin de DLA détection de fin de DLA (pas besoin que MH soit encore ouvert, juste Chrome)
 
+* grille : quand une case contient beaucoup d'objets, afficher simplement un truc comme "2343 trésors" avec un lien pour ouvrir (ne pas mélanger les niveaux)
+
 EN COURS :
 ==========
 * [Canop+Taip] gestion des forks et contributions dans github
@@ -22,6 +24,7 @@ EN COURS :
 
 TODO :
 ======
+* grille : ne pas afficher tous les trous de météorite (ceux de chaque niveau) mais simplement un seul
 * détection des trolls malades
 * calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquant pour entrainement
 * fatigue & am : calcul du cout en pv pour rejouer de suite, et suggestion d'attente
@@ -33,6 +36,7 @@ TODO :
 * bestiaire : modèle de données des CDM, parseur de CDM
 * bestiaire : envoi des CDM depuis l'extension
 * bestiaire : batch d'analyse des CDM pour construire le bestiaire
+* mouches : récapitulatif (en haut) à la fois sur les mouches actuelles et sur le total (en comptant celles en vadrouille)
 * rendre les parsings plus robustes en privilégiant les expressions régulières plutôt que le comptage des lignes ou cellules
 * [Canop] valider l'utilisation de go pour le codage du serveur
 * icône (un troll qui nage le crawl ?)
@@ -40,8 +44,12 @@ TODO :
 * grille : profils, chances au combat, etc. des monstres au hover
 * grille : trolls amis/ennemis
 * grille : mise en place d'un menu contextuel
+* grille : une seule ligne pour afficher un trou de météorite
 * grille/menu contextuel : lancement d'action déplacement
 * grille/menu contextuel : ajout de notes sur des cases ou des things pour l'équipe (par exemple "passer CE portail" ou bien "C'est ce mouch'oo qui m'a piqué mes mouches" ou encore "à finir 90%").
+* grille : bouton de centrage
+* grille : une flèche discrète par dessus la grille pour indiquer la direction du joueur (utiliser un canvas transparent ?)
+* grille : modifier la technique des infos au survol, pour que l'on voit mieux quelle est la case concernée
 * profil : un onglet pour lister les notes (de soi et de ceux qui partagent avec nous). Ceci aura l'effet de bord d'offrir des "bookmarks" des trolls et monstres annotés
 * liste des trolls : envoi de MP par case à cocher
 * profil : affichage rapport tués/décés
@@ -49,7 +57,6 @@ TODO :
 * chat d'équipe
 * poids de l'équipement : détailler ce qui est porté et ce qui est en besace
 * [Canop] options : séparer via des onglets en "Options standard" et "Options Chrall"
-* [Canop] grille magique (technologie secrete)
 * ? icône pour indiquer directement sur la carte quels monstres voient le caché
 * alarmes : ne pas perdre les alarmes (ajouter ?) quand on se loggue sur un autre troll
 * alarmes : fenêtre de popup dans le navigateur pour visualiser les alarmes, les désactiver et régler le délai avant DLA
