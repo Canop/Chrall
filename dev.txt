@@ -1,7 +1,5 @@
 RECENTS / A TESTER :
 ====================
-* taille de grille basée sur la vue paramétrée
-* [Canop] affichage (optionnel) des trésors, champis et lieux sur la grille
 * [Canop] site web : détection browser (indiquer qu'il faut Chrome, si nécessaire)
 * [Canop] site web : détecter si l'extension est installée
 * [Canop] améliorer les couleurs de la grille
@@ -15,7 +13,11 @@ RECENTS / A TESTER :
 * grille : quand une case contient beaucoup d'objets, afficher simplement un truc comme "2343 trésors" avec un lien pour ouvrir (ne pas mélanger les niveaux)
 * grille : ne pas afficher tous les trous de météorite (ceux de chaque niveau) mais simplement un seul
 * grille : ne jamais masquer les trous de météorite
-* vue : toujours garder visibles les onglets et le filtre de vue (je pense qu'il faut donner une position:fixed aux onglets et au filtre)
+* vue : toujours garder visibles les onglets et le filtre de vue
+
+* vue : accélération du changement d'onglet
+* grille : afficher différemment les trolls intangibles (italique ?)
+* grille/filtre : permettre le (dé)cochage par un clic sur le mot (ex : "trolls") et pas seulement la case à cocher elle-même
 
 EN COURS :
 ==========
@@ -29,8 +31,12 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 
 TODO :
 ======
+* calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquants pour entrainement
 * détection des trolls malades
-* calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquant pour entrainement
+* profil : indiquer les alarmes programmées ?
+* grille/filtre : remplacer "objets" par "trésors"
+* grille : ajouter un menu déroulant de limite de vue à côté du filtre (même style arrondi) avec une liste {"vue totale", "vue/2", "vue/4"}
+* grille : permettre que le premier affichage de vue se fasse toujours avec le même preset (réduit) pour un affichage par défaut plus rapide (modification du lien "Ma Vue", je suppose)
 * fatigue & am : calcul du cout en pv pour rejouer de suite, et suggestion d'attente
 * mettre en place des stats Google Analytics détaillées (affichage des différentes pages)
 * mettre en place une détection de problèmes unifiée (incapacité à analyser ou formater) et transmettre l'événement à google analytics (page incluse)
@@ -48,11 +54,9 @@ TODO :
 * grille : profils, chances au combat, etc. des monstres au hover
 * grille : trolls amis/ennemis
 * grille : mise en place d'un menu contextuel
-* grille : une seule ligne pour afficher un trou de météorite
 * grille/menu contextuel : lancement d'action déplacement
 * grille/menu contextuel : ajout de notes sur des cases ou des things pour l'équipe (par exemple "passer CE portail" ou bien "C'est ce mouch'oo qui m'a piqué mes mouches" ou encore "à finir 90%").
-* grille : bouton de centrage
-* grille : une flèche discrète par dessus la grille pour indiquer la direction du joueur (utiliser un canvas transparent ?)
+* grille : une flèche discrète par dessus la grille pour indiquer la direction du joueur (utiliser un canvas transparent ?). Cette flèche doit contenir un bouton de centrage.
 * grille : modifier la technique des infos au survol, pour que l'on voit mieux quelle est la case concernée
 * profil : un onglet pour lister les notes (de soi et de ceux qui partagent avec nous). Ceci aura l'effet de bord d'offrir des "bookmarks" des trolls et monstres annotés
 * liste des trolls : envoi de MP par case à cocher
@@ -63,6 +67,7 @@ TODO :
 * poids de l'équipement : détailler ce qui est porté et ce qui est en besace
 * [Canop] options : séparer via des onglets en "Options standard" et "Options Chrall"
 * ? icône pour indiquer directement sur la carte quels monstres voient le caché
+* alarmes : fonction manuelle d'ajout d'alarme ("on a dit qu'on tapait à 11h33")
 * alarmes : ne pas perdre les alarmes (ajouter ?) quand on se loggue sur un autre troll
 * alarmes : fenêtre de popup dans le navigateur pour visualiser les alarmes, les désactiver et régler le délai avant DLA
 * alarmes : sauver les alarmes en cookies (ou ailleurs ? sur le serveur ?) pour les retrouver au lancement de Chrome même si on ne va pas sur MH
@@ -70,6 +75,8 @@ TODO :
 * ajouter quelque part (sur la page d'accueil?) la mention que les pages sont modifiées par chrall et un lien vers le site web (et un mode d'emploi de désinstallation ?)
 * site web : aide détaillée/tutorial pour assurer que toutes les fonctions soient connues
 * préférences détaillées : transformation ou pas de la page d'accueil
+* grille/filtre : rendre inactives les cases à cocher de catégories vides
+* ? préparer un forum ?
 
 
 NOTES :

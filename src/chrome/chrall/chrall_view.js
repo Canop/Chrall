@@ -23,7 +23,8 @@ function Chrall_makeFiltersHtml() {
 		html += "<span><input type=checkbox id='"+key+"'";
 		if (viewFilters[key]) html += " checked";
 		html += " onClick=\"ChrallEmbedded_toggleDisplayByName('"+key+"', this.checked?'block':'none');\"";
-		html += ">"+key+"</span>";
+		//html += " disabled";
+		html += "><label for='"+key+"'>"+key+"</label></span>";
 	}
 	html += "</form>";
 	return html;
@@ -58,7 +59,9 @@ function Chrall_makeGridHtml() {
 			for (var i=0; i<trollsInView.length; i++) {
 				var t = trollsInView[i];
 				if (t.x==x && t.y==y) {
-					cellContent += "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a>";
+					cellContent += "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\"";
+					if (t.isIntangible) cellContent += " intangible";
+					cellContent += ">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a>";
 				}
 			}
 			for (var i=0; i<monstersInView.length; i++) {
@@ -173,7 +176,9 @@ function Chrall_analyseTrollTable(table) {
 			var cells = $(this).find("td");
 			var i=1;
 			troll.id = parseInt($(cells[i++]).text());
-			troll.name = $(cells[i++]).text();
+			var cell = $(cells[i++]);
+			troll.name = cell.text();
+			troll.isIntangible = cell.html().indexOf("mh_trolls_0")>=0; // les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
 			troll.level = $(cells[i++]).text();
 			troll.race = $(cells[i++]).text();
 			troll.guilde = $(cells[i++]).text();
@@ -337,7 +342,7 @@ function Chrall_analyseAndReformatView() {
 		$(".tab_content").hide();
 		var activeTab = $(this).find("a").attr("href");
 		window.scroll(0, 0);
-		$(activeTab).fadeIn();
+		$(activeTab).fadeIn("fast");
 		return false;
 	});
 }

@@ -105,10 +105,12 @@ Monster.prototype.setName = function(fullName){
  *  - turnDuration (en secondes)
  *  - strainBase (la fatigue de base)
  *  - strainMalus (le malus de fatigue)
+ *  - isIntangible
  *  - les characteristics...
  */ 
 function Troll(x, y, z) {
 	Thing.call(this, x, y, z); // appel du constructeur de la super-classe (il n'y a pas de 'super' en javascript)
+	this.isIntangible = false;
 }
 Troll.prototype = new Thing();
 /**

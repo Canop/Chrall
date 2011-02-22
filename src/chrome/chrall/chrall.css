@@ -28,6 +28,9 @@ a.ch_troll, a.ch_troll:hover {
 	color: blue  !important;
 	display: block;
 }
+a.ch_troll[intangible] {
+	font-style: italic;
+}
 a.ch_place, a.ch_place:hover {
 	color: black  !important;
 	display: block;
