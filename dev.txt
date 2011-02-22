@@ -14,10 +14,11 @@ RECENTS / A TESTER :
 * grille : ne pas afficher tous les trous de météorite (ceux de chaque niveau) mais simplement un seul
 * grille : ne jamais masquer les trous de météorite
 * vue : toujours garder visibles les onglets et le filtre de vue
-
+<- v0.7
 * vue : accélération du changement d'onglet
 * grille : afficher différemment les trolls intangibles (italique ?)
 * grille/filtre : permettre le (dé)cochage par un clic sur le mot (ex : "trolls") et pas seulement la case à cocher elle-même
+
 
 EN COURS :
 ==========
@@ -55,6 +56,7 @@ TODO :
 * grille : trolls amis/ennemis
 * grille : mise en place d'un menu contextuel
 * grille/menu contextuel : lancement d'action déplacement
+* corriger le calcul des prochaines DLA si on passe sur la vue des malus
 * grille/menu contextuel : ajout de notes sur des cases ou des things pour l'équipe (par exemple "passer CE portail" ou bien "C'est ce mouch'oo qui m'a piqué mes mouches" ou encore "à finir 90%").
 * grille : une flèche discrète par dessus la grille pour indiquer la direction du joueur (utiliser un canvas transparent ?). Cette flèche doit contenir un bouton de centrage.
 * grille : modifier la technique des infos au survol, pour que l'on voit mieux quelle est la case concernée

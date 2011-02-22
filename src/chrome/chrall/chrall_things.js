@@ -35,6 +35,24 @@ Characteristic.prototype.getCriticalMean = function() {
 	return Math.floor(this.diceNumber*1.5) * (this.diceSize+1)/2 + this.physicalBonus + this.magicalBonus;
 }
 
+//////////////////////////////////////////////////////////////////////// Mouche
+
+/**
+ *	Une mouche
+ * Params :
+ *  - type ("Rivatant", "Telaite", etc.) : capitalisé de façon normale
+ *  - name ou null
+ *  - characName : le nom de la caractéristique impactée [->taip : pas urgent]
+ *  - physicalBonus  [->taip : pas urgent]
+ *  - magicalBonus  [->taip : pas urgent]
+ */
+function Fly(type, name) {
+	this.type = type;
+	this.name = name ? name : null;
+	// <= insérer ici la détermination de la charac et du bonus
+}
+
+
 //////////////////////////////////////////////////////////////////////// Thing
 
 /**
@@ -106,6 +124,7 @@ Monster.prototype.setName = function(fullName){
  *  - strainBase (la fatigue de base)
  *  - strainMalus (le malus de fatigue)
  *  - isIntangible
+ *  - flies : le tableau des mouches
  *  - les characteristics...
  */ 
 function Troll(x, y, z) {
@@ -122,6 +141,10 @@ Troll.prototype = new Thing();
 Troll.prototype.getDla = function(nbTurnsToAdd) {
 	if (!nbTurnsToAdd) return this.dla;
 	return this.dla.clone().add({seconds: nbTurnsToAdd*this.turnDuration});
+}
+Troll.prototype.addFly = function(fly) {
+	if (!this.flies) this.flies = new Array();
+	this.flies.push(fly);
 }
 
 //////////////////////////////////////////////////////////////////////// Place (lieu)
