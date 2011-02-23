@@ -8,23 +8,26 @@ RECENTS / A TESTER :
 * [Canop] login : décocher "activer la DLA"
 * [Canop] moyenne des caractéristiques
 * [Canop] profil : moyenne de dégâts en critique
-* détection des gowaps malades
-* alarmes automatique 2 minutes avant fin de DLA détection de fin de DLA (pas besoin que MH soit encore ouvert, juste Chrome)
-* grille : quand une case contient beaucoup d'objets, afficher simplement un truc comme "2343 trésors" avec un lien pour ouvrir (ne pas mélanger les niveaux)
-* grille : ne pas afficher tous les trous de météorite (ceux de chaque niveau) mais simplement un seul
-* grille : ne jamais masquer les trous de météorite
-* vue : toujours garder visibles les onglets et le filtre de vue
+* [Canop] détection des gowaps malades
+* [Canop] alarmes automatique 2 minutes avant fin de DLA détection de fin de DLA (pas besoin que MH soit encore ouvert, juste Chrome)
+* [Canop] grille : quand une case contient beaucoup d'objets, afficher simplement un truc comme "2343 trésors" avec un lien pour ouvrir (ne pas mélanger les niveaux)
+* [Canop] grille : ne pas afficher tous les trous de météorite (ceux de chaque niveau) mais simplement un seul
+* [Canop] grille : ne jamais masquer les trous de météorite
+* [Canop] vue : toujours garder visibles les onglets et le filtre de vue
 <- v0.7
-* vue : accélération du changement d'onglet
-* grille : afficher différemment les trolls intangibles (italique ?)
-* grille/filtre : permettre le (dé)cochage par un clic sur le mot (ex : "trolls") et pas seulement la case à cocher elle-même
-
+* [Canop] vue : accélération du changement d'onglet
+* [Canop] grille : afficher différemment les trolls intangibles (italique ?)
+* [Canop] grille/filtre : permettre le (dé)cochage par un clic sur le mot (ex : "trolls") et pas seulement la case à cocher elle-même
+* [Canop] ajouter au tableau de récupération les colonnes suivantes : malus de charge, gain en minutes par PV de l'AM
+* [Canop] fatigue & am : calcul du cout en pv pour rejouer de suite, et suggestion d'attente
+* [Canop] profil : récupération du nombre de PA restant
 
 EN COURS :
 ==========
 * [Canop+Taip] gestion des forks et contributions dans github
 * [Canop] apprendre le langage go
 * [Canop] choisir une librairie go/mysql
+* [Taip]  calcul des bonus totaux des mouches
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================
@@ -32,13 +35,14 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 
 TODO :
 ======
+* expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
+* regarder si on ne peut pas récupérer des infos dans les scripts publics (par exemple les malus pour améliorer le calcul de la fatigue)
 * calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquants pour entrainement
 * détection des trolls malades
 * profil : indiquer les alarmes programmées ?
 * grille/filtre : remplacer "objets" par "trésors"
 * grille : ajouter un menu déroulant de limite de vue à côté du filtre (même style arrondi) avec une liste {"vue totale", "vue/2", "vue/4"}
 * grille : permettre que le premier affichage de vue se fasse toujours avec le même preset (réduit) pour un affichage par défaut plus rapide (modification du lien "Ma Vue", je suppose)
-* fatigue & am : calcul du cout en pv pour rejouer de suite, et suggestion d'attente
 * mettre en place des stats Google Analytics détaillées (affichage des différentes pages)
 * mettre en place une détection de problèmes unifiée (incapacité à analyser ou formater) et transmettre l'événement à google analytics (page incluse)
 * calculs en roll-over sur les sorts & compétences

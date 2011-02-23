@@ -1,7 +1,7 @@
 {
 	"name": "Chrall",
-	"version": "0.7",
-	"description": "Une extension Chrome pour Mounty Hall, par Canopée",
+	"version": "0.8",
+	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"homepage_url": "http://canop.org/chrall",
 	"update_url": "http://canop.org/chrall/updates.xml",
 	"background_page": "chrome-extension.html",
@@ -16,6 +16,7 @@
 			"js": [
 				"jquery.js",
 				"date-fr-FR.js",
+				"chrall_sentences.js",
 				"chrall_things.js",
 				"chrall_general.js",
 				"chrall_profile.js",
