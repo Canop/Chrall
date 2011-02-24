@@ -36,7 +36,7 @@ function Chrall_initSentences() {
 	Chrall_addSentence("encaisseur", "Durakuir", "synonyme");
 	Chrall_addSentence("imbouffable", "Durakuir", "synonyme");
 	Chrall_addSentence("rocher", "Durakuir", "synonyme");
-	Chrall_addSentence("... D'un autre côté votre compétence de race elle a pas de malus :)", "pas d'AM");
+	Chrall_addSentence("... D'un autre côté votre compétence de race, elle, elle n'a pas de malus :)", "pas d'AM");
 	Chrall_addSentence("Suggestion : réincarnation !", "pas d'AM");
 	Chrall_addSentence("Pfffff.... quelle idée de pas avoir AM !", "pas d'AM");
 	Chrall_addSentence("C'est pas cool, hein...", "pas d'AM");

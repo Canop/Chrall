@@ -57,7 +57,8 @@ function Fly(type, name) {
 
 /**
  * les Things sont les trucs qu'on trouve dans les souterrains. Ils ont essentiellement
- *  un id, un nom et une position (les x, y et z directement)
+ *  un id, un nom et une position (les x, y et z directement).
+ * Note : les champignons n'ont pas d'id visible dans la table reçue.
  * Params :
  *  - id
  *  - name

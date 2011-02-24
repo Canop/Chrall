@@ -205,6 +205,21 @@ function Chrall_analyseThingTable(table, list) {
 		}
 	);
 }
+function Chrall_analyseMushroomTable(table, list) {
+	$(table).find("tr.mh_tdpage").each(
+		function(){
+			var thing = new Thing();
+			var cells = $(this).find("td");
+			var i=1;
+			// je vens de m'apercevoir que les champignons n'avaient pas d'ID visible...
+			thing.name = $(cells[i++]).text();
+			thing.x = parseInt($(cells[i++]).text());
+			thing.y = parseInt($(cells[i++]).text());
+			thing.z = parseInt($(cells[i++]).text());
+			list.push(thing);
+		}
+	);
+}
 
 function Chrall_analysePlaceTable(table, list) {
 	$(table).find("tr.mh_tdpage").each(
@@ -267,7 +282,7 @@ function Chrall_analyseView() {
 	Chrall_analyseMonsterTable(tables[1]);
 	Chrall_analyseTrollTable(tables[2]);
 	Chrall_analyseThingTable(tables[3], objectsInView);
-	Chrall_analyseThingTable(tables[4], mushroomsInView);
+	Chrall_analyseMushroomTable(tables[4], mushroomsInView);
 	Chrall_analysePlaceTable(tables[5], placesInView);
 	Chrall_analyseThingTable(tables[6], cenotaphsInView);
 	

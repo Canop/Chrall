@@ -161,7 +161,9 @@ function Chrall_makeStrainInfos() {
 								if (pv0+normalStrain>optimalStrains[osi]) {
 									var goodAcceleration = optimalStrains[osi]-normalStrain;
 									var dateGoodAcceleration = player.getDla(1).clone().addMinutes(-goodAcceleration*normalPvGain);
-									html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour rejouer de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + ". ";
+									if (dateGoodAcceleration.getTime()<player.getDla(0).getTime()) {
+										html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour rejouer de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + ". ";
+									}
 									break;
 								}
 							}
@@ -182,7 +184,9 @@ function Chrall_makeStrainInfos() {
 							if (pv0+normalStrain>optimalStrains[osi]) {
 								var goodAcceleration = optimalStrains[osi]-normalStrain;
 								var dateGoodAcceleration = player.getDla(1).clone().addMinutes(-goodAcceleration*normalPvGain);
-								html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour jouer deux fois de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + ". ";
+								if (dateGoodAcceleration.getTime()<player.getDla(1).getTime()) {
+									html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour jouer deux fois de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + ". ";
+								}
 								break;
 							}
 						}
@@ -198,7 +202,7 @@ function Chrall_makeStrainInfos() {
 						html += "<small>"+Chrall_getSentence("nok")+"</small>";
 					}
 					break;
-				case 4 :
+				case 6 :
 					if (player.race!="Kastar") {
 						html += "<small>"+Chrall_getSentence("pas d'AM")+"</small>";
 					}

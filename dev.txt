@@ -21,6 +21,9 @@ RECENTS / A TESTER :
 * [Canop] ajouter au tableau de récupération les colonnes suivantes : malus de charge, gain en minutes par PV de l'AM
 * [Canop] fatigue & am : calcul du cout en pv pour rejouer de suite, et suggestion d'attente
 * [Canop] profil : récupération du nombre de PA restant
+<- v0.8
+* [Canop] BUG : les champignons n'étaient jamais affichés (ces curieuses choses n'ont pas d'ID affiché dans la table reçue de MH)
+* [Canop] fatigue optimale : rejeter si après la fin de DLA
 
 EN COURS :
 ==========
@@ -28,6 +31,7 @@ EN COURS :
 * [Canop] apprendre le langage go
 * [Canop] choisir une librairie go/mysql
 * [Taip]  calcul des bonus totaux des mouches
+* [Canop] serveur chrall_gogo
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================
@@ -35,12 +39,13 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 
 TODO :
 ======
+* grille/filtre : remplacer "objets" par "trésors"
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * regarder si on ne peut pas récupérer des infos dans les scripts publics (par exemple les malus pour améliorer le calcul de la fatigue)
 * calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquants pour entrainement
 * détection des trolls malades
+* grille : rendre le "Vous êtes ici" cliquable (ouverture du profil troll du joueur)
 * profil : indiquer les alarmes programmées ?
-* grille/filtre : remplacer "objets" par "trésors"
 * grille : ajouter un menu déroulant de limite de vue à côté du filtre (même style arrondi) avec une liste {"vue totale", "vue/2", "vue/4"}
 * grille : permettre que le premier affichage de vue se fasse toujours avec le même preset (réduit) pour un affichage par défaut plus rapide (modification du lien "Ma Vue", je suppose)
 * mettre en place des stats Google Analytics détaillées (affichage des différentes pages)
@@ -83,6 +88,7 @@ TODO :
 * préférences détaillées : transformation ou pas de la page d'accueil
 * grille/filtre : rendre inactives les cases à cocher de catégories vides
 * ? préparer un forum ?
+* trouver un endroit toujours présent pour le logout
 
 
 NOTES :
