@@ -47,6 +47,8 @@ function Chrall_extractDlaInfos(text) {
 	var turnDurationLine = lines[lines.length-1].trim();
 	var turnDurationString = turnDurationLine.split(':')[1];
 	player.turnDuration = Chrall_parseDuration(turnDurationString);
+	var actionPointsLine = lines[2];
+	player.actionPoints = parseInt(Chrall_tokenize(actionPointsLine)[3]);
 }
 
 function Chrall_extractFatigue(text) {
@@ -77,47 +79,144 @@ function Chrall_extractFatigue(text) {
 	//alert("player.strainMalus="+player.strainMalus);
 }
 
+
+
 /**
  * construit un certain nombre de tables donnant des infos sur la fatigue
  */
 function Chrall_makeStrainInfos() {
 	var html = "<div class=profileInfos>";
-	html += "<table border=0><tr><td valign=top>";
-	if (player.strainBase>0) {
-		html += "<table class=infos><tr><th>DLA</th><th>Fatigue</th></tr>";
-		var s = player.strainBase;
+	var optimalStrains = [29, 23, 18, 14, 11, 8, 6, 4];
+	var m0 = (player.getDla()-(new Date()).getTime())/(60*1000);
+	var m1 = (player.getDla(1)-(new Date()).getTime())/(60*1000);
+	//> construction de la table de récupération
+	if (player.strainBase+player.strainMalus>0) {
+		// TODO réussir à déplacer les instructions de style de cette table (center, border) en css
+		// TODO tester quelles colonnes afficher (suivant présence compétences AM et charge)
+		html += "<table class=infos width=100%><tr><th>DLA</th><th>Fatigue</th><th>Malus de charge</th><th>AM: minutes/PV</th><th align=left> &nbsp; AM: suggestion</th></tr>";
+		var baseStrain = player.strainBase;  // la fatigue de la dla i
 		for (var i=0;i<20;i++) {
+			// Pour les affichages construits ici, on suppose que les malus de DLA doivent disparaitre à la fin de cette DLA, de la prochaine ou de la subséquente.
+			// Notons qu'on pourrait faire bien plus compact avec deux fois moins de variables mais je préfère que le code reste lisible.
+			var normalStrain;
+			var alternateStrain = 0; // (toujours supérieure à normalStrain, sauf si pas applicable)
 			html += "<tr><td align=center>";
-			if (i==0) html += "en cours";
-			else if (i==1) html += "prochaine";
-			else html += "+ " + i;
-			var v = s;
-			if (player.strainMalus>0) {
-				if (i==0)  v += player.strainMalus;
-				else if (i==1) v += " ou " + (s+player.strainMalus);
-				// au delà les malus auront sans doute totalement disparu...
+			if (i==0) {
+				html += "en cours";
+				normalStrain = baseStrain + player.strainMalus;
+			} else if (i==1) {
+				html += "prochaine";
+				normalStrain = baseStrain;
+				alternateStrain = baseStrain + player.strainMalus;
+			} else if (i==2) {
+				html += "subséquente";
+				normalStrain = baseStrain;
+				alternateStrain = baseStrain + player.strainMalus;
+			} else {
+				html += "+ " + i;	
+				normalStrain = baseStrain; // en principe tous les malus auront disparu
 			}
-			html += "</td><td align=center>" + v + "</td></tr>";
-			s = Math.floor(s - s/5);
-			if (s<=0) break;
+			html += "</td>";
+			//> affichage de la fatigue de la DLA i
+			html += "<td align=center>" + normalStrain;
+			if (alternateStrain>normalStrain) {
+				html += " à " + alternateStrain;
+			}
+			html += "</td>";
+			//> calcul et affichage du malus de charge pour la DLA i
+			var normalChargeMalus = Math.floor(normalStrain/5);
+			var alternateChargeMalus = Math.floor(alternateStrain/5);
+			html += "<td align=center>";
+			if (alternateChargeMalus>normalChargeMalus) {
+				html += normalChargeMalus + " à " + alternateChargeMalus;
+			} else if (normalChargeMalus>0) {
+				html += normalChargeMalus;
+			} else {
+				html += "-";
+			}
+			if (alternateChargeMalus>1 || normalChargeMalus>1) html += " cases";
+			else if (normalChargeMalus>0) html += " case";
+			html += "</td>";
+			//> calcul et affichage du gain d'une AM en minutes par pv pour la dla i
+			html += "<td align=center>";
+			var normalPvGain = Math.min(30, Math.floor(120/(normalStrain*(1+Math.floor(normalStrain/10)))));
+			var alternatePvGain = Math.min(30, Math.floor(120/(alternateStrain*(1+Math.floor(alternateStrain/10)))));
+			if (alternatePvGain<normalPvGain) {
+				html += alternatePvGain + " à " + normalPvGain;
+			} else {
+				html += normalPvGain;				
+			}
+			html += "</td>";
+			//> calcul et affichage d'une suggestion pour l'AM
+			html += "<td align=left>";
+			switch (i) {
+				case 0 :
+					if (player.actionPoints>=2) {
+						if (m0>0) {
+							var pv0 = Math.ceil(m0*normalPvGain);
+							html += "Vous devez dépenser " + pv0 + " PV pour rejouer de suite. ";
+							if (alternatePvGain<normalPvGain) html += "Voire plus. ";
+							if (pv0>=100 /* TODO : mettre les pv restant */) html += "Evidemment ça fait beaucoup. ";
+							for (var osi=0; osi<optimalStrains.length; osi++) {
+								if (pv0+normalStrain>optimalStrains[osi]) {
+									var goodAcceleration = optimalStrains[osi]-normalStrain;
+									var dateGoodAcceleration = player.getDla(1).clone().addMinutes(-goodAcceleration*normalPvGain);
+									if (dateGoodAcceleration.getTime()<player.getDla(0).getTime()) {
+										html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour rejouer de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + ". ";
+									}
+									break;
+								}
+							}
+						} else {
+							html += "Vous n'auriez pas loupé votre DLA ?";
+						}
+					} else {
+						html += "Pas assez de PA pour accélerer";
+					}
+					break;
+				case 1 :
+					if (m0<0 && m1>0) {
+						var pv0 = Math.ceil(m1*normalPvGain);
+						html += "Si vous activez maintenant vous devez dépenser " + pv0 + " PV pour faire un cumul immédiatement. ";
+						if (alternatePvGain<normalPvGain) html += "Voire plus. ";
+						if (pv0>=100 /* TODO : mettre les pv restant */) html += "Evidemment après ça vous aurez comme un déficit quelque part. ";
+						for (var osi=0; osi<optimalStrains.length; osi++) {
+							if (pv0+normalStrain>optimalStrains[osi]) {
+								var goodAcceleration = optimalStrains[osi]-normalStrain;
+								var dateGoodAcceleration = player.getDla(1).clone().addMinutes(-goodAcceleration*normalPvGain);
+								if (dateGoodAcceleration.getTime()<player.getDla(1).getTime()) {
+									html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour jouer deux fois de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + ". ";
+								}
+								break;
+							}
+						}
+					}
+					break;
+				case 2 :
+					if (player.race!="Kastar") {
+						html += "<small>Ah mais vous êtes un " + Chrall_getSentence(player.race, "synonyme") + ", pas un " +  Chrall_getSentence("Kastar", "synonyme") + "...</small>";
+					}
+					break;
+				case 3 :
+					if (player.race!="Kastar") {
+						html += "<small>"+Chrall_getSentence("nok")+"</small>";
+					}
+					break;
+				case 6 :
+					if (player.race!="Kastar") {
+						html += "<small>"+Chrall_getSentence("pas d'AM")+"</small>";
+					}
+					break;
+				default:				
+			}
+			html += "</td>";
+			html += "</tr>";
+			//> on calcule la fatigue (de base) de la dla i+1
+			baseStrain = Math.floor(baseStrain - baseStrain/5);
+			if (baseStrain<=0) break;
 		}
 		html += "</table>";
-		html += "</td><td valign=top>";
 	}
-	var totalStrain = player.strainBase + player.strainMalus;
-	if (true) { // TODO vérifier que le troll a bien la compétence charge
-		if (totalStrain>0) {
-			var chargeMalus = Math.floor(totalStrain/5);
-			if (chargeMalus>0) html += "Malus de charge : " + chargeMalus + " case" + (chargeMalus>1?"s":"") + ".<br><br>";
-			else html += "Pas de malus de charge (car fatigue inférieure à 5).";
-		}
-	}
-	if (true) {
-		var pvGain = Math.min(30, Math.floor(120/(totalStrain*(1+Math.floor(totalStrain/10)))));
-		html += "Accélération du métabolisme : un PV fait gagner " + pvGain + (pvGain>1 ? " minutes" : " minute") + ".<br>";
-		if (player.race!="Kastar") html+="<small>Je sais bien que vous êtes un "+player.race+", mais je laisse ça pour la phase de tests.</small><br>";
-	}
-	html += "</td></tr></table>";
 	html += "</div>";
 	return html;
 }

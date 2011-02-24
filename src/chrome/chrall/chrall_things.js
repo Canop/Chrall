@@ -57,7 +57,8 @@ function Fly(type, name) {
 
 /**
  * les Things sont les trucs qu'on trouve dans les souterrains. Ils ont essentiellement
- *  un id, un nom et une position (les x, y et z directement)
+ *  un id, un nom et une position (les x, y et z directement).
+ * Note : les champignons n'ont pas d'id visible dans la table reçue.
  * Params :
  *  - id
  *  - name
@@ -87,7 +88,7 @@ Thing.prototype.setName = function(name) { // méthode surchargée pour les mons
 function Monster(x, y, z) {
 	Thing.call(this, x, y, z); // appel du constructeur de la super-classe (il n'y a pas de 'super' en javascript)
 }
-Monster.prototype = new Thing();
+Monster.prototype = new Thing(); // ça signifie que Monster est une sous-classe de Thing
 Monster.prototype.setName = function(fullName){
 	this.fullName = fullName;
 	this.isSick = false;
@@ -111,7 +112,7 @@ Monster.prototype.setName = function(fullName){
 	this.isGowap = this.name.indexOf("Gowap")==0;
 }
 
-//////////////////////////////////////////////////////////////////////// Troll
+//////////////////////////////////////////////////////////////////////// Troll (en Français : Troll)
 
 /**
  * Troll hérite de Thing.
@@ -125,10 +126,11 @@ Monster.prototype.setName = function(fullName){
  *  - strainMalus (le malus de fatigue)
  *  - isIntangible
  *  - flies : le tableau des mouches
+ *  - actionPoints : les PA restant
  *  - les characteristics...
  */ 
 function Troll(x, y, z) {
-	Thing.call(this, x, y, z); // appel du constructeur de la super-classe (il n'y a pas de 'super' en javascript)
+	Thing.call(this, x, y, z); 
 	this.isIntangible = false;
 }
 Troll.prototype = new Thing();
@@ -155,7 +157,7 @@ Troll.prototype.addFly = function(fly) {
  *  - isHole (trou de météorite)
  */ 
 function Place(x, y, z) {
-	Thing.call(this, x, y, z); // appel du constructeur de la super-classe (il n'y a pas de 'super' en javascript)
+	Thing.call(this, x, y, z);
 }
 Place.prototype = new Thing();
 

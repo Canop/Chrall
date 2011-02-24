@@ -36,4 +36,3 @@ function Chrall_sendDlaToExtension(dlaTime, cumulTime) {
 		}
 	);
 }
-
