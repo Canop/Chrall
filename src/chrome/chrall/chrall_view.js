@@ -340,7 +340,7 @@ function Chrall_analyseAndReformatView() {
 	html += "<div id=tabCenotaphs class=tab_content></div>";
 	html += "<div id=tabSettings class=tab_content></div>";
 	html += "</div>";
-	$($(document).find("table.mh_tdborder")[0]).parent().parent().prepend(html);	
+	$($("table.mh_tdborder")[0]).parent().parent().prepend(html);	
 	$("div#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 	$("div#tabMonsters").append(tables[1]);
 	$("div#tabTrolls").append(tables[2]);
