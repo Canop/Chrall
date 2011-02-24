@@ -21,6 +21,7 @@
 				"chrall_profile.js",
 				"chrall_start.js",
 				"chrall_view.js",
+				"chrall_flies.js",
 				"chrall_main.js"
 			]
 		},
