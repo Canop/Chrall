@@ -1,0 +1,12 @@
+
+Le serveur gogo est écrit en go (http://golang.org). Il est conçu pour être disponible à l'adresse
+	http://canop.org:9090/chrall
+
+Pour le compiler, après avoir installé l'environnement go, lancez la commande suivante dans ce répertoire :
+	gomake
+
+Pour lancer le serveur, exécutez ensuite
+	gogo
+
+Pour le tester, utilisez un navigateur web pour accéder à l'url
+	http://localhost:9090/chrall

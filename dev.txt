@@ -24,14 +24,16 @@ RECENTS / A TESTER :
 <- v0.8
 * [Canop] BUG : les champignons n'étaient jamais affichés (ces curieuses choses n'ont pas d'ID affiché dans la table reçue de MH)
 * [Canop] fatigue optimale : rejeter si après la fin de DLA
+* [Canop] options : séparer via des onglets en "Options standard" et "Options Chrall" (bon... c'est pas beau...)
 
 EN COURS :
 ==========
 * [Canop+Taip] gestion des forks et contributions dans github
 * [Canop] apprendre le langage go
 * [Canop] choisir une librairie go/mysql
-* [Taip]  calcul des bonus totaux des mouches
-* [Canop] serveur chrall_gogo
+* [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
+* [Canop] serveur gogochrall (entre autres pour le bestiaire)
+* [Canop] analyseur de cdm accessible via les options
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================
@@ -76,7 +78,6 @@ TODO :
 * chat d'équipe
 * tableaux standards MH (monstres, événements, tableau de chasse, etc.) : surligner la ligne de la souris pour faciliter le rapprochement gauche/droite.
 * poids de l'équipement : détailler ce qui est porté et ce qui est en besace
-* [Canop] options : séparer via des onglets en "Options standard" et "Options Chrall"
 * ? icône pour indiquer directement sur la carte quels monstres voient le caché
 * alarmes : fonction manuelle d'ajout d'alarme ("on a dit qu'on tapait à 11h33")
 * alarmes : ne pas perdre les alarmes (ajouter ?) quand on se loggue sur un autre troll

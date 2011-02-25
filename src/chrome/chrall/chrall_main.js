@@ -32,6 +32,8 @@ var viewFilters = {
 
 if (pageName=="Play_vue.php") { 
 	Chrall_analyseAndReformatView();	
+} else if (pageName=="Play_option.php") { 
+	Chrall_reformatOptionsView();
 } else if (pageName=="Play_profil.php") { 
 	Chrall_analyseAndReformatProfile();
 } else if (pageName=="PlayStart.php") { 

@@ -1,15 +1,17 @@
 ul.tabs {
 	margin: 0;
 	padding: 0;
-	position        : fixed;
-	top:0;
-	left:0;
 	list-style: none;
 	height: 32px; /*--Set height of tabs--*/
 	border-bottom: 1px solid #999;
 	border-left: 1px solid #999;
-	width: 100%;
 	background-image:url("http://games.mountyhall.com/MH_Packs/packMH_parchemin/fond/fond2.jpg");
+}
+ul.tabs[view] {
+	position        : fixed;
+	top:0;
+	left:0;
+	width: 100%;
 }
 ul.tabs li {
 	float: left;

@@ -315,7 +315,7 @@ function Chrall_analyseAndReformatView() {
 	
 	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 	var tables = $("table.mh_tdborder");
-	var html="<ul class=tabs>";
+	var html="<ul class=tabs view>";
 	html += "<li><a href=#tabGrid>Grille</a></li>";
 	html += "<li><a href=#tabTrolls>Trolls ("+trollsInView.length+")</a></li>";
 	html += "<li><a href=#tabMonsters>Monstres ("+monstersInView.length+")</a></li>";
