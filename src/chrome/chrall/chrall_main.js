@@ -30,15 +30,23 @@ var viewFilters = {
 	"cénotaphes" : false
 };
 
-if (pageName=="Play_vue.php") { 
-	Chrall_analyseAndReformatView();	
-} else if (pageName=="Play_option.php") { 
-	Chrall_reformatOptionsView();
-} else if (pageName=="Play_profil.php") { 
-	Chrall_analyseAndReformatProfile();
-} else if (pageName=="PlayStart.php") { 
-	Chrall_analyseAndReformatStartPage();
-} else if (pageName=="Play_mouche.php") { 
-	Chrall_analyseAndReformatFlies();
+
+switch (pageName) {
+	case "PlayStart.php":
+		Chrall_analyseAndReformatStartPage();	
+		break;
+	case "Play_profil.php":
+		Chrall_analyseAndReformatProfile();	
+		break;
+	case "Play_vue.php":
+		Chrall_analyseAndReformatView();	
+		break;
+	case "Play_mouche.php":
+		Chrall_analyseAndReformatFlies();	
+		break;
+	case "Play_option.php":
+		Chrall_analyseAndReformatView();	
+		break;
 }
+
 

@@ -1,5 +1,5 @@
 /**
- * cette fonction parcours la table de mouches et renseigne le tableau flies de la classe Troll
+ * cette fonction parcoure la table de mouches et renseigne le tableau flies de la classe Troll
  */ 
 function Chrall_analyseFlies() {
 	var flyRows = $("tr.mh_tdpage");
@@ -12,12 +12,10 @@ function Chrall_analyseFlies() {
 		var aFly = new Fly(aFlyType);
 		player.addFly(aFly);
 	}
-	
 }
 
 
 function Chrall_analyseAndReformatFlies() {
-
 
 	//> on vire le titre
 	$($("table")[2]).remove();
@@ -54,7 +52,7 @@ function Chrall_analyseAndReformatFlies() {
 	var totaux="att +"+att+" / esq +"+esq+" / deg +"+deg+" / arm +"+arm+" / Tour +"+cyc+" min / pv +"+pv+" / vue +"+vue+" / reg +"+reg;
 	
 	var html="<table width=98% cellspacing=0 border=0 cellpadding=2 align=left><tbody><tr><td align=left><b>"+totaux+"</b></td></tr></tbody></table>";
-	// insertion des bonus mouchesque.
+	// insertion des bonus mouchesques
 	$('form[name="ActionForm"]').parent().prepend(html);
 
 }
