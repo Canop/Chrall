@@ -38,5 +38,7 @@ if (pageName=="Play_vue.php") {
 	Chrall_analyseAndReformatProfile();
 } else if (pageName=="PlayStart.php") { 
 	Chrall_analyseAndReformatStartPage();
+} else if (pageName=="Play_mouche.php") { 
+	Chrall_analyseAndReformatFlies();
 }
 
