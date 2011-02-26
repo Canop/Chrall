@@ -153,10 +153,19 @@ function Chrall_makeStrainInfos() {
 				case 0 :
 					if (player.actionPoints>=2) {
 						if (m0>0) {
-							var pv0 = Math.ceil(m0*normalPvGain);
+							//~ html += "[m0 = " + m0 + "]";
+							var pv0 = Math.ceil(m0/normalPvGain);
 							html += "Vous devez dépenser " + pv0 + " PV pour rejouer de suite. ";
 							if (alternatePvGain<normalPvGain) html += "Voire plus. ";
 							if (pv0>=100 /* TODO : mettre les pv restant */) html += "Evidemment ça fait beaucoup. ";
+							if (pv0>2) {
+								var pv1 = pv0-1;
+								var g1 = pv1*normalPvGain;
+								//~ html += "[pv1 = " + pv1 + "]";
+								//~ html += "[g1 = " + g1 + "]";
+								//~ html += "[m0-g1 = " + (m0-g1) + "]";
+								html += "Si vous attendez " + Math.ceil(m0-g1) + " minutes, ce qui vous mènera à " + (player.getDla().clone().addMinutes(-g1).toString("HH:mm")) + " vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
+							}
 							for (var osi=0; osi<optimalStrains.length; osi++) {
 								if (pv0+normalStrain>optimalStrains[osi]) {
 									var goodAcceleration = optimalStrains[osi]-normalStrain;
@@ -176,7 +185,7 @@ function Chrall_makeStrainInfos() {
 					break;
 				case 1 :
 					if (m0<0 && m1>0) {
-						var pv0 = Math.ceil(m1*normalPvGain);
+						var pv0 = Math.ceil(m1/normalPvGain);
 						html += "Si vous activez maintenant vous devez dépenser " + pv0 + " PV pour faire un cumul immédiatement. ";
 						if (alternatePvGain<normalPvGain) html += "Voire plus. ";
 						if (pv0>=100 /* TODO : mettre les pv restant */) html += "Evidemment après ça vous aurez comme un déficit quelque part. ";
