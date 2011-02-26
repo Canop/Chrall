@@ -37,6 +37,11 @@ Chrall est open-source.<br>
 Vous pouvez participer au développement, signaler des bugs, ou simplement consulter les sources par curiosité via <a href=http://www.github.com/Canop/Chrall>github</a>.
 </p>
 
+<h2>Bestiaire & co</h2>
+<p>
+Le serveur du bestiaire est en cours d'auto-développement. Vous pouvez lui dire bonjour : <a href="http://canop.org:9090/chrall">canop.org:gOgO</a>
+</p>
+
 </div> <!-- content_wrapper -->
 </div> <!-- content_column_wrapper -->
 

@@ -11,7 +11,12 @@ function Chrall_reformatOptionsView() {
 	html += "</ul>";
 	html += "<div class=tab_container><br><br>";
 	html += "<div id=tabStandard class=tab_content></div>";
-	html += "<div id=tabChrall class=tab_content></div>";
+	html += "<div id=tabChrall class=tab_content>";
+	html += "<h2>Outils Chrall</h2>";
+	html += "<ul>";
+	html += "<li><a target=nouvelOnglet href=canop.org:9090/chrall/puit>Le Puit</a> dans lequel vous pouvez déverser vos CDM</li>";
+	html += "</ul>";
+	html += "</div>";
 	$(standardOptionContainer).prepend(html);
 	
 	//alert($(standardOptionTables[1]).html());

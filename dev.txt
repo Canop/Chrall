@@ -33,6 +33,7 @@ EN COURS :
 * [Canop] choisir une librairie go/mysql
 * [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
 * [Canop] serveur gogochrall (entre autres pour le bestiaire)
+* [Canop] structure du Puit (déversoir à CDM), tant côté client que pour l'analyse côté serveur
 * [Canop] analyseur de cdm accessible via les options
 
 TACHES EN RECHERCHE DE VOLONTAIRES :

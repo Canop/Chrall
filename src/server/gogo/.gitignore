@@ -3,3 +3,6 @@
 gogo
 *.8
 *.6
+
+# le script de déployement sur canop.org
+deploy.sh

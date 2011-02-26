@@ -15,10 +15,14 @@ func (h *Handler) hit() {
 	h.nbRequests++
 }
 
-func (h *Handler) head(w io.Writer) {
-	w.Write([]byte(`<html>
-	<head>
-		<title>canop.org:gOgO</title>
+func (h *Handler) head(w io.Writer, title string) {
+	if (title=="") {
+		title = "canop.org:gOgO"
+	}
+	fmt.Fprintf(w, "<html><head><title>%s</title>", title)
+	w.Write([]byte(`
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 		<style type="text/css">
 			body {
 				background-color: white;
@@ -26,12 +30,12 @@ func (h *Handler) head(w io.Writer) {
 				font-size: 14px;
 				padding: 0px;
 				margin: 0px;
-				height:100%;
 				color: white;
 			}
 			div.main {
 				width: 700px;
 				margin:auto;
+				margin-top: 20px;
 				-webkit-border-radius: 15px;
 				-moz-border-radius: 15px;
 				border-radius: 15px;
@@ -41,7 +45,6 @@ func (h *Handler) head(w io.Writer) {
 				font-size: 14px;
 				margin-bottom: 20px;
 				padding: 10px;
-				background: teal url("gradient-bg.png") repeat-x top;
 				-o-background-size: 100% 100%;
 				-moz-background-size: 100% 100%;
 				-webkit-background-size: 100% 100%;
@@ -83,9 +86,18 @@ func (h *Handler) head(w io.Writer) {
 				border-top: 1px solid darkblue;
 				border-bottom: 1px solid mediumblue;
 			}
+			textarea {
+				width: 100%;
+			}
+			.invisible {
+				display: none;
+			}
+			p#resultContent {
+				margin-left: 5px;
+			}
 		</style>
 	</head>
-	<body><br><br><br><br><div class=main>`))
+	<body><div class=main>`))
 }
 
 func (h *Handler) foot(w io.Writer) {

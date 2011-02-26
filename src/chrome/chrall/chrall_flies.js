@@ -34,13 +34,13 @@ function Chrall_analyseAndReformatFlies() {
 		} else if(aFlyType=="Xidant"){
 			arm++;
 		} else if(aFlyType=="Crobate"){
-			esq++;
+			att++;
 		} else if(aFlyType=="Miel"){
 			reg++;
 		} else if(aFlyType=="Nabolisants"){
 			deg++;
 		} else if(aFlyType=="Vertie"){
-			att++;
+			esq++;
 		}  else if(aFlyType=="Lunettes"){	
 			vue++;
 		} else if(aFlyType=="Telaite"){
