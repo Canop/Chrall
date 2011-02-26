@@ -4,6 +4,18 @@ package main
 une CDM représente une "connaissance de monstres" de Mounty Hall
 */
 
+import(
+	"fmt"
+	"strconv"
+)
+
 type CDM struct {
-	idMonstre int
+	IdMonstre int
+	NomMonstre string
+}
+
+func (cdm *CDM) Print() {
+	fmt.Println(" CDM-------")
+	fmt.Println("  ID : " + strconv.Itoa(cdm.IdMonstre))
+	fmt.Println("  Nom : " + cdm.NomMonstre)
 }

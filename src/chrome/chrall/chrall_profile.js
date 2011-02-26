@@ -153,7 +153,6 @@ function Chrall_makeStrainInfos() {
 				case 0 :
 					if (player.actionPoints>=2) {
 						if (m0>0) {
-							//~ html += "[m0 = " + m0 + "]";
 							var pv0 = Math.ceil(m0/normalPvGain);
 							html += "Vous devez dépenser " + pv0 + " PV pour rejouer de suite. ";
 							if (alternatePvGain<normalPvGain) html += "Voire plus. ";
@@ -161,17 +160,14 @@ function Chrall_makeStrainInfos() {
 							if (pv0>2) {
 								var pv1 = pv0-1;
 								var g1 = pv1*normalPvGain;
-								//~ html += "[pv1 = " + pv1 + "]";
-								//~ html += "[g1 = " + g1 + "]";
-								//~ html += "[m0-g1 = " + (m0-g1) + "]";
 								html += "Si vous attendez " + Math.ceil(m0-g1) + " minutes, ce qui vous mènera à " + (player.getDla().clone().addMinutes(-g1).toString("HH:mm")) + " vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
 							}
 							for (var osi=0; osi<optimalStrains.length; osi++) {
 								if (pv0+normalStrain>optimalStrains[osi]) {
 									var goodAcceleration = optimalStrains[osi]-normalStrain;
-									var dateGoodAcceleration = player.getDla(1).clone().addMinutes(-goodAcceleration*normalPvGain);
+									var dateGoodAcceleration = player.getDla(0).clone().addMinutes(-goodAcceleration*normalPvGain);
 									if (dateGoodAcceleration.getTime()<player.getDla(0).getTime()) {
-										html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour rejouer de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + ". ";
+										html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour rejouer de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + " (laquelle deviendra négligeable en "+(optimalStrains.length-osi-1)+" tours). ";
 									}
 									break;
 								}
@@ -189,6 +185,11 @@ function Chrall_makeStrainInfos() {
 						html += "Si vous activez maintenant vous devez dépenser " + pv0 + " PV pour faire un cumul immédiatement. ";
 						if (alternatePvGain<normalPvGain) html += "Voire plus. ";
 						if (pv0>=100 /* TODO : mettre les pv restant */) html += "Evidemment après ça vous aurez comme un déficit quelque part. ";
+						if (pv0>2) {
+							var pv1 = pv0-1;
+							var g1 = pv1*normalPvGain;
+							html += "Si vous attendez " + Math.ceil(m1-g1) + " minutes, ce qui vous mènera à " + (player.getDla(1).clone().addMinutes(-g1).toString("HH:mm")) + " vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
+						}
 						for (var osi=0; osi<optimalStrains.length; osi++) {
 							if (pv0+normalStrain>optimalStrains[osi]) {
 								var goodAcceleration = optimalStrains[osi]-normalStrain;
