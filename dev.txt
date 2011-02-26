@@ -25,6 +25,7 @@ RECENTS / A TESTER :
 * [Canop] BUG : les champignons n'étaient jamais affichés (ces curieuses choses n'ont pas d'ID affiché dans la table reçue de MH)
 * [Canop] fatigue optimale : rejeter si après la fin de DLA
 * [Canop] options : séparer via des onglets en "Options standard" et "Options Chrall" (bon... c'est pas beau...)
+* [Canop] structure du Puit (déversoir à CDM), tant côté client que pour l'analyse côté serveur
 
 EN COURS :
 ==========
@@ -33,8 +34,7 @@ EN COURS :
 * [Canop] choisir une librairie go/mysql
 * [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
 * [Canop] serveur gogochrall (entre autres pour le bestiaire)
-* [Canop] structure du Puit (déversoir à CDM), tant côté client que pour l'analyse côté serveur
-* [Canop] analyseur de cdm accessible via les options
+* [Canop] analyseur de cdm accessible (le Puit)
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================

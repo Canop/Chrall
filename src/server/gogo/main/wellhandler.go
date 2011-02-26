@@ -16,22 +16,27 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		<script>
 			function sendForAnalyse() {
 				$("#envoi").show();
-				$.getJSON(
-					"http://localhost:9090/chrall/json", {
-						"action" : "calculer"
-					},
-					function(data) {
+				$.post(
+					"http://localhost:9090/chrall/json",
+					JSON.stringify(
+						{
+							action: "pour",
+							bucket: $("#bucket").val()
+						}
+					),
+					function(data, textStatus) {
 						$("#envoi").hide();
 						$("p#resultContent").html(data['text']);
 						$("#result").show("slow");
-					}
+					},
+					"json"
 				);
 			}
 		</script>
 		<p>Vous êtes au bord du <span class=emphase>Puit</span> de <a href=..>gOgOchrall</a></p>
 		<p>Copiez vos CDM ci-dessous :
-			<form id=wellForm>
-				<textarea rows=20></textarea>
+			<form>
+				<textarea id=bucket rows=20></textarea>
 			</form>
 		</p>
 		<a href="javascript:sendForAnalyse();">Déverser</a> <span id=envoi class=invisible>Envoi en cours...</span>
@@ -40,7 +45,7 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			<span class=emphase>Résultat :</span>
 			</p>
 			<p id=resultContent>
-				Le puit ne sait pas encore digérer ça.
+				Désolé, il semble que le serveur ait trop bu...
 			</p>
 		</div>
 	`))
