@@ -96,3 +96,22 @@ div.profileInfos table.infos td {
 div.hiddenDiv {
 	display: none;
 }
+#tabChrall {
+	text-align: left;
+	padding : 8px;
+}
+#tabChrall a {
+	color: #900;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+#tabChrall a:hover {
+	background-color: #900;
+	padding-left: 8px;
+	padding-right: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	text-decoration: none;
+	color: white;
+}

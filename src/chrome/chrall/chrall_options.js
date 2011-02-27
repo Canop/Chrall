@@ -12,6 +12,12 @@ function Chrall_reformatOptionsView() {
 	html += "<div class=tab_container><br><br>";
 	html += " <div id=tabStandard class=tab_content></div>";
 	html += " <div id=tabChrall class=tab_content>";
+	html += "<h2>Qu'est-ce que Chrall</h2>";
+	html += "<p>";
+	html += "Chrall est une extension pour Chrome visant à enrichir l'interface du jeu. Elle ne modifie pas les autres pages que vous consultez.";
+	html += "<br>Si vous souhaitez retrouver l'interface standard de Mounty Hall, vous pouvez la désactiver via le menu <i>Outils/Extensions</i> de Chrome.";
+	html += "<br>Pour plus d'informations sur le projet Chrall : <a href=canop.org/chrall>canop.org/chrall</a>.";
+	html += "</p>";
 	html += "<h2>Outils Chrall</h2>";
 	html += "<ul>";
 	html += "<li><a target=nouvelOnglet href=canop.org:9090/chrall/puit>Le Puit</a> dans lequel vous pouvez déverser vos CDM</li>";
