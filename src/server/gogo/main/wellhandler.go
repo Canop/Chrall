@@ -28,18 +28,26 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 						$("#envoi").hide();
 						$("p#resultContent").html(data['text']);
 						$("#result").show("slow");
+						$("#cleanBtn").show();
 					},
 					"json"
 				);
 			}
+			function clean() {
+				$("#bucket").val("");
+				$("#result").hide("slow");
+				$("#cleanBtn").hide();
+			}
 		</script>
-		<p>Vous êtes au bord du <span class=emphase>Puit</span> de <a href=..>gOgOchrall</a></p>
+		<p>Vous êtes au bord du <span class=emphase>Puit</span> de <a href=/chrall>gOgOchrall</a></p>
 		<p>Copiez vos CDM ci-dessous :
 			<form>
 				<textarea id=bucket rows=20></textarea>
 			</form>
 		</p>
-		<a href="javascript:sendForAnalyse();">Déverser</a> <span id=envoi class=invisible>Envoi en cours...</span>
+		<a href="javascript:sendForAnalyse();">Déverser</a>
+		<a id=cleanBtn href="javascript:clean();" class=invisible>Nettoyer</a>
+		<span id=envoi class=invisible>Envoi en cours...</span>
 		<div id=result class=invisible>
 			<p>
 			<span class=emphase>Résultat :</span>

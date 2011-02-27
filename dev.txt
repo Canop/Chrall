@@ -35,6 +35,7 @@ EN COURS :
 * [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
 * [Canop] serveur gogochrall (entre autres pour le bestiaire)
 * [Canop] analyseur de cdm accessible (le Puit)
+* Bug sur la page d'options
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================
