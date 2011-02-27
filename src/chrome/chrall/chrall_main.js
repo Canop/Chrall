@@ -45,7 +45,7 @@ switch (pageName) {
 		Chrall_analyseAndReformatFlies();	
 		break;
 	case "Play_option.php":
-		Chrall_analyseAndReformatView();	
+		Chrall_reformatOptionsView();	
 		break;
 }
 
