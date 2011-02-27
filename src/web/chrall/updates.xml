@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
   <app appid='ilkokomnpebmcmfchojgojfelmgphmjk'>
-    <updatecheck codebase='http://canop.org/chrall/chrall_v000_008.crx' version='0.8' />
+    <updatecheck codebase='http://canop.org/chrall/chrall_v000_009.crx' version='0.9' />
   </app>
 </gupdate>
