@@ -26,7 +26,7 @@ func sendError(w http.ResponseWriter, title string, err os.Error) {
 func (h *JsonHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
 
-	fmt.Print("\n=== Requete reçue ====================");
+	fmt.Println("\n=== Requete reçue ====================");
 
 	jd := json.NewDecoder(hr.Body)
 	jr := new(jsonRequest)
@@ -37,12 +37,10 @@ func (h *JsonHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 		return
 	}
 	
-	fmt.Print("\nAnalyse :");
+	fmt.Println("Analyse :");
 
 	bd := new(BucketDecoder)
 	bd.Decode(jr.Bucket)
-
-	fmt.Print("\nCDM trouvées : " + strconv.Itoa(len(bd.Cdm)));
 	
 	// là ce serait plus propre d'utiliser la fonction json.Marshal mais j'ai perdu une heure sans réussir...
 	answer := "N° d'analyse : " + strconv.Itoa(h.nbRequests)
