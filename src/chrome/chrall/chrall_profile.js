@@ -195,7 +195,7 @@ function Chrall_makeStrainInfos() {
 								var goodAcceleration = optimalStrains[osi]-normalStrain;
 								var dateGoodAcceleration = player.getDla(1).clone().addMinutes(-goodAcceleration*normalPvGain);
 								if (dateGoodAcceleration.getTime()<player.getDla(1).getTime()) {
-									html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour jouer deux fois de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + ". ";
+									html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour jouer deux fois de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + " (laquelle deviendra négligeable en "+(optimalStrains.length-osi-1)+" tours). ";
 								}
 								break;
 							}
