@@ -54,7 +54,7 @@ func (h *JsonHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 			if i>0 {
 				answer += ", "
 			}
-			answer += cdm.NomComplet
+			answer += cdm.Nom
 		}
 		answer += ")"
 	}

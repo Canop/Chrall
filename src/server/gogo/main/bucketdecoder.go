@@ -33,7 +33,8 @@ func (bd *BucketDecoder) Decode(input string) {
 	lines := strings.Split(input, "\n", -1)
 	
 	var currentCdm *CDM
-	for _, line := range lines {
+	var numLineAtCdmStart int
+	for numLine, line := range lines {
 		//fmt.Println(line)
 		if strings.Contains(line, "CONNAISSANCE DES MONSTRES") {
 			fmt.Println("Start CDM")
@@ -61,8 +62,9 @@ func (bd *BucketDecoder) Decode(input string) {
 			fmt.Println("C'est une CDM !")
 			currentCdm = new(CDM)
 			currentCdm.IdMonstre = num
-			currentCdm.NomComplet = strings.Join(fields[fieldUn+1:len(fields)-1], " ")
+			currentCdm.SetNomComplet(strings.Join(fields[fieldUn+1:len(fields)-1], " "))
 			bd.addCdm(currentCdm)
+			numLineAtCdmStart = numLine
 		} else if strings.Contains(line, "Le Monstre Ciblé fait partie") {
 			fmt.Println("Start CDM")
 			fields := strings.Fields(line)
@@ -90,8 +92,16 @@ func (bd *BucketDecoder) Decode(input string) {
 			fmt.Println("C'est une CDM !")
 			currentCdm = new(CDM)
 			currentCdm.IdMonstre = num
-			currentCdm.NomComplet = strings.TrimLeft(strings.Join(fields[firstFieldWithOpeningBrace:len(fields)-2], " "), "(")
+			currentCdm.SetNomComplet(strings.TrimLeft(strings.Join(fields[firstFieldWithOpeningBrace:len(fields)-2], " "), "("))
 			bd.addCdm(currentCdm)
+			numLineAtCdmStart = numLine
+		} else if currentCdm!=nil && numLine-numLineAtCdmStart<40 { // 40 : nombre de lignes maximal d'une cdm (à déterminer)
+			char := AnalyseLineAsCdmChar(line)
+			if char!=nil {
+				currentCdm.AddChar(char)
+			} else {
+				fmt.Println("Ligne pas comprise : " + line);
+			}
 		}
 	}
 	
