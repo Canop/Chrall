@@ -11,11 +11,11 @@ import(
 
 type CDM struct {
 	IdMonstre int
-	NomMonstre string
+	NomComplet string
 }
 
 func (cdm *CDM) Print() {
 	fmt.Println(" CDM-------")
 	fmt.Println("  ID : " + strconv.Itoa(cdm.IdMonstre))
-	fmt.Println("  Nom : " + cdm.NomMonstre)
+	fmt.Println("  Nom : " + cdm.NomComplet)
 }

@@ -61,7 +61,7 @@ func (bd *BucketDecoder) Decode(input string) {
 			fmt.Println("C'est une CDM !")
 			currentCdm = new(CDM)
 			currentCdm.IdMonstre = num
-			currentCdm.NomMonstre = strings.Join(fields[fieldUn+1:len(fields)-1], " ")
+			currentCdm.NomComplet = strings.Join(fields[fieldUn+1:len(fields)-1], " ")
 			bd.addCdm(currentCdm)
 		} else if strings.Contains(line, "Le Monstre Ciblé fait partie") {
 			fmt.Println("Start CDM")
@@ -90,7 +90,7 @@ func (bd *BucketDecoder) Decode(input string) {
 			fmt.Println("C'est une CDM !")
 			currentCdm = new(CDM)
 			currentCdm.IdMonstre = num
-			currentCdm.NomMonstre = strings.TrimLeft(strings.Join(fields[firstFieldWithOpeningBrace:len(fields)-2], " "), "(")
+			currentCdm.NomComplet = strings.TrimLeft(strings.Join(fields[firstFieldWithOpeningBrace:len(fields)-2], " "), "(")
 			bd.addCdm(currentCdm)
 		}
 	}
