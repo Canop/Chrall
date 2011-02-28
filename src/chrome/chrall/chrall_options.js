@@ -20,7 +20,7 @@ function Chrall_reformatOptionsView() {
 	html += "</p>";
 	html += "<h2>Outils Chrall</h2>";
 	html += "<ul>";
-	html += "<li><a target=nouvelOnglet href=\"http://canop.org:9090/chrall/puit\">Le Puit</a> dans lequel vous pouvez déverser vos CDM</li>";
+	html += "<li><a target=nouvelOnglet href=\"http://canop.org:9090/chrall/puit\">Le Puits</a> dans lequel vous pouvez déverser vos CDM</li>";
 	html += "</ul>";
 	html += " </div>";
 	html += "</div>";

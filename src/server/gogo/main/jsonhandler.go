@@ -10,12 +10,25 @@ import (
 
 
 type jsonRequest struct {
-	Action  string	"action"
-	Bucket  string  "bucket"
+	Action string "action"
+	Bucket string "bucket"
+}
+
+type jsonAnswer struct {
+	Result string
+	Text string
+	Message string
 }
 
 type JsonHandler struct {
 	Handler
+	store *CdmStore // je suppose que je remplacerai à terme par un store global
+}
+
+func NewJsonHandler() (*JsonHandler) {
+	h := new(JsonHandler)
+	h.store = NewStore("temp_user", "temp_pwd") // TODO mettre user et mdp dans un fichier de config quelque part
+	return h
 }
 
 func sendError(w http.ResponseWriter, title string, err os.Error) {
@@ -26,40 +39,46 @@ func sendError(w http.ResponseWriter, title string, err os.Error) {
 func (h *JsonHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
 
-	fmt.Println("\n=== Requete reçue ====================");
+	fmt.Println("\n=== JsonHandler : Requete reçue ====================")
 
 	jd := json.NewDecoder(hr.Body)
 	jr := new(jsonRequest)
 	err := jd.Decode(jr)
-	
+
 	if err != nil {
 		sendError(w, "décodage", err)
 		return
 	}
-	
-	fmt.Println("Analyse :");
 
 	bd := new(BucketDecoder)
-	bd.Decode(jr.Bucket)
-	
-	// là ce serait plus propre d'utiliser la fonction json.Marshal mais j'ai perdu une heure sans réussir...
-	answer := "N° d'analyse : " + strconv.Itoa(h.nbRequests)
-	answer += "<br>" + strconv.Itoa(bd.nbResults) + " Objets trouvés :<ul>"
-	answer += "<li>  " + strconv.Itoa(len(bd.Cdm)) + " CDM"
-	if (len(bd.Cdm)>0) {
-		answer += " ("
+	bd.Decode(jr.Bucket, h.store)
+
+	ja := new(jsonAnswer)
+	ja.Result = "OK"
+	ja.Message = bd.Message
+	ja.Text = "N° d'analyse : " + strconv.Itoa(h.nbRequests)
+	ja.Text += "<br>" + strconv.Itoa(bd.nbResults) + " Objets trouvés :<ul>"
+	ja.Text += "<li>  " + strconv.Itoa(len(bd.Cdm)) + " CDM"
+	if len(bd.Cdm) > 0 {
+		ja.Text += " ("
 		for i, cdm := range bd.Cdm {
-			if i>0 {
-				answer += ", "
+			if i > 0 {
+				ja.Text += ", "
 			}
-			answer += cdm.Nom
+			ja.Text += cdm.Nom
 		}
-		answer += ")"
+		ja.Text += ")"
 	}
-	answer += "</li>"
-	answer += "</ul>"
-	if (bd.nbResults>0) {
-		answer += "<br>Les résultats ne sont pas encore mis en BD. Pour l'instant je teste le décodage."
+	ja.Text += "</li>"
+	ja.Text += "</ul>"
+	if bd.nbResults > 0 {
+		ja.Text += "<br>Les résultats ne sont pas encore mis en BD. Pour l'instant je teste le décodage."
 	}
-	fmt.Fprint(w, "{\"result\":\"OK\", \"text\": \""+answer+"\"}")
+	
+	ba, err := json.Marshal(ja)
+	if err!=nil {
+		sendError(w, "encodage réponse", err)
+		return
+	}
+	w.Write(ba)
 }

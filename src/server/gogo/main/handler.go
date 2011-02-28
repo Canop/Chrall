@@ -16,7 +16,7 @@ func (h *Handler) hit() {
 }
 
 func (h *Handler) head(w io.Writer, title string) {
-	if (title=="") {
+	if title == "" {
 		title = "canop.org:gOgO"
 	}
 	fmt.Fprintf(w, "<html><head><title>%s</title>", title)
@@ -92,8 +92,13 @@ func (h *Handler) head(w io.Writer, title string) {
 			.invisible {
 				display: none;
 			}
+			p {
+				margin-left: 5px;			
+			}
 			p#resultContent {
-				margin-left: 5px;
+			}
+			p#serverMessage {
+				font-style: italic;
 			}
 		</style>
 	</head>

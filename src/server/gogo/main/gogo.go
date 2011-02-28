@@ -26,9 +26,10 @@ func (server *GogoServer) Start() {
 
 	wellHandler := new(WellHandler)
 	wellHandler.server = server
+	http.Handle("/chrall/puits", wellHandler)
 	http.Handle("/chrall/puit", wellHandler)
 
-	jsonHandler := new(JsonHandler)
+	jsonHandler := NewJsonHandler()
 	jsonHandler.server = server
 	http.Handle("/chrall/json", jsonHandler)
 

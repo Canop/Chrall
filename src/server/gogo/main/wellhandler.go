@@ -26,7 +26,8 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 					),
 					function(data, textStatus) {
 						$("#envoi").hide();
-						$("p#resultContent").html(data['text']);
+						$("p#resultContent").html(data['Text']);
+						$("p#serverMessage").html(data['Message']);
 						$("#result").show("slow");
 						$("#cleanBtn").show();
 					},
@@ -39,7 +40,7 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 				$("#cleanBtn").hide();
 			}
 		</script>
-		<p>Vous êtes au bord du <span class=emphase>Puit</span> de <a href=/chrall>gOgOchrall</a></p>
+		<p>Vous êtes au bord du <span class=emphase>Puits</span> de <a href=/chrall>gOgOchrall</a></p>
 		<p>Copiez vos CDM ci-dessous :
 			<form>
 				<textarea id=bucket rows=20></textarea>
@@ -54,6 +55,8 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			</p>
 			<p id=resultContent>
 				Désolé, il semble que le serveur ait trop bu...
+			</p>
+			<p id=serverMessage>
 			</p>
 		</div>
 	`))

@@ -26,6 +26,10 @@ RECENTS / A TESTER :
 * [Canop] fatigue optimale : rejeter si après la fin de DLA
 * [Canop] options : séparer via des onglets en "Options standard" et "Options Chrall" (bon... c'est pas beau...)
 * [Canop] structure du Puit (déversoir à CDM), tant côté client que pour l'analyse côté serveur
+* Bug sur la page d'options
+<- v0.9
+* [Canop] Puit : bouton "nettoyer" (pour effacer le contenu du seau)
+* [Canop] gogoChrall : encodage plus propre de la réponse en JSON
 
 EN COURS :
 ==========
@@ -35,7 +39,7 @@ EN COURS :
 * [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
 * [Canop] serveur gogochrall (entre autres pour le bestiaire)
 * [Canop] analyseur de cdm accessible (le Puit)
-* Bug sur la page d'options
+* [Canop] stockage en BD des CDM - nécessité encoder les chaines en binaire ?
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================
@@ -43,8 +47,8 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 
 TODO :
 ======
-* [Canop] Puit : bouton "nettoyer" (pour effacer le contenu du seau)
-* [Canop] Puit : vérifier par un hash de la requète que ce n'est pas la même qu'une requète récente (bouton appuyé plusieurs fois)
+* grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)
+* [Canop] Puits : vérifier par un hash de la requète que ce n'est pas la même qu'une requète récente (bouton appuyé plusieurs fois)
 * grille/filtre : remplacer "objets" par "trésors"
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * regarder si on ne peut pas récupérer des infos dans les scripts publics (par exemple les malus pour améliorer le calcul de la fatigue)
