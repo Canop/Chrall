@@ -52,6 +52,12 @@ func (h *JsonHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 
 	bd := new(BucketDecoder)
 	bd.Decode(jr.Bucket, h.store)
+	
+	inserted, err := h.store.WriteCdms(bd.Cdm)
+	if err!=nil {
+		sendError(w, "écriture BD", err)
+	}
+	fmt.Println("Inserted : " + strconv.Itoa(inserted))
 
 	ja := new(jsonAnswer)
 	ja.Result = "OK"

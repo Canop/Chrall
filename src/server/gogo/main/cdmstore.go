@@ -12,9 +12,10 @@ TODO
 package main
 
 import (
+	"os"
 	"fmt"
 	"mysql"
-	"strconv"
+	//"strconv"
 )
 
 
@@ -33,6 +34,52 @@ func NewStore(user string, password string) *CdmStore {
 }
 
 
+type CdmRow struct {
+	Id int64
+	NumMonstre int64
+	NomComplet string
+}
+
+/*
+Notons qu'il faudra protéger tout ça par un Mutex (et donc regarder comment ça marche en go...)
+*/
+func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) {
+
+	inserted := 0
+
+	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)  
+	if err != nil {  
+		return 0, err
+	}
+	defer db.Close()
+	
+	
+	stmt, err := db.Prepare("insert into cdm (num_monstre, nom_complet) values (?, ?)")  
+	if err != nil {  
+		return 0, err
+	}
+	defer stmt.Close()
+	
+	var cdmRow CdmRow
+	for _, cdm := range cdms {
+		cdmRow.NumMonstre = int64(cdm.IdMonstre)
+		cdmRow.NomComplet = cdm.NomComplet
+		err = stmt.BindParams(cdmRow.NumMonstre, cdmRow.NomComplet)  
+		if err != nil {  
+			return inserted, err
+		}
+		err = stmt.Execute()  
+		if err != nil {  
+			return inserted, err
+		}
+		
+		inserted++
+	}
+
+	return inserted, nil
+}
+
+
 func (store *CdmStore) Test() string {
 	fmt.Println("Start Store Test")
 	
@@ -41,32 +88,37 @@ func (store *CdmStore) Test() string {
 	if err != nil {  
 		return "Echec à la connexion : " + err.String()
 	}
+	defer db.Close()
 	
-	err = db.Query("select id, nom_complet from cdm")  
+	stmt, err := db.Prepare("select num_monstre, nom_complet from cdm")  
+	if err != nil {  
+		return "Echec à la la préparation du PreparedStatement : " + err.String()
+	}
+	defer stmt.Close()
+
+	
+	err = stmt.Execute()  
 	if err != nil {
 		return "Echec lors du requétage : " + err.String()
 	}  
 
-	result, err := db.UseResult()  
-	if err != nil {  
-		return "Echec lecture résultat : " + err.String()
-	}  
-
+	Message := "CDM lues en BD : <ul>"
 	count := 0
-	for {  
-		row := result.FetchRow()  
-		if row == nil {  
+	var cdmRow CdmRow
+	stmt.BindResult(&cdmRow.NumMonstre, &cdmRow.NomComplet)
+	for {
+		eof, err := stmt.Fetch()  
+		if err != nil {
+			return "Echec à la lecture : " + err.String()  
+		}
+		if eof {  
 			break  
 		}
-		fmt.Println("  ligne "+strconv.Itoa(count)+" :")
-		id := row[0].(int64)
-		nomMonstre := string(row[1].([]byte)) // je n'arrive pas à récupérer de l'UTF8 complet ?
-		
-		fmt.Println("    monstre[" + strconv.Itoa64(id) + "] : " + nomMonstre)
+		Message += "<li>" + cdmRow.NomComplet + "</li>"
 		count ++
 	}  
-	
-	fmt.Println("End Store Test")
-	return "no test"
+		
+	fmt.Println("Message : " + Message)
+	return Message + "</ul>"
 }
 
