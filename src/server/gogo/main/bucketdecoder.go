@@ -14,7 +14,7 @@ import (
 type BucketDecoder struct {
 	Cdm       []*CDM // les CDM trouvées dans l'input	
 	nbResults int
-	Message string
+	Message   string
 }
 
 func (bd *BucketDecoder) addCdm(cdm *CDM) {
@@ -39,14 +39,14 @@ func (bd *BucketDecoder) Decode(input string, store *CdmStore) {
 		if len(line) < 4 {
 			continue
 		}
-		if strings.Index(line, "chrall:")==0 {
+		if strings.Index(line, "chrall:") == 0 {
 			fields := strings.Fields(line)
-			if len(fields)>1 {
+			if len(fields) > 1 {
 				switch fields[1] {
-					case "hello" :
-						bd.Message += "Coucou<br>"
-					case "test" :
-						bd.Message += "Test Store : " + store.Test() + "<br>"
+				case "hello":
+					bd.Message += "Coucou<br>"
+				case "test":
+					bd.Message += "Test Store : " + store.Test() + "<br>"
 				}
 			}
 		} else if cdm := NewCdm(line); cdm != nil {
@@ -68,6 +68,7 @@ func (bd *BucketDecoder) Decode(input string, store *CdmStore) {
 		if cdm == nil {
 			fmt.Println("cdm is nil !")
 		} else {
+			cdm.Compile()
 			cdm.Print()
 		}
 	}

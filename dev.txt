@@ -39,14 +39,16 @@ EN COURS :
 * [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
 * [Canop] serveur gogochrall (entre autres pour le bestiaire)
 * [Canop] analyseur de cdm accessible (le Puit)
-* [Canop] stockage en BD des CDM - nécessité encoder les chaines en binaire ?
+* [Canop] stockage en BD des CDM
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================
 * BUG: la mise à jour automatique de l'extension ne fonctionne pas
+* BUG: les sonneries ne marchent plus...
 
 TODO :
 ======
+* Bug Puits : les monstres féminins (expression "une ...") ne sont pas reconnus
 * grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)
 * [Canop] Puits : vérifier par un hash de la requète que ce n'est pas la même qu'une requète récente (bouton appuyé plusieurs fois)
 * grille/filtre : remplacer "objets" par "trésors"

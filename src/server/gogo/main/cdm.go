@@ -10,11 +10,43 @@ import (
 	"strings"
 )
 
+type boolean uint8 // il faut que je fasse des progrés dans la compréhension des énums et constantes...
+const (
+	b_unknown = boolean(0)
+	b_false   = boolean(1)
+	b_true    = boolean(2)
+)
+
+func (b boolean) String() string {
+	switch b {
+	case b_unknown:
+		return "unknown"
+	case b_false:
+		return "false"
+	case b_true:
+		return "true"
+	}
+	return "invalid_value"
+}
+
+func (b boolean) GenderString() string {
+	switch b {
+	case b_unknown:
+		return "inconnu"
+	case b_false:
+		return "femelle"
+	case b_true:
+		return "mâle"
+	}
+	return "bug!"
+}
+
 type CdmChar struct {
 	Min  uint   // 0 si pas défini
 	Max  uint   // 0 si pas défini
 	Text string // on ne conservera probablement pas indéfiniment ça mais pour l'instant ça permettra d'améliorer l'algo
 }
+
 
 func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 	fields := strings.Split(line, ":", 4)
@@ -63,11 +95,31 @@ func (char *CdmChar) Print(name string) {
 }
 
 type CDM struct {
-	IdMonstre  int    // TODO comment utiliser uint32 (et faire les conversions depuis et vers des chaines) ?
+	NumMonstre  uint 
 	Nom        string // exemple : "Mouch'oo Majestueux Sauvage Frénétique"
+	Male       boolean
 	TagAge     string // exemple : "Doyen"
 	NomComplet string // exemple : "Mouch'oo Majestueux Sauvage Frénétique [Doyen]"
-	Chars      map[string]*CdmChar
+	
+	Niveau_min uint
+	Niveau_max uint
+	Capacite_text string
+	Chars      map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
+}
+
+/*
+ transforme tous les paramètres de type CdmChar en des paramètres hardcodés, pour des
+ traitements plus rapides et surtout un mapping bd compatible avec le seul driver mysql que j'ai trouvé à avoir l'air pas trop naze
+*/
+func (cdm *CDM) Compile() {
+	if c:=cdm.Chars["Niveau"]; c!=nil {
+		cdm.Niveau_min = c.Min
+		cdm.Niveau_max = c.Max
+	}
+	if c:=cdm.Chars["Capacité spéciale"]; c!=nil {
+		cdm.Capacite_text = c.Text
+	}
+	
 }
 
 // renvoie une nouvelle CDM si cette ligne est l'entame d'une CDM
@@ -75,12 +127,18 @@ func NewCdm(line string) *CDM {
 	var fields []string
 	var numField string
 	var nomComplet string
+	var male boolean
 	if strings.Contains(line, "CONNAISSANCE DES MONSTRES") {
 		fields = strings.Fields(line)
 		fieldUn := -1
 		for i, f := range fields {
 			if f == "un" {
 				fieldUn = i
+				male = b_true
+				break
+			} else if f == "une" {
+				fieldUn = i
+				male = b_false
 				break
 			}
 		}
@@ -109,15 +167,16 @@ func NewCdm(line string) *CDM {
 	numField = fields[len(fields)-1]
 	numField = strings.TrimLeft(numField, "(N°")
 	numField = strings.TrimRight(numField, ")")
-	num, err := strconv.Atoi(numField)
+	num, err := strconv.Atoui(numField)
 	if err != nil {
 		fmt.Println("Error trying to parse '" + numField + "' as an int : not a CDM")
 		return nil
 	}
 	cdm := new(CDM)
-	cdm.IdMonstre = num
+	cdm.NumMonstre = num
 	cdm.SetNomComplet(nomComplet)
 	cdm.Chars = make(map[string]*CdmChar)
+	cdm.Male = male
 	return cdm
 }
 
@@ -139,8 +198,9 @@ func (cdm *CDM) SetNomComplet(nc string) {
 
 func (cdm *CDM) Print() {
 	fmt.Println(" CDM-------------------------------")
-	fmt.Println("  ID : " + strconv.Itoa(cdm.IdMonstre))
+	fmt.Println("  ID : " + strconv.Uitoa(cdm.NumMonstre))
 	fmt.Println("  Nom : " + cdm.NomComplet)
+	fmt.Println("  Sexe : " + cdm.Male.GenderString())
 	for name, char := range cdm.Chars {
 		char.Print(name)
 	}

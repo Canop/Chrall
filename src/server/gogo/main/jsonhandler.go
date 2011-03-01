@@ -15,8 +15,8 @@ type jsonRequest struct {
 }
 
 type jsonAnswer struct {
-	Result string
-	Text string
+	Result  string
+	Text    string
 	Message string
 }
 
@@ -25,7 +25,7 @@ type JsonHandler struct {
 	store *CdmStore // je suppose que je remplacerai à terme par un store global
 }
 
-func NewJsonHandler() (*JsonHandler) {
+func NewJsonHandler() *JsonHandler {
 	h := new(JsonHandler)
 	h.store = NewStore("temp_user", "temp_pwd") // TODO mettre user et mdp dans un fichier de config quelque part
 	return h
@@ -52,9 +52,9 @@ func (h *JsonHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 
 	bd := new(BucketDecoder)
 	bd.Decode(jr.Bucket, h.store)
-	
+
 	inserted, err := h.store.WriteCdms(bd.Cdm)
-	if err!=nil {
+	if err != nil {
 		sendError(w, "écriture BD", err)
 	}
 	fmt.Println("Inserted : " + strconv.Itoa(inserted))
@@ -78,11 +78,11 @@ func (h *JsonHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	ja.Text += "</li>"
 	ja.Text += "</ul>"
 	if bd.nbResults > 0 {
-		ja.Text += "<br>Les résultats ne sont pas encore mis en BD. Pour l'instant je teste le décodage."
+		ja.Text += "<br>Le stockage en base de données n'est pas encore fini. Patience..."
 	}
-	
+
 	ba, err := json.Marshal(ja)
-	if err!=nil {
+	if err != nil {
 		sendError(w, "encodage réponse", err)
 		return
 	}
