@@ -97,13 +97,23 @@ func (char *CdmChar) Print(name string) {
 type CDM struct {
 	NumMonstre  uint 
 	Nom        string // exemple : "Mouch'oo Majestueux Sauvage Frénétique"
-	Male       boolean
+	Mâle       boolean
 	TagAge     string // exemple : "Doyen"
 	NomComplet string // exemple : "Mouch'oo Majestueux Sauvage Frénétique [Doyen]"
 	
 	Niveau_min uint
 	Niveau_max uint
 	Capacite_text string
+	PV_min uint
+	PV_max uint
+	DésAttaque_min uint
+	DésAttaque_max uint
+	DésEsquive_min uint
+	DésEsquive_max uint
+	DésDégâts_min uint
+	DésDégâts_max uint
+	DésRégénération_min uint
+	DésRégénération_max uint
 	Chars      map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
 }
 
@@ -118,6 +128,22 @@ func (cdm *CDM) Compile() {
 	}
 	if c:=cdm.Chars["Capacité spéciale"]; c!=nil {
 		cdm.Capacite_text = c.Text
+	}
+	if c:=cdm.Chars["Dés d'Attaque"]; c!=nil {
+		cdm.DésAttaque_min = c.Min
+		cdm.DésAttaque_max = c.Max
+	}
+	if c:=cdm.Chars["Dés d'Esquive"]; c!=nil {
+		cdm.DésEsquive_min = c.Min
+		cdm.DésEsquive_max = c.Max
+	}
+	if c:=cdm.Chars["Dés de Dégat"]; c!=nil {
+		cdm.DésDégâts_min = c.Min
+		cdm.DésDégâts_max = c.Max
+	}
+	if c:=cdm.Chars["Dés de Régénération"]; c!=nil {
+		cdm.DésRégénération_min = c.Min
+		cdm.DésRégénération_max = c.Max
 	}
 	
 }
@@ -176,7 +202,7 @@ func NewCdm(line string) *CDM {
 	cdm.NumMonstre = num
 	cdm.SetNomComplet(nomComplet)
 	cdm.Chars = make(map[string]*CdmChar)
-	cdm.Male = male
+	cdm.Mâle = male
 	return cdm
 }
 
@@ -200,7 +226,7 @@ func (cdm *CDM) Print() {
 	fmt.Println(" CDM-------------------------------")
 	fmt.Println("  ID : " + strconv.Uitoa(cdm.NumMonstre))
 	fmt.Println("  Nom : " + cdm.NomComplet)
-	fmt.Println("  Sexe : " + cdm.Male.GenderString())
+	fmt.Println("  Sexe : " + cdm.Mâle.GenderString())
 	for name, char := range cdm.Chars {
 		char.Print(name)
 	}

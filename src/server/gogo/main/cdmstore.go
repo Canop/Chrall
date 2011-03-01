@@ -39,8 +39,13 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 
 	sql := "insert into cdm (num_monstre, nom_complet," // a priori en go on ne peut pas déclarer une chaine sur plusieurs lignes. Je suppose que le compilo combine...
 	sql += " niveau_min, niveau_max,"
-	sql += " capacite_text)"
-	sql += " values (?, ?, ?, ?, ?)"
+	sql += " capacite_text,"
+	sql += " des_attaque_min, des_attaque_max,"
+	sql += " des_esquive_min, des_esquive_max,"
+	sql += " des_degats_min, des_degats_max,"
+	sql += " des_regeneration_min, des_regeneration_max)"
+	sql += " values (?, ?, ?, ?, ?,"
+	sql += " ?, ?, ?, ?, ?, ?, ?, ?)"
 	
 	
 	fmt.Println("SQL: " + sql)
@@ -54,7 +59,11 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 		err = stmt.BindParams(
 			cdm.NumMonstre, cdm.NomComplet,
 			cdm.Niveau_min, cdm.Niveau_max,
-			cdm.Capacite_text)
+			cdm.Capacite_text,
+			cdm.DésAttaque_min, cdm.DésAttaque_max,
+			cdm.DésEsquive_min, cdm.DésEsquive_max,
+			cdm.DésDégâts_min, cdm.DésDégâts_max,
+			cdm.DésRégénération_min, cdm.DésRégénération_max)
 		if err != nil {
 			return inserted, err
 		}
