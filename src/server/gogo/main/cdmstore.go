@@ -23,7 +23,7 @@ func NewStore(user string, password string) *CdmStore {
 	store.user = user
 	store.password = password
 	store.database = "chrall"
-		
+
 	return store
 }
 
@@ -35,7 +35,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	if err != nil {
 		return 0, err
 	}
-	defer db.Close()	
+	defer db.Close()
 
 	sql := "insert into cdm (num_monstre, nom_complet," // a priori en go on ne peut pas déclarer une chaine sur plusieurs lignes. Je suppose que le compilo combine...
 	sql += " niveau_min, niveau_max,"
@@ -46,8 +46,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	sql += " des_regeneration_min, des_regeneration_max)"
 	sql += " values (?, ?, ?, ?, ?,"
 	sql += " ?, ?, ?, ?, ?, ?, ?, ?)"
-	
-	
+
 	fmt.Println("SQL: " + sql)
 	stmt, err := db.Prepare(sql)
 	if err != nil {
@@ -99,26 +98,26 @@ func (store *CdmStore) Test() string {
 	if err != nil {
 		return "Echec lors du requétage : " + err.String()
 	}
-	
-	/*
-	Message := "CDM lues en BD : <ul>"
-	count := 0
-	var cdmRow CdmRow
-	stmt.BindResult(&cdmRow.numMonstre, &cdmRow.nomComplet)
-	for {
-		eof, err := stmt.Fetch()
-		if err != nil {
-			return "Echec à la lecture : " + err.String()
-		}
-		if eof {
-			break
-		}
-		Message += "<li>" + cdmRow.nomComplet + "</li>"
-		count++
-	}
 
-	fmt.Println("Message : " + Message)
-	return Message + "</ul>"
+	/*
+		Message := "CDM lues en BD : <ul>"
+		count := 0
+		var cdmRow CdmRow
+		stmt.BindResult(&cdmRow.numMonstre, &cdmRow.nomComplet)
+		for {
+			eof, err := stmt.Fetch()
+			if err != nil {
+				return "Echec à la lecture : " + err.String()
+			}
+			if eof {
+				break
+			}
+			Message += "<li>" + cdmRow.nomComplet + "</li>"
+			count++
+		}
+
+		fmt.Println("Message : " + Message)
+		return Message + "</ul>"
 	*/
 	return "test incomplet"
 }

@@ -56,7 +56,7 @@ func (bd *BucketDecoder) Decode(input string, store *CdmStore) {
 		} else if currentCdm != nil && numLine-numLineAtCdmStart < 40 { // 40 : nombre de lignes maximal d'une cdm (à déterminer)
 			name, char := AnalyseLineAsCdmChar(line)
 			if name != "" {
-				currentCdm.Chars[name] = char
+				currentCdm.AddChar(name, char)
 			} else {
 				fmt.Println("Ligne pas comprise : " + line)
 			}
@@ -68,7 +68,6 @@ func (bd *BucketDecoder) Decode(input string, store *CdmStore) {
 		if cdm == nil {
 			fmt.Println("cdm is nil !")
 		} else {
-			cdm.Compile()
 			cdm.Print()
 		}
 	}

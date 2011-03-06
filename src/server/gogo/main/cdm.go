@@ -44,7 +44,8 @@ func (b boolean) GenderString() string {
 type CdmChar struct {
 	Min  uint   // 0 si pas défini
 	Max  uint   // 0 si pas défini
-	Text string // on ne conservera probablement pas indéfiniment ça mais pour l'instant ça permettra d'améliorer l'algo
+	Text string // on ne conservera probablement pas indéfiniment tout là dedans mais pour l'instant ça permettra d'améliorer l'algo sur les valeurs énumérées
+	Boolean boolean // inconnu si pas défini
 }
 
 
@@ -55,13 +56,6 @@ func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 	}
 	char = new(CdmChar)
 	name = strings.Trim(fields[0], " ")
-	if name == "Le Monstre ciblé fait partie des" {
-		name = "Famille"
-	} else if name == "Blessure" {
-		return "", nil // pour l'instant on n'analyse pas la blessure (qui est sur 2 lignes)
-	} else if name == "Points de Vie restants (Approximatif)" {
-		return "", nil // ceci provient de MountyZilla ou ZoryaZilla
-	}
 	char.Text = strings.Trim(strings.Join(fields[1:len(fields)], ":"), " ")
 	indexPar := strings.Index(char.Text, "(")
 	if indexPar >= 0 {
@@ -78,6 +72,13 @@ func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 			char.Max, _ = strconv.Atoui(fields[2])
 		} else if len(fields) == 3 && fields[0] == "supérieur" && fields[1] == "à" {
 			char.Min, _ = strconv.Atoui(fields[2])
+		} else if len(fields) == 3 && fields[0] == "égal" && fields[1] == "à" {
+			char.Min, _ = strconv.Atoui(fields[2])
+			char.Max = char.Min
+		} else if len(fields) == 1 && fields[0] == "Oui" {
+			char.Boolean = b_true
+		} else if len(fields) == 1 && fields[0] == "Non" {
+			char.Boolean = b_false
 		}
 	}
 	return name, char
@@ -95,58 +96,121 @@ func (char *CdmChar) Print(name string) {
 }
 
 type CDM struct {
-	NumMonstre  uint 
+	NumMonstre uint
 	Nom        string // exemple : "Mouch'oo Majestueux Sauvage Frénétique"
 	Mâle       boolean
 	TagAge     string // exemple : "Doyen"
 	NomComplet string // exemple : "Mouch'oo Majestueux Sauvage Frénétique [Doyen]"
-	
-	Niveau_min uint
-	Niveau_max uint
-	Capacite_text string
-	PV_min uint
-	PV_max uint
-	DésAttaque_min uint
-	DésAttaque_max uint
-	DésEsquive_min uint
-	DésEsquive_max uint
-	DésDégâts_min uint
-	DésDégâts_max uint
+
+	Niveau_min          uint
+	Niveau_max          uint
+	Capacite_text       string
+	PointsDeVie_min              uint
+	PointsDeVie_max              uint
+	DésAttaque_min      uint
+	DésAttaque_max      uint
+	DésEsquive_min      uint
+	DésEsquive_max      uint
+	DésDégâts_min       uint
+	DésDégâts_max       uint
 	DésRégénération_min uint
 	DésRégénération_max uint
-	Chars      map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
+	Armure_min uint
+	Armure_max uint
+	Vue_min uint
+	Vue_max uint
+	MaitriseMagique_min uint
+	MaitriseMagique_max uint
+	RésistanceMagique_min uint
+	RésistanceMagique_max uint
+	Famille_text	string
+	NombreDAttaques_min uint
+	NombreDAttaques_max uint
+	VitesseDeDéplacement_text	string
+	VoirLeCaché_boolean	boolean
+	AttaqueADistance_boolean boolean
+	DLA_text	string
+	DuréeTour_min uint
+	DuréeTour_max uint
+	Chargement_text string
+	BonusMalus_text string
+	PortéeDuPouvoir_text string
+	
+	Chars               map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
 }
 
-/*
- transforme tous les paramètres de type CdmChar en des paramètres hardcodés, pour des
- traitements plus rapides et surtout un mapping bd compatible avec le seul driver mysql que j'ai trouvé à avoir l'air pas trop naze
-*/
-func (cdm *CDM) Compile() {
-	if c:=cdm.Chars["Niveau"]; c!=nil {
+/**
+ * utilise le nom de la caractéristique pour renseigner les champs.
+ *  Remarques : 
+ *   - attention, suivant l'origine des cdm des labels différents peuvent être utilisés
+ *   - J'avais fait un switch initialement mais ça ne marchait pas pour tous les labels (au runtime), il semble y avoir des bugs sur les switch en go
+ */
+func (cdm *CDM) AddChar(name string, c *CdmChar) {
+	if name == "Niveau" {
 		cdm.Niveau_min = c.Min
 		cdm.Niveau_max = c.Max
-	}
-	if c:=cdm.Chars["Capacité spéciale"]; c!=nil {
+	} else if name == "Capacité spéciale" {
 		cdm.Capacite_text = c.Text
-	}
-	if c:=cdm.Chars["Dés d'Attaque"]; c!=nil {
+	} else if name == "Points de Vie" {
+		cdm.PointsDeVie_min = c.Min
+		cdm.PointsDeVie_max = c.Max
+	} else if name == "Dés d'Attaque" {
 		cdm.DésAttaque_min = c.Min
 		cdm.DésAttaque_max = c.Max
-	}
-	if c:=cdm.Chars["Dés d'Esquive"]; c!=nil {
+	} else if name == "Dés d'Esquive" {
 		cdm.DésEsquive_min = c.Min
 		cdm.DésEsquive_max = c.Max
-	}
-	if c:=cdm.Chars["Dés de Dégat"]; c!=nil {
+	} else if name ==  "Dés de Dégât" || name == "Dés de Dégat" {
 		cdm.DésDégâts_min = c.Min
 		cdm.DésDégâts_max = c.Max
-	}
-	if c:=cdm.Chars["Dés de Régénération"]; c!=nil {
+	} else if name ==  "Dés de Régénération" || name == "Dés de Régén."{
 		cdm.DésRégénération_min = c.Min
 		cdm.DésRégénération_max = c.Max
+	} else if name ==  "Armure"{
+		cdm.Armure_min = c.Min
+		cdm.Armure_max = c.Max
+	} else if name ==  "Vue"{
+		cdm.Vue_min = c.Min
+		cdm.Vue_max = c.Max
+	} else if name ==  "Maitrise Magique"{
+		cdm.MaitriseMagique_min = c.Min
+		cdm.MaitriseMagique_max = c.Max
+	} else if name ==  "Résistance Magique"{
+		cdm.RésistanceMagique_min = c.Min
+		cdm.RésistanceMagique_max = c.Max
+	} else if name ==  "Famille"{
+		cdm.Famille_text = c.Text
+	} else if name ==  "Le Monstre ciblé fait partie des"{
+		cdm.Famille_text = c.Text
+	} else if name ==  "Nombre d'attaques"{
+		cdm.NombreDAttaques_min = c.Min
+		cdm.NombreDAttaques_max = c.Max
+	} else if name ==  "Vitesse de Déplacement"{
+		cdm.VitesseDeDéplacement_text = c.Text
+	} else if name ==  "Voir le Caché"{
+		cdm.VoirLeCaché_boolean = c.Boolean
+	} else if name ==  "Attaque à distance"{
+		cdm.AttaqueADistance_boolean = c.Boolean
+	} else if name ==  "DLA"{
+		cdm.DLA_text = c.Text
+	} else if name ==  "Durée Tour"{
+		cdm.DuréeTour_min = c.Min
+		cdm.DuréeTour_max = c.Max
+	} else if name ==  "Chargement"{
+		cdm.Chargement_text = c.Text
+	} else if name ==  "Bonus Malus"{
+		cdm.BonusMalus_text = c.Text
+	} else if name ==  "Portée du Pouvoir"{
+		cdm.PortéeDuPouvoir_text = c.Text
+
+	} else {
+		fmt.Println("Caractéristique inconnue : \"" + name + "\"")
+		return // on n'ajoute pas à la map
 	}
-	
+
+	cdm.Chars[name] = c
 }
+
 
 // renvoie une nouvelle CDM si cette ligne est l'entame d'une CDM
 func NewCdm(line string) *CDM {
