@@ -1,7 +1,7 @@
 package main
 
 /*
-Ce service répond au requètes JSON contenues dans le body (en POST donc)
+Ce service répond aux requètes JSON contenues dans le body (en POST donc)
 */
 
 import (
@@ -43,7 +43,7 @@ func sendError(w http.ResponseWriter, title string, err os.Error) {
 func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
 
-	fmt.Println("\n=== JsonHandler : Requete reçue ====================")
+	fmt.Println("\n=== JsonPostHandler : Requete reçue ====================")
 
 	jd := json.NewDecoder(hr.Body)
 	jr := new(jsonRequest)

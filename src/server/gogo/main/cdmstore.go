@@ -107,6 +107,41 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	return inserted, nil
 }
 
+func (store *CdmStore) getMonsterCompleteNames(partialName string) ([]string, os.Error) {
+	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	sql := "select distinct nom_complet from cdm where nom_complet like '"+partialName+"%' or nom_complet like '% "+partialName+"%' limit 20"
+	stmt, err := db.Prepare(sql)
+	defer stmt.Close()
+
+	err = stmt.Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	names := make([]string, 20)
+	count :=0
+	var name string 
+	stmt.BindResult(&name)
+	for {
+		eof, err := stmt.Fetch()
+		if err != nil {
+			return nil, err
+		}
+		if eof {
+			break
+		}
+		names[count] = name
+		fmt.Println(names[count])
+		count++
+	}
+	return names[0:count], nil
+}
+
 func (store *CdmStore) ReadTotalStats() (*BestiaryExtract, os.Error) {
 	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
 	if err != nil {

@@ -11,6 +11,7 @@ GOFILES=\
 	main/wellhandler.go\
 	main/bestiaryhandler.go\
 	main/jsonposthandler.go\
+	main/jsongethandler.go\
 	main/chrallhandler.go\
 	main/gogo.go\
 

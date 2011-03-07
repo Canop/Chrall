@@ -38,7 +38,11 @@ func (server *GogoServer) Start() {
 
 	jsonPostHandler := NewJsonPostHandler(cdmStore)
 	jsonPostHandler.server = server
-	http.Handle("/chrall/json", jsonPostHandler)
+	http.Handle("/chrall/jsonp", jsonPostHandler)
+
+	jsonGetHandler := NewJsonGetHandler(cdmStore)
+	jsonGetHandler.server = server
+	http.Handle("/chrall/json", jsonGetHandler)
 
 	fmt.Printf("gogo démarré sur le port %d", port)
 	http.ListenAndServe(":"+strconv.Itoa(port), nil)

@@ -17,7 +17,7 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			function sendForAnalyse() {
 				$("#envoi").show();
 				$.post(
-					"/chrall/json",
+					"/chrall/jsonp",
 					JSON.stringify(
 						{
 							action: "pour",
