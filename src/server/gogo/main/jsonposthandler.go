@@ -1,5 +1,9 @@
 package main
 
+/*
+Ce service répond au requètes JSON contenues dans le body (en POST donc)
+*/
+
 import (
 	"http"
 	"fmt"
@@ -20,14 +24,14 @@ type jsonAnswer struct {
 	Message string
 }
 
-type JsonHandler struct {
+type JsonPostHandler struct {
 	Handler
-	store *CdmStore // je suppose que je remplacerai à terme par un store global
+	store *CdmStore
 }
 
-func NewJsonHandler() *JsonHandler {
-	h := new(JsonHandler)
-	h.store = NewStore("temp_user", "temp_pwd") // TODO mettre user et mdp dans un fichier de config quelque part
+func NewJsonPostHandler(store *CdmStore) *JsonPostHandler {
+	h := new(JsonPostHandler)
+	h.store = store
 	return h
 }
 
@@ -36,7 +40,7 @@ func sendError(w http.ResponseWriter, title string, err os.Error) {
 	fmt.Fprintf(w, "{\"result\":\"NOK\", \"text\": \"Erreur %s : %s\"}", title, err.String())
 }
 
-func (h *JsonHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
+func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
 
 	fmt.Println("\n=== JsonHandler : Requete reçue ====================")

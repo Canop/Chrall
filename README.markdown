@@ -1,0 +1,24 @@
+
+
+Chrall est une extension pour Chrome destinée aux joueurs en ligne de www.mountyhall.com.
+
+Le projet est géré par cano.petrole@gmail.com
+
+Structure :
+===========
+
+1. **l'extension Chrome** qui reformate les pages de la forme `games.mountyhall.com/*` : le code source est dans `src/chrome`. Il s'agit essentiellement de javascript.
+
+2. **le serveur gogochrall** : il répond aux requètes de l'extension pour sauver les CDM et pour fournir des estimations des caractéristiques des monstres. Son code source est dans `src/server`. Il s'agit de go et d'une base MySQL.
+
+3. **le site web** : il s'agit du site présentant l'extension à l'adresse http://canop.org/chrall. 
+
+Compiler vous même l'extension :
+================================
+
+Pour découvrir le développement des extensions Chrome ou parce que vous êtes parano et voulez être sûr de ce qu'il y a dans votre browser, vous pouvez télécharger l'extension et la charger à partir des sources dans Chrome (menu Outils/Extensions).
+
+Contribuer :
+============
+
+Si vous envisagez de participer au développement, vous pouvez faire un fork du projet. N'hésitez pas à me contacter si vous souhaitez en discuter. Vous pouvez également me contacter pour causer des technologies mises en oeuvre si vous êtes curieux.

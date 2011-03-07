@@ -1,11 +1,4 @@
--- phpMyAdmin SQL Dump
--- version 3.3.7deb5build0.10.10.1
--- http://www.phpmyadmin.net
---
--- Serveur: localhost
--- Généré le : Mar 01 Mars 2011 à 23:22
--- Version du serveur: 5.1.49
--- Version de PHP: 5.3.3-1ubuntu9.3
+
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -25,8 +18,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Structure de la table `cdm`
 --
 
-DROP TABLE IF EXISTS `cdm`;
-CREATE TABLE IF NOT EXISTS `cdm` (
+CREATE TABLE `cdm` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `origine` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'U',
   `date_adition` int(11) NOT NULL,
@@ -44,6 +36,26 @@ CREATE TABLE IF NOT EXISTS `cdm` (
   `des_degats_max` int(11) NOT NULL,
   `des_regeneration_min` int(11) NOT NULL,
   `des_regeneration_max` int(11) NOT NULL,
+  `armure_min` int(11) NOT NULL,
+  `armure_max` int(11) NOT NULL,
+  `vue_min` int(11) NOT NULL,
+  `vue_max` int(11) NOT NULL,
+  `maitrise_magique_min` int(11) NOT NULL,
+  `maitrise_magique_max` int(11) NOT NULL,
+  `resistance_magique_min` int(11) NOT NULL,
+  `resistance_magique_max` int(11) NOT NULL,
+  `famille_text` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `nombre_attaques_min` int(11) NOT NULL,
+  `nombre_attaques_max` int(11) NOT NULL,
+  `vitesse_deplacement_text` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `voir_le_cache_boolean` tinyint(4) NOT NULL,
+  `attaque_a_distance_boolean` tinyint(4) NOT NULL,
+  `dla_text` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `duree_tour_min` int(11) NOT NULL,
+  `duree_tour_max` int(11) NOT NULL,
+  `chargement_text` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `bonus_malus_text` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `portee_du_pouvoir` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `niveau_min` (`niveau_min`,`niveau_max`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=101 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

@@ -40,14 +40,14 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 				$("#cleanBtn").hide();
 			}
 		</script>
-		<p>Vous êtes au bord du <span class=emphase>Puits</span> de <a href=/chrall>gOgOchrall</a></p>
+		<p>Vous êtes au bord du <span class=emphase>Puits</span> de <a class=gogo href=/chrall>gOgOchrall</a></p>
 		<p>Copiez vos CDM ci-dessous :
 			<form>
 				<textarea id=bucket rows=20></textarea>
 			</form>
 		</p>
-		<a href="javascript:sendForAnalyse();">Déverser</a>
-		<a id=cleanBtn href="javascript:clean();" class=invisible>Nettoyer</a>
+		<a class=gogo href="javascript:sendForAnalyse();">Déverser</a>
+		<a class=gogo id=cleanBtn href="javascript:clean();" class=invisible>Nettoyer</a>
 		<span id=envoi class=invisible>Envoi en cours...</span>
 		<div id=result class=invisible>
 			<p>

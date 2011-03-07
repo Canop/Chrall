@@ -40,6 +40,7 @@ EN COURS :
 * [Canop] serveur gogochrall (entre autres pour le bestiaire)
 * [Canop] analyseur de cdm accessible (le Puit)
 * [Canop] stockage en BD des CDM
+* [Canop] cdmstore : écriture d'un hash sha1 pour éviter les doublons
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================

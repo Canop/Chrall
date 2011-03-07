@@ -21,8 +21,10 @@ func (h *Handler) head(w io.Writer, title string) {
 	}
 	fmt.Fprintf(w, "<html><head><title>%s</title>", title)
 	w.Write([]byte(`
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">		
+		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 		<style type="text/css">
 			body {
 				background-color: white;
@@ -66,10 +68,10 @@ func (h *Handler) head(w io.Writer, title string) {
 				font-weight:bold;
 				text-shadow: 0 0 0.2em black; 
 			}
-			a:focus {
+			a.gogo:focus {
 				oultine: none;
 			}
-			a {
+			a.gogo {
 				background-color: mediumblue;
 				border-top: 1px solid mediumblue;
 				border-bottom: 1px solid darkblue;
@@ -82,7 +84,7 @@ func (h *Handler) head(w io.Writer, title string) {
 				text-decoration: none;
 				color: white;
 			}
-			a:hover {
+			a.gogo:hover {
 				border-top: 1px solid darkblue;
 				border-bottom: 1px solid mediumblue;
 			}
@@ -99,6 +101,12 @@ func (h *Handler) head(w io.Writer, title string) {
 			}
 			p#serverMessage {
 				font-style: italic;
+			}
+			li {
+				line-height: 1.6em;
+			}
+			input {
+				width: 60%;
 			}
 		</style>
 	</head>
