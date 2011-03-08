@@ -19,7 +19,7 @@ func (server *GogoServer) Start() {
 	rootHandler := new(RootHandler)
 	rootHandler.server = server
 	http.Handle("/", rootHandler)
-	
+
 	cdmStore := NewStore("temp_user", "temp_pwd") // TODO mettre user et mdp dans un fichier de config quelque part
 
 	chrallHandler := new(ChrallHandler)

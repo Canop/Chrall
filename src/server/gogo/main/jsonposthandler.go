@@ -81,8 +81,23 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	}
 	ja.Text += "</li>"
 	ja.Text += "</ul>"
-	if bd.nbResults > 0 {
-		ja.Text += "<br>Le stockage en base de données n'est pas encore fini. Patience..."
+	nbIgnored := len(bd.Cdm) - inserted
+	if inserted == 1 {
+		ja.Text += "<br>Une CDM a été enregistrée."
+		if nbIgnored > 0 {
+			ja.Text += "<br>Les CDM déjà en base ne sont pas enregistrées."
+		}
+	} else if inserted > 1 {
+		ja.Text += "<br>" + strconv.Itoa(inserted) + " CDM ont été enregistrées."
+		if nbIgnored > 0 {
+			ja.Text += "<br>Les CDM déjà en base ne sont pas enregistrées."
+		}
+	} else {
+		if len(bd.Cdm) == 1 {
+			ja.Text += "<br>Cette CDM était déjà en base et a donc été ignorée."
+		} else if len(bd.Cdm) > 1 {
+			ja.Text += "<br>Ces CDM étaient déjà en base et ont donc été ignorées."
+		}
 	}
 
 	ba, err := json.Marshal(ja)

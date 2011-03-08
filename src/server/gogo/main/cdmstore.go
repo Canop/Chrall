@@ -10,6 +10,7 @@ import (
 	"os"
 	"fmt"
 	"mysql"
+	"strings"
 )
 
 type CdmStore struct {
@@ -37,8 +38,10 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	}
 	defer db.Close()
 
-	sql := "insert into cdm (num_monstre, nom_complet," // a priori en go on ne peut pas déclarer une chaine sur plusieurs lignes. Je suppose que le compilo combine...
+	sql := "insert ignore into cdm (num_monstre, nom_complet, nom, age, " // a priori en go on ne peut pas déclarer une chaine sur plusieurs lignes. Je suppose que le compilo combine...
+	sql += "sha1,"
 	sql += " niveau_min, niveau_max,"
+	sql += " points_de_vie_min, points_de_vie_max, "
 	sql += " capacite_text,"
 	sql += " des_attaque_min, des_attaque_max,"
 	sql += " des_esquive_min, des_esquive_max,"
@@ -49,7 +52,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	sql += " maitrise_magique_min, maitrise_magique_max,"
 	sql += " resistance_magique_min, resistance_magique_max,"
 	sql += " famille_text,"
-	sql += " nombre_attaques_min, nombre_attaques_max,"
+	sql += " nombre_attaques,"
 	sql += " vitesse_deplacement_text,"
 	sql += " voir_le_cache_boolean,"
 	sql += " attaque_a_distance_boolean,"
@@ -57,11 +60,11 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	sql += " duree_tour_min, duree_tour_max,"
 	sql += " chargement_text,"
 	sql += " bonus_malus_text,"
-	sql += " portee_du_pouvoir_text)" 
-	
-	sql += " values (?, ?, ?, ?, ?,"
-	sql += " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
-	sql += " ?, ?, ?, ?, ?, ?, ?, ?)" 
+	sql += " portee_du_pouvoir_text)"
+
+	sql += " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+	sql += " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
+	sql += " ?, ?, ?, ?, ?, ?, ?, ?)"
 
 	fmt.Println("SQL: " + sql)
 	stmt, err := db.Prepare(sql)
@@ -73,7 +76,10 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	for _, cdm := range cdms {
 		err = stmt.BindParams(
 			cdm.NumMonstre, cdm.NomComplet,
+			cdm.Nom, cdm.TagAge,
+			cdm.ComputeSHA1(),
 			cdm.Niveau_min, cdm.Niveau_max,
+			cdm.PointsDeVie_min, cdm.PointsDeVie_max,
 			cdm.Capacite_text,
 			cdm.DésAttaque_min, cdm.DésAttaque_max,
 			cdm.DésEsquive_min, cdm.DésEsquive_max,
@@ -84,7 +90,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 			cdm.MaitriseMagique_min, cdm.MaitriseMagique_max,
 			cdm.RésistanceMagique_min, cdm.RésistanceMagique_max,
 			cdm.Famille_text,
-			cdm.NombreDAttaques_min, cdm.NombreDAttaques_max,
+			cdm.NombreDAttaques,
 			cdm.VitesseDeDéplacement_text,
 			uint8(cdm.VoirLeCaché_boolean),
 			uint8(cdm.AttaqueADistance_boolean),
@@ -97,16 +103,18 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 			return inserted, err
 		}
 		err = stmt.Execute()
+
 		if err != nil {
 			return inserted, err
 		}
 
-		inserted++
+		inserted += int(stmt.AffectedRows)
 	}
 
 	return inserted, nil
 }
 
+// renvoie une liste de noms pour un champ d'auto-completion
 func (store *CdmStore) getMonsterCompleteNames(partialName string) ([]string, os.Error) {
 	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
 	if err != nil {
@@ -114,7 +122,7 @@ func (store *CdmStore) getMonsterCompleteNames(partialName string) ([]string, os
 	}
 	defer db.Close()
 
-	sql := "select distinct nom_complet from cdm where nom_complet like '"+partialName+"%' or nom_complet like '% "+partialName+"%' limit 20"
+	sql := "select distinct nom_complet from cdm where nom_complet like '" + partialName + "%' or nom_complet like '% " + partialName + "%' limit 20"
 	stmt, err := db.Prepare(sql)
 	defer stmt.Close()
 
@@ -124,8 +132,8 @@ func (store *CdmStore) getMonsterCompleteNames(partialName string) ([]string, os
 	}
 
 	names := make([]string, 20)
-	count :=0
-	var name string 
+	count := 0
+	var name string
 	stmt.BindResult(&name)
 	for {
 		eof, err := stmt.Fetch()
@@ -136,7 +144,7 @@ func (store *CdmStore) getMonsterCompleteNames(partialName string) ([]string, os
 			break
 		}
 		names[count] = name
-		fmt.Println(names[count])
+		//fmt.Println(names[count])
 		count++
 	}
 	return names[0:count], nil
@@ -164,51 +172,116 @@ func (store *CdmStore) ReadTotalStats() (*BestiaryExtract, os.Error) {
 	row := result.FetchRow()
 	be.NbCdm = row[0].(int64)
 	be.NbMonsters = row[1].(int64)
-	
+
 	return be, nil
 }
 
+func fieldAsUint(o interface{}) uint {
+	if o == nil {
+		return 0
+	}
+	return uint(o.(int64))
+}
 
-func (store *CdmStore) Test() string {
-	fmt.Println("Start Store Test")
+// TODO trouver mieux, plus fiable, et standard...
+func toMysqlString(s string) string {
+	s = strings.Replace(s, "\"", "\\\"", -1)
+	return "\""+s+"\""
+	//s = strings.Replace(s, "'", "\\'", -1)
+	//return "'"+s+"'"
+}
 
-	fmt.Println("Connexion et dump table cdm")
+// renvoie une expression de calcul d'un minimum de colonne tel que les 0 ne soient pas pris en compte.
+// le nullif autour contourne un bug (présumé) de la librairie GoMySQL
+func namin(col string) string {
+	return "ifnull(min(nullif("+col+", 0)), 0)"
+}
+func namax(col string) string {
+	return "ifnull(max(nullif("+col+", 0)), 0)"
+}
+func naminmax(colp string) string {
+	return namin(colp+"_min") + ", " + namax(colp+"_max")
+}
+
+func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtract, os.Error) {
 	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
 	if err != nil {
-		return "Echec à la connexion : " + err.String()
+		return nil, err
 	}
 	defer db.Close()
 
-	stmt, err := db.Prepare("select num_monstre, nom_complet from cdm")
+	sql := "select count(*), count(distinct num_monstre),"
+	sql += naminmax("niveau") + ", "
+	sql += naminmax("points_de_vie") + ", "
+	sql += "max(capacite_text), "
+	sql += naminmax("des_attaque") + ", "
+	sql += naminmax("des_esquive") + ", "
+	sql += naminmax("des_degats") + ", "
+	sql += naminmax("des_regeneration") + ", "
+	sql += naminmax("armure") + ", "
+	sql += naminmax("vue") + ", "
+	sql += naminmax("maitrise_magique") + ", "
+	sql += naminmax("resistance_magique") + ", "
+	sql += " max(famille_text), "
+	sql += " max(nombre_attaques), "
+	sql += " max(vitesse_deplacement_text), "
+	sql += " max(voir_le_cache_boolean), "
+	sql += " max(attaque_a_distance_boolean), "
+	sql += " max(dla_text), "
+	sql += naminmax("duree_tour") + ", "
+	sql += " max(chargement_text), "
+	sql += " max(bonus_malus_text), "
+	sql += " max(portee_du_pouvoir_text)"
+	sql += " from cdm where nom_complet=" + toMysqlString(completeName)
+
+	fmt.Println(sql)
+
+	err = db.Query(sql)
 	if err != nil {
-		return "Echec à la la préparation du PreparedStatement : " + err.String()
+		return nil, err
 	}
-	defer stmt.Close()
-
-	err = stmt.Execute()
+	result, err := db.UseResult()
 	if err != nil {
-		return "Echec lors du requétage : " + err.String()
+		return nil, err
 	}
 
-	/*
-		Message := "CDM lues en BD : <ul>"
-		count := 0
-		var cdmRow CdmRow
-		stmt.BindResult(&cdmRow.numMonstre, &cdmRow.nomComplet)
-		for {
-			eof, err := stmt.Fetch()
-			if err != nil {
-				return "Echec à la lecture : " + err.String()
-			}
-			if eof {
-				break
-			}
-			Message += "<li>" + cdmRow.nomComplet + "</li>"
-			count++
-		}
+	row := result.FetchRow()
+	if row == nil {
+		fmt.Println("ComputeMonsterStats : no result")
+		return nil, nil
+	}
+	
+	be := new(BestiaryExtract)
+	be.Fusion = new(CDM)
 
-		fmt.Println("Message : " + Message)
-		return Message + "</ul>"
-	*/
-	return "test incomplet"
+	be.Fusion.NomComplet = completeName
+	be.NbCdm = row[0].(int64)
+	be.NbMonsters = row[1].(int64)
+	be.Fusion.Niveau_min = uint(row[2].(int64))
+	be.Fusion.Niveau_max = uint(row[3].(int64))
+	be.Fusion.PointsDeVie_min = fieldAsUint(row[4])
+	be.Fusion.PointsDeVie_max = fieldAsUint(row[5])
+	be.Fusion.Capacite_text = string(row[6].([]uint8))
+	be.Fusion.DésAttaque_min = fieldAsUint(row[7])
+	be.Fusion.DésAttaque_max = fieldAsUint(row[8])
+	be.Fusion.DésEsquive_min = fieldAsUint(row[9])
+	be.Fusion.DésEsquive_max = fieldAsUint(row[10])
+	be.Fusion.DésDégâts_min = fieldAsUint(row[11])
+	be.Fusion.DésDégâts_max = fieldAsUint(row[12])
+	be.Fusion.DésRégénération_min = fieldAsUint(row[13])
+	be.Fusion.DésRégénération_max = fieldAsUint(row[14])
+	be.Fusion.Armure_min = fieldAsUint(row[15])
+	be.Fusion.Armure_max = fieldAsUint(row[16])
+	be.Fusion.Vue_min = fieldAsUint(row[17])
+	be.Fusion.Vue_max = fieldAsUint(row[18])
+	be.Fusion.MaitriseMagique_min = fieldAsUint(row[19])
+	be.Fusion.MaitriseMagique_max = fieldAsUint(row[20])
+	be.Fusion.RésistanceMagique_min = fieldAsUint(row[21])
+	be.Fusion.RésistanceMagique_max = fieldAsUint(row[22])
+	//be.Fusion.Famille_text = string(row[6].([]uint8)) ___
+	//be.Fusion.NombreDAttaques = fieldAsUint(row[12])
+	//be.Fusion.Capacite_text = string(row[6].([]uint8))
+
+
+	return be, nil
 }

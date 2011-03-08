@@ -28,28 +28,32 @@ RECENTS / A TESTER :
 * [Canop] structure du Puit (déversoir à CDM), tant côté client que pour l'analyse côté serveur
 * Bug sur la page d'options
 <- v0.9
+* [Canop] choisir une librairie go/mysql
+* [Canop] serveur gogochrall (entre autres pour le bestiaire)
 * [Canop] Puit : bouton "nettoyer" (pour effacer le contenu du seau)
 * [Canop] gogoChrall : encodage plus propre de la réponse en JSON
+* [Canop] analyseur de cdm accessible (le Puit)
+* [Canop] Bug Puits : les monstres féminins (expression "une ...") ne sont pas reconnus
+* [Canop] cdmstore : écriture d'un hash sha1 pour éviter les doublons
+* [Canop] stockage en BD des CDM
+* [Canop] Puits : pb avec les lignes coupées (mail)
+* [Canop] cdmstore : pb avec les min et max s'il y a des zéros. L'astuce "max(nullif(maitrise_magique_max, 0))" ne marche pas avec la librairie GoMySQL
 
 EN COURS :
 ==========
 * [Canop+Taip] gestion des forks et contributions dans github
 * [Canop] apprendre le langage go
-* [Canop] choisir une librairie go/mysql
 * [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
-* [Canop] serveur gogochrall (entre autres pour le bestiaire)
-* [Canop] analyseur de cdm accessible (le Puit)
-* [Canop] stockage en BD des CDM
-* [Canop] cdmstore : écriture d'un hash sha1 pour éviter les doublons
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================
 * BUG: la mise à jour automatique de l'extension ne fonctionne pas
-* BUG: les sonneries ne marchent plus...
+* BUG: les sonneries ne marchent pas toujours...
 
 TODO :
 ======
-* Bug Puits : les monstres féminins (expression "une ...") ne sont pas reconnus
+* puits : résolution du problème de l'espace aléatoire entre le nom et le tagAge (reconstruire le nomComplet ?)
+* options : lien vers le bestiaire
 * grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)
 * [Canop] Puits : vérifier par un hash de la requète que ce n'est pas la même qu'une requète récente (bouton appuyé plusieurs fois)
 * grille/filtre : remplacer "objets" par "trésors"
@@ -101,6 +105,8 @@ TODO :
 * grille/filtre : rendre inactives les cases à cocher de catégories vides
 * ? préparer un forum ?
 * trouver un endroit toujours présent pour le logout
+* cdmstore : détection d'erreur basée sur la variance des valeurs
+* Puits : calculer en batch des caractéristiques compilées par espèce
 
 
 NOTES :

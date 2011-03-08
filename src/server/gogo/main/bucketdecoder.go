@@ -9,6 +9,7 @@ Ce seau est une chaine qui peut contenir des CDM, et peut-être un jour autre ch
 import (
 	"strings"
 	"fmt"
+	"strconv"
 )
 
 type BucketDecoder struct {
@@ -40,16 +41,16 @@ func (bd *BucketDecoder) Decode(input string, store *CdmStore) {
 			continue
 		}
 		if strings.Index(line, "chrall:") == 0 {
+			fmt.Println("QUOTE: \"" + strconv.Quote(line) + "\"")
+
 			fields := strings.Fields(line)
 			if len(fields) > 1 {
 				switch fields[1] {
 				case "hello":
 					bd.Message += "Coucou<br>"
-				case "test":
-					bd.Message += "Test Store : " + store.Test() + "<br>"
 				}
 			}
-		} else if cdm := NewCdm(line); cdm != nil {
+		} else if cdm := NewCdm(lines[numLine:]); cdm != nil { // là on voit les avantages du langage go ! :)
 			currentCdm = cdm
 			bd.addCdm(currentCdm)
 			numLineAtCdmStart = numLine
@@ -68,7 +69,8 @@ func (bd *BucketDecoder) Decode(input string, store *CdmStore) {
 		if cdm == nil {
 			fmt.Println("cdm is nil !")
 		} else {
-			cdm.Print()
+			//cdm.Print()
+			//fmt.Printf("\n\n SHA1 : %x\n", cdm.ComputeSHA1())
 		}
 	}
 }

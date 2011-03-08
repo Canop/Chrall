@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"hash"
+	"crypto/sha1"
 )
 
 type boolean uint8 // il faut que je fasse des progrés dans la compréhension des énums et constantes...
@@ -42,9 +44,10 @@ func (b boolean) GenderString() string {
 }
 
 type CdmChar struct {
-	Min  uint   // 0 si pas défini
-	Max  uint   // 0 si pas défini
-	Text string // on ne conservera probablement pas indéfiniment tout là dedans mais pour l'instant ça permettra d'améliorer l'algo sur les valeurs énumérées
+	Min     uint    // 0 si pas défini
+	Max     uint    // 0 si pas défini
+	Value   uint    // 0 si pas défini
+	Text    string  // on ne conservera probablement pas indéfiniment tout là dedans mais pour l'instant ça permettra d'améliorer l'algo sur les valeurs énumérées
 	Boolean boolean // inconnu si pas défini
 }
 
@@ -65,6 +68,10 @@ func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 		}
 		//fmt.Println("***valuesText=\""+valuesText+"\"")
 		fields = strings.Fields(valuesText)
+		value, valueErr := strconv.Atoui(fields[0])
+		if valueErr == nil {
+			char.Value = value
+		}
 		if len(fields) == 4 && fields[0] == "entre" && fields[2] == "et" {
 			char.Min, _ = strconv.Atoui(fields[1])
 			char.Max, _ = strconv.Atoui(fields[3])
@@ -93,50 +100,104 @@ func (char *CdmChar) Print(name string) {
 	if char.Max != 0 {
 		fmt.Println("    max  : " + strconv.Uitoa(char.Max))
 	}
+	if char.Value != 0 {
+		fmt.Println("    value  : " + strconv.Uitoa(char.Value))
+	}
 }
 
 type CDM struct {
-	NumMonstre uint
-	Nom        string // exemple : "Mouch'oo Majestueux Sauvage Frénétique"
-	Mâle       boolean
-	TagAge     string // exemple : "Doyen"
-	NomComplet string // exemple : "Mouch'oo Majestueux Sauvage Frénétique [Doyen]"
+	NumMonstre                uint
+	Nom                       string // exemple : "Mouch'oo Majestueux Sauvage Frénétique"
+	Mâle                      boolean
+	TagAge                    string // exemple : "Doyen"
+	NomComplet                string // exemple : "Mouch'oo Majestueux Sauvage Frénétique [Doyen]"
+	Niveau_min                uint
+	Niveau_max                uint
+	Capacite_text             string
+	PointsDeVie_min           uint
+	PointsDeVie_max           uint
+	DésAttaque_min            uint
+	DésAttaque_max            uint
+	DésEsquive_min            uint
+	DésEsquive_max            uint
+	DésDégâts_min             uint
+	DésDégâts_max             uint
+	DésRégénération_min       uint
+	DésRégénération_max       uint
+	Armure_min                uint
+	Armure_max                uint
+	Vue_min                   uint
+	Vue_max                   uint
+	MaitriseMagique_min       uint
+	MaitriseMagique_max       uint
+	RésistanceMagique_min     uint
+	RésistanceMagique_max     uint
+	Famille_text              string
+	NombreDAttaques           uint
+	VitesseDeDéplacement_text string
+	VoirLeCaché_boolean       boolean
+	AttaqueADistance_boolean  boolean
+	DLA_text                  string
+	DuréeTour_min             uint
+	DuréeTour_max             uint
+	Chargement_text           string
+	BonusMalus_text           string
+	PortéeDuPouvoir_text      string
 
-	Niveau_min          uint
-	Niveau_max          uint
-	Capacite_text       string
-	PointsDeVie_min              uint
-	PointsDeVie_max              uint
-	DésAttaque_min      uint
-	DésAttaque_max      uint
-	DésEsquive_min      uint
-	DésEsquive_max      uint
-	DésDégâts_min       uint
-	DésDégâts_max       uint
-	DésRégénération_min uint
-	DésRégénération_max uint
-	Armure_min uint
-	Armure_max uint
-	Vue_min uint
-	Vue_max uint
-	MaitriseMagique_min uint
-	MaitriseMagique_max uint
-	RésistanceMagique_min uint
-	RésistanceMagique_max uint
-	Famille_text	string
-	NombreDAttaques_min uint
-	NombreDAttaques_max uint
-	VitesseDeDéplacement_text	string
-	VoirLeCaché_boolean	boolean
-	AttaqueADistance_boolean boolean
-	DLA_text	string
-	DuréeTour_min uint
-	DuréeTour_max uint
-	Chargement_text string
-	BonusMalus_text string
-	PortéeDuPouvoir_text string
-	
-	Chars               map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
+	Chars map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
+}
+
+func valuesCell(min uint, max uint) string {
+	if (min==max) {
+		return "<td>" + strconv.Uitoa(min) + "</td>"
+	}
+	if max==0 {
+		return "<td>" + strconv.Uitoa(min) + " - +∞</td>"
+	}
+	return "<td>" + strconv.Uitoa(min) + " - " + strconv.Uitoa(max) + "</td>"
+}
+
+func valuesLine(label string, min uint, max uint) string {
+	if min==0 && max==0 {
+		return ""
+	}
+	return "<tr><th>" + label + "</th>" + valuesCell(min, max) + "</tr>"
+}
+
+
+func (cdm *CDM) HtmlTable() string {
+	html := "<table class=cdm cellpadding=4>" // oui, c'est pas bien le cellpadding... j'ai du mal avec le css...
+	html += "<tr><th colspan=2 class=title>" + cdm.NomComplet + "</th></tr>"
+	html += "<tr><th>Niveau</th>" + valuesCell(cdm.Niveau_min, cdm.Niveau_max)
+	if cdm.Capacite_text != "" {
+		html += "<tr><th>Capacité</th>"
+		html += fmt.Sprintf("<td>%s</td></tr>", cdm.Capacite_text)
+	}
+	html += valuesLine("Points de vie", cdm.PointsDeVie_min, cdm.PointsDeVie_max)
+	html += valuesLine("Dés d'attaque", cdm.DésAttaque_min, cdm.DésAttaque_max)
+	html += valuesLine("Dés d'esquive", cdm.DésEsquive_min, cdm.DésEsquive_max)
+	html += valuesLine("Dés de dégâts", cdm.DésDégâts_min, cdm.DésDégâts_max)
+	html += valuesLine("Dés de régé.", cdm.DésRégénération_min, cdm.DésRégénération_max)
+	html += valuesLine("Armure", cdm.Armure_min, cdm.Armure_max)
+	html += valuesLine("Vue", cdm.Vue_min, cdm.Vue_max)	
+	html += valuesLine("Maitrise magique", cdm.MaitriseMagique_min, cdm.MaitriseMagique_max)
+	html += valuesLine("Résistance magique", cdm.RésistanceMagique_min, cdm.RésistanceMagique_max)
+	html += "</table>"
+	return html
+}
+
+func (cdm *CDM) ComputeSHA1() []byte {
+	unhash := "cdm"
+	unhash += strconv.Uitoa(cdm.NumMonstre)
+	unhash += cdm.NomComplet
+	unhash += cdm.Mâle.GenderString()
+	for key, value := range cdm.Chars {
+		unhash += key + value.Text
+	}
+	//fmt.Println(" UNHASH : " + unhash)
+	var h hash.Hash = sha1.New()
+	h.Write([]byte(unhash))
+	return h.Sum()
 }
 
 /**
@@ -160,47 +221,46 @@ func (cdm *CDM) AddChar(name string, c *CdmChar) {
 	} else if name == "Dés d'Esquive" {
 		cdm.DésEsquive_min = c.Min
 		cdm.DésEsquive_max = c.Max
-	} else if name ==  "Dés de Dégât" || name == "Dés de Dégat" {
+	} else if name == "Dés de Dégât" || name == "Dés de Dégat" {
 		cdm.DésDégâts_min = c.Min
 		cdm.DésDégâts_max = c.Max
-	} else if name ==  "Dés de Régénération" || name == "Dés de Régén."{
+	} else if name == "Dés de Régénération" || name == "Dés de Régén." {
 		cdm.DésRégénération_min = c.Min
 		cdm.DésRégénération_max = c.Max
-	} else if name ==  "Armure"{
+	} else if name == "Armure" {
 		cdm.Armure_min = c.Min
 		cdm.Armure_max = c.Max
-	} else if name ==  "Vue"{
+	} else if name == "Vue" {
 		cdm.Vue_min = c.Min
 		cdm.Vue_max = c.Max
-	} else if name ==  "Maitrise Magique"{
+	} else if name == "Maitrise Magique" {
 		cdm.MaitriseMagique_min = c.Min
 		cdm.MaitriseMagique_max = c.Max
-	} else if name ==  "Résistance Magique"{
+	} else if name == "Résistance Magique" {
 		cdm.RésistanceMagique_min = c.Min
 		cdm.RésistanceMagique_max = c.Max
-	} else if name ==  "Famille"{
+	} else if name == "Famille" {
 		cdm.Famille_text = c.Text
-	} else if name ==  "Le Monstre ciblé fait partie des"{
+	} else if name == "Le Monstre ciblé fait partie des" {
 		cdm.Famille_text = c.Text
-	} else if name ==  "Nombre d'attaques"{
-		cdm.NombreDAttaques_min = c.Min
-		cdm.NombreDAttaques_max = c.Max
-	} else if name ==  "Vitesse de Déplacement"{
+	} else if name == "Nombre d'attaques" {
+		cdm.NombreDAttaques = c.Value
+	} else if name == "Vitesse de Déplacement" {
 		cdm.VitesseDeDéplacement_text = c.Text
-	} else if name ==  "Voir le Caché"{
+	} else if name == "Voir le Caché" {
 		cdm.VoirLeCaché_boolean = c.Boolean
-	} else if name ==  "Attaque à distance"{
+	} else if name == "Attaque à distance" {
 		cdm.AttaqueADistance_boolean = c.Boolean
-	} else if name ==  "DLA"{
+	} else if name == "DLA" {
 		cdm.DLA_text = c.Text
-	} else if name ==  "Durée Tour"{
+	} else if name == "Durée Tour" {
 		cdm.DuréeTour_min = c.Min
 		cdm.DuréeTour_max = c.Max
-	} else if name ==  "Chargement"{
+	} else if name == "Chargement" {
 		cdm.Chargement_text = c.Text
-	} else if name ==  "Bonus Malus"{
+	} else if name == "Bonus Malus" {
 		cdm.BonusMalus_text = c.Text
-	} else if name ==  "Portée du Pouvoir"{
+	} else if name == "Portée du Pouvoir" {
 		cdm.PortéeDuPouvoir_text = c.Text
 
 	} else {
@@ -213,7 +273,16 @@ func (cdm *CDM) AddChar(name string, c *CdmChar) {
 
 
 // renvoie une nouvelle CDM si cette ligne est l'entame d'une CDM
-func NewCdm(line string) *CDM {
+func NewCdm(lines []string) *CDM {
+	if len(lines) < 4 {
+		return nil
+	}
+	// on commence par faire du recollage/découpage pour gérer le cas des mails où la première ligne de la cdm est souvent coupée
+	line := lines[0] + lines[1]
+	if index := strings.Index(line, ")"); index >= 0 {
+		line = line[0:index]
+	}
+
 	var fields []string
 	var numField string
 	var nomComplet string
@@ -274,16 +343,15 @@ func NewCdm(line string) *CDM {
 func (cdm *CDM) SetNomComplet(nc string) {
 	cdm.NomComplet = nc
 	// on cherche pour voir si on trouve la mention de l'age
-	fields := strings.Fields(nc)
-	lastField := fields[len(fields)-1]
-	if lastField[0] == '[' && lastField[len(lastField)-1] == ']' {
-		cdm.Nom = strings.Join(fields[0:len(fields)-1], " ")
-		cdm.TagAge = strings.Trim(lastField[1:len(lastField)-1], " ")
-		//fmt.Print("Age : " + cdm.TagAge)
-	} else {
-		cdm.Nom = nc
-		fmt.Print("Pas d'âge")
+	//fmt.Println("*****")
+	i1 := strings.Index(nc, "[")
+	i2 := strings.Index(nc, "]")
+	if i1 > 0 && i2 > i1 {
+		cdm.Nom = strings.Trim(nc[0:i1], " ")
+		cdm.TagAge = nc[i1+1 : i2]
 	}
+	//fmt.Println("Nom : *" + cdm.Nom + "*")
+	//fmt.Println("Age : *" + cdm.TagAge + "*")	
 }
 
 func (cdm *CDM) Print() {

@@ -108,6 +108,25 @@ func (h *Handler) head(w io.Writer, title string) {
 			input {
 				width: 60%;
 			}
+			p.bestiary_extract {
+				text-align: center;
+			}
+			table.cdm {
+				border-collapse: collapse;
+				border: thin solid #A0A0FF;
+				font-size:14px;
+			}
+			table.cdm th {
+				border: thin solid #A0A0FF;
+				text-align:right;
+			}
+			table.cdm td {
+				border: thin solid #A0A0FF;
+				text-align: left;
+			}
+			table.cdm th.title {
+				text-align:center;
+			}
 		</style>
 	</head>
 	<body><div class=main>`))

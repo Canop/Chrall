@@ -21,12 +21,16 @@ func NewBestiaryHandler(store *CdmStore) *BestiaryHandler {
 func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	h.hit()
 	h.head(w, "Le Bestiaire de gOgOchrall")
-	//aaa := "oh!"
 	w.Write([]byte(`
 		<script>
 		function chooseMonster(name) {
-			$("p#resultContent").html("Le nom choisi est... " + name);
-			$("#result").show("slow");
+			$.getJSON(
+				"/chrall/json?action=get_extract&name="+name,
+				function(data) {
+					$("p#resultContent").html(data);
+					$("#result").show("slow");				
+				}
+			);
 		}
 		
 		$(document).ready(function() {
@@ -40,14 +44,14 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		</script>
 		<p>Vous faites face au <span class=emphase>Bestiaire</span> de <a class=gogo href=/chrall>gOgOchrall</a></p>
 	`))
-	
+
 	be, err := h.store.ReadTotalStats()
-	if err!=nil {
+	if err != nil {
 		fmt.Fprint(w, "<p>La base de données du bestiaire semble innacessible :   <span class=emphase>"+err.String()+"</span></p>")
 	} else {
 		fmt.Fprintf(w, "<p>Le bestiaire contient actuellement : <span class=emphase>%d</span> CDM concernant <span class=emphase>%d</span> monstres.</p>", be.NbCdm, be.NbMonsters)
 	}
-		
+
 	w.Write([]byte(`<p>Choisissez un monstre :
 				<input id="monster_name" />
 		</p>
@@ -57,7 +61,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			<span class=emphase>Résultat :</span>
 			</p>
 			<p id=resultContent>
-				Désolé, il semble que le serveur ait trop bu...
+				Désolé, il semble que g0g0chrall ait encore trop bu...
 			</p>
 			<p id=serverMessage>
 			</p>
