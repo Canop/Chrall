@@ -1,8 +1,15 @@
-
+Présentation :
+==============
 
 Chrall est une extension pour Chrome destinée aux joueurs en ligne de www.mountyhall.com.
 
 Le projet est géré par cano.petrole@gmail.com
+
+Installation :
+==============
+
+Le plus simple pour profiter de Chrall est d'installer l'extension déjà préparée. Visitez pour cela [le site officiel](http://canop.org/chrall) avec votre navigateur Chrome.
+
 
 Structure :
 ===========
