@@ -144,11 +144,11 @@ type CDM struct {
 	VitesseDeDéplacement_text string
 	VoirLeCaché_boolean       boolean
 	AttaqueADistance_boolean  boolean
-	DLA_text                  string
+	DLA_text                  string // dépend de l'individu et du moment ?
 	DuréeTour_min             uint
 	DuréeTour_max             uint
-	Chargement_text           string
-	BonusMalus_text           string
+	Chargement_text           string // dépend de l'individu et du moment ?
+	BonusMalus_text           string // dépend de l'individu et du moment ?
 	PortéeDuPouvoir_text      string
 
 	Chars map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
@@ -173,6 +173,9 @@ func (cdm *CDM) HtmlTable() string {
 	html += cdmValueLine("Nombre d'attaques", cdm.NombreDAttaques)
 	html += cdmTextLine("Vitesse de déplacement", cdm.VitesseDeDéplacement_text)
 	html += cdmBooleanLine("Voit le caché", cdm.VoirLeCaché_boolean)
+	html += cdmBooleanLine("Attaque à distance", cdm.AttaqueADistance_boolean)
+	html += cdmValuesLine("Durée du tour", cdm.DuréeTour_min, cdm.DuréeTour_max)
+	html += cdmTextLine("Portée du pouvoir", cdm.PortéeDuPouvoir_text)
 	html += "</table>"
 	return html
 }
