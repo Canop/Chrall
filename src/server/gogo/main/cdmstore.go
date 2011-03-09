@@ -184,7 +184,12 @@ func fieldAsUint(o interface{}) uint {
 	}
 	return uint(o.(int64))
 }
-
+func fieldAsBoolean(o interface{}) boolean {
+	if o == nil {
+		return b_unknown
+	}
+	return boolean(o.(int64))
+}
 // ceci est en particulier nécessaire parce que je n'ai pas le même type sur le serveur debian (64 bits) et mon petit ubuntu (32 bits)
 func fieldAsString(o interface{}) string {
 	if o!=nil {
@@ -275,11 +280,10 @@ func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtrac
 	be.Fusion.MaitriseMagique_max = fieldAsUint(row[20])
 	be.Fusion.RésistanceMagique_min = fieldAsUint(row[21])
 	be.Fusion.RésistanceMagique_max = fieldAsUint(row[22])
-
 	be.Fusion.Famille_text = fieldAsString(row[23])
 	be.Fusion.NombreDAttaques = fieldAsUint(row[24])
 	be.Fusion.Capacite_text = fieldAsString(row[25])
-	be.Fusion.VoirLeCaché_boolean = boolean(row[26].(int64))
+	be.Fusion.VoirLeCaché_boolean = fieldAsBoolean(row[26])
 
 	return be, nil
 }
