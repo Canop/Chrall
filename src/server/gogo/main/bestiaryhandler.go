@@ -24,6 +24,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	w.Write([]byte(`
 		<script>
 		function chooseMonster(name) {
+			$("#cleanBtn").show();
 			$.getJSON(
 				"/chrall/json?action=get_extract&name="+name,
 				function(data) {
@@ -32,8 +33,15 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 				}
 			);
 		}
+		function clean() {
+			$("#monster_name").val("");
+			$("#monster_name").focus();
+			$("#result").hide("slow");
+			$("#cleanBtn").hide();
+		}
 		
 		$(document).ready(function() {
+			$("#monster_name").focus();
 			$("input#monster_name").autocomplete({
 				source: "/chrall/json?action=get_monster_names"
 			});
@@ -53,10 +61,11 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 
 	w.Write([]byte(`<p>Choisissez un monstre :
-				<input id="monster_name" />
+		<input id="monster_name" />
+		<a class=gogo id=cleanBtn href="javascript:clean();" invisible>Vider</a>
 		</p>
-		<span id=envoi class=invisible>Envoi en cours...</span>
-		<div id=result class=invisible>
+		<span id=envoi invisible>Envoi en cours...</span>
+		<div id=result invisible>
 			<p>
 			<span class=emphase>Résultat :</span>
 			</p>

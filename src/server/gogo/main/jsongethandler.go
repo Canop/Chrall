@@ -40,8 +40,12 @@ func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *htt
 	if be == nil {
 		html = "g0g0chrall ne connait pas ce monstre"
 	} else {
-		if (be.NbMonsters<2) {
-			html = fmt.Sprintf("Cette estimation est basée sur %d CDM d'un seul monstre.", be.NbCdm)
+		if be.NbMonsters < 2 {
+			if be.NbCdm == 1 {
+				html = "Une seule CDM a été reçue pour cette espèce."
+			} else {
+				html = fmt.Sprintf("Cette estimation est basée sur %d CDM d'un seul monstre.", be.NbCdm)
+			}
 		} else {
 			html = fmt.Sprintf("Cette estimation est basée sur %d CDM concernant %d monstres.", be.NbCdm, be.NbMonsters)
 		}

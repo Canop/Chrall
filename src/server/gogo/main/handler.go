@@ -91,7 +91,7 @@ func (h *Handler) head(w io.Writer, title string) {
 			textarea {
 				width: 100%;
 			}
-			.invisible {
+			[invisible] {
 				display: none;
 			}
 			p {
@@ -106,7 +106,7 @@ func (h *Handler) head(w io.Writer, title string) {
 				line-height: 1.6em;
 			}
 			input {
-				width: 60%;
+				width: 55%;
 			}
 			p.bestiary_extract {
 				text-align: center;

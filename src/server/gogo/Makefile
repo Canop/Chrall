@@ -2,6 +2,8 @@ include $(GOROOT)/src/Make.inc
 
 TARG=gogo
 GOFILES=\
+	main/html.go\
+	main/sql.go\
 	main/cdm.go\
 	main/bestiaryextract.go\
 	main/cdmstore.go\

@@ -22,13 +22,13 @@ const (
 func (b boolean) String() string {
 	switch b {
 	case b_unknown:
-		return "unknown"
+		return "inconnu"
 	case b_false:
-		return "false"
+		return "non"
 	case b_true:
-		return "true"
+		return "oui"
 	}
-	return "invalid_value"
+	return "valeur_invalide"
 }
 
 func (b boolean) GenderString() string {
@@ -61,17 +61,15 @@ func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 	name = strings.Trim(fields[0], " ")
 	char.Text = strings.Trim(strings.Join(fields[1:len(fields)], ":"), " ")
 	indexPar := strings.Index(char.Text, "(")
+	//fmt.Println("name:"+name)
+	//fmt.Println(" char.Text:"+char.Text)
 	if indexPar >= 0 {
 		valuesText := char.Text[indexPar+1 : len(char.Text)]
 		if valuesText[len(valuesText)-1] == ')' {
 			valuesText = valuesText[0 : len(valuesText)-1]
 		}
-		//fmt.Println("***valuesText=\""+valuesText+"\"")
+		//fmt.Println(" valuesText=\""+valuesText+"\"")
 		fields = strings.Fields(valuesText)
-		value, valueErr := strconv.Atoui(fields[0])
-		if valueErr == nil {
-			char.Value = value
-		}
 		if len(fields) == 4 && fields[0] == "entre" && fields[2] == "et" {
 			char.Min, _ = strconv.Atoui(fields[1])
 			char.Max, _ = strconv.Atoui(fields[3])
@@ -82,10 +80,19 @@ func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 		} else if len(fields) == 3 && fields[0] == "égal" && fields[1] == "à" {
 			char.Min, _ = strconv.Atoui(fields[2])
 			char.Max = char.Min
-		} else if len(fields) == 1 && fields[0] == "Oui" {
-			char.Boolean = b_true
-		} else if len(fields) == 1 && fields[0] == "Non" {
-			char.Boolean = b_false
+		} 
+	} else {
+		fields = strings.Fields(char.Text)
+		if len(fields)>0 {
+			value, valueErr := strconv.Atoui(fields[0])
+			if valueErr == nil {
+				char.Value = value
+			}
+			if len(fields) == 1 && fields[0] == "Oui" {
+				char.Boolean = b_true
+			} else if len(fields) == 1 && fields[0] == "Non" {
+				char.Boolean = b_false
+			}
 		}
 	}
 	return name, char
@@ -147,41 +154,25 @@ type CDM struct {
 	Chars map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
 }
 
-func valuesCell(min uint, max uint) string {
-	if (min==max) {
-		return "<td>" + strconv.Uitoa(min) + "</td>"
-	}
-	if max==0 {
-		return "<td>" + strconv.Uitoa(min) + " - +∞</td>"
-	}
-	return "<td>" + strconv.Uitoa(min) + " - " + strconv.Uitoa(max) + "</td>"
-}
-
-func valuesLine(label string, min uint, max uint) string {
-	if min==0 && max==0 {
-		return ""
-	}
-	return "<tr><th>" + label + "</th>" + valuesCell(min, max) + "</tr>"
-}
-
 
 func (cdm *CDM) HtmlTable() string {
 	html := "<table class=cdm cellpadding=4>" // oui, c'est pas bien le cellpadding... j'ai du mal avec le css...
 	html += "<tr><th colspan=2 class=title>" + cdm.NomComplet + "</th></tr>"
-	html += "<tr><th>Niveau</th>" + valuesCell(cdm.Niveau_min, cdm.Niveau_max)
-	if cdm.Capacite_text != "" {
-		html += "<tr><th>Capacité</th>"
-		html += fmt.Sprintf("<td>%s</td></tr>", cdm.Capacite_text)
-	}
-	html += valuesLine("Points de vie", cdm.PointsDeVie_min, cdm.PointsDeVie_max)
-	html += valuesLine("Dés d'attaque", cdm.DésAttaque_min, cdm.DésAttaque_max)
-	html += valuesLine("Dés d'esquive", cdm.DésEsquive_min, cdm.DésEsquive_max)
-	html += valuesLine("Dés de dégâts", cdm.DésDégâts_min, cdm.DésDégâts_max)
-	html += valuesLine("Dés de régé.", cdm.DésRégénération_min, cdm.DésRégénération_max)
-	html += valuesLine("Armure", cdm.Armure_min, cdm.Armure_max)
-	html += valuesLine("Vue", cdm.Vue_min, cdm.Vue_max)	
-	html += valuesLine("Maitrise magique", cdm.MaitriseMagique_min, cdm.MaitriseMagique_max)
-	html += valuesLine("Résistance magique", cdm.RésistanceMagique_min, cdm.RésistanceMagique_max)
+	html += cdmValuesLine("Niveau", cdm.Niveau_min, cdm.Niveau_max)
+	html += cdmTextLine("Famille", cdm.Famille_text)
+	html += cdmValuesLine("Points de vie", cdm.PointsDeVie_min, cdm.PointsDeVie_max)
+	html += cdmValuesLine("Dés d'attaque", cdm.DésAttaque_min, cdm.DésAttaque_max)
+	html += cdmValuesLine("Dés d'esquive", cdm.DésEsquive_min, cdm.DésEsquive_max)
+	html += cdmValuesLine("Dés de dégâts", cdm.DésDégâts_min, cdm.DésDégâts_max)
+	html += cdmValuesLine("Dés de régénération", cdm.DésRégénération_min, cdm.DésRégénération_max)
+	html += cdmValuesLine("Armure", cdm.Armure_min, cdm.Armure_max)
+	html += cdmValuesLine("Vue", cdm.Vue_min, cdm.Vue_max)
+	html += cdmValuesLine("Maitrise magique", cdm.MaitriseMagique_min, cdm.MaitriseMagique_max)
+	html += cdmValuesLine("Résistance magique", cdm.RésistanceMagique_min, cdm.RésistanceMagique_max)
+	html += cdmTextLine("Capacité", cdm.Capacite_text)
+	html += cdmValueLine("Nombre d'attaques", cdm.NombreDAttaques)
+	html += cdmTextLine("Vitesse de déplacement", cdm.VitesseDeDéplacement_text)
+	html += cdmBooleanLine("Voit le caché", cdm.VoirLeCaché_boolean)
 	html += "</table>"
 	return html
 }
@@ -262,7 +253,10 @@ func (cdm *CDM) AddChar(name string, c *CdmChar) {
 		cdm.BonusMalus_text = c.Text
 	} else if name == "Portée du Pouvoir" {
 		cdm.PortéeDuPouvoir_text = c.Text
-
+	} else if name == "Blessure" || name == "Blessure (Approximatif)" {
+		// on ne met pas de message, on ignore ça volontairement
+	} else if name == "Points de Vie restants (Approximatif)" {
+		// ça vient de MountyZilla : on ignore
 	} else {
 		fmt.Println("Caractéristique inconnue : \"" + name + "\"")
 		return // on n'ajoute pas à la map
@@ -349,6 +343,9 @@ func (cdm *CDM) SetNomComplet(nc string) {
 	if i1 > 0 && i2 > i1 {
 		cdm.Nom = strings.Trim(nc[0:i1], " ")
 		cdm.TagAge = nc[i1+1 : i2]
+		cdm.NomComplet = cdm.Nom + " [" + cdm.TagAge + "]" // on reconstruit car parfois l'espace avant le '[' est manquant
+	} else {
+		cdm.NomComplet = nc
 	}
 	//fmt.Println("Nom : *" + cdm.Nom + "*")
 	//fmt.Println("Age : *" + cdm.TagAge + "*")	

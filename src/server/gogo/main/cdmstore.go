@@ -10,7 +10,7 @@ import (
 	"os"
 	"fmt"
 	"mysql"
-	"strings"
+	"time"
 )
 
 type CdmStore struct {
@@ -24,7 +24,6 @@ func NewStore(user string, password string) *CdmStore {
 	store.user = user
 	store.password = password
 	store.database = "chrall"
-
 	return store
 }
 
@@ -39,7 +38,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	defer db.Close()
 
 	sql := "insert ignore into cdm (num_monstre, nom_complet, nom, age, " // a priori en go on ne peut pas déclarer une chaine sur plusieurs lignes. Je suppose que le compilo combine...
-	sql += "sha1,"
+	sql += "sha1, date_adition, "
 	sql += " niveau_min, niveau_max,"
 	sql += " points_de_vie_min, points_de_vie_max, "
 	sql += " capacite_text,"
@@ -62,7 +61,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	sql += " bonus_malus_text,"
 	sql += " portee_du_pouvoir_text)"
 
-	sql += " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+	sql += " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
 	sql += " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
 	sql += " ?, ?, ?, ?, ?, ?, ?, ?)"
 
@@ -72,12 +71,15 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 		return 0, err
 	}
 	defer stmt.Close()
-
+	
+	time := time.Seconds()
+	
 	for _, cdm := range cdms {
 		err = stmt.BindParams(
 			cdm.NumMonstre, cdm.NomComplet,
 			cdm.Nom, cdm.TagAge,
 			cdm.ComputeSHA1(),
+			time,
 			cdm.Niveau_min, cdm.Niveau_max,
 			cdm.PointsDeVie_min, cdm.PointsDeVie_max,
 			cdm.Capacite_text,
@@ -183,24 +185,19 @@ func fieldAsUint(o interface{}) uint {
 	return uint(o.(int64))
 }
 
-// TODO trouver mieux, plus fiable, et standard...
-func toMysqlString(s string) string {
-	s = strings.Replace(s, "\"", "\\\"", -1)
-	return "\""+s+"\""
-	//s = strings.Replace(s, "'", "\\'", -1)
-	//return "'"+s+"'"
-}
-
-// renvoie une expression de calcul d'un minimum de colonne tel que les 0 ne soient pas pris en compte.
-// le nullif autour contourne un bug (présumé) de la librairie GoMySQL
-func namin(col string) string {
-	return "ifnull(min(nullif("+col+", 0)), 0)"
-}
-func namax(col string) string {
-	return "ifnull(max(nullif("+col+", 0)), 0)"
-}
-func naminmax(colp string) string {
-	return namin(colp+"_min") + ", " + namax(colp+"_max")
+// ceci est en particulier nécessaire parce que je n'ai pas le même type sur le serveur debian (64 bits) et mon petit ubuntu (32 bits)
+func fieldAsString(o interface{}) string {
+	if o!=nil {
+		switch t := o.(type) {
+		case string:
+			fmt.Println("input is string")
+			return o.(string)
+		case []uint8:
+			fmt.Println("input is []uint8")
+			return string(o.([]uint8))
+		}
+	}
+	return ""
 }
 
 func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtract, os.Error) {
@@ -211,7 +208,7 @@ func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtrac
 	defer db.Close()
 
 	sql := "select count(*), count(distinct num_monstre),"
-	sql += naminmax("niveau") + ", "
+	sql += namaxmin("niveau") + ", " // namaxmin car le niveau d'un monstre est fixe pour un nom complet donné
 	sql += naminmax("points_de_vie") + ", "
 	sql += "max(capacite_text), "
 	sql += naminmax("des_attaque") + ", "
@@ -250,7 +247,7 @@ func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtrac
 		fmt.Println("ComputeMonsterStats : no result")
 		return nil, nil
 	}
-	
+
 	be := new(BestiaryExtract)
 	be.Fusion = new(CDM)
 
@@ -261,7 +258,7 @@ func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtrac
 	be.Fusion.Niveau_max = uint(row[3].(int64))
 	be.Fusion.PointsDeVie_min = fieldAsUint(row[4])
 	be.Fusion.PointsDeVie_max = fieldAsUint(row[5])
-	be.Fusion.Capacite_text = string(row[6].([]uint8))
+	be.Fusion.Capacite_text = fieldAsString(row[6])
 	be.Fusion.DésAttaque_min = fieldAsUint(row[7])
 	be.Fusion.DésAttaque_max = fieldAsUint(row[8])
 	be.Fusion.DésEsquive_min = fieldAsUint(row[9])
@@ -278,10 +275,11 @@ func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtrac
 	be.Fusion.MaitriseMagique_max = fieldAsUint(row[20])
 	be.Fusion.RésistanceMagique_min = fieldAsUint(row[21])
 	be.Fusion.RésistanceMagique_max = fieldAsUint(row[22])
-	//be.Fusion.Famille_text = string(row[6].([]uint8)) ___
-	//be.Fusion.NombreDAttaques = fieldAsUint(row[12])
-	//be.Fusion.Capacite_text = string(row[6].([]uint8))
 
+	be.Fusion.Famille_text = fieldAsString(row[23])
+	be.Fusion.NombreDAttaques = fieldAsUint(row[24])
+	be.Fusion.Capacite_text = fieldAsString(row[25])
+	be.Fusion.VoirLeCaché_boolean = boolean(row[26].(int64))
 
 	return be, nil
 }

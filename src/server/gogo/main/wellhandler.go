@@ -47,9 +47,9 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			</form>
 		</p>
 		<a class=gogo href="javascript:sendForAnalyse();">Déverser</a>
-		<a class=gogo id=cleanBtn href="javascript:clean();" class=invisible>Nettoyer</a>
-		<span id=envoi class=invisible>Envoi en cours...</span>
-		<div id=result class=invisible>
+		<a class=gogo id=cleanBtn href="javascript:clean();" invisible>Nettoyer</a>
+		<span id=envoi invisible>Envoi en cours...</span>
+		<div id=result invisible>
 			<p>
 			<span class=emphase>Résultat :</span>
 			</p>

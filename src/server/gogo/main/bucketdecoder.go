@@ -69,7 +69,7 @@ func (bd *BucketDecoder) Decode(input string, store *CdmStore) {
 		if cdm == nil {
 			fmt.Println("cdm is nil !")
 		} else {
-			//cdm.Print()
+			cdm.Print()
 			//fmt.Printf("\n\n SHA1 : %x\n", cdm.ComputeSHA1())
 		}
 	}
