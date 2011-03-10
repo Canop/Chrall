@@ -5,14 +5,20 @@ import (
 	"io"
 )
 
-type Handler struct {
-	nbRequests int
-	server     *GogoServer
+type Hitter struct {
+	nbHits int
+	parent *Hitter
 }
 
-func (h *Handler) hit() {
-	h.server.nbRequests++
-	h.nbRequests++
+func (h* Hitter) hit() {
+	h.nbHits++
+	if h.parent!=nil {
+		h.parent.hit()
+	}
+}
+
+type Handler struct {
+	Hitter
 }
 
 func (h *Handler) head(w io.Writer, title string) {

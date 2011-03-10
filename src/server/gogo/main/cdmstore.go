@@ -117,6 +117,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 }
 
 // renvoie une liste de noms pour un champ d'auto-completion
+// on limite à 10 résultats (c'est la limite par défaut dans l'API jquery et ça semble raisonnable)
 func (store *CdmStore) getMonsterCompleteNames(partialName string) ([]string, os.Error) {
 	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
 	if err != nil {
@@ -124,7 +125,7 @@ func (store *CdmStore) getMonsterCompleteNames(partialName string) ([]string, os
 	}
 	defer db.Close()
 
-	sql := "select distinct nom_complet from cdm where nom_complet like '" + partialName + "%' or nom_complet like '% " + partialName + "%' limit 20"
+	sql := "select distinct nom_complet from cdm where nom_complet like '" + partialName + "%' or nom_complet like '% " + partialName + "%' limit 10"
 	stmt, err := db.Prepare(sql)
 	defer stmt.Close()
 
@@ -133,7 +134,7 @@ func (store *CdmStore) getMonsterCompleteNames(partialName string) ([]string, os
 		return nil, err
 	}
 
-	names := make([]string, 20)
+	names := make([]string, 10)
 	count := 0
 	var name string
 	stmt.BindResult(&name)
@@ -178,32 +179,7 @@ func (store *CdmStore) ReadTotalStats() (*BestiaryExtract, os.Error) {
 	return be, nil
 }
 
-func fieldAsUint(o interface{}) uint {
-	if o == nil {
-		return 0
-	}
-	return uint(o.(int64))
-}
-func fieldAsBoolean(o interface{}) boolean {
-	if o == nil {
-		return b_unknown
-	}
-	return boolean(o.(int64))
-}
-// ceci est en particulier nécessaire parce que je n'ai pas le même type sur le serveur debian (64 bits) et mon petit ubuntu (32 bits)
-func fieldAsString(o interface{}) string {
-	if o!=nil {
-		switch t := o.(type) {
-		case string:
-			fmt.Println("input is string")
-			return o.(string)
-		case []uint8:
-			fmt.Println("input is []uint8")
-			return string(o.([]uint8))
-		}
-	}
-	return ""
-}
+
 
 func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtract, os.Error) {
 	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
@@ -229,14 +205,11 @@ func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtrac
 	sql += " max(vitesse_deplacement_text), "
 	sql += " max(voir_le_cache_boolean), "
 	sql += " max(attaque_a_distance_boolean), "
-	sql += " max(dla_text), "
 	sql += naminmax("duree_tour") + ", "
-	sql += " max(chargement_text), "
-	sql += " max(bonus_malus_text), "
 	sql += " max(portee_du_pouvoir_text)"
 	sql += " from cdm where nom_complet=" + toMysqlString(completeName)
 
-	fmt.Println(sql)
+	//fmt.Println(sql)
 
 	err = db.Query(sql)
 	if err != nil {
@@ -257,10 +230,10 @@ func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtrac
 	be.Fusion = new(CDM)
 
 	be.Fusion.NomComplet = completeName
-	be.NbCdm = row[0].(int64)
-	be.NbMonsters = row[1].(int64)
-	be.Fusion.Niveau_min = uint(row[2].(int64))
-	be.Fusion.Niveau_max = uint(row[3].(int64))
+	be.NbCdm = fieldAsInt64(row[0])
+	be.NbMonsters = fieldAsInt64(row[1])
+	be.Fusion.Niveau_min = fieldAsUint(row[2])
+	be.Fusion.Niveau_max = fieldAsUint(row[3])
 	be.Fusion.PointsDeVie_min = fieldAsUint(row[4])
 	be.Fusion.PointsDeVie_max = fieldAsUint(row[5])
 	be.Fusion.Capacite_text = fieldAsString(row[6])
@@ -282,8 +255,13 @@ func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtrac
 	be.Fusion.RésistanceMagique_max = fieldAsUint(row[22])
 	be.Fusion.Famille_text = fieldAsString(row[23])
 	be.Fusion.NombreDAttaques = fieldAsUint(row[24])
-	be.Fusion.Capacite_text = fieldAsString(row[25])
+	be.Fusion.VitesseDeDéplacement_text = fieldAsString(row[25])
 	be.Fusion.VoirLeCaché_boolean = fieldAsBoolean(row[26])
+	be.Fusion.AttaqueADistance_boolean = fieldAsBoolean(row[26])
+	be.Fusion.DuréeTour_min = fieldAsUint(row[27])
+	be.Fusion.DuréeTour_max = fieldAsUint(row[28])
+	be.Fusion.PortéeDuPouvoir_text = fieldAsString(row[29])
 
+	sql += " from cdm where nom_complet=" + toMysqlString(completeName)
 	return be, nil
 }

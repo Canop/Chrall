@@ -6,7 +6,7 @@ import (
 
 
 type WellHandler struct {
-	Handler
+	ChrallHandler
 }
 
 func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {

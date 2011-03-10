@@ -1,6 +1,6 @@
 {
 	"name": "Chrall",
-	"version": "0.9",
+	"version": "0.10",
 	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"homepage_url": "http://canop.org/chrall",
 	"update_url": "http://canop.org/chrall/updates.xml",
@@ -11,10 +11,12 @@
 			"all_frames" : true,
 			"css": [
 				"chrall.css",
-				"tabs.css"
+				"tabs.css",
+				"jquery.bubblepopup.v2.3.1.css"
 			],
 			"js": [
 				"jquery.js",
+				"jquery.bubblepopup.v2.3.1.min.js",
 				"date-fr-FR.js",
 				"chrall_sentences.js",
 				"chrall_things.js",

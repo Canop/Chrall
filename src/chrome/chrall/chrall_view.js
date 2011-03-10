@@ -36,7 +36,17 @@ function Chrall_makeFiltersHtml() {
 function Chrall_makeGridHtml() {
 	var grey_closed_png_url = chrome.extension.getURL("grey_closed.png");
 	var grey_open_png_url = chrome.extension.getURL("grey_open.png");
-	var html = "<table class=grid>";
+	
+	html = "<script>";
+	html += "function grid_receive(answer) {";
+	html += " var id = answer.RequestId;";
+	html += " var html = answer.Html;";
+	//html += " alert(document.getElementById('innerbubble-'+id).innerHTML);";
+	html += " document.getElementById('innerbubble-'+id).innerHTML=html;";
+	html += "}";
+	html += "</script>";
+	
+	html += "<table class=grid>";
 	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center title=\"Nordhikan (Y+)\">Nordhikan (Y+)</td><td bgcolor=#BABABA></td></tr>";
 	html += "<tr>";
 	html += "<td nowrap rowspan="+(ymax-ymin+3)+" title=\"Oxhykan (X-)\"><span style='display:block;-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-moz-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;'>Oxhykan&nbsp;(X-)</span></td>";
@@ -52,6 +62,7 @@ function Chrall_makeGridHtml() {
 		for (var x=xmin; x<=xmax; x++) {
 			var hdist = player.hdist(x, y);
 			var hasHole = false;
+			var cellPositionMessage = "case X="+x+" Y="+y+"<br>Distance horizontale: "+hdist;
 			var cellContent = "";
 			if (x==player.x && y==player.y) {
 				cellContent += "<span class=ch_player>"+player.z+":Vous êtes ici</span><br>"
@@ -60,6 +71,7 @@ function Chrall_makeGridHtml() {
 				var t = trollsInView[i];
 				if (t.x==x && t.y==y) {
 					cellContent += "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\"";
+					cellContent += " message=\""+cellPositionMessage+"\"" // TODO trouver un moyen de moins dupliquer ce message !
 					if (t.isIntangible) cellContent += " intangible";
 					cellContent += ">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a>";
 				}
@@ -72,7 +84,11 @@ function Chrall_makeGridHtml() {
 						if (m.isSick) cellContent += "<span class=ch_tag>[M]</span>";
 						cellContent += "</a>";
 					} else {
-						cellContent += "<a name='monstres' class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\">"+m.z+": "+m.name+"</a>";
+						cellContent += "<a name='monstres' class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\"";
+						cellContent += " message=\""+cellPositionMessage+"\"" // TODO trouver un moyen de moins dupliquer ce message !
+						cellContent += " id="+m.id;
+						cellContent += " nom_complet_monstre=\""+encodeURIComponent(m.fullName)+"\"";
+						cellContent += ">"+m.z+": "+m.fullName+"</a>";
 					}
 				}
 			}
@@ -129,7 +145,7 @@ function Chrall_makeGridHtml() {
 					cellContent += "<a name='cénotaphes' class=ch_cenotaph>"+t.z+": "+t.name+"</a>";
 				}
 			}
-			html += "<td class=d"+((hdist-horizontalViewLimit+20001)%2)+" title='case X="+x+" Y="+y+" \nDistance horizontale: "+hdist+"'";
+			html += "<td class=d"+((hdist-horizontalViewLimit+20001)%2);
 			if (cellContent.length>0) html += " hasContent"; 
 			html += ">";
 			if (hasHole==true) html += "<span class=ch_place>Trou de Météorite</span>";
@@ -339,7 +355,7 @@ function Chrall_analyseAndReformatView() {
 	html += "<div id=tabMushrooms class=tab_content></div>";
 	html += "<div id=tabCenotaphs class=tab_content></div>";
 	html += "<div id=tabSettings class=tab_content></div>";
-	html += "</div>";
+	html += "</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
 	$($("table.mh_tdborder")[0]).parent().parent().prepend(html);	
 	$("div#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 	$("div#tabMonsters").append(tables[1]);
@@ -350,7 +366,8 @@ function Chrall_analyseAndReformatView() {
 	$("div#tabCenotaphs").append(tables[6]);
 	$(".tab_content").hide();
 	$("ul.tabs li:first").addClass("active").show();
-	$(".tab_content:first").show(); 
+	$(".tab_content:first").show();
+	
 	$("ul.tabs li").click(function() {
 		$("ul.tabs li").removeClass("active");
 		$(this).addClass("active");
@@ -360,4 +377,47 @@ function Chrall_analyseAndReformatView() {
 		$(activeTab).fadeIn("fast");
 		return false;
 	});
+	
+	// on ajoute le popup sur les monstres
+	var monsterLinks = $("a.ch_monster");
+	monsterLinks.each(
+		function() {
+			var link = $(this);
+			link.CreateBubblePopup({
+				position: 'bottom',
+				align: 'center',
+				innerHtml: link.attr("message") + "<br><div id=innerbubble-"+link.attr("id")+">En attente de g0g0Chrall...</div>",
+				innerHtmlStyle: { color:'#FFFFFF', 'text-align':'center' },
+				themeName: 'all-black',
+				themePath: chrome.extension.getURL('jquerybubblepopup-theme')
+			});
+		}
+	);	
+	monsterLinks.mouseover(function(){
+		var link = $(this);
+		$.ajax(
+			{
+				url: "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + link.attr("nom_complet_monstre") + "&requestId=" + link.attr("id"),
+				crossDomain: true,
+				dataType: "jsonp"
+			}
+		);
+	});
+
+	// on ajoute un popup sur les trolls (pour avoir la distance de charge, et plus tard d'autres choses peut-être)
+	var trollLinks = $("a.ch_troll");
+	trollLinks.each(
+		function() {
+			var link = $(this);
+			link.CreateBubblePopup({
+				position: 'bottom',
+				align: 'center',
+				innerHtml: link.attr("message"),
+				innerHtmlStyle: { color:'#FFFFFF', 'text-align':'center' },
+				themeName: 'all-blue',
+				themePath: chrome.extension.getURL('jquerybubblepopup-theme')
+			});
+		}
+	);	
+
 }

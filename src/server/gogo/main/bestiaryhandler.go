@@ -7,29 +7,34 @@ import (
 
 
 type BestiaryHandler struct {
-	Handler
-	store *CdmStore
+	ChrallHandler
 }
-
-func NewBestiaryHandler(store *CdmStore) *BestiaryHandler {
-	h := new(BestiaryHandler)
-	h.store = store
-	return h
-}
-
 
 func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	h.hit()
 	h.head(w, "Le Bestiaire de gOgOchrall")
 	w.Write([]byte(`
 		<script>
+		var sentValue;
 		function chooseMonster(name) {
 			$("#cleanBtn").show();
+			sentValue = name
 			$.getJSON(
-				"/chrall/json?action=get_extract&name="+name,
+				"/chrall/json?action=get_extract&timestamp="+(new Date()).getTime()+"&name="+name,
 				function(data) {
 					$("p#resultContent").html(data);
-					$("#result").show("slow");				
+					$("#result").show("slow");
+					setTimeout(
+						function() {
+							var newName = $("input#monster_name").val();
+							//alert ("newName=" + newName);
+							if (sentValue!=	newName) {
+								//alert("mauvais !");
+								chooseMonster(newName);
+							} 
+						},
+						200
+					);
 				}
 			);
 		}
@@ -46,7 +51,8 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 				source: "/chrall/json?action=get_monster_names"
 			});
 			$("input#monster_name").change(function(){
-				chooseMonster($(this).val());
+				inputValue = $(this).val();
+				chooseMonster(inputValue);
 			});
 		});
 		</script>
@@ -62,6 +68,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	w.Write([]byte(`<p>Choisissez un monstre :
 		<input id="monster_name" />
+		<a class=gogo id=sendBtn href="javascript:chooseMonster($('input#monster_name').val());">Hop!</a>
 		<a class=gogo id=cleanBtn href="javascript:clean();" invisible>Vider</a>
 		</p>
 		<span id=envoi invisible>Envoi en cours...</span>

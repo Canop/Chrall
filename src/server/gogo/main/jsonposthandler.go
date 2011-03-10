@@ -25,15 +25,9 @@ type jsonAnswer struct {
 }
 
 type JsonPostHandler struct {
-	Handler
-	store *CdmStore
+	ChrallHandler
 }
 
-func NewJsonPostHandler(store *CdmStore) *JsonPostHandler {
-	h := new(JsonPostHandler)
-	h.store = store
-	return h
-}
 
 func sendError(w http.ResponseWriter, title string, err os.Error) {
 	fmt.Printf("\nErreur %s : %s", title, err.String())
@@ -66,7 +60,7 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	ja := new(jsonAnswer)
 	ja.Result = "OK"
 	ja.Message = bd.Message
-	ja.Text = "N° d'analyse : " + strconv.Itoa(h.nbRequests)
+	ja.Text = "N° d'analyse : " + strconv.Itoa(h.nbHits)
 	ja.Text += "<br>" + strconv.Itoa(bd.nbResults) + " Objets trouvés :<ul>"
 	ja.Text += "<li>  " + strconv.Itoa(len(bd.Cdm)) + " CDM"
 	if len(bd.Cdm) > 0 {

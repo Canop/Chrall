@@ -12,36 +12,41 @@ const (
 
 
 type GogoServer struct {
-	nbRequests int
+	Hitter
 }
 
 func (server *GogoServer) Start() {
 	rootHandler := new(RootHandler)
-	rootHandler.server = server
+	rootHandler.parent = &server.Hitter
 	http.Handle("/", rootHandler)
 
 	cdmStore := NewStore("temp_user", "temp_pwd") // TODO mettre user et mdp dans un fichier de config quelque part
 
 	chrallHandler := new(ChrallHandler)
-	chrallHandler.server = server
+	chrallHandler.parent = &rootHandler.Hitter
+	chrallHandler.store = cdmStore
 	http.Handle("/chrall", chrallHandler)
 	http.Handle("/chrall/", chrallHandler)
 
 	wellHandler := new(WellHandler)
-	wellHandler.server = server
+	wellHandler.parent = &chrallHandler.Hitter
+	wellHandler.store = cdmStore
 	http.Handle("/chrall/puits", wellHandler)
 	http.Handle("/chrall/puit", wellHandler)
 
-	bestiaryHandler := NewBestiaryHandler(cdmStore)
-	bestiaryHandler.server = server
+	bestiaryHandler := new(BestiaryHandler)
+	bestiaryHandler.parent = &chrallHandler.Hitter
+	bestiaryHandler.store = cdmStore
 	http.Handle("/chrall/bestiaire", bestiaryHandler)
 
-	jsonPostHandler := NewJsonPostHandler(cdmStore)
-	jsonPostHandler.server = server
+	jsonPostHandler := new(JsonPostHandler)
+	jsonPostHandler.store = cdmStore
+	jsonPostHandler.parent = &chrallHandler.Hitter
 	http.Handle("/chrall/jsonp", jsonPostHandler)
 
-	jsonGetHandler := NewJsonGetHandler(cdmStore)
-	jsonGetHandler.server = server
+	jsonGetHandler := new(JsonGetHandler)
+	jsonGetHandler.store = cdmStore
+	jsonGetHandler.parent = &chrallHandler.Hitter
 	http.Handle("/chrall/json", jsonGetHandler)
 
 	fmt.Printf("gogo démarré sur le port %d", port)

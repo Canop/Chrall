@@ -115,3 +115,22 @@ div.hiddenDiv {
 	text-decoration: none;
 	color: white;
 }
+table.cdm {
+	border-collapse: collapse;
+	border: thin solid #A0A0FF;
+	font-size:14px;
+	color: white;
+}
+table.cdm th {
+	border: thin solid #A0A0FF;
+	text-align:right;
+}
+table.cdm td {
+	border: thin solid #A0A0FF;
+	text-align: left;
+	padding: 3px;
+}
+table.cdm th.title {
+	text-align:center;
+}
+

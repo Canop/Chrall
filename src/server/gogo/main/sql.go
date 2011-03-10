@@ -32,3 +32,34 @@ func naminmax(colp string) string {
 func namaxmin(colp string) string {
 	return namax(colp+"_min") + ", " + namin(colp+"_max")
 }
+
+func fieldAsUint(o interface{}) uint {
+	if o == nil {
+		return 0
+	}
+	return uint(o.(int64))
+}
+func fieldAsInt64(o interface{}) int64 {
+	if o == nil {
+		return 0
+	}
+	return o.(int64)
+}
+func fieldAsBoolean(o interface{}) boolean {
+	if o == nil {
+		return b_unknown
+	}
+	return boolean(o.(int64))
+}
+// ceci est en particulier nécessaire parce que je n'ai pas le même type sur le serveur debian (64 bits) et mon petit ubuntu (32 bits)
+func fieldAsString(o interface{}) string {
+	if o!=nil {
+		switch t := o.(type) {
+		case string:
+			return o.(string)
+		case []uint8:
+			return string(o.([]uint8))
+		}
+	}
+	return ""
+}

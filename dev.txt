@@ -42,6 +42,9 @@ RECENTS / A TESTER :
 * [Canop] puits : mettre les dates d'insertion sur les CDM
 * [Canop] puits : résolution du problème de l'espace aléatoire entre le nom et le tagAge
 * [Canop] Puits : dédoublonnage des CDM (par hash sha1)
+* [Canop] grille : affichage des caractéristiques des monstres au hover
+* [Canop] grille : il n'y a plus de bulle sur toutes les cases mais juste sur les monstres et les trolls
+<- v0.10
 
 EN COURS :
 ==========
@@ -55,6 +58,7 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 
 TODO :
 ======
+* profil : virer la colonne de l'AM pour les non-kastars
 * options : lien vers le bestiaire
 * grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)
 * grille/filtre : remplacer "objets" par "trésors"
@@ -105,6 +109,7 @@ TODO :
 * ? préparer un forum ?
 * trouver un endroit toujours présent pour le logout
 * cdmstore : détection d'erreur basée sur la variance des valeurs
+* bestiaire : à terme afficher les moyennes des caracs en BD ?
 
 
 NOTES :

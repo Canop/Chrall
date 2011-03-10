@@ -10,34 +10,30 @@ import (
 	"json"
 )
 
+type BestiaryExtractJson struct {
+	RequestId string
+	Html string
+}
 
 type JsonGetHandler struct {
-	Handler
-	store *CdmStore
+	ChrallHandler
 }
 
-func NewJsonGetHandler(store *CdmStore) *JsonGetHandler {
-	h := new(JsonGetHandler)
-	h.store = store
-	return h
-}
-
-
-func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *http.Request) {
+func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	monsterCompleteNames := hr.Form["name"]
 	if len(monsterCompleteNames) < 1 {
 		fmt.Println(" no monster complete name in request")
-		return
+		return "Hein ?"
 	}
 	fmt.Println(" Request for \"" + monsterCompleteNames[0] + "\"")
 
 	be, err := h.store.ComputeMonsterStats(monsterCompleteNames[0])
 	if err != nil {
 		fmt.Println(" Erreur : " + err.String())
-		return
+		return "Erreur : " + err.String()
 	}
 	var html string
-	if be == nil {
+	if be == nil || be.NbCdm == 0 {
 		html = "g0g0chrall ne connait pas ce monstre"
 	} else {
 		if be.NbMonsters < 2 {
@@ -53,9 +49,27 @@ func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *htt
 		html += be.Fusion.HtmlTable()
 		html += "</center>"
 	}
-	fmt.Println("HTML:\n:" + html)
+	//fmt.Println("HTML:\n:" + html)
+	return html
+}
+
+func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *http.Request) {
+	html := h.makeBestiaryExtractHtml(hr)
 	bhtml, _ := json.Marshal(html)
 	w.Write(bhtml)
+}
+
+func (h *JsonGetHandler) serveBestiaryExtractHtmlJsonp(w http.ResponseWriter, hr *http.Request) {
+	bejs := new(BestiaryExtractJson)
+	requestId := hr.Form["requestId"]
+	if len(requestId)>0 {
+		bejs.RequestId = requestId[0]
+	}
+	bejs.Html = h.makeBestiaryExtractHtml(hr)
+	fmt.Fprint(w, "grid_receive(")
+	mb, _ := json.Marshal(bejs)
+	w.Write(mb)
+	fmt.Fprint(w, ")")	
 }
 
 func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr *http.Request) {
@@ -77,6 +91,8 @@ func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr
 
 func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
+	w.SetHeader("Access-Control-Allow-Origin", "*")
+	w.SetHeader("Access-Control-Request-Method", "GET")
 
 	fmt.Println("\n=== JsonGetHandler : Requete reçue ====================")
 	fmt.Println(" URL : " + hr.RawURL)
@@ -93,6 +109,8 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 		h.serveAutocompleteMonsterNames(w, hr)
 	} else if action == "get_extract" {
 		h.serveBestiaryExtractHtml(w, hr)
+	} else if action == "get_extract_jsonp" {
+		h.serveBestiaryExtractHtmlJsonp(w, hr)
 	} else {
 		fmt.Println(" Requete non comprise")
 	}
