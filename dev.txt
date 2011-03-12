@@ -45,27 +45,31 @@ RECENTS / A TESTER :
 * [Canop] grille : affichage des caractéristiques des monstres au hover
 * [Canop] grille : il n'y a plus de bulle sur toutes les cases mais juste sur les monstres et les trolls
 <- v0.10
+* [Canop] profil : virer la colonne de l'AM pour les non-kastars => vérifier que c'est OK pour les kastars
 
 EN COURS :
 ==========
 * [Canop] apprendre le langage go
 * [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
+* abandon de la logique d'auto-update de l'extension, remplacé par l'affichage d'un discret message proposant d'aller mettre à jour l'extension
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================
-* BUG: la mise à jour automatique de l'extension ne fonctionne pas
 * BUG: les sonneries ne marchent pas toujours...
 
 TODO :
 ======
-* profil : virer la colonne de l'AM pour les non-kastars
+* virer la boite de dialogue d'alarme : elle peut bloquer tout Chrome...
 * options : lien vers le bestiaire
+* bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
+* afficher les caractéristiques des monstres y compris dans la table (pas seulement sur la grille)
 * grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)
 * grille/filtre : remplacer "objets" par "trésors"
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * regarder si on ne peut pas récupérer des infos dans les scripts publics (par exemple les malus pour améliorer le calcul de la fatigue)
 * calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquants pour entrainement
 * détection des trolls malades
+* virer la librairie de bulles et en faire une moi-même (plus adaptée, plus précisément placée)
 * grille : rendre le "Vous êtes ici" cliquable (ouverture du profil troll du joueur)
 * profil : indiquer les alarmes programmées ?
 * grille : ajouter un menu déroulant de limite de vue à côté du filtre (même style arrondi) avec une liste {"vue totale", "vue/2", "vue/4"}
@@ -110,6 +114,9 @@ TODO :
 * trouver un endroit toujours présent pour le logout
 * cdmstore : détection d'erreur basée sur la variance des valeurs
 * bestiaire : à terme afficher les moyennes des caracs en BD ?
+* ajouter au filtre json les pages venant des principaux proxys mh
+* procédures automatiques de sauvegardes des bd
+* bouton pour activer la DLA suivante
 
 
 NOTES :

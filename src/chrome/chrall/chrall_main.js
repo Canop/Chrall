@@ -47,6 +47,9 @@ switch (pageName) {
 	case "Play_option.php":
 		Chrall_reformatOptionsView();	
 		break;
+	case "Play_a_competence16b.php":
+		Chrall_handleCdmPage();	
+		break;
 }
 
 
