@@ -31,6 +31,12 @@ Chrall est une extension Chrome pour le jeu <a href=http://www.mountyhall.com>Mo
 <p><a href=chrall_v000_010.crx>installer Chrall dans Chrome</a>.</p>
 <p id=browserInfos></p>
 
+
+<h2>Discuter</h2>
+<p>
+Un forum a été mis en place : <a href=fofo/>le fofo</a>.
+</p>
+
 <h2>Développement</h2>
 <p>
 Chrall est open-source.<br>
