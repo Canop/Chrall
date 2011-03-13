@@ -16,7 +16,7 @@ function Chrall_handleCdmPage() {
 	
 	$.ajax(
 		{
-			url: "http://localhost:9090/chrall/json?action=accept_cdm_jsonp&cdm=" + encodeURIComponent(text), // <- attention, ne marche que si le text est court...
+			url: "http://canop.org:9090/chrall/json?action=accept_cdm_jsonp&cdm=" + encodeURIComponent(text), // <- attention, ne marche que si le text est court...
 			crossDomain: true,
 			dataType: "jsonp"
 		}

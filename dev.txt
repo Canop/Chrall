@@ -53,6 +53,7 @@ EN COURS :
 * [Canop] apprendre le langage go
 * [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
 * abandon de la logique d'auto-update de l'extension, remplacé par l'affichage d'un discret message proposant d'aller mettre à jour l'extension
+* grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================
@@ -60,10 +61,10 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 
 TODO :
 ======
+* sauver les stats d'usage du serveur g0g0chrall
 * virer la boite de dialogue d'alarme : elle peut bloquer tout Chrome...
 * bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
 * afficher les caractéristiques des monstres y compris dans la table (pas seulement sur la grille)
-* grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)
 * grille/filtre : remplacer "objets" par "trésors"
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * regarder si on ne peut pas récupérer des infos dans les scripts publics (par exemple les malus pour améliorer le calcul de la fatigue)
