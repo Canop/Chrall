@@ -27,6 +27,7 @@ function Chrall_reformatOptionsView() {
 	html += " (donc pas de transmission des AA, des blessures des monstres, des coups, des infos de vos trolls, etc.)."
 	html += "</p>";
 	html += "<h2>Outils Chrall</h2>";
+	html += "<span id=toto>TOTO</span>"
 	html += "<ul>";
 	html += "<li><a target=nouvelOnglet href=\"http://canop.org:9090/chrall/puits\">Le Puits</a> dans lequel vous pouvez déverser vos CDM</li>";
 	html += "<li><a target=nouvelOnglet href=\"http://canop.org:9090/chrall/bestiaire\">Le Bestiaire</a> qui vous dira en retour ce qu'il sait des monstres</li>";
@@ -53,4 +54,5 @@ function Chrall_reformatOptionsView() {
 		$(activeTab).fadeIn("fast");
 		return false;
 	});
+
 }

@@ -127,7 +127,7 @@ function Chrall_makeGridHtml() {
 				}
 				for (var i=0; i<list.length; i++) {
 					var t = list[i];
-					cellContent += "<span name='objets' class=ch_object>"+t.z+": "+t.name+"</span>";
+					cellContent += "<span name='objets' bub=\""+t.id+" : "+t.name+"\" class=ch_object>"+t.z+": "+t.name+"</span>"; // note :pb à attendre si le nom du trésor contient un guillement
 				}
 				if (merge) {
 					cellContent += "</div></span>";
@@ -415,6 +415,22 @@ function Chrall_analyseAndReformatView() {
 				innerHtml: link.attr("message"),
 				innerHtmlStyle: { color:'#FFFFFF', 'text-align':'center' },
 				themeName: 'all-blue',
+				themePath: chrome.extension.getURL('jquerybubblepopup-theme')
+			});
+		}
+	);	
+	
+	// on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
+	var objectNames = $("span.ch_object");
+	objectNames.each(
+		function() {
+			var o = $(this);
+			o.CreateBubblePopup({
+				position: 'left',
+				align: 'center',
+				innerHtml: o.attr("bub"),
+				innerHtmlStyle: { color:'#FFFFFF', 'text-align':'center' },
+				themeName: 'all-grey',
 				themePath: chrome.extension.getURL('jquerybubblepopup-theme')
 			});
 		}

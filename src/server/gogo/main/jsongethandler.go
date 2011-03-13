@@ -15,9 +15,11 @@ type BestiaryExtractJson struct {
 	Html string
 }
 
+
 type JsonGetHandler struct {
 	ChrallHandler
 }
+
 
 func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	monsterCompleteNames := hr.Form["name"]
@@ -72,6 +74,35 @@ func (h *JsonGetHandler) serveBestiaryExtractHtmlJsonp(w http.ResponseWriter, hr
 	fmt.Fprint(w, ")")	
 }
 
+// traite les cdm envoyées par l'extension chrall
+func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Request) {
+	encodedCdms := hr.Form["cdm"]
+	if len(encodedCdms)>0 {
+		encodedCdm := encodedCdms[0]
+		fmt.Println(w, encodedCdm)
+
+		bd := new(BucketDecoder)
+		bd.Decode(encodedCdm, h.store)
+		_, err := h.store.WriteCdms(bd.Cdm)
+		if err != nil {
+			fmt.Println("Erreur au décodage des CDM")
+		}
+
+		answerHtml := "CDM : ";
+		for _, cdm := range bd.Cdm {
+			answerHtml += cdm.NomComplet
+		}
+
+		fmt.Fprint(w, "cdm_receive(")
+		mhtml, _ := json.Marshal("Merci pour " + answerHtml)
+		w.Write(mhtml)
+		fmt.Fprint(w, ")")	
+
+	} else {
+		fmt.Println("Pas de CDM dans la requete!")
+	}
+}
+
 func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr *http.Request) {
 	monsterPartialNames := hr.Form["term"]
 	if len(monsterPartialNames) < 1 {
@@ -111,6 +142,8 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 		h.serveBestiaryExtractHtml(w, hr)
 	} else if action == "get_extract_jsonp" {
 		h.serveBestiaryExtractHtmlJsonp(w, hr)
+	} else if action == "accept_cdm_jsonp" {
+		h.serveAcceptCdmJsonp(w, hr)
 	} else {
 		fmt.Println(" Requete non comprise")
 	}

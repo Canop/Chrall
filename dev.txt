@@ -46,6 +46,7 @@ RECENTS / A TESTER :
 * [Canop] grille : il n'y a plus de bulle sur toutes les cases mais juste sur les monstres et les trolls
 <- v0.10
 * [Canop] profil : virer la colonne de l'AM pour les non-kastars => vérifier que c'est OK pour les kastars
+* options : lien vers le bestiaire
 
 EN COURS :
 ==========
@@ -60,7 +61,6 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 TODO :
 ======
 * virer la boite de dialogue d'alarme : elle peut bloquer tout Chrome...
-* options : lien vers le bestiaire
 * bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
 * afficher les caractéristiques des monstres y compris dans la table (pas seulement sur la grille)
 * grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)

@@ -36,8 +36,11 @@ func sendError(w http.ResponseWriter, title string, err os.Error) {
 
 func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
+	w.SetHeader("Access-Control-Allow-Origin", "*")
+	w.SetHeader("Access-Control-Request-Method", "GET")
 
 	fmt.Println("\n=== JsonPostHandler : Requete reçue ====================")
+	fmt.Println(" URL : " + hr.RawURL)
 
 	jd := json.NewDecoder(hr.Body)
 	jr := new(jsonRequest)
