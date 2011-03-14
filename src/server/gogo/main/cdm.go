@@ -247,7 +247,7 @@ func (cdm *CDM) AddChar(name string, c *CdmChar) {
 		cdm.AttaqueADistance_boolean = c.Boolean
 	} else if name == "DLA" {
 		cdm.DLA_text = c.Text
-	} else if name == "Durée Tour" {
+	} else if name == "Durée Tour" || name == "Durée tour" {
 		cdm.DuréeTour_min = c.Min
 		cdm.DuréeTour_max = c.Max
 	} else if name == "Chargement" {
@@ -275,16 +275,26 @@ func NewCdm(lines []string) *CDM {
 		return nil
 	}
 	// on commence par faire du recollage/découpage pour gérer le cas des mails où la première ligne de la cdm est souvent coupée
-	line := lines[0] + lines[1]
+	// PB : on va afficher ensuite un "ligne pas comprise" erroné en essayant de lire la ligne d'après
+	// on pourrait optimiser aussi en évitant ce recollage bizarre mais c'est déjà bien compliqué de gérer tous les cas...
+	var line string
+	if len(lines[1])>4 && (lines[1][0]=='(' || lines[1][0]=='[') {
+		line = lines[0] + " " + lines[1] // parce que l'espace est souvent perdu s'il coincide avec un changement de ligne
+	} else {
+		line = lines[0] + lines[1] 
+	}
+	
 	if index := strings.Index(line, ")"); index >= 0 {
 		line = line[0:index]
 	}
-
+	
+	fmt.Println("LINE : " + line)
+	
 	var fields []string
 	var numField string
 	var nomComplet string
 	var male boolean
-	if strings.Contains(line, "CONNAISSANCE DES MONSTRES") {
+	if strings.Contains(lines[0], "CONNAISSANCE DES MONSTRES") {
 		fields = strings.Fields(line)
 		fieldUn := -1
 		for i, f := range fields {
@@ -303,26 +313,28 @@ func NewCdm(lines []string) *CDM {
 			return nil
 		}
 		nomComplet = strings.Join(fields[fieldUn+1:len(fields)-1], " ")
-	} else if strings.Contains(line, "Le Monstre Ciblé fait partie") {
+	} else if strings.Contains(lines[0], "Le Monstre Ciblé fait partie") {
 		fields = strings.Fields(line)
-		firstFieldWithOpeningBrace := -1
-		for i, f := range fields {
-			if f[0] == '(' {
-				firstFieldWithOpeningBrace = i
-				break
-			}
-		}
-		if firstFieldWithOpeningBrace == -1 || firstFieldWithOpeningBrace >= len(fields)-2 {
-			fmt.Println("Impossible de trouver le début du nom")
+		
+		ia := strings.Index(line, "(")
+		ib := strings.Index(line, "]")
+		if ia<0 || ib<0 {
+			fmt.Println("Impossible de trouver le nom")
 			return nil
 		}
-		nomComplet = strings.TrimLeft(strings.Join(fields[firstFieldWithOpeningBrace:len(fields)-2], " "), "(")
+		nomComplet = line[ia+1:ib+1]
 	} else {
 		return nil
 	}
-	numField = fields[len(fields)-1]
-	numField = strings.TrimLeft(numField, "(N°")
+	fmt.Println("nomComplet=\""+nomComplet+"\"")
+	numField = fields[len(fields)-1] // attention : le "fields" est d'une fiabilité relative (en cas de coupure sur l'espace, celui ci est viré)
+	if indexParLeft := strings.Index(numField, "("); indexParLeft>=0 {
+		numField = numField[indexParLeft+1:]
+	}	 
 	numField = strings.TrimRight(numField, ")")
+	if indexNo := strings.Index(numField, "N°"); indexNo>=0 {
+		numField = numField[indexNo+len("N°"):]
+	}	
 	num, err := strconv.Atoui(numField)
 	if err != nil {
 		fmt.Println("Error trying to parse '" + numField + "' as an int : not a CDM")

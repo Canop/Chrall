@@ -47,6 +47,10 @@ RECENTS / A TESTER :
 <- v0.10
 * [Canop] profil : virer la colonne de l'AM pour les non-kastars => vérifier que c'est OK pour les kastars
 * options : lien vers le bestiaire
+* forum
+<- v0.11
+* script de lancement de gogo en nohup (reste ouvert après fermeture session)
+* Puits : correction de quelques problèmes d'analyse (touchant environ 2% des CDM)
 
 EN COURS :
 ==========
@@ -118,6 +122,7 @@ TODO :
 * ajouter au filtre json les pages venant des principaux proxys mh
 * procédures automatiques de sauvegardes des bd
 * bouton pour activer la DLA suivante
+* bonus/malus : totaux
 
 
 NOTES :
