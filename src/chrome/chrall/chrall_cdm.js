@@ -1,16 +1,17 @@
 
 
 function Chrall_handleCdmPage() {
-	alert("une cdm est cachée dans cette page");
+	alert("Si tu vois cette alerte, signale le à Denys");
 	
 	var cdm = $("table table table form").children().text();
-	alert(cdm); // à vérifier
 	
-	html = "ICI!<script>";
+	html = "Si tu lis ce texte, dis le à Denys, please<script>";
 	html += "function cdm_receive(answer) {";
 	html += " alert(answer);";
 	html += "}";
 	html += "</script>";
+
+	alert(cdm); // à vérifier
 
 	$("table table table form").append(html);
 	

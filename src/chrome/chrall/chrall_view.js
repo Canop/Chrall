@@ -42,20 +42,21 @@ function Chrall_makeGridHtml() {
 	html += " var id = answer.RequestId;";
 	html += " var html = answer.Html;";
 	//html += " alert(document.getElementById('innerbubble-'+id).innerHTML);";
-	html += " document.getElementById('innerbubble-'+id).innerHTML=html;";
+	//html += " document.getElementById('innerbubble-'+id).innerHTML=html;";
+	html += " document.getElementById('monsterBubbleContent').innerHTML=html;";
 	html += "}";
 	html += "</script>";
 	
 	html += "<table class=grid>";
-	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center title=\"Nordhikan (Y+)\">Nordhikan (Y+)</td><td bgcolor=#BABABA></td></tr>";
+	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center>Nordhikan (Y+)</td><td bgcolor=#BABABA></td></tr>";
 	html += "<tr>";
-	html += "<td nowrap rowspan="+(ymax-ymin+3)+" title=\"Oxhykan (X-)\"><span style='display:block;-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-moz-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;'>Oxhykan&nbsp;(X-)</span></td>";
+	html += "<td nowrap rowspan="+(ymax-ymin+3)+"\"><span style='display:block;-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-moz-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;'>Oxhykan&nbsp;(X-)</span></td>";
 	html += "<td align=center height=30 width=30>y\\x</td>";
 	for (var x=xmin; x<=xmax; x++) {
 		html += "<td class=grad>"+x+"</td>";
 	}
 	html += "<td align=center height=30 width=30>x/y</td>";
-	html += "<td rowspan="+(ymax-ymin+3)+" title='Orhykan (X+)'><span style='display:block;transform:rotate(90deg);-webkit-transform:rotate(90deg);-moz-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;'>Orhykan&nbsp;(X+)</span></td>";
+	html += "<td rowspan="+(ymax-ymin+3)+" ><span style='display:block;transform:rotate(90deg);-webkit-transform:rotate(90deg);-moz-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;'>Orhykan&nbsp;(X+)</span></td>";
 	html += "</tr>\n";
 	for (var y=ymax; y>=ymin; y--) {
 		html += "<tr><td class=grad height=30>"+ y + "</td>\n";
@@ -161,7 +162,7 @@ function Chrall_makeGridHtml() {
 	}
 	html += "<td align=center height=30 width=30>x\\y</td>";
 	html += "</tr>";
-	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center title=\"Midikan (Y-)\">Midikan (Y-)</td><td bgcolor=#BABABA></td></tr>";
+	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center>Midikan (Y-)</td><td bgcolor=#BABABA></td></tr>";
 	html += "</table>";
 	return html;
 }
@@ -378,33 +379,62 @@ function Chrall_analyseAndReformatView() {
 		return false;
 	});
 	
-	// on ajoute le popup sur les monstres
+	//> on ajoute le popup sur les monstres
+	var onDiv = false;
+    var onLink = false;
+    var bubbleExists = false;
+    var timeoutID;
+    function hideBubble() {
+        clearTimeout(timeoutID);
+        if (bubbleExists && !onDiv) {
+             $("#monsterBubble").remove();
+             bubbleExists = false;
+        }
+    }
+    function showBubble(event, text) {
+        if (bubbleExists) hideBubble();
+        var tPosX = event.pageX;
+        var tPosY = event.pageY;
+        if (tPosX>document.body.clientWidth/2) tPosX -= 250;
+        else tPosX += 50; 
+        if (tPosX<0) tPosX=0;
+        if (tPosY>document.body.clientHeight/2) tPosY -= 300;
+        else tPosY += 10; 
+        if (tPosY<0) tPosY=0;
+        $('<div id="monsterBubble" style="top:' + tPosY + '; left:' + tPosX + ';"><div class=bubbleTitle>'+text+'</div><br><div id=monsterBubbleContent></div></div>').mouseover(keepBubbleOpen).mouseout(letBubbleClose).appendTo('body');
+        bubbleExists = true;
+    }
+    function keepBubbleOpen() {
+        onDiv = true;
+    }
+    function letBubbleClose() {
+        onDiv = false;
+        hideBubble();
+    }
 	var monsterLinks = $("a.ch_monster");
 	monsterLinks.each(
 		function() {
 			var link = $(this);
-			link.CreateBubblePopup({
-				position: 'bottom',
-				align: 'center',
-				innerHtml: link.attr("message") + "<br><div id=innerbubble-"+link.attr("id")+">En attente de g0g0Chrall...</div>",
-				innerHtmlStyle: { color:'#FFFFFF', 'text-align':'center' },
-				themeName: 'all-black',
-				themePath: chrome.extension.getURL('jquerybubblepopup-theme')
+			link.mouseover(function(event) {
+				if (onDiv || onLink) return false;
+				onLink = true;
+				$.ajax(
+					{
+						url: "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + link.attr("nom_complet_monstre") + "&requestId=" + link.attr("id"),
+						crossDomain: true,
+						dataType: "jsonp"
+					}
+				);
+				showBubble.call(this, event, link.text());
+			});
+			link.mouseout(function(){
+				onLink = false;
+				timeoutID = setTimeout(hideBubble, 150);
 			});
 		}
-	);	
-	monsterLinks.mouseover(function(){
-		var link = $(this);
-		$.ajax(
-			{
-				url: "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + link.attr("nom_complet_monstre") + "&requestId=" + link.attr("id"),
-				crossDomain: true,
-				dataType: "jsonp"
-			}
-		);
-	});
+	);
 
-	// on ajoute un popup sur les trolls (pour avoir la distance de charge, et plus tard d'autres choses peut-être)
+	//> on ajoute un popup sur les trolls (pour avoir la distance de charge, et plus tard d'autres choses peut-être)
 	var trollLinks = $("a.ch_troll");
 	trollLinks.each(
 		function() {
@@ -420,7 +450,7 @@ function Chrall_analyseAndReformatView() {
 		}
 	);	
 	
-	// on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
+	//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
 	var objectNames = $("span.ch_object");
 	objectNames.each(
 		function() {

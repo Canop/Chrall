@@ -7,6 +7,7 @@ GOFILES=\
 	main/cdm.go\
 	main/bestiaryextract.go\
 	main/cdmstore.go\
+	main/messager.go\
 	main/handler.go\
 	main/roothandler.go\
 	main/bucketdecoder.go\

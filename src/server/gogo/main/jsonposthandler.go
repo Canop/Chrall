@@ -55,7 +55,7 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	bd.Decode(jr.Bucket, h.store)
 
 	inserted := 0
-	if len(bd.Cdm)>0 {
+	if len(bd.Cdm) > 0 {
 		inserted, err = h.store.WriteCdms(bd.Cdm)
 		if err != nil {
 			sendError(w, "écriture BD", err)

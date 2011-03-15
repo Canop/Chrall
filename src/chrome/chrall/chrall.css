@@ -133,4 +133,73 @@ table.cdm td {
 table.cdm th.title {
 	text-align:center;
 }
-
+.ch_box {
+	display: none;
+	position: absolute;
+	border-radius: 15px;
+	box-shadow: 0px 4px 10px #666;
+	font-size: 14px;
+	margin-bottom: 20px;
+	padding: 10px;
+	color: white;
+	background-size: 100% 100%;
+	background: -webkit-gradient(
+		linear,
+		left top, left bottom,
+		from(dodgerblue),
+		to(indigo)
+	);
+}
+#ch_messageTitle {
+	color: orange;
+	font-weight:bold;
+	text-shadow: 0 0 0.2em black;
+	cursor: pointer;
+}
+#ch_messageContent {
+	display: none;
+}
+.emphase {
+	color: orange;
+	font-weight:bold;
+	text-shadow: 0 0 0.2em black; 
+}
+a.gogo:focus {
+	oultine: none;
+}
+a.gogo,  a.gogo:link {
+	background-color: mediumblue;
+	border-top: 1px solid mediumblue;
+	border-bottom: 1px solid darkblue;
+	margin : 4px;
+	padding-left: 8px;
+	padding-right: 8px;
+	border-radius: 10px;
+	text-decoration: none;
+	color: white !important;
+}
+a.gogo:hover {
+	border-top: 1px solid darkblue;
+	border-bottom: 1px solid mediumblue;
+}
+[invisible] {
+	display: none;
+}
+#monsterBubble {
+	position: fixed; display: inline; border: 2px;
+	border-radius: 4px;
+	box-shadow: 0px 4px 10px #666;
+	font-size: 12px;
+	color: white;
+	background-size: 100% 100%;
+	background: -webkit-gradient(
+		linear,
+		left top, left bottom,
+		from(dodgerblue),
+		to(indigo)
+	);
+	padding: 4px;
+}
+.bubbleTitle {
+	text-align: center;
+} 

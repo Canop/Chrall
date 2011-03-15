@@ -51,13 +51,18 @@ RECENTS / A TESTER :
 <- v0.11
 * script de lancement de gogo en nohup (reste ouvert après fermeture session)
 * Puits : correction de quelques problèmes d'analyse (touchant environ 2% des CDM)
+* grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)
+* virer la boite de dialogue d'alarme : elle peut bloquer tout Chrome...
+* abandon de la logique d'auto-update de l'extension, remplacée par l'affichage d'un discret message proposant d'aller mettre à jour l'extension
+* calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquants pour entrainement
+* grille/bestiaire : mise en place d'un système de bulle maison
 
 EN COURS :
 ==========
 * [Canop] apprendre le langage go
 * [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
-* abandon de la logique d'auto-update de l'extension, remplacé par l'affichage d'un discret message proposant d'aller mettre à jour l'extension
-* grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)
+* virer la librairie de bulles et en faire une moi-même (plus adaptée, plus précisément placée) [fait pour le bestiaire]
+* réflexion sur l'opportunité de passer à une base mongodb
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================
@@ -66,15 +71,12 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 TODO :
 ======
 * sauver les stats d'usage du serveur g0g0chrall
-* virer la boite de dialogue d'alarme : elle peut bloquer tout Chrome...
 * bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
 * afficher les caractéristiques des monstres y compris dans la table (pas seulement sur la grille)
 * grille/filtre : remplacer "objets" par "trésors"
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * regarder si on ne peut pas récupérer des infos dans les scripts publics (par exemple les malus pour améliorer le calcul de la fatigue)
-* calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquants pour entrainement
 * détection des trolls malades
-* virer la librairie de bulles et en faire une moi-même (plus adaptée, plus précisément placée)
 * grille : rendre le "Vous êtes ici" cliquable (ouverture du profil troll du joueur)
 * profil : indiquer les alarmes programmées ?
 * grille : ajouter un menu déroulant de limite de vue à côté du filtre (même style arrondi) avec une liste {"vue totale", "vue/2", "vue/4"}
@@ -123,6 +125,8 @@ TODO :
 * procédures automatiques de sauvegardes des bd
 * bouton pour activer la DLA suivante
 * bonus/malus : totaux
+
+* regarder si ça n'aurait pas été mieux d'utiliser mongodb plutôt que mysql... après tout c'est pas comme si on visait l'utilisation préférentielle de vieilles technos...
 
 
 NOTES :

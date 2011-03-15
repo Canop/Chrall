@@ -71,9 +71,9 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 		return 0, err
 	}
 	defer stmt.Close()
-	
+
 	time := time.Seconds()
-	
+
 	for _, cdm := range cdms {
 		err = stmt.BindParams(
 			cdm.NumMonstre, cdm.NomComplet,
@@ -178,7 +178,6 @@ func (store *CdmStore) ReadTotalStats() (*BestiaryExtract, os.Error) {
 
 	return be, nil
 }
-
 
 
 func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtract, os.Error) {

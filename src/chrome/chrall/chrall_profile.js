@@ -34,9 +34,30 @@ function Chrall_extractBasicInfos(text) {
 	player.id = parseInt(tokens[1]);
 	player.name = tokens[3];
 	player.race = tokens[5];
-	//~ alert("player.id="+player.id);
-	//~ alert("player.name="+player.name);
-	//~ alert("player.race="+player.race);
+}
+
+function Chrall_extractXpInfos(text) {
+	var tokens = Chrall_tokenize(text);
+	//for (var i=0; i<tokens.length; i++) alert(i + " : " + tokens[i]); 
+	player.level = parseInt(tokens[1]);
+	player.pi = parseInt(tokens[2]);
+	player.px = parseInt(tokens[5]);
+	player.pxPerso = parseInt(tokens[9]);
+	player.availablePi = parseInt(tokens[11]);
+}
+
+function Chrall_makeXpComments() {
+	var nextLevelPi = Chrall_getTotalPiForLevel(player.level+1);
+	var trainingPx = player.level*2;
+	var html = "";
+	var diff = player.px+player.pxPerso-trainingPx;
+	if (diff>=0) {
+		html += "Vous pouvez vous entrainer : il vous restera " + diff + " px.";
+	} else {
+		html += "Il vous manque " + (-diff) + " px pour vous entrainer.";
+	}
+	html += "<br>Chaque entrainement coûte " + trainingPx + " PX. Vous devez vous entrainer " + Math.ceil((nextLevelPi-player.pi)/trainingPx) + " fois pour passer au niveau " + (player.level+1) + ".";
+	return html;
 }
 	
 function Chrall_extractDlaInfos(text) {
@@ -53,9 +74,6 @@ function Chrall_extractDlaInfos(text) {
 
 function Chrall_extractFatigue(text) {
 	var lines = text.split('\n');
-	//~ for (var i=0; i<lines.length; i++) {
-		//~ alert("lines["+i+"]=***"+lines[i]+"***");
-	//~ }
 	var strainLine = lines[16]; // c'est la ligne qui contient "Fatigue............:"
 	var tokens = strainLine.split(new RegExp("[\)\( ,:=\.\+]+", "g"));
 	var strainBaseFound = false;
@@ -75,11 +93,7 @@ function Chrall_extractFatigue(text) {
 		} catch (error) {
 		}
 	}
-	//alert("player.strainBase="+player.strainBase);
-	//alert("player.strainMalus="+player.strainMalus);
 }
-
-
 
 /**
  * construit un certain nombre de tables donnant des infos sur la fatigue
@@ -91,11 +105,10 @@ function Chrall_makeStrainInfos() {
 	var m1 = (player.getDla(1)-(new Date()).getTime())/(60*1000);
 	//> construction de la table de récupération
 	if (player.strainBase+player.strainMalus>0) {
-		// TODO réussir à déplacer les instructions de style de cette table (center, border) en css
-		// TODO tester quelles colonnes afficher (suivant présence compétences AM et charge)
-		html += "<table class=infos width=100%><tr><th>DLA</th><th>Fatigue</th><th>Malus de charge</th>";
+		// TODO tester présence compétence charge
+		html += "<table class=infos><tr><th> DLA &nbsp; </th><th> &nbsp; Fatigue &nbsp; </th><th> &nbsp; Malus de charge &nbsp; </th>";
 		if (player.race=="Kastar") {
-			html += "<th>AM: minutes/PV</th><th align=left> &nbsp; AM: suggestion</th>";
+			html += "<th> &nbsp; AM: minutes/PV &nbsp; </th><th align=left> &nbsp; AM: suggestion</th>";
 		}
 		html += "</tr>";
 		var baseStrain = player.strainBase;  // la fatigue de la dla i
@@ -243,6 +256,7 @@ function Chrall_analyseAndReformatProfile() {
 	
 	Chrall_extractBasicInfos($(cells[1]).text()); // la cellule qui contient l'id, le nom, la race
 	Chrall_extractDlaInfos($(cells[4]).text()); // cells[4] est la cellule en face de "Echeance du tour"
+	Chrall_extractXpInfos($(cells[8]).text());
 	Chrall_extractFatigue($(cells[10]).text());
 	Chrall_analyseAndReformatMainCharacteristicsTable($($("table table table.mh_tdborder table")[2])); // TODO trouver plus fiable !
 	
@@ -250,9 +264,37 @@ function Chrall_analyseAndReformatProfile() {
 	$(cells[4]).append("<b>---&gt;&nbsp;DLA suivante : " + player.getDla(1).toString("dd/MM/yyyy HH:mm:ss") + "</b>");
 	$(cells[4]).append("<br>(et encore après : " + player.getDla(2).toString("dd/MM/yyyy HH:mm:ss") + ")");
 
+	//> on affiche quelques calculs sur les px et les pi
+	$(cells[8]).append("<br>"+Chrall_makeXpComments());
+
 	//> on affiche les infos liées à la fatigue
 	$(cells[10]).append(Chrall_makeStrainInfos());
 	
 	//> on signale à l'extension la date de la fin de DLA, pour qu'elle programme éventuellement une alarme
 	Chrall_sendDlaToExtension(player.getDla(0).getTime(), player.getDla(1).getTime());
+	
+	//> on ajoute de quoi afficher les messages de gogochrall
+	var html = "<script>";
+	html += "function chrall_receiveMessage(answer) {";
+	html += " if (answer.Nature=='empty') return;";
+	html += " document.getElementById('mbox').style.display='inline-block';";
+	html += " document.getElementById('ch_messageTitle').innerHTML=answer.Title;";
+	html += " document.getElementById('ch_messageContent').innerHTML='<br><br>'+answer.Content;";
+	html += "}";
+	html += "</script>";
+	html += "<span id=mbox class=ch_box><a id=ch_messageTitle>en attente...</a>";
+	html += "<span id=ch_messageContent><br><br>...de g0g0chrall...</span></span><br><br>";
+	$($("table table table")[0]).append(html);
+	
+	$.ajax(
+		{
+			url: "http://canop.org:9090/chrall/json?action=check_messages&TrollId=" + player.id + "&ChrallVersion=0.11",
+			crossDomain: true,
+			dataType: "jsonp"
+		}
+	);
+	$("#ch_messageTitle").click(function() {
+		$("#ch_messageContent").toggle();
+	});
+
 }

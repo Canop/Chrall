@@ -3,6 +3,7 @@
  * Il contient aussi les variables globales.
  */
 
+var chrallVersion = "0.12";
 
 var monstersInView = new Array();
 var trollsInView = new Array();

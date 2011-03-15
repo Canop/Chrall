@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"http"
 )
 
 type Hitter struct {
@@ -10,15 +11,23 @@ type Hitter struct {
 	parent *Hitter
 }
 
-func (h* Hitter) hit() {
+func (h *Hitter) hit() {
 	h.nbHits++
-	if h.parent!=nil {
+	if h.parent != nil {
 		h.parent.hit()
 	}
 }
 
 type Handler struct {
 	Hitter
+}
+
+func GetFormValue(hr *http.Request, name string) string {
+	values := hr.Form[name]
+	if len(values)>0 {
+		return values[0]
+	}
+	return ""
 }
 
 func (h *Handler) head(w io.Writer, title string) {

@@ -80,10 +80,10 @@ func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 		} else if len(fields) == 3 && fields[0] == "égal" && fields[1] == "à" {
 			char.Min, _ = strconv.Atoui(fields[2])
 			char.Max = char.Min
-		} 
+		}
 	} else {
 		fields = strings.Fields(char.Text)
-		if len(fields)>0 {
+		if len(fields) > 0 {
 			value, valueErr := strconv.Atoui(fields[0])
 			if valueErr == nil {
 				char.Value = value
@@ -278,18 +278,16 @@ func NewCdm(lines []string) *CDM {
 	// PB : on va afficher ensuite un "ligne pas comprise" erroné en essayant de lire la ligne d'après
 	// on pourrait optimiser aussi en évitant ce recollage bizarre mais c'est déjà bien compliqué de gérer tous les cas...
 	var line string
-	if len(lines[1])>4 && (lines[1][0]=='(' || lines[1][0]=='[') {
+	if len(lines[1]) > 4 && (lines[1][0] == '(' || lines[1][0] == '[') {
 		line = lines[0] + " " + lines[1] // parce que l'espace est souvent perdu s'il coincide avec un changement de ligne
 	} else {
-		line = lines[0] + lines[1] 
+		line = lines[0] + lines[1]
 	}
-	
+
 	if index := strings.Index(line, ")"); index >= 0 {
 		line = line[0:index]
 	}
-	
-	fmt.Println("LINE : " + line)
-	
+
 	var fields []string
 	var numField string
 	var nomComplet string
@@ -315,26 +313,27 @@ func NewCdm(lines []string) *CDM {
 		nomComplet = strings.Join(fields[fieldUn+1:len(fields)-1], " ")
 	} else if strings.Contains(lines[0], "Le Monstre Ciblé fait partie") {
 		fields = strings.Fields(line)
-		
+
 		ia := strings.Index(line, "(")
 		ib := strings.Index(line, "]")
-		if ia<0 || ib<0 {
+		if ia >= 0 && ib > ia {
+			nomComplet = line[ia+1 : ib+1]		
+		} else {
 			fmt.Println("Impossible de trouver le nom")
 			return nil
 		}
-		nomComplet = line[ia+1:ib+1]
 	} else {
 		return nil
 	}
-	fmt.Println("nomComplet=\""+nomComplet+"\"")
+	fmt.Println("nomComplet=\"" + nomComplet + "\"")
 	numField = fields[len(fields)-1] // attention : le "fields" est d'une fiabilité relative (en cas de coupure sur l'espace, celui ci est viré)
-	if indexParLeft := strings.Index(numField, "("); indexParLeft>=0 {
+	if indexParLeft := strings.Index(numField, "("); indexParLeft >= 0 {
 		numField = numField[indexParLeft+1:]
-	}	 
+	}
 	numField = strings.TrimRight(numField, ")")
-	if indexNo := strings.Index(numField, "N°"); indexNo>=0 {
+	if indexNo := strings.Index(numField, "N°"); indexNo >= 0 {
 		numField = numField[indexNo+len("N°"):]
-	}	
+	}
 	num, err := strconv.Atoui(numField)
 	if err != nil {
 		fmt.Println("Error trying to parse '" + numField + "' as an int : not a CDM")

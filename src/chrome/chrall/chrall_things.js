@@ -125,6 +125,10 @@ Monster.prototype.setName = function(fullName){
  *  - strainBase (la fatigue de base)
  *  - strainMalus (le malus de fatigue)
  *  - isIntangible
+ *  - px
+ *  - pxPerso
+ * 	- pi
+ *  - availablePi : les pi non encore consommés en amélioration
  *  - flies : le tableau des mouches
  *  - actionPoints : les PA restant
  *  - les characteristics...

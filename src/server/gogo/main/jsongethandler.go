@@ -1,7 +1,7 @@
 package main
 
 /*
-Ce service répond aux requètes JSON en GET
+Ce service répond aux requètes JSON et JSONP en GET
 */
 
 import (
@@ -12,12 +12,20 @@ import (
 
 type BestiaryExtractJson struct {
 	RequestId string
-	Html string
+	Html      string
 }
 
 
 type JsonGetHandler struct {
 	ChrallHandler
+}
+
+func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Request) {
+	out := GetMessage(GetFormValue(hr,"TrollId"), GetFormValue(hr,"ChrallVersion"))
+	bout, _ := json.Marshal(out)
+	fmt.Fprint(w, "chrall_receiveMessage(")
+	w.Write(bout)
+	fmt.Fprint(w, ")")
 }
 
 
@@ -64,20 +72,20 @@ func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *htt
 func (h *JsonGetHandler) serveBestiaryExtractHtmlJsonp(w http.ResponseWriter, hr *http.Request) {
 	bejs := new(BestiaryExtractJson)
 	requestId := hr.Form["requestId"]
-	if len(requestId)>0 {
+	if len(requestId) > 0 {
 		bejs.RequestId = requestId[0]
 	}
 	bejs.Html = h.makeBestiaryExtractHtml(hr)
 	fmt.Fprint(w, "grid_receive(")
 	mb, _ := json.Marshal(bejs)
 	w.Write(mb)
-	fmt.Fprint(w, ")")	
+	fmt.Fprint(w, ")")
 }
 
 // traite les cdm envoyées par l'extension chrall
 func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Request) {
 	encodedCdms := hr.Form["cdm"]
-	if len(encodedCdms)>0 {
+	if len(encodedCdms) > 0 {
 		encodedCdm := encodedCdms[0]
 		fmt.Println(w, encodedCdm)
 
@@ -88,7 +96,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 			fmt.Println("Erreur au décodage des CDM")
 		}
 
-		answerHtml := "CDM : ";
+		answerHtml := "CDM : "
 		for _, cdm := range bd.Cdm {
 			answerHtml += cdm.NomComplet
 		}
@@ -96,7 +104,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 		fmt.Fprint(w, "cdm_receive(")
 		mhtml, _ := json.Marshal("Merci pour " + answerHtml)
 		w.Write(mhtml)
-		fmt.Fprint(w, ")")	
+		fmt.Fprint(w, ")")
 
 	} else {
 		fmt.Println("Pas de CDM dans la requete!")
@@ -144,6 +152,8 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 		h.serveBestiaryExtractHtmlJsonp(w, hr)
 	} else if action == "accept_cdm_jsonp" {
 		h.serveAcceptCdmJsonp(w, hr)
+	} else if action == "check_messages" {
+		h.serveMessageJsonp(w, hr)
 	} else {
 		fmt.Println(" Requete non comprise")
 	}
