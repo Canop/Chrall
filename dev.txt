@@ -48,20 +48,22 @@ RECENTS / A TESTER :
 * [Canop] profil : virer la colonne de l'AM pour les non-kastars => vérifier que c'est OK pour les kastars
 * options : lien vers le bestiaire
 * forum
+* ajouter quelque part (sur la page d'accueil?) la mention que les pages sont modifiées par chrall et un lien vers le site web (et un mode d'emploi de désinstallation ?)
 <- v0.11
 * script de lancement de gogo en nohup (reste ouvert après fermeture session)
 * Puits : correction de quelques problèmes d'analyse (touchant environ 2% des CDM)
 * grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)
+<- v0.12
 * virer la boite de dialogue d'alarme : elle peut bloquer tout Chrome...
 * abandon de la logique d'auto-update de l'extension, remplacée par l'affichage d'un discret message proposant d'aller mettre à jour l'extension
 * calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquants pour entrainement
-* grille/bestiaire : mise en place d'un système de bulle maison
+* grille/bestiaire : mise en place d'un système de bulle maison (plus adapté, bulles plus précisément placées, bien plus rapide)
+<- v0.13
 
 EN COURS :
 ==========
 * [Canop] apprendre le langage go
 * [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
-* virer la librairie de bulles et en faire une moi-même (plus adaptée, plus précisément placée) [fait pour le bestiaire]
 * réflexion sur l'opportunité de passer à une base mongodb
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
@@ -70,6 +72,13 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 
 TODO :
 ======
+
+* profil : affichage rapport tués/décés
+* bulles des monstres : vérifier l'ID avant de modifier le contenu de la bulle
+* bouton pour activer la DLA suivante
+* grille : permettre que le premier affichage de vue se fasse toujours avec le même preset (réduit) pour un affichage par défaut plus rapide (modification du lien "Ma Vue", je suppose)
+* grille : ajouter un menu déroulant de limite de vue à côté du filtre (même style arrondi) avec une liste {"vue totale", "vue/2", "vue/4"}
+* bonus/malus : totaux
 * sauver les stats d'usage du serveur g0g0chrall
 * bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
 * afficher les caractéristiques des monstres y compris dans la table (pas seulement sur la grille)
@@ -78,9 +87,7 @@ TODO :
 * regarder si on ne peut pas récupérer des infos dans les scripts publics (par exemple les malus pour améliorer le calcul de la fatigue)
 * détection des trolls malades
 * grille : rendre le "Vous êtes ici" cliquable (ouverture du profil troll du joueur)
-* profil : indiquer les alarmes programmées ?
-* grille : ajouter un menu déroulant de limite de vue à côté du filtre (même style arrondi) avec une liste {"vue totale", "vue/2", "vue/4"}
-* grille : permettre que le premier affichage de vue se fasse toujours avec le même preset (réduit) pour un affichage par défaut plus rapide (modification du lien "Ma Vue", je suppose)
+* profil : indiquer les alarmes programmées
 * mettre en place des stats Google Analytics détaillées (affichage des différentes pages)
 * mettre en place une détection de problèmes unifiée (incapacité à analyser ou formater) et transmettre l'événement à google analytics (page incluse)
 * calculs en roll-over sur les sorts & compétences
@@ -89,20 +96,16 @@ TODO :
 * bestiaire : batch d'analyse des CDM pour construire le bestiaire
 * mouches : récapitulatif (en haut) à la fois sur les mouches actuelles et sur le total (en comptant celles en vadrouille)
 * rendre les parsings plus robustes en privilégiant les expressions régulières plutôt que le comptage des lignes ou cellules
-* [Canop] valider l'utilisation de go pour le codage du serveur
 * icône (un troll qui nage le crawl ?)
 * interface de troll (suivants identifiés)
-* grille : profils, chances au combat, etc. des monstres au hover
 * grille : trolls amis/ennemis
 * grille : mise en place d'un menu contextuel
 * grille/menu contextuel : lancement d'action déplacement
 * corriger le calcul des prochaines DLA si on passe sur la vue des malus
 * grille/menu contextuel : ajout de notes sur des cases ou des things pour l'équipe (par exemple "passer CE portail" ou bien "C'est ce mouch'oo qui m'a piqué mes mouches" ou encore "à finir 90%").
 * grille : une flèche discrète par dessus la grille pour indiquer la direction du joueur (utiliser un canvas transparent ?). Cette flèche doit contenir un bouton de centrage.
-* grille : modifier la technique des infos au survol, pour que l'on voit mieux quelle est la case concernée
 * profil : un onglet pour lister les notes (de soi et de ceux qui partagent avec nous). Ceci aura l'effet de bord d'offrir des "bookmarks" des trolls et monstres annotés
 * liste des trolls : envoi de MP par case à cocher
-* profil : affichage rapport tués/décés
 * profil/actions programmées : afficher la moyenne de la parade
 * chat d'équipe 
 * tableaux standards MH (monstres, événements, tableau de chasse, etc.) : surligner la ligne de la souris pour faciliter le rapprochement gauche/droite.
@@ -113,7 +116,6 @@ TODO :
 * alarmes : fenêtre de popup dans le navigateur pour visualiser les alarmes, les désactiver et régler le délai avant DLA
 * alarmes : sauver les alarmes en cookies (ou ailleurs ? sur le serveur ?) pour les retrouver au lancement de Chrome même si on ne va pas sur MH
 * alarmes : proposer une librairie de sonneries (et les mettre en téléchargement sur téléphone pour se faire des pépétes ! non j'déconne...)
-* ajouter quelque part (sur la page d'accueil?) la mention que les pages sont modifiées par chrall et un lien vers le site web (et un mode d'emploi de désinstallation ?)
 * site web : aide détaillée/tutorial pour assurer que toutes les fonctions soient connues
 * préférences détaillées : transformation ou pas de la page d'accueil
 * grille/filtre : rendre inactives les cases à cocher de catégories vides
@@ -121,10 +123,8 @@ TODO :
 * trouver un endroit toujours présent pour le logout
 * cdmstore : détection d'erreur basée sur la variance des valeurs
 * bestiaire : à terme afficher les moyennes des caracs en BD ?
-* ajouter au filtre json les pages venant des principaux proxys mh
+* ajouter au filtre de manifest.json les pages venant des principaux proxys mh
 * procédures automatiques de sauvegardes des bd
-* bouton pour activer la DLA suivante
-* bonus/malus : totaux
 
 * regarder si ça n'aurait pas été mieux d'utiliser mongodb plutôt que mysql... après tout c'est pas comme si on visait l'utilisation préférentielle de vieilles technos...
 

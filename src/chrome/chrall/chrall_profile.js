@@ -74,6 +74,7 @@ function Chrall_extractDlaInfos(text) {
 
 function Chrall_extractFatigue(text) {
 	var lines = text.split('\n');
+	//for (var i=0; i<10; i++) alert(i+" : " + lines[i]);
 	var strainLine = lines[16]; // c'est la ligne qui contient "Fatigue............:"
 	var tokens = strainLine.split(new RegExp("[\)\( ,:=\.\+]+", "g"));
 	var strainBaseFound = false;
@@ -296,5 +297,15 @@ function Chrall_analyseAndReformatProfile() {
 	$("#ch_messageTitle").click(function() {
 		$("#ch_messageContent").toggle();
 	});
+	
+	//> ajout des liens sur les compétences
+	$('a[href*="EnterComp"]').each(
+		function() {
+			var link = $(this);
+			var text = getBubbleContentForCompetence(link.text());
+			bubble(link, text, "bub_competence");
+		}
+	);	
+
 
 }

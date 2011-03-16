@@ -7,7 +7,6 @@ function Chrall_makeFiltersHtml() {
 	html += "function ChrallEmbedded_toggleDisplayByName(key, display){";
 	html += " var os = document.getElementsByName(key);";
 	html += " for (var i=0; i<os.length; i++) {";
-	//html += "  if (i<2) alert('display=='+os[i].style.display);";
 	html += "  if (!display) {";
 	html += "   if (os[i].style.display=='block') os[i].style.display='none';";
 	html += "   else os[i].style.display='block';";
@@ -23,7 +22,6 @@ function Chrall_makeFiltersHtml() {
 		html += "<span><input type=checkbox id='"+key+"'";
 		if (viewFilters[key]) html += " checked";
 		html += " onClick=\"ChrallEmbedded_toggleDisplayByName('"+key+"', this.checked?'block':'none');\"";
-		//html += " disabled";
 		html += "><label for='"+key+"'>"+key+"</label></span>";
 	}
 	html += "</form>";
@@ -39,11 +37,9 @@ function Chrall_makeGridHtml() {
 	
 	html = "<script>";
 	html += "function grid_receive(answer) {";
-	html += " var id = answer.RequestId;";
+	html += " var id = answer.RequestId;"; // sera peut-être un jour utilisé pour vérifier que la bulle ouverte est celle pour laquelle on a fait la requete
 	html += " var html = answer.Html;";
-	//html += " alert(document.getElementById('innerbubble-'+id).innerHTML);";
-	//html += " document.getElementById('innerbubble-'+id).innerHTML=html;";
-	html += " document.getElementById('monsterBubbleContent').innerHTML=html;";
+	html += " document.getElementById('bubbleContent').innerHTML=html;";
 	html += "}";
 	html += "</script>";
 	
@@ -379,90 +375,36 @@ function Chrall_analyseAndReformatView() {
 		return false;
 	});
 	
+	
+
 	//> on ajoute le popup sur les monstres
-	var onDiv = false;
-    var onLink = false;
-    var bubbleExists = false;
-    var timeoutID;
-    function hideBubble() {
-        clearTimeout(timeoutID);
-        if (bubbleExists && !onDiv) {
-             $("#monsterBubble").remove();
-             bubbleExists = false;
-        }
-    }
-    function showBubble(event, text) {
-        if (bubbleExists) hideBubble();
-        var tPosX = event.pageX;
-        var tPosY = event.pageY;
-        if (tPosX>document.body.clientWidth/2) tPosX -= 250;
-        else tPosX += 50; 
-        if (tPosX<0) tPosX=0;
-        if (tPosY>document.body.clientHeight/2) tPosY -= 300;
-        else tPosY += 10; 
-        if (tPosY<0) tPosY=0;
-        $('<div id="monsterBubble" style="top:' + tPosY + '; left:' + tPosX + ';"><div class=bubbleTitle>'+text+'</div><br><div id=monsterBubbleContent></div></div>').mouseover(keepBubbleOpen).mouseout(letBubbleClose).appendTo('body');
-        bubbleExists = true;
-    }
-    function keepBubbleOpen() {
-        onDiv = true;
-    }
-    function letBubbleClose() {
-        onDiv = false;
-        hideBubble();
-    }
-	var monsterLinks = $("a.ch_monster");
-	monsterLinks.each(
+	$("a.ch_monster").each(
 		function() {
 			var link = $(this);
-			link.mouseover(function(event) {
-				if (onDiv || onLink) return false;
-				onLink = true;
-				$.ajax(
-					{
-						url: "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + link.attr("nom_complet_monstre") + "&requestId=" + link.attr("id"),
-						crossDomain: true,
-						dataType: "jsonp"
-					}
-				);
-				showBubble.call(this, event, link.text());
-			});
-			link.mouseout(function(){
-				onLink = false;
-				timeoutID = setTimeout(hideBubble, 150);
-			});
+			var text = link.text();
+			bubble(link, text, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + link.attr("nom_complet_monstre") + "&requestId=" + link.attr("id"));
 		}
 	);
 
 	//> on ajoute un popup sur les trolls (pour avoir la distance de charge, et plus tard d'autres choses peut-être)
-	var trollLinks = $("a.ch_troll");
-	trollLinks.each(
+	$("a.ch_troll").each(
 		function() {
 			var link = $(this);
-			link.CreateBubblePopup({
-				position: 'bottom',
-				align: 'center',
-				innerHtml: link.attr("message"),
-				innerHtmlStyle: { color:'#FFFFFF', 'text-align':'center' },
-				themeName: 'all-blue',
-				themePath: chrome.extension.getURL('jquerybubblepopup-theme')
-			});
+			var text = link.attr("message");
+			bubble(link, text, "bub_troll");
 		}
 	);	
-	
+
 	//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
-	var objectNames = $("span.ch_object");
-	objectNames.each(
+	$("span.ch_object").each(
 		function() {
 			var o = $(this);
-			o.CreateBubblePopup({
-				position: 'left',
-				align: 'center',
-				innerHtml: o.attr("bub"),
-				innerHtmlStyle: { color:'#FFFFFF', 'text-align':'center' },
-				themeName: 'all-grey',
-				themePath: chrome.extension.getURL('jquerybubblepopup-theme')
-			});
+			var text = o.attr("bub");
+			if (text) {
+				bubble(o, text, "bub_object");
+			} else {
+				bubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
+			}
 		}
 	);	
 

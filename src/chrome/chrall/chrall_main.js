@@ -3,7 +3,7 @@
  * Il contient aussi les variables globales.
  */
 
-var chrallVersion = "0.12";
+var chrallVersion = "0.13";
 
 var monstersInView = new Array();
 var trollsInView = new Array();
@@ -48,7 +48,7 @@ switch (pageName) {
 	case "Play_option.php":
 		Chrall_reformatOptionsView();	
 		break;
-	case "Play_a_competence16b.php":
+	case "Play_a_Competence16b.php":
 		Chrall_handleCdmPage();	
 		break;
 }

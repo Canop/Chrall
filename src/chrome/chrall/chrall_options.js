@@ -16,7 +16,7 @@ function Chrall_reformatOptionsView() {
 	html += "<p>";
 	html += "Chrall est une extension pour Chrome visant à enrichir l'interface du jeu.";
 	html += "<br>Si vous souhaitez retrouver l'interface standard de Mounty Hall, vous pouvez la désactiver via le menu <i>Outils/Extensions</i> de Chrome.";
-	html += "<br>Pour plus d'informations sur le projet Chrall : <a href=canop.org/chrall>canop.org/chrall</a>.";
+	html += "<br>Pour plus d'informations sur le projet Chrall : <a href=http://canop.org/chrall>canop.org/chrall</a>.";
 	html += "</p>";
 	html += "<h2>Que fait Chrall exactement</h2>";
 	html += "<p>";

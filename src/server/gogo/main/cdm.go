@@ -156,7 +156,7 @@ type CDM struct {
 
 
 func (cdm *CDM) HtmlTable() string {
-	html := "<table class=cdm cellpadding=4>" // oui, c'est pas bien le cellpadding... j'ai du mal avec le css...
+	html := "<table class=cdm cellpadding=2>" // oui, c'est pas bien le cellpadding... j'ai du mal avec le css...
 	html += "<tr><th colspan=2 class=title>" + cdm.NomComplet + "</th></tr>"
 	html += cdmValuesLine("Niveau", cdm.Niveau_min, cdm.Niveau_max)
 	html += cdmTextLine("Famille", cdm.Famille_text)

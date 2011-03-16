@@ -28,3 +28,9 @@ Contribuer :
 ============
 
 Si vous envisagez de participer au développement, vous pouvez faire un fork du projet. N'hésitez pas à me contacter si vous souhaitez en discuter. Vous pouvez également me contacter pour causer des technologies mises en oeuvre si vous êtes curieux.
+
+
+Licence :
+=========
+
+La license est dans src/chrome/chrall. Elle s'applique aussi à la partie en go, et à tout ce à quoi elle a l'air de s'appliquer. Au moins.

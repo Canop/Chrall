@@ -80,8 +80,6 @@ form#gridFiltersForm {
 	margin : 4px;
 	padding-left: 8px;
 	padding-right: 8px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
 	border-radius: 10px;
 }
 div.profileInfos table.infos {
@@ -109,8 +107,6 @@ div.hiddenDiv {
 	background-color: #900;
 	padding-left: 8px;
 	padding-right: 8px;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
 	border-radius: 8px;
 	text-decoration: none;
 	color: white;
@@ -128,7 +124,7 @@ table.cdm th {
 table.cdm td {
 	border: thin solid #A0A0FF;
 	text-align: left;
-	padding: 3px;
+	padding: 2px;
 }
 table.cdm th.title {
 	text-align:center;
@@ -185,20 +181,25 @@ a.gogo:hover {
 [invisible] {
 	display: none;
 }
-#monsterBubble {
+#bubble {
 	position: fixed; display: inline; border: 2px;
-	border-radius: 4px;
 	box-shadow: 0px 4px 10px #666;
+	border-radius: 6px;
 	font-size: 12px;
 	color: white;
-	background-size: 100% 100%;
-	background: -webkit-gradient(
-		linear,
-		left top, left bottom,
-		from(dodgerblue),
-		to(indigo)
-	);
 	padding: 4px;
+}
+.bub_monster {
+	background-color: brown;
+}
+.bub_troll  {
+	background-color: blue;
+}
+.bub_object  {
+	background-color: grey;
+}
+.bub_competence  {
+	background-color: #080;
 }
 .bubbleTitle {
 	text-align: center;
