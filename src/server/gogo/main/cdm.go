@@ -311,7 +311,7 @@ func NewCdm(lines []string) *CDM {
 			return nil
 		}
 		nomComplet = strings.Join(fields[fieldUn+1:len(fields)-1], " ")
-	} else if strings.Contains(lines[0], "Le Monstre Ciblé fait partie") {
+	} else if strings.Contains(lines[0], "Monstre Ciblé fait partie") {
 		fields = strings.Fields(line)
 
 		ia := strings.Index(line, "(")

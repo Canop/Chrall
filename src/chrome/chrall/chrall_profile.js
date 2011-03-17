@@ -59,6 +59,20 @@ function Chrall_makeXpComments() {
 	html += "<br>Chaque entrainement coûte " + trainingPx + " PX. Vous devez vous entrainer " + Math.ceil((nextLevelPi-player.pi)/trainingPx) + " fois pour passer au niveau " + (player.level+1) + ".";
 	return html;
 }
+
+
+function Chrall_extractSight(text) {
+	var lines = text.split('\n');
+	var tokens = Chrall_tokenize(lines[5]);
+	//for (var i=0; i<lines.length; i++) console.log(i+" : "+lines[i]);
+	//for (var i=0; i<tokens.length; i++) console.log(i+" : \""+tokens[i]+"\"");
+	var sight = new Characteristic();
+	sight.diceNumber = parseInt(tokens[0]);
+	sight.diceSize = 1;
+	sight.physicalBonus = parseInt(tokens[2]);
+	player.sight=sight;
+}
+
 	
 function Chrall_extractDlaInfos(text) {
 	// pour comprendre le code qui suit il faut savoir que la page générée est segmentée en bien plus de lignes que ce qui est visible
@@ -72,9 +86,12 @@ function Chrall_extractDlaInfos(text) {
 	player.actionPoints = parseInt(Chrall_tokenize(actionPointsLine)[3]);
 }
 
-function Chrall_extractFatigue(text) {
+function Chrall_extractPvAndFatigue(text) {
 	var lines = text.split('\n');
 	//for (var i=0; i<10; i++) alert(i+" : " + lines[i]);
+	var pvTokens = Chrall_tokenize(lines[2]);
+	//for (var i=0; i<pvTokens.length; i++) alert(pvTokens[i]);
+	player.pv = parseInt(pvTokens[1].trim());
 	var strainLine = lines[16]; // c'est la ligne qui contient "Fatigue............:"
 	var tokens = strainLine.split(new RegExp("[\)\( ,:=\.\+]+", "g"));
 	var strainBaseFound = false;
@@ -173,52 +190,59 @@ function Chrall_makeStrainInfos() {
 						if (player.actionPoints>=2) {
 							if (m0>0) {
 								var pv0 = Math.ceil(m0/normalPvGain);
-								html += "Vous devez dépenser " + pv0 + " PV pour rejouer de suite. ";
-								if (alternatePvGain<normalPvGain) html += "Voire plus. ";
-								if (pv0>=100 /* TODO : mettre les pv restant */) html += "Evidemment ça fait beaucoup. ";
+								playerAmAbstract.push("" + normalPvGain + " minutes gagnées par PV dépensé.");
+								var mpai = "Vous devez dépenser " + pv0 + " PV pour rejouer de suite. ";
+								playerAmAbstract.push(mpai);
+								if (alternatePvGain<normalPvGain) mpai += "Voire plus. ";
+								if (pv0>=100 /* TODO : mettre les pv restant */) mpai += "Evidemment ça fait beaucoup. ";
 								if (pv0>2) {
 									var pv1 = pv0-1;
 									var g1 = pv1*normalPvGain;
-									html += "Si vous attendez " + Math.ceil(m0-g1) + " minutes, ce qui vous mènera à " + (player.getDla().clone().addMinutes(-g1).toString("HH:mm")) + " vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
+									mpai += "Si vous attendez " + Math.ceil(m0-g1) + " minutes, ce qui vous mènera à " + (player.getDla().clone().addMinutes(-g1).toString("HH:mm")) + " vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
 								}
 								for (var osi=0; osi<optimalStrains.length; osi++) {
 									if (pv0+normalStrain>optimalStrains[osi]) {
 										var goodAcceleration = optimalStrains[osi]-normalStrain;
 										var dateGoodAcceleration = player.getDla(0).clone().addMinutes(-goodAcceleration*normalPvGain);
 										if (dateGoodAcceleration.getTime()<player.getDla(0).getTime()) {
-											html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour rejouer de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + " (laquelle deviendra négligeable en "+(optimalStrains.length-osi-1)+" tours). ";
+											mpai += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour rejouer de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + " (laquelle deviendra négligeable en "+(optimalStrains.length-osi-1)+" tours). ";
 										}
 										break;
 									}
 								}
 							} else {
-								html += "Vous n'auriez pas loupé votre DLA ?";
+								playerAmAbstract.push("Vous n'auriez pas loupé votre DLA ?");
 							}
 						} else {
-							html += "Pas assez de PA pour accélerer";
+							playerAmAbstract.push("Pas assez de PA pour accélerer.");
 						}
+						html += playerAmAbstract[playerAmAbstract.length-1];
+						
 						break;
 					case 1 :
 						if (m0<0 && m1>0) {
 							var pv0 = Math.ceil(m1/normalPvGain);
-							html += "Si vous activez maintenant vous devez dépenser " + pv0 + " PV pour faire un cumul immédiatement. ";
-							if (alternatePvGain<normalPvGain) html += "Voire plus. ";
-							if (pv0>=100 /* TODO : mettre les pv restant */) html += "Evidemment après ça vous aurez comme un déficit quelque part. ";
+							playerAmAbstract.push("" + normalPvGain + " minutes gagnées par PV dépensé à la prochaine DLA.");
+							var mpai = "Si vous activez maintenant vous devez dépenser " + pv0 + " PV pour faire un cumul immédiatement. ";
+							playerAmAbstract.push(mpai);
+							if (alternatePvGain<normalPvGain) mpai += "Voire plus. ";
+							if (pv0>=100 /* TODO : mettre les pv restant */) mpai += "Evidemment après ça vous aurez comme un déficit quelque part. ";
 							if (pv0>2) {
 								var pv1 = pv0-1;
 								var g1 = pv1*normalPvGain;
-								html += "Si vous attendez " + Math.ceil(m1-g1) + " minutes, ce qui vous mènera à " + (player.getDla(1).clone().addMinutes(-g1).toString("HH:mm")) + " vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
+								mpai += "Si vous attendez " + Math.ceil(m1-g1) + " minutes, ce qui vous mènera à " + (player.getDla(1).clone().addMinutes(-g1).toString("HH:mm")) + " vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
 							}
 							for (var osi=0; osi<optimalStrains.length; osi++) {
 								if (pv0+normalStrain>optimalStrains[osi]) {
 									var goodAcceleration = optimalStrains[osi]-normalStrain;
 									var dateGoodAcceleration = player.getDla(1).clone().addMinutes(-goodAcceleration*normalPvGain);
 									if (dateGoodAcceleration.getTime()<player.getDla(1).getTime()) {
-										html += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour jouer deux fois de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + " (laquelle deviendra négligeable en "+(optimalStrains.length-osi-1)+" tours). ";
+										mpai += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour jouer deux fois de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + " (laquelle deviendra négligeable en "+(optimalStrains.length-osi-1)+" tours). ";
 									}
 									break;
 								}
 							}
+						html += playerAmAbstract[playerAmAbstract.length-1];
 						}
 						break;
 					default:				
@@ -251,16 +275,41 @@ function Chrall_analyseAndReformatMainCharacteristicsTable(table) {
 	
 }
 
+function Chrall_readTalentTable(table) {
+	var rows = table.find("tr");
+	for (var i=0; i<rows.length; i++) {
+		var talent = new Talent();
+		talent.readRow(rows[i]);
+		if (talent.name) {
+			player.addTalent(talent);
+		}
+	}
+	//~ for (var key in player.talents) {
+		//~ console.log(player.talents[key]);
+	//~ }
+}
+
+function Chrall_extractMagic(text) {
+	var tokens = Chrall_tokenize(text);
+	//for (var i=0; i<tokens.length; i++) console.log(i+" : \""+tokens[i]+"\"");
+	player.rm = parseInt(tokens[4]) + parseInt(tokens[6]);
+	player.mm = parseInt(tokens[11]) + parseInt(tokens[13]);
+}
+
 function Chrall_analyseAndReformatProfile() {
 	var cells = $("table table table.mh_tdborder tr.mh_tdpage td");
 	//alert(cells.length);
 	
 	Chrall_extractBasicInfos($(cells[1]).text()); // la cellule qui contient l'id, le nom, la race
 	Chrall_extractDlaInfos($(cells[4]).text()); // cells[4] est la cellule en face de "Echeance du tour"
+	Chrall_extractSight($(cells[6]).text());
 	Chrall_extractXpInfos($(cells[8]).text());
-	Chrall_extractFatigue($(cells[10]).text());
+	Chrall_extractPvAndFatigue($(cells[10]).text());
 	Chrall_analyseAndReformatMainCharacteristicsTable($($("table table table.mh_tdborder table")[2])); // TODO trouver plus fiable !
 	
+	var mmrmcell = $("table table table.mh_tdborder tr.mh_tdpage").find('td:contains("Résistance à la Magie")');
+	Chrall_extractMagic(mmrmcell.text());
+		
 	//> on affiche la date du prochain cumul
 	$(cells[4]).append("<b>---&gt;&nbsp;DLA suivante : " + player.getDla(1).toString("dd/MM/yyyy HH:mm:ss") + "</b>");
 	$(cells[4]).append("<br>(et encore après : " + player.getDla(2).toString("dd/MM/yyyy HH:mm:ss") + ")");
@@ -270,6 +319,11 @@ function Chrall_analyseAndReformatProfile() {
 
 	//> on affiche les infos liées à la fatigue
 	$(cells[10]).append(Chrall_makeStrainInfos());
+	
+	var compAndSortTables = $("table table table.mh_tdpage");
+	var compTable = $(compAndSortTables[2]);
+	Chrall_readTalentTable($(compAndSortTables[2]));
+	Chrall_readTalentTable($(compAndSortTables[3]));
 	
 	//> on signale à l'extension la date de la fin de DLA, pour qu'elle programme éventuellement une alarme
 	Chrall_sendDlaToExtension(player.getDla(0).getTime(), player.getDla(1).getTime());
@@ -289,7 +343,7 @@ function Chrall_analyseAndReformatProfile() {
 	
 	$.ajax(
 		{
-			url: "http://canop.org:9090/chrall/json?action=check_messages&TrollId=" + player.id + "&ChrallVersion=0.11",
+			url: "http://canop.org:9090/chrall/json?action=check_messages&TrollId=" + player.id + "&ChrallVersion="+chrallVersion,
 			crossDomain: true,
 			dataType: "jsonp"
 		}
@@ -298,14 +352,22 @@ function Chrall_analyseAndReformatProfile() {
 		$("#ch_messageContent").toggle();
 	});
 	
-	//> ajout des liens sur les compétences
+	//> ajout des bulles sur les compétences
 	$('a[href*="EnterComp"]').each(
 		function() {
 			var link = $(this);
-			var text = getBubbleContentForCompetence(link.text());
+			var text = getBubbleContentForCompetence(link.text().trim());
 			bubble(link, text, "bub_competence");
 		}
 	);	
 
+	//> ajout des bulles sur les sorts
+	$('a[href*="EnterSort"]').each(
+		function() {
+			var link = $(this);
+			var text = getBubbleContentForSort(link.text().trim());
+			bubble(link, text, "bub_sort");
+		}
+	);	
 
 }

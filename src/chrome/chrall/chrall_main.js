@@ -3,7 +3,6 @@
  * Il contient aussi les variables globales.
  */
 
-var chrallVersion = "0.13";
 
 var monstersInView = new Array();
 var trollsInView = new Array();
@@ -18,6 +17,7 @@ var viewIsEmpty=true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
 var player = new Troll();
 var horizontalViewLimit = -1;
+var playerAmAbstract = new Array(); // strings
 
 // note : pour l'instant il faut que ces valeurs de départ soient cohérentes avec le css (display='block' ou display='none');
 // Par ailleurs attention à un détail : les clés suivantes sont à la fois des clés dans le code et les labels dans l'ihm
@@ -30,7 +30,6 @@ var viewFilters = {
 	"champignons" : false,
 	"cénotaphes" : false
 };
-
 
 switch (pageName) {
 	case "PlayStart.php":

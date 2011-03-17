@@ -59,12 +59,18 @@ RECENTS / A TESTER :
 * calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquants pour entrainement
 * grille/bestiaire : mise en place d'un système de bulle maison (plus adapté, bulles plus précisément placées, bien plus rapide)
 <- v0.13
+* test sur le serveur de la version de l'extension pour afficher un message proposant une mise à jour
+* grille/bulles : (ré)afficher la distance horizontale des monstres et leur position dans la bulle
+* test sur le site web de la version de l'extension pour afficher un message proposant une mise à jour
+* correction bug Puits : la présence de "???" dans le texte faisait déconner jquery.ajax (aucune idée du pourquoi, je remplace maintenant les "?" par des "-")
+* récupération PV, vue, MM et RM (tout ça utile pour les sorts et compétences)
 
 EN COURS :
 ==========
 * [Canop] apprendre le langage go
 * [Taip]  calcul des bonus totaux des mouches (séparation : présentes & toutes)
-* réflexion sur l'opportunité de passer à une base mongodb
+* réflexion sur l'opportunité de passer à une base mongodb [l'inconnue porte sur les performances des consolidations et recherches textuelles)
+* calculs en roll-over sur les sorts & compétences
 
 TACHES EN RECHERCHE DE VOLONTAIRES :
 ====================================
@@ -72,10 +78,13 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 
 TODO :
 ======
-
+* calculer et afficher les totaux de MM et RM
+* grille/bulles : réduire l'encombrement des extraits du bestiaire
+* grille/bulles monstres : afficher (après activation d'une option) moyenne et écart-type des caractéristiques
 * profil : affichage rapport tués/décés
 * bulles des monstres : vérifier l'ID avant de modifier le contenu de la bulle
 * bouton pour activer la DLA suivante
+* intégration d'un lien pour accéder au bestiaire (pour faire des recherches sur des monstres "ressemblant")
 * grille : permettre que le premier affichage de vue se fasse toujours avec le même preset (réduit) pour un affichage par défaut plus rapide (modification du lien "Ma Vue", je suppose)
 * grille : ajouter un menu déroulant de limite de vue à côté du filtre (même style arrondi) avec une liste {"vue totale", "vue/2", "vue/4"}
 * bonus/malus : totaux
@@ -90,7 +99,6 @@ TODO :
 * profil : indiquer les alarmes programmées
 * mettre en place des stats Google Analytics détaillées (affichage des différentes pages)
 * mettre en place une détection de problèmes unifiée (incapacité à analyser ou formater) et transmettre l'événement à google analytics (page incluse)
-* calculs en roll-over sur les sorts & compétences
 * profil : affichage à côté des dégâts moyens des dégâts avec les différentes compétences (CDB4 par exemple)
 * bestiaire : envoi des CDM depuis l'extension
 * bestiaire : batch d'analyse des CDM pour construire le bestiaire
@@ -125,6 +133,7 @@ TODO :
 * bestiaire : à terme afficher les moyennes des caracs en BD ?
 * ajouter au filtre de manifest.json les pages venant des principaux proxys mh
 * procédures automatiques de sauvegardes des bd
+* PB : la version de chrall est spécifié à 4 endroits (nom du fichier crx et champ caché dans index.php, messager.go, chrall_general.js). Ca fait 3 de trop. Faire un makefile ?
 
 * regarder si ça n'aurait pas été mieux d'utiliser mongodb plutôt que mysql... après tout c'est pas comme si on visait l'utilisation préférentielle de vieilles technos...
 

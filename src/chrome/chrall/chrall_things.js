@@ -8,7 +8,7 @@
  * 
  * Le cas des caractéristiques sans dés (par exemple la vue) est simplement couvert par un nombre de dés à 0
  */ 
-function Characteristic(row) {
+function Characteristic() {
 }
 Characteristic.prototype.readRow = function(row) {
 	var cells = $(row).find("td");
@@ -35,6 +35,25 @@ Characteristic.prototype.getCriticalMean = function() {
 	return Math.floor(this.diceNumber*1.5) * (this.diceSize+1)/2 + this.physicalBonus + this.magicalBonus;
 }
 
+//////////////////////////////////////////////////////////////////////// Talent
+
+/**
+ * Params :
+ *  - name
+ *  - level (le niveau max de la compétence)
+ *  - mastering (le pourcentage pour le niveau max)
+ */ 
+function Talent() {
+}
+Talent.prototype.readRow = function(row) {
+	var cells = $(row).find("td");
+	if (cells.len<3) return; // c'est pas forcément le moyen le plus propre de gérer les exceptions...
+	this.name = ($(cells[1])).find("a").text().trim();
+	var tokens = Chrall_tokenize(($(cells[2])).text().trim());
+	this.level = parseInt(tokens[2]);
+	this.mastering = parseInt(tokens[3]);
+}
+
 //////////////////////////////////////////////////////////////////////// Mouche
 
 /**
@@ -43,15 +62,11 @@ Characteristic.prototype.getCriticalMean = function() {
  *  - type ("Rivatant", "Telaite", etc.) : capitalisé de façon normale
  *  - name ou null
  *  - characName : le nom de la caractéristique impactée [->taip : pas urgent]
- *  - physicalBonus  [->taip : pas urgent]
- *  - magicalBonus  [->taip : pas urgent]
  */
 function Fly(type, name) {
 	this.type = type;
 	this.name = name ? name : null;
-	// <= insérer ici la détermination de la charac et du bonus
 }
-
 
 //////////////////////////////////////////////////////////////////////// Thing
 
@@ -76,7 +91,6 @@ Thing.prototype.setName = function(name) { // méthode surchargée pour les mons
 }
 
 //////////////////////////////////////////////////////////////////////// Monstre
-
 
 /**
  * Monster hérite de Thing.
@@ -151,6 +165,10 @@ Troll.prototype.getDla = function(nbTurnsToAdd) {
 Troll.prototype.addFly = function(fly) {
 	if (!this.flies) this.flies = new Array();
 	this.flies.push(fly);
+}
+Troll.prototype.addTalent = function(t) {
+	if (!this.talents) this.talents = new Object();
+	this.talents[t.name]=t;
 }
 
 //////////////////////////////////////////////////////////////////////// Place (lieu)

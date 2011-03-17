@@ -28,13 +28,14 @@ Chrall est une extension Chrome pour le jeu <a href=http://www.mountyhall.com>Mo
 </p>
 
 <h2>Téléchargement</h2>
+<p>Version actuelle : <span id=version>0.13</span></p>
 <p><a href=chrall_v000_013.crx>installer Chrall dans Chrome</a>.</p>
 <p id=browserInfos></p>
 
 
 <h2>Discuter</h2>
 <p>
-Un forum a été mis en place : <a href=fofo/>le fofo</a>.
+Un forum a été mis en place : <a href=fofo/>le canofofo</a>.
 </p>
 
 <h2>Développement</h2>
@@ -45,7 +46,7 @@ Vous pouvez participer au développement, signaler des bugs, ou simplement consu
 
 <h2>Bestiaire & co</h2>
 <p>
-Le serveur du bestiaire est en cours d'auto-développement. Vous pouvez lui dire bonjour : <a href="http://canop.org:9090/chrall">canop.org:gOgO</a>
+Vous pouvez <a href="http://canop.org:9090/chrall/bestiaire">consulter le bestiaire</a> ou <a href="http://canop.org:9090/chrall/puits">y contribuer</a>.
 </p>
 
 </div> <!-- content_wrapper -->

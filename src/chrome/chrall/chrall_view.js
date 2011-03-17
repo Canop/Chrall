@@ -39,7 +39,10 @@ function Chrall_makeGridHtml() {
 	html += "function grid_receive(answer) {";
 	html += " var id = answer.RequestId;"; // sera peut-être un jour utilisé pour vérifier que la bulle ouverte est celle pour laquelle on a fait la requete
 	html += " var html = answer.Html;";
-	html += " document.getElementById('bubbleContent').innerHTML=html;";
+	html += " var div = document.getElementById('bubbleContent');";
+	html += " if (div) {";
+	html += "  div.innerHTML=html;"; // il n'y a plus de div si la bulle est close
+	html += " }";
 	html += "}";
 	html += "</script>";
 	
@@ -59,7 +62,7 @@ function Chrall_makeGridHtml() {
 		for (var x=xmin; x<=xmax; x++) {
 			var hdist = player.hdist(x, y);
 			var hasHole = false;
-			var cellPositionMessage = "case X="+x+" Y="+y+"<br>Distance horizontale: "+hdist;
+			var cellPositionMessage = "X="+x+" Y="+y+"<br>Distance horizontale: "+hdist;
 			var cellContent = "";
 			if (x==player.x && y==player.y) {
 				cellContent += "<span class=ch_player>"+player.z+":Vous êtes ici</span><br>"
@@ -82,7 +85,7 @@ function Chrall_makeGridHtml() {
 						cellContent += "</a>";
 					} else {
 						cellContent += "<a name='monstres' class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\"";
-						cellContent += " message=\""+cellPositionMessage+"\"" // TODO trouver un moyen de moins dupliquer ce message !
+						cellContent += " message=\""+m.fullName+" en "+cellPositionMessage+"\""
 						cellContent += " id="+m.id;
 						cellContent += " nom_complet_monstre=\""+encodeURIComponent(m.fullName)+"\"";
 						cellContent += ">"+m.z+": "+m.fullName+"</a>";
@@ -381,7 +384,7 @@ function Chrall_analyseAndReformatView() {
 	$("a.ch_monster").each(
 		function() {
 			var link = $(this);
-			var text = link.text();
+			var text = link.attr("message");
 			bubble(link, text, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + link.attr("nom_complet_monstre") + "&requestId=" + link.attr("id"));
 		}
 	);

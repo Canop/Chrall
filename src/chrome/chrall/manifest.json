@@ -17,7 +17,6 @@
 				"jquery.js",
 				"date-fr-FR.js",
 				"chrall_bubbles.js",
-				"chrall_sentences.js",
 				"chrall_things.js",
 				"chrall_general.js",
 				"chrall_talents.js",
@@ -33,6 +32,7 @@
 			"matches": ["http://canop.org/chrall/*", "http://www.canop.org/chrall/*"],
 			"js": [
 				"jquery.js",
+				"chrall_general.js",
 				"chrall_detect.js"
 			]
 		}

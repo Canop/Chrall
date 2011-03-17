@@ -189,6 +189,9 @@ a.gogo:hover {
 	color: white;
 	padding: 4px;
 }
+#bubble td {
+	color: white;
+}
 .bub_monster {
 	background-color: brown;
 }
@@ -200,6 +203,9 @@ a.gogo:hover {
 }
 .bub_competence  {
 	background-color: #080;
+}
+.bub_sort  {
+	background-color: #A00;
 }
 .bubbleTitle {
 	text-align: center;

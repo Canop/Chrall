@@ -11,17 +11,18 @@ type WellHandler struct {
 
 func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	h.hit()
-	h.head(w, "Le Puit de gOgOchrall")
+	h.head(w, "Le Puits de gOgOchrall")
 	w.Write([]byte(`
 		<script>
 			function sendForAnalyse() {
 				$("#envoi").show();
+				var bucketText = $("#bucket").val().replace(/\?/g, "-"); // si je ne fais pas cette élimination des "?", jquery fait des trucs bizarres à l'envoi
 				$.post(
 					"/chrall/jsonp",
 					JSON.stringify(
 						{
 							action: "pour",
-							bucket: $("#bucket").val()
+							bucket: bucketText
 						}
 					),
 					function(data, textStatus) {

@@ -1,14 +1,10 @@
 /*
  contient des fonctions liées à l'interface générale
- et des utilitaires
+ et des utilitaires. Contient aussi la constante donnant la version courante de Chrall
 */
 
-function Chrall_findPlayerLocation() {
-	/*
-	 * pour l'instant il n'y a pas grand chose là dedans, je n'arrive pas à accéder aux autres frames
-	 */ 
-	//alert($(document.getElementsByName("sommaire")[0]).find("div.infoMenu").length);
-}
+var chrallVersion = "0.13";
+
 
 /**
  * découpe en mots (un nombre peut être un mot).
@@ -17,7 +13,7 @@ function Chrall_findPlayerLocation() {
  * Attention : si vous corrigez le comportement de la ligne ci-dessus il faudra modifier Chrall_extractBasicInfos et pas mal d'autres méthodes
  */
 /* copiable pour tester :
-for (var i=0; i<tokens.length; i++) alert(tokens[i]); 
+for (var i=0; i<tokens.length; i++) console.log("\""+tokens[i]+"\""); 
 */
 function Chrall_tokenize(text) {
 	return text.trim().split(new RegExp("[ /\t\n\r\f,.:=()]+", "g"));
