@@ -17,7 +17,7 @@ var viewIsEmpty=true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
 var player = new Troll();
 var horizontalViewLimit = -1;
-var playerAmAbstract = new Array(); // strings
+var playerAmAbstract = new Array(); // strings. utilisées dans le profil à la fois pour le tableau de l'am et pour la bulle de la compétence en bas
 
 // note : pour l'instant il faut que ces valeurs de départ soient cohérentes avec le css (display='block' ou display='none');
 // Par ailleurs attention à un détail : les clés suivantes sont à la fois des clés dans le code et les labels dans l'ihm
@@ -30,6 +30,8 @@ var viewFilters = {
 	"champignons" : false,
 	"cénotaphes" : false
 };
+
+console.log("pageName=\""+pageName+"\""); 
 
 switch (pageName) {
 	case "PlayStart.php":
@@ -47,7 +49,8 @@ switch (pageName) {
 	case "Play_option.php":
 		Chrall_reformatOptionsView();	
 		break;
-	case "Play_a_Competence16b.php":
+	case "Play_a_Competence16.php":
+	case "Play_a_Competence16b.php": // le 16b serait le formulaire de préparation ?
 		Chrall_handleCdmPage();	
 		break;
 }

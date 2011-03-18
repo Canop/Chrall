@@ -63,14 +63,20 @@ function Chrall_makeXpComments() {
 
 function Chrall_extractSight(text) {
 	var lines = text.split('\n');
-	var tokens = Chrall_tokenize(lines[5]);
-	//for (var i=0; i<lines.length; i++) console.log(i+" : "+lines[i]);
-	//for (var i=0; i<tokens.length; i++) console.log(i+" : \""+tokens[i]+"\"");
-	var sight = new Characteristic();
-	sight.diceNumber = parseInt(tokens[0]);
-	sight.diceSize = 1;
-	sight.physicalBonus = parseInt(tokens[2]);
-	player.sight=sight;
+	for (var l=0; l<lines.length; l++) {
+		if (lines[l].indexOf("Case")>=0) { // ce test est nécessaire car des lignes peuvent s'intercaler avec la mention du camou ou de l'invi
+			var tokens = Chrall_tokenize(lines[l]);
+			//for (var i=0; i<lines.length; i++) console.log(i+" : "+lines[i]);
+			//for (var i=0; i<tokens.length; i++) console.log(i+" : \""+tokens[i]+"\"");
+			var sight = new Characteristic();
+			sight.diceNumber = parseInt(tokens[0]);
+			sight.diceSize = 1;
+			sight.physicalBonus = parseInt(tokens[2]);
+			player.sight=sight;
+			return;
+		}
+	}
+	
 }
 
 	
@@ -294,6 +300,7 @@ function Chrall_extractMagic(text) {
 	//for (var i=0; i<tokens.length; i++) console.log(i+" : \""+tokens[i]+"\"");
 	player.rm = parseInt(tokens[4]) + parseInt(tokens[6]);
 	player.mm = parseInt(tokens[11]) + parseInt(tokens[13]);
+	player.concentration = parseInt(tokens[17]);
 }
 
 function Chrall_analyseAndReformatProfile() {

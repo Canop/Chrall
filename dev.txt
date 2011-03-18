@@ -64,6 +64,7 @@ RECENTS / A TESTER :
 * test sur le site web de la version de l'extension pour afficher un message proposant une mise à jour
 * correction bug Puits : la présence de "???" dans le texte faisait déconner jquery.ajax (aucune idée du pourquoi, je remplace maintenant les "?" par des "-")
 * récupération PV, vue, MM et RM (tout ça utile pour les sorts et compétences)
+<- v0.14
 
 EN COURS :
 ==========
@@ -78,6 +79,7 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 
 TODO :
 ======
+* fofo : version française
 * calculer et afficher les totaux de MM et RM
 * grille/bulles : réduire l'encombrement des extraits du bestiaire
 * grille/bulles monstres : afficher (après activation d'une option) moyenne et écart-type des caractéristiques

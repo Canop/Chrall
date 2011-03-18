@@ -1,9 +1,11 @@
 
 
+
 function Chrall_handleCdmPage() {
+	console.log("entering Chrall_handleCdmPage");
 	alert("Si tu vois cette alerte, signale le à Denys");
 	
-	var cdm = $("table table table form").children().text();
+	var cdm = $("table table table form").children().text(); // utiliser :contains pour trouver la cdm ?
 	
 	html = "Si tu lis ce texte, dis le à Denys, please<script>";
 	html += "function cdm_receive(answer) {";
@@ -17,10 +19,11 @@ function Chrall_handleCdmPage() {
 	
 	$.ajax(
 		{
-			url: "http://canop.org:9090/chrall/json?action=accept_cdm_jsonp&cdm=" + encodeURIComponent(text), // <- attention, ne marche que si le text est court...
+			url: "http://canop.org:9090/chrall/json?action=accept_cdm_jsonp&cdm=" + encodeURIComponent(cdm), // <- attention, ne marche que si le text est court...
 			crossDomain: true,
 			dataType: "jsonp"
 		}
 	);
+	console.log("leaving Chrall_handleCdmPage");
 
 }

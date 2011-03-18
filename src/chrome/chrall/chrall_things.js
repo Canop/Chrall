@@ -145,6 +145,7 @@ Monster.prototype.setName = function(fullName){
  *  - availablePi : les pi non encore consommés en amélioration
  *  - flies : le tableau des mouches
  *  - actionPoints : les PA restant
+ *  - concentration
  *  - les characteristics...
  */ 
 function Troll(x, y, z) {
