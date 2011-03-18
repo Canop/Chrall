@@ -188,10 +188,14 @@ function getBubbleContentForSort(name) {
 			return html;
 		
 		case "Bulle Anti-Magie" :
-			return "Fournit une augmentation de 100% à la Résistance Magique pendant 2 tours<br>mais la Maîtrise Magique subit une diminution de 100% pendant 4 tours";
+			var html = "Fournit une augmentation de 100% à la Résistance Magique pendant 2 tours<br>mais la Maîtrise Magique subit une diminution de 100% pendant 4 tours";
+			html += "<br>En raison du décumul le deuxième BAM augmente votre Résistance Magique de 67%.";
+			return html;
 
 		case "Bulle Magique" :
-			return "Fournit une augmentation de 100% à la Maîtrise Magique pendant 2 tours<br>mais la Résistance Magique subit une diminution de 100% pendant 4 tours";
+			var html = "Fournit une augmentation de 100% à la Maîtrise Magique pendant 2 tours<br>mais la Résistance Magique subit une diminution de 100% pendant 4 tours";
+			html += "<br>En raison du décumul le deuxième BuM augmente votre Maîtrise Magique de 67%.";
+			return html;
 					
 		case "Glue" :
 			var s = player.sight.diceNumber+player.sight.physicalBonus;
@@ -258,13 +262,25 @@ function getBubbleContentForSort(name) {
 			return html
 		
 		case "Téléportation" :
-			var d = Math.ceil((Math.sqrt(19+8*(Math.floor(player.mm/5)+3))-7)/2);
 			var s = player.sight.diceNumber;
-			var html = "<table>";
-			html += "<tr><td>Portée horizontale</td><td> : " + (d+20+s) + "</td></tr>";
-			html += "<tr><td>Portée verticale</td><td> : " + Math.floor(d/3+3) + "</td></tr>";
-			html += "</table>";		
-			return html
+			var f = function(mm) {
+				var d = Math.ceil((Math.sqrt(19+8*(Math.floor(mm/5)+3))-7)/2);
+				var html = "<table>";
+				html += "<tr><td>Portée horizontale</td><td> : " + (d+20+s) + "</td></tr>";
+				html += "<tr><td>Portée verticale</td><td> : " + Math.floor(d/3+3) + "</td></tr>";
+				html += "</table>";
+				return html;
+			}
+			if (player.talents["Bulle Magique"]) {
+				html = f(player.mm);
+				html += "<br>Si vous faites un BuM :";
+				html += f(player.mm+player.baseMm);
+				html += "<br>Si vous faites deux BuM :";
+				html += f(player.mm+1.67*player.baseMm);
+				return html
+			} else {
+				return f(player.mm);
+			}
 		
 		case "Vampirisme" :
 			var att = 3.5*2*Math.floor(player.damage.diceNumber/3) + player.attac.magicalBonus;

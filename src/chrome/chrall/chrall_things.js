@@ -147,6 +147,7 @@ Monster.prototype.setName = function(fullName){
  *  - actionPoints : les PA restant
  *  - concentration
  *  - les characteristics...
+ *  - mm, rm, baseMm, baseRm
  */ 
 function Troll(x, y, z) {
 	Thing.call(this, x, y, z); 

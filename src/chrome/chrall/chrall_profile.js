@@ -298,8 +298,10 @@ function Chrall_readTalentTable(table) {
 function Chrall_extractMagic(text) {
 	var tokens = Chrall_tokenize(text);
 	//for (var i=0; i<tokens.length; i++) console.log(i+" : \""+tokens[i]+"\"");
-	player.rm = parseInt(tokens[4]) + parseInt(tokens[6]);
-	player.mm = parseInt(tokens[11]) + parseInt(tokens[13]);
+	player.baseRm = parseInt(tokens[4]);
+	player.rm = player.baseRm + parseInt(tokens[6]);
+	player.baseMm = parseInt(tokens[11]);
+	player.mm = player.baseMm + parseInt(tokens[13]);
 	player.concentration = parseInt(tokens[17]);
 }
 
