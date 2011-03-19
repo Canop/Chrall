@@ -16,19 +16,23 @@ function Chrall_handleCdmPage() {
 	//> écriture du script de récupération de la réponse (mécanisme JSONP)
 	html = "<script>";
 	html += "function cdm_receive(answer) {";
-	alert("Réponse de gogochrall : "+answer);
+	html += "alert('Réponse de gogochrall : '+answer);";
 	html += "}";
 	html += "</script>";
 	$("table table table form").append(html);
 	
-	//> envoi au serveur de la CDM
-	$.ajax(
-		{
-			url: "http://canop.org:9090/chrall/json?action=accept_cdm_jsonp&cdm=" + encodeURIComponent(cdm), // <- attention, ne marche que si le text est court...
-			crossDomain: true,
-			dataType: "jsonp"
-		}
-	);
-	
+	if (cdm.substring("Monstre Ciblé fait partie")<0) {
+		alert("cdm ratée ? Pas d'envoi à gogochrall");
+	} else {
+		//> envoi au serveur de la CDM
+		$.ajax(
+			{
+				url: "http://canop.org:9090/chrall/json?action=accept_cdm_jsonp&cdm=" + encodeURIComponent(cdm), // <- attention, ne marche que si le text est court...
+				crossDomain: true,
+				dataType: "jsonp"
+			}
+		);
+	}
+		
 	console.log("leaving Chrall_handleCdmPage");
 }
