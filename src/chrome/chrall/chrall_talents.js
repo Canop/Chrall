@@ -271,7 +271,7 @@ function getBubbleContentForSort(name) {
 				html += "</table>";
 				return html;
 			}
-			if (player.talents["Bulle Magique"]) {
+			if (player.talents["Bulle Magique"]) { // note : le calcul ci dessous est faux si un BuM est DEJA fait
 				html = f(player.mm);
 				html += "<br>Si vous faites un BuM :";
 				html += f(player.mm+player.baseMm);

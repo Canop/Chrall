@@ -91,21 +91,26 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 
 		bd := new(BucketDecoder)
 		bd.Decode(encodedCdm, h.store)
-		_, err := h.store.WriteCdms(bd.Cdm)
-		if err != nil {
-			fmt.Println("Erreur au décodage des CDM")
-		}
-
-		answerHtml := "CDM : "
-		for _, cdm := range bd.Cdm {
-			answerHtml += cdm.NomComplet
+		var answerHtml string
+		if len(bd.Cdm)>0 {
+			_, err := h.store.WriteCdms(bd.Cdm)
+			if err != nil {
+				fmt.Println("Erreur au stockage des CDM")
+			}
+			answerHtml = "CDM lue : "
+			for _, cdm := range bd.Cdm {
+				answerHtml += cdm.NomComplet
+			}
+			answerHtml += " Merci !"
+		} else {
+			fmt.Println("Pas de CDM ou pas compris.")
+			answerHtml += "Oups... Je n'ai pas compris la requete :("
 		}
 
 		fmt.Fprint(w, "cdm_receive(")
-		mhtml, _ := json.Marshal("Merci pour " + answerHtml)
+		mhtml, _ := json.Marshal(answerHtml)
 		w.Write(mhtml)
 		fmt.Fprint(w, ")")
-
 	} else {
 		fmt.Println("Pas de CDM dans la requete!")
 	}

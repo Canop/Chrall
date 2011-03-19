@@ -3,20 +3,25 @@
 
 function Chrall_handleCdmPage() {
 	console.log("entering Chrall_handleCdmPage");
-	alert("Si tu vois cette alerte, signale le à Denys");
 	
-	var cdm = $("table table table form").children().text(); // utiliser :contains pour trouver la cdm ?
+	//> récupération de la cdm (en prenant soin de séparer les lignes)
+	// TODO : vérifier que ce n'est pas un échec
+	var para = $($("table table table form p")[1]);	
+	cdm = "";
+	cdm += $(para.find("b")[0]).text();
+	para.find("tr").each(function() {
+		cdm += "\n"+$(this).text();
+	});
 	
-	html = "Si tu lis ce texte, dis le à Denys, please<script>";
+	//> écriture du script de récupération de la réponse (mécanisme JSONP)
+	html = "<script>";
 	html += "function cdm_receive(answer) {";
-	html += " alert(answer);";
+	alert("Réponse de gogochrall : "+answer);
 	html += "}";
 	html += "</script>";
-
-	alert(cdm); // à vérifier
-
 	$("table table table form").append(html);
 	
+	//> envoi au serveur de la CDM
 	$.ajax(
 		{
 			url: "http://canop.org:9090/chrall/json?action=accept_cdm_jsonp&cdm=" + encodeURIComponent(cdm), // <- attention, ne marche que si le text est court...
@@ -24,6 +29,6 @@ function Chrall_handleCdmPage() {
 			dataType: "jsonp"
 		}
 	);
+	
 	console.log("leaving Chrall_handleCdmPage");
-
 }

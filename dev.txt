@@ -79,6 +79,8 @@ TACHES EN RECHERCHE DE VOLONTAIRES :
 
 TODO :
 ======
+* BUG bestiaire : pour le Gritche Fanatique [Majeur], il m'affiche "Niveau : 26 - 2"
+* interception des cdm : ne rien envoyer au serveur si on a raté la comp...
 * fofo : version française
 * calculer et afficher les totaux de MM et RM
 * grille/bulles : réduire l'encombrement des extraits du bestiaire
