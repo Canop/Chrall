@@ -21,7 +21,7 @@ type JsonGetHandler struct {
 }
 
 func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Request) {
-	out := GetMessage(GetFormValue(hr,"TrollId"), GetFormValue(hr,"ChrallVersion"))
+	out := GetMessage(GetFormValue(hr, "TrollId"), GetFormValue(hr, "ChrallVersion"))
 	bout, _ := json.Marshal(out)
 	fmt.Fprint(w, "chrall_receiveMessage(")
 	w.Write(bout)
@@ -92,7 +92,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 		bd := new(BucketDecoder)
 		bd.Decode(encodedCdm, h.store)
 		var answerHtml string
-		if len(bd.Cdm)>0 {
+		if len(bd.Cdm) > 0 {
 			_, err := h.store.WriteCdms(bd.Cdm)
 			if err != nil {
 				fmt.Println("Erreur au stockage des CDM")

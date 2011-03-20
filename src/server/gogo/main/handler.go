@@ -24,7 +24,7 @@ type Handler struct {
 
 func GetFormValue(hr *http.Request, name string) string {
 	values := hr.Form[name]
-	if len(values)>0 {
+	if len(values) > 0 {
 		return values[0]
 	}
 	return ""

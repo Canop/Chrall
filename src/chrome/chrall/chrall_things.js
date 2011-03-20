@@ -135,6 +135,8 @@ Monster.prototype.setName = function(fullName){
  *  - race
  * 	- guildeName
  *  - dla (instance de Date)
+ *  - pv
+ *  - pvMax
  *  - turnDuration (en secondes)
  *  - strainBase (la fatigue de base)
  *  - strainMalus (le malus de fatigue)

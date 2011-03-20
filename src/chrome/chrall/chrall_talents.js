@@ -1,4 +1,3 @@
-
 /**
  * renvoie le baratin informatif à afficher dans une bulle lorsque la souris passe au dessus du nom
  *  d'une compétence.
@@ -34,7 +33,7 @@ function getBubbleContentForCompetence(name) {
 			var att = des_att * 3.5 + Math.floor((player.attac.physicalBonus+player.attac.magicalBonus)/2);
 			var deg = des_att * 2 + Math.floor((player.damage.physicalBonus+player.damage.magicalBonus)/2);
 			var degCrit = deg + Math.floor(des_att/2)*2;
-			return "<table><tr><td>Attaque moyenne</td><td> : " + att + "</td></tr><tr><td>Dégâts moyens</td><td>  : " + deg+ " / " + degCrit + "</td></tr></table>50 % de l'armure physique de la cible est ignorée."; // TODO : ajouter en critique
+			return "<table><tr><td>Attaque moyenne</td><td> : " + att + "</td></tr><tr><td>Dégâts moyens</td><td>  : " + deg+ " / " + degCrit + "</td></tr></table>50 % de l'armure physique de la cible est ignorée.";
 		
 		case "Camouflage" :
 			var html = "Déplacement : un jet de compétence (à 75% du niveau du sortilège) est nécessaire pour conserver le Camouflage (Ce jet ne coûte aucun PA et ne rapporte pas de PX).";
@@ -57,6 +56,17 @@ function getBubbleContentForCompetence(name) {
 
 		case "Construire un Piège" :
 			return "Tout laisse penser que le développeur de chrall n'a jamais construit de piège...";
+			
+		case "Contre-Attaquer" :
+			var des_att = Math.floor(player.attac.diceNumber/2);
+			var att = des_att * 3.5 + Math.floor((player.attac.physicalBonus+player.attac.magicalBonus)/2);
+			var html = "<table>";
+			html += "<tr><td>Attaque moyenne</td><td> : " + att + "</td></tr>";
+			html += "<tr><td>Dégâts moyens</td><td> : " + player.damage.getMean() + " / " + player.damage.getCriticalMean() + "</td></tr>";
+			html += "</table>";
+			return html;
+		
+		
 
 		case "Coup de Butoir" :
 			var compLevel = player.talents[name].level;
@@ -69,6 +79,9 @@ function getBubbleContentForCompetence(name) {
 			
 		case "Déplacement Eclair" :
 			return "Diminue de 1 PA le coup d'un déplacement par rapport à un déplacement normal.";
+
+		case "Ecriture Magique" :
+			return "Une EM vous coûtera 5 PA mais surtout de nombreux investissements et des recherches savantes qui ne tiendraient pas dans une petite bulle...";
 
 		case "Golemologie" :
 			return "Je n'ai pas trouvé d'information sur Wikipédia concernant la golémologie mais par contre voici ce qu'ils ont sur la Polémologie :<br><i>La polémologie (littéralement « science de la guerre ») est une discipline fondée après la Seconde Guerre mondiale par le sociologue français Gaston Bouthoul (1896-1980).<br>Elle étudie les facteurs dits « polémogènes » : les corrélations éventuelles entre les explosions de violence et des phénomènes économiques, culturels, psychologiques et surtout démographiques récurrents.</i>";
@@ -111,7 +124,15 @@ function getBubbleContentForCompetence(name) {
 			html += "<tr><td>Portée horizontale</td><td> : " + (2*s) + "</td></tr>";
 			html += "<tr><td>Portée verticale</td><td> : " + 2*Math.ceil(s/2) + "</td></tr>";
 			html += "</table>";	
-			return html
+			return html;
+	
+		case "Régénération Accrue" :
+			var desRA = Math.floor(player.pvMax/20);
+			var html = "<table>";
+			html += "<tr><td>Régénération Accrue</td><td> : " + desRA + " D3</td></tr>";
+			html += "<tr><td>Moyenne</td><td> : " + (desRA*2) + "</td></tr>";
+			html += "</table>";
+			return html;
 	
 		case "Retraite" :
 			return "Si l'on vous frappe, vous prenez votre retraite.<br>Sauf si c'est une botte secrète : ils sont fourbes les skrims...";
@@ -196,7 +217,15 @@ function getBubbleContentForSort(name) {
 			var html = "Fournit une augmentation de 100% à la Maîtrise Magique pendant 2 tours<br>mais la Résistance Magique subit une diminution de 100% pendant 4 tours";
 			html += "<br>En raison du décumul le deuxième BuM augmente votre Maîtrise Magique de 67%.";
 			return html;
-					
+
+		case "Explosion" :
+			var des = 1 + Math.floor((player.damage.diceNumber+Math.floor(player.pvMax/10))/2); // faut-il bien prendre en compte les bonus ?
+			var html = "<table>";
+			html += "<tr><td>Dégâts infligés si non résistée</td><td> : " + des + " D3</td></tr>";
+			html += "<tr><td>Moyenne</td><td> : " + (2*des) + " PV</td></tr>";
+			html += "</table>";	
+			return html
+			
 		case "Glue" :
 			var s = player.sight.diceNumber+player.sight.physicalBonus;
 			var html = "<table>";
@@ -204,11 +233,28 @@ function getBubbleContentForSort(name) {
 			html += "</table>";	
 			return html
 
+		case "Griffe du Sorcier" :
+			var att = 3.5*player.attac.diceNumber + player.attac.magicalBonus;
+			var deg = 2*Math.floor(player.damage.diceNumber/2) + player.damage.magicalBonus;
+			var dur = 1 + Math.floor((player.sight.diceNumber+player.sight.physicalBonus)/5);
+			var vir = 1 + Math.floor(player.pv/30) + Math.floor(player.regeneration.diceNumber/3);
+			var html = "<table>";
+			html += "<tr><td>Attaque</td><td> : " + att + "</td></tr>";
+			html += "<tr><td>Dégâts de la frappe</td><td> : " + deg + "</td></tr>";
+			html += "<tr><td>Durée du poison</td><td> : " + dur + "</td></tr>";
+			html += "<tr><td>Virulence du poison</td><td> : " + vir + "</td></tr>";
+			html += "</table>";	
+			html += "En cas de Résistance Magique, les effets du poisons sont divisés par deux et durent deux fois moins longtemps.";
+			return html
+
 		case "Hypnotisme" :
 			return "On m'a dit que c'était utile... il faudra que j'essaye un jour...";
 
 		case "Identification des trésors" :
 			return "Je doute pouvoir vous aprendre quelque chose sur ce sujet...";
+		
+		case "Projection" :
+			return "La créature ciblée (Troll ou Monstre) par le lanceur du Sortilège sera projetée par un champ de force magique vers une zone voisine. La direction de la projection est aléatoire et la victime sera désorientée. La conséquence de cette désorientation est qu'elle perdra 1 D6 en esquive pour le tour en cours.";
 		
 		case "Projectile Magique" :
 			var s = player.sight.diceNumber+player.sight.physicalBonus;
@@ -273,9 +319,9 @@ function getBubbleContentForSort(name) {
 			}
 			if (player.talents["Bulle Magique"]) { // note : le calcul ci dessous est faux si un BuM est DEJA fait
 				html = f(player.mm);
-				html += "<br>Si vous faites un BuM :";
+				html += "<br>Si vous n'avez pas fait de BuM, en faire un donnerait :";
 				html += f(player.mm+player.baseMm);
-				html += "<br>Si vous faites deux BuM :";
+				html += "<br>Si vous n'avez pas fait de BuM, en faire deux donnerait :";
 				html += f(player.mm+1.67*player.baseMm);
 				return html
 			} else {

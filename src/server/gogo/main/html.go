@@ -17,25 +17,25 @@ func cdmValuesCell(min uint, max uint) string {
 	}
 	return "<td>" + strconv.Uitoa(min) + " - " + strconv.Uitoa(max) + "</td>"
 }
-func addCdmValuesLine(c[]string, label string, min uint, max uint) string {
+func addCdmValuesLine(c []string, label string, min uint, max uint) string {
 	if min == 0 && max == 0 {
 		return ""
 	}
 	return "<th>" + label + "</th>" + cdmValuesCell(min, max)
 }
-func addCdmValueLine(c[]string, label string, v uint) string {
+func addCdmValueLine(c []string, label string, v uint) string {
 	if v == 0 {
 		return ""
 	}
 	return "<th>" + label + "</th><td>" + strconv.Uitoa(v) + "</td>"
 }
-func addCdmBooleanLine(c[]string, label string, b boolean) string {
+func addCdmBooleanLine(c []string, label string, b boolean) string {
 	if b == b_unknown {
 		return ""
 	}
 	return "<th>" + label + "</th><td>" + b.String() + "</td>"
 }
-func addCdmTextLine(c[]string, label string, t string) string {
+func addCdmTextLine(c []string, label string, t string) string {
 	if t == "" {
 		return ""
 	}
@@ -44,52 +44,53 @@ func addCdmTextLine(c[]string, label string, t string) string {
 
 
 type NameValue struct {
-	name string
+	name  string
 	value string
 }
+
 func (nv NameValue) toCells(colspan string) string {
-	html := "<th>" + nv.name + "</th><td colspan="+colspan
+	html := "<th>" + nv.name + "</th><td colspan=" + colspan
 	html += ">" + nv.value + "</td>"
 	return html
 }
 
-func addUintsNV(c []NameValue, label string, min uint, max uint) []NameValue{
+func addUintsNV(c []NameValue, label string, min uint, max uint) []NameValue {
 	if min == 0 && max == 0 {
 		return c
 	}
 	n := len(c)
-	c = c[0:n+1]
-	if max==0 {
+	c = c[0 : n+1]
+	if max == 0 {
 		c[n] = NameValue{label, strconv.Uitoa(min) + " - ?"}
 	} else {
-		c[n] = NameValue{label, strconv.Uitoa(min) + " - " + strconv.Uitoa(max)}	
+		c[n] = NameValue{label, strconv.Uitoa(min) + " - " + strconv.Uitoa(max)}
 	}
 	return c
 }
-func addUintNV(c []NameValue, label string, v uint) []NameValue{
+func addUintNV(c []NameValue, label string, v uint) []NameValue {
 	if v == 0 {
 		return c
 	}
 	n := len(c)
-	c = c[0:n+1]
+	c = c[0 : n+1]
 	c[n] = NameValue{label, strconv.Uitoa(v)}
 	return c
 }
-func addBooleanNV(c []NameValue, label string, b boolean) []NameValue{
+func addBooleanNV(c []NameValue, label string, b boolean) []NameValue {
 	if b == b_unknown {
 		return c
 	}
 	n := len(c)
-	c = c[0:n+1]
+	c = c[0 : n+1]
 	c[n] = NameValue{label, b.String()}
 	return c
 }
-func addTextNV(c []NameValue, label string, t string) []NameValue{
+func addTextNV(c []NameValue, label string, t string) []NameValue {
 	if t == "" {
-		return  c
+		return c
 	}
 	n := len(c)
-	c = c[0:n+1]
+	c = c[0 : n+1]
 	c[n] = NameValue{label, t}
 	return c
 }
@@ -124,27 +125,27 @@ func (cdm *CDM) HtmlTable() string {
 	lc = addUintsNV(lc, "Durée du tour", cdm.DuréeTour_min, cdm.DuréeTour_max)
 	rc = addTextNV(rc, "Portée du pouvoir", cdm.PortéeDuPouvoir_text)
 	//> on équilibre éventuellement les colonnes
-	lcl:=len(lc)
-	rcl:=len(rc)
-	if lcl>rcl+1 {		
-		d := (lcl-rcl)/2		
-		rc = rc[0:rcl+d]
-		lcl -=d
-		for i:=0; i<d; i++ {
+	lcl := len(lc)
+	rcl := len(rc)
+	if lcl > rcl+1 {
+		d := (lcl - rcl) / 2
+		rc = rc[0 : rcl+d]
+		lcl -= d
+		for i := 0; i < d; i++ {
 			rc[rcl+i] = lc[lcl+i]
 		}
 		lc = lc[0:lcl]
 	}
 	//> on écrit ensuite le tableau
 	n := len(lc)
-	if len(rc)>n {
+	if len(rc) > n {
 		n = len(rc)
 	}
-	for i:=0;  i<n; i++ {
+	for i := 0; i < n; i++ {
 		html += "<tr>"
-		if i>=len(rc) {
+		if i >= len(rc) {
 			html += lc[i].toCells("3")
-		} else if i>=len(lc) {
+		} else if i >= len(lc) {
 			html += rc[i].toCells("3")
 		} else {
 			html += lc[i].toCells("1")
@@ -152,10 +153,9 @@ func (cdm *CDM) HtmlTable() string {
 		}
 		html += "</tr>"
 	}
-	for _, c := range(bc) {
+	for _, c := range bc {
 		html += "<tr>" + c.toCells("3") + "</tr>"
 	}
 	html += "</table>"
 	return html
 }
-

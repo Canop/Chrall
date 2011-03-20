@@ -155,7 +155,6 @@ type CDM struct {
 }
 
 
-
 func (cdm *CDM) ComputeSHA1() []byte {
 	unhash := "cdm"
 	unhash += strconv.Uitoa(cdm.NumMonstre)
@@ -293,7 +292,7 @@ func NewCdm(lines []string) *CDM {
 		ia := strings.Index(line, "(")
 		ib := strings.Index(line, "]")
 		if ia >= 0 && ib > ia {
-			nomComplet = line[ia+1 : ib+1]		
+			nomComplet = line[ia+1 : ib+1]
 		} else {
 			fmt.Println("Impossible de trouver le nom")
 			return nil

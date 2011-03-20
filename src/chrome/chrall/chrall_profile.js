@@ -94,10 +94,16 @@ function Chrall_extractDlaInfos(text) {
 
 function Chrall_extractPvAndFatigue(text) {
 	var lines = text.split('\n');
-	//for (var i=0; i<10; i++) alert(i+" : " + lines[i]);
+	//for (var i=0; i<20; i++) console.log(i+" : " + lines[i]);
 	var pvTokens = Chrall_tokenize(lines[2]);
-	//for (var i=0; i<pvTokens.length; i++) alert(pvTokens[i]);
 	player.pv = parseInt(pvTokens[1].trim());
+	pvTokens = Chrall_tokenize(lines[10]);
+	for (var i=0; i<pvTokens.length; i++) console.log(i + " => " + pvTokens[i]);
+	player.pvMax = parseInt(pvTokens[1].trim());
+	try {
+		player.pvMax += parseInt(pvTokens[2].trim());
+	} catch (error) {}
+	console.log("PV MAX : " + player.pvMax);
 	var strainLine = lines[16]; // c'est la ligne qui contient "Fatigue............:"
 	var tokens = strainLine.split(new RegExp("[\)\( ,:=\.\+]+", "g"));
 	var strainBaseFound = false;
@@ -114,8 +120,7 @@ function Chrall_extractPvAndFatigue(text) {
 					strainBaseFound = true;
 				}
 			}
-		} catch (error) {
-		}
+		} catch (error) {}
 	}
 }
 
