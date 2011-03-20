@@ -155,30 +155,6 @@ type CDM struct {
 }
 
 
-func (cdm *CDM) HtmlTable() string {
-	html := "<table class=cdm cellpadding=2>" // oui, c'est pas bien le cellpadding... j'ai du mal avec le css...
-	html += "<tr><th colspan=2 class=title>" + cdm.NomComplet + "</th></tr>"
-	html += cdmValuesLine("Niveau", cdm.Niveau_min, cdm.Niveau_max)
-	html += cdmTextLine("Famille", cdm.Famille_text)
-	html += cdmValuesLine("Points de vie", cdm.PointsDeVie_min, cdm.PointsDeVie_max)
-	html += cdmValuesLine("Dés d'attaque", cdm.DésAttaque_min, cdm.DésAttaque_max)
-	html += cdmValuesLine("Dés d'esquive", cdm.DésEsquive_min, cdm.DésEsquive_max)
-	html += cdmValuesLine("Dés de dégâts", cdm.DésDégâts_min, cdm.DésDégâts_max)
-	html += cdmValuesLine("Dés de régénération", cdm.DésRégénération_min, cdm.DésRégénération_max)
-	html += cdmValuesLine("Armure", cdm.Armure_min, cdm.Armure_max)
-	html += cdmValuesLine("Vue", cdm.Vue_min, cdm.Vue_max)
-	html += cdmValuesLine("Maitrise magique", cdm.MaitriseMagique_min, cdm.MaitriseMagique_max)
-	html += cdmValuesLine("Résistance magique", cdm.RésistanceMagique_min, cdm.RésistanceMagique_max)
-	html += cdmTextLine("Capacité", cdm.Capacite_text)
-	html += cdmValueLine("Nombre d'attaques", cdm.NombreDAttaques)
-	html += cdmTextLine("Vitesse de déplacement", cdm.VitesseDeDéplacement_text)
-	html += cdmBooleanLine("Voit le caché", cdm.VoirLeCaché_boolean)
-	html += cdmBooleanLine("Attaque à distance", cdm.AttaqueADistance_boolean)
-	html += cdmValuesLine("Durée du tour", cdm.DuréeTour_min, cdm.DuréeTour_max)
-	html += cdmTextLine("Portée du pouvoir", cdm.PortéeDuPouvoir_text)
-	html += "</table>"
-	return html
-}
 
 func (cdm *CDM) ComputeSHA1() []byte {
 	unhash := "cdm"
