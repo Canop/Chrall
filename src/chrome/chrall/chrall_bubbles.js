@@ -39,7 +39,7 @@ function showBubble(event, text, cssClass, hasAjaxContent) {
 	if (tPosY<h/2)	html += "top:"+(tPosY+20);
 	else 			html += "bottom:"+(h-tPosY+20);
 	if (hasAjaxContent) {
-		html += ';" class="'+cssClass+'"><div class=bubbleTitle>'+text+'</div><br><div id=bubbleContent>en attente de gogochrall...</div></div>';
+		html += ';" class="'+cssClass+'"><div class=bubbleTitle>'+text+'</div><div id=bubbleContent>en attente de gogochrall...</div></div>';
 	} else {
 		html += ';" class="'+cssClass+'"><div class=bubbleContent>'+text+'</div></div>';
 	}

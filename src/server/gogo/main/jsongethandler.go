@@ -55,7 +55,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		} else {
 			html = fmt.Sprintf("Cette estimation est basée sur %d CDM concernant %d monstres.", be.NbCdm, be.NbMonsters)
 		}
-		html += "<br><br><center>"
+		html += "<center>"
 		html += be.Fusion.HtmlTable()
 		html += "</center>"
 	}

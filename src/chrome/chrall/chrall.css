@@ -120,11 +120,13 @@ table.cdm {
 table.cdm th {
 	border: thin solid #A0A0FF;
 	text-align:right;
+	font-weight: normal;
+	padding: 0 2px;
 }
 table.cdm td {
 	border: thin solid #A0A0FF;
 	text-align: left;
-	padding: 2px;
+	padding: 0 2px;
 }
 table.cdm th.title {
 	text-align:center;
