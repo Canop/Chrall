@@ -26,7 +26,7 @@ var viewFilters = {
 	"monstres" : true,
 	"gowaps" : true,
 	"lieux" : true,
-	"objets" : false,
+	"trésors" : false,
 	"champignons" : false,
 	"cénotaphes" : false
 };

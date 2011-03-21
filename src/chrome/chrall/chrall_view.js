@@ -117,7 +117,7 @@ function Chrall_makeGridHtml() {
 				var merge = list.length>3;				
 				if (merge) {
 					var divName = "objects_"+(x<0?"_"+(-x):x)+"_"+(y<0?"_"+(-y):y)+"_"+(-level);
-					cellContent += "<span name='objets' class=ch_object>" + level + " : ";
+					cellContent += "<span name='trésors' class=ch_object>" + level + " : ";
 					// ligne suivante : début de tentative de mettre un triangle d'ouverture
 					//cellContent += "<img border=0 src=\""+grey_closed_png_url+"\">";
 					cellContent += "<a class=ch_objects_toggler href=\"javascript:ChrallEmbedded_toggleDisplayByName('"+divName+"');\">";
@@ -127,7 +127,7 @@ function Chrall_makeGridHtml() {
 				}
 				for (var i=0; i<list.length; i++) {
 					var t = list[i];
-					cellContent += "<span name='objets' bub=\""+t.id+" : "+t.name+"\" class=ch_object>"+t.z+": "+t.name+"</span>"; // note :pb à attendre si le nom du trésor contient un guillement
+					cellContent += "<span name='trésors' bub=\""+t.id+" : "+t.name+"\" class=ch_object>"+t.z+": "+t.name+"</span>"; // note :pb à attendre si le nom du trésor contient un guillement
 				}
 				if (merge) {
 					cellContent += "</div></span>";
@@ -381,11 +381,20 @@ function Chrall_analyseAndReformatView() {
 	
 
 	//> on ajoute le popup sur les monstres
-	$("a.ch_monster").each(
+	$('a[href*="EMV"]').each(
 		function() {
 			var link = $(this);
-			var text = link.attr("message");
-			bubble(link, text, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + link.attr("nom_complet_monstre") + "&requestId=" + link.attr("id"));
+			// ce qui suit est peut-être un peu trop compliqué mais je n'arrive pas à obtenir un bon formatage (sans retour chariot) des liens des monstres (z:nom) sans mettre le z (la profondeur) dans le a
+			if (link.attr("message")) {
+				//> lien dans la grille
+				var text = link.attr("message");
+				var nomMonstre = link.attr("nom_complet_monstre");
+				bubble(link, text, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre);
+			} else {
+				//> lien dans la table
+				var linkText = link.text();
+				bubble(link, linkText, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + encodeURIComponent(linkText));				
+			}			
 		}
 	);
 

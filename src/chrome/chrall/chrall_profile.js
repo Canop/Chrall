@@ -133,7 +133,7 @@ function Chrall_makeStrainInfos() {
 	var m0 = (player.getDla()-(new Date()).getTime())/(60*1000);
 	var m1 = (player.getDla(1)-(new Date()).getTime())/(60*1000);
 	//> construction de la table de récupération
-	if (player.strainBase+player.strainMalus>0) {
+	if (player.strainBase+player.strainMalus>0 || player.race=="Kastar") { // pour les kastars on affiche toujours le tableau
 		// TODO tester présence compétence charge
 		html += "<table class=infos><tr><th> DLA &nbsp; </th><th> &nbsp; Fatigue &nbsp; </th><th> &nbsp; Malus de charge &nbsp; </th>";
 		if (player.race=="Kastar") {
@@ -263,7 +263,9 @@ function Chrall_makeStrainInfos() {
 			html += "</tr>";
 			//> on calcule la fatigue (de base) de la dla i+1
 			baseStrain = Math.floor(baseStrain - baseStrain/5);
-			if (baseStrain<=0) break;
+			if (baseStrain<=0) {
+				if (player.race!="Kastar" || i>1) break;
+			}
 		}
 		html += "</table>";
 	}
@@ -300,7 +302,10 @@ function Chrall_readTalentTable(table) {
 	//~ }
 }
 
+// renvoie une version améliorée du texte, pouvant le remplacer
 function Chrall_extractMagic(text) {
+	//var lines = text.split('\n');
+	//for (var i=0; i<20; i++) console.log(i+" : " + lines[i]);
 	var tokens = Chrall_tokenize(text);
 	//for (var i=0; i<tokens.length; i++) console.log(i+" : \""+tokens[i]+"\"");
 	player.baseRm = parseInt(tokens[4]);
@@ -308,6 +313,12 @@ function Chrall_extractMagic(text) {
 	player.baseMm = parseInt(tokens[11]);
 	player.mm = player.baseMm + parseInt(tokens[13]);
 	player.concentration = parseInt(tokens[17]);
+	var r = "<table border=0>"; // je n'ai pas trouvé d'autre moyens d'insérer les totaux que de reconstruire toute la cellule :\
+	r += "<tr><td>Résistance à la Magie</td><td> : " + player.baseRm + "</td><td> + " + (player.rm-player.baseRm) + "</td><td> = " + player.rm + " points</td></tr>";
+	r += "<tr><td>Maîtrise de la Magie</td><td> : " + player.baseMm + "</td><td> + " + (player.mm-player.baseMm) + "</td><td> = " + player.mm + " points</td></tr>";
+	r += "<tr><td>Bonus de Concentration</td><td> : " + player.concentration + " %</td></tr>";
+	r += "</table>";
+	return r;
 }
 
 function Chrall_analyseAndReformatProfile() {
@@ -322,7 +333,8 @@ function Chrall_analyseAndReformatProfile() {
 	Chrall_analyseAndReformatMainCharacteristicsTable($($("table table table.mh_tdborder table")[2])); // TODO trouver plus fiable !
 	
 	var mmrmcell = $("table table table.mh_tdborder tr.mh_tdpage").find('td:contains("Résistance à la Magie")');
-	Chrall_extractMagic(mmrmcell.text());
+	var mmrmtext = Chrall_extractMagic(mmrmcell.text());
+	mmrmcell.html(mmrmtext);
 		
 	//> on affiche la date du prochain cumul
 	$(cells[4]).append("<b>---&gt;&nbsp;DLA suivante : " + player.getDla(1).toString("dd/MM/yyyy HH:mm:ss") + "</b>");

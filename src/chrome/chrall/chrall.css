@@ -53,7 +53,7 @@ a.ch_cenotaph, a.ch_cenotaph:hover {
 span.ch_tag {
 	color: black !important;
 }
-span.ch_player {
+.ch_player {
 	color: green;
 	font-weight: bold;
 }

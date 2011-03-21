@@ -8,7 +8,6 @@ function Chrall_analyseFlies() {
 	for (var i=0;i<flyRows.length; i++) {
 		var cells = $(flyRows[i]).find("td");
 		var aFlyType = $(cells[2]).text().trim();
-
 		var aFly = new Fly(aFlyType);
 		player.addFly(aFly);
 	}
@@ -16,9 +15,6 @@ function Chrall_analyseFlies() {
 
 
 function Chrall_analyseAndReformatFlies() {
-
-	//> on vire le titre
-	$($("table")[2]).remove();
 	
 	// analyse du tableau de mouches
 	Chrall_analyseFlies();
@@ -49,10 +45,11 @@ function Chrall_analyseAndReformatFlies() {
 		  
 	}
 	
-	var totaux="att +"+att+" / esq +"+esq+" / deg +"+deg+" / arm +"+arm+" / Tour +"+cyc+" min / pv +"+pv+" / vue +"+vue+" / reg +"+reg;
+	var totaux="Att : +"+att+" | Esq : +"+esq+" | Deg : +"+deg+" | Arm : +"+arm+" | Tour : -"+cyc+" min | PV : +"+pv+" | Vue +"+vue+" | Reg : +"+reg;
+	var html = '<br><table width="98%" border="0" cellspacing="1" cellpadding="5" align="CENTER" class="mh_tdborder"><tr class=mh_tdpage><td class=mh_tdtitre><b>Total</b></td><td><b>' + totaux + '</b></td></tr></table><br>';
 	
-	var html="<table width=98% cellspacing=0 border=0 cellpadding=2 align=left><tbody><tr><td align=left><b>"+totaux+"</b></td></tr></tbody></table>";
+	//var html="<table width=98% cellspacing=0 border=0 cellpadding=2 align=left><tbody><tr><td align=left><b>"+totaux+"</b></td></tr></tbody></table>";
 	// insertion des bonus mouchesques
-	$('form[name="ActionForm"]').parent().prepend(html);
+	$('form[name="ActionForm"]').prepend(html);
 
 }

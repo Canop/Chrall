@@ -24,7 +24,6 @@ function getBubbleContentForCompetence(name) {
 			html += "</table>";
 			return html;
 			
-		
 		case "Balluchonnage" :
 			return "<table><tr><td>Balluchonner</td><td> : 1 PA</td></tr><tr><td>Déballuchonner</td><td> : 2 PA</td></tr></table>";
 		
@@ -65,8 +64,6 @@ function getBubbleContentForCompetence(name) {
 			html += "<tr><td>Dégâts moyens</td><td> : " + player.damage.getMean() + " / " + player.damage.getCriticalMean() + "</td></tr>";
 			html += "</table>";
 			return html;
-		
-		
 
 		case "Coup de Butoir" :
 			var compLevel = player.talents[name].level;
@@ -86,6 +83,15 @@ function getBubbleContentForCompetence(name) {
 		case "Golemologie" :
 			return "Je n'ai pas trouvé d'information sur Wikipédia concernant la golémologie mais par contre voici ce qu'ils ont sur la Polémologie :<br><i>La polémologie (littéralement « science de la guerre ») est une discipline fondée après la Seconde Guerre mondiale par le sociologue français Gaston Bouthoul (1896-1980).<br>Elle étudie les facteurs dits « polémogènes » : les corrélations éventuelles entre les explosions de violence et des phénomènes économiques, culturels, psychologiques et surtout démographiques récurrents.</i>";
 
+		case "Identification des Champignons" :
+			var s = player.sight.diceNumber+player.sight.physicalBonus;
+			var html = "<table>";
+			html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(s/2) + "</td></tr>";
+			html += "<tr><td>Portée verticale</td><td> : " + Math.floor(Math.ceil(s/2)/2) + "</td></tr>"; // TODO vérifier la formule
+			html += "</table>";	
+			return html;
+		
+
 		case "Insultes" :
 			return "Portée : une case à l'horizontal";
 			
@@ -94,7 +100,7 @@ function getBubbleContentForCompetence(name) {
 			var p = Math.floor(2+s/5);
 			var cppc = player.talents[name].mastering + player.concentration;
 			var html = "<table>";
-			html += "<tr><td>Portée (à l'horizontal)</td><td> : " + p + (p>1 ? " cases" : " case") + "</td></tr>";
+			html += "<tr><td>Portée (à l'horizontale)</td><td> : " + p + (p>1 ? " cases" : " case") + "</td></tr>";
 			for (d=1; d<=s && d<=p && d<=20; d++) {
 				var bv = Math.min(10, (1-d)*10 + s);
 				html += "<tr><td>Jet de toucher à "+ d+ (d>1 ? " cases" : " case") + "</td><td> : " + (cppc+bv) + " %</td></tr>";
@@ -135,7 +141,7 @@ function getBubbleContentForCompetence(name) {
 			return html;
 	
 		case "Retraite" :
-			return "Si l'on vous frappe, vous prenez votre retraite.<br>Sauf si c'est une botte secrète : ils sont fourbes les skrims...";
+			return "Si l'on vous frappe, vous prenez votre retraite.<br>Sauf si c'est une botte secrète : ils sont fourbes les skrims.";
 		
 		default :
 			return "<i>Il faudrait qu'une bonne âme s'occupe de programmer l'aide relative à ce talent</i>";
@@ -240,11 +246,11 @@ function getBubbleContentForSort(name) {
 			var vir = 1 + Math.floor(player.pv/30) + Math.floor(player.regeneration.diceNumber/3);
 			var html = "<table>";
 			html += "<tr><td>Attaque</td><td> : " + att + "</td></tr>";
-			html += "<tr><td>Dégâts de la frappe</td><td> : " + deg + "</td></tr>";
-			html += "<tr><td>Durée du poison</td><td> : " + dur + "</td></tr>";
-			html += "<tr><td>Virulence du poison</td><td> : " + vir + "</td></tr>";
+			html += "<tr><td>Dégâts de la frappe</td><td> : " + deg + " PV</td></tr>";
+			html += "<tr><td>Durée du poison</td><td> : " + dur + (dur>1?" tours":" tour") + "</td></tr>";
+			html += "<tr><td>Virulence du poison</td><td> : " + vir + " PV par tour</td></tr>";
 			html += "</table>";	
-			html += "En cas de Résistance Magique, les effets du poisons sont divisés par deux et durent deux fois moins longtemps.";
+			html += "En cas de Résistance Magique, les effets du poisons sont<br>divisés par deux et durent deux fois moins longtemps.";
 			return html
 
 		case "Hypnotisme" :
@@ -290,6 +296,19 @@ function getBubbleContentForSort(name) {
 		case "Invisibilité" :
 			return "Avec 3 PA vous pouvez gagner une invisibilité qui durera tant<br>que vous ne perdrez pas de PV et que vous ne bougerez pas.<br>... surtout ne pas pêter !";
 
+		case "Siphon des âmes" :
+			var att = 3.5*player.attac.diceNumber + player.attac.magicalBonus;
+			var deg = 2*player.regeneration.diceNumber + player.damage.magicalBonus;
+			var nec = player.regeneration.diceNumber;
+			var html = "<table>";
+			html += "<tr><td>Attaque</td><td> : " + att + "</td></tr>";
+			html += "<tr><td>Dégâts de la frappe</td><td> : " + deg + " PV</td></tr>";
+			html += "<tr><td>Nécrose : Attaque</td><td> :  -" + nec + " durant deux tours</td></tr>";
+			html += "</table>";	
+			html += "En cas de Résistance Magique, les dégâts sont divisés par deux<br>de même que les effets et la durée de la nécrose.";
+			return html
+	
+
 		case "Télékinésie" :
 			var s = player.sight.diceNumber + player.sight.physicalBonus;
 			var p = Math.floor(s/2);
@@ -317,9 +336,9 @@ function getBubbleContentForSort(name) {
 				html += "</table>";
 				return html;
 			}
-			if (player.talents["Bulle Magique"]) { // note : le calcul ci dessous est faux si un BuM est DEJA fait
+			if (player.talents["Bulle Magique"]) {
 				html = f(player.mm);
-				html += "<br>Si vous n'avez pas fait de BuM, en faire un donnerait :";
+				html += "<br>Si vous n'avez pas fait de BuM, en faire une donnerait :";
 				html += f(player.mm+player.baseMm);
 				html += "<br>Si vous n'avez pas fait de BuM, en faire deux donnerait :";
 				html += f(player.mm+1.67*player.baseMm);
@@ -327,6 +346,19 @@ function getBubbleContentForSort(name) {
 			} else {
 				return f(player.mm);
 			}
+			
+		case "Rafale Psychique" :
+			var deg = player.damage.diceNumber * 2 + player.damage.magicalBonus;
+			var html = "<table>";
+			html += "<tr><td>Dégâts directs</td><td> : " + deg + "</td></tr>";
+			html += "<tr><td>Malus de régénération</td><td> : " + player.damage.diceNumber + " PV durant 2 tours</td></tr>";
+			html += "</table>";
+			return html;
+			
+		case "Sacrifice" :
+			var html = "Vous pouvez soigner un troll situé sur votre case ou une case voisine.";
+			html += "<br>Cela vous coûte 1D3 PV + 1D3 par tranche entière de 5 points de vie soignés.";
+			return html;
 		
 		case "Vampirisme" :
 			var att = 3.5*2*Math.floor(player.damage.diceNumber/3) + player.attac.magicalBonus;
