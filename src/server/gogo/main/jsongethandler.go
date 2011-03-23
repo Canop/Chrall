@@ -35,7 +35,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		fmt.Println(" no monster complete name in request")
 		return "Hein ?"
 	}
-	fmt.Println(" Request for \"" + monsterCompleteNames[0] + "\"")
+	//fmt.Println(" Request for \"" + monsterCompleteNames[0] + "\"")
 
 	be, err := h.store.ComputeMonsterStats(monsterCompleteNames[0])
 	if err != nil {

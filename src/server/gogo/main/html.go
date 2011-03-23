@@ -42,7 +42,6 @@ func addCdmTextLine(c []string, label string, t string) string {
 	return "<th>" + label + "</th><td>" + t + "</td>"
 }
 
-
 type NameValue struct {
 	name  string
 	value string

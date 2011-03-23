@@ -38,7 +38,6 @@ function Chrall_extractBasicInfos(text) {
 
 function Chrall_extractXpInfos(text) {
 	var tokens = Chrall_tokenize(text);
-	//for (var i=0; i<tokens.length; i++) alert(i + " : " + tokens[i]); 
 	player.level = parseInt(tokens[1]);
 	player.pi = parseInt(tokens[2]);
 	player.px = parseInt(tokens[5]);
@@ -57,9 +56,9 @@ function Chrall_makeXpComments() {
 		html += "Il vous manque " + (-diff) + " px pour vous entrainer.";
 	}
 	html += "<br>Chaque entrainement coûte " + trainingPx + " PX. Vous devez vous entrainer " + Math.ceil((nextLevelPi-player.pi)/trainingPx) + " fois pour passer au niveau " + (player.level+1) + ".";
+	html += "<br>Tuer un monstre ou un troll ne vous rapporte des px que s'il est de niveau supérieur à " + Math.floor((2*player.level-10)/3) + " (chaque niveau supplémentaire de la cible vous rapporte 3 px de plus).";
 	return html;
 }
-
 
 function Chrall_extractSight(text) {
 	var lines = text.split('\n');
@@ -76,9 +75,7 @@ function Chrall_extractSight(text) {
 			return;
 		}
 	}
-	
 }
-
 	
 function Chrall_extractDlaInfos(text) {
 	// pour comprendre le code qui suit il faut savoir que la page générée est segmentée en bien plus de lignes que ce qui est visible
@@ -297,9 +294,6 @@ function Chrall_readTalentTable(table) {
 			player.addTalent(talent);
 		}
 	}
-	//~ for (var key in player.talents) {
-		//~ console.log(player.talents[key]);
-	//~ }
 }
 
 // renvoie une version améliorée du texte, pouvant le remplacer

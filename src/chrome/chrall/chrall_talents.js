@@ -254,7 +254,12 @@ function getBubbleContentForSort(name) {
 			return html
 
 		case "Hypnotisme" :
-			return "On m'a dit que c'était utile... il faudra que j'essaye un jour...";
+			var esq = player.dodge.diceNumber;
+			var html = "<table>";
+			html += "<tr><td>Hypnose pleine</td><td> : Esquive -" + Math.floor(esq*1.5) + " dés</td></tr>";
+			html += "<tr><td>Hypnose réduite</td><td> : Esquive -" + Math.floor(esq/3) + " dés</td></tr>";
+			html += "</table>";	
+			return html
 
 		case "Identification des trésors" :
 			return "Je doute pouvoir vous aprendre quelque chose sur ce sujet...";

@@ -80,6 +80,7 @@ RECENTS / A TESTER :
 * interception des CDM : faire un retour moins barbare qu'une alerte
 * bulles des monstres : vérifier le nom avant de modifier le contenu de la bulle (on peut recevoir des réponses à des vieilles questions si le réseau est lent)
 <- v0.16
+* profil : afficher près du niveau du joueur le niveau minimal des adversaires pour que leur mort rapporte des px
 
 EN COURS :
 ==========
@@ -100,12 +101,14 @@ P2 :
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * à voir : mon contrat d'hébergement n'offre pas théoriquement un débit très important...
 * profil : indiquer les alarmes programmées
-* bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
+* bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax) [je vais attendre d'avoir un peu plus de CDM]
 * sauver les stats d'usage du serveur g0g0chrall ?
 * détection des trolls malades
 
 P3 :
+* grille : afficher les px rapportés par les monstres (nécessite de stocker ou récupérer le niveau du troll du joueur)
 * grille/bulles monstres : afficher (après activation d'une option) moyenne et écart-type des caractéristiques
+* liste des trolls : envoi de MP par case à cocher (comme dans MZ)
 * profil : affichage rapport tués/décés
 * bulles de bestiaire sur les gowaps ?
 * intégration d'un lien pour accéder au bestiaire (pour faire des recherches sur des monstres "ressemblant")
@@ -123,7 +126,6 @@ P3 :
 * grille/menu contextuel : ajout de notes sur des cases ou des things pour l'équipe (par exemple "passer CE portail" ou bien "C'est ce mouch'oo qui m'a piqué mes mouches" ou encore "à finir 90%").
 * grille : une flèche discrète par dessus la grille pour indiquer la direction du joueur (utiliser un canvas transparent ?). Cette flèche doit contenir un bouton de centrage.
 * profil : un onglet pour lister les notes (de soi et de ceux qui partagent avec nous). Ceci aura l'effet de bord d'offrir des "bookmarks" des trolls et monstres annotés
-* liste des trolls : envoi de MP par case à cocher
 * profil/actions programmées : afficher la moyenne de la parade
 * chat d'équipe 
 * tableaux standards MH (monstres, événements, tableau de chasse, etc.) : surligner la ligne de la souris pour faciliter le rapprochement gauche/droite.
@@ -148,3 +150,4 @@ NOTES :
 =======
 * pas de vrai concept d'équipe : chaque troll choisit un par un les trolls à qui il donne accés en lecture à ce qu'il mont(r)e. Et il doit être possible de bloquer les infos d'un autre joueur.
 * liste de technos : extensions chrome, git, javascript, ajax, github, mysql, jquery, go, mercurial, php, css
+* je viens de tomber sur la fonction fmt.Sscanf. Elle aurait sans doute permis d'écrire le parseur plus simplement.
