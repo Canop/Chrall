@@ -1,3 +1,5 @@
+var horizontalViewLimit;
+var viewMaxSight; // récupérée dans l'analyse de la vue ceci correspond à la vue maximale possible
 
 /**
  * construit la ligne de boites à cocher permettant de filtrer la grille
@@ -17,7 +19,30 @@ function Chrall_makeFiltersHtml() {
 	html += "}";
 	html += "";
 	html += "</script>";
-	html += "<form id=gridFiltersForm> Montrer : ";
+	html += "<form id=gridFiltersForm>";
+	if (viewMaxSight>5) {
+		html += "<small>Horizon : </small><select id=viewRedux>";
+		html += "<option value="+horizontalViewLimit+">Actuel (vue de "+horizontalViewLimit+")</option>";
+		if (horizontalViewLimit!=4 && viewMaxSight>4) {
+			html += "<option value=4>Intime (vue de 4)</option>";
+		}
+		if (horizontalViewLimit!=6 && viewMaxSight>6) {
+			html += "<option value=6>Proche (vue de 6)</option>";
+		}
+		if (horizontalViewLimit!=8 && viewMaxSight>8) {
+			html += "<option value=8>Ordinaire (vue de 8)</option>";
+		}
+		if (horizontalViewLimit!=12 && viewMaxSight>12) {
+			html += "<option value=12>Lointain (vue de 12)</option>";
+		}
+		if (horizontalViewLimit!=20 && viewMaxSight>20) {
+			html += "<option value=20>Très lointain (vue de 20)</option>";
+		}
+		if (horizontalViewLimit!=viewMaxSight) {
+			html += "<option value="+viewMaxSight+">Max (vue de "+viewMaxSight+")</option>";
+		}		
+		html += "</select> &nbsp;";	
+	}
 	for (var key in viewFilters) {
 		html += "<span><input type=checkbox id='"+key+"'";
 		if (viewFilters[key]) html += " checked";
@@ -35,17 +60,7 @@ function Chrall_makeGridHtml() {
 	var grey_closed_png_url = chrome.extension.getURL("grey_closed.png");
 	var grey_open_png_url = chrome.extension.getURL("grey_open.png");
 	
-	html = "<script>";
-	html += "function grid_receive(answer) {";
-	html += " var id = answer.RequestId;"; // sera peut-être un jour utilisé pour vérifier que la bulle ouverte est celle pour laquelle on a fait la requete
-	html += " var html = answer.Html;";
-	html += " var div = document.getElementById('bubbleContent');";
-	html += " if (div) {";
-	html += "  div.innerHTML=html;"; // il n'y a plus de div si la bulle est close
-	html += " }";
-	html += "}";
-	html += "</script>";
-	
+	html = "";	
 	html += "<table class=grid>";
 	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center>Nordhikan (Y+)</td><td bgcolor=#BABABA></td></tr>";
 	html += "<tr>";
@@ -80,12 +95,14 @@ function Chrall_makeGridHtml() {
 				var m = monstersInView[i];
 				if (m.x==x && m.y==y) {
 					if (m.isGowap) {
-						cellContent += "<a name='gowaps' class=ch_gowap href=\"javascript:EMV("+m.id+",750,550);\">"+m.z+": "+m.name+"";
+						cellContent += "<a name='gowaps' class=ch_gowap href=\"javascript:EMV("+m.id+",750,550);\"";
+						cellContent += " message=\""+m.fullName+" ( "+m.id+" )<br>en X="+x+" Y="+y+" Z="+m.z+"\"";
+						cellContent += ">"+m.z+": "+m.name+"";
 						if (m.isSick) cellContent += "<span class=ch_tag>[M]</span>";
 						cellContent += "</a>";
 					} else {
 						cellContent += "<a name='monstres' class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\"";
-						cellContent += " message=\""+m.fullName+" en "+cellPositionMessage+"\""
+						cellContent += " message=\""+m.fullName+" en "+cellPositionMessage+"\"";
 						cellContent += " id="+m.id;
 						cellContent += " nom_complet_monstre=\""+encodeURIComponent(m.fullName)+"\"";
 						cellContent += ">"+m.z+": "+m.fullName+"</a>";
@@ -287,7 +304,13 @@ function Chrall_analyseView() {
 	player.y = parseInt(positionSentenceTokens[8]);
 	player.z = parseInt(positionSentenceTokens[10]);
 
-	//> recherche de la limite de vue horizontale (pour dessiner la grille ensuite)
+	//> recherche de la vue max
+	var sightLine = $('li:contains(" porte actuellement à")');
+	var tokens = Chrall_tokenize(sightLine.text());
+	viewMaxSight = parseInt(tokens[5]);
+	//alert(viewMaxSight);
+
+	//> recherche de l'horizon (pour dessiner la grille ensuite)
 	try {
 		horizontalViewLimit = parseInt(document.getElementsByName("ai_MaxVue")[0].value);
 	} catch(error) {
@@ -328,6 +351,10 @@ function Chrall_analyseAndReformatView() {
 	
 	//> on analyse la vue
 	Chrall_analyseView();
+	
+	//> on colle en haut à droite les liens [Refresh] et [Logout]
+	var refreshLogout = $("table table div");
+	refreshLogout.addClass("floatTopRight");
 	
 	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 	var tables = $("table.mh_tdborder");
@@ -378,23 +405,34 @@ function Chrall_analyseAndReformatView() {
 		return false;
 	});
 	
-	
 
 	//> on ajoute le popup sur les monstres
 	$('a[href*="EMV"]').each(
 		function() {
 			var link = $(this);
-			// ce qui suit est peut-être un peu trop compliqué mais je n'arrive pas à obtenir un bon formatage (sans retour chariot) des liens des monstres (z:nom) sans mettre le z (la profondeur) dans le a
-			if (link.attr("message")) {
-				//> lien dans la grille
-				var text = link.attr("message");
-				var nomMonstre = link.attr("nom_complet_monstre");
-				bubble(link, text, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre);
+			var linkText = link.text();
+			var message = link.attr("message");
+			if (link.attr('class')=='ch_gowap') { 
+				if (message) {
+					bubble(link, message, "bub_gowap");
+				}
 			} else {
-				//> lien dans la table
-				var linkText = link.text();
-				bubble(link, linkText, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + encodeURIComponent(linkText));				
-			}			
+				// ce qui suit est peut-être un peu trop compliqué mais je n'arrive pas à obtenir un bon formatage (sans retour chariot) des liens des monstres (z:nom) sans mettre le z (la profondeur) dans le a
+				var nomMonstre;
+				var requestId;
+				if (message) {
+					//> lien dans la grille
+					nomMonstre = link.attr("nom_complet_monstre");
+					requestId = decodeURIComponent(nomMonstre);
+				} else {
+					//> lien dans la table
+					nomMonstre = encodeURIComponent(linkText);
+					message = linkText;
+					requestId = linkText;
+				}
+				$('#bubbleMonsterName').val(nomMonstre);	
+				bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre, requestId);
+			}
 		}
 	);
 
@@ -420,4 +458,11 @@ function Chrall_analyseAndReformatView() {
 		}
 	);	
 
+	//> on outille le select de réduction de vue
+	$('select#viewRedux').change(function(){
+		var limit  = $(this).val();
+		document.getElementsByName("ai_MaxVue")[0].value = limit;
+		document.getElementsByName("ai_MaxVueVert")[0].value = Math.ceil(limit/2);
+		$('form[name="LimitViewForm"]').submit();
+	});
 }

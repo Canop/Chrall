@@ -16,7 +16,6 @@ var pageName = splitedPathname[splitedPathname.length-1];
 var viewIsEmpty=true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
 var player = new Troll();
-var horizontalViewLimit = -1;
 var playerAmAbstract = new Array(); // strings. utilisées dans le profil à la fois pour le tableau de l'am et pour la bulle de la compétence en bas
 
 // note : pour l'instant il faut que ces valeurs de départ soient cohérentes avec le css (display='block' ou display='none');

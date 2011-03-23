@@ -73,47 +73,44 @@ RECENTS / A TESTER :
 * affichage propre du total des mouches
 * grille/filtre : remplacer "objets" par "trésors"
 * afficher les caractéristiques des monstres y compris dans la table (pas seulement sur la grille)
+* grille : ajouter un menu déroulant de limite de vue à côté du filtre (même style arrondi) 
+* interception des cdm : ne rien envoyer au serveur si on a raté la comp [à vérifier en ratant la comp...]
+* grille : les id des gowaps et leurs noms complets sont bullés
+* vue : faire flotter en haut à droite les liens [refresh] et [logout]
+* interception des CDM : faire un retour moins barbare qu'une alerte
+* bulles des monstres : vérifier le nom avant de modifier le contenu de la bulle (on peut recevoir des réponses à des vieilles questions si le réseau est lent)
+<- v0.16
 
 EN COURS :
 ==========
 * [Canop] apprendre le langage go
 * calcul des bonus totaux des mouches : séparation entre présentes & toutes
 * calculs en roll-over sur les sorts & compétences
-* interception des cdm : ne rien envoyer au serveur si on a raté la comp...
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
-
-TACHES EN RECHERCHE DE VOLONTAIRES :
-====================================
-* BUG: les sonneries ne marchent pas toujours...
 * procédures de sauvegardes de la bd
+* BUG : les sonneries ne marchent pas toujours...
 
 TODO :
 ======
 P1 :
-* interception des CDM : faire un retour moins barbare qu'une alerte
-* bonus/malus : totaux
-* grille : permettre que le premier affichage de vue se fasse toujours avec le même preset (réduit) pour un affichage par défaut plus rapide
-* grille : ajouter un menu déroulant de limite de vue à côté du filtre (même style arrondi) avec une liste {"vue totale", "vue/2", "vue/4"}
-* expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
+* BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
 
 P2 :
+* bonus/malus : totaux
+* expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * à voir : mon contrat d'hébergement n'offre pas théoriquement un débit très important...
 * profil : indiquer les alarmes programmées
 * bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
-* sauver les stats d'usage du serveur g0g0chrall
+* sauver les stats d'usage du serveur g0g0chrall ?
+* détection des trolls malades
 
 P3 :
-* bestiaire : stocker dans des records spéciaux prioritaires les infos consolidées (automatiquement ou manuellement (niveau des monstres ?))
-* bestiaire : table des âges, pour calculer au moins les niveaux automatiquement
-* BUG bestiaire : pour le Gritche Fanatique [Majeur], il m'affiche "Niveau : 26 - 2"
 * grille/bulles monstres : afficher (après activation d'une option) moyenne et écart-type des caractéristiques
 * profil : affichage rapport tués/décés
-* bulles des monstres : vérifier l'ID avant de modifier le contenu de la bulle
-* bouton pour activer la DLA suivante
 * bulles de bestiaire sur les gowaps ?
 * intégration d'un lien pour accéder au bestiaire (pour faire des recherches sur des monstres "ressemblant")
 * regarder si on ne peut pas récupérer des infos dans les scripts publics (par exemple les malus pour améliorer le calcul de la fatigue)
-* détection des trolls malades
+* grille : permettre que le premier affichage de vue se fasse toujours avec le même preset (réduit) pour un affichage par défaut plus rapide
 * bestiaire : batch d'analyse des CDM pour construire le bestiaire
 * mouches : récapitulatif (en haut) à la fois sur les mouches actuelles et sur le total (en comptant celles en vadrouille)
 * rendre les parsings plus robustes en privilégiant les expressions régulières plutôt que le comptage des lignes ou cellules
@@ -140,12 +137,11 @@ P3 :
 * site web : aide détaillée/tutorial pour assurer que toutes les fonctions soient connues
 * préférences détaillées : transformation ou pas de la page d'accueil
 * grille/filtre : rendre inactives les cases à cocher de catégories vides
-* trouver un endroit toujours présent pour le logout
+* bestiaire : stocker dans des records spéciaux prioritaires les infos consolidées (automatiquement ou manuellement (niveau des monstres ?))
 * cdmstore : détection d'erreur basée sur la variance des valeurs
-* bestiaire : à terme afficher les moyennes des caracs en BD ?
 * ajouter au filtre de manifest.json les pages venant des principaux proxys mh
 * PB : la version de chrall est spécifié à 4 endroits (nom du fichier crx et champ caché dans index.php, messager.go, chrall_general.js). Ca fait 3 de trop. Faire un makefile ?
-* réflexion sur l'opportunité de passer à une base mongodb [l'inconnue porte sur les performances des consolidations et recherches textuelles)
+* réflexion sur l'opportunité de passer à une base mongodb [l'inconnue porte sur les performances des consolidations et recherches textuelles]
 
 
 NOTES :

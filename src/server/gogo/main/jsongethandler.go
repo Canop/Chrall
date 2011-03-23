@@ -71,7 +71,7 @@ func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *htt
 
 func (h *JsonGetHandler) serveBestiaryExtractHtmlJsonp(w http.ResponseWriter, hr *http.Request) {
 	bejs := new(BestiaryExtractJson)
-	requestId := hr.Form["requestId"]
+	requestId := hr.Form["name"]
 	if len(requestId) > 0 {
 		bejs.RequestId = requestId[0]
 	}
@@ -97,14 +97,14 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 			if err != nil {
 				fmt.Println("Erreur au stockage des CDM")
 			}
-			answerHtml = "CDM lue : "
+			answerHtml = "Cette CDM ( "
 			for _, cdm := range bd.Cdm {
 				answerHtml += cdm.NomComplet
 			}
-			answerHtml += " Merci !"
+			answerHtml += " ) a bien été reçue par gogochrall et stockée dans le bestiaire. Merci."
 		} else {
 			fmt.Println("Pas de CDM ou pas compris.")
-			answerHtml += "Oups... Je n'ai pas compris la requete :("
+			answerHtml += "Oups... Le serveur gogochrall n'a pas compris la requete :("
 		}
 
 		fmt.Fprint(w, "cdm_receive(")

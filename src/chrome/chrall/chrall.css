@@ -1,3 +1,9 @@
+div.floatTopRight {
+	position:fixed;
+	right:2;
+	top:4;
+	z-index:10;
+}
 div.grid_holder {
 	padding:0px;
 	margin:0px;
@@ -21,7 +27,7 @@ a.ch_monster, a.ch_monster:hover {
 	display: block;
 }
 a.ch_gowap, a.ch_gowap:hover {
-	color: #e5ad15 !important;
+	color: #c99b1f !important;
 	display: block;
 }
 a.ch_troll, a.ch_troll:hover {
@@ -82,6 +88,7 @@ form#gridFiltersForm {
 	padding-right: 8px;
 	border-radius: 10px;
 }
+
 div.profileInfos table.infos {
 	border-collapse: collapse;
 	border: thin solid #333333;
@@ -196,6 +203,9 @@ a.gogo:hover {
 }
 .bub_monster {
 	background-color: brown;
+}
+.bub_gowap {
+	background-color: #c99b1f;
 }
 .bub_troll  {
 	background-color: blue;

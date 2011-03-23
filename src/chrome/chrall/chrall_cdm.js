@@ -14,15 +14,16 @@ function Chrall_handleCdmPage() {
 	});
 	
 	//> écriture du script de récupération de la réponse (mécanisme JSONP)
-	html = "<script>";
+	html = "<div id=gogochrall></div>";
+	html += "<script>";
 	html += "function cdm_receive(answer) {";
-	html += "alert('Réponse de gogochrall : '+answer);";
+	html += " document.getElementById('gogochrall').innerHTML = answer;";
 	html += "}";
 	html += "</script>";
 	$("table table table form").append(html);
 	
 	if (cdm.substring("Monstre Ciblé fait partie")<0) {
-		alert("cdm ratée ? Pas d'envoi à gogochrall");
+		document.getElementById('gogochrall').innerHTML = "cdm ratée ? Pas d'envoi à gogochrall.";
 	} else {
 		//> envoi au serveur de la CDM
 		$.ajax(
@@ -33,6 +34,6 @@ function Chrall_handleCdmPage() {
 			}
 		);
 	}
-		
+	
 	console.log("leaving Chrall_handleCdmPage");
 }

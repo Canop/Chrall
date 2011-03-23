@@ -1,19 +1,19 @@
 /*
  * Après avoir testé une foultitude de librairies de bulles (jquery ou non), je me suis résolu à en écrire une qui 
  *  - soit rapide (la plupart rament dés qu'on a une trentaine de bulles...)
- *  - supporte un contenu fourni par requète JSONP
+ *  - supporte un contenu fourni en temps réel par requète JSONP
  *  - gère le positionnement automatiquement pour ne pas afficher bêtement les trucs en dehors de la zone visible ou les écraser
  *  - empêche les bulles de recouvrir la souris
  * 
  * Notes :
- *  - Le callback de l'appel JSONP a charge de remplir le $("#bubbleContent")
+ *  - Le callback de l'appel JSONP s'appelle grid_receive (on changera sans doute ça)
+ *  - le serveur JSONP répond un objet de la form {RequestId: "truc", Html: "machin"}
  *  - si on a besoin de plus de souplesse côté css, il faudra ajouter un div intermédiaire (dans la version actuelle vous aurez du mal à surcharger
  *        via la classe les styles définis dans #bubble)
  * 
- * TODO :
- * 	- gérer l'ascenseur afin que la bulle reste près de la souris
  */ 
 
+var bubbleInitDone = false;
 var onBubbleTarget = false;
 var onBubbleDiv = false;
 var bubbleExists = false;
@@ -26,7 +26,7 @@ function hideBubble() {
 		bubbleExists = false;
 	}
 }
-function showBubble(event, text, cssClass, hasAjaxContent) {
+function showBubble(event, text, cssClass, ajaxRequestId) {
 	if (bubbleExists) hideBubble();
 	var html = '<div id="bubble" style="';
 	var tPosX = event.pageX-pageXOffset;
@@ -38,7 +38,8 @@ function showBubble(event, text, cssClass, hasAjaxContent) {
 	var h = document.body.clientHeight;
 	if (tPosY<h/2)	html += "top:"+(tPosY+20);
 	else 			html += "bottom:"+(h-tPosY+20);
-	if (hasAjaxContent) {
+	if (ajaxRequestId) {
+		document.getElementById('bubbleRequestId').value = ajaxRequestId; // je ne sais pas pourquoi mais utiliser $('#bubbleRequestId').val ne marche pas bien
 		html += ';" class="'+cssClass+'"><div class=bubbleTitle>'+text+'</div><div id=bubbleContent>en attente de gogochrall...</div></div>';
 	} else {
 		html += ';" class="'+cssClass+'"><div class=bubbleContent>'+text+'</div></div>';
@@ -57,8 +58,26 @@ function bubble(
 	target,  // un objet jquery, par exemple  $("a.ch_monster")
 	text, // le contenu de la bulle
 	cssClass, // une classe css ajoutée à la bulle
-	ajaxUrl // une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
+	ajaxUrl, // une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
+	ajaxRequestId
 ) {
+	if (!bubbleInitDone) {
+		var html = "<input type=hidden id=bubbleRequestId value=''>";
+		html += "<script>";
+		html += "function grid_receive(answer) {"; // ce nom n'est pas générique parce que je n'ai  pas eu envie de couper la compatibilité client-serveur le temps que les testeurs changent de version...
+		html += " if (document.getElementById('bubbleRequestId').value!=answer.RequestId) {";
+		html += "  console.log('answer received to old request : ' + answer.RequestId);";
+		html += "  return;";
+		html += " }";
+		html += " var div = document.getElementById('bubbleContent');";
+		html += " if (div) {";
+		html += "  div.innerHTML=answer.Html;"; // il n'y a plus de div si la bulle est close
+		html += " }";
+		html += "}";
+		html += "</script>";
+		$(html).appendTo("body");
+		bubbleInitDone = true;
+	}
 	target.mouseenter(function(event) {
 		if (onBubbleDiv || onBubbleTarget) return false;
 		onBubbleTarget = true;
@@ -70,9 +89,9 @@ function bubble(
 					dataType: "jsonp"
 				}
 			);
-			showBubble.call(this, event, text, cssClass, true);
+			showBubble.call(this, event, text, cssClass, ajaxRequestId);
 		} else {
-			showBubble.call(this, event, text, cssClass, false);
+			showBubble.call(this, event, text, cssClass);
 		}
 	});
 	target.mouseout(function(){
