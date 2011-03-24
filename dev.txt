@@ -95,6 +95,8 @@ TODO :
 ======
 P1 :
 * BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
+* Bug sur le décumul (Laz : "12-8-4 (en dessous je sais pas) alors que ça indique 12-7-4")
+* Bug charge (Laz : "j'aimerais que la bulle ait raison et que ma charge soit de 9 cavernes (en fait c'est que 7)"
 
 P2 :
 * bonus/malus : totaux

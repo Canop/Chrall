@@ -41,7 +41,7 @@ function getBubbleContentForCompetence(name) {
 			return html;
 			
 		case "Charger" :
-			var range = Math.floor((player.pv/10+player.regeneration.diceNumber)/5)+1; 
+			var range = Math.floor( (Math.ceil(player.pv/10) + player.regeneration.diceNumber) / 5 )+1; 
 			range -= Math.floor((player.strainBase+player.strainMalus)/5); // malus de fatigue
 			if (range<0) range = 0;
 			var html = "<table><tr><td>Portée</td><td> : "+range+"</td></tr>";
@@ -91,7 +91,6 @@ function getBubbleContentForCompetence(name) {
 			html += "</table>";	
 			return html;
 		
-
 		case "Insultes" :
 			return "Portée : une case à l'horizontal";
 			
@@ -170,11 +169,11 @@ function getBubbleContentForSort(name) {
 			var a = player.regeneration.diceNumber;
 			var html = "<table>";
 			html += "<tr><td>Premier AE</td><td> : armure +" + a + "</td></tr>";
-			html += "<tr><td>Deuxième AE</td><td> : armure +" + Math.floor(a*0.66) + "</td></tr>";
-			html += "<tr><td>Troisième AE</td><td> : armure +" + Math.floor(a*0.4) + "</td></tr>";
-			html += "<tr><td>Quatrième AE</td><td> : armure +" + Math.floor(a*0.25) + "</td></tr>";
-			html += "<tr><td>Cinquième AE</td><td> : armure +" + Math.floor(a*0.15) + "</td></tr>";
-			html += "<tr><td>Sixième et suivants</td><td> : armure +" + Math.floor(a*0.1) + "</td></tr>";
+			html += "<tr><td>Deuxième AE</td><td> : armure +" + (a-Math.floor(a*0.33)) + "</td></tr>";
+			html += "<tr><td>Troisième AE</td><td> : armure +" + (a-Math.floor(a*0.6)) + "</td></tr>";
+			html += "<tr><td>Quatrième AE</td><td> : armure +" + (a-Math.floor(a*0.75)) + "</td></tr>";
+			html += "<tr><td>Cinquième AE</td><td> : armure +" + (a-Math.floor(a*0.85)) + "</td></tr>";
+			html += "<tr><td>Sixième et suivants</td><td> : armure +" + (a-Math.floor(a*0.9)) + "</td></tr>";
 			html += "</table>";
 			return html;
 
@@ -182,11 +181,11 @@ function getBubbleContentForSort(name) {
 			var a = 1 + Math.floor((player.attac.diceNumber-3)/2);
 			var html = "<table>";
 			html += "<tr><td>Premier ADA</td><td> : attaque +" + a + "</td></tr>";
-			html += "<tr><td>Deuxième ADA</td><td> : attaque +" + Math.floor(a*0.66) + "</td></tr>";
-			html += "<tr><td>Troisième ADA</td><td> : attaque +" + Math.floor(a*0.4) + "</td></tr>";
-			html += "<tr><td>Quatrième ADA</td><td> : attaque +" + Math.floor(a*0.25) + "</td></tr>";
-			html += "<tr><td>Cinquième ADA</td><td> : attaque +" + Math.floor(a*0.15) + "</td></tr>";
-			html += "<tr><td>Sixième et suivants</td><td> : attaque +" + Math.floor(a*0.1) + "</td></tr>";
+			html += "<tr><td>Deuxième ADA</td><td> : attaque +" + (a-Math.floor(a*0.33)) + "</td></tr>";
+			html += "<tr><td>Troisième ADA</td><td> : attaque +" + (a-Math.floor(a*0.6)) + "</td></tr>";
+			html += "<tr><td>Quatrième ADA</td><td> : attaque +" + (a-Math.floor(a*0.75)) + "</td></tr>";
+			html += "<tr><td>Cinquième ADA</td><td> : attaque +" + (a-Math.floor(a*0.85)) + "</td></tr>";
+			html += "<tr><td>Sixième et suivants</td><td> : attaque +" + (a-Math.floor(a*0.9)) + "</td></tr>";
 			html += "</table>";
 			return html;
 
@@ -194,11 +193,11 @@ function getBubbleContentForSort(name) {
 			var a = 1 + Math.floor((player.dodge.diceNumber-3)/2);
 			var html = "<table>";
 			html += "<tr><td>Premier ADE</td><td> : esquive +" + a + "</td></tr>";
-			html += "<tr><td>Deuxième ADE</td><td> : esquive +" + Math.floor(a*0.66) + "</td></tr>";
-			html += "<tr><td>Troisième ADE</td><td> : esquive +" + Math.floor(a*0.4) + "</td></tr>";
-			html += "<tr><td>Quatrième ADE</td><td> : esquive +" + Math.floor(a*0.25) + "</td></tr>";
-			html += "<tr><td>Cinquième ADE</td><td> : esquive +" + Math.floor(a*0.15) + "</td></tr>";
-			html += "<tr><td>Sixième et suivants</td><td> : esquive +" + Math.floor(a*0.1) + "</td></tr>";
+			html += "<tr><td>Deuxième ADE</td><td> : esquive +" + (a-Math.floor(a*0.33)) + "</td></tr>";
+			html += "<tr><td>Troisième ADE</td><td> : esquive +" + (a-Math.floor(a*0.6)) + "</td></tr>";
+			html += "<tr><td>Quatrième ADE</td><td> : esquive +" + (a-Math.floor(a*0.75)) + "</td></tr>";
+			html += "<tr><td>Cinquième ADE</td><td> : esquive +" + (a-Math.floor(a*0.85)) + "</td></tr>";
+			html += "<tr><td>Sixième et suivants</td><td> : esquive +" + (a-Math.floor(a*0.9)) + "</td></tr>";
 			html += "</table>";
 			return html;
 
@@ -206,11 +205,11 @@ function getBubbleContentForSort(name) {
 			var a = 1 + Math.floor((player.damage.diceNumber-3)/2);
 			var html = "<table>";
 			html += "<tr><td>Premier ADD</td><td> : dégâts +" + a + "</td></tr>";
-			html += "<tr><td>Deuxième ADD</td><td> : dégâts +" + Math.floor(a*0.66) + "</td></tr>";
-			html += "<tr><td>Troisième ADD</td><td> : dégâts +" + Math.floor(a*0.4) + "</td></tr>";
-			html += "<tr><td>Quatrième ADD</td><td> : dégâts +" + Math.floor(a*0.25) + "</td></tr>";
-			html += "<tr><td>Cinquième ADD</td><td> : dégâts +" + Math.floor(a*0.15) + "</td></tr>";
-			html += "<tr><td>Sixième et suivants</td><td> : dégâts +" + Math.floor(a*0.1) + "</td></tr>";
+			html += "<tr><td>Deuxième ADD</td><td> : dégâts +" + (a-Math.floor(a*0.33)) + "</td></tr>";
+			html += "<tr><td>Troisième ADD</td><td> : dégâts +" + (a-Math.floor(a*0.6)) + "</td></tr>";
+			html += "<tr><td>Quatrième ADD</td><td> : dégâts +" + (a-Math.floor(a*0.75)) + "</td></tr>";
+			html += "<tr><td>Cinquième ADD</td><td> : dégâts +" + (a-Math.floor(a*0.85)) + "</td></tr>";
+			html += "<tr><td>Sixième et suivants</td><td> : dégâts +" + (a-Math.floor(a*0.9)) + "</td></tr>";
 			html += "</table>";
 			return html;
 		
