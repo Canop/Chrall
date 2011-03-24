@@ -118,8 +118,8 @@ function getBubbleContentForCompetence(name) {
 		case "Parer" :
 			var parade = 3.5*Math.floor(player.attac.diceNumber/2) + Math.floor((player.attac.physicalBonus+player.attac.magicalBonus)/2);
 			var html = "<table>";
-			html += "<tr><td>Jet de parade</td><td> : " + parade + "</td></tr>";
-			html += "<tr><td>\"Esquive\" totale</td><td> : " + (player.dodge.getMean() + parade) + "</td></tr>";
+			html += "<tr><td>Jet de parade moyen</td><td> : " + parade + "</td></tr>";
+			html += "<tr><td>\"Esquive\" moyenne totale</td><td> : " + (player.dodge.getMean() + parade) + "</td></tr>";
 			html += "</table>";
 			return html;
 			
