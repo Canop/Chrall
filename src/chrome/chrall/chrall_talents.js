@@ -41,10 +41,20 @@ function getBubbleContentForCompetence(name) {
 			return html;
 			
 		case "Charger" :
-			var range = Math.floor( (Math.ceil(player.pv/10) + player.regeneration.diceNumber) / 5 )+1; 
+			console.log("player.pv="+player.pv);
+			console.log("player.regeneration.diceNumber="+player.regeneration.diceNumber);
+			var s = Math.ceil(player.pv/10) + player.regeneration.diceNumber;
+			var range = 1;
+			if (s>49) range = 8;
+			else if (s>39) range = 7;
+			else if (s>30) range = 6;
+			else if (s>22) range = 5;
+			else if (s>15) range = 4;
+			else if (s>9) range = 3;
+			else if (s>4) range = 2;
 			range -= Math.floor((player.strainBase+player.strainMalus)/5); // malus de fatigue
 			if (range<0) range = 0;
-			var html = "<table><tr><td>Portée</td><td> : "+range+"</td></tr>";
+			var html = "<table><tr><td>Portée</td><td> : "+range+(range>1 ? " cases" : " case") + "</td></tr>";
 			html += "<tr><td>Attaque moyenne</td><td> : " + player.attac.getMean() + "</td></tr>";
 			html += "<tr><td>Dégâts moyens</td><td> : " + player.damage.getMean() + " / " + player.damage.getCriticalMean() + "</td></tr>";
 			html += "</table>";
