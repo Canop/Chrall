@@ -433,8 +433,8 @@ function Chrall_analyseAndReformatView() {
 					requestId = linkText;
 				}
 				$('#bubbleMonsterName').val(nomMonstre);
-				//bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
-				bubble(link, message, "bub_monster", "http://localhost:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
+				bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
+				//bubble(link, message, "bub_monster", "http://localhost:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
 			}
 		}
 	);
