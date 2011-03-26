@@ -34,9 +34,9 @@ function CharBmEffect(type, value) {
 	this.sum[type] = value;
 	this.count[type] = 1;
 }
-CharBmEffect.prototype.add = function(type, value,  decumul) {
+CharBmEffect.prototype.add = function(type, value, hasDecumul) {
 	if (this.count[type]) {
-		if (decumul) {
+		if (hasDecumul) {
 			this.sum[type] += decumul(this.count[type]++, value);
 		} else {
 			this.sum[type] += value;
@@ -65,7 +65,7 @@ function Chrall_analyseAndReformatBM() {
 		effects.push(new BmEffect(
 			$(cells[0]).text().trim(),
 			$(cells[2]).text().trim(),
-			$(cells[3]).html().substring('bullet_red.jpg')>=0, // marqueur du décumul
+			$(cells[3]).html().indexOf('bullet_red.jpg')>=0, // marqueur du décumul
 			$(cells[4]).text().trim(),
 			$(cells[5]).text().trim()
 		));

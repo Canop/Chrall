@@ -50,7 +50,7 @@ function itoa(o) {
 }
 
 function decumul(i, val) {
-	return val - Math.floor(val*([0, .33, .6, .75, .85, .9][Math.min(i,4)]));
+	return Math.floor(val - val*([0, .33, .6, .75, .85, .9][Math.min(i,4)]));
 }
 
 function turnName(turn) {	
