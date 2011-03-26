@@ -95,12 +95,10 @@ function Chrall_extractPvAndFatigue(text) {
 	var pvTokens = Chrall_tokenize(lines[2]);
 	player.pv = parseInt(pvTokens[1].trim());
 	pvTokens = Chrall_tokenize(lines[10]);
-	for (var i=0; i<pvTokens.length; i++) console.log(i + " => " + pvTokens[i]);
 	player.pvMax = parseInt(pvTokens[1].trim());
 	try {
 		player.pvMax += parseInt(pvTokens[2].trim());
 	} catch (error) {}
-	console.log("PV MAX : " + player.pvMax);
 	var strainLine = lines[16]; // c'est la ligne qui contient "Fatigue............:"
 	var tokens = strainLine.split(new RegExp("[\)\( ,:=\.\+]+", "g"));
 	var strainBaseFound = false;

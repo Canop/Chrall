@@ -21,6 +21,7 @@
 				"chrall_general.js",
 				"chrall_talents.js",
 				"chrall_cdm.js",
+				"chrall_bm.js",
 				"chrall_profile.js",
 				"chrall_options.js",
 				"chrall_start.js",
