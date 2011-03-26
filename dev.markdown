@@ -14,21 +14,27 @@ RECENTS / A TESTER :
 * grille : ne pas afficher tous les trous de météorite (ceux de chaque niveau) mais simplement un seul
 * grille : ne jamais masquer les trous de météorite
 * vue : toujours garder visibles les onglets et le filtre de vue
+
 <- v0.7
+
 * vue : accélération du changement d'onglet
 * grille : afficher différemment les trolls intangibles (italique ?)
 * grille/filtre : permettre le (dé)cochage par un clic sur le mot (ex : "trolls") et pas seulement la case à cocher elle-même
 * ajouter au tableau de récupération les colonnes suivantes : malus de charge, gain en minutes par PV de l'AM
 * fatigue & am : calcul du cout en pv pour rejouer de suite, et suggestion d'attente
 * profil : récupération du nombre de PA restant
+
 <- v0.8
+
 * BUG : les champignons n'étaient jamais affichés (ces curieuses choses n'ont pas d'ID affiché dans la table reçue de MH)
 * fatigue optimale : rejeter si après la fin de DLA
 * options : séparer via des onglets en "Options standard" et "Options Chrall" (bon... c'est pas beau...)
 * structure du Puit (déversoir à CDM), tant côté client que pour l'analyse côté serveur
 * Bug sur la page d'options
+
 <- v0.9
-* [Canop+Taip] gestion des forks et contributions dans github
+
+* gestion des forks et contributions dans github
 * choisir une librairie go/mysql
 * serveur gogochrall (entre autres pour le bestiaire)
 * Puit : bouton "nettoyer" (pour effacer le contenu du seau)
@@ -44,30 +50,42 @@ RECENTS / A TESTER :
 * Puits : dédoublonnage des CDM (par hash sha1)
 * grille : affichage des caractéristiques des monstres au hover
 * grille : il n'y a plus de bulle sur toutes les cases mais juste sur les monstres et les trolls
+
 <- v0.10
+
 * profil : virer la colonne de l'AM pour les non-kastars => vérifier que c'est OK pour les kastars
 * options : lien vers le bestiaire
 * forum
 * ajouter quelque part (sur la page d'accueil?) la mention que les pages sont modifiées par chrall et un lien vers le site web (et un mode d'emploi de désinstallation ?)
+
 <- v0.11
+
 * script de lancement de gogo en nohup (reste ouvert après fermeture session)
 * Puits : correction de quelques problèmes d'analyse (touchant environ 2% des CDM)
 * grille : afficher au hover le numéro des trésors (utile pour le pilotage des gowaps)
+
 <- v0.12
+
 * virer la boite de dialogue d'alarme : elle peut bloquer tout Chrome...
 * abandon de la logique d'auto-update de l'extension, remplacée par l'affichage d'un discret message proposant d'aller mettre à jour l'extension
 * calcul du nombre d'entrainements avant le changement de niveau et du nombre de px manquants pour entrainement
 * grille/bestiaire : mise en place d'un système de bulle maison (plus adapté, bulles plus précisément placées, bien plus rapide)
+
 <- v0.13
+
 * test sur le serveur de la version de l'extension pour afficher un message proposant une mise à jour
 * grille/bulles : (ré)afficher la distance horizontale des monstres et leur position dans la bulle
 * test sur le site web de la version de l'extension pour afficher un message proposant une mise à jour
 * correction bug Puits : la présence de "???" dans le texte faisait déconner jquery.ajax (aucune idée du pourquoi, je remplace maintenant les "?" par des "-")
 * récupération PV, vue, MM et RM (tout ça utile pour les sorts et compétences)
+
 <- v0.14
+
 * fofo : version française
 * bestiaire : envoi des CDM depuis l'extension
+
 <- v0.15
+
 * grille/bulles : réduire l'encombrement des extraits du bestiaire
 * calculer et afficher les totaux de MM et RM
 * affichage propre du total des mouches
@@ -79,41 +97,50 @@ RECENTS / A TESTER :
 * vue : faire flotter en haut à droite les liens [refresh] et [logout]
 * interception des CDM : faire un retour moins barbare qu'une alerte
 * bulles des monstres : vérifier le nom avant de modifier le contenu de la bulle (on peut recevoir des réponses à des vieilles questions si le réseau est lent)
+
 <- v0.16
+
 * profil : afficher près du niveau du joueur le niveau minimal des adversaires pour que leur mort rapporte des px
+
 <- v1.0
 <- v1.01
-* correction, je pense, du problème 
+
+* Bug charge (Laz : "j'aimerais que la bulle ait raison et que ma charge soit de 9 cavernes (en fait c'est que 7)"
+
 <- v1.02
 
 EN COURS :
 ==========
 * apprendre le langage go
 * calcul des bonus totaux des mouches : séparation entre présentes & toutes
-* calculs en roll-over sur les sorts & compétences
+* calculs en roll-over sur les sorts & compétences _(il en reste encore à faire)_
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
 * Bug sur le décumul (Laz : "12-8-4 (en dessous je sais pas) alors que ça indique 12-7-4")
-* Bug charge (Laz : "j'aimerais que la bulle ait raison et que ma charge soit de 9 cavernes (en fait c'est que 7)"
 
 TODO :
 ======
 P1 :
+----
 * BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
+* bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
+* affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 
 P2 :
+----
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
-* bonus/malus : totaux
+* bonus/malus : totaux [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=12)
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * à voir : mon contrat d'hébergement n'offre pas théoriquement un débit très important...
 * profil : indiquer les alarmes programmées
-* bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax) [je vais attendre d'avoir un peu plus de CDM]
 * sauver les stats d'usage du serveur g0g0chrall ?
 * détection des trolls malades
 
 P3 :
-* coût des déplacements et charges (en tenant compte du gluage éventuel) [attention : besoin scripts publics]
+----
+* grille : coût des déplacements et charges (en tenant compte du gluage éventuel) _(attention : besoin scripts publics)_
+* équipement : afficher les bonus [demande Fabdi](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=13&p=71#p71)
 * grille : afficher les px rapportés par les monstres (nécessite de stocker ou récupérer le niveau du troll du joueur)
 * grille/bulles monstres : afficher (après activation d'une option) moyenne et écart-type des caractéristiques
 * liste des trolls : envoi de MP par case à cocher (comme dans MZ)
@@ -151,7 +178,7 @@ P3 :
 * cdmstore : détection d'erreur basée sur la variance des valeurs
 * ajouter au filtre de manifest.json les pages venant des principaux proxys mh
 * PB : la version de chrall est spécifié à 4 endroits (nom du fichier crx et champ caché dans index.php, messager.go, chrallgeneral.js). Ca fait 3 de trop. Faire un makefile ?
-* réflexion sur l'opportunité de passer à une base mongodb [l'inconnue porte sur les performances des consolidations et recherches textuelles]
+* réflexion sur l'opportunité de passer à une base mongodb _(l'inconnue porte sur les performances des consolidations et recherches textuelles)_
 
 
 NOTES :
