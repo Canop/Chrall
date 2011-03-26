@@ -160,6 +160,7 @@ func (cdm *CDM) ComputeSHA1() []byte {
 	unhash += strconv.Uitoa(cdm.NumMonstre)
 	unhash += cdm.NomComplet
 	unhash += cdm.Mâle.GenderString()
+	unhash += cdm.Famille_text // parce qu'elle n'est pas toujours dans les Chars...
 	for key, value := range cdm.Chars {
 		unhash += key + value.Text
 	}
@@ -267,6 +268,7 @@ func NewCdm(lines []string) *CDM {
 	var numField string
 	var nomComplet string
 	var male boolean
+	var famille string
 	if strings.Contains(lines[0], "CONNAISSANCE DES MONSTRES") {
 		fields = strings.Fields(line)
 		fieldUn := -1
@@ -288,10 +290,12 @@ func NewCdm(lines []string) *CDM {
 		nomComplet = strings.Join(fields[fieldUn+1:len(fields)-1], " ")
 	} else if strings.Contains(lines[0], "Monstre Ciblé fait partie") {
 		fields = strings.Fields(line)
-
+		ip := strings.LastIndex(line, ":")
 		ia := strings.Index(line, "(")
 		ib := strings.Index(line, "]")
-		if ia >= 0 && ib > ia {
+		if ip>=0 && ia>=ip && ib>ia {
+			famille = strings.Trim(line[ip+2 : ia-1], " ")
+			fmt.Println("Fam : '" + famille + "'")
 			nomComplet = line[ia+1 : ib+1]
 		} else {
 			fmt.Println("Impossible de trouver le nom")
@@ -316,6 +320,7 @@ func NewCdm(lines []string) *CDM {
 	}
 	cdm := new(CDM)
 	cdm.NumMonstre = num
+	cdm.Famille_text = famille
 	cdm.SetNomComplet(nomComplet)
 	cdm.Chars = make(map[string]*CdmChar)
 	cdm.Mâle = male
