@@ -45,6 +45,9 @@ switch (pageName) {
 	case "Play_mouche.php":
 		Chrall_analyseAndReformatFlies();	
 		break;
+	case "Play_BM.php":
+		Chrall_analyseAndReformatBM();	
+		break;
 	case "Play_option.php":
 		Chrall_reformatOptionsView();	
 		break;

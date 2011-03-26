@@ -16,7 +16,7 @@ var chrallVersion = "1.2";
 for (var i=0; i<tokens.length; i++) console.log("\""+tokens[i]+"\""); 
 */
 function Chrall_tokenize(text) {
-	return text.trim().split(new RegExp("[ /\t\n\r\f,.:=()]+", "g"));
+	return text.trim().split(new RegExp("[ /|\t\n\r\f,.:=()]+", "g"));
 	
 }
 
@@ -38,4 +38,29 @@ function Chrall_sendDlaToExtension(dlaTime, cumulTime) {
  */
 function Chrall_getTotalPiForLevel(level) {
 	return 5*level*(level+1)-10;
+}
+
+function itoa(o) {
+	if (o) {
+		if (o>0) return "+"+o;
+		else return ""+o;
+	} else {
+		return "-";
+	}
+}
+
+function decumul(i, val) {
+	return val - Math.floor(val*([0, .33, .6, .75, .85, .9][Math.min(i,4)]));
+}
+
+function turnName(turn) {	
+	if (turn==0) {
+		return "en cours";
+	} else if (turn==1) {
+		return "prochaine";
+	} else if (turn==2) {
+		return "subséquente";
+	} else {
+		return "+ " + turn;	
+	}
 }

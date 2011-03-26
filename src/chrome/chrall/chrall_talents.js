@@ -41,8 +41,6 @@ function getBubbleContentForCompetence(name) {
 			return html;
 			
 		case "Charger" :
-			console.log("player.pv="+player.pv);
-			console.log("player.regeneration.diceNumber="+player.regeneration.diceNumber);
 			var s = Math.ceil(player.pv/10) + player.regeneration.diceNumber;
 			var range = 1;
 			if (s>49) range = 8;
@@ -179,11 +177,11 @@ function getBubbleContentForSort(name) {
 			var a = player.regeneration.diceNumber;
 			var html = "<table>";
 			html += "<tr><td>Premier AE</td><td> : armure +" + a + "</td></tr>";
-			html += "<tr><td>Deuxième AE</td><td> : armure +" + (a-Math.floor(a*0.33)) + "</td></tr>";
-			html += "<tr><td>Troisième AE</td><td> : armure +" + (a-Math.floor(a*0.6)) + "</td></tr>";
-			html += "<tr><td>Quatrième AE</td><td> : armure +" + (a-Math.floor(a*0.75)) + "</td></tr>";
-			html += "<tr><td>Cinquième AE</td><td> : armure +" + (a-Math.floor(a*0.85)) + "</td></tr>";
-			html += "<tr><td>Sixième et suivants</td><td> : armure +" + (a-Math.floor(a*0.9)) + "</td></tr>";
+			html += "<tr><td>Deuxième AE</td><td> : armure +" + decumul(1, a) + "</td></tr>";
+			html += "<tr><td>Troisième AE</td><td> : armure +" + decumul(2, a) + "</td></tr>";
+			html += "<tr><td>Quatrième AE</td><td> : armure +" + decumul(3, a) + "</td></tr>";
+			html += "<tr><td>Cinquième AE</td><td> : armure +" + decumul(4, a) + "</td></tr>";
+			html += "<tr><td>Sixième et suivants</td><td> : armure +" + decumul(5, a) + "</td></tr>";
 			html += "</table>";
 			return html;
 
@@ -191,11 +189,11 @@ function getBubbleContentForSort(name) {
 			var a = 1 + Math.floor((player.attac.diceNumber-3)/2);
 			var html = "<table>";
 			html += "<tr><td>Premier ADA</td><td> : attaque +" + a + "</td></tr>";
-			html += "<tr><td>Deuxième ADA</td><td> : attaque +" + (a-Math.floor(a*0.33)) + "</td></tr>";
-			html += "<tr><td>Troisième ADA</td><td> : attaque +" + (a-Math.floor(a*0.6)) + "</td></tr>";
-			html += "<tr><td>Quatrième ADA</td><td> : attaque +" + (a-Math.floor(a*0.75)) + "</td></tr>";
-			html += "<tr><td>Cinquième ADA</td><td> : attaque +" + (a-Math.floor(a*0.85)) + "</td></tr>";
-			html += "<tr><td>Sixième et suivants</td><td> : attaque +" + (a-Math.floor(a*0.9)) + "</td></tr>";
+			html += "<tr><td>Deuxième ADA</td><td> : attaque +" + decumul(1, a) + "</td></tr>";
+			html += "<tr><td>Troisième ADA</td><td> : attaque +" + decumul(2, a) + "</td></tr>";
+			html += "<tr><td>Quatrième ADA</td><td> : attaque +" + decumul(3, a) + "</td></tr>";
+			html += "<tr><td>Cinquième ADA</td><td> : attaque +" + decumul(4, a) + "</td></tr>";
+			html += "<tr><td>Sixième et suivants</td><td> : attaque +" + decumul(5, a) + "</td></tr>";
 			html += "</table>";
 			return html;
 
@@ -203,11 +201,11 @@ function getBubbleContentForSort(name) {
 			var a = 1 + Math.floor((player.dodge.diceNumber-3)/2);
 			var html = "<table>";
 			html += "<tr><td>Premier ADE</td><td> : esquive +" + a + "</td></tr>";
-			html += "<tr><td>Deuxième ADE</td><td> : esquive +" + (a-Math.floor(a*0.33)) + "</td></tr>";
-			html += "<tr><td>Troisième ADE</td><td> : esquive +" + (a-Math.floor(a*0.6)) + "</td></tr>";
-			html += "<tr><td>Quatrième ADE</td><td> : esquive +" + (a-Math.floor(a*0.75)) + "</td></tr>";
-			html += "<tr><td>Cinquième ADE</td><td> : esquive +" + (a-Math.floor(a*0.85)) + "</td></tr>";
-			html += "<tr><td>Sixième et suivants</td><td> : esquive +" + (a-Math.floor(a*0.9)) + "</td></tr>";
+			html += "<tr><td>Deuxième ADE</td><td> : esquive +" + decumul(1, a) + "</td></tr>";
+			html += "<tr><td>Troisième ADE</td><td> : esquive +" + decumul(2, a) + "</td></tr>";
+			html += "<tr><td>Quatrième ADE</td><td> : esquive +" + decumul(3, a) + "</td></tr>";
+			html += "<tr><td>Cinquième ADE</td><td> : esquive +" + decumul(4, a) + "</td></tr>";
+			html += "<tr><td>Sixième et suivants</td><td> : esquive +" + decumul(5, a) + "</td></tr>";
 			html += "</table>";
 			return html;
 
@@ -215,11 +213,11 @@ function getBubbleContentForSort(name) {
 			var a = 1 + Math.floor((player.damage.diceNumber-3)/2);
 			var html = "<table>";
 			html += "<tr><td>Premier ADD</td><td> : dégâts +" + a + "</td></tr>";
-			html += "<tr><td>Deuxième ADD</td><td> : dégâts +" + (a-Math.floor(a*0.33)) + "</td></tr>";
-			html += "<tr><td>Troisième ADD</td><td> : dégâts +" + (a-Math.floor(a*0.6)) + "</td></tr>";
-			html += "<tr><td>Quatrième ADD</td><td> : dégâts +" + (a-Math.floor(a*0.75)) + "</td></tr>";
-			html += "<tr><td>Cinquième ADD</td><td> : dégâts +" + (a-Math.floor(a*0.85)) + "</td></tr>";
-			html += "<tr><td>Sixième et suivants</td><td> : dégâts +" + (a-Math.floor(a*0.9)) + "</td></tr>";
+			html += "<tr><td>Deuxième ADD</td><td> : dégâts +" + decumul(1, a) + "</td></tr>";
+			html += "<tr><td>Troisième ADD</td><td> : dégâts +" + decumul(2, a) + "</td></tr>";
+			html += "<tr><td>Quatrième ADD</td><td> : dégâts +" + decumul(3, a) + "</td></tr>";
+			html += "<tr><td>Cinquième ADD</td><td> : dégâts +" + decumul(4, a) + "</td></tr>";
+			html += "<tr><td>Sixième et suivants</td><td> : dégâts +" + decumul(5, a) + "</td></tr>";
 			html += "</table>";
 			return html;
 		
@@ -284,7 +282,6 @@ function getBubbleContentForSort(name) {
 			var threeshold = 1;
 			var step = 4;
 			for (var i=0; i<range; i++) { // si on atteind 30... ben c'est qu'on a trop de vue!
-				console.log("vue<"+threeshold+" => portée="+i);
 				if (s<threeshold) {
 					range = i;
 					break;
@@ -390,11 +387,11 @@ function getBubbleContentForSort(name) {
 			var a = Math.floor(player.sight.diceNumber/2);
 			var html = "<table>";
 			html += "<tr><td>Premier VA</td><td> : vue +" + a + "</td></tr>";
-			html += "<tr><td>Deuxième VA</td><td> : vue +" + Math.floor(a*0.66) + "</td></tr>";
-			html += "<tr><td>Troisième VA</td><td> : vue +" + Math.floor(a*0.4) + "</td></tr>";
-			html += "<tr><td>Quatrième VA</td><td> : vue +" + Math.floor(a*0.25) + "</td></tr>";
-			html += "<tr><td>Cinquième VA</td><td> : vue +" + Math.floor(a*0.15) + "</td></tr>";
-			html += "<tr><td>Sixième et suivants</td><td> : vue +" + Math.floor(a*0.1) + "</td></tr>";
+			html += "<tr><td>Deuxième VA</td><td> : vue +" + decumul(1, a) + "</td></tr>";
+			html += "<tr><td>Troisième VA</td><td> : vue +" +decumul(2, a) + "</td></tr>";
+			html += "<tr><td>Quatrième VA</td><td> : vue +" + decumul(3, a) + "</td></tr>";
+			html += "<tr><td>Cinquième VA</td><td> : vue +" + decumul(4, a) + "</td></tr>";
+			html += "<tr><td>Sixième et suivants</td><td> : vue +" + decumul(5, a) + "</td></tr>";
 			html += "</table>";
 			if (player.race=="Tomawak") {
 				html += "Vision Accrue augmente la portée du Projectile Magique mais pas l'attaque ni les dégâts.";

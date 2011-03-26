@@ -118,11 +118,13 @@ EN COURS :
 * procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
 * Bug sur le décumul (Laz : "12-8-4 (en dessous je sais pas) alors que ça indique 12-7-4")
+* bonus/malus : totaux [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=12)
 
 TODO :
 ======
 P1 :
 ----
+* BUG : la famille du monstre n'est pas toujours décodée
 * BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
 * bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
@@ -130,7 +132,6 @@ P1 :
 P2 :
 ----
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
-* bonus/malus : totaux [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=12)
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * à voir : mon contrat d'hébergement n'offre pas théoriquement un débit très important...
 * profil : indiquer les alarmes programmées
