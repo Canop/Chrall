@@ -106,7 +106,7 @@ func (cdm *CDM) HtmlTable() string {
 	rc := make([]NameValue, 0, CDM_MAX_ITEMS_IN_COL)
 	bc := make([]NameValue, 0, CDM_MAX_ITEMS_IN_COL)
 	lc = addUintsNV(lc, "Niveau", cdm.Niveau_min, cdm.Niveau_max)
-	addTextNV(rc, "Famille", cdm.Famille_text)
+	rc = addTextNV(rc, "Famille", cdm.Famille_text)
 	lc = addUintsNV(lc, "Dés d'attaque", cdm.DésAttaque_min, cdm.DésAttaque_max)
 	lc = addUintsNV(lc, "Dés d'esquive", cdm.DésEsquive_min, cdm.DésEsquive_max)
 	lc = addUintsNV(lc, "Dés de dégâts", cdm.DésDégâts_min, cdm.DésDégâts_max)
