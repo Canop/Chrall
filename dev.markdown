@@ -109,6 +109,9 @@ RECENTS / A TESTER :
 
 <- v1.02
 
+* BUG : la famille du monstre n'est pas toujours décodée
+* bonus/malus : totaux [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=12)
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -118,13 +121,11 @@ EN COURS :
 * procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
 * Bug sur le décumul (Laz : "12-8-4 (en dessous je sais pas) alors que ça indique 12-7-4")
-* bonus/malus : totaux [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=12)
 
 TODO :
 ======
 P1 :
 ----
-* BUG : la famille du monstre n'est pas toujours décodée
 * BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
 * bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)

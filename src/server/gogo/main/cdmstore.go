@@ -10,6 +10,7 @@ import (
 	"os"
 	"fmt"
 	"mysql"
+	"strconv"
 	"time"
 )
 
@@ -179,55 +180,9 @@ func (store *CdmStore) ReadTotalStats() (*BestiaryExtract, os.Error) {
 	return be, nil
 }
 
-
-func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtract, os.Error) {
-	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	sql := "select count(*), count(distinct num_monstre),"
-	sql += namaxmin("niveau") + ", " // namaxmin car le niveau d'un monstre est fixe pour un nom complet donné
-	sql += naminmax("points_de_vie") + ", "
-	sql += "max(capacite_text), "
-	sql += naminmax("des_attaque") + ", "
-	sql += naminmax("des_esquive") + ", "
-	sql += naminmax("des_degats") + ", "
-	sql += naminmax("des_regeneration") + ", "
-	sql += naminmax("armure") + ", "
-	sql += naminmax("vue") + ", "
-	sql += naminmax("maitrise_magique") + ", "
-	sql += naminmax("resistance_magique") + ", "
-	sql += " max(famille_text), "
-	sql += " max(nombre_attaques), "
-	sql += " max(vitesse_deplacement_text), "
-	sql += " max(voir_le_cache_boolean), "
-	sql += " max(attaque_a_distance_boolean), "
-	sql += naminmax("duree_tour") + ", "
-	sql += " max(portee_du_pouvoir_text)"
-	sql += " from cdm where nom_complet=" + toMysqlString(completeName)
-
-	//fmt.Println(sql)
-
-	err = db.Query(sql)
-	if err != nil {
-		return nil, err
-	}
-	result, err := db.UseResult()
-	if err != nil {
-		return nil, err
-	}
-
-	row := result.FetchRow()
-	if row == nil {
-		fmt.Println("ComputeMonsterStats : no result")
-		return nil, nil
-	}
-
+func rowToBestiaryExtract(completeName string, row mysql.Row) *BestiaryExtract {
 	be := new(BestiaryExtract)
 	be.Fusion = new(CDM)
-
 	be.Fusion.NomComplet = completeName
 	be.NbCdm = fieldAsInt64(row[0])
 	be.NbMonsters = fieldAsInt64(row[1])
@@ -260,7 +215,101 @@ func (store *CdmStore) ComputeMonsterStats(completeName string) (*BestiaryExtrac
 	be.Fusion.DuréeTour_min = fieldAsUint(row[27])
 	be.Fusion.DuréeTour_max = fieldAsUint(row[28])
 	be.Fusion.PortéeDuPouvoir_text = fieldAsString(row[29])
+	return be
+}
 
+/**
+ * estime les caractéristiques du monstre.
+ * Si l'id est fourni (i.e. pas 0) et si on a des cdm concernant ce monstre précis, on n'utilise que celles là [EN COURS]
+ */
+func (store *CdmStore) ComputeMonsterStats(completeName string, monsterId uint) (*BestiaryExtract, os.Error) {
+	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	if monsterId != 0 {
+		sql := "select count(*), count(distinct num_monstre),"
+		sql += namaxmin("niveau") + ", "
+		sql += namaxmin("points_de_vie") + ", "
+		sql += "max(capacite_text), "
+		sql += namaxmin("des_attaque") + ", "
+		sql += namaxmin("des_esquive") + ", "
+		sql += namaxmin("des_degats") + ", "
+		sql += namaxmin("des_regeneration") + ", "
+		sql += namaxmin("armure") + ", "
+		sql += namaxmin("vue") + ", "
+		sql += namaxmin("maitrise_magique") + ", "
+		sql += namaxmin("resistance_magique") + ", "
+		sql += " max(famille_text), "
+		sql += " max(nombre_attaques), "
+		sql += " max(vitesse_deplacement_text), "
+		sql += " max(voir_le_cache_boolean), "
+		sql += " max(attaque_a_distance_boolean), "
+		sql += namaxmin("duree_tour") + ", "
+		sql += " max(portee_du_pouvoir_text)"
+		sql += " from cdm where nom_complet=" + toMysqlString(completeName)
+		sql += " and num_monstre=" + strconv.Uitoa(monsterId)
+
+		err = db.Query(sql)
+		if err != nil {
+			return nil, err
+		}
+		result, err := db.UseResult()
+		if err != nil {
+			return nil, err
+		}
+		row := result.FetchRow()
+		db.FreeResult()
+		if row != nil {
+			fmt.Println("MONSTER FOUND BY NUM")
+			be := rowToBestiaryExtract(completeName, row)
+			be.PreciseMonster = true
+			return be, nil
+		}
+	}
+
+	sql := "select count(*), count(distinct num_monstre),"
+	sql += namaxmin("niveau") + ", " // namaxmin car le niveau d'un monstre est fixe pour un nom complet donné
+	sql += naminmax("points_de_vie") + ", "
+	sql += "max(capacite_text), "
+	sql += naminmax("des_attaque") + ", "
+	sql += naminmax("des_esquive") + ", "
+	sql += naminmax("des_degats") + ", "
+	sql += naminmax("des_regeneration") + ", "
+	sql += naminmax("armure") + ", "
+	sql += naminmax("vue") + ", "
+	sql += naminmax("maitrise_magique") + ", "
+	sql += naminmax("resistance_magique") + ", "
+	sql += " max(famille_text), "
+	sql += " max(nombre_attaques), "
+	sql += " max(vitesse_deplacement_text), "
+	sql += " max(voir_le_cache_boolean), "
+	sql += " max(attaque_a_distance_boolean), "
+	sql += naminmax("duree_tour") + ", "
+	sql += " max(portee_du_pouvoir_text)"
 	sql += " from cdm where nom_complet=" + toMysqlString(completeName)
+
+	fmt.Println(sql)
+
+	err = db.Query(sql)
+	if err != nil {
+		return nil, err
+	}
+	result, err := db.UseResult()
+	if err != nil {
+		return nil, err
+	}
+
+	row := result.FetchRow()
+	if row == nil {
+		//fmt.Println("ComputeMonsterStats : no result")
+		return nil, nil
+	}
+	db.FreeResult()
+
+	be := rowToBestiaryExtract(completeName, row)
+	be.PreciseMonster = true
 	return be, nil
 }

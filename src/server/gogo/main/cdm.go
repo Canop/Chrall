@@ -293,8 +293,8 @@ func NewCdm(lines []string) *CDM {
 		ip := strings.LastIndex(line, ":")
 		ia := strings.Index(line, "(")
 		ib := strings.Index(line, "]")
-		if ip>=0 && ia>=ip && ib>ia {
-			famille = strings.Trim(line[ip+2 : ia-1], " ")
+		if ip >= 0 && ia >= ip && ib > ia {
+			famille = strings.Trim(line[ip+2:ia-1], " ")
 			fmt.Println("Fam : '" + famille + "'")
 			nomComplet = line[ia+1 : ib+1]
 		} else {

@@ -8,6 +8,7 @@ import (
 	"http"
 	"fmt"
 	"json"
+	"strconv"
 )
 
 type BestiaryExtractJson struct {
@@ -35,9 +36,16 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		fmt.Println(" no monster complete name in request")
 		return "Hein ?"
 	}
+	var monsterId uint
+	var monsterIdAsString string
+	monsterIds := hr.Form["monsterId"]
+	if len(monsterCompleteNames) > 0 {
+		monsterIdAsString = monsterIds[0]
+		monsterId, _ = strconv.Atoui(monsterIdAsString)
+	}
 	//fmt.Println(" Request for \"" + monsterCompleteNames[0] + "\"")
 
-	be, err := h.store.ComputeMonsterStats(monsterCompleteNames[0])
+	be, err := h.store.ComputeMonsterStats(monsterCompleteNames[0], monsterId)
 	if err != nil {
 		fmt.Println(" Erreur : " + err.String())
 		return "Erreur : " + err.String()
@@ -46,14 +54,22 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	if be == nil || be.NbCdm == 0 {
 		html = "g0g0chrall ne connait pas ce monstre"
 	} else {
-		if be.NbMonsters < 2 {
-			if be.NbCdm == 1 {
-				html = "Une seule CDM a été reçue pour cette espèce."
+		if be.PreciseMonster && monsterId>0 {
+			if be.NbMonsters < 2 {
+				html = "Cette estimation est basée sur une CDM unique du monstre " + monsterIdAsString
 			} else {
-				html = fmt.Sprintf("Cette estimation est basée sur %d CDM d'un seul monstre.", be.NbCdm)
+				html = fmt.Sprintf("Cette estimation est basée sur %d CDM du monstre.", be.NbCdm)
 			}
 		} else {
-			html = fmt.Sprintf("Cette estimation est basée sur %d CDM concernant %d monstres.", be.NbCdm, be.NbMonsters)
+			if be.NbMonsters < 2 {
+				if be.NbCdm == 1 {
+					html = "Une seule CDM a été reçue pour cette espèce."
+				} else {
+					html = fmt.Sprintf("Cette estimation est basée sur %d CDM d'un seul monstre.", be.NbCdm)
+				}
+			} else {
+				html = fmt.Sprintf("Cette estimation est basée sur %d CDM concernant %d monstres.", be.NbCdm, be.NbMonsters)
+			}
 		}
 		html += "<center>"
 		html += be.Fusion.HtmlTable()

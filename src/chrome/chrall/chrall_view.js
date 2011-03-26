@@ -420,9 +420,11 @@ function Chrall_analyseAndReformatView() {
 				// ce qui suit est peut-être un peu trop compliqué mais je n'arrive pas à obtenir un bon formatage (sans retour chariot) des liens des monstres (z:nom) sans mettre le z (la profondeur) dans le a
 				var nomMonstre;
 				var requestId;
+				var monsterId;
 				if (message) {
 					//> lien dans la grille
 					nomMonstre = link.attr("nom_complet_monstre");
+					monsterId = link.attr('id');
 					requestId = decodeURIComponent(nomMonstre);
 				} else {
 					//> lien dans la table
@@ -430,8 +432,9 @@ function Chrall_analyseAndReformatView() {
 					message = linkText;
 					requestId = linkText;
 				}
-				$('#bubbleMonsterName').val(nomMonstre);	
-				bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre, requestId);
+				$('#bubbleMonsterName').val(nomMonstre);
+				//bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
+				bubble(link, message, "bub_monster", "http://localhost:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
 			}
 		}
 	);
