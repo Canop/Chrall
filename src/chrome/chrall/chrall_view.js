@@ -178,7 +178,7 @@ function Chrall_makeGridHtml() {
 	}
 	html += "<td align=center height=30 width=30>x\\y</td>";
 	html += "</tr>";
-	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center>Midikan (Y-)</td><td bgcolor=#BABABA></td></tr>";
+	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center>Mydikan (Y-)</td><td bgcolor=#BABABA></td></tr>";
 	html += "</table>";
 	return html;
 }
