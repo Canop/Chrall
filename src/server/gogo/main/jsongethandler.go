@@ -39,7 +39,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	var monsterId uint
 	var monsterIdAsString string
 	monsterIds := hr.Form["monsterId"]
-	if len(monsterCompleteNames) > 0 {
+	if len(monsterIds) > 0 {
 		monsterIdAsString = monsterIds[0]
 		monsterId, _ = strconv.Atoui(monsterIdAsString)
 	}
