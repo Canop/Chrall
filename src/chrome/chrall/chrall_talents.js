@@ -41,18 +41,23 @@ function getBubbleContentForCompetence(name) {
 			return html;
 			
 		case "Charger" :
-			var s = Math.ceil(player.pv/10) + player.regeneration.diceNumber;
-			var range = 1;
-			if (s>49) range = 8;
-			else if (s>39) range = 7;
-			else if (s>30) range = 6;
-			else if (s>22) range = 5;
-			else if (s>15) range = 4;
-			else if (s>9) range = 3;
-			else if (s>4) range = 2;
+			var computeRange = function(pv) {
+				var s = Math.ceil(pv/10) + player.regeneration.diceNumber;
+				if (s>49) return 8;
+				else if (s>39) return 7;
+				else if (s>30) return 6;
+				else if (s>22) return 5;
+				else if (s>15) return 4;
+				else if (s>9) return 3;
+				else if (s>4) return 2;
+				return 1;
+			}
+			var maxRange = computeRange(player.pvMax);
+			var range = computeRange(player.pv);
 			range -= Math.floor((player.strainBase+player.strainMalus)/5); // malus de fatigue
 			if (range<0) range = 0;
-			var html = "<table><tr><td>Portée</td><td> : "+range+(range>1 ? " cases" : " case") + "</td></tr>";
+			var html = "<table><tr><td>Portée maximale</td><td> : "+maxRange+(maxRange>1 ? " cases" : " case") + "</td></tr>";
+			html += "<tr><td>Portée actuelle</td><td> : "+range+(range>1 ? " cases" : " case") + "</td></tr>";
 			html += "<tr><td>Attaque moyenne</td><td> : " + player.attac.getMean() + "</td></tr>";
 			html += "<tr><td>Dégâts moyens</td><td> : " + player.damage.getMean() + " / " + player.damage.getCriticalMean() + "</td></tr>";
 			html += "</table>";

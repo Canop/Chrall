@@ -111,6 +111,11 @@ RECENTS / A TESTER :
 
 * BUG : la famille du monstre n'est pas toujours décodée
 * bonus/malus : totaux [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=12)
+* Bug sur le décumul (Laz : "12-8-4 (en dessous je sais pas) alors que ça indique 12-7-4")
+* laz : ce serait pas mal que la bulle de charge indique à la fois les valeurs max et instantanée.
+* bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
+
+<- v1.03
 
 EN COURS :
 ==========
@@ -120,15 +125,14 @@ EN COURS :
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
-* Bug sur le décumul (Laz : "12-8-4 (en dessous je sais pas) alors que ça indique 12-7-4")
 
 TODO :
 ======
 P1 :
 ----
 * BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
-* bestiaire/grille : exploiter les CDM du monstre (et pas de son espèce) si on les a (en utilisant maxmin plutôt que minmax)
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
+* site web chrall : actualiser fréquemment (30s ?) le test de la version, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
 
 P2 :
 ----
