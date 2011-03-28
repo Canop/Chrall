@@ -24,22 +24,18 @@ table.grid td {
 }
 a.ch_monster, a.ch_monster:hover {
 	color: brown !important;
-	display: block;
 }
 a.ch_gowap, a.ch_gowap:hover {
 	color: #c99b1f !important;
-	display: block;
 }
 a.ch_troll, a.ch_troll:hover {
 	color: blue  !important;
-	display: block;
 }
 a.ch_troll[intangible] {
 	font-style: italic;
 }
 a.ch_place, a.ch_place:hover {
 	color: black  !important;
-	display: block;
 }
 span.ch_object, span.ch_object:hover {
 	color: grey  !important;
@@ -222,3 +218,31 @@ a.gogo:hover {
 .bubbleTitle {
 	text-align: center;
 } 
+
+#objectMenu {
+	position: absolute; border: 2px;
+	box-shadow: 0px 6px 10px #666;
+	border-radius: 0 0 10px 10px;
+	border-left: thin solid #333333;
+	border-bottom: thin solid #333333;
+	border-right: thin solid #333333;
+	font-size: 12px;
+	color: white;
+	padding: 2px;
+	text-align: center;
+}
+#objectMenu a:link {
+	display: block;
+	background-color: green;
+	margin : 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-radius: 8px;
+	text-decoration: none;
+	color: white !important;
+}
+#objectMenu a:hover {
+	background-color: darkGreen;
+}
+
+

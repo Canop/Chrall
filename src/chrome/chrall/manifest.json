@@ -17,6 +17,7 @@
 				"jquery.js",
 				"date-fr-FR.js",
 				"chrall_bubbles.js",
+				"chrall_objectMenu.js",
 				"chrall_things.js",
 				"chrall_general.js",
 				"chrall_talents.js",
@@ -27,6 +28,8 @@
 				"chrall_start.js",
 				"chrall_view.js",
 				"chrall_flies.js",
+				"chrall_move.js",
+				"chrall_play2.js",
 				"chrall_main.js"
 			]
 		},

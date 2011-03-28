@@ -55,6 +55,12 @@ switch (pageName) {
 	case "Play_a_Competence16b.php": // le 16b serait le formulaire de préparation ?
 		Chrall_handleCdmPage();	
 		break;
+	case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la colonne menu de gauche
+		Chrall_preparePlay2Inputs();	
+		break;
+	case "Play_a_Move.php":
+		Chrall_handleMovePage();	
+		break;
 }
 
 

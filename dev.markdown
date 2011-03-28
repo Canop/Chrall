@@ -132,7 +132,8 @@ P1 :
 ----
 * BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
-* site web chrall : actualiser fréquemment (30s ?) le test de la version, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
+* site web chrall : actualiser fréquemment (30s ?) à partir du clic sur le lien de l'extension, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
+* grille : boutons de DE et charge
 
 P2 :
 ----
@@ -168,7 +169,6 @@ P3 :
 * grille : une flèche discrète par dessus la grille pour indiquer la direction du joueur (utiliser un canvas transparent ?). Cette flèche doit contenir un bouton de centrage.
 * profil : un onglet pour lister les notes (de soi et de ceux qui partagent avec nous). Ceci aura l'effet de bord d'offrir des "bookmarks" des trolls et monstres annotés
 * profil/actions programmées : afficher la moyenne de la parade
-* chat d'équipe 
 * tableaux standards MH (monstres, événements, tableau de chasse, etc.) : surligner la ligne de la souris pour faciliter le rapprochement gauche/droite.
 * poids de l'équipement : détailler ce qui est porté et ce qui est en besace
 * ? icône pour indiquer directement sur la carte quels monstres voient le caché

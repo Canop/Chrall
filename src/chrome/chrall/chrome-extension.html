@@ -65,13 +65,14 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 			if (alarm.time>=timeNow && alarm.status!="played") {
 				playSound();
 				alarm.status = "played";
-				// alert("Hé ! Il est l'heure..."); j'enlève l'alarme : elle bloque toute les fenêtres, y compris quand on ne la voit pas...
+				// alert("Hé ! Il est l'heure..."); j'enlève l'alert : elle bloque toute les fenêtres, y compris quand on ne la voit pas...
 			}
 		}
 	}
 
 	chrome.extension.onRequest.addListener(
 		function(request, sender, sendResponse) {
+			console.log('chrome-extension : Request received !');
 			for (var key in request) {
 				//alert("key=" + key + "  value="+request[key]);
 				if (key=="dla" || key=="cumul") {

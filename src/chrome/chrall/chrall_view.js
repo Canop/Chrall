@@ -60,7 +60,18 @@ function Chrall_makeGridHtml() {
 	var grey_closed_png_url = chrome.extension.getURL("grey_closed.png");
 	var grey_open_png_url = chrome.extension.getURL("grey_open.png");
 	
-	html = "";	
+	html = "";
+	
+	html += "<script>";
+	html += "function playDE(dx, dy, dz){";
+	html += " parent.chrall_de_dx.value=dx;";
+	html += " parent.chrall_de_dy.value=dy;";
+	html += " parent.chrall_de_dz.value=dz;";
+	html += " parent.frames['Action'].location.href='Play_action.php?ai_ToDo=112&amp;as_Action=ACTION!';";
+	html += "";
+	html += "}";
+	html += "</script>";
+	
 	html += "<table class=grid>";
 	html += "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center>Nordhikan (Y+)</td><td bgcolor=#BABABA></td></tr>";
 	html += "<tr>";
@@ -79,12 +90,15 @@ function Chrall_makeGridHtml() {
 			var hasHole = false;
 			var cellPositionMessage = "X="+x+" Y="+y+"<br>Distance horizontale: "+hdist;
 			var cellContent = "";
+			var cellMenuInfos = null;
 			if (x==player.x && y==player.y) {
-				cellContent += "<span class=ch_player>"+player.z+":Vous êtes ici</span><br>"
+				cellContent += "<span class=ch_player>"+player.z+":Vous êtes ici</span><br>";
+				cellMenuInfos = "cell00";
 			}
 			for (var i=0; i<trollsInView.length; i++) {
 				var t = trollsInView[i];
 				if (t.x==x && t.y==y) {
+					if (cellContent.length>0) cellContent += "<br>";
 					cellContent += "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\"";
 					cellContent += " message=\""+cellPositionMessage+"\"" // TODO trouver un moyen de moins dupliquer ce message !
 					if (t.isIntangible) cellContent += " intangible";
@@ -95,12 +109,14 @@ function Chrall_makeGridHtml() {
 				var m = monstersInView[i];
 				if (m.x==x && m.y==y) {
 					if (m.isGowap) {
+					if (cellContent.length>0) cellContent += "<br>";
 						cellContent += "<a name='gowaps' class=ch_gowap href=\"javascript:EMV("+m.id+",750,550);\"";
 						cellContent += " message=\""+m.fullName+" ( "+m.id+" )<br>en X="+x+" Y="+y+" Z="+m.z+"\"";
 						cellContent += ">"+m.z+": "+m.name+"";
 						if (m.isSick) cellContent += "<span class=ch_tag>[M]</span>";
 						cellContent += "</a>";
 					} else {
+					if (cellContent.length>0) cellContent += "<br>";
 						cellContent += "<a name='monstres' class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\"";
 						cellContent += " message=\""+m.fullName+" en "+cellPositionMessage+"\"";
 						cellContent += " id="+m.id;
@@ -115,6 +131,7 @@ function Chrall_makeGridHtml() {
 					if (t.isHole) {
 						hasHole = true;
 					} else {
+					if (cellContent.length>0) cellContent += "<br>";
 						cellContent += "<a name='lieux' class=ch_place>"+t.z+": "+t.name+"</a>";
 					}
 				}
@@ -133,6 +150,7 @@ function Chrall_makeGridHtml() {
 				var list = objectsByLevel[level];
 				var merge = list.length>3;				
 				if (merge) {
+					if (cellContent.length>0) cellContent += "<br>";
 					var divName = "objects_"+(x<0?"_"+(-x):x)+"_"+(y<0?"_"+(-y):y)+"_"+(-level);
 					cellContent += "<span name='trésors' class=ch_object>" + level + " : ";
 					// ligne suivante : début de tentative de mettre un triangle d'ouverture
@@ -144,6 +162,7 @@ function Chrall_makeGridHtml() {
 				}
 				for (var i=0; i<list.length; i++) {
 					var t = list[i];
+					if (cellContent.length>0) cellContent += "<br>";
 					cellContent += "<span name='trésors' bub=\""+t.id+" : "+t.name+"\" class=ch_object>"+t.z+": "+t.name+"</span>"; // note :pb à attendre si le nom du trésor contient un guillement
 				}
 				if (merge) {
@@ -153,19 +172,27 @@ function Chrall_makeGridHtml() {
 			for (var i=0; i<mushroomsInView.length; i++) {
 				var t = mushroomsInView[i];
 				if (t.x==x && t.y==y) {
+					if (cellContent.length>0) cellContent += "<br>";
 					cellContent += "<a name='champignons' class=ch_mushroom>"+t.z+": "+t.name+"</a>";
 				}
 			}
 			for (var i=0; i<cenotaphsInView.length; i++) {
 				var t = cenotaphsInView[i];
 				if (t.x==x && t.y==y) {
+					if (cellContent.length>0) cellContent += "<br>";
 					cellContent += "<a name='cénotaphes' class=ch_cenotaph>"+t.z+": "+t.name+"</a>";
 				}
 			}
 			html += "<td class=d"+((hdist-horizontalViewLimit+20001)%2);
-			if (cellContent.length>0) html += " hasContent"; 
+			html += " grid_x=" + x;
+			html += " grid_y=" + y;
+			if (cellContent.length>0) html += " hasContent";
+			if (cellMenuInfos!=null) html += " cellMenuInfos="+cellMenuInfos;
 			html += ">";
-			if (hasHole==true) html += "<span class=ch_place>Trou de Météorite</span>";
+			if (hasHole==true) {
+				if (cellContent.length>0) cellContent += "<br>";
+				html += "<span class=ch_place>Trou de Météorite</span>";
+			}
 			html += cellContent;
 			html += "</td>\n";
 		}
@@ -382,7 +409,7 @@ function Chrall_analyseAndReformatView() {
 	html += "<div id=tabMushrooms class=tab_content></div>";
 	html += "<div id=tabCenotaphs class=tab_content></div>";
 	html += "<div id=tabSettings class=tab_content></div>";
-	html += "</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
+	html += '</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>';
 	$($("table.mh_tdborder")[0]).parent().parent().prepend(html);	
 	$("div#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 	$("div#tabMonsters").append(tables[1]);
@@ -405,7 +432,7 @@ function Chrall_analyseAndReformatView() {
 		return false;
 	});
 	
-
+	
 	//> on ajoute le popup sur les monstres
 	$('a[href*="EMV"]').each(
 		function() {
@@ -467,5 +494,26 @@ function Chrall_analyseAndReformatView() {
 		document.getElementsByName("ai_MaxVue")[0].value = limit;
 		document.getElementsByName("ai_MaxVueVert")[0].value = Math.ceil(limit/2);
 		$('form[name="LimitViewForm"]').submit();
+	});
+
+	//> on met des menus sur certaines cellules
+	function makeDeLink(x, y, z) {
+		return '<a href="javascript:console.log(\'AE\');playDE('+(x-player.x)+','+(y-player.y)+','+(z-player.z)+');">DE '+x+' '+y+' '+z+'</a>';
+	}
+	$('td[grid_x]').each(function() {
+		var o = $(this);
+		var x = parseInt(o.attr('grid_x'));
+		var y = parseInt(o.attr('grid_y'));
+		if (x>=player.x-1 && x<=player.x+1 && y>=player.y-1 && y<=player.y+1) {
+			var links = new Array();
+			if (player.z<0) links.push(makeDeLink(x, y, player.z+1));
+			if (x!=player.x || y!=player.y) links.push(makeDeLink(x, y, player.z));
+			links.push(makeDeLink(x, y, player.z-1));
+			//console.log(links);
+			objectMenu(
+				o,
+				links.join('')
+			);
+		}
 	});
 }
