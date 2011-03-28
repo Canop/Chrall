@@ -1,7 +1,8 @@
-/**
- *
+/*
+ * La méthode objectMenu, la seule publique, permet d'ajouter un menu (en fait un div
+ *  dont le contenu est fourni par l'appelant) qui s'affiche sous un objet (testé pour
+ *  un td mais ça doit marcher avec tout ce qui est fixe et assez large).
  */ 
-
 
 var onOmTarget = false;
 var onOmMenu = false;
@@ -13,14 +14,12 @@ var omMenu;
 function hideOm() {
 	clearTimeout(omCloseTimeoutID);
 	if (omExists && !onOmMenu) {
-		//console.log("hideOm");
 		$("#objectMenu").remove();
 		omExists = false;
 	}
 }
 function showOm(target, text) {
 	var pos =target.offset();
-	//console.log("showOm");
 	if (omExists) hideOm();
 	var html = '<div id="objectMenu" style="';
 	html += "left:"+pos.left+"px;";
@@ -29,6 +28,7 @@ function showOm(target, text) {
 	html += "background-color:"+target.css("background-color")+";";
 	html += '">'+text+'</div>';
 	omMenu = $(html);
+	omTarget = target;
 	omMenu.mouseover(keepOmOpen).mouseout(letOmClose).appendTo('body');
 	omExists = true;
 }
@@ -46,11 +46,9 @@ function letOmClose(event) {
 			&& event.pageY>pos.top
 			&& event.pageY<pos.top+omMenu.height()
 		) {
-			//console.log("FAUX POSITIF");
 			return;
 		}
 	}
-	//console.log("letOmClose");
 	onOmMenu = false;
 	hideOm();
 }
@@ -60,13 +58,21 @@ function objectMenu(
 	html // le contenu du menu
 ) {
 	target.mouseenter(function(event) {
-		//console.log("mouseenter");
 		if (onOmMenu || onOmTarget) return false;
 		onOmTarget = true;
 		showOm.call(this, $(this), html);
 	});
 	target.mouseout(function(){
-		//console.log("mouseout");
+		// si l'on entre dans un objet du menu (par exemple un lien) l'évenement MouseOut est envoyé, on doit donc filtrer ce cas
+		var pos = omTarget.offset();
+		if (
+			event.pageX>pos.left
+			&& event.pageX<pos.left+omTarget.width()
+			&& event.pageY>pos.top
+			&& event.pageY<pos.top+omTarget.height()
+		) {
+			return;
+		}
 		onOmTarget = false;
 		omCloseTimeoutID = setTimeout(hideOm, 150);
 	});

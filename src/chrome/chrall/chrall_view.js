@@ -184,11 +184,11 @@ function Chrall_makeGridHtml() {
 			html += "<td class=d"+((hdist-horizontalViewLimit+20001)%2);
 			html += " grid_x=" + x;
 			html += " grid_y=" + y;
-			if (cellContent.length>0) html += " hasContent";
+			var cellIsAccessibleByDe = x>=player.x-1 && x<=player.x+1 && y>=player.y-1 && y<=player.y+1;
+			if (cellContent.length>0 || cellIsAccessibleByDe) html += " hasContent";
 			if (cellMenuInfos!=null) html += " cellMenuInfos="+cellMenuInfos;
 			html += ">";
 			if (hasHole==true) {
-				if (cellContent.length>0) cellContent += "<br>";
 				html += "<span class=ch_place>Trou de Météorite</span>";
 			}
 			html += cellContent;
