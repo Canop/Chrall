@@ -22,33 +22,33 @@ table.grid th {
 table.grid td {
 	border: thin solid #333333;
 }
-a.ch_monster, a.ch_monster:hover {
+.ch_monster, .ch_monster:hover {
 	color: brown !important;
 }
-a.ch_gowap, a.ch_gowap:hover {
+.ch_gowap, .ch_gowap:hover {
 	color: #c99b1f !important;
 }
-a.ch_troll, a.ch_troll:hover {
+.ch_troll, .ch_troll:hover {
 	color: blue  !important;
 }
-a.ch_troll[intangible] {
+.ch_troll[intangible] {
 	font-style: italic;
 }
-a.ch_place, a.ch_place:hover {
+.ch_place, .ch_place:hover {
 	color: black  !important;
 }
-span.ch_object, span.ch_object:hover {
+.ch_object, .ch_object:hover {
 	color: grey  !important;
 	display: none;
 }
 a.ch_objects_toggler {
 	color: grey  !important;
 }
-a.ch_mushroom, a.ch_mushroom:hover {
+.ch_mushroom, .ch_mushroom:hover {
 	color: #6d7e44  !important;
 	display: none;
 }
-a.ch_cenotaph, a.ch_cenotaph:hover {
+.ch_cenotaph, .ch_cenotaph:hover {
 	color: #3fbbbc  !important;
 	display: none;
 }

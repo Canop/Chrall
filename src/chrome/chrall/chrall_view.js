@@ -10,8 +10,8 @@ function Chrall_makeFiltersHtml() {
 	html += " var os = document.getElementsByName(key);";
 	html += " for (var i=0; i<os.length; i++) {";
 	html += "  if (!display) {";
-	html += "   if (os[i].style.display=='block') os[i].style.display='none';";
-	html += "   else os[i].style.display='block';";
+	html += "   if (os[i].style.display=='inline') os[i].style.display='none';";
+	html += "   else os[i].style.display='inline';";
 	html += "  } else {";
 	html += "   os[i].style.display=display;";
 	html += "  }";
@@ -46,7 +46,7 @@ function Chrall_makeFiltersHtml() {
 	for (var key in viewFilters) {
 		html += "<span><input type=checkbox id='"+key+"'";
 		if (viewFilters[key]) html += " checked";
-		html += " onClick=\"ChrallEmbedded_toggleDisplayByName('"+key+"', this.checked?'block':'none');\"";
+		html += " onClick=\"ChrallEmbedded_toggleDisplayByName('"+key+"', this.checked?'inline':'none');\"";
 		html += "><label for='"+key+"'>"+key+"</label></span>";
 	}
 	html += "</form>";
@@ -98,7 +98,7 @@ function Chrall_makeGridHtml() {
 			for (var i=0; i<trollsInView.length; i++) {
 				var t = trollsInView[i];
 				if (t.x==x && t.y==y) {
-					if (cellContent.length>0) cellContent += "<br>";
+					if (cellContent.length>0) cellContent += "<br name='trolls' class=ch_troll>";
 					cellContent += "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\"";
 					cellContent += " message=\""+cellPositionMessage+"\"" // TODO trouver un moyen de moins dupliquer ce message !
 					if (t.isIntangible) cellContent += " intangible";
@@ -109,14 +109,14 @@ function Chrall_makeGridHtml() {
 				var m = monstersInView[i];
 				if (m.x==x && m.y==y) {
 					if (m.isGowap) {
-					if (cellContent.length>0) cellContent += "<br>";
+						if (cellContent.length>0) cellContent += "<br name='gowaps' class=ch_gowap>";
 						cellContent += "<a name='gowaps' class=ch_gowap href=\"javascript:EMV("+m.id+",750,550);\"";
 						cellContent += " message=\""+m.fullName+" ( "+m.id+" )<br>en X="+x+" Y="+y+" Z="+m.z+"\"";
 						cellContent += ">"+m.z+": "+m.name+"";
 						if (m.isSick) cellContent += "<span class=ch_tag>[M]</span>";
 						cellContent += "</a>";
 					} else {
-					if (cellContent.length>0) cellContent += "<br>";
+						if (cellContent.length>0) cellContent += "<br name='monstres' class=ch_monster>";
 						cellContent += "<a name='monstres' class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\"";
 						cellContent += " message=\""+m.fullName+" en "+cellPositionMessage+"\"";
 						cellContent += " id="+m.id;
@@ -131,7 +131,7 @@ function Chrall_makeGridHtml() {
 					if (t.isHole) {
 						hasHole = true;
 					} else {
-					if (cellContent.length>0) cellContent += "<br>";
+					if (cellContent.length>0) cellContent += "<br name='lieux' class=ch_place>";
 						cellContent += "<a name='lieux' class=ch_place>"+t.z+": "+t.name+"</a>";
 					}
 				}
@@ -150,11 +150,9 @@ function Chrall_makeGridHtml() {
 				var list = objectsByLevel[level];
 				var merge = list.length>3;				
 				if (merge) {
-					if (cellContent.length>0) cellContent += "<br>";
+					if (cellContent.length>0) cellContent += "<br name='trésors' class=ch_object>";
 					var divName = "objects_"+(x<0?"_"+(-x):x)+"_"+(y<0?"_"+(-y):y)+"_"+(-level);
 					cellContent += "<span name='trésors' class=ch_object>" + level + " : ";
-					// ligne suivante : début de tentative de mettre un triangle d'ouverture
-					//cellContent += "<img border=0 src=\""+grey_closed_png_url+"\">";
 					cellContent += "<a class=ch_objects_toggler href=\"javascript:ChrallEmbedded_toggleDisplayByName('"+divName+"');\">";
 					cellContent += "<b>"+list.length+" trésors</b>";
 					cellContent += "</a>";
@@ -162,7 +160,7 @@ function Chrall_makeGridHtml() {
 				}
 				for (var i=0; i<list.length; i++) {
 					var t = list[i];
-					if (cellContent.length>0) cellContent += "<br>";
+					if (cellContent.length>0) cellContent += "<br name='trésors' class=ch_object>";
 					cellContent += "<span name='trésors' bub=\""+t.id+" : "+t.name+"\" class=ch_object>"+t.z+": "+t.name+"</span>"; // note :pb à attendre si le nom du trésor contient un guillement
 				}
 				if (merge) {
@@ -172,14 +170,14 @@ function Chrall_makeGridHtml() {
 			for (var i=0; i<mushroomsInView.length; i++) {
 				var t = mushroomsInView[i];
 				if (t.x==x && t.y==y) {
-					if (cellContent.length>0) cellContent += "<br>";
+					if (cellContent.length>0) cellContent += "<br name='champignons' class=ch_mushroom>";
 					cellContent += "<a name='champignons' class=ch_mushroom>"+t.z+": "+t.name+"</a>";
 				}
 			}
 			for (var i=0; i<cenotaphsInView.length; i++) {
 				var t = cenotaphsInView[i];
 				if (t.x==x && t.y==y) {
-					if (cellContent.length>0) cellContent += "<br>";
+					if (cellContent.length>0) cellContent += "<br name='cénotaphes' class=ch_cenotaph>";
 					cellContent += "<a name='cénotaphes' class=ch_cenotaph>"+t.z+": "+t.name+"</a>";
 				}
 			}
