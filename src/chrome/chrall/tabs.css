@@ -2,7 +2,7 @@ ul.tabs {
 	margin: 0;
 	padding: 0;
 	list-style: none;
-	height: 32px; /*--Set height of tabs--*/
+	height: 27px; /*--Set height of tabs--*/
 	border-bottom: 1px solid #999;
 	border-left: 1px solid #999;
 	background-image:url("http://games.mountyhall.com/MH_Packs/packMH_parchemin/fond/fond2.jpg");
@@ -17,8 +17,8 @@ ul.tabs li {
 	float: left;
 	margin: 0;
 	padding: 0;
-	height: 31px; /*--Subtract 1px from the height of the unordered list--*/
-	line-height: 31px; /*--Vertically aligns the text within the tab--*/
+	height: 26px; /*--Subtract 1px from the height of the unordered list--*/
+	line-height: 26px; /*--Vertically aligns the text within the tab--*/
 	border: 1px solid #999;
 	border-left: none;
 	margin-bottom: -1px; /*--Pull the list item down 1px--*/
@@ -30,8 +30,8 @@ ul.tabs li a {
 	text-decoration: none;
 	color: #000;
 	display: block;
-	font-size: 1.2em;
-	padding: 0 20px;
+	font-size: 14px;
+	padding: 0 8px;
 	border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
 	outline: none;
 }

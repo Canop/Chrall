@@ -21,7 +21,7 @@ function Chrall_makeFiltersHtml() {
 	html += "</script>";
 	html += "<form id=gridFiltersForm>";
 	if (viewMaxSight>5) {
-		html += "<small>Horizon : </small><select id=viewRedux>";
+		html += "Horizon : <select id=viewRedux>";
 		html += "<option value="+horizontalViewLimit+">Actuel (vue de "+horizontalViewLimit+")</option>";
 		if (horizontalViewLimit!=4 && viewMaxSight>4) {
 			html += "<option value=4>Intime (vue de 4)</option>";
@@ -382,7 +382,7 @@ function Chrall_analyseAndReformatView() {
 	html += "<div id=tabMushrooms class=tab_content></div>";
 	html += "<div id=tabCenotaphs class=tab_content></div>";
 	html += "<div id=tabSettings class=tab_content></div>";
-	html += "</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>";
+	html += "</div><br><br><br><br><br><br><br><br><br><br><br>";
 	$($("table.mh_tdborder")[0]).parent().parent().prepend(html);	
 	$("div#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 	$("div#tabMonsters").append(tables[1]);

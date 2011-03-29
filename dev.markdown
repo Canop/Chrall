@@ -186,6 +186,10 @@ P3 :
 * ajouter au filtre de manifest.json les pages venant des principaux proxys mh
 * PB : la version de chrall est spécifié à 4 endroits (nom du fichier crx et champ caché dans index.php, messager.go, chrallgeneral.js). Ca fait 3 de trop. Faire un makefile ?
 * réflexion sur l'opportunité de passer à une base mongodb _(l'inconnue porte sur les performances des consolidations et recherches textuelles)_
+* équipement/petits : montrer quels compos sont EM
+* bestiaire : montrer quels compos sont EM
+* liste matos tanière : montrer quels compos sont EM
+* programmation golem : sauvegarde
 
 
 NOTES :

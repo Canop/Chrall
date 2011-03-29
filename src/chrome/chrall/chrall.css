@@ -79,8 +79,9 @@ table.grid td[hasContent]{
 }
 form#gridFiltersForm {
 	position: fixed;
+	font-size:12px;
 	left: 15px;
-	top: 40px;
+	top: 32px;
 	background-color: #EBEBEB;
 	border: 1px solid grey;
 	margin : 4px;
