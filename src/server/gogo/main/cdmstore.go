@@ -263,10 +263,12 @@ func (store *CdmStore) ComputeMonsterStats(completeName string, monsterId uint) 
 		row := result.FetchRow()
 		db.FreeResult()
 		if row != nil {
-			fmt.Println("MONSTER FOUND BY NUM")
 			be := rowToBestiaryExtract(completeName, row)
-			be.PreciseMonster = true
-			return be, nil
+			if be.NbCdm > 0 {
+				fmt.Println("MONSTER FOUND BY NUM : " + strconv.Uitoa(monsterId))
+				be.PreciseMonster = true
+				return be, nil
+			}
 		}
 	}
 
@@ -291,7 +293,7 @@ func (store *CdmStore) ComputeMonsterStats(completeName string, monsterId uint) 
 	sql += " max(portee_du_pouvoir_text)"
 	sql += " from cdm where nom_complet=" + toMysqlString(completeName)
 
-	fmt.Println(sql)
+	//fmt.Println(sql)
 
 	err = db.Query(sql)
 	if err != nil {
@@ -310,6 +312,6 @@ func (store *CdmStore) ComputeMonsterStats(completeName string, monsterId uint) 
 	db.FreeResult()
 
 	be := rowToBestiaryExtract(completeName, row)
-	be.PreciseMonster = true
+	be.PreciseMonster = false
 	return be, nil
 }
