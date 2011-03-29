@@ -184,7 +184,8 @@ function Chrall_makeGridHtml() {
 			html += "<td class=d"+((hdist-horizontalViewLimit+20001)%2);
 			html += " grid_x=" + x;
 			html += " grid_y=" + y;
-			var cellIsAccessibleByDe = x>=player.x-1 && x<=player.x+1 && y>=player.y-1 && y<=player.y+1;
+			var deRange = player.z==0 ? 2 : 1;
+			var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
 			if (cellContent.length>0 || cellIsAccessibleByDe) html += " hasContent";
 			if (cellMenuInfos!=null) html += " cellMenuInfos="+cellMenuInfos;
 			html += ">";
@@ -502,7 +503,9 @@ function Chrall_analyseAndReformatView() {
 		var o = $(this);
 		var x = parseInt(o.attr('grid_x'));
 		var y = parseInt(o.attr('grid_y'));
-		if (x>=player.x-1 && x<=player.x+1 && y>=player.y-1 && y<=player.y+1) {
+		var deRange = player.z==0 ? 2 : 1;
+		var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
+		if (cellIsAccessibleByDe) {
 			var links = new Array();
 			if (player.z<0) links.push(makeDeLink(x, y, player.z+1));
 			if (x!=player.x || y!=player.y) links.push(makeDeLink(x, y, player.z));
