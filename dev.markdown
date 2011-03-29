@@ -133,6 +133,7 @@ P1 :
 * BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * site web chrall : actualiser fréquemment (30s ?) le test de la version, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
+* grille : réduire l'encombrement des onglets pour la compatibilité avec les petits écrans
 
 P2 :
 ----
