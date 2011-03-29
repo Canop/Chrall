@@ -133,7 +133,7 @@ P1 :
 * BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * site web chrall : actualiser fréquemment (30s ?) à partir du clic sur le lien de l'extension, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
-* grille : boutons de DE et charge
+* grille : menu pour initier les DE
 
 P2 :
 ----
@@ -143,6 +143,7 @@ P2 :
 * profil : indiquer les alarmes programmées
 * sauver les stats d'usage du serveur g0g0chrall ?
 * détection des trolls malades
+* grille/menuDE : vérifier que la session a été activée
 
 P3 :
 ----
