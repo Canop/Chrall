@@ -130,6 +130,7 @@ EN COURS :
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
+* bestiaire : augmenter la taille de la liste de noms matchants
 
 TODO :
 ======
@@ -202,3 +203,4 @@ NOTES :
 * pas de vrai concept d'équipe : chaque troll choisit un par un les trolls à qui il donne accés en lecture à ce qu'il mont(r)e. Et il doit être possible de bloquer les infos d'un autre joueur.
 * liste de technos : extensions chrome, git, javascript, ajax, github, mysql, jquery, go, mercurial, php, css
 * je viens de tomber sur la fonction fmt.Sscanf. Elle aurait sans doute permis d'écrire le parseur plus simplement.
+* pour le serveur, j'aurais peut-être pu aussi utiliser node.js. J'aime bien le go mais node.js semble sympa aussi...

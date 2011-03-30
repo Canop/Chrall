@@ -38,7 +38,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	}
 	defer db.Close()
 
-	sql := "insert ignore into cdm (num_monstre, nom_complet, nom, age, " // a priori en go on ne peut pas déclarer une chaine sur plusieurs lignes. Je suppose que le compilo combine...
+	sql := "insert ignore into cdm (num_monstre, nom_complet, nom, age, " // En go on ne peut pas déclarer une chaine sur plusieurs lignes. J'espère que le compilo combine...
 	sql += "sha1, date_adition, "
 	sql += " niveau_min, niveau_max,"
 	sql += " points_de_vie_min, points_de_vie_max, "
@@ -118,24 +118,30 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 }
 
 // renvoie une liste de noms pour un champ d'auto-completion
-// on limite à 10 résultats (c'est la limite par défaut dans l'API jquery et ça semble raisonnable)
-func (store *CdmStore) getMonsterCompleteNames(partialName string) ([]string, os.Error) {
+func (store *CdmStore) getMonsterCompleteNames(partialName string, limit uint) ([]string, os.Error) {
+	if limit > 100 {
+		limit = 100
+	} else if limit < 5 {
+		limit = 5
+	}
 	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
 
-	sql := "select distinct nom_complet from cdm where nom_complet like '" + partialName + "%' or nom_complet like '% " + partialName + "%' limit 10"
+	sql := "select distinct nom_complet from cdm where nom_complet like " + toMysqlString(partialName+"%") + " or nom_complet like " + toMysqlString("% "+partialName+"%") + " limit " + strconv.Uitoa(limit)
 	stmt, err := db.Prepare(sql)
 	defer stmt.Close()
+
+	//fmt.Println(sql)
 
 	err = stmt.Execute()
 	if err != nil {
 		return nil, err
 	}
 
-	names := make([]string, 10)
+	names := make([]string, limit)
 	count := 0
 	var name string
 	stmt.BindResult(&name)
@@ -148,7 +154,7 @@ func (store *CdmStore) getMonsterCompleteNames(partialName string) ([]string, os
 			break
 		}
 		names[count] = name
-		//fmt.Println(names[count])
+		fmt.Println(names[count])
 		count++
 	}
 	return names[0:count], nil

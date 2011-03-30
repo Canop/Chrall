@@ -48,7 +48,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		$(document).ready(function() {
 			$("#monster_name").focus();
 			$("input#monster_name").autocomplete({
-				source: "/chrall/json?action=get_monster_names"
+				source: "/chrall/json?action=get_monster_names&limit=20"
 			});
 			$("input#monster_name").change(function(){
 				inputValue = $(this).val();

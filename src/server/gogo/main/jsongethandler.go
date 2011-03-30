@@ -54,7 +54,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	if be == nil || be.NbCdm == 0 {
 		html = "g0g0chrall ne connait pas ce monstre"
 	} else {
-		if be.PreciseMonster && monsterId>0 {
+		if be.PreciseMonster && monsterId > 0 {
 			if be.NbMonsters < 2 {
 				html = "Cette estimation est basée sur une CDM unique du monstre " + monsterIdAsString
 			} else {
@@ -133,14 +133,13 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 }
 
 func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr *http.Request) {
-	monsterPartialNames := hr.Form["term"]
-	if len(monsterPartialNames) < 1 {
+	monsterPartialName := GetFormValue(hr, "term")
+	if monsterPartialName == "" {
 		fmt.Println(" no monster partial name in request")
 		return
 	}
-	fmt.Println(" Request for \"" + monsterPartialNames[0] + "\"")
-
-	list, err := h.store.getMonsterCompleteNames(monsterPartialNames[0])
+	limit, _ := strconv.Atoui(GetFormValue(hr, "limit"))
+	list, err := h.store.getMonsterCompleteNames(monsterPartialName, limit)
 	if err != nil {
 		fmt.Println(" Erreur : " + err.String())
 		return
