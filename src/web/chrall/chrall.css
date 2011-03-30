@@ -77,7 +77,6 @@ div.column_wrapper#cv_content_column_wrapper {
 div#content_wrapper {
 }
 
-
 div#col_1 {
 	float:left;
 	width:480px;
@@ -158,6 +157,8 @@ div.dbox#dys div.dbox_content a:hover {
 }
 
 img.screenshot {
+	margin-left: 0;
+	margin-right: 0;
 	margin-top: 8px;
 	margin-bottom: 15px;
 	box-shadow: 0px 10px 15px #666;
