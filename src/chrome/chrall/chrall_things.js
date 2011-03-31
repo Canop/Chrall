@@ -146,10 +146,11 @@ Monster.prototype.setName = function(fullName){
  * 	- pi
  *  - availablePi : les pi non encore consommés en amélioration
  *  - flies : le tableau des mouches
- *  - actionPoints : les PA restant
  *  - concentration
  *  - les characteristics...
  *  - mm, rm, baseMm, baseRm
+ *  - pa (les pa restant, pas souvent disponibles)
+ *  - cellIsFree (pour le malus de déplacement de case occupée)
  */ 
 function Troll(x, y, z) {
 	Thing.call(this, x, y, z); 

@@ -271,7 +271,7 @@ function getBubbleContentForSort(name) {
 			html += "<tr><td>Hypnose pleine</td><td> : Esquive -" + Math.floor(esq*1.5) + " dés</td></tr>";
 			html += "<tr><td>Hypnose réduite</td><td> : Esquive -" + Math.floor(esq/3) + " dés</td></tr>";
 			html += "</table>";	
-			return html
+			return html;
 
 		case "Identification des trésors" :
 			return "Je doute pouvoir vous aprendre quelque chose sur ce sujet...";
@@ -307,7 +307,7 @@ function getBubbleContentForSort(name) {
 			} 
 			
 			html += "</table>";		
-			return html
+			return html;
 			
 		case "Invisibilité" :
 			return "Avec 3 PA vous pouvez gagner une invisibilité qui durera tant<br>que vous ne perdrez pas de PV et que vous ne bougerez pas.<br>... surtout ne pas pêter !";
@@ -322,8 +322,7 @@ function getBubbleContentForSort(name) {
 			html += "<tr><td>Nécrose : Attaque</td><td> :  -" + nec + " durant deux tours</td></tr>";
 			html += "</table>";	
 			html += "En cas de Résistance Magique, les dégâts sont divisés par deux<br>de même que les effets et la durée de la nécrose.";
-			return html
-	
+			return html;
 
 		case "Télékinésie" :
 			var s = player.sight.diceNumber + player.sight.physicalBonus;
@@ -340,7 +339,7 @@ function getBubbleContentForSort(name) {
 			html+="<br>Les trésors Moyen"+f(p);
 			html+="<br>Les trésors Lourd"+f(p-1);
 			html+="<br>Les trésors Très Lourd et d'une Ton'"+f(p-2);
-			return html
+			return html;
 		
 		case "Téléportation" :
 			var s = player.sight.diceNumber;

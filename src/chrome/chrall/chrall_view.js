@@ -334,7 +334,6 @@ function Chrall_analyseView() {
 	var sightLine = $('li:contains(" porte actuellement à")');
 	var tokens = Chrall_tokenize(sightLine.text());
 	viewMaxSight = parseInt(tokens[5]);
-	//alert(viewMaxSight);
 
 	//> recherche de l'horizon (pour dessiner la grille ensuite)
 	try {
@@ -350,6 +349,25 @@ function Chrall_analyseView() {
 	Chrall_analyseMushroomTable(tables[4], mushroomsInView);
 	Chrall_analysePlaceTable(tables[5], placesInView);
 	Chrall_analyseThingTable(tables[6], cenotaphsInView);
+	
+	//> on regarde si la case du joueur est encombrée
+	player.cellIsFree = true;
+	for (var i=0; i<monstersInView.length; i++) {
+		var m = monstersInView[i];
+		if (m.x==player.x && m.y==player.y && m.z==player.z) {
+			player.cellIsFree = false;
+			break;
+		}
+	}
+	if (player.cellIsFree) {
+		for (var i=0; i<trollsInView.length; i++) {
+			var t = trollsInView[i];
+			if (t.x==player.x && t.y==player.y && t.z==player.z) {
+				player.cellIsFree = false;
+				break;
+			}
+		}
+	}
 	
 	//> on détermine la zone visible 
 	if (horizontalViewLimit>=0) {
@@ -495,26 +513,40 @@ function Chrall_analyseAndReformatView() {
 		$('form[name="LimitViewForm"]').submit();
 	});
 
-	//> on met des menus sur certaines cellules
-	function makeDeLink(x, y, z) {
+	//> on ajoute le menu des DE
+	var makeDeLink = function(x, y, z) {
+		var cost = (player.cellIsFree ? 1 : 2) + (z==player.z ? 0 : 1);
+		if (cost>player.pa) return '';
 		return '<a href="javascript:console.log(\'AE\');playDE('+(x-player.x)+','+(y-player.y)+','+(z-player.z)+');">DE '+x+' '+y+' '+z+'</a>';
 	}
-	$('td[grid_x]').each(function() {
-		var o = $(this);
-		var x = parseInt(o.attr('grid_x'));
-		var y = parseInt(o.attr('grid_y'));
-		var deRange = player.z==0 ? 2 : 1;
-		var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
-		if (cellIsAccessibleByDe) {
-			var links = new Array();
-			if (player.z<0) links.push(makeDeLink(x, y, player.z+1));
-			if (x!=player.x || y!=player.y) links.push(makeDeLink(x, y, player.z));
-			links.push(makeDeLink(x, y, player.z-1));
-			//console.log(links);
-			objectMenu(
-				o,
-				links.join('')
-			);
+	// D'abord il faut voir si on a des PA et combien. On doit demander ça à la page de fond qui elle-même a reçu l'info par
+	//  la petite frame d'action en bas de l'écran.
+	// Pour l'instant on ne teste pas le gluage parce que ça imposerait d'être passé récemment par le profil
+	chrome.extension.sendRequest(
+		{"get_pa": "s'il-te-plaît?"},
+		function(answer) {
+			console.log("Réponse : pa=" + answer.pa);
+			if (answer.pa>=0) player.pa = answer.pa;
+			if (answer.pa>1 || (player.cellIsFree && answer.pa>0)) {
+				$('td[grid_x]').each(function() {
+					var o = $(this);
+					var x = parseInt(o.attr('grid_x'));
+					var y = parseInt(o.attr('grid_y'));
+					var deRange = player.z==0 ? 2 : 1;
+					var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
+					if (cellIsAccessibleByDe) {
+						var links = '';
+						if (player.z<0) links += (makeDeLink(x, y, player.z+1));
+						if (x!=player.x || y!=player.y) links += (makeDeLink(x, y, player.z));
+						links += (makeDeLink(x, y, player.z-1));
+						objectMenu(
+							o,
+							links
+						);
+					}
+				});				
+			}
 		}
-	});
+	);
+
 }

@@ -48,6 +48,9 @@ switch (pageName) {
 	case "Play_BM.php":
 		Chrall_analyseAndReformatBM();	
 		break;
+	case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
+		Chrall_handleActionPage();
+		break;
 	case "Play_option.php":
 		Chrall_reformatOptionsView();	
 		break;

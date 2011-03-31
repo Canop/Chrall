@@ -9,6 +9,7 @@
 		{
 			"matches": ["http://games.mountyhall.com/*"],
 			"all_frames" : true,
+			"run_at" : "document_end",
 			"css": [
 				"chrall.css",
 				"tabs.css"
@@ -30,6 +31,7 @@
 				"chrall_flies.js",
 				"chrall_move.js",
 				"chrall_play2.js",
+				"chrall_action.js",
 				"chrall_main.js"
 			]
 		},

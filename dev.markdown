@@ -141,9 +141,11 @@ P1 :
 * BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * site web chrall : actualiser fréquemment (30s ?) à partir du clic sur le lien de l'extension, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
+* grille : toujours afficher les trésors sur la case du joueur ? Ou bien les afficher initialement et les enlever lorsqu'on désactive tous les affichages de trésors ?
 
 P2 :
 ----
+* grille : "afficher dans les case vides leurs coordonnées X/Y" [laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=7)
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * à voir : mon contrat d'hébergement n'offre pas théoriquement un débit très important...
@@ -153,6 +155,9 @@ P2 :
 
 P3 :
 ----
+* remettre la vue en grille si on sort d'un échec de DE [laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=16&start=10)
+* grille : mettre les liens sur les lieux qui en ont dans la table
+* grille/lieux : bulles affichant la distance
 * grille : coût des déplacements et charges (en tenant compte du gluage éventuel) _(attention : besoin scripts publics)_
 * équipement : afficher les bonus [demande Fabdi](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=13&p=71#p71)
 * grille : afficher les px rapportés par les monstres (nécessite de stocker ou récupérer le niveau du troll du joueur)
@@ -196,6 +201,7 @@ P3 :
 * bestiaire : montrer quels compos sont EM
 * liste matos tanière : montrer quels compos sont EM
 * programmation golem : sauvegarde
+
 
 
 NOTES :

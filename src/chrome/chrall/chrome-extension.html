@@ -19,6 +19,9 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 
 
 <script type="text/javascript">
+
+	var remainingPaInfos = null;
+
 	// objet alarme
 	function Alarm(time) {
 		this.time = time; // la date à laquelle on veut que ça sonne
@@ -72,11 +75,20 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 
 	chrome.extension.onRequest.addListener(
 		function(request, sender, sendResponse) {
-			console.log('chrome-extension : Request received !');
 			for (var key in request) {
-				//alert("key=" + key + "  value="+request[key]);
 				if (key=="dla" || key=="cumul") {
 					alarms[key] = new Alarm(request[key]-alarmMargin);
+				} else if (key=="pa") {
+					remainingPaInfos = {
+						"time": (new Date()).getTime(),
+						"pa": request[key]
+					};
+				} else if (key=="get_pa") {
+					var pa = -1;
+					if (remainingPaInfos) {
+						pa = remainingPaInfos.pa;
+					}
+					sendResponse({"pa":pa});					
 				}
 			}
 			//alarms["test"] = new Alarm((new Date()).getTime() + 30000);
