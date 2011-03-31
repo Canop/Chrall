@@ -22,6 +22,7 @@ var onBubbleTarget = false;
 var onBubbleDiv = false;
 var bubbleExists = false;
 var bubbleCloseTimeoutID;
+var bubbleTarget;
 
 function hideBubble() {
 	clearTimeout(bubbleCloseTimeoutID);
@@ -30,7 +31,7 @@ function hideBubble() {
 		bubbleExists = false;
 	}
 }
-function showBubble(event, text, cssClass, ajaxRequestId) {
+function showBubble(target, event, text, cssClass, ajaxRequestId) {
 	if (bubbleExists) hideBubble();
 	var html = '<div id="bubble" style="';
 	var tPosX = event.pageX-pageXOffset;
@@ -48,6 +49,7 @@ function showBubble(event, text, cssClass, ajaxRequestId) {
 	} else {
 		html += ';" class="'+cssClass+'"><div class=bubbleContent>'+text+'</div></div>';
 	}
+	bubbleTarget = target;
 	$(html).mouseover(keepBubbleOpen).mouseout(letBubbleClose).appendTo('body');
 	bubbleExists = true;
 }
@@ -93,12 +95,21 @@ function bubble(
 					dataType: "jsonp"
 				}
 			);
-			showBubble.call(this, event, text, cssClass, ajaxRequestId);
+			showBubble.call(this, $(this), event, text, cssClass, ajaxRequestId);
 		} else {
-			showBubble.call(this, event, text, cssClass);
+			showBubble.call(this, $(this), event, text, cssClass);
 		}
 	});
 	target.mouseout(function(){
+		//~ var pos = bubbleTarget.offset();
+		//~ if (
+			//~ event.pageX>pos.left
+			//~ && event.pageX<pos.left+bubbleTarget.width()
+			//~ && event.pageY>pos.top
+			//~ && event.pageY<pos.top+bubbleTarget.height()
+		//~ ) {
+			//~ return;
+		//~ }
 		onBubbleTarget = false;
 		bubbleCloseTimeoutID = setTimeout(hideBubble, 150);
 	});

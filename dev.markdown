@@ -122,6 +122,12 @@ RECENTS / A TESTER :
 
 <- v1.04
 
+* grille/menuDE : vérifier que la session a été activée
+* site : gallerie présentant les principales fonctions
+* grille : centrage automatique
+
+<- v1.05
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -136,8 +142,6 @@ TODO :
 ======
 P1 :
 ----
-* grille/menuDE : vérifier que la session a été activée
-* site : gallerie présentant les principales fonctions
 * BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * site web chrall : actualiser fréquemment (30s ?) à partir du clic sur le lien de l'extension, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
@@ -145,7 +149,7 @@ P1 :
 
 P2 :
 ----
-* grille : "afficher dans les case vides leurs coordonnées X/Y" [laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=7)
+* grille : "afficher dans les case vides leurs coordonnées X/Y" [laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=7) => PB (les cases ne restent pas vides)
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * à voir : mon contrat d'hébergement n'offre pas théoriquement un débit très important...
@@ -167,15 +171,12 @@ P3 :
 * bulles de bestiaire sur les gowaps ?
 * intégration d'un lien pour accéder au bestiaire (pour faire des recherches sur des monstres "ressemblant")
 * regarder si on ne peut pas récupérer des infos dans les scripts publics (par exemple les malus pour améliorer le calcul de la fatigue)
-* grille : permettre que le premier affichage de vue se fasse toujours avec le même preset (réduit) pour un affichage par défaut plus rapide
 * bestiaire : batch d'analyse des CDM pour construire le bestiaire
 * mouches : récapitulatif (en haut) à la fois sur les mouches actuelles et sur le total (en comptant celles en vadrouille)
 * rendre les parsings plus robustes en privilégiant les expressions régulières plutôt que le comptage des lignes ou cellules
 * icône (un troll qui nage le crawl ?)
 * interface de troll (suivants identifiés)
 * grille : trolls amis/ennemis
-* grille : mise en place d'un menu contextuel
-* grille/menu contextuel : lancement d'action déplacement
 * corriger le calcul des prochaines DLA si on passe sur la vue des malus
 * grille/menu contextuel : ajout de notes sur des cases ou des things pour l'équipe (par exemple "passer CE portail" ou bien "C'est ce mouch'oo qui m'a piqué mes mouches" ou encore "à finir 90%").
 * grille : une flèche discrète par dessus la grille pour indiquer la direction du joueur (utiliser un canvas transparent ?). Cette flèche doit contenir un bouton de centrage.

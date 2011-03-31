@@ -503,7 +503,7 @@ function Chrall_analyseAndReformatView() {
 				bubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
 			}
 		}
-	);	
+	);
 
 	//> on outille le select de réduction de vue
 	$('select#viewRedux').change(function(){
@@ -543,10 +543,32 @@ function Chrall_analyseAndReformatView() {
 							o,
 							links
 						);
+					//~ } else {
+						//~ objectMenu(
+							//~ o,
+							//~ "x=28"
+						//~ );
 					}
 				});				
 			}
 		}
+	);
+	
+	// on centre la vue sur la cellule du joueur
+	setTimeout(
+		function() {
+			var grid = $('table.grid');
+			var playerCell = $('td[cellMenuInfos="cell00"]');
+			$('body').animate(
+				{
+					scrollLeft: (playerCell.offset().left+playerCell.innerWidth() - window.innerWidth/2),
+					scrollTop: (playerCell.offset().top+playerCell.innerHeight() - window.innerHeight/2)
+				},
+				'slow'
+			);
+
+		},
+		100
 	);
 
 }

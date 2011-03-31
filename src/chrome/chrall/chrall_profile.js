@@ -193,7 +193,7 @@ function Chrall_makeStrainInfos() {
 				html += "<td align=left>";
 				switch (i) {
 					case 0 :
-						if (player.actionPoints>=2) {
+						if (player.pa>=2) {
 							if (m0>0) {
 								var pv0 = Math.ceil(m0/normalPvGain);
 								playerAmAbstract.push("" + normalPvGain + " minutes gagnées par PV dépensé.");
