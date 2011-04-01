@@ -527,12 +527,30 @@ function Chrall_analyseAndReformatView() {
 		{"get_pa": "s'il-te-plaît?"},
 		function(answer) {
 			if (answer.pa>=0) player.pa = answer.pa;
-			console.log('trésors aux pieds : ' + $('td[cellMenuInfos="cell00"] a.ch_object').text());
 			$('td[grid_x]').each(function() {
 				var o = $(this);
 				var x = parseInt(o.attr('grid_x'));
 				var y = parseInt(o.attr('grid_y'));
 				var links = '';
+				// on ajoute au menu la liste des trésors aux pieds du joueur, pas qu'il oublie de les prendre...
+				if (x==player.x && y==player.y) {
+					var objectsOnPlayerCell = new Array();
+					for (var i=0; i<objectsInView.length; i++) {
+						var t = objectsInView[i];
+						if (t.x==player.x && t.y==player.y && t.z==player.z) {
+							objectsOnPlayerCell.push(t);
+						}
+					}
+					if (objectsOnPlayerCell.length>4) {
+						links += "<span class=ch_pl_object>Il y a " + objectsOnPlayerCell.length + " trésors à vos pieds.</span>";
+					} else if (objectsOnPlayerCell.length>0) {
+						links += '<span class=ch_pl_object>A vos pieds :</span>';
+						for (var i=0; i<objectsOnPlayerCell.length; i++) {
+							links += '<br><span class=ch_pl_object>'+objectsOnPlayerCell[i].name+'</span>';							
+						}
+					}
+				}
+				// liste des DE possibles
 				if (answer.pa>1 || (player.cellIsFree && answer.pa>0)) {
 					var deRange = player.z==0 ? 2 : 1;
 					var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
@@ -541,7 +559,8 @@ function Chrall_analyseAndReformatView() {
 						if (x!=player.x || y!=player.y) links += (makeDeLink(x, y, player.z));
 						links += (makeDeLink(x, y, player.z-1));
 					}
-				}					
+				}
+							
 				objectMenu(
 					o,
 					x + " " + y,

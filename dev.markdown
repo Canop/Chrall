@@ -134,6 +134,9 @@ RECENTS / A TESTER :
 
 <- v1.06
 
+* grille : affichage dans le menu des DE des trésors aux pieds du joueur
+
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -141,7 +144,6 @@ EN COURS :
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
-* grille : toujours afficher les trésors sur la case du joueur ? Ou bien les afficher initialement et les enlever lorsqu'on désactive tous les affichages de trésors ?
 
 TODO :
 ======
