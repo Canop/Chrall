@@ -24,6 +24,7 @@ var bubbleExists = false;
 var bubbleCloseTimeoutID;
 var bubbleTarget;
 
+
 function hideBubble() {
 	clearTimeout(bubbleCloseTimeoutID);
 	if (bubbleExists && !onBubbleDiv) {

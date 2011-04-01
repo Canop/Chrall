@@ -2,78 +2,125 @@
  * La méthode objectMenu, la seule publique, permet d'ajouter un menu (en fait un div
  *  dont le contenu est fourni par l'appelant) qui s'affiche sous un objet (testé pour
  *  un td mais ça doit marcher avec tout ce qui est fixe et assez large).
+ * 
+ * TODO : on pourrait rendre ça plus joli, là je code et je spécifie en même temps du coup
+ *  c'est un peu bordélique, faudra que je refactore.
  */ 
 
 var onOmTarget = false;
-var onOmMenu = false;
+var onOmTopMenu = false;
+var onOmBottomMenu = false;
 var omExists = false;
 var omCloseTimeoutID;
 var omTarget;
-var omMenu;
+var omTopMenu;
+var omBottomMenu;
 
+
+function eventIsOver(event, o) {
+	if (!o) return false;
+	var pos = o.offset();
+	var ex = event.pageX;
+	var ey = event.pageY;
+	//~ console.log('ex='+ex);
+	//~ console.log('ey='+ey);
+	//~ console.log('pos.left='+pos.left);
+	//~ console.log('pos.top='+pos.top);
+	//~ console.log('o.width()='+o.width());
+	//~ console.log('o.height()='+o.height());
+	if (
+		ex>=pos.left
+		&& ex<=pos.left+o.width()
+		&& ey>=pos.top
+		&& ey<=pos.top+o.height()
+	) {
+		return true;
+	}
+	return false;
+}
+
+function checkHideOm() {
+	if (onOmTarget||onOmTopMenu||onOmBottomMenu) return;
+	// avant de fermer, on va laisser le temps de vérifier qu'on n'est pas tout de suite passé
+	// dans un autre objet (par exemple depuis la cible vers un menu)
+	setTimeout(function() {
+		if (onOmTarget || onOmTopMenu || onOmBottomMenu) return;
+		hideOm();
+	}, 200);
+}
 function hideOm() {
 	clearTimeout(omCloseTimeoutID);
-	if (omExists && !onOmMenu) {
-		$("#objectMenu").remove();
-		omExists = false;
-	}
+	if (omTopMenu) omTopMenu.remove();
+	if (omBottomMenu) omBottomMenu.remove();
 }
-function showOm(target, text) {
+function showOm(target, text_top, text_bottom) {
 	var pos =target.offset();
-	if (omExists) hideOm();
-	var html = '<div id="objectMenu" style="';
-	html += "left:"+pos.left+"px;";
-	html += "top:"+(pos.top+target.innerHeight())+"px;";
-	html += "width:"+(target.width()-1)+"px;";
-	html += "background-color:"+target.css("background-color")+";";
-	html += '">'+text+'</div>';
-	omMenu = $(html);
-	omTarget = target;
-	omMenu.mouseover(keepOmOpen).mouseout(letOmClose).appendTo('body');
-	omExists = true;
-}
-function keepOmOpen() {
-	onOmMenu = true;
-}
-function letOmClose(event) {
-	if (!onOmMenu) return;
-	if (omMenu) {
-		// si l'on entre dans un objet du menu (par exemple un lien) l'évenement MouseOut est envoyé, on doit donc filtrer ce cas
-		var pos = omMenu.offset();
-		if (
-			event.pageX>pos.left
-			&& event.pageX<pos.left+omMenu.width()
-			&& event.pageY>pos.top
-			&& event.pageY<pos.top+omMenu.height()
-		) {
-			return;
-		}
-	}
-	onOmMenu = false;
 	hideOm();
+	omTarget = target;
+	onOmTopMenu = false;
+	onOmBottomMenu = false;
+	if (text_top && text_top.length>0 && (pos.top-pageYOffset)>30) { /* remarque : le test sur la position est heuristique et surtout lié à mon cas d'usage précis */
+		var html = '<div id="objectMenu_top" style="';
+		html += "left:"+pos.left+"px;";
+		html += "bottom:"+(document.body.clientHeight-pos.top-5)+"px;";
+		html += "width:"+(target.width()-1)+"px;";
+		html += "background-color:"+target.css("background-color")+";";
+		html += '">'+text_top+'</div>';
+		omTopMenu = $(html);
+		// la ligne suivante est en commentaire pour que le passage de la souris sur le "menu" du haut n'empêche pas
+		//  sa fermeture. On pourra rendre ce comportement paramétrable
+		//omTopMenu.mouseover(enterTopMenu).mouseout(leaveTopMenu);
+		omTopMenu.appendTo('body');
+	}
+	if (text_bottom && text_bottom.length>0) {
+		var html = '<div id="objectMenu_bottom" style="';
+		html += "left:"+pos.left+"px;";
+		html += "top:"+(pos.top+target.innerHeight())+"px;";
+		html += "width:"+(target.width()-1)+"px;";
+		html += "background-color:"+target.css("background-color")+";";
+		html += '">'+text_bottom+'</div>';
+		omBottomMenu = $(html);
+		omBottomMenu.mouseover(enterBottomMenu).mouseout(leaveBottomMenu);
+		omBottomMenu.appendTo('body');
+	}
 }
+function enterTopMenu() {
+	onOmTopMenu = true;
+}
+function leaveTopMenu(event) {
+	if (!onOmTopMenu) return;
+	// si l'on entre dans un objet du menu (par exemple un lien) l'évenement MouseOut est envoyé, on doit donc filtrer ce cas
+	if (eventIsOver(event, omTopMenu)) return;
+	onOmTopMenu = false;
+	checkHideOm();
+}
+function enterBottomMenu() {
+	onOmBottomMenu = true;
+}
+function leaveBottomMenu(event) {
+	if (!onOmBottomMenu) return;
+	// si l'on entre dans un objet du menu (par exemple un lien) l'évenement MouseOut est envoyé, on doit donc filtrer ce cas
+	if (eventIsOver(event, omBottomMenu)) return;
+	onOmBottomMenu = false;
+	checkHideOm();
+}
+
+var a=0;
 
 function objectMenu(
 	target,  // un objet jquery, par exemple  $("#myObject")
-	html // le contenu du menu
+	html_top, // le contenu du menu au dessus (ou '')
+	html_bottom // le contenu du menu en dessous (ou '')
 ) {
 	target.mouseenter(function(event) {
-		if (onOmMenu || onOmTarget) return false;
+		if (onOmTopMenu || onOmBottomMenu) return false;
 		onOmTarget = true;
-		showOm.call(this, $(this), html);
+		showOm($(this), html_top, html_bottom);
 	});
 	target.mouseout(function(){
-		// si l'on entre dans un objet du menu (par exemple un lien) l'évenement MouseOut est envoyé, on doit donc filtrer ce cas
-		var pos = omTarget.offset();
-		if (
-			event.pageX>pos.left
-			&& event.pageX<pos.left+omTarget.width()
-			&& event.pageY>pos.top
-			&& event.pageY<pos.top+omTarget.height()
-		) {
-			return;
-		}
+		a++;
+		if (eventIsOver(event, omTarget)) return;
 		onOmTarget = false;
-		omCloseTimeoutID = setTimeout(hideOm, 150);
+		checkHideOm();
 	});
 }

@@ -21,6 +21,7 @@ function Chrall_makeFiltersHtml() {
 	html += "</script>";
 	html += "<form id=gridFiltersForm>";
 	if (viewMaxSight>5) {
+		html += '<img id=goto_player class=butt src="'+chrome.extension.getURL("player_target.png")+'">';
 		html += "Horizon : <select id=viewRedux>";
 		html += "<option value="+horizontalViewLimit+">Actuel (vue de "+horizontalViewLimit+")</option>";
 		if (horizontalViewLimit!=4 && viewMaxSight>4) {
@@ -513,7 +514,7 @@ function Chrall_analyseAndReformatView() {
 		$('form[name="LimitViewForm"]').submit();
 	});
 
-	//> on ajoute le menu des DE
+	//> on ajoute le menu des DE, le titre de chaque cellule
 	var makeDeLink = function(x, y, z) {
 		var cost = (player.cellIsFree ? 1 : 2) + (z==player.z ? 0 : 1);
 		if (cost>player.pa) return '';
@@ -525,50 +526,50 @@ function Chrall_analyseAndReformatView() {
 	chrome.extension.sendRequest(
 		{"get_pa": "s'il-te-plaît?"},
 		function(answer) {
-			console.log("Réponse : pa=" + answer.pa);
 			if (answer.pa>=0) player.pa = answer.pa;
-			if (answer.pa>1 || (player.cellIsFree && answer.pa>0)) {
-				$('td[grid_x]').each(function() {
-					var o = $(this);
-					var x = parseInt(o.attr('grid_x'));
-					var y = parseInt(o.attr('grid_y'));
+			console.log('trésors aux pieds : ' + $('td[cellMenuInfos="cell00"] a.ch_object').text());
+			$('td[grid_x]').each(function() {
+				var o = $(this);
+				var x = parseInt(o.attr('grid_x'));
+				var y = parseInt(o.attr('grid_y'));
+				var links = '';
+				if (answer.pa>1 || (player.cellIsFree && answer.pa>0)) {
 					var deRange = player.z==0 ? 2 : 1;
 					var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
 					if (cellIsAccessibleByDe) {
-						var links = '';
 						if (player.z<0) links += (makeDeLink(x, y, player.z+1));
 						if (x!=player.x || y!=player.y) links += (makeDeLink(x, y, player.z));
 						links += (makeDeLink(x, y, player.z-1));
-						objectMenu(
-							o,
-							links
-						);
-					//~ } else {
-						//~ objectMenu(
-							//~ o,
-							//~ "x=28"
-						//~ );
 					}
-				});				
-			}
+				}					
+				objectMenu(
+					o,
+					x + " " + y,
+					links
+				);
+			});				
 		}
 	);
 	
-	// on centre la vue sur la cellule du joueur
+	var gotoPlayer = function() {
+		var playerCell = $('td[cellMenuInfos="cell00"]');
+		$('body').animate(
+			{
+				scrollLeft: (playerCell.offset().left + (playerCell.innerWidth()-window.innerWidth)/2),
+				scrollTop: (playerCell.offset().top + (playerCell.innerHeight()-window.innerHeight)/2)
+			},
+			'slow'
+		);		
+	}
+	
+	//> on centre la vue sur la cellule du joueur
 	setTimeout(
 		function() {
-			var grid = $('table.grid');
-			var playerCell = $('td[cellMenuInfos="cell00"]');
-			$('body').animate(
-				{
-					scrollLeft: (playerCell.offset().left+playerCell.innerWidth() - window.innerWidth/2),
-					scrollTop: (playerCell.offset().top+playerCell.innerHeight() - window.innerHeight/2)
-				},
-				'slow'
-			);
-
+			gotoPlayer();
 		},
 		100
 	);
-
+	
+	//> bouton de centrage
+	$('#goto_player').click(gotoPlayer);
 }

@@ -128,40 +128,42 @@ RECENTS / A TESTER :
 
 <- v1.05
 
+* bestiaire : augmenter la taille de la liste de noms matchants
+* grille : affichage des coordonnées des cases (fait via une extension de mon système objectMenu)
+* bouton "où suis-je ?" pour retrouver la case du joueur
+
 EN COURS :
 ==========
 * apprendre le langage go
-* calcul des bonus totaux des mouches : séparation entre présentes & toutes
 * calculs en roll-over sur les sorts & compétences _(il en reste encore à faire)_
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
-* bestiaire : augmenter la taille de la liste de noms matchants
 
 TODO :
 ======
 P1 :
 ----
-* BUG : je crois que les messages de l'AM déconnent en cas de fatigue extrême
+* BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * site web chrall : actualiser fréquemment (30s ?) à partir du clic sur le lien de l'extension, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
 * grille : toujours afficher les trésors sur la case du joueur ? Ou bien les afficher initialement et les enlever lorsqu'on désactive tous les affichages de trésors ?
 
 P2 :
 ----
-* grille : "afficher dans les case vides leurs coordonnées X/Y" [laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=7) => PB (les cases ne restent pas vides)
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * à voir : mon contrat d'hébergement n'offre pas théoriquement un débit très important...
 * profil : indiquer les alarmes programmées
 * sauver les stats d'usage du serveur g0g0chrall ?
-* détection des trolls malades
+* grille : mettre les liens sur les lieux qui en ont dans la table
 
 P3 :
 ----
+* grille : rendre cliquable le "vous êtes içi" (ça nécessite de récupérer le numéro du troll...)
+* détection des trolls malades
+* calcul des bonus totaux des mouches : séparation entre présentes & toutes
 * remettre la vue en grille si on sort d'un échec de DE [laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=16&start=10)
-* grille : mettre les liens sur les lieux qui en ont dans la table
-* grille/lieux : bulles affichant la distance
 * grille : coût des déplacements et charges (en tenant compte du gluage éventuel) _(attention : besoin scripts publics)_
 * équipement : afficher les bonus [demande Fabdi](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=13&p=71#p71)
 * grille : afficher les px rapportés par les monstres (nécessite de stocker ou récupérer le niveau du troll du joueur)
@@ -170,8 +172,7 @@ P3 :
 * profil : affichage rapport tués/décés
 * bulles de bestiaire sur les gowaps ?
 * intégration d'un lien pour accéder au bestiaire (pour faire des recherches sur des monstres "ressemblant")
-* regarder si on ne peut pas récupérer des infos dans les scripts publics (par exemple les malus pour améliorer le calcul de la fatigue)
-* bestiaire : batch d'analyse des CDM pour construire le bestiaire
+* regarder si on ne peut pas récupérer des infos dans les scripts publics
 * mouches : récapitulatif (en haut) à la fois sur les mouches actuelles et sur le total (en comptant celles en vadrouille)
 * rendre les parsings plus robustes en privilégiant les expressions régulières plutôt que le comptage des lignes ou cellules
 * icône (un troll qui nage le crawl ?)
@@ -179,21 +180,16 @@ P3 :
 * grille : trolls amis/ennemis
 * corriger le calcul des prochaines DLA si on passe sur la vue des malus
 * grille/menu contextuel : ajout de notes sur des cases ou des things pour l'équipe (par exemple "passer CE portail" ou bien "C'est ce mouch'oo qui m'a piqué mes mouches" ou encore "à finir 90%").
-* grille : une flèche discrète par dessus la grille pour indiquer la direction du joueur (utiliser un canvas transparent ?). Cette flèche doit contenir un bouton de centrage.
 * profil : un onglet pour lister les notes (de soi et de ceux qui partagent avec nous). Ceci aura l'effet de bord d'offrir des "bookmarks" des trolls et monstres annotés
-* profil/actions programmées : afficher la moyenne de la parade
 * tableaux standards MH (monstres, événements, tableau de chasse, etc.) : surligner la ligne de la souris pour faciliter le rapprochement gauche/droite.
 * poids de l'équipement : détailler ce qui est porté et ce qui est en besace
-* ? icône pour indiquer directement sur la carte quels monstres voient le caché
 * alarmes : fonction manuelle d'ajout d'alarme ("on a dit qu'on tapait à 11h33")
 * alarmes : ne pas perdre les alarmes (ajouter ?) quand on se loggue sur un autre troll
 * alarmes : fenêtre de popup dans le navigateur pour visualiser les alarmes, les désactiver et régler le délai avant DLA
 * alarmes : sauver les alarmes en cookies (ou ailleurs ? sur le serveur ?) pour les retrouver au lancement de Chrome même si on ne va pas sur MH
-* alarmes : proposer une librairie de sonneries (et les mettre en téléchargement sur téléphone pour se faire des pépétes ! non j'déconne...)
 * site web : aide détaillée/tutorial pour assurer que toutes les fonctions soient connues
 * préférences détaillées : transformation ou pas de la page d'accueil
 * grille/filtre : rendre inactives les cases à cocher de catégories vides
-* bestiaire : stocker dans des records spéciaux prioritaires les infos consolidées (automatiquement ou manuellement (niveau des monstres ?))
 * cdmstore : détection d'erreur basée sur la variance des valeurs
 * ajouter au filtre de manifest.json les pages venant des principaux proxys mh
 * PB : la version de chrall est spécifié à 4 endroits (nom du fichier crx et champ caché dans index.php, messager.go, chrallgeneral.js). Ca fait 3 de trop. Faire un makefile ?
@@ -201,9 +197,7 @@ P3 :
 * équipement/petits : montrer quels compos sont EM
 * bestiaire : montrer quels compos sont EM
 * liste matos tanière : montrer quels compos sont EM
-* programmation golem : sauvegarde
-
-
+* programmation golem : sauvegarde/restauration
 
 NOTES :
 =======
