@@ -41,6 +41,9 @@ table.grid td {
 	color: grey  !important;
 	display: none;
 }
+.ch_pl_object, .ch_pl_object:hover {
+	color: grey  !important;
+}
 a.ch_objects_toggler {
 	color: grey  !important;
 }

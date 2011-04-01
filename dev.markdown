@@ -132,6 +132,8 @@ RECENTS / A TESTER :
 * grille : affichage des coordonnées des cases (fait via une extension de mon système objectMenu)
 * bouton "où suis-je ?" pour retrouver la case du joueur
 
+<- v1.06
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -139,15 +141,16 @@ EN COURS :
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
+* grille : toujours afficher les trésors sur la case du joueur ? Ou bien les afficher initialement et les enlever lorsqu'on désactive tous les affichages de trésors ?
 
 TODO :
 ======
 P1 :
 ----
+* bulles des trolls et monstres : indiquer les 3 coordonnées
 * BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * site web chrall : actualiser fréquemment (30s ?) à partir du clic sur le lien de l'extension, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
-* grille : toujours afficher les trésors sur la case du joueur ? Ou bien les afficher initialement et les enlever lorsqu'on désactive tous les affichages de trésors ?
 
 P2 :
 ----
