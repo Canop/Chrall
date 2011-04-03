@@ -1,7 +1,7 @@
 /*
- * La méthode objectMenu, la seule publique, permet d'ajouter un menu (en fait un div
- *  dont le contenu est fourni par l'appelant) qui s'affiche sous un objet (testé pour
- *  un td mais ça doit marcher avec tout ce qui est fixe et assez large).
+ * La méthode objectMenu, la seule publique, permet d'ajouter un ou deux menu(s) (en fait un div
+ *  dont le contenu est fourni par l'appelant) au dessus et au dessous d'un objet.
+ * 
  * 
  * TODO : on pourrait rendre ça plus joli, là je code et je spécifie en même temps du coup
  *  c'est un peu bordélique, faudra que je refactore.
@@ -22,12 +22,6 @@ function eventIsOver(event, o) {
 	var pos = o.offset();
 	var ex = event.pageX;
 	var ey = event.pageY;
-	//~ console.log('ex='+ex);
-	//~ console.log('ey='+ey);
-	//~ console.log('pos.left='+pos.left);
-	//~ console.log('pos.top='+pos.top);
-	//~ console.log('o.width()='+o.width());
-	//~ console.log('o.height()='+o.height());
 	if (
 		ex>=pos.left
 		&& ex<=pos.left+o.width()
@@ -59,7 +53,7 @@ function showOm(target, text_top, text_bottom) {
 	omTarget = target;
 	onOmTopMenu = false;
 	onOmBottomMenu = false;
-	if (text_top && text_top.length>0 && (pos.top-pageYOffset)>30) { /* remarque : le test sur la position est heuristique et surtout lié à mon cas d'usage précis */
+	if (text_top && text_top.length>0 && (pos.top-pageYOffset)>65) { /* remarque : le test sur la position est heuristique et surtout lié à mon cas d'usage précis */
 		var html = '<div id="objectMenu_top" style="';
 		html += "left:"+pos.left+"px;";
 		html += "bottom:"+(document.body.clientHeight-pos.top-5)+"px;";
@@ -105,8 +99,6 @@ function leaveBottomMenu(event) {
 	checkHideOm();
 }
 
-var a=0;
-
 function objectMenu(
 	target,  // un objet jquery, par exemple  $("#myObject")
 	html_top, // le contenu du menu au dessus (ou '')
@@ -118,7 +110,6 @@ function objectMenu(
 		showOm($(this), html_top, html_bottom);
 	});
 	target.mouseout(function(){
-		a++;
 		if (eventIsOver(event, omTarget)) return;
 		onOmTarget = false;
 		checkHideOm();

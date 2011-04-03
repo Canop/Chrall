@@ -3,14 +3,6 @@
  * Il contient aussi les variables globales.
  */
 
-
-var monstersInView = new Array();
-var trollsInView = new Array();
-var placesInView = new Array();
-var objectsInView = new Array();
-var mushroomsInView = new Array();
-var cenotaphsInView = new Array();
-
 var splitedPathname = document.location.pathname.split('/');
 var pageName = splitedPathname[splitedPathname.length-1];
 var viewIsEmpty=true; // correspond à un état d'analyse de la vue
