@@ -9,17 +9,17 @@ div.grid_holder {
 	margin:0px;
 	width: 100%;
 }
-table.grid {
+table#grid {
 	background: white;
 	border-collapse: collapse;
 	border: thin solid #333333;
 	font-size:14px;
 	text-align:center;
 }
-table.grid th {
+table#grid th {
 	border: thin solid #333333;
 }
-table.grid td {
+table#grid td {
 	border: thin solid #333333;
 }
 .ch_monster, .ch_monster:hover {
@@ -62,18 +62,18 @@ span.ch_tag {
 	color: green !important;
 	font-weight: bold;
 }
-table.grid td.grad {
+table#grid td.grad {
 	text-align: center;
 	min-width: 25px;
 	min-height: 25px;
 }
-table.grid td.d0 {
+table#grid td.d0 {
 	background-color:white;
 }
-table.grid td.d1 {
+table#grid td.d1 {
 	background-color:#e5decb;
 }
-table.grid td[hasContent]{
+table#grid td[hasContent]{
 	min-width:100px;
 }
 form#gridFiltersForm {

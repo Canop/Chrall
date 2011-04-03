@@ -135,7 +135,8 @@ RECENTS / A TESTER :
 <- v1.06
 
 * grille : affichage dans le menu des DE des trésors aux pieds du joueur
-
+* OPTM calcul de la grille : remplacement de l'algo de construction en O⁵ par du O³ (surtout intéressant pour les toms, mais il reste pas mal de lenteur sur la lecture qui était déjà en O³ en raison des parsages jquery)
+* diverses optimisations
 
 EN COURS :
 ==========
@@ -144,6 +145,7 @@ EN COURS :
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
+* PB grille : les titres de cellule perturbent parfois les filtres
 
 TODO :
 ======
@@ -165,6 +167,7 @@ P2 :
 
 P3 :
 ----
+* grille : rendre déplaçable la grille par glissage de la souris
 * grille : rendre cliquable le "vous êtes içi" (ça nécessite de récupérer le numéro du troll...)
 * détection des trolls malades
 * calcul des bonus totaux des mouches : séparation entre présentes & toutes
