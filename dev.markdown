@@ -135,8 +135,9 @@ RECENTS / A TESTER :
 <- v1.06
 
 * grille : affichage dans le menu des DE des trésors aux pieds du joueur
-* OPTM calcul de la grille : remplacement de l'algo de construction en O⁵ par du O³ (surtout intéressant pour les toms, mais il reste pas mal de lenteur sur la lecture qui était déjà en O³ en raison des parsages jquery)
+* OPTM calcul de la grille : remplacement de l'algo de construction en O⁵ par du O³ (surtout intéressant pour les toms, mais il reste pas mal de lenteur sur la lecture qui était déjà en O³ en raison des parsages jquery et surtout sur l'insertion de la grille dans la page)
 * diverses optimisations
+* PB grille : les titres de cellule perturbent parfois les filtres
 
 EN COURS :
 ==========
@@ -145,19 +146,21 @@ EN COURS :
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
-* PB grille : les titres de cellule perturbent parfois les filtres
+* bulles des trolls et monstres : indiquer les 3 coordonnées
 
 TODO :
 ======
 P1 :
 ----
-* bulles des trolls et monstres : indiquer les 3 coordonnées
+* cdm : ne pas transmettre automatiquement mais via un bouton ? [point MH sur l'automatisation](http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=2&TopicID=137209)
 * BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * site web chrall : actualiser fréquemment (30s ?) à partir du clic sur le lien de l'extension, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
 
 P2 :
 ----
+* grille / bulle de troll : intégrer le nombre de kills de trolls et le classement associé
+* grille / bulle de troll : mettre au point une estimation TK/neutre/ATK/NoK
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * à voir : mon contrat d'hébergement n'offre pas théoriquement un débit très important...
@@ -169,6 +172,7 @@ P3 :
 ----
 * grille : rendre déplaçable la grille par glissage de la souris
 * grille : rendre cliquable le "vous êtes içi" (ça nécessite de récupérer le numéro du troll...)
+* lors d'un TP, affichage d'une carte des trous de météorite
 * détection des trolls malades
 * calcul des bonus totaux des mouches : séparation entre présentes & toutes
 * remettre la vue en grille si on sort d'un échec de DE [laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=16&start=10)

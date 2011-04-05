@@ -182,6 +182,7 @@ Troll.prototype.addTalent = function(t) {
  * Place hérite de Thing.
  * Params :
  *  - isHole (trou de météorite)
+ *  - hasLink (si oui on le construit automatiquement)
  */ 
 function Place(x, y, z) {
 	Thing.call(this, x, y, z);
