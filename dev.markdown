@@ -211,6 +211,8 @@ P3 :
 * bestiaire : montrer quels compos sont EM
 * liste matos tanière : montrer quels compos sont EM
 * programmation golem : sauvegarde/restauration
+* bulle troll : indiquer le compte des kills de gowaps apprivoisés
+* bulle troll : indiquer si vous avez (tué/été tué par) le troll
 
 NOTES :
 =======

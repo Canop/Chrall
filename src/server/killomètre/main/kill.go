@@ -5,4 +5,5 @@ type Kill struct {
 	TueurEstTroll bool
 	Tué           int
 	TuéEstTroll   bool
+	Tag           tag
 }

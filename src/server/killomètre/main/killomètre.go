@@ -13,20 +13,20 @@ import (
 type Killomètre struct {
 	NbReadFiles uint
 	Kills       []*Kill
-	Trolls	[]*Troll
-	NbTrolls uint
+	Trolls      []*Troll // pour un accès rapide, l'index dans le tableau est l'id du troll
+	NbTrolls    uint
 }
 
 func (km *Killomètre) initTroll(id int) {
-	if id>=len(km.Trolls) {
-		if id>=cap(km.Trolls) {
+	if id >= len(km.Trolls) {
+		if id >= cap(km.Trolls) {
 			newSlice := make([]*Troll, ((id+1)*5/4)+1000)
 			copy(newSlice, km.Trolls)
 			km.Trolls = newSlice
 		}
-		km.Trolls = km.Trolls[0: id+1]
+		km.Trolls = km.Trolls[0 : id+1]
 	}
-	if km.Trolls[id]==nil {
+	if km.Trolls[id] == nil {
 		km.NbTrolls++
 		km.Trolls[id] = &Troll{id, 0, 0}
 	}
@@ -88,11 +88,11 @@ func (km *Killomètre) parseFichierKills(file *os.File) os.Error {
 
 func (km *Killomètre) handleFile(f *os.File) os.Error {
 	childs, err := f.Readdir(-1)
-	if err == nil {		
+	if err == nil {
 		fmt.Println("Entering directory " + f.Name())
-		for _, fi := range(childs) {
+		for _, fi := range childs {
 			//fmt.Println("Chidlname : " + fi.Name)
-			err := km.handleFilename(f.Name()+"/"+fi.Name)
+			err := km.handleFilename(f.Name() + "/" + fi.Name)
 			if err != nil {
 				return err
 			}
@@ -113,14 +113,18 @@ func (km *Killomètre) handleFilename(filename string) os.Error {
 	return km.handleFile(f)
 }
 // construit un tableau des trolls triés par leur nombre de kills de trolls
-func (km *Killomètre) SortTrollsByKillsOfTrolls() ([]*Troll) {
+func (km *Killomètre) SortTrollsByKillsOfTrolls() []*Troll {
 	sortedTrolls := make([]*Troll, len(km.Trolls))
 	copy(sortedTrolls, km.Trolls)
 	a := &TrollKillerArray{sortedTrolls}
 	sort.Sort(a)
 	return sortedTrolls
 }
- 
+
+// analyse les kills pour essayer de déterminer qui est TK, ATK, MK
+func (km * Killomètre) Analyse() {
+	
+}
 
 func main() {
 	const fArg = 1
@@ -137,7 +141,7 @@ func main() {
 		tt := 0
 		tm := 0
 		mt := 0
-		for _,kill := range(km.Kills) {
+		for _, kill := range km.Kills {
 			//fmt.Printf("  ==> %v %v %v %v\n", kill.Tueur, kill.TueurEstTroll, kill.Tué, kill.TuéEstTroll)
 			if kill.TueurEstTroll {
 				if kill.TuéEstTroll {
@@ -150,13 +154,13 @@ func main() {
 			}
 		}
 		trollsByTrollKills := km.SortTrollsByKillsOfTrolls()
-		
+
 		fmt.Printf("Fini en %d secondes\n Fichiers lus : %d\n Kills lus : %d", time.Seconds()-startTime, km.NbReadFiles, len(km.Kills))
 		fmt.Printf("\nTroll tue Monstre : %d\n", tm)
 		fmt.Printf("Troll tue Troll : %d\n", tt)
 		fmt.Printf("Monstre tue Troll : %d\n", mt)
 		fmt.Printf("Nombre de trolls : %d\n", km.NbTrolls)
-		fmt.Println("Plus grands tueurs de troll : ")		
+		fmt.Println("Plus grands tueurs de troll : ")
 		PrintTrolls(trollsByTrollKills, 20)
 	}
 	fmt.Println()
