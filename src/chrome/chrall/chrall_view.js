@@ -114,6 +114,7 @@ function Chrall_makeGridHtml() {
 						if (c>0) cellContent[c++] = "<br name='trolls' class=ch_troll>";
 						cellContent[c++] = "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\"";
 						cellContent[c++] = ' message="'+t.name+' ( '+t.id+' )<br>en X='+x+' Y='+y+' Z='+t.z+'<br>Distance horizontale : ' + hdist+'"';
+						cellContent[c++] = " id="+t.id;
 						if (t.isIntangible) cellContent[c++] = " intangible";
 						cellContent[c++] = ">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a>";
 					}
@@ -512,18 +513,21 @@ function Chrall_analyseAndReformatView() {
 					message = linkText;
 					requestId = linkText;
 				}
-				$('#bubbleMonsterName').val(nomMonstre);
 				bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
 			}
 		}
 	);
 
-	//> on ajoute un popup sur les trolls (pour avoir la distance de charge, et plus tard d'autres choses peut-être)
+	//> on ajoute un popup sur les trolls (pour avoir la distance de charge, et des stats de kill par retour jsonp)
 	$("#grid a.ch_troll").each(
 		function() {
 			var link = $(this);
-			var text = link.attr("message");
-			bubble(link, text, "bub_troll");
+			var message = link.attr("message");
+			//bubble(link, message, "bub_troll");
+			var trollId = link.attr('id');
+			if (trollId) {
+				bubble(link, message, "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
+			}
 		}
 	);	
 

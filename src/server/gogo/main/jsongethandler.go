@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-type BestiaryExtractJson struct {
+type BubbleJson struct {
 	RequestId string
 	Html      string
 }
@@ -32,9 +32,30 @@ func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Reque
 
 
 func (h *JsonGetHandler) makeTrollStatsHtml(hr *http.Request) string {	
-	//trollId := GetFormValue(hr, "trollId")
+	trollIdStr := GetFormValue(hr, "trollId")
+	trollId, err := strconv.Atoi(trollIdStr)
+	if err!=nil || trollId<=0 {
+		fmt.Println("makeTrollStatsHtml : Invalid troll Id")
+		return "Invalid troll Id"
+	}
+	tks := h.tksManager.getTrollKillStats(trollId)
+	if tks==nil {
+		fmt.Printf("Troll inconnu %d\n: ", trollId)
+		return "Troll inconnu ou pacifiste"
+	}
+	return tks.HtmlTable()
+}
+
+func (h *JsonGetHandler) serveTrollStatsHtmlJsonp(w http.ResponseWriter, hr *http.Request) {
+	bejs := new(BubbleJson)
+	trollIdStr := GetFormValue(hr, "trollId")
+	bejs.RequestId = trollIdStr
 	
-	return "not yet implemented"
+	bejs.Html = h.makeTrollStatsHtml(hr)
+	fmt.Fprint(w, "grid_receive(")
+	mb, _ := json.Marshal(bejs)
+	w.Write(mb)
+	fmt.Fprint(w, ")")
 }
 
 func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
@@ -93,7 +114,7 @@ func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *htt
 }
 
 func (h *JsonGetHandler) serveBestiaryExtractHtmlJsonp(w http.ResponseWriter, hr *http.Request) {
-	bejs := new(BestiaryExtractJson)
+	bejs := new(BubbleJson)
 	requestId := hr.Form["name"]
 	if len(requestId) > 0 {
 		bejs.RequestId = requestId[0]
@@ -175,6 +196,8 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 		h.serveAutocompleteMonsterNames(w, hr)
 	} else if action == "get_extract" {
 		h.serveBestiaryExtractHtml(w, hr)
+	} else if action == "get_troll_info" {
+		h.serveTrollStatsHtmlJsonp(w, hr)
 	} else if action == "get_extract_jsonp" {
 		h.serveBestiaryExtractHtmlJsonp(w, hr)
 	} else if action == "accept_cdm_jsonp" {

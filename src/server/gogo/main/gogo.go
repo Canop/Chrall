@@ -24,14 +24,6 @@ func (server *GogoServer) Start() {
 	
 	tksManager := new(TksManager)
 	
-	// TEST
-	tks := tksManager.getTrollKillStats(57760)
-	if tks==nil {
-		fmt.Println("Canop pas trouvée")
-	} else {
-		fmt.Printf("Canop trouvée. NbKillsTrolls=%d\n", tks.NbKillsTrolls)
-	}
-
 	chrallHandler := new(ChrallHandler)
 	chrallHandler.parent = &rootHandler.Hitter
 	chrallHandler.store = cdmStore

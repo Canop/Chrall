@@ -40,27 +40,29 @@ func (m *TksManager) ReadCsvFileIfNew() os.Error {
 	classement := uint(0)
 	lastKillTrolls := uint(654321) // la flemme...
 	i := uint(0)
+	// notons qu'on ne supprime pas les anciennes stats avant, on remplace directement
+	// Et au final on ne devrait pas souvent redimensionner la table
 	for err == nil {
 		i++
 		tokens := strings.Split(line, ";", 3)
+		//fmt.Printf("%s - %s - '%s'\n", tokens[0], tokens[1], tokens[2])
 		tks := new(TrollKillStats)
 		trollId, _ := strconv.Atoi(tokens[0])
 		tks.NbKillsTrolls, _ = strconv.Atoui(tokens[1])
-		tks.NbKillsMonstres, _ = strconv.Atoui(tokens[2])
+		tks.NbKillsMonstres, _ = strconv.Atoui(strings.Trim(tokens[2]," \n"))
 		if tks.NbKillsTrolls != lastKillTrolls {
 			classement = i
 		}
 		tks.ClassementKillsTrolls = classement
 		if trollId >= len(m.Trolls) {
 			if trollId >= cap(m.Trolls) {
-				newSlice := make([]*TrollKillStats, ((trollId+1)*5/4)+1000)
+				newSlice := make([]*TrollKillStats, ((trollId+1)*5/4)+100)
 				copy(newSlice, m.Trolls)
 				m.Trolls = newSlice
 			}
 			m.Trolls = m.Trolls[0 : trollId+1]
 		}
 		m.Trolls[trollId] = tks
-
 		line, err = r.ReadString('\n')
 	}
 	if err != os.EOF {
