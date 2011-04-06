@@ -37,12 +37,12 @@ func (a *TrollKillerArray) Swap(i int, j int) {
 
 // imprime un tableau lisible des principales caractéristiques des trolls
 func PrintTrolls(trolls []*Troll, max int) {
-	fmt.Printf("| %10s | %10s | %15s | %17s |\n", "Classement", "Troll", "Kills de trolls", "Kills de monstres")
+	fmt.Printf("| %10s | %7s | %15s | %17s |\n", "Classement", "Troll", "Kills de trolls", "Kills de monstres")
 	i := 0
 	for _, troll := range trolls {
 		if troll != nil {
 			i++
-			fmt.Printf("| %10d | %10d | %15d | %17d |\n", i, troll.Id, troll.NbKillsTrolls, troll.NbKillsMonstres)
+			fmt.Printf("| %10d | %7d | %15d | %17d |\n", i, troll.Id, troll.NbKillsTrolls, troll.NbKillsMonstres)
 			if i == max {
 				break
 			}
@@ -50,7 +50,7 @@ func PrintTrolls(trolls []*Troll, max int) {
 	}
 }
 
-
+// écrit un fichier csv des trolls
 func WriteTrolls(w *os.File, trolls []*Troll, includeHeader bool) { // je ne sais pas pourquoi je ne peux pas définir w comme un *io.Writer
 	if includeHeader {
 		fmt.Fprintf(w, "%s;%s;%s\n", "Troll", "Kills de trolls", "Kills de monstres")
