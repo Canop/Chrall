@@ -113,7 +113,7 @@ function Chrall_makeGridHtml() {
 						var t = cell.trolls[i];
 						if (c>0) cellContent[c++] = "<br name='trolls' class=ch_troll>";
 						cellContent[c++] = "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\"";
-						cellContent[c++] = ' message="'+t.name+' ( '+m.id+' )<br>en X='+x+' Y='+y+' Z='+m.z+'"<br>Distance horizontale : ' + hdist;
+						cellContent[c++] = ' message="'+t.name+' ( '+t.id+' )<br>en X='+x+' Y='+y+' Z='+t.z+'<br>Distance horizontale : ' + hdist+'"';
 						if (t.isIntangible) cellContent[c++] = " intangible";
 						cellContent[c++] = ">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a>";
 					}
@@ -124,14 +124,14 @@ function Chrall_makeGridHtml() {
 						if (m.isGowap) {
 							if (c>0) cellContent[c++] = "<br name='gowaps' class=ch_gowap>";
 							cellContent[c++] = "<a name='gowaps' class=ch_gowap href=\"javascript:EMV("+m.id+",750,550);\"";
-							cellContent[c++] = ' message="'+m.fullName+' ( '+m.id+' )<br>en X='+x+' Y='+y+' Z='+m.z+'"<br>Distance horizontale : ' + hdist;
+							cellContent[c++] = ' message="'+m.fullName+' ( '+m.id+' )<br>en X='+x+' Y='+y+' Z='+m.z+'<br>Distance horizontale : ' + hdist+'"';
 							cellContent[c++] = ">"+m.z+": "+m.name+"";
 							if (m.isSick) cellContent[c++] = "<span class=ch_tag>[M]</span>";
 							cellContent[c++] = "</a>";
 						} else {
 							if (c>0) cellContent[c++] = "<br name='monstres' class=ch_monster>";
 							cellContent[c++] = "<a name='monstres' class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\"";
-							cellContent[c++] = ' message="'+m.fullName+' ( '+m.id+' )<br>en X='+x+' Y='+y+' Z='+m.z+'"<br>Distance horizontale : ' + hdist;
+							cellContent[c++] = ' message="'+m.fullName+' ( '+m.id+' )<br>en X='+x+' Y='+y+' Z='+m.z+'<br>Distance horizontale : ' + hdist+'"';
 							cellContent[c++] = " id="+m.id;
 							cellContent[c++] = " nom_complet_monstre=\""+encodeURIComponent(m.fullName)+"\"";
 							cellContent[c++] = ">"+m.z+": "+m.fullName+"</a>";
