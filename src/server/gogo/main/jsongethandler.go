@@ -19,6 +19,7 @@ type BestiaryExtractJson struct {
 
 type JsonGetHandler struct {
 	ChrallHandler
+	tksManager *TksManager
 }
 
 func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Request) {
@@ -29,6 +30,12 @@ func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Reque
 	fmt.Fprint(w, ")")
 }
 
+
+func (h *JsonGetHandler) makeTrollStatsHtml(hr *http.Request) string {	
+	//trollId := GetFormValue(hr, "trollId")
+	
+	return "not yet implemented"
+}
 
 func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	monsterCompleteNames := hr.Form["name"]

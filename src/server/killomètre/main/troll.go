@@ -59,5 +59,5 @@ func WriteTrolls(w *os.File, trolls []*Troll, includeHeader bool) { // je ne sai
 		if troll != nil {
 			fmt.Fprintf(w, "%d;%d;%d\n", troll.Id, troll.NbKillsTrolls, troll.NbKillsMonstres)
 		}
-	}	
+	}
 }

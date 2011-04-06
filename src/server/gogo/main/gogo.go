@@ -21,6 +21,16 @@ func (server *GogoServer) Start() {
 	http.Handle("/", rootHandler)
 
 	cdmStore := NewStore("temp_user", "temp_pwd") // TODO mettre user et mdp dans un fichier de config quelque part
+	
+	tksManager := new(TksManager)
+	
+	// TEST
+	tks := tksManager.getTrollKillStats(57760)
+	if tks==nil {
+		fmt.Println("Canop pas trouvée")
+	} else {
+		fmt.Printf("Canop trouvée. NbKillsTrolls=%d\n", tks.NbKillsTrolls)
+	}
 
 	chrallHandler := new(ChrallHandler)
 	chrallHandler.parent = &rootHandler.Hitter
@@ -46,6 +56,7 @@ func (server *GogoServer) Start() {
 
 	jsonGetHandler := new(JsonGetHandler)
 	jsonGetHandler.store = cdmStore
+	jsonGetHandler.tksManager = tksManager
 	jsonGetHandler.parent = &chrallHandler.Hitter
 	http.Handle("/chrall/json", jsonGetHandler)
 

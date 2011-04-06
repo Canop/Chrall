@@ -5,4 +5,4 @@
 
 lftp ftp://ftp.mountyhall.com/ -e "mirror -c -x test2009 -x 2003 -x 2004 -x 2005 -x 2006 -x 2007 -x 2008 -x 2009 -x 2010 /evenements ~/dev/Chrall/trav/morts/events; quit"
 
-./killomètre ~/dev/Chrall/trav/morts/events
+./killomètre ~/dev/Chrall/trav/morts/events > killomètre.out
