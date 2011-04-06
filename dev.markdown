@@ -153,6 +153,7 @@ TODO :
 P1 :
 ----
 * cdm : ne pas transmettre automatiquement mais via un bouton ? [point MH sur l'automatisation](http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=2&TopicID=137209)
+* affichage quelque part du nombre de CDM transmises via Chrall
 * BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * site web chrall : actualiser fréquemment (30s ?) à partir du clic sur le lien de l'extension, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update

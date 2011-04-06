@@ -1,8 +1,8 @@
 package main
 
 type Kill struct {
-	Tueur         uint
+	Tueur         int
 	TueurEstTroll bool
-	Tué           uint
+	Tué           int
 	TuéEstTroll   bool
 }

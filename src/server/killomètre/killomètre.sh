@@ -1,4 +1,4 @@
 # recompile et lance l'application killomètre
 gomake
-./killomètre
+./killomètre ~/dev/Chrall/trav/morts
 
