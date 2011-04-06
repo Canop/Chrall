@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 )
 
 type Troll struct {
@@ -47,4 +48,16 @@ func PrintTrolls(trolls []*Troll, max int) {
 			}
 		}
 	}
+}
+
+
+func WriteTrolls(w *os.File, trolls []*Troll, includeHeader bool) { // je ne sais pas pourquoi je ne peux pas définir w comme un *io.Writer
+	if includeHeader {
+		fmt.Fprintf(w, "%s;%s;%s\n", "Troll", "Kills de trolls", "Kills de monstres")
+	}
+	for _, troll := range trolls {
+		if troll != nil {
+			fmt.Fprintf(w, "%d;%d;%d\n", troll.Id, troll.NbKillsTrolls, troll.NbKillsMonstres)
+		}
+	}	
 }

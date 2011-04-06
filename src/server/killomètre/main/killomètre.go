@@ -118,12 +118,23 @@ func (km *Killomètre) SortTrollsByKillsOfTrolls() []*Troll {
 	copy(sortedTrolls, km.Trolls)
 	a := &TrollKillerArray{sortedTrolls}
 	sort.Sort(a)
+	//sortedTrolls = sortedTrolls[0:km.nbTrolls] // on réduit la tranche pour ne pas conserver les nil du bout (en espérant que ce soit bien trié)
 	return sortedTrolls
 }
 
 // analyse les kills pour essayer de déterminer qui est TK, ATK, MK
 func (km * Killomètre) Analyse() {
-	
+}
+
+func WriteTrollsToFile(filename string, trolls []*Troll) os.Error {
+	//os.Remove(filename)
+	f, err := os.Open(filename, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0777)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	WriteTrolls(f, trolls, false)	
+	return nil
 }
 
 func main() {
@@ -133,16 +144,19 @@ func main() {
 		return
 	}
 	startTime := time.Seconds()
+	
+	//> analyse
 	km := new(Killomètre)
 	err := km.handleFilename(os.Args[fArg])
+	
 	if err != nil {
-		fmt.Printf("Erreur %v", err)
+		fmt.Printf("Erreur : %v", err)
 	} else {
+		//> quelques stats sans intérêt qui seront bientôt bazardées
 		tt := 0
 		tm := 0
 		mt := 0
 		for _, kill := range km.Kills {
-			//fmt.Printf("  ==> %v %v %v %v\n", kill.Tueur, kill.TueurEstTroll, kill.Tué, kill.TuéEstTroll)
 			if kill.TueurEstTroll {
 				if kill.TuéEstTroll {
 					tt++
@@ -153,8 +167,17 @@ func main() {
 				mt++
 			}
 		}
+		
+		//> construction d'un tableau des trolls par nombre de kills de trolls
 		trollsByTrollKills := km.SortTrollsByKillsOfTrolls()
 
+		//> export du tableau complet
+		err := WriteTrollsToFile("kom.csv", trollsByTrollKills)
+		if err!=nil {
+			fmt.Printf("Erreur while writing output file : %v\n", err)
+		}
+		
+		//> affichage d'un petit bilan
 		fmt.Printf("Fini en %d secondes\n Fichiers lus : %d\n Kills lus : %d", time.Seconds()-startTime, km.NbReadFiles, len(km.Kills))
 		fmt.Printf("\nTroll tue Monstre : %d\n", tm)
 		fmt.Printf("Troll tue Troll : %d\n", tt)
