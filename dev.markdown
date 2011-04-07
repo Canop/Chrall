@@ -140,28 +140,28 @@ RECENTS / A TESTER :
 * PB grille : les titres de cellule perturbent parfois les filtres
 * grille : rendre cliquable le "vous êtes içi" (ça a nécessité de récupérer le numéro du troll)
 * bulles des trolls et monstres : indiquer les 3 coordonnées
-
+* grille / bulle de troll : intégrer le nombre de kills de trolls et le classement associé
+* case à cocher avant la CDM pour permettre de refuser l'envoi [point MH sur l'automatisation](http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=2&TopicID=137209)
 
 EN COURS :
 ==========
 * apprendre le langage go
 * calculs en roll-over sur les sorts & compétences _(il en reste encore à faire)_
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
-* procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
-* grille / bulle de troll : intégrer le nombre de kills de trolls et le classement associé
 * grille / bulle de troll : mettre au point une estimation TK/neutre/ATK/NoK
+* grille : mettre les liens sur les lieux qui en ont dans la table
 
 TODO :
 ======
 P1 :
 ----
-* cdm : ne pas transmettre automatiquement mais via un bouton ? [point MH sur l'automatisation](http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=2&TopicID=137209)
+* chron : sauvegardes de la bd
+* chron sur le serveur pour lancer tous les matins l'update des kills
 * affichage quelque part du nombre de CDM transmises via Chrall
 * BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * site web chrall : actualiser fréquemment (30s ?) à partir du clic sur le lien de l'extension, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
-* grille : mettre les liens sur les lieux qui en ont dans la table
 
 P2 :
 ----
@@ -171,12 +171,13 @@ P2 :
 
 P3 :
 ----
+* diplomatie intégrée à la vue [demande Laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=18)
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 * grille : rendre déplaçable la grille par glissage de la souris
 * lors d'un TP, affichage d'une carte des trous de météorite
 * détection des trolls malades
 * calcul des bonus totaux des mouches : séparation entre présentes & toutes
-* remettre la vue en grille si on sort d'un échec de DE [laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=16&start=10)
+* remettre la vue en grille si on sort d'un échec de DE [laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=16&start=10) refusé
 * grille : coût des déplacements et charges (en tenant compte du gluage éventuel) _(attention : besoin scripts publics)_
 * équipement : afficher les bonus [demande Fabdi](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=13&p=71#p71)
 * grille : afficher les px rapportés par les monstres (nécessite de stocker ou récupérer le niveau du troll du joueur)
