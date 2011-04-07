@@ -1,6 +1,13 @@
 <html>
-<head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"></head>
+<head>
+	<title>Chrall</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
 <body>
+<!--
+Info regarding this extension : http://canop.org/chrall
+-->
+
 
 <!--
 Le script suivant me permet de mesurer l'utilisation de Chrall via Google Analytics.
@@ -21,6 +28,8 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 <script type="text/javascript">
 
 	var remainingPaInfos = null;
+	var trollId = 0;
+	var sendCdm = true;
 
 	// objet alarme
 	function Alarm(time) {
@@ -46,11 +55,9 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 		for (var key in alarms) {			
 			var alarm = alarms[key];
 			if (alarm.time>timeNow) {
-				//alert("alarm scheduled : " + key + " for " + (new Date(alarm.time)));
 				setTimeout(checkAlarms, alarm.time-timeNow+2);
 				alarm.status = "scheduled";
 			} else {
-				//alert("alarm skipped (too late) : " + key);
 				alarm.status = "skipped";
 			}
 		}
@@ -60,7 +67,6 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 	function checkAlarms() {
 		var timeNow = (new Date()).getTime();
 		if (timeNow<lastAlarmTime+minimalTimeBetweenAlarms) {
-			//alert("last alarm too recent");
 			return;
 		}
 		for (var key in alarms) {
@@ -68,11 +74,11 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 			if (alarm.time>=timeNow && alarm.status!="played") {
 				playSound();
 				alarm.status = "played";
-				// alert("Hé ! Il est l'heure..."); j'enlève l'alert : elle bloque toute les fenêtres, y compris quand on ne la voit pas...
 			}
 		}
 	}
 
+	// réponse aux requètes envoyées par les scripts "embbeded"
 	chrome.extension.onRequest.addListener(
 		function(request, sender, sendResponse) {
 			for (var key in request) {
@@ -89,9 +95,16 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 						pa = remainingPaInfos.pa;
 					}
 					sendResponse({"pa":pa});					
+				} else if (key=="trollId") {
+					trollId = request[key];
+				} else if (key=="get_trollId") {
+					sendResponse({"trollId":trollId});					
+				} else if (key=="send_cdm") {
+					sendCdm = request[key]=='' ? false : true;
+				} else if (key=="get_send_cdm") {
+					sendResponse({"send_cdm":sendCdm});					
 				}
 			}
-			//alarms["test"] = new Alarm((new Date()).getTime() + 30000);
 			scheduleAlarms();
 		}
 	);

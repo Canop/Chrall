@@ -22,6 +22,8 @@ func (server *GogoServer) Start() {
 
 	cdmStore := NewStore("temp_user", "temp_pwd") // TODO mettre user et mdp dans un fichier de config quelque part
 
+	tksManager := new(TksManager)
+
 	chrallHandler := new(ChrallHandler)
 	chrallHandler.parent = &rootHandler.Hitter
 	chrallHandler.store = cdmStore
@@ -46,6 +48,7 @@ func (server *GogoServer) Start() {
 
 	jsonGetHandler := new(JsonGetHandler)
 	jsonGetHandler.store = cdmStore
+	jsonGetHandler.tksManager = tksManager
 	jsonGetHandler.parent = &chrallHandler.Hitter
 	http.Handle("/chrall/json", jsonGetHandler)
 

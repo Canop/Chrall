@@ -22,7 +22,7 @@ function Chrall_reformatOptionsView() {
 	html += "<p>";
 	html += "Chrall modifie les pages que vous recevez depuis games.mountyhall.com (Chrall ne voit ni ne change les autres pages)."
 	html += "<br>Chrall affiche, sur la vue, des estimations des caractéristiques des monstres, en exploitant son bestiaire (lien plus bas)."
-	html += "<br>Chrall transmet les CDM que vous effectuez à ce bestiaire, afin de l'enrichir."
+	html += "<br>Chrall transmet les CDM que vous effectuez à ce bestiaire, afin de l'enrichir (si vous l'acceptez)."
 	html += "<br>Aucune autre information, et en particulier aucune information pouvant donner un avantage illégitime à un autre joueur n'est récupérée"
 	html += " (donc pas de transmission des AA, des blessures des monstres, des coups, des infos de vos trolls, etc.)."
 	html += "</p>";

@@ -138,6 +138,9 @@ RECENTS / A TESTER :
 * OPTM calcul de la grille : remplacement de l'algo de construction en O⁵ par du O³ (surtout intéressant pour les toms, mais il reste pas mal de lenteur sur la lecture qui était déjà en O³ en raison des parsages jquery et surtout sur l'insertion de la grille dans la page)
 * diverses optimisations
 * PB grille : les titres de cellule perturbent parfois les filtres
+* grille : rendre cliquable le "vous êtes içi" (ça a nécessité de récupérer le numéro du troll)
+* bulles des trolls et monstres : indiquer les 3 coordonnées
+
 
 EN COURS :
 ==========
@@ -146,32 +149,30 @@ EN COURS :
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * procédures de sauvegardes de la bd
 * BUG : les sonneries ne marchent pas toujours...
-* bulles des trolls et monstres : indiquer les 3 coordonnées
+* grille / bulle de troll : intégrer le nombre de kills de trolls et le classement associé
+* grille / bulle de troll : mettre au point une estimation TK/neutre/ATK/NoK
 
 TODO :
 ======
 P1 :
 ----
 * cdm : ne pas transmettre automatiquement mais via un bouton ? [point MH sur l'automatisation](http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=2&TopicID=137209)
+* affichage quelque part du nombre de CDM transmises via Chrall
 * BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * site web chrall : actualiser fréquemment (30s ?) à partir du clic sur le lien de l'extension, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
+* grille : mettre les liens sur les lieux qui en ont dans la table
 
 P2 :
 ----
-* grille / bulle de troll : intégrer le nombre de kills de trolls et le classement associé
-* grille / bulle de troll : mettre au point une estimation TK/neutre/ATK/NoK
-* je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
-* à voir : mon contrat d'hébergement n'offre pas théoriquement un débit très important...
 * profil : indiquer les alarmes programmées
 * sauver les stats d'usage du serveur g0g0chrall ?
-* grille : mettre les liens sur les lieux qui en ont dans la table
 
 P3 :
 ----
+* je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 * grille : rendre déplaçable la grille par glissage de la souris
-* grille : rendre cliquable le "vous êtes içi" (ça nécessite de récupérer le numéro du troll...)
 * lors d'un TP, affichage d'une carte des trous de météorite
 * détection des trolls malades
 * calcul des bonus totaux des mouches : séparation entre présentes & toutes
@@ -210,6 +211,8 @@ P3 :
 * bestiaire : montrer quels compos sont EM
 * liste matos tanière : montrer quels compos sont EM
 * programmation golem : sauvegarde/restauration
+* bulle troll : indiquer le compte des kills de gowaps apprivoisés
+* bulle troll : indiquer si vous avez (tué/été tué par) le troll
 
 NOTES :
 =======

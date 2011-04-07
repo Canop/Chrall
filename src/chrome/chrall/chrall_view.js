@@ -101,10 +101,13 @@ function Chrall_makeGridHtml() {
 			var cellContent = [];
 			var c = 0;
 			var cellId=null;
-			var cellMenuInfos = null;
+			//var cellMenuInfos = null;
 			if (x==player.x && y==player.y) {
-				cellContent[c++] = "<span class=ch_player>"+player.z+":Vous êtes ici</span><br>";
-				cellMenuInfos = "cell00";
+				cellContent[c++] = "<a class=ch_player href=\"javascript:EPV("+player.id+");\"";
+				cellContent[c++] = " id="+player.id;
+				if (t.isIntangible) cellContent[c++] = " intangible";
+				cellContent[c++] = ">"+player.z+":Vous êtes ici</a>";
+				//cellMenuInfos = "cell00";
 				cellId='cellp0p0';
 			}
 			if (cell) {
@@ -114,6 +117,7 @@ function Chrall_makeGridHtml() {
 						if (c>0) cellContent[c++] = "<br name='trolls' class=ch_troll>";
 						cellContent[c++] = "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\"";
 						cellContent[c++] = ' message="'+t.name+' ( '+t.id+' )<br>en X='+x+' Y='+y+' Z='+t.z+'<br>Distance horizontale : ' + hdist+'"';
+						cellContent[c++] = " id="+t.id;
 						if (t.isIntangible) cellContent[c++] = " intangible";
 						cellContent[c++] = ">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a>";
 					}
@@ -205,7 +209,7 @@ function Chrall_makeGridHtml() {
 			var deRange = player.z==0 ? 2 : 1;
 			var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
 			if (c>0 || cellIsAccessibleByDe) html[h++] = " hasContent";
-			if (cellMenuInfos!=null) html[h++] = " cellMenuInfos="+cellMenuInfos;
+			//if (cellMenuInfos!=null) html[h++] = " cellMenuInfos="+cellMenuInfos;
 			html[h++] = ">";
 			if (hasHole==true) {
 				html[h++] = "<span class=ch_place>Trou de Météorite</span>";
@@ -512,18 +516,31 @@ function Chrall_analyseAndReformatView() {
 					message = linkText;
 					requestId = linkText;
 				}
-				$('#bubbleMonsterName').val(nomMonstre);
 				bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
 			}
 		}
 	);
 
-	//> on ajoute un popup sur les trolls (pour avoir la distance de charge, et plus tard d'autres choses peut-être)
+	//> on ajoute un popup sur les trolls (pour avoir la distance de charge, et des stats de kill par retour jsonp)
 	$("#grid a.ch_troll").each(
 		function() {
 			var link = $(this);
-			var text = link.attr("message");
-			bubble(link, text, "bub_troll");
+			var message = link.attr("message");
+			var trollId = link.attr('id');
+			if (trollId) {
+				bubble(link, message, "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
+			}
+		}
+	);	
+
+	//> on fait pareil pour le joueur
+	$("#grid a.ch_player").each(
+		function() {
+			var link = $(this);
+			var trollId = link.attr('id');
+			if (trollId) {
+				bubble(link, 'Troll '+player.id, "bub_player", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
+			}
 		}
 	);	
 

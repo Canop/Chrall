@@ -4,6 +4,7 @@ TARG=gogo
 GOFILES=\
 	main/html.go\
 	main/sql.go\
+	main/trollkillstats.go\
 	main/cdm.go\
 	main/bestiaryextract.go\
 	main/cdmstore.go\

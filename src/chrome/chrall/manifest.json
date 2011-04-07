@@ -31,7 +31,9 @@
 				"chrall_view.js",
 				"chrall_flies.js",
 				"chrall_move.js",
+				"chrall_play.js",
 				"chrall_play2.js",
+				"chrall_menu.js",
 				"chrall_action.js",
 				"chrall_main.js"
 			]
