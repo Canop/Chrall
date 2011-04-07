@@ -24,6 +24,18 @@ var viewFilters = {
 
 console.log("pageName=\""+pageName+"\""); 
 
+function getTrollIdthenExecute(f) {
+	chrome.extension.sendRequest(
+		{"get_trollId": "s'il-te-plaît?"},
+		function(answer) {
+			player.id = answer.trollId;
+			console.log('player trollID : '+player.id);
+			f.call();
+		}
+	);
+}
+
+
 switch (pageName) {
 	case "PlayStart.php":
 		Chrall_analyseAndReformatStartPage();	
@@ -32,10 +44,10 @@ switch (pageName) {
 		Chrall_analyseAndReformatProfile();	
 		break;
 	case "Play_vue.php":
-		Chrall_analyseAndReformatView();	
+		getTrollIdthenExecute(Chrall_analyseAndReformatView);	
 		break;
 	case "Play_mouche.php":
-		Chrall_analyseAndReformatFlies();	
+		Chrall_analyseAndReformatFlies();
 		break;
 	case "Play_BM.php":
 		Chrall_analyseAndReformatBM();	
@@ -46,9 +58,17 @@ switch (pageName) {
 	case "Play_option.php":
 		Chrall_reformatOptionsView();	
 		break;
-	case "Play_a_Competence16.php":
-	case "Play_a_Competence16b.php": // le 16b serait le formulaire de préparation ?
-		Chrall_handleCdmPage();	
+	case "Play_a_Competence16.php": // préparation de CDM (le formulaire de choix du monstre)
+		Chrall_handleBeforeCdmPage();	
+		break;
+	case "Play_a_Competence16b.php": // résultat de cdm
+		getTrollIdthenExecute(Chrall_handleCdmPage);	
+		break;
+	case "Play.php": // c'est le frameset qui engloble tout
+		Chrall_preparePlayInputs();	
+		break;
+	case "Play_menu.php": // c'est la frame de gauche
+		Chrall_handleMenuPage();	
 		break;
 	case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la colonne menu de gauche
 		Chrall_preparePlay2Inputs();	

@@ -220,6 +220,9 @@ a.gogo:hover {
 .bub_troll  {
 	background-color: blue;
 }
+.bub_player  {
+	background-color: green;
+}
 .bub_object  {
 	background-color: grey;
 }
