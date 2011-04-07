@@ -1,5 +1,9 @@
 package main
 
+/*
+ * J'ai été un peu paresseux sur certains trucs, on devrait pouvoir faire du go plus élégant...
+ */ 
+
 import (
 	"bufio"
 	"fmt"
@@ -28,7 +32,7 @@ func (km *Killomètre) initTroll(id int) {
 	}
 	if km.Trolls[id] == nil {
 		km.NbTrolls++
-		km.Trolls[id] = &Troll{id, 0, 0}
+		km.Trolls[id] = &Troll{id, 0, 0, 0, 0}
 	}
 }
 
@@ -112,18 +116,53 @@ func (km *Killomètre) handleFilename(filename string) os.Error {
 	defer f.Close()
 	return km.handleFile(f)
 }
+
 // construit un tableau des trolls triés par leur nombre de kills de trolls
 func (km *Killomètre) SortTrollsByKillsOfTrolls() []*Troll {
 	sortedTrolls := make([]*Troll, len(km.Trolls))
 	copy(sortedTrolls, km.Trolls)
 	a := &TrollKillerArray{sortedTrolls}
 	sort.Sort(a)
-	//sortedTrolls = sortedTrolls[0:km.nbTrolls] // on réduit la tranche pour ne pas conserver les nil du bout (en espérant que ce soit bien trié)
+	sortedTrolls = sortedTrolls[0:km.NbTrolls]
+	return sortedTrolls
+}
+
+// construit un tableau des trolls triés par leur nombre de kills de monstres
+func (km *Killomètre) SortTrollsByKillsOfMonsters() []*Troll {
+	sortedTrolls := make([]*Troll, len(km.Trolls))
+	copy(sortedTrolls, km.Trolls)
+	a := &MonsterKillerArray{sortedTrolls}
+	sort.Sort(a)
+	sortedTrolls = sortedTrolls[0:km.NbTrolls]
 	return sortedTrolls
 }
 
 // analyse les kills pour essayer de déterminer qui est TK, ATK, MK
 func (km *Killomètre) Analyse() {
+}
+
+func (km *Killomètre) CalculeClassements(trollsByTrollKills []*Troll, trollsByMonsterKills []*Troll) {
+	//> calcul du classement par kills de trolls
+	classement := 0
+	lastKillTrolls := uint(654321) // la flemme...
+	for i, troll := range(trollsByTrollKills) {
+		if troll.NbKillsTrolls!=lastKillTrolls {
+			classement = i+1
+			lastKillTrolls = troll.NbKillsTrolls
+		}
+		troll.ClassementKillsTrolls = classement
+	}
+	//> calcul du classement par kills de monstres
+	classement = 0
+	lastKillMonstres := uint(654321)
+	for i, troll := range(trollsByMonsterKills) {
+		if troll.NbKillsMonstres!=lastKillMonstres {
+			classement = i+1
+			lastKillMonstres = troll.NbKillsMonstres
+		}
+		troll.ClassementKillsMonstres = classement
+	}
+
 }
 
 func WriteTrollsToFile(filename string, trolls []*Troll) os.Error {
@@ -168,8 +207,12 @@ func main() {
 			}
 		}
 
-		//> construction d'un tableau des trolls par nombre de kills de trolls
+		//> construction de tableaux triés
 		trollsByTrollKills := km.SortTrollsByKillsOfTrolls()
+		trollsByMonsterKills := km.SortTrollsByKillsOfMonsters() // notons que ça irait sans doute plus rapidement de partir du tableau des trolls triés, plus court...
+		
+		//> calcul des classements
+		km.CalculeClassements(trollsByTrollKills, trollsByMonsterKills)
 
 		//> export du tableau complet
 		err := WriteTrollsToFile("kom.csv", trollsByTrollKills)

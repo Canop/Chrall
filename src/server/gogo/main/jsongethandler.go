@@ -31,15 +31,15 @@ func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Reque
 }
 
 
-func (h *JsonGetHandler) makeTrollStatsHtml(hr *http.Request) string {	
+func (h *JsonGetHandler) makeTrollStatsHtml(hr *http.Request) string {
 	trollIdStr := GetFormValue(hr, "trollId")
 	trollId, err := strconv.Atoi(trollIdStr)
-	if err!=nil || trollId<=0 {
+	if err != nil || trollId <= 0 {
 		fmt.Println("makeTrollStatsHtml : Invalid troll Id")
 		return "Invalid troll Id"
 	}
 	tks := h.tksManager.getTrollKillStats(trollId)
-	if tks==nil {
+	if tks == nil {
 		fmt.Printf("Troll inconnu %d\n: ", trollId)
 		return "Troll inconnu ou pacifiste"
 	}
@@ -50,7 +50,7 @@ func (h *JsonGetHandler) serveTrollStatsHtmlJsonp(w http.ResponseWriter, hr *htt
 	bejs := new(BubbleJson)
 	trollIdStr := GetFormValue(hr, "trollId")
 	bejs.RequestId = trollIdStr
-	
+
 	bejs.Html = h.makeTrollStatsHtml(hr)
 	fmt.Fprint(w, "grid_receive(")
 	mb, _ := json.Marshal(bejs)

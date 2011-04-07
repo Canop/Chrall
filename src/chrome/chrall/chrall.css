@@ -127,13 +127,13 @@ div.hiddenDiv {
 	text-decoration: none;
 	color: white;
 }
-table.cdm {
+table.cdm, table.tks {
 	border-collapse: collapse;
 	border: thin solid #A0A0FF;
 	font-size:12px;
 	color: white;
 }
-table.cdm th {
+table.cdm th, table.tks th {
 	border: thin solid #A0A0FF;
 	text-align:right;
 	font-weight: normal;
@@ -142,6 +142,11 @@ table.cdm th {
 table.cdm td {
 	border: thin solid #A0A0FF;
 	text-align: left;
+	padding: 0 2px;
+}
+table.tks td {
+	border: thin solid #A0A0FF;
+	text-align: center;
 	padding: 0 2px;
 }
 table.cdm th.title {

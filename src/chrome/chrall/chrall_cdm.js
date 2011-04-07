@@ -53,6 +53,7 @@ function Chrall_handleCdmPage() {
 					document.getElementById('gogochrall').innerHTML = "Conformément à votre souhait, la CDM n'a pas été envoyée au serveur Chrall. Sniff...";
 				}
 			}
+		);
 	}
 	
 	console.log("leaving Chrall_handleCdmPage");

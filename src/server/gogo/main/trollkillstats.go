@@ -10,9 +10,10 @@ import (
 
 // statistiques concernant un troll
 type TrollKillStats struct {
-	NbKillsTrolls         uint
-	ClassementKillsTrolls uint
-	NbKillsMonstres       uint
+	NbKillsTrolls           uint
+	NbKillsMonstres         uint
+	ClassementKillsTrolls   uint
+	ClassementKillsMonstres uint
 }
 
 // l'objet qui contient les stats
@@ -27,33 +28,39 @@ type TksManager struct {
 // Lit un fichier csv contenant, triés par nombre de kills de trolls, une ligne pour
 //  chaque troll connu (voir troll.go)
 func (m *TksManager) ReadCsvFileIfNew() os.Error {
+	filename := "../killometre/kom.csv"
+	if m.lastFileRead>0 {
+		fi, err := os.Stat(filename)
+		if err!=nil {
+			return err
+		}
+		if !fi.IsRegular() {
+			return os.NewError("TksManager : Fichier de stats " + filename + " introuvable ou anormal")
+		}
+		if fi.Mtime_ns < m.lastFileRead*1000000000 { // conversion secondes - nanosecondes...
+			fmt.Println("TksManager : le fichier n'a pas changé")
+			return nil
+		}
+	}
 
-	// <- tester ici si le fichier est plus récent que lastFileRead
-
-	f, err := os.Open("../killomètre/kom.csv", os.O_RDONLY, 0)
+	f, err := os.Open(filename, os.O_RDONLY, 0)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
 	r := bufio.NewReader(f)
 	line, err := r.ReadString('\n')
-	classement := uint(0)
-	lastKillTrolls := uint(654321) // la flemme...
-	i := uint(0)
 	// notons qu'on ne supprime pas les anciennes stats avant, on remplace directement
 	// Et au final on ne devrait pas souvent redimensionner la table
 	for err == nil {
-		i++
-		tokens := strings.Split(line, ";", 3)
+		tokens := strings.Split(line, ";", 5)
 		//fmt.Printf("%s - %s - '%s'\n", tokens[0], tokens[1], tokens[2])
 		tks := new(TrollKillStats)
 		trollId, _ := strconv.Atoi(tokens[0])
 		tks.NbKillsTrolls, _ = strconv.Atoui(tokens[1])
-		tks.NbKillsMonstres, _ = strconv.Atoui(strings.Trim(tokens[2]," \n"))
-		if tks.NbKillsTrolls != lastKillTrolls {
-			classement = i
-		}
-		tks.ClassementKillsTrolls = classement
+		tks.NbKillsMonstres, _ = strconv.Atoui(tokens[2])
+		tks.ClassementKillsTrolls, _ = strconv.Atoui(tokens[3])
+		tks.ClassementKillsMonstres, _ = strconv.Atoui(strings.Trim(tokens[4], " \n"))
 		if trollId >= len(m.Trolls) {
 			if trollId >= cap(m.Trolls) {
 				newSlice := make([]*TrollKillStats, ((trollId+1)*5/4)+100)
@@ -77,10 +84,10 @@ func (m *TksManager) ReadCsvFileIfNew() os.Error {
 
 func (m *TksManager) getTrollKillStats(trollId int) *TrollKillStats {
 	now, _, _ := os.Time()
-	if (now-m.lastFileCheck>180) {
+	if now-m.lastFileCheck > 180 {
 		m.lastFileCheck = now
 		err := m.ReadCsvFileIfNew()
-		if err!=nil {
+		if err != nil {
 			fmt.Println("Unable to load kill stats file :")
 			fmt.Println(err)
 		}

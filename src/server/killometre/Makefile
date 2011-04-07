@@ -1,6 +1,6 @@
 include $(GOROOT)/src/Make.inc
 
-TARG=killomètre
+TARG=killometre
 GOFILES=\
 	main/tag.go\
 	main/kill.go\
