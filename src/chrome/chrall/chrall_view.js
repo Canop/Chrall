@@ -370,7 +370,7 @@ function Chrall_analyseView() {
 	// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case
 	player.cellIsFree = true;
 	objectsOnPlayerCell = new Array();
-	var cell = grid.getCellOrNull(player.x, player.z);
+	var cell = grid.getCellOrNull(player.x, player.y);
 	if (cell) {
 		if (cell.trolls) {
 			for (var i=0; i<cell.trolls.length; i++) {
