@@ -161,6 +161,7 @@ TODO :
 ======
 P1 :
 ----
+* comptage des kills de trolls : enlever les suicides
 * cron : sauvegardes de la bd
 * affichage quelque part du nombre de CDM transmises via Chrall
 * BUG : je crois que les messages de l'AM déconnent
@@ -175,6 +176,7 @@ P2 :
 
 P3 :
 ----
+* classification TK/ATK : utiliser les guildes comme indice
 * en réponse à un envoi de CDM répondre en intégrant les données des autres CDM et en évaluant les PV restant
 * utiliser ftp://ftp.mountyhall.com/Public_ Trolls2.txt pour batir une liste des trolls complète et surtout avoir le niveau du joueur ?
 * diplomatie intégrée à la vue [demande Laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=18) Utiliser ftp://ftp.mountyhall.com/Public_ Diplomatie.txt

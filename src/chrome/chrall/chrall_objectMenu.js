@@ -39,12 +39,19 @@ function eventIsOver(event, o) {
 }
 
 function checkHideOm() {
+		console.log('checkHideOm A');
 	if (onOmTarget||onOmTopMenu||onOmBottomMenu) return;
+		console.log('checkHideOm B');
 	// avant de fermer, on va laisser le temps de vérifier qu'on n'est pas tout de suite passé
 	// dans un autre objet (par exemple depuis la cible vers un menu)
 	clearTimeout(omCloseTimeoutID);
 	omCloseTimeoutID = setTimeout(function() {
+				console.log('checkHideOm C');
+
 		if (onOmTarget || onOmTopMenu || onOmBottomMenu) return;
+		
+				console.log('checkHideOm D');
+
 		hideOm();
 	}, 200);
 }
@@ -115,8 +122,10 @@ function objectMenu(
 		onOmTarget = true;
 		showOm($(this), html_top, html_bottom);
 	});
-	target.mouseout(function(){
+	target.mouseout(function(event){
+		console.log('target.mouseout');
 		if (eventIsOver(event, omTarget)) return;
+		console.log('eventIsOver false');
 		onOmTarget = false;
 		checkHideOm();
 	});
