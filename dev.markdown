@@ -142,6 +142,11 @@ RECENTS / A TESTER :
 * bulles des trolls et monstres : indiquer les 3 coordonnées
 * grille / bulle de troll : intégrer le nombre de kills de trolls et le classement associé
 * case à cocher avant la CDM pour permettre de refuser l'envoi [point MH sur l'automatisation](http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=2&TopicID=137209)
+* site web chrall : ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
+
+<- v1.07
+
+* cron sur le serveur pour lancer tous les matins l'update des kills
 
 EN COURS :
 ==========
@@ -156,22 +161,23 @@ TODO :
 ======
 P1 :
 ----
-* chron : sauvegardes de la bd
-* chron sur le serveur pour lancer tous les matins l'update des kills
+* cron : sauvegardes de la bd
 * affichage quelque part du nombre de CDM transmises via Chrall
 * BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
-* site web chrall : actualiser fréquemment (30s ?) à partir du clic sur le lien de l'extension, afin de ne pas continuer à afficher bêtement qu'on n'est pas à jour après l'update
 
 P2 :
 ----
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * profil : indiquer les alarmes programmées
 * sauver les stats d'usage du serveur g0g0chrall ?
+* lien pour les lieux proches bricotrolls
 
 P3 :
 ----
-* diplomatie intégrée à la vue [demande Laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=18)
+* en réponse à un envoi de CDM répondre en intégrant les données des autres CDM et en évaluant les PV restant
+* utiliser ftp://ftp.mountyhall.com/Public_ Trolls2.txt pour batir une liste des trolls complète et surtout avoir le niveau du joueur ?
+* diplomatie intégrée à la vue [demande Laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=18) Utiliser ftp://ftp.mountyhall.com/Public_ Diplomatie.txt
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 * grille : rendre déplaçable la grille par glissage de la souris
 * lors d'un TP, affichage d'une carte des trous de météorite
@@ -214,6 +220,9 @@ P3 :
 * programmation golem : sauvegarde/restauration
 * bulle troll : indiquer le compte des kills de gowaps apprivoisés
 * bulle troll : indiquer si vous avez (tué/été tué par) le troll
+* recherche de lieux intégrée
+* grille : flèches pour indiquer les directions des lieux intéressants (bookmarkés ou bien sur recherche)
+* système 'mappy' intégré en exploitant la liste des gares TGV du ftp MH
 
 NOTES :
 =======

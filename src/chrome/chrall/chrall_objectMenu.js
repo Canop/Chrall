@@ -3,14 +3,16 @@
  *  dont le contenu est fourni par l'appelant) au dessus et au dessous d'un objet.
  * 
  * 
- * TODO : on pourrait rendre ça plus joli, là je code et je spécifie en même temps du coup
- *  c'est un peu bordélique, faudra que je refactore.
+ * 
+ * TODO : tester si les performances restent correctes avec http://cherne.net/brian/resources/jquery.hoverIntent.html
+ * 
  */ 
 
 var onOmTarget = false;
 var onOmTopMenu = false;
 var onOmBottomMenu = false;
 var omExists = false;
+var omEnterTimeoutID;
 var omCloseTimeoutID;
 var omTarget;
 var omTopMenu;
@@ -18,10 +20,13 @@ var omBottomMenu;
 
 
 function eventIsOver(event, o) {
+	// FIXME il y a un problème de décalage vertical de quelques pixels que je ne comprends pas (sur le haut de la zone au moins)
 	if (!o) return false;
 	var pos = o.offset();
 	var ex = event.pageX;
 	var ey = event.pageY;
+	//~ console.log("pos.top="+pos.top);
+	//~ console.log("e.pageY="+event.pageY);
 	if (
 		ex>=pos.left
 		&& ex<=pos.left+o.width()
@@ -37,16 +42,17 @@ function checkHideOm() {
 	if (onOmTarget||onOmTopMenu||onOmBottomMenu) return;
 	// avant de fermer, on va laisser le temps de vérifier qu'on n'est pas tout de suite passé
 	// dans un autre objet (par exemple depuis la cible vers un menu)
-	setTimeout(function() {
+	clearTimeout(omCloseTimeoutID);
+	omCloseTimeoutID = setTimeout(function() {
 		if (onOmTarget || onOmTopMenu || onOmBottomMenu) return;
 		hideOm();
 	}, 200);
 }
 function hideOm() {
-	clearTimeout(omCloseTimeoutID);
 	if (omTopMenu) omTopMenu.remove();
 	if (omBottomMenu) omBottomMenu.remove();
 }
+
 function showOm(target, text_top, text_bottom) {
 	var pos =target.offset();
 	hideOm();
