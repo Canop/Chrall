@@ -149,7 +149,9 @@ function Chrall_makeGridHtml() {
 							hasHole = true;
 						} else {
 						if (c>0) cellContent[c++] = "<br name='lieux' class=ch_place>";
-							cellContent[c++] = "<a name='lieux' class=ch_place>"+t.z+": "+t.name+"</a>";
+							cellContent[c++] = "<a name='lieux' class=ch_place";
+							if (t.hasLink) cellContent[c++] = ' href="javascript:Enter(\'/mountyhall/View/TaniereDescription.php?ai_IDLieu='+t.id+'\',750,500)"';
+							cellContent[c++] = ">"+t.z+": "+t.name+"</a>";
 						}
 					}
 				}
@@ -293,7 +295,9 @@ function Chrall_analysePlaceTable(table) {
 			var cells = $(this).find("td");
 			var i=1;
 			thing.id = parseInt($(cells[i++]).text());
-			thing.setName($(cells[i++]).text());
+			var nameCell = $(cells[i++]);
+			thing.hasLink = nameCell.find('a').length>0;
+			thing.setName(nameCell.text());
 			thing.x = parseInt($(cells[i++]).text());
 			thing.y = parseInt($(cells[i++]).text());
 			thing.z = parseInt($(cells[i++]).text());

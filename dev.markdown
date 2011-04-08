@@ -147,6 +147,7 @@ RECENTS / A TESTER :
 <- v1.07
 
 * cron sur le serveur pour lancer tous les matins l'update des kills
+* grille : mettre les liens sur les lieux qui en ont dans la table
 
 EN COURS :
 ==========
@@ -155,7 +156,6 @@ EN COURS :
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * BUG : les sonneries ne marchent pas toujours...
 * grille / bulle de troll : mettre au point une estimation TK/neutre/ATK/NoK
-* grille : mettre les liens sur les lieux qui en ont dans la table
 
 TODO :
 ======
