@@ -6,11 +6,21 @@ import (
 )
 
 type Troll struct {
-	Id              int
-	NbKillsTrolls   uint
-	NbKillsMonstres uint
-	ClassementKillsTrolls int
+	Id                      int
+	NbKillsTrolls           uint // suicides non compris
+	NbKillsMonstres         uint
+	ClassementKillsTrolls   int
 	ClassementKillsMonstres int
+	Tag                     tag
+	NbKillsTK               uint
+	NbKillsATK              uint
+	NbKilledByATK           uint
+}
+
+func NewTroll(id int) *Troll {
+	t := new(Troll)
+	t.Id = id
+	return t
 }
 
 
@@ -19,6 +29,7 @@ type Troll struct {
 type TrollKillerArray struct {
 	trolls []*Troll
 }
+
 func (a *TrollKillerArray) Len() int {
 	return len(a.trolls)
 }
@@ -40,6 +51,7 @@ func (a *TrollKillerArray) Swap(i int, j int) {
 type MonsterKillerArray struct {
 	trolls []*Troll
 }
+
 func (a *MonsterKillerArray) Len() int {
 	return len(a.trolls)
 }
@@ -59,12 +71,12 @@ func (a *MonsterKillerArray) Swap(i int, j int) {
 
 // imprime un tableau lisible des principales caractéristiques des trolls
 func PrintTrolls(trolls []*Troll, max int) {
-	fmt.Printf("| %10s | %7s | %15s | %17s | %25s | %25s |\n", "Classement", "Troll", "Kills de trolls", "Kills de monstres", "Class. kills trolls", "Class. kills monstres")
+	fmt.Printf("| %10s | %7s | %15s | %17s | %20s | %21s | %10s | %10s | %10s |\n", "Classement", "Troll", "Kills de trolls", "Kills de monstres", "Class. kills trolls", "Class. kills monstres", "Classif", "Kills TK", "Kills ATK")
 	i := 0
 	for _, troll := range trolls {
 		if troll != nil {
 			i++
-			fmt.Printf("| %10d | %7d | %15d | %17d | %25d | %25d |\n", i, troll.Id, troll.NbKillsTrolls, troll.NbKillsMonstres, troll.ClassementKillsTrolls, troll.ClassementKillsMonstres)
+			fmt.Printf("| %10d | %7d | %15d | %17d | %20d | %21d | %10s | %10d | %10d |\n", i, troll.Id, troll.NbKillsTrolls, troll.NbKillsMonstres, troll.ClassementKillsTrolls, troll.ClassementKillsMonstres, troll.Tag.string(), troll.NbKillsTK, troll.NbKillsATK)
 			if i == max {
 				break
 			}
@@ -75,11 +87,11 @@ func PrintTrolls(trolls []*Troll, max int) {
 // écrit un fichier csv des trolls
 func WriteTrolls(w *os.File, trolls []*Troll, includeHeader bool) { // je ne sais pas pourquoi je ne peux pas définir w comme un *io.Writer
 	if includeHeader {
-		fmt.Fprintf(w, "%s;%s;%s\n", "Troll", "Kills de trolls", "Kills de monstres", "Classement kills trolls", "Classement kills monstres")
+		fmt.Fprintf(w, "%s;%s;%s;%s;%s;%s\n", "Troll", "Kills de trolls", "Kills de monstres", "Classement kills trolls", "Classement kills monstres", "Classif", "Kills TK", "Kills ATK")
 	}
 	for _, troll := range trolls {
 		if troll != nil {
-			fmt.Fprintf(w, "%d;%d;%d;%d;%d\n", troll.Id, troll.NbKillsTrolls, troll.NbKillsMonstres, troll.ClassementKillsTrolls, troll.ClassementKillsMonstres)
+			fmt.Fprintf(w, "%d;%d;%d;%d;%d;%s;%d;%d\n", troll.Id, troll.NbKillsTrolls, troll.NbKillsMonstres, troll.ClassementKillsTrolls, troll.ClassementKillsMonstres, troll.Tag.string(), troll.NbKillsTK, troll.NbKillsATK)
 		}
 	}
 }

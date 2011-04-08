@@ -160,6 +160,14 @@ func (cdm *CDM) HtmlTable() string {
 	return html
 }
 
+/*
+
+	Classification Chrall : TK (probable)
+								la seconde partie est basée sur le rapport entre kills tk et kills atk, et sur le nombre de kills atk
+
+
+*/
+
 // construit une description tabulaire d'une CDM (réelle ou estimée)
 func (tks *TrollKillStats) HtmlTable() string {
 	sum := tks.NbKillsTrolls + tks.NbKillsMonstres

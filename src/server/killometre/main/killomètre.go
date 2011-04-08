@@ -2,7 +2,7 @@ package main
 
 /*
  * J'ai été un peu paresseux sur certains trucs, on devrait pouvoir faire du go plus élégant...
- */ 
+ */
 
 import (
 	"bufio"
@@ -32,7 +32,7 @@ func (km *Killomètre) initTroll(id int) {
 	}
 	if km.Trolls[id] == nil {
 		km.NbTrolls++
-		km.Trolls[id] = &Troll{id, 0, 0, 0, 0}
+		km.Trolls[id] = NewTroll(id)
 	}
 }
 
@@ -48,7 +48,7 @@ func (km *Killomètre) addKill(kill *Kill) {
 	km.Kills[l] = kill
 	if kill.TueurEstTroll {
 		km.initTroll(kill.Tueur)
-		if kill.TuéEstTroll {
+		if kill.TuéEstTroll && kill.Tué != kill.Tueur {
 			km.Trolls[kill.Tueur].NbKillsTrolls++
 		} else {
 			km.Trolls[kill.Tueur].NbKillsMonstres++
@@ -137,17 +137,14 @@ func (km *Killomètre) SortTrollsByKillsOfMonsters() []*Troll {
 	return sortedTrolls
 }
 
-// analyse les kills pour essayer de déterminer qui est TK, ATK, MK
-func (km *Killomètre) Analyse() {
-}
 
 func (km *Killomètre) CalculeClassements(trollsByTrollKills []*Troll, trollsByMonsterKills []*Troll) {
 	//> calcul du classement par kills de trolls
 	classement := 0
 	lastKillTrolls := uint(654321) // la flemme...
-	for i, troll := range(trollsByTrollKills) {
-		if troll.NbKillsTrolls!=lastKillTrolls {
-			classement = i+1
+	for i, troll := range trollsByTrollKills {
+		if troll.NbKillsTrolls != lastKillTrolls {
+			classement = i + 1
 			lastKillTrolls = troll.NbKillsTrolls
 		}
 		troll.ClassementKillsTrolls = classement
@@ -155,9 +152,9 @@ func (km *Killomètre) CalculeClassements(trollsByTrollKills []*Troll, trollsByM
 	//> calcul du classement par kills de monstres
 	classement = 0
 	lastKillMonstres := uint(654321)
-	for i, troll := range(trollsByMonsterKills) {
-		if troll.NbKillsMonstres!=lastKillMonstres {
-			classement = i+1
+	for i, troll := range trollsByMonsterKills {
+		if troll.NbKillsMonstres != lastKillMonstres {
+			classement = i + 1
 			lastKillMonstres = troll.NbKillsMonstres
 		}
 		troll.ClassementKillsMonstres = classement
@@ -191,28 +188,16 @@ func main() {
 	if err != nil {
 		fmt.Printf("Erreur : %v", err)
 	} else {
-		//> quelques stats sans intérêt qui seront bientôt bazardées
-		tt := 0
-		tm := 0
-		mt := 0
-		for _, kill := range km.Kills {
-			if kill.TueurEstTroll {
-				if kill.TuéEstTroll {
-					tt++
-				} else {
-					tm++
-				}
-			} else {
-				mt++
-			}
-		}
 
 		//> construction de tableaux triés
 		trollsByTrollKills := km.SortTrollsByKillsOfTrolls()
 		trollsByMonsterKills := km.SortTrollsByKillsOfMonsters() // notons que ça irait sans doute plus rapidement de partir du tableau des trolls triés, plus court...
-		
+
 		//> calcul des classements
 		km.CalculeClassements(trollsByTrollKills, trollsByMonsterKills)
+
+		//> analyse
+		km.Analyse(trollsByTrollKills)
 
 		//> export du tableau complet
 		err := WriteTrollsToFile("kom.csv", trollsByTrollKills)
@@ -220,12 +205,27 @@ func main() {
 			fmt.Printf("Erreur while writing output file : %v\n", err)
 		}
 
+		//> quelques stats
+		nbTK := 0
+		nbATK := 0
+		nbMK := 0
+		nbInconnus := 0
+		for _, troll := range trollsByTrollKills {
+			if troll.Tag == tk {
+				nbTK++
+			} else if troll.Tag == atk {
+				nbATK++
+			} else if troll.Tag == mk {
+				nbMK++
+			} else {
+				nbInconnus++
+			}
+		}
+
 		//> affichage d'un petit bilan
-		fmt.Printf("Fini en %d secondes\n Fichiers lus : %d\n Kills lus : %d", time.Seconds()-startTime, km.NbReadFiles, len(km.Kills))
-		fmt.Printf("\nTroll tue Monstre : %d\n", tm)
-		fmt.Printf("Troll tue Troll : %d\n", tt)
-		fmt.Printf("Monstre tue Troll : %d\n", mt)
+		fmt.Printf("Fini en %d secondes\n Fichiers lus : %d\n Kills lus : %d\n", time.Seconds()-startTime, km.NbReadFiles, len(km.Kills))
 		fmt.Printf("Nombre de trolls : %d\n", km.NbTrolls)
+		fmt.Printf("\nTK : %d\nATK : %d\nMK : %d\nInconnus : %d\n", nbTK, nbATK, nbMK, nbInconnus)
 		fmt.Println("Plus grands tueurs de troll : ")
 		PrintTrolls(trollsByTrollKills, 20)
 	}
