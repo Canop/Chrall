@@ -175,7 +175,7 @@ func (tks *TrollKillStats) HtmlTable() string {
 		return "Ce troll n'a jamais tué"
 	}
 	return fmt.Sprintf(
-		"<table class=tks><tr><td>Victimes</td><td>Nombre</td><td>Part</td><td>Classement</td></tr><tr><th>Trolls</th><td>%d</td><td>%3.1f %%</td><td>%d</td></tr><tr><th>Monstres</th><td>%d</td><td>%3.1f %%</td><td>%d</td></tr></table>",
+		"<table class=tks><tr><td>Victimes</td><td>Nombre</td><td>Part</td><td>Classement</td></tr><tr><th>Trolls</th><td>%d</td><td>%3.1f %%</td><td>%d</td></tr><tr><th>Monstres</th><td>%d</td><td>%3.1f %%</td><td>%d</td></tr></table>Classification Chrall : %s",
 		tks.NbKillsTrolls, (float32(tks.NbKillsTrolls) * 100 / float32(sum)), tks.ClassementKillsTrolls,
-		tks.NbKillsMonstres, float32(tks.NbKillsMonstres)*100/float32(sum), tks.ClassementKillsMonstres)
+		tks.NbKillsMonstres, float32(tks.NbKillsMonstres)*100/float32(sum), tks.ClassementKillsMonstres, tks.ClassifChrall)
 }

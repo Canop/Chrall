@@ -14,6 +14,7 @@ type TrollKillStats struct {
 	NbKillsMonstres         uint
 	ClassementKillsTrolls   uint
 	ClassementKillsMonstres uint
+	ClassifChrall           string
 }
 
 // l'objet qui contient les stats
@@ -29,9 +30,9 @@ type TksManager struct {
 //  chaque troll connu (voir troll.go)
 func (m *TksManager) ReadCsvFileIfNew() os.Error {
 	filename := "../killometre/kom.csv"
-	if m.lastFileRead>0 {
+	if m.lastFileRead > 0 {
 		fi, err := os.Stat(filename)
-		if err!=nil {
+		if err != nil {
 			return err
 		}
 		if !fi.IsRegular() {
@@ -53,14 +54,15 @@ func (m *TksManager) ReadCsvFileIfNew() os.Error {
 	// notons qu'on ne supprime pas les anciennes stats avant, on remplace directement
 	// Et au final on ne devrait pas souvent redimensionner la table
 	for err == nil {
-		tokens := strings.Split(line, ";", 5)
+		tokens := strings.Split(line, ";", 9)
 		//fmt.Printf("%s - %s - '%s'\n", tokens[0], tokens[1], tokens[2])
 		tks := new(TrollKillStats)
 		trollId, _ := strconv.Atoi(tokens[0])
 		tks.NbKillsTrolls, _ = strconv.Atoui(tokens[1])
 		tks.NbKillsMonstres, _ = strconv.Atoui(tokens[2])
 		tks.ClassementKillsTrolls, _ = strconv.Atoui(tokens[3])
-		tks.ClassementKillsMonstres, _ = strconv.Atoui(strings.Trim(tokens[4], " \n"))
+		tks.ClassementKillsMonstres, _ = strconv.Atoui(tokens[4])
+		tks.ClassifChrall = strings.Trim(tokens[8], " \n")
 		if trollId >= len(m.Trolls) {
 			if trollId >= cap(m.Trolls) {
 				newSlice := make([]*TrollKillStats, ((trollId+1)*5/4)+100)
