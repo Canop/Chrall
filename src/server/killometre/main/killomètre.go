@@ -66,6 +66,8 @@ func (km *Killomètre) parseLigneKill(line string) {
 		return
 	}
 	kill := new(Kill)
+	killTime, _ :=  time.Parse("2006-01-02 15:04:05", tokens[0])
+	kill.Seconds = killTime.Seconds()
 	kill.Tueur, _ = strconv.Atoi(tokens[1])
 	kill.TueurEstTroll = tokens[2] == "Troll"
 	kill.Tué, _ = strconv.Atoi(tokens[3])

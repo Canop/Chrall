@@ -15,6 +15,7 @@ type Troll struct {
 	NbKillsTK               uint
 	NbKillsATK              uint
 	NbKilledByATK           uint
+	NbKillsTKLastYear	uint
 }
 
 func NewTroll(id int) *Troll {
@@ -29,7 +30,7 @@ func (troll *Troll) ChrallClassifHtml() string {
 		if troll.NbKillsMonstres==0 {
 			return "<b>NK</b>"
 		}
-		return "Pacifiste"
+		return "pur <b>MK</b>"
 	}
 	if troll.Tag == mk {
 		if troll.NbKillsTrolls<2 && troll.NbKillsMonstres>200 {
@@ -38,22 +39,26 @@ func (troll *Troll) ChrallClassifHtml() string {
 		return "<b>MK</b>"
 	}
 	if troll.Tag == tk {
-		if troll.NbKillsTrolls<5 {
-			if troll.NbKillsMonstres>120 {
-				return "<b>TK</b> occasionnel"
+		s := ""
+		if troll.NbKillsTKLastYear==0 {
+			s = "Ancien "
+		}
+		if troll.NbKillsTrolls<=5 {
+			if troll.NbKillsMonstres>30*troll.NbKillsTrolls {
+				return s + "<b>TK</b> occasionnel"
 			}
-			return "<b>TK</b> probable"
+			return s + "<b>TK</b> probable"
 		}
-		if troll.NbKillsTrolls>30 && troll.NbKillsMonstres<50 {
-			return "pur <b>TK</b>"
+		if troll.NbKillsTrolls>30 && troll.NbKillsMonstres<40 {
+			return s + "pur <b>TK</b>"
 		}
-		if troll.NbKillsATK*3 >= 2*troll.NbKillsTK {
-			return "<b>TK</b> probable"
+		if troll.NbKillsTrolls >= 2*troll.NbKillsTK {
+			return s + "<b>TK</b> probable"
 		}
-		return "<b>TK</b>" 
+		return s + "<b>TK</b>" 
 	}
 	if troll.Tag == atk {
-		if troll.NbKillsMonstres > 12*troll.NbKillsTrolls {
+		if troll.NbKillsMonstres > 10*troll.NbKillsTrolls {
 			return "<b>MK</b> et <b>ATK</b>"
 		}
 		return "<b>ATK</b>"

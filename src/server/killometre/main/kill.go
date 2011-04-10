@@ -6,4 +6,5 @@ type Kill struct {
 	Tué           int
 	TuéEstTroll   bool
 	Tag           tag
+	Seconds		int64 // la date du kill
 }

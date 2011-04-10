@@ -148,6 +148,9 @@ RECENTS / A TESTER :
 
 * cron sur le serveur pour lancer tous les matins l'update des kills
 * grille : mettre les liens sur les lieux qui en ont dans la table
+* comptage des kills de trolls : enlever les suicides
+* grille / bulle de troll : mettre au point une estimation TK/neutre/ATK/NoK
+* estimation TK/ATK : mention "Ancien" quand nécessaire
 
 EN COURS :
 ==========
@@ -155,15 +158,15 @@ EN COURS :
 * calculs en roll-over sur les sorts & compétences _(il en reste encore à faire)_
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * BUG : les sonneries ne marchent pas toujours...
-* grille / bulle de troll : mettre au point une estimation TK/neutre/ATK/NoK
+* Affichage, pour les trolls guildés, du statut diplomatique des autres trolls
 
 TODO :
 ======
 P1 :
 ----
-* comptage des kills de trolls : enlever les suicides
 * cron : sauvegardes de la bd
 * affichage quelque part du nombre de CDM transmises via Chrall
+* en réponse à un envoi de CDM répondre en intégrant les données des autres CDM et en évaluant les PV restant
 * BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 
@@ -177,7 +180,6 @@ P2 :
 P3 :
 ----
 * classification TK/ATK : utiliser les guildes comme indice
-* en réponse à un envoi de CDM répondre en intégrant les données des autres CDM et en évaluant les PV restant
 * utiliser ftp://ftp.mountyhall.com/Public_ Trolls2.txt pour batir une liste des trolls complète et surtout avoir le niveau du joueur ?
 * diplomatie intégrée à la vue [demande Laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=18) Utiliser ftp://ftp.mountyhall.com/Public_ Diplomatie.txt
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !

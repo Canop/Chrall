@@ -1,13 +1,13 @@
 /*
  * J'implémente ici un algo très simple, pas très fiable mais qui semble donner de bons résultats pour la découverte des TK et ATK
  * 
- * 
  */
 
 package main
 
 import (
 	"fmt"
+	"os"
 )
 
 func (km *Killomètre) tagKills() int {
@@ -52,15 +52,21 @@ func (km *Killomètre) tagKills() int {
 }
 
 func (km *Killomètre) tagTrolls(trollsByTrollKills []*Troll) (nbTK int, nbATK int) {
+	now, _, _ := os.Time()
+	oneYearBefore := now - 365*24*60*60
 	for _, troll := range trollsByTrollKills {
 		troll.NbKillsTK = 0
 		troll.NbKillsATK = 0
 		troll.NbKilledByATK = 0
+		troll.NbKillsTKLastYear = 0
 	}
 	for _, kill := range km.Kills {
 		if kill.TueurEstTroll {
 			if kill.Tag == tk {
 				km.Trolls[kill.Tueur].NbKillsTK++
+				if kill.Seconds > oneYearBefore {
+					km.Trolls[kill.Tueur].NbKillsTKLastYear++
+				}
 			} else if kill.Tag == atk {
 				km.Trolls[kill.Tueur].NbKillsATK++
 				km.Trolls[kill.Tué].NbKilledByATK++
@@ -99,7 +105,7 @@ func (km *Killomètre) Analyse(trollsByTrollKills []*Troll) {
 		fmt.Printf("Changes in tagKills : %d\n", nbChanges)
 		nbTK, nbATK := km.tagTrolls(trollsByTrollKills)
 		fmt.Printf("TK : %d\nATK : %d\n", nbTK, nbATK)
-		if nbChanges < 10 {
+		if nbChanges == 0 {
 			break
 		}
 	}
