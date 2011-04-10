@@ -235,21 +235,47 @@ function getBubbleContentForSort(name) {
 			var html = "Fournit une augmentation de 100% à la Maîtrise Magique pendant 2 tours<br>mais la Résistance Magique subit une diminution de 100% pendant 4 tours";
 			html += "<br>En raison du décumul le deuxième BuM augmente votre Maîtrise Magique de 67%.";
 			return html;
-
+			
 		case "Explosion" :
 			var des = 1 + Math.floor((player.damage.diceNumber+Math.floor(player.pvMax/10))/2); // faut-il bien prendre en compte les bonus ?
 			var html = "<table>";
 			html += "<tr><td>Dégâts infligés si non résistée</td><td> : " + des + " D3</td></tr>";
 			html += "<tr><td>Moyenne</td><td> : " + (2*des) + " PV</td></tr>";
 			html += "</table>";	
-			return html
+			return html;
+			
+		case "Faiblesse Passagère" :
+			var a = 1 + Math.floor((Math.floor((player.pv-30)/10)+player.damage.diceNumber-3)/2);
+			var html = "Affecte les monstres et trolls sur la case ou sur la case voisine d'un malus soumis au décumul :<table>";
+			html += "<tr><td>Premier FP</td><td> : dégâts -" + a + "</td></tr>";
+			html += "<tr><td>Deuxième FP</td><td> : dégâts -" + decumul(1, a) + "</td></tr>";
+			html += "<tr><td>Troisième FP</td><td> : dégâts -" + decumul(2, a) + "</td></tr>";
+			html += "<tr><td>Quatrième FP</td><td> : dégâts -" + decumul(3, a) + "</td></tr>";
+			html += "<tr><td>Cinquième FP</td><td> : dégâts -" + decumul(4, a) + "</td></tr>";
+			html += "<tr><td>Sixième et suivants</td><td> : dégâts -" + decumul(5, a) + "</td></tr>";
+			html += "</table>";
+			return html;
+			
+			
+		case "Flash Aveuglant" :
+			var s = player.sight.diceNumber+player.sight.physicalBonus;
+			var a = 1 + Math.floor(s/5);
+			var html = "Affecte les monstres et trolls sur la case d'un malus à l'attaque, à l'esquive et à la vue :<table>";
+			html += "<tr><td>Premier FA</td><td> : -" + a + "</td></tr>";
+			html += "<tr><td>Deuxième FA</td><td> : -" + decumul(1, a) + "</td></tr>";
+			html += "<tr><td>Troisième FA</td><td> : -" + decumul(2, a) + "</td></tr>";
+			html += "<tr><td>Quatrième FA</td><td> : -" + decumul(3, a) + "</td></tr>";
+			html += "<tr><td>Cinquième FA</td><td> : -" + decumul(4, a) + "</td></tr>";
+			html += "<tr><td>Sixième et suivants</td><td> : -" + decumul(5, a) + "</td></tr>";
+			html += "</table>";
+			return html;
 			
 		case "Glue" :
 			var s = player.sight.diceNumber+player.sight.physicalBonus;
 			var html = "<table>";
 			html += "<tr><td>Portée (à l'horizontale uniquement)</td><td> : " + Math.floor(1+s/3) + "</td></tr>";
 			html += "</table>";	
-			return html
+			return html;
 
 		case "Griffe du Sorcier" :
 			var att = 3.5*player.attac.diceNumber + player.attac.magicalBonus;
@@ -263,7 +289,7 @@ function getBubbleContentForSort(name) {
 			html += "<tr><td>Virulence du poison</td><td> : " + vir + " PV par tour</td></tr>";
 			html += "</table>";	
 			html += "En cas de Résistance Magique, les effets du poisons sont<br>divisés par deux et durent deux fois moins longtemps.";
-			return html
+			return html;
 
 		case "Hypnotisme" :
 			var esq = player.dodge.diceNumber;
@@ -275,6 +301,13 @@ function getBubbleContentForSort(name) {
 
 		case "Identification des trésors" :
 			return "Je doute pouvoir vous aprendre quelque chose sur ce sujet...";
+
+		case "Invisibilité" :
+			return "Avec 3 PA vous pouvez gagner une invisibilité qui durera tant<br>que vous ne perdrez pas de PV et que vous ne bougerez pas.<br>... surtout ne pas pêter !";
+		
+		case "Lévitation" :
+			var h = 1.4 + Math.min(Math.floor((player.sight.diceNumber+player.damage.magicalBonus)/5) + Math.floor(player.mm/600), 0);
+			return "Altitude de lévitation : " + h + " cm du sol";
 		
 		case "Projection" :
 			return "La créature ciblée (Troll ou Monstre) par le lanceur du Sortilège sera projetée par un champ de force magique vers une zone voisine. La direction de la projection est aléatoire et la victime sera désorientée. La conséquence de cette désorientation est qu'elle perdra 1 D6 en esquive pour le tour en cours.";
@@ -308,9 +341,10 @@ function getBubbleContentForSort(name) {
 			
 			html += "</table>";		
 			return html;
-			
-		case "Invisibilité" :
-			return "Avec 3 PA vous pouvez gagner une invisibilité qui durera tant<br>que vous ne perdrez pas de PV et que vous ne bougerez pas.<br>... surtout ne pas pêter !";
+
+		case "Puissance Magique" :
+			var html = "Le sort Puissance Magique permet à votre Trõll de disposer d'un bonus de dés de dégâts sur tous vos sortilèges d'attaque égal à 20% des dés de dégâts du sort utilisé. Ce bonus dure deux tours et s'accompagne d'un malus aux dés d'attaque égal à 20% des dés d'attaque du sortilège utilisé";
+			return html;
 
 		case "Siphon des âmes" :
 			var att = 3.5*player.attac.diceNumber + player.attac.magicalBonus;

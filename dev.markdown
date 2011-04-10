@@ -155,7 +155,7 @@ RECENTS / A TESTER :
 EN COURS :
 ==========
 * apprendre le langage go
-* calculs en roll-over sur les sorts & compétences _(il en reste encore à faire)_
+* calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * BUG : les sonneries ne marchent pas toujours...
 * Affichage, pour les trolls guildés, du statut diplomatique des autres trolls
