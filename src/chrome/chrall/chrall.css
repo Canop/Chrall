@@ -208,6 +208,7 @@ a.gogo:hover {
 	position: fixed; display: inline; border: 2px;
 	box-shadow: 0px 4px 10px #666;
 	border-radius: 6px;
+	font-style:normal;
 	font-size: 12px;
 	color: white;
 	padding: 4px;

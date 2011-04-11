@@ -151,6 +151,9 @@ RECENTS / A TESTER :
 * comptage des kills de trolls : enlever les suicides
 * grille / bulle de troll : mettre au point une estimation TK/neutre/ATK/NoK
 * estimation TK/ATK : mention "Ancien" quand nécessaire
+* bulle des trolls, indiquer race, niveau et guilde
+* utiliser ftp://ftp.mountyhall.com/Public_ Trolls2.txt pour batir une liste des trolls complète et surtout avoir le niveau du joueur
+* afficher les bulles de trolls et monstres dans les listes d'évènements de trolls
 
 EN COURS :
 ==========
@@ -164,8 +167,9 @@ TODO :
 ======
 P1 :
 ----
+* afficher les bulles de trolls dans les listes d'évènements de monstres
+* page événements : afficher les bulles de trolls et monstres
 * BUG : le nombre de kills de monstres que j'affiche dans la liste est inférieur à celui du "Tableau de chasse"...
-* bulle des trolls, indiquer race, niveau et guilde
 * bulles des monstres : indiquer leur jet de stabilité.
 * cron : sauvegardes de la bd
 * affichage quelque part du nombre de CDM transmises via Chrall
@@ -176,7 +180,6 @@ P1 :
 
 P2 :
 ----
-* afficher les bulles de trolls dans les listes d'évènements (de trolls et de monstres)
 * profil : ajouter derrière l'agilité le [jet de stabilité](http://mountypedia.mountyhall.com/Mountyhall/Balayage)
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * profil : indiquer les alarmes programmées
@@ -184,7 +187,6 @@ P2 :
 
 P3 :
 ----
-* utiliser ftp://ftp.mountyhall.com/Public_ Trolls2.txt pour batir une liste des trolls complète et surtout avoir le niveau du joueur ?
 * diplomatie intégrée à la vue [demande Laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=18) Utiliser ftp://ftp.mountyhall.com/Public_ Diplomatie.txt
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 * grille : rendre déplaçable la grille par glissage de la souris

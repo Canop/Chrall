@@ -532,7 +532,7 @@ function Chrall_analyseAndReformatView() {
 			var message = link.attr("message");
 			var trollId = link.attr('id');
 			if (trollId) {
-				bubble(link, message, "bub_troll", "http://localhost:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
+				bubble(link, message, "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
 			}
 		}
 	);	
@@ -543,7 +543,7 @@ function Chrall_analyseAndReformatView() {
 			var link = $(this);
 			var trollId = link.attr('id');
 			if (trollId) {
-				bubble(link, '', "bub_player", "http://localhost:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
+				bubble(link, '', "bub_player", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
 			}
 		}
 	);	

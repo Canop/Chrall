@@ -51,7 +51,7 @@ function showBubble(target, event, text, cssClass, ajaxRequestId) {
 		html += ';" class="'+cssClass+'"><div class=bubbleContent>'+text+'</div></div>';
 	}
 	bubbleTarget = target;
-	$(html).mouseover(keepBubbleOpen).mouseout(letBubbleClose).appendTo('body');
+	$(html).mouseover(keepBubbleOpen).mouseout(letBubbleClose).prependTo('body');
 	bubbleExists = true;
 }
 function keepBubbleOpen() {
