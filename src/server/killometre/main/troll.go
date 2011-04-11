@@ -7,6 +7,10 @@ import (
 
 type Troll struct {
 	Id                      int
+	Nom                     string
+	IdGuilde                int
+	Race                    raceTroll
+	Niveau                  uint
 	NbKillsTrolls           uint // suicides non compris
 	NbKillsMonstres         uint
 	ClassementKillsTrolls   int
@@ -15,7 +19,8 @@ type Troll struct {
 	NbKillsTK               uint
 	NbKillsATK              uint
 	NbKilledByATK           uint
-	NbKillsTKLastYear	uint
+	NbKillsTKRécents        uint
+	NbKillsRécents          uint
 }
 
 func NewTroll(id int) *Troll {
@@ -26,36 +31,36 @@ func NewTroll(id int) *Troll {
 
 // bâtit une classification textuelle qualitative pour un affichage dans l'extension Chrall
 func (troll *Troll) ChrallClassifHtml() string {
-	if troll.NbKillsTrolls==0 {
-		if troll.NbKillsMonstres==0 {
+	if troll.NbKillsTrolls == 0 {
+		if troll.NbKillsMonstres == 0 {
 			return "<b>NK</b>"
 		}
 		return "pur <b>MK</b>"
 	}
 	if troll.Tag == mk {
-		if troll.NbKillsTrolls<2 && troll.NbKillsMonstres>200 {
+		if troll.NbKillsTrolls < 2 && troll.NbKillsMonstres > 200 {
 			return "pur <b>MK</b>"
 		}
 		return "<b>MK</b>"
 	}
 	if troll.Tag == tk {
 		s := ""
-		if troll.NbKillsTKLastYear==0 {
+		if troll.NbKillsTKRécents == 0 && troll.NbKillsRécents > 10 {
 			s = "Ancien "
 		}
-		if troll.NbKillsTrolls<=5 {
-			if troll.NbKillsMonstres>30*troll.NbKillsTrolls {
+		if troll.NbKillsTrolls <= 5 {
+			if troll.NbKillsMonstres > 30*troll.NbKillsTrolls {
 				return s + "<b>TK</b> occasionnel"
 			}
 			return s + "<b>TK</b> probable"
 		}
-		if troll.NbKillsTrolls>30 && troll.NbKillsMonstres<40 {
+		if troll.NbKillsTrolls > 30 && troll.NbKillsMonstres < 40 {
 			return s + "pur <b>TK</b>"
 		}
-		if troll.NbKillsTrolls >= 2*troll.NbKillsTK {
+		if troll.NbKillsTrolls >= 3*troll.NbKillsTK && troll.NbKillsTK < 20 {
 			return s + "<b>TK</b> probable"
 		}
-		return s + "<b>TK</b>" 
+		return s + "<b>TK</b>"
 	}
 	if troll.Tag == atk {
 		if troll.NbKillsMonstres > 10*troll.NbKillsTrolls {
@@ -114,12 +119,12 @@ func (a *MonsterKillerArray) Swap(i int, j int) {
 
 // imprime un tableau lisible des principales caractéristiques des trolls
 func PrintTrolls(trolls []*Troll, max int) {
-	fmt.Printf("| %10s | %7s | %15s | %17s | %20s | %21s | %7s | %9s | %9s | %20s |\n", "Classement", "Troll", "Kills de trolls", "Kills de monstres", "Class. kills trolls", "Class. kills monstres", "Classif", "Kills TK", "Kills ATK", "Classif HTML")
+	fmt.Printf("| %10s | %7s | %24s | %15s | %17s | %19s | %21s | %7s | %8s | %9s | %30s |\n", "Classement", "Num", "Nom", "Kills de trolls", "Kills de monstres", "Class. kills trolls", "Class. kills monstres", "Classif", "Kills TK", "Kills ATK", "Classif HTML")
 	i := 0
 	for _, troll := range trolls {
 		if troll != nil {
 			i++
-			fmt.Printf("| %10d | %7d | %15d | %17d | %20d | %21d | %7s | %9d | %9d | %20s |\n", i, troll.Id, troll.NbKillsTrolls, troll.NbKillsMonstres, troll.ClassementKillsTrolls, troll.ClassementKillsMonstres, troll.Tag.string(), troll.NbKillsTK, troll.NbKillsATK, troll.ChrallClassifHtml())
+			fmt.Printf("| %10d | %7d | %24s | %15d | %17d | %19d | %21d | %7s | %8d | %9d | %30s |\n", i, troll.Id, troll.Nom, troll.NbKillsTrolls, troll.NbKillsMonstres, troll.ClassementKillsTrolls, troll.ClassementKillsMonstres, troll.Tag.string(), troll.NbKillsTK, troll.NbKillsATK, troll.ChrallClassifHtml())
 			if i == max {
 				break
 			}
@@ -130,11 +135,11 @@ func PrintTrolls(trolls []*Troll, max int) {
 // écrit un fichier csv des trolls
 func WriteTrolls(w *os.File, trolls []*Troll, includeHeader bool) { // je ne sais pas pourquoi je ne peux pas définir w comme un *io.Writer
 	if includeHeader {
-		fmt.Fprintf(w, "%s;%s;%s;%s;%s;%s\n", "Troll", "Kills de trolls", "Kills de monstres", "Classement kills trolls", "Classement kills monstres", "Classif", "Kills TK", "Kills ATK", "Classif HTML")
+		fmt.Fprintf(w, "%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n", "ID Troll", "Kills de trolls", "Kills de monstres", "Classement kills trolls", "Classement kills monstres", "Classif", "Kills TK", "Kills ATK", "Classif HTML", "Nom", "Race", "Niveau", "ID Guilde")
 	}
 	for _, troll := range trolls {
 		if troll != nil {
-			fmt.Fprintf(w, "%d;%d;%d;%d;%d;%s;%d;%d;%s\n", troll.Id, troll.NbKillsTrolls, troll.NbKillsMonstres, troll.ClassementKillsTrolls, troll.ClassementKillsMonstres, troll.Tag.string(), troll.NbKillsTK, troll.NbKillsATK, troll.ChrallClassifHtml())
+			fmt.Fprintf(w, "%d;%d;%d;%d;%d;%s;%d;%d;%s;%s;%s;%d;%d\n", troll.Id, troll.NbKillsTrolls, troll.NbKillsMonstres, troll.ClassementKillsTrolls, troll.ClassementKillsMonstres, troll.Tag.string(), troll.NbKillsTK, troll.NbKillsATK, troll.ChrallClassifHtml(), troll.Nom, troll.Race.string(), troll.Niveau, troll.IdGuilde)
 		}
 	}
 }

@@ -14,9 +14,9 @@ import (
 
 type boolean uint8 // il faut que je fasse des progrés dans la compréhension des énums et constantes...
 const (
-	b_unknown = boolean(0)
-	b_false   = boolean(1)
-	b_true    = boolean(2)
+	b_unknown = boolean(iota)
+	b_false   = boolean(iota)
+	b_true    = boolean(iota)
 )
 
 func (b boolean) String() string {

@@ -21,10 +21,10 @@ func (km *Killomètre) tagKills() int {
 					if kill.Tueur == kill.Tué {
 						kill.Tag = suicide // ne sont pas compris dans troll.NbKillsTrolls
 						nbChanges++
-					} else if tueur.Tag == tk {
-						kill.Tag = tk
-						nbChanges++
-					} else if tueur.Tag == atk {
+						//~ } else if tueur.Tag == tk {
+						//~ kill.Tag = tk
+						//~ nbChanges++
+					} else if tueur.Tag == atk { // à voir... dangereux...
 						kill.Tag = atk
 						nbChanges++
 					} else if tué.Tag == mk {
@@ -33,7 +33,7 @@ func (km *Killomètre) tagKills() int {
 					} else if tué.Tag == atk {
 						kill.Tag = tk
 						nbChanges++
-					} else if tué.Tag == tk {
+					} else if tué.Tag == tk && tueur.Tag != tk {
 						kill.Tag = atk
 						nbChanges++
 					} else if tué.NbKillsTrolls-tué.NbKillsATK <= (tué.NbKillsMonstres+tué.NbKillsTK)/50 {
@@ -58,14 +58,18 @@ func (km *Killomètre) tagTrolls(trollsByTrollKills []*Troll) (nbTK int, nbATK i
 		troll.NbKillsTK = 0
 		troll.NbKillsATK = 0
 		troll.NbKilledByATK = 0
-		troll.NbKillsTKLastYear = 0
+		troll.NbKillsTKRécents = 0
+		troll.NbKillsRécents = 0
 	}
 	for _, kill := range km.Kills {
 		if kill.TueurEstTroll {
+			if kill.Seconds > oneYearBefore {
+				km.Trolls[kill.Tueur].NbKillsRécents++
+			}
 			if kill.Tag == tk {
 				km.Trolls[kill.Tueur].NbKillsTK++
 				if kill.Seconds > oneYearBefore {
-					km.Trolls[kill.Tueur].NbKillsTKLastYear++
+					km.Trolls[kill.Tueur].NbKillsTKRécents++
 				}
 			} else if kill.Tag == atk {
 				km.Trolls[kill.Tueur].NbKillsATK++
@@ -74,7 +78,7 @@ func (km *Killomètre) tagTrolls(trollsByTrollKills []*Troll) (nbTK int, nbATK i
 		}
 	}
 	for _, troll := range trollsByTrollKills {
-		if troll.NbKillsTK > 8 || (troll.NbKillsTK > 3 && troll.NbKillsTK*3 > troll.NbKillsTrolls) {
+		if troll.NbKillsTK > 8 || (troll.NbKillsTK > 4 && troll.NbKillsTK*3 > troll.NbKillsTrolls) {
 			troll.Tag = tk
 			nbTK++
 		} else if troll.NbKillsATK > 2 && (troll.NbKillsATK*15 > 10*troll.NbKillsTrolls) {

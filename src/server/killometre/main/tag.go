@@ -1,13 +1,17 @@
 package main
 
+import (
+	"strings"
+)
+
 type tag uint8
 
 const (
-	inconnu = tag(0)
-	mk      = tag(1)
-	tk      = tag(2)
-	atk     = tag(3)
-	suicide = tag(4)
+	inconnu = tag(iota)
+	mk      = tag(iota)
+	tk      = tag(iota)
+	atk     = tag(iota)
+	suicide = tag(iota)
 )
 
 func (t tag) string() string {
@@ -22,4 +26,31 @@ func (t tag) string() string {
 		return "suicide"
 	}
 	return "inconnu"
+}
+
+type raceTroll uint8
+
+const (
+	race_inconnue = raceTroll(iota)
+	darkling      = raceTroll(iota)
+	durakuir      = raceTroll(iota)
+	kastar        = raceTroll(iota)
+	skrim         = raceTroll(iota)
+	tomawak       = raceTroll(iota)
+)
+
+var RACE_NAMES = [6]string{"inconnu", "darkling", "durakuir", "kastar", "skrim", "tomawak"}
+
+func (r raceTroll) string() string {
+	return RACE_NAMES[uint(r)]
+}
+
+func race(s string) raceTroll {
+	s = strings.ToLower(s)
+	for i, name := range RACE_NAMES {
+		if s == name {
+			return raceTroll(i)
+		}
+	}
+	return race_inconnue
 }

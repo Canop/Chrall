@@ -102,7 +102,7 @@ function Chrall_makeGridHtml() {
 			var c = 0;
 			var cellId=null;
 			//var cellMenuInfos = null;
-			if (x==player.x && y==player.y) {
+			if (x===player.x && y===player.y) {
 				cellContent[c++] = "<a class=ch_player href=\"javascript:EPV("+player.id+");\"";
 				cellContent[c++] = " id="+player.id;
 				if (t.isIntangible) cellContent[c++] = " intangible";
@@ -116,7 +116,7 @@ function Chrall_makeGridHtml() {
 						var t = cell.trolls[i];
 						if (c>0) cellContent[c++] = "<br name='trolls' class=ch_troll>";
 						cellContent[c++] = "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\"";
-						cellContent[c++] = ' message="'+t.name+' ( '+t.id+' )<br>en X='+x+' Y='+y+' Z='+t.z+'<br>Distance horizontale : ' + hdist+'"';
+						cellContent[c++] = ' message="en X='+x+' Y='+y+' Z='+t.z+'<br>Distance horizontale : ' + hdist+'"';
 						cellContent[c++] = " id="+t.id;
 						if (t.isIntangible) cellContent[c++] = " intangible";
 						cellContent[c++] = ">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a>";
@@ -208,12 +208,12 @@ function Chrall_makeGridHtml() {
 			html[h++] = " grid_x=" + x;
 			html[h++] = " grid_y=" + y;
 			if (cellId!=null) html[h++] = ' id='+cellId;
-			var deRange = player.z==0 ? 2 : 1;
+			var deRange = player.z===0 ? 2 : 1;
 			var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
 			if (c>0 || cellIsAccessibleByDe) html[h++] = " hasContent";
 			//if (cellMenuInfos!=null) html[h++] = " cellMenuInfos="+cellMenuInfos;
 			html[h++] = ">";
-			if (hasHole==true) {
+			if (hasHole===true) {
 				html[h++] = "<span class=ch_place>Trou de Météorite</span>";
 			}
 			html[h++] = cellContent.join('');
@@ -382,7 +382,7 @@ function Chrall_analyseView() {
 	if (cell) {
 		if (cell.trolls) {
 			for (var i=0; i<cell.trolls.length; i++) {
-				if (cell.trolls[i].z==player.z) {
+				if (cell.trolls[i].z===player.z) {
 					player.cellIsFree = false;
 					break;
 				}
@@ -390,7 +390,7 @@ function Chrall_analyseView() {
 		}
 		if ((!player.cellIsFree)&&(cell.monsters)) {
 			for (var i=0; i<cell.monsters.length; i++) {
-				if (cell.monsters[i].z==player.z) {
+				if (cell.monsters[i].z===player.z) {
 					player.cellIsFree = false;
 					break;
 				}
@@ -398,7 +398,7 @@ function Chrall_analyseView() {
 		}
 		if (cell.objects) {
 			for (var i=0; i<cell.objects.length; i++) {
-				if (cell.objects[i].z==player.z) {
+				if (cell.objects[i].z===player.z) {
 					objectsOnPlayerCell.push(cell.objects[i]);
 				}
 			}			
@@ -532,7 +532,7 @@ function Chrall_analyseAndReformatView() {
 			var message = link.attr("message");
 			var trollId = link.attr('id');
 			if (trollId) {
-				bubble(link, message, "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
+				bubble(link, message, "bub_troll", "http://localhost:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
 			}
 		}
 	);	
@@ -543,7 +543,7 @@ function Chrall_analyseAndReformatView() {
 			var link = $(this);
 			var trollId = link.attr('id');
 			if (trollId) {
-				bubble(link, 'Troll '+player.id, "bub_player", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
+				bubble(link, '', "bub_player", "http://localhost:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
 			}
 		}
 	);	
@@ -571,7 +571,7 @@ function Chrall_analyseAndReformatView() {
 
 	//> on ajoute le menu des DE, le titre de chaque cellule
 	var makeDeLink = function(x, y, z) {
-		var cost = (player.cellIsFree ? 1 : 2) + (z==player.z ? 0 : 1);
+		var cost = (player.cellIsFree ? 1 : 2) + (z===player.z ? 0 : 1);
 		if (cost>player.pa) return '';
 		return '<a href="javascript:console.log(\'AE\');playDE('+(x-player.x)+','+(y-player.y)+','+(z-player.z)+');">DE '+x+' '+y+' '+z+'</a>';
 	}
@@ -588,7 +588,7 @@ function Chrall_analyseAndReformatView() {
 				var y = parseInt(o.attr('grid_y'));
 				var links = '';
 				// on ajoute au menu la liste des trésors aux pieds du joueur, pas qu'il oublie de les prendre...
-				if (x==player.x && y==player.y) {
+				if (x===player.x && y===player.y) {
 					if (objectsOnPlayerCell.length>4) {
 						links += "<span class=ch_pl_object>Il y a " + objectsOnPlayerCell.length + " trésors à vos pieds.</span>";
 					} else if (objectsOnPlayerCell.length>0) {
@@ -600,7 +600,7 @@ function Chrall_analyseAndReformatView() {
 				}
 				// liste des DE possibles
 				if (answer.pa>1 || (player.cellIsFree && answer.pa>0)) {
-					var deRange = player.z==0 ? 2 : 1;
+					var deRange = player.z===0 ? 2 : 1;
 					var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
 					if (cellIsAccessibleByDe) {
 						if (player.z<0) links += (makeDeLink(x, y, player.z+1));

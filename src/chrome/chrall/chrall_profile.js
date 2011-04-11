@@ -280,7 +280,11 @@ function Chrall_analyseAndReformatMainCharacteristicsTable(table) {
 	$(rows[3]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne AN : " + player.damage.getMean() + "/" + player.damage.getCriticalMean() + "</td>");
 	player.armor = new Characteristic().readRow(rows[4]);
 	$(rows[4]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Total : " + player.armor.getMean() + "</td>");
-	
+	var agility = player.dodge.diceNumber+player.regeneration.diceNumber;
+	var stabDices = (Math.floor(agility/3)*2);
+	var stabBM = (player.dodge.physicalBonus+player.dodge.magicalBonus);
+	var html = ' => Stabilité contre le balayage : '+stabDices+'D6 + '+stabBM+'  &nbsp; Moyenne : '+(3.5*stabDices+stabBM)+' (le jet de balayage du Darkling vaut 1 D6 par dé d\'attaque + BM d\'attaque)';
+	$('p:contains("Agilité")').append(html);
 }
 
 function Chrall_readTalentTable(table) {

@@ -155,7 +155,7 @@ RECENTS / A TESTER :
 EN COURS :
 ==========
 * apprendre le langage go
-* calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA
+* calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * BUG : les sonneries ne marchent pas toujours...
 * Affichage, pour les trolls guildés, du statut diplomatique des autres trolls
@@ -164,22 +164,26 @@ TODO :
 ======
 P1 :
 ----
+* BUG : le nombre de kills de monstres que j'affiche dans la liste est inférieur à celui du "Tableau de chasse"...
+* bulle des trolls, indiquer race, niveau et guilde
+* bulles des monstres : indiquer leur jet de stabilité.
 * cron : sauvegardes de la bd
 * affichage quelque part du nombre de CDM transmises via Chrall
 * en réponse à un envoi de CDM répondre en intégrant les données des autres CDM et en évaluant les PV restant
 * BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
+* comprendre la gestion des packages en go pour factoriser le code online et offline
 
 P2 :
 ----
+* afficher les bulles de trolls dans les listes d'évènements (de trolls et de monstres)
+* profil : ajouter derrière l'agilité le [jet de stabilité](http://mountypedia.mountyhall.com/Mountyhall/Balayage)
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * profil : indiquer les alarmes programmées
-* sauver les stats d'usage du serveur g0g0chrall ?
 * lien pour les lieux proches bricotrolls
 
 P3 :
 ----
-* classification TK/ATK : utiliser les guildes comme indice
 * utiliser ftp://ftp.mountyhall.com/Public_ Trolls2.txt pour batir une liste des trolls complète et surtout avoir le niveau du joueur ?
 * diplomatie intégrée à la vue [demande Laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=18) Utiliser ftp://ftp.mountyhall.com/Public_ Diplomatie.txt
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
@@ -187,7 +191,6 @@ P3 :
 * lors d'un TP, affichage d'une carte des trous de météorite
 * détection des trolls malades
 * calcul des bonus totaux des mouches : séparation entre présentes & toutes
-* remettre la vue en grille si on sort d'un échec de DE [laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=16&start=10) refusé
 * grille : coût des déplacements et charges (en tenant compte du gluage éventuel) _(attention : besoin scripts publics)_
 * équipement : afficher les bonus [demande Fabdi](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=13&p=71#p71)
 * grille : afficher les px rapportés par les monstres (nécessite de stocker ou récupérer le niveau du troll du joueur)
@@ -216,8 +219,8 @@ P3 :
 * grille/filtre : rendre inactives les cases à cocher de catégories vides
 * cdmstore : détection d'erreur basée sur la variance des valeurs
 * ajouter au filtre de manifest.json les pages venant des principaux proxys mh
+* sauver les stats d'usage du serveur g0g0chrall ?
 * PB : la version de chrall est spécifié à 4 endroits (nom du fichier crx et champ caché dans index.php, messager.go, chrallgeneral.js). Ca fait 3 de trop. Faire un makefile ?
-* réflexion sur l'opportunité de passer à une base mongodb _(l'inconnue porte sur les performances des consolidations et recherches textuelles)_
 * équipement/petits : montrer quels compos sont EM
 * bestiaire : montrer quels compos sont EM
 * liste matos tanière : montrer quels compos sont EM

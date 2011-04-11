@@ -76,6 +76,9 @@ switch (pageName) {
 	case "Play_a_Move.php":
 		Chrall_handleMovePage();	
 		break;
+	case "PJView_Events.php":
+		Chrall_analyseAndReformatPJView();
+		break;
 }
 
 

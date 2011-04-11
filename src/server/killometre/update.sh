@@ -3,7 +3,12 @@
 # puis met à jour le tableau kom.csv contenant des stats
 # de kill des trolls.
 
-lftp ftp://ftp.mountyhall.com/ -e "mirror -c -x test2009 -x 2003 -x 2004 -x 2005 -x 2006 -x 2007 -x 2008 -x 2009 -x 2010 /evenements /home/dys/chrall/morts; quit" > /home/dys/chrall/update-kills.out
+# récupération de la liste des trolls
+lftp ftp://ftp.mountyhall.com/ -e "get /Public_Trolls.txt -o /home/dys/chrall/Public_Trolls.txt; quit" > /home/dys/chrall/update-kills.out
+
+# récupération des fichiers d'événements MORTS
+lftp ftp://ftp.mountyhall.com/ -e "mirror -c -x test2009 -x 2003 -x 2004 -x 2005 -x 2006 -x 2007 -x 2008 -x 2009 -x 2010 /evenements /home/dys/chrall/morts; quit" >> /home/dys/chrall/update-kills.out
 #lftp ftp://ftp.mountyhall.com/ -e "mirror -c -x test2009 /evenements /home/dys/chrall/morts; quit"
 
-/home/dys/chrall/killometre/killometre /home/dys/chrall/morts >> /home/dys/chrall/update-kills.out
+# exécution de killomètre
+/home/dys/chrall/killometre/killometre  /home/dys/chrall/Public_Trolls.txt /home/dys/chrall/morts >> /home/dys/chrall/update-kills.out

@@ -23,6 +23,15 @@ function getBubbleContentForCompetence(name) {
 			html += "<tr><td>Dégâts moyens</td><td> : " + player.damage.getMean() + " / " + player.damage.getCriticalMean() + "</td></tr>";
 			html += "</table>";
 			return html;
+
+		case "Balayage" :
+			var att = player.attac.getMean();
+			var html = "Jet de déstabilisation moyen : " + att;
+			html += "<br>Si le jet de déstabilisation est strictement supérieur au jet de stabilité, le défenseur se retrouve à terre.";
+			html += "<br>De plus, si le jet de déstabilisation est strictement supérieur à deux fois le jet de stabilité, le défenseur active les possibles pièges sur la case.";
+			html += "<br>Un Trõll <i>à terre</i> dispose d'un Point d'Action de moins lorsqu'il active un tour.";
+			html += "<br>Pour se relever, le Trõll doit utiliser l'action <i>se relever</i> qui coûte 2 PA.";
+			return html;
 			
 		case "Balluchonnage" :
 			return "<table><tr><td>Balluchonner</td><td> : 1 PA</td></tr><tr><td>Déballuchonner</td><td> : 2 PA</td></tr></table>";
@@ -346,6 +355,19 @@ function getBubbleContentForSort(name) {
 			var html = "Le sort Puissance Magique permet à votre Trõll de disposer d'un bonus de dés de dégâts sur tous vos sortilèges d'attaque égal à 20% des dés de dégâts du sort utilisé. Ce bonus dure deux tours et s'accompagne d'un malus aux dés d'attaque égal à 20% des dés d'attaque du sortilège utilisé";
 			return html;
 
+		case "Rafale Psychique" :
+			var deg = player.damage.diceNumber * 2 + player.damage.magicalBonus;
+			var html = "<table>";
+			html += "<tr><td>Dégâts directs</td><td> : " + deg + "</td></tr>";
+			html += "<tr><td>Malus de régénération</td><td> : " + player.damage.diceNumber + " PV durant 2 tours</td></tr>";
+			html += "</table>";
+			return html;
+			
+		case "Sacrifice" :
+			var html = "Vous pouvez soigner un troll situé sur votre case ou une case voisine.";
+			html += "<br>Cela vous coûte 1D3 PV + 1D3 par tranche entière de 5 points de vie soignés.";
+			return html;
+
 		case "Siphon des âmes" :
 			var att = 3.5*player.attac.diceNumber + player.attac.magicalBonus;
 			var deg = 2*player.regeneration.diceNumber + player.damage.magicalBonus;
@@ -396,18 +418,6 @@ function getBubbleContentForSort(name) {
 				return f(player.mm);
 			}
 			
-		case "Rafale Psychique" :
-			var deg = player.damage.diceNumber * 2 + player.damage.magicalBonus;
-			var html = "<table>";
-			html += "<tr><td>Dégâts directs</td><td> : " + deg + "</td></tr>";
-			html += "<tr><td>Malus de régénération</td><td> : " + player.damage.diceNumber + " PV durant 2 tours</td></tr>";
-			html += "</table>";
-			return html;
-			
-		case "Sacrifice" :
-			var html = "Vous pouvez soigner un troll situé sur votre case ou une case voisine.";
-			html += "<br>Cela vous coûte 1D3 PV + 1D3 par tranche entière de 5 points de vie soignés.";
-			return html;
 		
 		case "Vampirisme" :
 			var att = 3.5*2*Math.floor(player.damage.diceNumber/3) + player.attac.magicalBonus;
