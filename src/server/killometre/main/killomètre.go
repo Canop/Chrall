@@ -69,7 +69,7 @@ func (km *Killomètre) addKill(kill *Kill) {
 }
 
 func (km *Killomètre) parseLigneTroll(line string) {
-	tokens := strings.Split(line, ";", 7)
+	tokens := strings.Split(line, ";", 9)
 	if len(tokens) < 7 {
 		fmt.Printf("Ligne non comprise : %s\n", line)
 		return
@@ -79,7 +79,14 @@ func (km *Killomètre) parseLigneTroll(line string) {
 	troll.Nom = AsciiToUTF8([]uint8(tokens[1]))
 	troll.Race = race(tokens[2])
 	troll.Niveau, _ = strconv.Atoui(tokens[3])
-	troll.IdGuilde, _ = strconv.Atoi(tokens[6])
+	var err os.Error
+	troll.IdGuilde, err = strconv.Atoi(tokens[6])
+	if err != nil {
+		fmt.Println("Error in parsing :")
+		fmt.Println(err)
+	}
+		fmt.Printf("Guilde : %d\n", troll.IdGuilde)
+
 }
 
 func (km *Killomètre) parseLigneKill(line string) {

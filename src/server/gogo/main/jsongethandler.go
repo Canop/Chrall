@@ -40,7 +40,7 @@ func (h *JsonGetHandler) makeTrollStatsHtml(hr *http.Request) string {
 		fmt.Printf("Troll inconnu %d\n: ", trollId)
 		return "Troll inconnu ou pacifiste"
 	}
-	html := tks.HtmlTable(trollId)
+	html := tks.HtmlTable(trollId, h.tksManager)
 	if askerId > 0 {
 		ti := h.tksManager.getTrollInfos(askerId)
 		if ti != nil {

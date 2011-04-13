@@ -166,6 +166,7 @@ RECENTS / A TESTER :
 * page news : afficher les bulles de trolls et monstres
 * vue : effacer les bouts de menu au changement d'onglet
 * bulles des trolls et monstres : affichage des px qu'ils rapportent
+* bulles des trolls : indiquer la guilde
 
 
 EN COURS :
@@ -179,7 +180,6 @@ TODO :
 P1 :
 ----
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
-* bulles des trolls : indiquer la guilde
 * Affichage, pour les trolls guildés, du statut diplomatique des autres trolls
 * BUG : le nombre de kills de monstres que j'affiche dans la liste est inférieur à celui du "Tableau de chasse"...
 * bulles des monstres : indiquer leur jet de stabilité.

@@ -162,23 +162,22 @@ func (cdm *CDM) HtmlTable() string {
 	return html
 }
 
-/*
 
-	Classification Chrall : TK (probable)
-								la seconde partie est basée sur le rapport entre kills tk et kills atk, et sur le nombre de kills atk
-
-
-*/
-
-// construit une description tabulaire d'une CDM (réelle ou estimée)
-func (tks *TrollInfos) HtmlTable(id int) string {
+// construit une description tabulaire d'un troll
+func (tks *TrollInfos) HtmlTable(id int, m *TksManager) string {
 	sum := tks.NbKillsTrolls + tks.NbKillsMonstres
 	if sum == 0 {
 		return "Ce troll n'a jamais tué"
 	}
+	guildStr := ""
+	guilde := m.getGuildInfos(int(tks.IdGuilde))
+	fmt.Printf("Guilde : %d\n", tks.IdGuilde)
+	if guilde!=nil {
+		guildStr = "<br>Guilde : " + guilde.Nom
+	}
 	return fmt.Sprintf(
-		"%s %s %d ( %d )<table class=tks><tr><td>Victimes</td><td>Nombre</td><td>Part</td><td>Classement</td></tr><tr><th>Trolls</th><td>%d</td><td>%3.1f %%</td><td>%d</td></tr><tr><th>Monstres</th><td>%d</td><td>%3.1f %%</td><td>%d</td></tr></table>Classification Chrall : %s",
-		tks.Nom, tks.Race.string(), tks.Niveau, id,
+		"%s %s %d ( %d )%s<table class=tks><tr><td>Victimes</td><td>Nombre</td><td>Part</td><td>Classement</td></tr><tr><th>Trolls</th><td>%d</td><td>%3.1f %%</td><td>%d</td></tr><tr><th>Monstres</th><td>%d</td><td>%3.1f %%</td><td>%d</td></tr></table>Classification Chrall : %s",
+		tks.Nom, tks.Race.string(), tks.Niveau, id, guildStr,
 		tks.NbKillsTrolls, (float32(tks.NbKillsTrolls) * 100 / float32(sum)), tks.ClassementKillsTrolls,
 		tks.NbKillsMonstres, float32(tks.NbKillsMonstres)*100/float32(sum), tks.ClassementKillsMonstres, tks.ClassifChrall)
 }
