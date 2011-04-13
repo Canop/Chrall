@@ -23,7 +23,7 @@ type Killomètre struct {
 
 func AsciiToUTF8(c []byte) string {
 	u := make([]int, len(c))
-	for i := 0; i < len(u); i++ {		
+	for i := 0; i < len(u); i++ {
 		u[i] = int(c[i])
 	}
 	return string(u)
@@ -76,7 +76,7 @@ func (km *Killomètre) parseLigneTroll(line string) {
 	}
 	trollId, _ := strconv.Atoi(tokens[0])
 	troll := km.initTroll(trollId)
-	troll.Nom = AsciiToUTF8([]uint8(tokens[1])) 
+	troll.Nom = AsciiToUTF8([]uint8(tokens[1]))
 	troll.Race = race(tokens[2])
 	troll.Niveau, _ = strconv.Atoui(tokens[3])
 	troll.IdGuilde, _ = strconv.Atoi(tokens[6])
@@ -232,8 +232,8 @@ func main() {
 
 	//> construction de tableaux triés
 	//trollsByTrollKills := km.SortTrollsByKillsOfTrolls()
-	trollsByTrollKills := SortTrolls(km.Trolls, km.NbTrolls, func (troll *Troll) uint {return troll.NbKillsTrolls});
-	trollsByMonsterKills := SortTrolls(trollsByTrollKills, km.NbTrolls, func (troll *Troll) uint {return troll.NbKillsMonstres});
+	trollsByTrollKills := SortTrolls(km.Trolls, km.NbTrolls, func(troll *Troll) uint { return troll.NbKillsTrolls })
+	trollsByMonsterKills := SortTrolls(trollsByTrollKills, km.NbTrolls, func(troll *Troll) uint { return troll.NbKillsMonstres })
 	//trollsByMonsterKills := km.SortTrollsByKillsOfMonsters() // notons que ça irait sans doute plus rapidement de partir du tableau des trolls triés, plus court...
 
 	//> calcul des classements

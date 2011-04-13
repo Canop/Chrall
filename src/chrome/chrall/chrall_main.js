@@ -52,6 +52,9 @@ switch (pageName) {
 	case "Play_BM.php":
 		Chrall_analyseAndReformatBM();	
 		break;
+	case "Play_evenement.php":
+		getTrollIdthenExecute(Chrall_addBubblesToLinks);
+		break;
 	case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
 		Chrall_handleActionPage();
 		break;
@@ -77,7 +80,14 @@ switch (pageName) {
 		Chrall_handleMovePage();	
 		break;
 	case "PJView_Events.php":
-		Chrall_analyseAndReformatPJView();
+		Chrall_analysePJView();
+		Chrall_addBubblesToLinks();
+		break;
+	case "Play_news.php":
+		getTrollIdthenExecute(Chrall_addBubblesToLinks);
+		break;
+	case "MonsterView.php":
+		Chrall_addBubblesToLinks();
 		break;
 }
 

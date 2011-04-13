@@ -151,43 +151,55 @@ RECENTS / A TESTER :
 * comptage des kills de trolls : enlever les suicides
 * grille / bulle de troll : mettre au point une estimation TK/neutre/ATK/NoK
 * estimation TK/ATK : mention "Ancien" quand nécessaire
-* bulle des trolls, indiquer race, niveau et guilde
+* bulle des trolls, indiquer race et niveau
 * utiliser ftp://ftp.mountyhall.com/Public_ Trolls2.txt pour batir une liste des trolls complète et surtout avoir le niveau du joueur
 * afficher les bulles de trolls et monstres dans les listes d'évènements de trolls
+* correction des types mime pour le JSONP et le JSON, avec précision de l'encodage UTF-8
+* afficher les bulles de trolls dans les listes d'évènements de monstres
+* page événements : afficher les bulles de trolls et monstres
+* profil : ajouter derrière l'agilité le [jet de stabilité](http://mountypedia.mountyhall.com/Mountyhall/Balayage)
+* stockage, avec les cdm, de l'id de leur auteur (pour pouvoir plus tard dire "vous avez offert 1000 cdm, merci")
+* label sur le bouton de centrage de la vue
+
+<- v1.08
+
+* page news : afficher les bulles de trolls et monstres
+* vue : effacer les bouts de menu au changement d'onglet
+* bulles des trolls et monstres : affichage des px qu'ils rapportent
+
 
 EN COURS :
 ==========
 * apprendre le langage go
-* calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
 * profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
 * BUG : les sonneries ne marchent pas toujours...
-* Affichage, pour les trolls guildés, du statut diplomatique des autres trolls
 
 TODO :
 ======
 P1 :
 ----
-* afficher les bulles de trolls dans les listes d'évènements de monstres
-* page événements : afficher les bulles de trolls et monstres
+* calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
+* bulles des trolls : indiquer la guilde
+* Affichage, pour les trolls guildés, du statut diplomatique des autres trolls
 * BUG : le nombre de kills de monstres que j'affiche dans la liste est inférieur à celui du "Tableau de chasse"...
 * bulles des monstres : indiquer leur jet de stabilité.
 * cron : sauvegardes de la bd
+* profil : après la mise à jour de Chrall, recommander d'utiliser Refresh
 * affichage quelque part du nombre de CDM transmises via Chrall
-* en réponse à un envoi de CDM répondre en intégrant les données des autres CDM et en évaluant les PV restant
 * BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * comprendre la gestion des packages en go pour factoriser le code online et offline
 
 P2 :
 ----
-* profil : ajouter derrière l'agilité le [jet de stabilité](http://mountypedia.mountyhall.com/Mountyhall/Balayage)
-* expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * profil : indiquer les alarmes programmées
 * lien pour les lieux proches bricotrolls
 
 P3 :
 ----
 * diplomatie intégrée à la vue [demande Laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=18) Utiliser ftp://ftp.mountyhall.com/Public_ Diplomatie.txt
+* en réponse à un envoi de CDM répondre en intégrant les données des autres CDM du même monstre et en évaluant les PV restant
+* profil d'un autre troll : menu pour definir le troll ou sa guilde en ami ou ennemi (même si on n'est pas guildé -> uniquement pour bd chrall)
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 * grille : rendre déplaçable la grille par glissage de la souris
 * lors d'un TP, affichage d'une carte des trous de météorite
@@ -197,9 +209,10 @@ P3 :
 * équipement : afficher les bonus [demande Fabdi](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=13&p=71#p71)
 * grille : afficher les px rapportés par les monstres (nécessite de stocker ou récupérer le niveau du troll du joueur)
 * grille/bulles monstres : afficher (après activation d'une option) moyenne et écart-type des caractéristiques
-* liste des trolls : envoi de MP par case à cocher (comme dans MZ)
+* liste des trolls : envoi de MP par case à cocher (comme dans ZZ)
 * profil : affichage rapport tués/décés
 * bulles de bestiaire sur les gowaps ?
+* expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
 * intégration d'un lien pour accéder au bestiaire (pour faire des recherches sur des monstres "ressemblant")
 * regarder si on ne peut pas récupérer des infos dans les scripts publics
 * mouches : récapitulatif (en haut) à la fois sur les mouches actuelles et sur le total (en comptant celles en vadrouille)

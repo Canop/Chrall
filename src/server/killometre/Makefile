@@ -6,6 +6,7 @@ GOFILES=\
 	main/kill.go\
 	main/troll.go\
 	main/analyse.go\
+	main/trollsort.go\
 	main/killomètre.go\
 
 include $(GOROOT)/src/Make.cmd

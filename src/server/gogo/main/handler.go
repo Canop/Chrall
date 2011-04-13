@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"http"
+	"strconv"
 )
 
 type Hitter struct {
@@ -28,6 +29,22 @@ func GetFormValue(hr *http.Request, name string) string {
 		return values[0]
 	}
 	return ""
+}
+func GetFormValueAsInt(hr *http.Request, name string) int {
+	values := hr.Form[name]
+	if len(values) > 0 {
+		v, _ := strconv.Atoi(values[0])
+		return v
+	}
+	return 0
+}
+func GetFormValueAsUint(hr *http.Request, name string) uint {
+	values := hr.Form[name]
+	if len(values) > 0 {
+		v, _ := strconv.Atoui(values[0])
+		return v
+	}
+	return 0
 }
 
 func (h *Handler) head(w io.Writer, title string) {

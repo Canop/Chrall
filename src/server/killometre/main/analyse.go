@@ -1,5 +1,5 @@
 /*
- * J'implémente ici un algo très simple, pas très fiable mais qui semble donner de bons résultats pour la découverte des TK et ATK
+ * J'implémente ici un algo très simple, pas très fiable théoriquement mais qui semble donner de bons résultats pour la découverte des TK et ATK
  * 
  */
 
@@ -16,7 +16,7 @@ func (km *Killomètre) tagKills() int {
 		if kill.Tag == inconnu {
 			if kill.TueurEstTroll {
 				if kill.TuéEstTroll {
-					tueur := km.Trolls[kill.Tueur]
+					//tueur := km.Trolls[kill.Tueur]
 					tué := km.Trolls[kill.Tué]
 					if kill.Tueur == kill.Tué {
 						kill.Tag = suicide // ne sont pas compris dans troll.NbKillsTrolls
@@ -24,20 +24,20 @@ func (km *Killomètre) tagKills() int {
 						//~ } else if tueur.Tag == tk {
 						//~ kill.Tag = tk
 						//~ nbChanges++
-					} else if tueur.Tag == atk { // à voir... dangereux...
-						kill.Tag = atk
-						nbChanges++
+						//~ } else if tueur.Tag == atk { // à voir... dangereux...
+						//~ kill.Tag = atk
+						//~ nbChanges++
 					} else if tué.Tag == mk {
 						kill.Tag = tk
 						nbChanges++
 					} else if tué.Tag == atk {
 						kill.Tag = tk
 						nbChanges++
-					} else if tué.Tag == tk && tueur.Tag != tk {
+					} else if tué.Tag == tk /*&& tueur.Tag != tk*/ {
 						kill.Tag = atk
 						nbChanges++
 					} else if tué.NbKillsTrolls-tué.NbKillsATK <= (tué.NbKillsMonstres+tué.NbKillsTK)/50 {
-						// on ne sait pas si le tué est mk ou atk, mais il n'est pas tk
+						// on ne sait pas si le tué est mk ou atk, mais il n'est pas tk, donc le kill lui est tk
 						kill.Tag = tk
 						nbChanges++
 					}
@@ -78,16 +78,17 @@ func (km *Killomètre) tagTrolls(trollsByTrollKills []*Troll) (nbTK int, nbATK i
 		}
 	}
 	for _, troll := range trollsByTrollKills {
-		if troll.NbKillsTK > 8 || (troll.NbKillsTK > 4 && troll.NbKillsTK*3 > troll.NbKillsTrolls) {
+		if troll.NbKillsTK > 4 && ((troll.NbKillsTK*3 > troll.NbKillsATK+1) || (troll.NbKillsTK > 4 && troll.NbKillsTK*3 > troll.NbKillsTrolls)) {
 			troll.Tag = tk
 			nbTK++
-		} else if troll.NbKillsATK > 2 && (troll.NbKillsATK*15 > 10*troll.NbKillsTrolls) {
+		} else if troll.NbKillsATK > 3 && (troll.NbKillsATK*15 > 10*troll.NbKillsTrolls) {
 			troll.Tag = atk
 			nbATK++
 		} else if troll.NbKilledByATK > 3 {
 			troll.Tag = tk
 			nbTK++
 		}
+		//fmt.Printf("Troll %d ktk=%d katk=%d kt=%d  ---> %s\n", troll.Id, troll.NbKillsTK, troll.NbKillsATK, troll.NbKillsTrolls, troll.Tag.string())
 	}
 	return nbTK, nbATK
 

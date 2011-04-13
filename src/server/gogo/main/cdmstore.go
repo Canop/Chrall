@@ -28,7 +28,7 @@ func NewStore(user string, password string) *CdmStore {
 	return store
 }
 
-func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) {
+func (store *CdmStore) WriteCdms(cdms []*CDM, author int) (nbWrittenCdms int, err os.Error) {
 
 	inserted := 0
 
@@ -38,7 +38,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	}
 	defer db.Close()
 
-	sql := "insert ignore into cdm (num_monstre, nom_complet, nom, age, " // En go on ne peut pas déclarer une chaine sur plusieurs lignes. J'espère que le compilo combine...
+	sql := "insert ignore into cdm (author, num_monstre, nom_complet, nom, age, " // En go on ne peut pas déclarer une chaine sur plusieurs lignes. J'espère que le compilo combine...
 	sql += "sha1, date_adition, "
 	sql += " niveau_min, niveau_max,"
 	sql += " points_de_vie_min, points_de_vie_max, "
@@ -62,7 +62,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 	sql += " bonus_malus_text,"
 	sql += " portee_du_pouvoir_text)"
 
-	sql += " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+	sql += " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
 	sql += " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
 	sql += " ?, ?, ?, ?, ?, ?, ?, ?)"
 
@@ -77,6 +77,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM) (nbWrittenCdms int, err os.Error) 
 
 	for _, cdm := range cdms {
 		err = stmt.BindParams(
+			author,
 			cdm.NumMonstre, cdm.NomComplet,
 			cdm.Nom, cdm.TagAge,
 			cdm.ComputeSHA1(),

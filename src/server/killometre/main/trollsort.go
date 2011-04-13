@@ -6,8 +6,9 @@ import (
 
 type TrollArray struct {
 	data []*Troll
-	val func(troll *Troll) uint
+	val  func(troll *Troll) uint
 }
+
 func (a *TrollArray) Len() int {
 	return len(a.data)
 }
@@ -32,5 +33,3 @@ func SortTrolls(source []*Troll, size uint, val func(troll *Troll) uint) []*Trol
 	sortedTrolls = sortedTrolls[0:size]
 	return sortedTrolls
 }
-
-

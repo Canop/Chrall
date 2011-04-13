@@ -72,7 +72,6 @@ func (troll *Troll) ChrallClassifHtml() string {
 }
 
 
-
 // imprime un tableau lisible des principales caractéristiques des trolls
 func PrintTrolls(trolls []*Troll, max int) {
 	fmt.Printf("| %5s | %7s | %24s | %15s | %17s | %19s | %21s | %7s | %8s | %9s | %30s |\n", "#", "Num", "Nom", "Kills de trolls", "Kills de monstres", "Class. kills trolls", "Class. kills monstres", "Classif", "Kills TK", "Kills ATK", "Classif HTML")

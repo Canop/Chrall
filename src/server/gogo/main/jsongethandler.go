@@ -23,6 +23,7 @@ type JsonGetHandler struct {
 }
 
 func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Request) {
+	w.SetHeader("Content-Type", "text/javascript;charset=utf-8")
 	out := GetMessage(GetFormValue(hr, "TrollId"), GetFormValue(hr, "ChrallVersion"))
 	bout, _ := json.Marshal(out)
 	fmt.Fprint(w, "chrall_receiveMessage(")
@@ -32,21 +33,25 @@ func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Reque
 
 
 func (h *JsonGetHandler) makeTrollStatsHtml(hr *http.Request) string {
-	trollIdStr := GetFormValue(hr, "trollId")
-	trollId, err := strconv.Atoi(trollIdStr)
-	if err != nil || trollId <= 0 {
-		fmt.Println("makeTrollStatsHtml : Invalid troll Id")
-		return "Invalid troll Id"
-	}
+	askerId := GetFormValueAsInt(hr, "asker")
+	trollId := GetFormValueAsInt(hr, "trollId")
 	tks := h.tksManager.getTrollInfos(trollId)
 	if tks == nil {
 		fmt.Printf("Troll inconnu %d\n: ", trollId)
 		return "Troll inconnu ou pacifiste"
 	}
-	return tks.HtmlTable(trollId)
+	html := tks.HtmlTable(trollId)
+	if askerId > 0 {
+		ti := h.tksManager.getTrollInfos(askerId)
+		if ti != nil {
+			html += fmt.Sprintf("<br>Tuer ce troll vous rapporterait %d px", pxkill(ti.Niveau, tks.Niveau))
+		}
+	}
+	return html
 }
 
 func (h *JsonGetHandler) serveTrollStatsHtmlJsonp(w http.ResponseWriter, hr *http.Request) {
+	w.SetHeader("Content-Type", "text/javascript;charset=utf-8")
 	bejs := new(BubbleJson)
 	trollIdStr := GetFormValue(hr, "trollId")
 	bejs.RequestId = trollIdStr
@@ -62,21 +67,14 @@ func (h *JsonGetHandler) serveTrollStatsHtmlJsonp(w http.ResponseWriter, hr *htt
 }
 
 func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
-	monsterCompleteNames := hr.Form["name"]
-	if len(monsterCompleteNames) < 1 {
+	askerId := GetFormValueAsInt(hr, "asker")
+	monsterCompleteName := GetFormValue(hr, "name")
+	if monsterCompleteName == "" {
 		fmt.Println(" no monster complete name in request")
 		return "Hein ?"
 	}
-	var monsterId uint
-	var monsterIdAsString string
-	monsterIds := hr.Form["monsterId"]
-	if len(monsterIds) > 0 {
-		monsterIdAsString = monsterIds[0]
-		monsterId, _ = strconv.Atoui(monsterIdAsString)
-	}
-	//fmt.Println(" Request for \"" + monsterCompleteNames[0] + "\"")
-
-	be, err := h.store.ComputeMonsterStats(monsterCompleteNames[0], monsterId)
+	monsterId := GetFormValueAsUint(hr, "monsterId")
+	be, err := h.store.ComputeMonsterStats(monsterCompleteName, monsterId)
 	if err != nil {
 		fmt.Println(" Erreur : " + err.String())
 		return "Erreur : " + err.String()
@@ -87,7 +85,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	} else {
 		if be.PreciseMonster && monsterId > 0 {
 			if be.NbMonsters < 2 {
-				html = "Cette estimation est basée sur une CDM unique du monstre " + monsterIdAsString
+				html = "Cette estimation est basée sur une CDM unique de ce monstre"
 			} else {
 				html = fmt.Sprintf("Cette estimation est basée sur %d CDM du monstre.", be.NbCdm)
 			}
@@ -105,6 +103,13 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		html += "<center>"
 		html += be.Fusion.HtmlTable()
 		html += "</center>"
+		fmt.Printf("ASKER ID : %d\n", askerId)
+		if askerId > 0 {
+			ti := h.tksManager.getTrollInfos(askerId)
+			if ti != nil {
+				html += "Tuer ce monstre vous rapporterait " + be.getGainPx(ti.Niveau)
+			}
+		}
 	}
 	//fmt.Println("HTML:\n:" + html)
 	return html
@@ -117,6 +122,7 @@ func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *htt
 }
 
 func (h *JsonGetHandler) serveBestiaryExtractHtmlJsonp(w http.ResponseWriter, hr *http.Request) {
+	w.SetHeader("Content-Type", "text/javascript;charset=utf-8")
 	bejs := new(BubbleJson)
 	requestId := hr.Form["name"]
 	if len(requestId) > 0 {
@@ -131,6 +137,7 @@ func (h *JsonGetHandler) serveBestiaryExtractHtmlJsonp(w http.ResponseWriter, hr
 
 // traite les cdm envoyées par l'extension chrall
 func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Request) {
+	w.SetHeader("Content-Type", "text/javascript;charset=utf-8")
 	encodedCdms := hr.Form["cdm"]
 	if len(encodedCdms) > 0 {
 		encodedCdm := encodedCdms[0]
@@ -140,7 +147,9 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 		bd.Decode(encodedCdm, h.store)
 		var answerHtml string
 		if len(bd.Cdm) > 0 {
-			_, err := h.store.WriteCdms(bd.Cdm)
+			author := GetFormValue(hr, "author")
+			authorId, _ := strconv.Atoi(author)
+			_, err := h.store.WriteCdms(bd.Cdm, authorId)
 			if err != nil {
 				fmt.Println("Erreur au stockage des CDM")
 			}
@@ -164,6 +173,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 }
 
 func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr *http.Request) {
+	w.SetHeader("Content-Type", "application/json")
 	monsterPartialName := GetFormValue(hr, "term")
 	if monsterPartialName == "" {
 		fmt.Println(" no monster partial name in request")

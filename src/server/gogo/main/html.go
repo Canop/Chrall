@@ -62,6 +62,8 @@ func addUintsNV(c []NameValue, label string, min uint, max uint) []NameValue {
 	c = c[0 : n+1]
 	if max == 0 {
 		c[n] = NameValue{label, strconv.Uitoa(min) + " - ?"}
+	} else if min==max {
+		c[n] = NameValue{label, strconv.Uitoa(min)}
 	} else {
 		c[n] = NameValue{label, strconv.Uitoa(min) + " - " + strconv.Uitoa(max)}
 	}

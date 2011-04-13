@@ -30,7 +30,7 @@ function Chrall_makeFiltersHtml() {
 	html += "</script>";
 	html += "<form id=gridFiltersForm>";
 	if (viewMaxSight>5) {
-		html += '<img id=goto_player class=butt src="'+chrome.extension.getURL("player_target.png")+'">';
+		html += '<img title="Centre la vue sur votre troll" id=goto_player class=butt src="'+chrome.extension.getURL("player_target.png")+'">';
 		html += "Horizon : <select id=viewRedux>";
 		html += "<option value="+horizontalViewLimit+">Actuel (vue de "+horizontalViewLimit+")</option>";
 		if (horizontalViewLimit!=4 && viewMaxSight>4) {
@@ -482,6 +482,7 @@ function Chrall_analyseAndReformatView() {
 	$(".tab_content:first").show();
 	
 	$("ul.tabs li").click(function() {
+		hideOm(); // fermeture des éventuels objectMenus de la grille
 		$("ul.tabs li").removeClass("active");
 		$(this).addClass("active");
 		$(".tab_content").hide();
@@ -520,7 +521,7 @@ function Chrall_analyseAndReformatView() {
 					message = linkText;
 					requestId = linkText;
 				}
-				bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
+				bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
 			}
 		}
 	);
@@ -532,7 +533,7 @@ function Chrall_analyseAndReformatView() {
 			var message = link.attr("message");
 			var trollId = link.attr('id');
 			if (trollId) {
-				bubble(link, message, "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
+				bubble(link, message, "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
 			}
 		}
 	);	
@@ -542,7 +543,9 @@ function Chrall_analyseAndReformatView() {
 		function() {
 			var link = $(this);
 			var trollId = link.attr('id');
-			if (trollId) {
+			if (trollId==0) {
+				bubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
+			} else {
 				bubble(link, '', "bub_player", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
 			}
 		}
