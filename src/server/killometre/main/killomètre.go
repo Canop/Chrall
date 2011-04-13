@@ -9,7 +9,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"sort"
 	"strings"
 	"strconv"
 	"time"
@@ -160,26 +159,6 @@ func (km *Killomètre) traiteNomFichierKills(filename string) os.Error {
 	return km.traiteFichierKills(f)
 }
 
-// construit un tableau des trolls triés par leur nombre de kills de trolls
-func (km *Killomètre) SortTrollsByKillsOfTrolls() []*Troll {
-	sortedTrolls := make([]*Troll, len(km.Trolls))
-	copy(sortedTrolls, km.Trolls)
-	a := &TrollKillerArray{sortedTrolls}
-	sort.Sort(a)
-	sortedTrolls = sortedTrolls[0:km.NbTrolls]
-	return sortedTrolls
-}
-
-// construit un tableau des trolls triés par leur nombre de kills de monstres
-func (km *Killomètre) SortTrollsByKillsOfMonsters() []*Troll {
-	sortedTrolls := make([]*Troll, len(km.Trolls))
-	copy(sortedTrolls, km.Trolls)
-	a := &MonsterKillerArray{sortedTrolls}
-	sort.Sort(a)
-	sortedTrolls = sortedTrolls[0:km.NbTrolls]
-	return sortedTrolls
-}
-
 
 func (km *Killomètre) CalculeClassements(trollsByTrollKills []*Troll, trollsByMonsterKills []*Troll) {
 	//> calcul du classement par kills de trolls
@@ -252,8 +231,10 @@ func main() {
 	}
 
 	//> construction de tableaux triés
-	trollsByTrollKills := km.SortTrollsByKillsOfTrolls()
-	trollsByMonsterKills := km.SortTrollsByKillsOfMonsters() // notons que ça irait sans doute plus rapidement de partir du tableau des trolls triés, plus court...
+	//trollsByTrollKills := km.SortTrollsByKillsOfTrolls()
+	trollsByTrollKills := SortTrolls(km.Trolls, km.NbTrolls, func (troll *Troll) uint {return troll.NbKillsTrolls});
+	trollsByMonsterKills := SortTrolls(trollsByTrollKills, km.NbTrolls, func (troll *Troll) uint {return troll.NbKillsMonstres});
+	//trollsByMonsterKills := km.SortTrollsByKillsOfMonsters() // notons que ça irait sans doute plus rapidement de partir du tableau des trolls triés, plus court...
 
 	//> calcul des classements
 	km.CalculeClassements(trollsByTrollKills, trollsByMonsterKills)
@@ -262,7 +243,7 @@ func main() {
 	km.Analyse(trollsByTrollKills)
 
 	//> export du tableau complet
-	err = WriteTrollsToFile("kom.csv", trollsByTrollKills)
+	err = WriteTrollsToFile("/home/dys/chrall/killometre/kom.csv", trollsByTrollKills)
 	if err != nil {
 		fmt.Printf("Erreur while writing output file : %v\n", err)
 	}

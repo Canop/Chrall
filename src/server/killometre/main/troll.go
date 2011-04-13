@@ -16,7 +16,7 @@ type Troll struct {
 	ClassementKillsTrolls   int
 	ClassementKillsMonstres int
 	Tag                     tag
-	NbKillsTK               uint
+	NbKillsTK               uint // attention : ceci n'a de sens que statistique, une part importante des kills est forcément mal tagguée
 	NbKillsATK              uint
 	NbKilledByATK           uint
 	NbKillsTKRécents        uint
@@ -72,59 +72,15 @@ func (troll *Troll) ChrallClassifHtml() string {
 }
 
 
-// une structure permettant de trier un tableau de trolls
-//  par leur nombre de kills de trolls
-type TrollKillerArray struct {
-	trolls []*Troll
-}
-
-func (a *TrollKillerArray) Len() int {
-	return len(a.trolls)
-}
-func (a *TrollKillerArray) Less(i int, j int) bool {
-	if a.trolls[i] == nil {
-		return false
-	}
-	if a.trolls[j] == nil {
-		return true
-	}
-	return a.trolls[j].NbKillsTrolls < a.trolls[i].NbKillsTrolls
-}
-func (a *TrollKillerArray) Swap(i int, j int) {
-	a.trolls[i], a.trolls[j] = a.trolls[j], a.trolls[i]
-}
-
-// une structure permettant de trier un tableau de trolls
-//  par leur nombre de kills de monstres
-type MonsterKillerArray struct {
-	trolls []*Troll
-}
-
-func (a *MonsterKillerArray) Len() int {
-	return len(a.trolls)
-}
-func (a *MonsterKillerArray) Less(i int, j int) bool {
-	if a.trolls[i] == nil {
-		return false
-	}
-	if a.trolls[j] == nil {
-		return true
-	}
-	return a.trolls[j].NbKillsMonstres < a.trolls[i].NbKillsMonstres
-}
-func (a *MonsterKillerArray) Swap(i int, j int) {
-	a.trolls[i], a.trolls[j] = a.trolls[j], a.trolls[i]
-}
-
 
 // imprime un tableau lisible des principales caractéristiques des trolls
 func PrintTrolls(trolls []*Troll, max int) {
-	fmt.Printf("| %10s | %7s | %24s | %15s | %17s | %19s | %21s | %7s | %8s | %9s | %30s |\n", "Classement", "Num", "Nom", "Kills de trolls", "Kills de monstres", "Class. kills trolls", "Class. kills monstres", "Classif", "Kills TK", "Kills ATK", "Classif HTML")
+	fmt.Printf("| %5s | %7s | %24s | %15s | %17s | %19s | %21s | %7s | %8s | %9s | %30s |\n", "#", "Num", "Nom", "Kills de trolls", "Kills de monstres", "Class. kills trolls", "Class. kills monstres", "Classif", "Kills TK", "Kills ATK", "Classif HTML")
 	i := 0
 	for _, troll := range trolls {
 		if troll != nil {
 			i++
-			fmt.Printf("| %10d | %7d | %24s | %15d | %17d | %19d | %21d | %7s | %8d | %9d | %30s |\n", i, troll.Id, troll.Nom, troll.NbKillsTrolls, troll.NbKillsMonstres, troll.ClassementKillsTrolls, troll.ClassementKillsMonstres, troll.Tag.string(), troll.NbKillsTK, troll.NbKillsATK, troll.ChrallClassifHtml())
+			fmt.Printf("| %5d | %7d | %24s | %15d | %17d | %19d | %21d | %7s | %8d | %9d | %30s |\n", i, troll.Id, troll.Nom, troll.NbKillsTrolls, troll.NbKillsMonstres, troll.ClassementKillsTrolls, troll.ClassementKillsMonstres, troll.Tag.string(), troll.NbKillsTK, troll.NbKillsATK, troll.ChrallClassifHtml())
 			if i == max {
 				break
 			}
