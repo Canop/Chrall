@@ -62,7 +62,7 @@ func addUintsNV(c []NameValue, label string, min uint, max uint) []NameValue {
 	c = c[0 : n+1]
 	if max == 0 {
 		c[n] = NameValue{label, strconv.Uitoa(min) + " - ?"}
-	} else if min==max {
+	} else if min == max {
 		c[n] = NameValue{label, strconv.Uitoa(min)}
 	} else {
 		c[n] = NameValue{label, strconv.Uitoa(min) + " - " + strconv.Uitoa(max)}
@@ -171,13 +171,13 @@ func (tks *TrollInfos) HtmlTable(id int, m *TksManager) string {
 	}
 	guildStr := ""
 	guilde := m.getGuildInfos(int(tks.IdGuilde))
-	fmt.Printf("Guilde : %d\n", tks.IdGuilde)
-	if guilde!=nil {
+	if guilde != nil {
 		guildStr = "<br>Guilde : " + guilde.Nom
 	}
-	return fmt.Sprintf(
+	html := fmt.Sprintf(
 		"%s %s %d ( %d )%s<table class=tks><tr><td>Victimes</td><td>Nombre</td><td>Part</td><td>Classement</td></tr><tr><th>Trolls</th><td>%d</td><td>%3.1f %%</td><td>%d</td></tr><tr><th>Monstres</th><td>%d</td><td>%3.1f %%</td><td>%d</td></tr></table>Classification Chrall : %s",
 		tks.Nom, tks.Race.string(), tks.Niveau, id, guildStr,
 		tks.NbKillsTrolls, (float32(tks.NbKillsTrolls) * 100 / float32(sum)), tks.ClassementKillsTrolls,
 		tks.NbKillsMonstres, float32(tks.NbKillsMonstres)*100/float32(sum), tks.ClassementKillsMonstres, tks.ClassifChrall)
+	return html
 }

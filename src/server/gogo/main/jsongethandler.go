@@ -44,7 +44,9 @@ func (h *JsonGetHandler) makeTrollStatsHtml(hr *http.Request) string {
 	if askerId > 0 {
 		ti := h.tksManager.getTrollInfos(askerId)
 		if ti != nil {
+			h.tksManager.CheckDiploLoaded()
 			html += fmt.Sprintf("<br>Tuer ce troll vous rapporterait %d px", pxkill(ti.Niveau, tks.Niveau))
+			html += h.tksManager.Diplo.DescribeYourRelationsWith(uint(askerId), ti.IdGuilde, uint(trollId), tks.IdGuilde)
 		}
 	}
 	return html

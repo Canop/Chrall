@@ -52,18 +52,34 @@ type TrollInfos struct {
 }
 
 type GuildInfos struct {
-	Nom	string
+	Nom string
 }
+
+
+type DiplomaticRelation struct {
+	FirstIsGuild  bool
+	FirstId       uint
+	SecondIsGuild bool
+	SecondId      uint
+	foe           bool
+	Text          string
+}
+
+
+//===========================================================================================================================================
 
 // l'objet qui contient les stats
 // A priori ce sera toujours un singleton.
 type TksManager struct {
-	Trolls        []*TrollInfos // les infos des trolls, indexées par id de troll (certes, avec un table de hash spécifique ce ne serait pas lent et le tableau serait deux fois plus court mais... la flemme...)
+	Trolls             []*TrollInfos // les infos des trolls, indexées par id de troll (certes, avec un table de hash spécifique ce ne serait pas lent et le tableau serait deux fois plus court mais... la flemme...)
 	lastTrollFileCheck int64         // la date, en secondes, à laquelle on a vérifié si le fichier csv source avait changé pour la dernière fois
 	lastTrollFileRead  int64         // la date, en secondes, à laquelle on a lu le fichier csv source pour la dernière fois
-	Guildes	[]*GuildInfos
-	lastGuildFileCheck int64         
-	lastGuildFileRead  int64         
+	Guildes            []*GuildInfos
+	lastGuildFileCheck int64
+	lastGuildFileRead  int64
+	Diplo              *DiploGraph
+	lastDiploFileCheck int64
+	lastDiploFileRead  int64
 }
 
 
@@ -73,6 +89,38 @@ func AsciiToUTF8(c []byte) string {
 		u[i] = int(c[i])
 	}
 	return string(u)
+}
+
+
+func (m *TksManager) ReadStandardDiploCsvFileIfNew() os.Error {
+	filename := "/home/dys/chrall/Public_Diplomatie.txt"
+	if m.lastDiploFileRead > 0 {
+		fi, err := os.Stat(filename)
+		if err != nil {
+			return err
+		}
+		if !fi.IsRegular() {
+			return os.NewError("TksManager : Fichier " + filename + " introuvable ou anormal")
+		}
+		if fi.Mtime_ns < m.lastDiploFileRead*1000000000 {
+			return nil
+		}
+	}
+	f, err := os.Open(filename, os.O_RDONLY, 0)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	r := bufio.NewReader(f)
+	g := NewDiploGraph()
+	err = g.ReadDiploGraph(r)
+	if err != nil {
+		return err
+	}
+	m.lastTrollFileRead, _, _ = os.Time()
+	m.Diplo = g
+	fmt.Println("TksManager : Fichier de diplo standard lu")
+	return nil
 }
 
 func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
@@ -89,7 +137,7 @@ func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
 			return nil
 		}
 	}
-	
+
 	f, err := os.Open(filename, os.O_RDONLY, 0)
 	if err != nil {
 		return err
@@ -99,7 +147,7 @@ func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
 	line, err := r.ReadString('\n')
 	for err == nil {
 		tokens := strings.Split(line, ";", 4)
-		if len(tokens)<2 {
+		if len(tokens) < 2 {
 			fmt.Println("Ligne invalide")
 		} else {
 			gi := new(GuildInfos)
@@ -125,7 +173,6 @@ func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
 	m.lastTrollFileRead, _, _ = os.Time()
 	fmt.Println("TksManager : Fichier des guildes lu")
 	return nil
-
 }
 
 
@@ -159,7 +206,7 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 	// Et au final on ne devrait pas souvent redimensionner la table
 	for err == nil {
 		tokens := strings.Split(line, ";", 13)
-		if len(tokens)<13 {
+		if len(tokens) < 13 {
 			fmt.Println("Ligne invalide")
 		} else {
 			tks := new(TrollInfos)
@@ -231,4 +278,16 @@ func (m *TksManager) getGuildInfos(id int) *GuildInfos {
 		return m.Guildes[id]
 	}
 	return nil
+}
+
+func (m *TksManager) CheckDiploLoaded() {
+	now, _, _ := os.Time()
+	if now-m.lastDiploFileCheck > 300 {
+		m.lastDiploFileCheck = now
+		err := m.ReadStandardDiploCsvFileIfNew()
+		if err != nil {
+			fmt.Println("Unable to load standard diplo file :")
+			fmt.Println(err)
+		}
+	}
 }

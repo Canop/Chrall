@@ -6,6 +6,7 @@ GOFILES=\
 	main/sql.go\
 	main/trollinfos.go\
 	main/cdm.go\
+	main/diplo.go\
 	main/bestiaryextract.go\
 	main/cdmstore.go\
 	main/messager.go\
