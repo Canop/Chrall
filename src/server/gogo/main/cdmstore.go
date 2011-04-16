@@ -272,7 +272,6 @@ func (store *CdmStore) ComputeMonsterStats(completeName string, monsterId uint) 
 		if row != nil {
 			be := rowToBestiaryExtract(completeName, row)
 			if be.NbCdm > 0 {
-				fmt.Println("MONSTER FOUND BY NUM : " + strconv.Uitoa(monsterId))
 				be.PreciseMonster = true
 				return be, nil
 			}

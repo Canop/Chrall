@@ -8,7 +8,6 @@ import (
 	"strconv"
 )
 
-
 type raceTroll uint8
 
 const (
@@ -93,33 +92,60 @@ func AsciiToUTF8(c []byte) string {
 
 
 func (m *TksManager) ReadStandardDiploCsvFileIfNew() os.Error {
-	filename := "/home/dys/chrall/Public_Diplomatie.txt"
+	standardDiploFilename := "/home/dys/chrall/Public_Diplomatie.txt"
+	trollDiploFilename := "/home/dys/chrall/Diplodotrolls.csv"
+	mustRead := false
 	if m.lastDiploFileRead > 0 {
-		fi, err := os.Stat(filename)
+		fi, err := os.Stat(standardDiploFilename)
 		if err != nil {
 			return err
 		}
 		if !fi.IsRegular() {
-			return os.NewError("TksManager : Fichier " + filename + " introuvable ou anormal")
+			return os.NewError("TksManager : Fichier " + standardDiploFilename + " introuvable ou anormal")
 		}
-		if fi.Mtime_ns < m.lastDiploFileRead*1000000000 {
-			return nil
-		}
+		mustRead = fi.Mtime_ns > m.lastDiploFileRead*1000000000
 	}
-	f, err := os.Open(filename, os.O_RDONLY, 0)
+	if !mustRead {
+		fi, err := os.Stat(trollDiploFilename)
+		if err != nil {
+			return err
+		}
+		if !fi.IsRegular() {
+			return os.NewError("TksManager : Fichier " + trollDiploFilename + " introuvable ou anormal")
+		}
+		mustRead = fi.Mtime_ns > m.lastDiploFileRead*1000000000
+		fmt.Printf("mustRead trollDiploFile = %v \n", mustRead)
+	}
+	if !mustRead {
+		return nil
+	}
+
+	g := NewDiploGraph()
+	f, err := os.Open(standardDiploFilename, os.O_RDONLY, 0)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
 	r := bufio.NewReader(f)
-	g := NewDiploGraph()
-	err = g.ReadDiploGraph(r)
+	err = g.ReadDiploGraph(r, true, false)
 	if err != nil {
 		return err
 	}
-	m.lastTrollFileRead, _, _ = os.Time()
+
+	f, err = os.Open(trollDiploFilename, os.O_RDONLY, 0)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	r = bufio.NewReader(f)
+	err = g.ReadDiploGraph(r, false, true)
+	if err != nil {
+		return err
+	}
+
+	m.lastDiploFileRead, _, _ = os.Time()
+	fmt.Println("TksManager : Fichiers de diplo lus")
 	m.Diplo = g
-	fmt.Println("TksManager : Fichier de diplo standard lu")
 	return nil
 }
 

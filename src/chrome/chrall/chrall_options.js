@@ -7,7 +7,7 @@ function Chrall_reformatOptionsView() {
 
 	var html="<ul class=tabs>";
 	html += "<li><a href=#tabStandard>Options Standard</a></li>";
-	html += "<li><a href=#tabChrall>Options Chrall</a></li>";
+	html += "<li><a href=#tabChrall>Chrall</a></li>";
 	html += "</ul>";
 	html += "<div class=tab_container><br><br>";
 	html += " <div id=tabStandard class=tab_content></div>";

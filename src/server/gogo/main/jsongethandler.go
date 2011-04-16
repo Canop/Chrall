@@ -9,11 +9,18 @@ import (
 	"fmt"
 	"json"
 	"strconv"
+	"os"
 )
 
 type BubbleJson struct {
 	RequestId string
 	Html      string
+}
+
+type TrollBubbleJson struct {
+	RequestId string
+	Html      string
+	IdGuilde  uint
 }
 
 
@@ -32,33 +39,34 @@ func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Reque
 }
 
 
-func (h *JsonGetHandler) makeTrollStatsHtml(hr *http.Request) string {
+func (h *JsonGetHandler) makeTrollStats(hr *http.Request) *TrollBubbleJson {
+	bejs := new(TrollBubbleJson)
 	askerId := GetFormValueAsInt(hr, "asker")
+	trollIdStr := GetFormValue(hr, "trollId")
+	bejs.RequestId = trollIdStr
 	trollId := GetFormValueAsInt(hr, "trollId")
 	tks := h.tksManager.getTrollInfos(trollId)
 	if tks == nil {
 		fmt.Printf("Troll inconnu %d\n: ", trollId)
-		return "Troll inconnu ou pacifiste"
-	}
-	html := tks.HtmlTable(trollId, h.tksManager)
-	if askerId > 0 {
-		ti := h.tksManager.getTrollInfos(askerId)
-		if ti != nil {
-			h.tksManager.CheckDiploLoaded()
-			html += fmt.Sprintf("<br>Tuer ce troll vous rapporterait %d px", pxkill(ti.Niveau, tks.Niveau))
-			html += h.tksManager.Diplo.DescribeYourRelationsWith(uint(askerId), ti.IdGuilde, uint(trollId), tks.IdGuilde)
+		bejs.Html = "Troll inconnu ou pacifiste"
+	} else {
+		html := tks.HtmlTable(trollId, h.tksManager)
+		if askerId > 0 {
+			ti := h.tksManager.getTrollInfos(askerId)
+			if ti != nil {
+				h.tksManager.CheckDiploLoaded()
+				html += fmt.Sprintf("<br>Tuer ce troll vous rapporterait %d px", pxkill(ti.Niveau, tks.Niveau))
+				html += h.tksManager.Diplo.DescribeYourRelationsWith(uint(askerId), ti.IdGuilde, uint(trollId), tks.IdGuilde)
+			}
 		}
+		bejs.Html = html
 	}
-	return html
+	return bejs
 }
 
 func (h *JsonGetHandler) serveTrollStatsHtmlJsonp(w http.ResponseWriter, hr *http.Request) {
 	w.SetHeader("Content-Type", "text/javascript;charset=utf-8")
-	bejs := new(BubbleJson)
-	trollIdStr := GetFormValue(hr, "trollId")
-	bejs.RequestId = trollIdStr
-
-	bejs.Html = h.makeTrollStatsHtml(hr)
+	bejs := h.makeTrollStats(hr)
 	fmt.Fprint(w, "grid_receive(")
 	mb, err := json.Marshal(bejs)
 	if err != nil {
@@ -105,7 +113,6 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		html += "<center>"
 		html += be.Fusion.HtmlTable()
 		html += "</center>"
-		fmt.Printf("ASKER ID : %d\n", askerId)
 		if askerId > 0 {
 			ti := h.tksManager.getTrollInfos(askerId)
 			if ti != nil {
@@ -193,6 +200,7 @@ func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr
 
 func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
+	startSeconds, startNanosecs, _ := os.Time()
 	w.SetHeader("Access-Control-Allow-Origin", "*")
 	w.SetHeader("Access-Control-Request-Method", "GET")
 
@@ -222,4 +230,7 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	} else {
 		fmt.Println(" Requete non comprise")
 	}
+	endSeconds, endNanosecs, _ := os.Time()
+	durationMillis := 1e3*(endSeconds-startSeconds) + (endNanosecs-startNanosecs)/1e6
+	fmt.Printf(" Duration : %d ms\n", durationMillis)
 }

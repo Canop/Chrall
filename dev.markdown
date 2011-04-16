@@ -167,7 +167,9 @@ RECENTS / A TESTER :
 * vue : effacer les bouts de menu au changement d'onglet
 * bulles des trolls et monstres : affichage des px qu'ils rapportent
 * bulles des trolls : indiquer la guilde
+* diplomatie intégrée à la vue [demande Laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=18) Utiliser ftp://ftp.mountyhall.com/Public_ Diplomatie.txt
 
+<- v1.09
 
 EN COURS :
 ==========
@@ -179,13 +181,12 @@ TODO :
 ======
 P1 :
 ----
+* profil d'un autre troll : menu pour definir le troll ou sa guilde en ami ou ennemi (même si on n'est pas guildé -> uniquement pour bd chrall) [pb : authentification ?]
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
-* Affichage, pour les trolls guildés, du statut diplomatique des autres trolls
-* BUG : le nombre de kills de monstres que j'affiche dans la liste est inférieur à celui du "Tableau de chasse"...
+* BUG : le nombre de kills de monstres que j'affiche dans la liste est inférieur à celui du "Tableau de chasse"... sans doute des trous dans la liste du serveur ftp mais la liste de discussion de MH est morte...
 * bulles des monstres : indiquer leur jet de stabilité.
 * cron : sauvegardes de la bd
 * profil : après la mise à jour de Chrall, recommander d'utiliser Refresh
-* affichage quelque part du nombre de CDM transmises via Chrall
 * BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * comprendre la gestion des packages en go pour factoriser le code online et offline
@@ -194,12 +195,12 @@ P2 :
 ----
 * profil : indiquer les alarmes programmées
 * lien pour les lieux proches bricotrolls
+* affichage quelque part du nombre de CDM transmises via Chrall
+* grille : marquer les trolls ennemis ou amis
 
 P3 :
 ----
-* diplomatie intégrée à la vue [demande Laz](http://www.canop.org/chrall/fofo/viewtopic.php?f=5&t=18) Utiliser ftp://ftp.mountyhall.com/Public_ Diplomatie.txt
 * en réponse à un envoi de CDM répondre en intégrant les données des autres CDM du même monstre et en évaluant les PV restant
-* profil d'un autre troll : menu pour definir le troll ou sa guilde en ami ou ennemi (même si on n'est pas guildé -> uniquement pour bd chrall)
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 * grille : rendre déplaçable la grille par glissage de la souris
 * lors d'un TP, affichage d'une carte des trous de météorite
@@ -245,6 +246,7 @@ P3 :
 * recherche de lieux intégrée
 * grille : flèches pour indiquer les directions des lieux intéressants (bookmarkés ou bien sur recherche)
 * système 'mappy' intégré en exploitant la liste des gares TGV du ftp MH
+* bulle et profil d'un troll : indiquer si le troll nous a tué ou la réciproque
 
 NOTES :
 =======

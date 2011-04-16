@@ -85,8 +85,6 @@ func (km *Killomètre) parseLigneTroll(line string) {
 		fmt.Println("Error in parsing :")
 		fmt.Println(err)
 	}
-		fmt.Printf("Guilde : %d\n", troll.IdGuilde)
-
 }
 
 func (km *Killomètre) parseLigneKill(line string) {
@@ -278,5 +276,7 @@ func main() {
 	fmt.Printf("\nTK : %d\nATK : %d\nMK : %d\nInconnus : %d\n", nbTK, nbATK, nbMK, nbInconnus)
 	fmt.Println("Plus grands tueurs de troll : ")
 	PrintTrolls(trollsByTrollKills, 100)
+	fmt.Println("Plus grands tueurs de monstres : ")
+	PrintTrolls(trollsByMonsterKills, 100)
 	fmt.Println()
 }

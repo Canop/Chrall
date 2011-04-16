@@ -106,12 +106,13 @@ func (g *DiploGraph) getNode(isTroll bool, id uint) *DiploNode {
 }
 
 // charge un fichier de diplo (a priori il vaut mieux partir d'un graphe vide)
-func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader) os.Error {
+func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader, ascii bool, subjectIsTroll bool) os.Error {
 	line, err := r.ReadString('\n')
 	for err == nil {
 		tokens := strings.Split(line, ";", 6)
 		if len(tokens) < 5 {
 			fmt.Println("Ligne invalide")
+			continue
 		}
 		sid, _ := strconv.Atoui(tokens[0])
 		eIsTroll := false
@@ -121,6 +122,7 @@ func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader) os.Error {
 		eid, _ := strconv.Atoui(tokens[2])
 		v := new(DiploVertice)
 		sn := getOrCreateNode(g.Guilds, sid)
+		sn.IsTroll = subjectIsTroll
 		var en *DiploNode
 		if eIsTroll {
 			en = getOrCreateNode(g.Trolls, eid)
@@ -132,7 +134,10 @@ func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader) os.Error {
 		v.End = en
 		sn.Starts = AddVertice(sn.Starts, v)
 		en.Ends = AddVertice(en.Ends, v)
-		v.Text = AsciiToUTF8([]uint8(strings.Trim(tokens[3], " ")))
+		v.Text = strings.Trim(tokens[3], " ")
+		if ascii {
+			v.Text = AsciiToUTF8([]uint8(v.Text))
+		}
 		if tokens[4] == "ENNEMI" {
 			v.Foe = true
 		}
@@ -150,7 +155,16 @@ func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader) os.Error {
 
 func (g *DiploGraph) DescribeYourRelationsWith(yourTroll, yourGuild, hisTroll, hisGuild uint) string {
 	html := ""
-	var v *DiploVertice
+	v := g.Vertices[VerticeKey(true, yourTroll, true, hisTroll)]
+	if v != nil {
+		html += "<br>Ce que vous pensez de ce troll :<br>  &nbsp; "
+		html += v.ColoredText()
+	}	
+	v = g.Vertices[VerticeKey(true, hisTroll, true, yourTroll)]
+	if v != nil {
+		html += "<br>Ce que ce troll pense de vous :<br>  &nbsp; "
+		html += v.ColoredText()
+	}	
 	if yourGuild > 1 {
 		v = g.Vertices[VerticeKey(false, yourGuild, true, hisTroll)]
 		if v != nil {

@@ -8,7 +8,7 @@ function Chrall_addBubblesToLinks() {
 			var link = $(this);
 			var href = link.attr('href');
 			var trollId = href.split('\'')[1];
-			if (trollId!=player.id) {
+			if (trollId!=player.id && trollId!=viewedTrollId) {
 				bubble(link, '', "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
 			}
 		}

@@ -22,8 +22,11 @@ func pxkill(niveauTueur uint, niveauTué uint) int {
 func (be *BestiaryExtract) getGainPx(niveauTueur uint) string {
 	if be.Fusion.Niveau_max == 0 {
 		return fmt.Sprintf("> %d px", pxkill(niveauTueur, be.Fusion.Niveau_min))
-	} else if be.Fusion.Niveau_min == be.Fusion.Niveau_max {
-		return fmt.Sprintf("%d px", pxkill(niveauTueur, be.Fusion.Niveau_min))
 	}
-	return fmt.Sprintf("entre %d et %d px", pxkill(niveauTueur, be.Fusion.Niveau_min), pxkill(niveauTueur, be.Fusion.Niveau_max))
+	pxMin := pxkill(niveauTueur, be.Fusion.Niveau_min)
+	pxMax := pxkill(niveauTueur, be.Fusion.Niveau_max)
+	if pxMin == pxMax {
+		return fmt.Sprintf("%d px", pxMin)
+	}
+	return fmt.Sprintf("entre %d et %d px", pxMin, pxMax)
 }

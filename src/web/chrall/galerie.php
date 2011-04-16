@@ -33,9 +33,18 @@ ini_set('default_charset', 'utf-8');
 
 <p>Au passage de la souris sur les objets, trolls, monstres, des informations supplémentaires s'affichent sans qu'il soit besoin de cliquer :</p>
 <img class=screenshot src=screens/bestiaire-800.png>
+<img class=screenshot src=screens/diplo_001.png>
+<img class=screenshot src=screens/diplo_002.png>
 
 <p>Plus moyen de vous planter dans les déplacements :</p>
 <img class=screenshot src=screens/menu_de-800.png>
+
+<p>Ou d'oublier de ramasser avant de bouger :</p>
+<img class=screenshot src=screens/tresors_aux_pieds-800.png>
+
+<p>Et même avec une vue de 30 vous ne serez jamais perdu :</p>
+<img class=screenshot src=screens/bouton_perdu.png>
+
 
 
 <h2>Le profil</h2>
@@ -47,6 +56,13 @@ ini_set('default_charset', 'utf-8');
 <img class=screenshot src=screens/add.png>
 <br>
 <img class=screenshot src=screens/teleport.png>
+
+<h2>Ce que vous ne voyez pas</h2>
+<p>Certaines fonctions ne sont pas visibles mais audibles : 5 minutes avant votre DLA, un son discret (compatible avec une ambiance de bureau) vous alerte. <a href="javascript:document.getElementById('alarm').play();">Ecoutez</a>.
+</p>
+<audio id=alarm>
+	<source src=sound/zbluejay.wav>
+</audio>
 
 </div> <!-- content_wrapper -->
 </div> <!-- content_column_wrapper -->
