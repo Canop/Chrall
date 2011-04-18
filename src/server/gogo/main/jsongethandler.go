@@ -30,7 +30,7 @@ type JsonGetHandler struct {
 }
 
 func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Request) {
-	w.SetHeader("Content-Type", "text/javascript;charset=utf-8")
+	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
 	out := GetMessage(GetFormValue(hr, "TrollId"), GetFormValue(hr, "ChrallVersion"))
 	bout, _ := json.Marshal(out)
 	fmt.Fprint(w, "chrall_receiveMessage(")
@@ -65,7 +65,7 @@ func (h *JsonGetHandler) makeTrollStats(hr *http.Request) *TrollBubbleJson {
 }
 
 func (h *JsonGetHandler) serveTrollStatsHtmlJsonp(w http.ResponseWriter, hr *http.Request) {
-	w.SetHeader("Content-Type", "text/javascript;charset=utf-8")
+	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
 	bejs := h.makeTrollStats(hr)
 	fmt.Fprint(w, "grid_receive(")
 	mb, err := json.Marshal(bejs)
@@ -131,7 +131,7 @@ func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *htt
 }
 
 func (h *JsonGetHandler) serveBestiaryExtractHtmlJsonp(w http.ResponseWriter, hr *http.Request) {
-	w.SetHeader("Content-Type", "text/javascript;charset=utf-8")
+	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
 	bejs := new(BubbleJson)
 	requestId := hr.Form["name"]
 	if len(requestId) > 0 {
@@ -146,7 +146,7 @@ func (h *JsonGetHandler) serveBestiaryExtractHtmlJsonp(w http.ResponseWriter, hr
 
 // traite les cdm envoyées par l'extension chrall
 func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Request) {
-	w.SetHeader("Content-Type", "text/javascript;charset=utf-8")
+	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
 	encodedCdms := hr.Form["cdm"]
 	if len(encodedCdms) > 0 {
 		encodedCdm := encodedCdms[0]
@@ -182,7 +182,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 }
 
 func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr *http.Request) {
-	w.SetHeader("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 	monsterPartialName := GetFormValue(hr, "term")
 	if monsterPartialName == "" {
 		fmt.Println(" no monster partial name in request")
@@ -201,8 +201,8 @@ func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr
 func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
 	startSeconds, startNanosecs, _ := os.Time()
-	w.SetHeader("Access-Control-Allow-Origin", "*")
-	w.SetHeader("Access-Control-Request-Method", "GET")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Request-Method", "GET")
 
 	fmt.Println("\n=== JsonGetHandler : Requete reçue ====================")
 	fmt.Println(" URL : " + hr.RawURL)

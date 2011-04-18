@@ -121,7 +121,7 @@ func (m *TksManager) ReadStandardDiploCsvFileIfNew() os.Error {
 	}
 
 	g := NewDiploGraph()
-	f, err := os.Open(standardDiploFilename, os.O_RDONLY, 0)
+	f, err := os.Open(standardDiploFilename)
 	if err != nil {
 		return err
 	}
@@ -132,7 +132,7 @@ func (m *TksManager) ReadStandardDiploCsvFileIfNew() os.Error {
 		return err
 	}
 
-	f, err = os.Open(trollDiploFilename, os.O_RDONLY, 0)
+	f, err = os.Open(trollDiploFilename)
 	if err != nil {
 		return err
 	}
@@ -164,7 +164,7 @@ func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
 		}
 	}
 
-	f, err := os.Open(filename, os.O_RDONLY, 0)
+	f, err := os.Open(filename)
 	if err != nil {
 		return err
 	}
@@ -221,7 +221,7 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 		}
 	}
 
-	f, err := os.Open(filename, os.O_RDONLY, 0)
+	f, err := os.Open(filename)
 	if err != nil {
 		return err
 	}

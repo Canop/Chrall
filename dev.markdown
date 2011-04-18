@@ -171,6 +171,10 @@ RECENTS / A TESTER :
 
 <- v1.09
 
+* suppression d'un bug qui empêchait l'affichage de la grille dans certaines conditions
+
+<- v1.10
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -214,13 +218,9 @@ P3 :
 * profil : affichage rapport tués/décés
 * bulles de bestiaire sur les gowaps ?
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
-* intégration d'un lien pour accéder au bestiaire (pour faire des recherches sur des monstres "ressemblant")
-* regarder si on ne peut pas récupérer des infos dans les scripts publics
 * mouches : récapitulatif (en haut) à la fois sur les mouches actuelles et sur le total (en comptant celles en vadrouille)
-* rendre les parsings plus robustes en privilégiant les expressions régulières plutôt que le comptage des lignes ou cellules
 * icône (un troll qui nage le crawl ?)
 * interface de troll (suivants identifiés)
-* grille : trolls amis/ennemis
 * corriger le calcul des prochaines DLA si on passe sur la vue des malus
 * grille/menu contextuel : ajout de notes sur des cases ou des things pour l'équipe (par exemple "passer CE portail" ou bien "C'est ce mouch'oo qui m'a piqué mes mouches" ou encore "à finir 90%").
 * profil : un onglet pour lister les notes (de soi et de ceux qui partagent avec nous). Ceci aura l'effet de bord d'offrir des "bookmarks" des trolls et monstres annotés
@@ -228,7 +228,6 @@ P3 :
 * poids de l'équipement : détailler ce qui est porté et ce qui est en besace
 * alarmes : fonction manuelle d'ajout d'alarme ("on a dit qu'on tapait à 11h33")
 * alarmes : ne pas perdre les alarmes (ajouter ?) quand on se loggue sur un autre troll
-* alarmes : fenêtre de popup dans le navigateur pour visualiser les alarmes, les désactiver et régler le délai avant DLA
 * alarmes : sauver les alarmes en cookies (ou ailleurs ? sur le serveur ?) pour les retrouver au lancement de Chrome même si on ne va pas sur MH
 * site web : aide détaillée/tutorial pour assurer que toutes les fonctions soient connues
 * préférences détaillées : transformation ou pas de la page d'accueil
@@ -252,5 +251,5 @@ NOTES :
 =======
 * pas de vrai concept d'équipe : chaque troll choisit un par un les trolls à qui il donne accés en lecture à ce qu'il mont(r)e. Et il doit être possible de bloquer les infos d'un autre joueur.
 * liste de technos : extensions chrome, git, javascript, ajax, github, mysql, jquery, go, mercurial, php, css
-* je viens de tomber sur la fonction fmt.Sscanf. Elle aurait sans doute permis d'écrire le parseur plus simplement.
 * pour le serveur, j'aurais peut-être pu aussi utiliser node.js. J'aime bien le go mais node.js semble sympa aussi...
+

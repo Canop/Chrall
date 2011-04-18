@@ -2,6 +2,11 @@
 Frontal pour la BD
 
 j'exploite ce connecteur mysql : https://github.com/Philio/GoMySQL
+
+Pour le mettre à jour, je me mets dans son répertoire et je fais
+   git fetch origin
+   git merge origin/master
+
 */
 
 package main

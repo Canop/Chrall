@@ -112,7 +112,7 @@ func (km *Killomètre) parseFichierTrolls(file *os.File) os.Error {
 		line, err = r.ReadString('\n')
 	}
 	if err != os.EOF {
-		fmt.Println("Error in parsing :")
+		fmt.Println("Error in parsing (parseFichierTrolls) :")
 		fmt.Println(err)
 		return err
 	}
@@ -128,7 +128,7 @@ func (km *Killomètre) parseFichierKills(file *os.File) os.Error {
 	}
 	km.NbReadFiles++
 	if err != os.EOF {
-		fmt.Println("Error in parsing :")
+		fmt.Println("Error in parsing (parseFichierKills) :")
 		fmt.Println(err)
 		return err
 	}
@@ -156,7 +156,7 @@ func (km *Killomètre) traiteFichierKills(f *os.File) os.Error {
 
 // fichier ou répertoire
 func (km *Killomètre) traiteNomFichierKills(filename string) os.Error {
-	f, err := os.Open(filename, os.O_RDONLY, 0)
+	f, err := os.Open(filename)
 	if err != nil {
 		return err
 	}
@@ -190,7 +190,7 @@ func (km *Killomètre) CalculeClassements(trollsByTrollKills []*Troll, trollsByM
 }
 
 func WriteTrollsToFile(filename string, trolls []*Troll) os.Error {
-	f, err := os.Open(filename, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0777)
+	f, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
@@ -216,7 +216,7 @@ func main() {
 	km := new(Killomètre)
 
 	//> lecture du fichier des trolls
-	f, err := os.Open(cheminFichierTrolls, os.O_RDONLY, 0)
+	f, err := os.Open(cheminFichierTrolls)
 	if err != nil {
 		fmt.Printf("Erreur à l'ouverture du fichier des trolls : %v", err)
 		return
