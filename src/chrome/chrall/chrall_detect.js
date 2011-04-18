@@ -7,7 +7,7 @@ if (paragraph.length>0) {
 		console.log('refresh scheduled');
 		setTimeout(function() {
 			document.location.reload();
-		}, 10000);
+		}, 5000);
 	} else {
 		html += "<br>De plus, vous disposez de la dernière version. Il n'est donc a priori pas nécessaire de cliquer sur le lien ci-dessus.";
 	}
