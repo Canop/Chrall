@@ -105,7 +105,7 @@ function Chrall_makeGridHtml() {
 			if (x===player.x && y===player.y) {
 				cellContent[c++] = "<a class=ch_player href=\"javascript:EPV("+player.id+");\"";
 				cellContent[c++] = " id="+player.id;
-				if (t.isIntangible) cellContent[c++] = " intangible";
+				if (player.isIntangible) cellContent[c++] = " intangible";
 				cellContent[c++] = ">"+player.z+":Vous êtes ici</a>";
 				//cellMenuInfos = "cell00";
 				cellId='cellp0p0';
@@ -533,7 +533,7 @@ function Chrall_analyseAndReformatView() {
 			var message = link.attr("message");
 			var trollId = link.attr('id');
 			if (trollId) {
-				bubble(link, message, "bub_troll", "http://localhost:9090/chrall/json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
+				bubble(link, message, "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
 			}
 		}
 	);	
