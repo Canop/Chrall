@@ -193,7 +193,7 @@ P1 :
 * profil : après la mise à jour de Chrall, recommander d'utiliser Refresh
 * BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
-* comprendre la gestion des packages en go pour factoriser le code online et offline
+* comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
 
 P2 :
 ----
