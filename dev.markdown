@@ -178,6 +178,7 @@ RECENTS / A TESTER :
 * grille : rendre déplaçable la grille par glissage de la souris
 * grille : centrage au double-clic
 
+<- v1.11
 
 EN COURS :
 ==========
