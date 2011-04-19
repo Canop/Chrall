@@ -1,13 +1,8 @@
-var horizontalViewLimit; // l'orizon actuel, inférieur ou égal à la vue maximale
+var horizontalViewLimit; // l'horizon actuel, inférieur ou égal à la vue maximale
 var viewMaxSight; // récupérée dans l'analyse de la vue ceci correspond à la vue maximale possible
 var grid; // la grille. Tout ce qui est visible est stocké là dedans
 var objectsOnPlayerCell;
-var nbPlacesInView = 0;
-var nbTrollsInView = 0;
-var nbMonstersInView = 0;
-var nbObjectsInView = 0;
-var nbMushroomsInView = 0;
-var nbCenotaphsInView = 0;
+
 
 
 /**
@@ -245,7 +240,7 @@ function Chrall_analyseMonsterTable(monsterTable) {
 			monster.y = parseInt($(cells[i++]).text());
 			monster.z = parseInt($(cells[i++]).text());
 			grid.getCellNotNull(monster.x, monster.y).addMonster(monster);
-			nbMonstersInView++;
+			grid.nbMonstersInView++;
 		}
 	);
 	// TODO trier par z pour la construction de la grille
@@ -268,7 +263,7 @@ function Chrall_analyseTrollTable(table) {
 			troll.y = parseInt($(cells[i++]).text());
 			troll.z = parseInt($(cells[i++]).text());
 			grid.getCellNotNull(troll.x, troll.y).addTroll(troll);
-			nbTrollsInView++;
+			grid.nbTrollsInView++;
 		}
 	);
 }
@@ -284,7 +279,7 @@ function Chrall_analyseMushroomTable(table) {
 			thing.y = parseInt($(cells[i++]).text());
 			thing.z = parseInt($(cells[i++]).text());
 			grid.getCellNotNull(thing.x, thing.y).addMushroom(thing);
-			nbMushroomsInView++;
+			grid.nbMushroomsInView++;
 		}
 	);
 }
@@ -302,7 +297,7 @@ function Chrall_analysePlaceTable(table) {
 			thing.y = parseInt($(cells[i++]).text());
 			thing.z = parseInt($(cells[i++]).text());
 			grid.getCellNotNull(thing.x, thing.y).addPlace(thing);
-			nbPlacesInView++;
+			grid.nbPlacesInView++;
 		}
 	);
 }
@@ -310,8 +305,8 @@ function Chrall_analyseObjectTable(table) {
 	// optm : cette méthode consomme beaucoup, peut-être l'itération sur les cellules
 	// il faudrait peut-être, comme il n'y a pas de vraies recherches, itérer directement sur le DOM
 	var lines = $(table).find("tr.mh_tdpage");
-	nbObjectsInView = lines.length;
-	for (var l=0; l<nbObjectsInView; l++) {
+	grid.nbObjectsInView = lines.length;
+	for (var l=0; l<grid.nbObjectsInView; l++) {
 		var thing = new Thing();
 		var cells = $(lines[l]).find("td");
 		var i=1;
@@ -335,7 +330,7 @@ function Chrall_analyseCenotaphTable(table) {
 			thing.y = parseInt($(cells[i++]).text());
 			thing.z = parseInt($(cells[i++]).text());
 			grid.getCellNotNull(thing.x, thing.y).addCenotaph(thing);
-			nbCenotaphsInView++;
+			grid.nbCenotaphsInView++;
 		}
 	);
 }
@@ -440,36 +435,38 @@ function Chrall_analyseAndReformatView() {
 	
 	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 	var tables = $("table.mh_tdborder");
-	var html="<ul class=tabs view>";
-	html += "<li><a href=#tabGrid>Grille</a></li>";
-	html += "<li><a href=#tabTrolls>Trolls ("+nbTrollsInView+")</a></li>";
-	html += "<li><a href=#tabMonsters>Monstres ("+nbMonstersInView+")</a></li>";
-	html += "<li><a href=#tabPlaces>Lieux ("+nbPlacesInView+")</a></li>";
-	html += "<li><a href=#tabObjects>Trésors ("+nbObjectsInView+")</a></li>";
-	html += "<li><a href=#tabMushrooms>Champignons ("+nbMushroomsInView+")</a></li>";
-	html += "<li><a href=#tabCenotaphs>Cénotaphes ("+nbCenotaphsInView+")</a></li>";
-	html += "<li><a href=#tabSettings>Réglages</a></li>";
-	html += "</ul>";
-	html += "<div class=tab_container><br><br>";
-	html += "<div id=tabGrid class=tab_content><br><br>";
-	html += Chrall_makeFiltersHtml();
-	html += "<div class=grid_holder>";
-	html += Chrall_makeGridHtml();
-	html += "</div>";
-	html += "</div>";
-	html += "<div id=tabTrolls class=tab_content></div>";
-	html += "<div id=tabMonsters class=tab_content></div>";
-	html += "<div id=tabPlaces class=tab_content></div>";
-	html += "<div id=tabObjects class=tab_content></div>";
-	html += "<div id=tabMushrooms class=tab_content></div>";
-	html += "<div id=tabCenotaphs class=tab_content></div>";
-	html += "<div id=tabSettings class=tab_content></div>";
-	html += "</div><br><br><br><br><br><br><br><br><br><br><br>";
+	var html = []
+	var h = 0;
+	html[h++] = "<ul class=tabs view>";
+	html[h++] = "<li><a href=#tabGrid>Grille</a></li>";
+	html[h++] = "<li><a href=#tabTrolls>Trolls ("+grid.nbTrollsInView+")</a></li>";
+	html[h++] = "<li><a href=#tabMonsters>Monstres ("+grid.nbMonstersInView+")</a></li>";
+	html[h++] = "<li><a href=#tabPlaces>Lieux ("+grid.nbPlacesInView+")</a></li>";
+	html[h++] = "<li><a href=#tabObjects>Trésors ("+grid.nbObjectsInView+")</a></li>";
+	html[h++] = "<li><a href=#tabMushrooms>Champignons ("+grid.nbMushroomsInView+")</a></li>";
+	html[h++] = "<li><a href=#tabCenotaphs>Cénotaphes ("+grid.nbCenotaphsInView+")</a></li>";
+	html[h++] = "<li><a href=#tabSettings>Réglages</a></li>";
+	html[h++] = "</ul>";
+	html[h++] = "<div class=tab_container view>";
+	html[h++] = "<div id=tabGrid class=tab_content>";
+	html[h++] = Chrall_makeFiltersHtml();
+	html[h++] = "<div id=grid_holder>";
+	html[h++] = Chrall_makeGridHtml();
+	html[h++] = "</div>";
+	html[h++] = "</div>";
+	html[h++] = "<div id=tabTrolls class=tab_content scroll></div>";
+	html[h++] = "<div id=tabMonsters class=tab_content scroll></div>";
+	html[h++] = "<div id=tabPlaces class=tab_content scroll></div>";
+	html[h++] = "<div id=tabObjects class=tab_content scroll></div>";
+	html[h++] = "<div id=tabMushrooms class=tab_content scroll></div>";
+	html[h++] = "<div id=tabCenotaphs class=tab_content scroll></div>";
+	html[h++] = "<div id=tabSettings class=tab_content scroll></div>";
+	html[h++] = "</div>";
 	
 	var time_after_grid_building = (new Date()).getTime(); // <= prof
 
 	
-	$($("table.mh_tdborder")[0]).parent().parent().prepend(html);	
+	$($("table.mh_tdborder")[0]).parent().parent().prepend(html.join(''));	
 	$("#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 	$("#tabMonsters").append(tables[1]);
 	$("#tabTrolls").append(tables[2]);
@@ -493,7 +490,9 @@ function Chrall_analyseAndReformatView() {
 	});
 	
 	var time_after_grid_append = (new Date()).getTime(); // <= prof
-
+	
+	$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
+	$('#grid_holder').dragscrollable({dragSelector: '#grid'});
 	
 	//> on ajoute le popup sur les monstres
 	$('a[href*="EMV"]').each(
@@ -621,25 +620,31 @@ function Chrall_analyseAndReformatView() {
 		}
 	);
 	
+	var $gridHolder = $('#grid_holder');
+	var $playerCell = $('#cellp0p0');
 	var gotoPlayer = function() {
-		var playerCell = $('#cellp0p0');
-		$('body').animate(
+		hideOm();
+		scrollInProgress = true;
+		$gridHolder.animate(
 			{
-				scrollLeft: (playerCell.offset().left + (playerCell.innerWidth()-window.innerWidth)/2),
-				scrollTop: (playerCell.offset().top + (playerCell.innerHeight()-window.innerHeight)/2)
+				scrollLeft: ($gridHolder.scrollLeft()+$playerCell.offset().left + ($playerCell.innerWidth()-window.innerWidth)/2),
+				scrollTop: ($gridHolder.scrollTop()+$playerCell.offset().top + ($playerCell.innerHeight()-window.innerHeight)/2)
 			},
-			'slow'
-		);		
+			'slow',
+			function() {
+				scrollInProgress = false;
+			}
+		);
 	}
 	//> on centre la vue sur la cellule du joueur
 	setTimeout(
-		function() {
-			gotoPlayer();
-		},
+		gotoPlayer,
 		100
 	);
 	//> bouton de centrage
 	$('#goto_player').click(gotoPlayer);
+	//> hook pour le centrage au double-clic
+	$('#grid').dblclick(gotoPlayer);
 
 	var time_end = (new Date()).getTime(); // <= prof
 	console.log("Profiling - Vue de " + horizontalViewLimit);

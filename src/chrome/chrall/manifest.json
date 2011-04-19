@@ -16,6 +16,7 @@
 			],
 			"js": [
 				"jquery.js",
+				"dragscrollable.js",
 				"date-fr-FR.js",
 				"chrall_bubbles.js",
 				"chrall_objectMenu.js",

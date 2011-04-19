@@ -15,13 +15,13 @@ var omExists = false;
 var omEnterTimeoutID;
 var omCloseTimeoutID;
 var omTarget;
-var omTopMenu;
-var omBottomMenu;
+var omTopMenu = null;
+var omBottomMenu = null;
 
 
 function eventIsOver(event, o) {
 	// FIXME il y a un problème de décalage vertical de quelques pixels que je ne comprends pas (sur le haut de la zone au moins)
-	if (!o) return false;
+	if ((!o) || o==null) return false;
 	var pos = o.offset();
 	var ex = event.pageX;
 	var ey = event.pageY;
@@ -53,8 +53,14 @@ function checkHideOm() {
 	}, 200);
 }
 function hideOm() {
-	if (omTopMenu) omTopMenu.remove();
-	if (omBottomMenu) omBottomMenu.remove();
+	if (omTopMenu!=null) {
+		omTopMenu.remove();
+		omTopMenu = null;
+	}
+	if (omBottomMenu!=null) {
+		omBottomMenu.remove();
+		omBottomMenu = null;
+	}
 }
 
 function showOm(target, text_top, text_bottom) {
@@ -115,7 +121,7 @@ function objectMenu(
 	html_bottom // le contenu du menu en dessous (ou '')
 ) {
 	target.mouseenter(function(event) {
-		if (onOmTopMenu || onOmBottomMenu) return false;
+		if (scrollInProgress || onOmTopMenu || onOmBottomMenu) return false;
 		onOmTarget = true;
 		showOm($(this), html_top, html_bottom);
 	});

@@ -37,6 +37,12 @@ function Grid(xp, yp, sight) {
 	var c = 2*this.sight+1;
 	this.cells = new Array(c);
 	for (var i=0; i<c; i++) this.cells[i] = new Array(c);
+	this.nbPlacesInView = 0;
+	this.nbTrollsInView = 0;
+	this.nbMonstersInView = 0;
+	this.nbObjectsInView = 0;
+	this.nbMushroomsInView = 0;
+	this.nbCenotaphsInView = 0;
 }
 
 // renvoie la cellule de coordonnées passées.

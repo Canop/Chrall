@@ -8,10 +8,10 @@ ul.tabs {
 	background-image:url("http://games.mountyhall.com/MH_Packs/packMH_parchemin/fond/fond2.jpg");
 }
 ul.tabs[view] {
-	position        : fixed;
+	position : fixed;
 	top:0;
 	left:0;
-	width: 100%;
+	right:0;
 }
 ul.tabs li {
 	float: left;
@@ -47,8 +47,18 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 	border-top: none;
 	overflow: hidden;
 	clear: both;
-	float: left; width: 100%;
-	background: #fff;
+	left:0;
+	right:0;
+	background: white;
+}
+.tab_container[view] {
+	position : fixed;
+	top:28px;
+	left:0;
+	right:0;
+	bottom:0;
+	margin: 0;
+	padding: 0;
 }
 .tab_content {
 	padding-top: 5px;
@@ -56,4 +66,14 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 	padding-left: 1px;
 	padding-right: 1px;
 	font-size: 1.2em;
+}
+ul.tab_container[view] .tab_content {
+	position : fixed;
+	top:28px;
+	left:0;
+	right:0;
+	bottom:0;
+}
+.tab_content[scroll] {
+	overflow-y:scroll;
 }

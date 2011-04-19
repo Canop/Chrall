@@ -175,44 +175,44 @@ RECENTS / A TESTER :
 
 <- v1.10
 
+* grille : rendre déplaçable la grille par glissage de la souris
+* grille : centrage au double-clic
+
+
 EN COURS :
 ==========
 * apprendre le langage go
-* profil : vérifier qu'on affiche correctement les infos de l'AM quand la fatigue est faible
-* BUG : les sonneries ne marchent pas toujours...
 
 TODO :
 ======
 P1 :
 ----
-* profil d'un autre troll : menu pour definir le troll ou sa guilde en ami ou ennemi (même si on n'est pas guildé -> uniquement pour bd chrall) [pb : authentification ?]
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
-* BUG : le nombre de kills de monstres que j'affiche dans la liste est inférieur à celui du "Tableau de chasse"... sans doute des trous dans la liste du serveur ftp mais la liste de discussion de MH est morte...
-* bulles des monstres : indiquer leur jet de stabilité.
-* cron : sauvegardes de la bd
+* bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * profil : après la mise à jour de Chrall, recommander d'utiliser Refresh
-* BUG : je crois que les messages de l'AM déconnent
 * affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
 
 P2 :
 ----
+* BUG : le nombre de kills de monstres que j'affiche dans la liste est inférieur à celui du "Tableau de chasse"... sans doute des trous dans la liste du serveur ftp mais la liste de discussion de MH est morte...
+* profil d'un autre troll : menu pour definir le troll ou sa guilde en ami ou ennemi (même si on n'est pas guildé -> uniquement pour bd chrall) [pb : authentification ?]
 * profil : indiquer les alarmes programmées
 * lien pour les lieux proches bricotrolls
 * affichage quelque part du nombre de CDM transmises via Chrall
 * grille : marquer les trolls ennemis ou amis
+* cron : sauvegardes de la bd
 
 P3 :
 ----
 * en réponse à un envoi de CDM répondre en intégrant les données des autres CDM du même monstre et en évaluant les PV restant
 * je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
-* grille : rendre déplaçable la grille par glissage de la souris
 * lors d'un TP, affichage d'une carte des trous de météorite
 * détection des trolls malades
+* grille : rendre cliquables les cénotaphes
 * calcul des bonus totaux des mouches : séparation entre présentes & toutes
 * grille : coût des déplacements et charges (en tenant compte du gluage éventuel) _(attention : besoin scripts publics)_
 * équipement : afficher les bonus [demande Fabdi](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=13&p=71#p71)
-* grille : afficher les px rapportés par les monstres (nécessite de stocker ou récupérer le niveau du troll du joueur)
 * grille/bulles monstres : afficher (après activation d'une option) moyenne et écart-type des caractéristiques
 * liste des trolls : envoi de MP par case à cocher (comme dans ZZ)
 * profil : affichage rapport tués/décés

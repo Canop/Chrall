@@ -86,7 +86,7 @@ function bubble(
 		bubbleInitDone = true;
 	}
 	target.mouseenter(function(event) {
-		if (onBubbleDiv || onBubbleTarget) return false;
+		if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
 		onBubbleTarget = true;
 		if (ajaxUrl) {
 			$.ajax(
@@ -102,15 +102,6 @@ function bubble(
 		}
 	});
 	target.mouseout(function(){
-		//~ var pos = bubbleTarget.offset();
-		//~ if (
-			//~ event.pageX>pos.left
-			//~ && event.pageX<pos.left+bubbleTarget.width()
-			//~ && event.pageY>pos.top
-			//~ && event.pageY<pos.top+bubbleTarget.height()
-		//~ ) {
-			//~ return;
-		//~ }
 		onBubbleTarget = false;
 		bubbleCloseTimeoutID = setTimeout(hideBubble, 150);
 	});

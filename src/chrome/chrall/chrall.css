@@ -4,10 +4,16 @@ div.floatTopRight {
 	top:4;
 	z-index:10;
 }
-div.grid_holder {
+#grid_holder {
 	padding:0px;
 	margin:0px;
-	width: 100%;
+	position:fixed;
+	left:0;
+	top:32px;
+	right:0;
+	bottom:0;
+	overflow: auto;
+	border-left: 1px solid #999;
 }
 table#grid {
 	background: white;
@@ -15,6 +21,10 @@ table#grid {
 	border: thin solid #333333;
 	font-size:14px;
 	text-align:center;
+	cursor:move;
+	-moz-user-select: none;
+	user-select: none;
+	-webkit-user-select: none;
 }
 table#grid th {
 	border: thin solid #333333;
@@ -87,6 +97,7 @@ form#gridFiltersForm {
 	padding-left: 8px;
 	padding-right: 8px;
 	border-radius: 10px;
+	z-index:3;
 }
 form#gridFiltersForm img.butt {
 	margin-right: 6px;
