@@ -30,7 +30,6 @@ function getTrollIdthenExecute(f) {
 		{"get_trollId": "s'il-te-plaît?"},
 		function(answer) {
 			player.id = answer.trollId;
-			console.log('player trollID : '+player.id);
 			f.call();
 		}
 	);

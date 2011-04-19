@@ -493,74 +493,127 @@ function Chrall_analyseAndReformatView() {
 	
 	$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
 	$('#grid_holder').dragscrollable({dragSelector: '#grid'});
+
+	setTimeout( // afin d'accélérer l'affichage initial, on  repousse un peu l'ajout des bulles et menus
+		function() {
+			//> on ajoute le popup sur les monstres
+			$('a[href*="EMV"]').each(
+				function() {
+					var link = $(this);
+					var linkText = link.text();
+					var message = link.attr("message");
+					if (link.attr('class')=='ch_gowap') { 
+						if (message) {
+							bubble(link, message, "bub_gowap");
+						}
+					} else {
+						// ce qui suit est peut-être un peu trop compliqué mais je n'arrive pas à obtenir un bon formatage (sans retour chariot) des liens des monstres (z:nom) sans mettre le z (la profondeur) dans le a
+						var nomMonstre;
+						var requestId;
+						var monsterId;
+						if (message) {
+							//> lien dans la grille
+							nomMonstre = link.attr("nom_complet_monstre");
+							monsterId = link.attr('id');
+							requestId = decodeURIComponent(nomMonstre);
+						} else {
+							//> lien dans la table
+							nomMonstre = encodeURIComponent(linkText);
+							message = linkText;
+							requestId = linkText;
+						}
+						bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
+					}
+				}
+			);
+
+			//> on ajoute un popup sur les trolls (pour avoir la distance de charge, et des stats de kill par retour jsonp)
+			$("#grid a.ch_troll").each(
+				function() {
+					var link = $(this);
+					var message = link.attr("message");
+					var trollId = link.attr('id');
+					if (trollId) {
+						bubble(link, message, "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
+					}
+				}
+			);	
+
+			//> on fait pareil pour le joueur
+			$("#grid a.ch_player").each(
+				function() {
+					var link = $(this);
+					var trollId = link.attr('id');
+					if (trollId==0) {
+						bubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
+					} else {
+						bubble(link, '', "bub_player", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
+					}
+				}
+			);	
 	
-	//> on ajoute le popup sur les monstres
-	$('a[href*="EMV"]').each(
-		function() {
-			var link = $(this);
-			var linkText = link.text();
-			var message = link.attr("message");
-			if (link.attr('class')=='ch_gowap') { 
-				if (message) {
-					bubble(link, message, "bub_gowap");
+			//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
+			$("#grid span.ch_object").each(
+				function() {
+					var o = $(this);
+					var text = o.attr("bub");
+					if (text) {
+						bubble(o, text, "bub_object");
+					} else {
+						bubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
+					}
 				}
-			} else {
-				// ce qui suit est peut-être un peu trop compliqué mais je n'arrive pas à obtenir un bon formatage (sans retour chariot) des liens des monstres (z:nom) sans mettre le z (la profondeur) dans le a
-				var nomMonstre;
-				var requestId;
-				var monsterId;
-				if (message) {
-					//> lien dans la grille
-					nomMonstre = link.attr("nom_complet_monstre");
-					monsterId = link.attr('id');
-					requestId = decodeURIComponent(nomMonstre);
-				} else {
-					//> lien dans la table
-					nomMonstre = encodeURIComponent(linkText);
-					message = linkText;
-					requestId = linkText;
+			);
+			
+			//> on ajoute le menu des DE, le titre de chaque cellule
+			var makeDeLink = function(x, y, z) {
+				var cost = (player.cellIsFree ? 1 : 2) + (z===player.z ? 0 : 1);
+				if (cost>player.pa) return '';
+				return '<a href="javascript:console.log(\'AE\');playDE('+(x-player.x)+','+(y-player.y)+','+(z-player.z)+');">DE '+x+' '+y+' '+z+'</a>';
+			}
+			// D'abord il faut voir si on a des PA et combien. On doit demander ça à la page de fond qui elle-même a reçu l'info par
+			//  la petite frame d'action en bas de l'écran.
+			// Pour l'instant on ne teste pas le gluage parce que ça imposerait d'être passé récemment par le profil
+			chrome.extension.sendRequest(
+				{"get_pa": "s'il-te-plaît?"},
+				function(answer) {
+					if (answer.pa>=0) player.pa = answer.pa;
+					$('#grid td[grid_x]').each(function() {
+						var o = $(this);
+						var x = parseInt(o.attr('grid_x'));
+						var y = parseInt(o.attr('grid_y'));
+						var links = '';
+						// on ajoute au menu la liste des trésors aux pieds du joueur, pas qu'il oublie de les prendre...
+						if (x===player.x && y===player.y) {
+							if (objectsOnPlayerCell.length>4) {
+								links += "<span class=ch_pl_object>Il y a " + objectsOnPlayerCell.length + " trésors à vos pieds.</span>";
+							} else if (objectsOnPlayerCell.length>0) {
+								links += '<span class=ch_pl_object>A vos pieds :</span>';
+								for (var i=0; i<objectsOnPlayerCell.length; i++) {
+									links += '<br><span class=ch_pl_object>'+objectsOnPlayerCell[i].name+'</span>';							
+								}
+							}
+						}
+						// liste des DE possibles
+						if (answer.pa>1 || (player.cellIsFree && answer.pa>0)) {
+							var deRange = player.z===0 ? 2 : 1;
+							var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
+							if (cellIsAccessibleByDe) {
+								if (player.z<0) links += (makeDeLink(x, y, player.z+1));
+								if (x!=player.x || y!=player.y) links += (makeDeLink(x, y, player.z));
+								links += (makeDeLink(x, y, player.z-1));
+							}
+						}
+									
+						objectMenu(
+							o,
+							x + " " + y,
+							links
+						);
+					});				
 				}
-				bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
-			}
-		}
-	);
-
-	//> on ajoute un popup sur les trolls (pour avoir la distance de charge, et des stats de kill par retour jsonp)
-	$("#grid a.ch_troll").each(
-		function() {
-			var link = $(this);
-			var message = link.attr("message");
-			var trollId = link.attr('id');
-			if (trollId) {
-				bubble(link, message, "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
-			}
-		}
-	);	
-
-	//> on fait pareil pour le joueur
-	$("#grid a.ch_player").each(
-		function() {
-			var link = $(this);
-			var trollId = link.attr('id');
-			if (trollId==0) {
-				bubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
-			} else {
-				bubble(link, '', "bub_player", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
-			}
-		}
-	);	
-
-	//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
-	$("#grid span.ch_object").each(
-		function() {
-			var o = $(this);
-			var text = o.attr("bub");
-			if (text) {
-				bubble(o, text, "bub_object");
-			} else {
-				bubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
-			}
-		}
+			);
+		}, 2000
 	);
 
 	//> on outille le select de réduction de vue
@@ -571,54 +624,6 @@ function Chrall_analyseAndReformatView() {
 		$('form[name="LimitViewForm"]').submit();
 	});
 
-	//> on ajoute le menu des DE, le titre de chaque cellule
-	var makeDeLink = function(x, y, z) {
-		var cost = (player.cellIsFree ? 1 : 2) + (z===player.z ? 0 : 1);
-		if (cost>player.pa) return '';
-		return '<a href="javascript:console.log(\'AE\');playDE('+(x-player.x)+','+(y-player.y)+','+(z-player.z)+');">DE '+x+' '+y+' '+z+'</a>';
-	}
-	// D'abord il faut voir si on a des PA et combien. On doit demander ça à la page de fond qui elle-même a reçu l'info par
-	//  la petite frame d'action en bas de l'écran.
-	// Pour l'instant on ne teste pas le gluage parce que ça imposerait d'être passé récemment par le profil
-	chrome.extension.sendRequest(
-		{"get_pa": "s'il-te-plaît?"},
-		function(answer) {
-			if (answer.pa>=0) player.pa = answer.pa;
-			$('#grid td[grid_x]').each(function() {
-				var o = $(this);
-				var x = parseInt(o.attr('grid_x'));
-				var y = parseInt(o.attr('grid_y'));
-				var links = '';
-				// on ajoute au menu la liste des trésors aux pieds du joueur, pas qu'il oublie de les prendre...
-				if (x===player.x && y===player.y) {
-					if (objectsOnPlayerCell.length>4) {
-						links += "<span class=ch_pl_object>Il y a " + objectsOnPlayerCell.length + " trésors à vos pieds.</span>";
-					} else if (objectsOnPlayerCell.length>0) {
-						links += '<span class=ch_pl_object>A vos pieds :</span>';
-						for (var i=0; i<objectsOnPlayerCell.length; i++) {
-							links += '<br><span class=ch_pl_object>'+objectsOnPlayerCell[i].name+'</span>';							
-						}
-					}
-				}
-				// liste des DE possibles
-				if (answer.pa>1 || (player.cellIsFree && answer.pa>0)) {
-					var deRange = player.z===0 ? 2 : 1;
-					var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
-					if (cellIsAccessibleByDe) {
-						if (player.z<0) links += (makeDeLink(x, y, player.z+1));
-						if (x!=player.x || y!=player.y) links += (makeDeLink(x, y, player.z));
-						links += (makeDeLink(x, y, player.z-1));
-					}
-				}
-							
-				objectMenu(
-					o,
-					x + " " + y,
-					links
-				);
-			});				
-		}
-	);
 	
 	var $gridHolder = $('#grid_holder');
 	var $playerCell = $('#cellp0p0');
