@@ -50,7 +50,7 @@ func (bd *BucketDecoder) Decode(input string, store *CdmStore) {
 					bd.Message += "Coucou<br>"
 				}
 			}
-		} else if cdm := NewCdm(lines[numLine:]); cdm != nil { // là on voit les avantages du langage go ! :)
+		} else if cdm := NewCdm(lines[numLine:]); cdm != nil {
 			currentCdm = cdm
 			bd.addCdm(currentCdm)
 			numLineAtCdmStart = numLine

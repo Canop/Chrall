@@ -29,8 +29,6 @@ div#title_stripe {
 	box-shadow: 0px 10px 15px #666;
 	-moz-box-shadow: 0px 10px 15px #666;
 	-webkit-box-shadow: 0px 10px 15px #666;
-}
-div#title_stripe {
 	font-family: Lucida Sans Unicode, Verdana;
 	color: white;
 	font-size: 20px;
@@ -166,3 +164,19 @@ img.screenshot {
 	-webkit-box-shadow: 0px 10px 15px #666;
 }
 
+a.install {
+	background-color: blue;
+	border-top: 1px solid lightblue;
+	border-bottom: 1px solid darkblue;
+	margin : 4px;
+	padding: 8px;
+	border-radius: 10px;
+	text-decoration: none;
+	color: white;
+	font-weight: bold;
+	text-shadow: rgba(0,0,0,0.5) -1px 0, rgba(0,0,0,0.3) 0 -1px, rgba(255,255,255,0.5) 0 1px, rgba(0,0,0,0.3) -1px -2px;
+	box-shadow: 0 3px 5px #777;
+}
+a.install:hover {
+	color: orange;
+}

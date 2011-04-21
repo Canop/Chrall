@@ -220,10 +220,10 @@ a.gogo:hover {
 	box-shadow: 0px 4px 10px #666;
 	border-radius: 6px;
 	font-style:normal;
-	font-size: 12px;
+	font-size: 12px !important;
 	color: white;
 	padding: 4px;
-	z-index:2;
+	z-index:20;
 }
 #bubble td {
 	color: white;
@@ -312,4 +312,29 @@ a.gogo:hover {
 #ch_popm_trigger {
 	color: orange;
 	cursor: pointer;
+}
+
+#ch_pjpop_trigger {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index:3;
+	width:30px;
+	height:30px;
+	border-radius: 0 0 10px 0;
+}
+#ch_pjpop {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index:20;
+	width:8px;
+	height:8px;
+	border-radius: 0 0 10px 0;
+	background: -webkit-gradient(
+		linear,
+		left top, left bottom,
+		from(dodgerblue),
+		to(indigo)
+	);
 }

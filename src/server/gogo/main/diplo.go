@@ -159,12 +159,12 @@ func (g *DiploGraph) DescribeYourRelationsWith(yourTroll, yourGuild, hisTroll, h
 	if v != nil {
 		html += "<br>Ce que vous pensez de ce troll :<br>  &nbsp; "
 		html += v.ColoredText()
-	}	
+	}
 	v = g.Vertices[VerticeKey(true, hisTroll, true, yourTroll)]
 	if v != nil {
 		html += "<br>Ce que ce troll pense de vous :<br>  &nbsp; "
 		html += v.ColoredText()
-	}	
+	}
 	if yourGuild > 1 {
 		v = g.Vertices[VerticeKey(false, yourGuild, true, hisTroll)]
 		if v != nil {

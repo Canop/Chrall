@@ -30,3 +30,18 @@ func (be *BestiaryExtract) getGainPx(niveauTueur uint) string {
 	}
 	return fmt.Sprintf("entre %d et %d px", pxMin, pxMax)
 }
+
+// renvoie le min et le max de la blessure possible
+func (be *BestiaryExtract) getPvRestant(pourcentageBlessure uint) (pvMin, pvMax uint) {
+	if pourcentageBlessure >= 95 {
+		pvMin = 1
+	} else {
+		pvMin = (100 - pourcentageBlessure - 5) * be.Fusion.PointsDeVie_min / 100
+	}
+	if pourcentageBlessure <= 5 {
+		pvMax = be.Fusion.PointsDeVie_max
+	} else {
+		pvMax = (100 - pourcentageBlessure + 5) * be.Fusion.PointsDeVie_max / 100
+	}
+	return pvMin, pvMax
+}

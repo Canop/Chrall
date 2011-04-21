@@ -163,9 +163,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 				fmt.Println("Erreur au stockage des CDM")
 			}
 			answerHtml = "Cette CDM ( "
-			for _, cdm := range bd.Cdm {
-				answerHtml += cdm.NomComplet
-			}
+			answerHtml += bd.Cdm[0].NomComplet
 			answerHtml += " ) a bien été reçue par gogochrall et stockée dans le bestiaire. Merci."
 		} else {
 			fmt.Println("Pas de CDM ou pas compris.")

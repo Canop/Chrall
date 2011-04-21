@@ -3,13 +3,13 @@ var paragraph = $("#browserInfos");
 if (paragraph.length>0) {
 	var html = "Chrall est déjà installé dans ce navigateur et fonctionne.";
 	if (chrallVersion != $("#version").text()) {
-		html += "<br>Votre version est plus ancienne (" + chrallVersion + "). Vous devriez cliquer sur le lien ci-dessus afin de mettre à jour Chrall.";
+		html += "<br>Votre version est plus ancienne (" + chrallVersion + "). Vous devriez cliquer sur le bouton ci-dessus afin de mettre à jour Chrall.";
 		console.log('refresh scheduled');
 		setTimeout(function() {
 			document.location.reload();
 		}, 5000);
 	} else {
-		html += "<br>De plus, vous disposez de la dernière version. Il n'est donc a priori pas nécessaire de cliquer sur le lien ci-dessus.";
+		html += "<br>De plus, vous disposez de la dernière version. Il n'est donc a priori pas nécessaire de cliquer sur le bouton ci-dessus.";
 	}
 	paragraph.html(html);
 }

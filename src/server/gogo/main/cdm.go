@@ -60,10 +60,13 @@ func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 	char = new(CdmChar)
 	name = strings.Trim(fields[0], " ")
 	char.Text = strings.Trim(strings.Join(fields[1:len(fields)], ":"), " ")
-	indexPar := strings.Index(char.Text, "(")
 	//fmt.Println("name:"+name)
 	//fmt.Println(" char.Text:"+char.Text)
-	if indexPar >= 0 {
+	if indexPc := strings.Index(char.Text, "%"); indexPc >= 0 {
+		// c'est le cas uniquement de la blessure
+		fields = strings.Fields(char.Text[0 : indexPc-1])
+		char.Value, _ = strconv.Atoui(fields[0])
+	} else if indexPar := strings.Index(char.Text, "("); indexPar >= 0 {
 		valuesText := char.Text[indexPar+1 : len(char.Text)]
 		if valuesText[len(valuesText)-1] == ')' {
 			valuesText = valuesText[0 : len(valuesText)-1]
@@ -150,6 +153,7 @@ type CDM struct {
 	Chargement_text           string // dépend de l'individu et du moment ?
 	BonusMalus_text           string // dépend de l'individu et du moment ?
 	PortéeDuPouvoir_text      string
+	Blessure                  uint // ce champ n'est pas persisté, mais il permet de calculer pour le donneur de CDM le nombre de PV restant
 
 	Chars map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
 }
@@ -233,7 +237,7 @@ func (cdm *CDM) AddChar(name string, c *CdmChar) {
 	} else if name == "Portée du Pouvoir" {
 		cdm.PortéeDuPouvoir_text = c.Text
 	} else if name == "Blessure" || name == "Blessure (Approximatif)" {
-		// on ne met pas de message, on ignore ça volontairement
+		cdm.Blessure = c.Value
 	} else if name == "Points de Vie restants (Approximatif)" {
 		// ça vient de MountyZilla : on ignore
 	} else {

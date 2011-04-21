@@ -11,13 +11,14 @@ function Chrall_analyseAndReformatPJView() {
 	
 	var html = [];
 	var h = 0;
-	html[h++] = '<div id=ch_popm>';
-	html[h++] = '<span id=ch_popm_trigger>C</span><span id=ch_popm_content style="display:none;">hrall';
-	html[h++] = '<br>player.id='+player.id;
-	html[h++] = '</span>';
+	html[h++] = '<div id=ch_pjpop_trigger>';
+	html[h++] = '<div id=ch_pjpop>';
+	html[h++] = '</div>';
 	html[h++] = '</div>';
 	console.log(html);
 	$(html.join('')).appendTo($('body'));
+
+	bubble($("#ch_pjpop_trigger"), '', "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&asker="+player.id+"&trollId="+viewedTrollId, viewedTrollId);
+
 	
-	$('#ch_popm_trigger').click(function(){$('#ch_popm_content').toggle();});
 }

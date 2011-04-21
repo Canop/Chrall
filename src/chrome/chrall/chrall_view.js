@@ -613,7 +613,7 @@ function Chrall_analyseAndReformatView() {
 					});				
 				}
 			);
-		}, 2000
+		}, 1000
 	);
 
 	//> on outille le select de réduction de vue

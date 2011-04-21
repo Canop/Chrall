@@ -67,7 +67,7 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
 	padding-right: 1px;
 	font-size: 1.2em;
 }
-ul.tab_container[view] .tab_content {
+.tab_container[view] .tab_content {
 	position : fixed;
 	top:28px;
 	left:0;

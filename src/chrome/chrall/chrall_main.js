@@ -80,7 +80,8 @@ switch (pageName) {
 		Chrall_handleMovePage();	
 		break;
 	case "PJView.php":
-		//getTrollIdthenExecute(Chrall_analyseAndReformatPJView); 
+		getTrollIdthenExecute(Chrall_analyseAndReformatPJView); 
+		//Chrall_analyseAndReformatPJView();
 		break;
 	case "PJView_Events.php":
 		Chrall_analysePJEventsView();

@@ -180,6 +180,10 @@ RECENTS / A TESTER :
 
 <- v1.11
 
+* vue : BUG : les tables ne sont à nouveau plus scrollables...
+* profil des trolls : approcher la souris du coin en haut à gauche ouvre la bulle du troll
+
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -188,6 +192,9 @@ TODO :
 ======
 P1 :
 ----
+* grille : pb du clic et double-clic en même temps sur un lien
+* en réponse à un envoi de CDM répondre en intégrant les données des autres CDM du même monstre et en évaluant les PV restant
+* site chrall : faire un lien d'install à gueule de bouton, ça sera plus clair...
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * profil : après la mise à jour de Chrall, recommander d'utiliser Refresh
@@ -206,8 +213,7 @@ P2 :
 
 P3 :
 ----
-* en réponse à un envoi de CDM répondre en intégrant les données des autres CDM du même monstre et en évaluant les PV restant
-* je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
+* bulles de trolls sur les liens/noms de trolls du fofo MH.
 * lors d'un TP, affichage d'une carte des trous de météorite
 * détection des trolls malades
 * grille : rendre cliquables les cénotaphes
@@ -247,6 +253,7 @@ P3 :
 * grille : flèches pour indiquer les directions des lieux intéressants (bookmarkés ou bien sur recherche)
 * système 'mappy' intégré en exploitant la liste des gares TGV du ftp MH
 * bulle et profil d'un troll : indiquer si le troll nous a tué ou la réciproque
+* je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
 
 NOTES :
 =======
