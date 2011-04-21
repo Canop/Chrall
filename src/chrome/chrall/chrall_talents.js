@@ -309,7 +309,7 @@ function getBubbleContentForSort(name) {
 			return html;
 
 		case "Identification des trésors" :
-			return "Je doute pouvoir vous aprendre quelque chose sur ce sujet...";
+			return "Je doute pouvoir vous apprendre quelque chose sur ce sujet...";
 
 		case "Invisibilité" :
 			return "Avec 3 PA vous pouvez gagner une invisibilité qui durera tant<br>que vous ne perdrez pas de PV et que vous ne bougerez pas.<br>... surtout ne pas pêter !";
