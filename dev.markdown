@@ -182,6 +182,8 @@ RECENTS / A TESTER :
 
 * vue : BUG : les tables ne sont à nouveau plus scrollables...
 * profil des trolls : approcher la souris du coin en haut à gauche ouvre la bulle du troll
+* en réponse à un envoi de CDM répondre en intégrant les données des autres CDM du même monstre et en évaluant les PV restant
+* Puits : il est possible de préciser le numéro du donateur
 
 
 EN COURS :
@@ -192,8 +194,8 @@ TODO :
 ======
 P1 :
 ----
+* forum MH: mettre une bulle directement sur les liens vers les trolls
 * grille : pb du clic et double-clic en même temps sur un lien
-* en réponse à un envoi de CDM répondre en intégrant les données des autres CDM du même monstre et en évaluant les PV restant
 * site chrall : faire un lien d'install à gueule de bouton, ça sera plus clair...
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)

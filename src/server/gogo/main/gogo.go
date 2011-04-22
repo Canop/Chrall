@@ -43,6 +43,7 @@ func (server *GogoServer) Start() {
 
 	jsonPostHandler := new(JsonPostHandler)
 	jsonPostHandler.store = cdmStore
+	jsonPostHandler.tksManager = tksManager
 	jsonPostHandler.parent = &chrallHandler.Hitter
 	http.Handle("/chrall/jsonp", jsonPostHandler)
 

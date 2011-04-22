@@ -91,7 +91,7 @@ func AsciiToUTF8(c []byte) string {
 }
 
 
-func (m *TksManager) ReadStandardDiploCsvFileIfNew() os.Error {
+func (m *TksManager) ReadDiploCsvFilesIfNew() os.Error {
 	standardDiploFilename := "/home/dys/chrall/Public_Diplomatie.txt"
 	trollDiploFilename := "/home/dys/chrall/Diplodotrolls.csv"
 	mustRead := false
@@ -308,11 +308,11 @@ func (m *TksManager) getGuildInfos(id int) *GuildInfos {
 
 func (m *TksManager) CheckDiploLoaded() {
 	now, _, _ := os.Time()
-	if now-m.lastDiploFileCheck > 300 {
+	if now-m.lastDiploFileCheck > 100 {
 		m.lastDiploFileCheck = now
-		err := m.ReadStandardDiploCsvFileIfNew()
+		err := m.ReadDiploCsvFilesIfNew()
 		if err != nil {
-			fmt.Println("Unable to load standard diplo file :")
+			fmt.Println("Unable to load diplo files :")
 			fmt.Println(err)
 		}
 	}

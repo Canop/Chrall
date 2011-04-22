@@ -16,6 +16,7 @@ import (
 type jsonRequest struct {
 	Action string "action"
 	Bucket string "bucket"
+	Author int "author"
 }
 
 type jsonAnswer struct {
@@ -26,6 +27,7 @@ type jsonAnswer struct {
 
 type JsonPostHandler struct {
 	ChrallHandler
+	tksManager *TksManager
 }
 
 
@@ -56,7 +58,7 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 
 	inserted := 0
 	if len(bd.Cdm) > 0 {
-		inserted, err = h.store.WriteCdms(bd.Cdm, 0)
+		inserted, err = h.store.WriteCdms(bd.Cdm, jr.Author)
 		if err != nil {
 			sendError(w, "écriture BD", err)
 		}
@@ -79,6 +81,17 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 			ja.Text += cdm.Nom
 		}
 		ja.Text += ")"
+		if len(bd.Cdm)==1 {
+			// dans ce cas on fait une analyse de la blessure, en exploitant si possible également les autres cdm de ce monstre
+			cdm := bd.Cdm[0]
+			be, err := h.store.ComputeMonsterStats(cdm.NomComplet, cdm.NumMonstre)
+			if err != nil {
+				fmt.Println(" Erreur : " + err.String())
+			} else {
+				html := be.Html(cdm.NumMonstre, jr.Author, h.tksManager, cdm.Blessure)
+				ja.Message += html				
+			}
+		}
 	}
 	ja.Text += "</li>"
 	ja.Text += "</ul>"

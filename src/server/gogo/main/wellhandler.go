@@ -16,12 +16,26 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		<script>
 			function sendForAnalyse() {
 				$("#envoi").show();
+				var authorId = -1;
+				var authorIdStr = $("#author").val().trim();
+				if (authorIdStr!="") {
+					try {
+						authorId = parseInt(authorIdStr)
+					} catch (e) {}
+				} else {
+					authorId = 0; // cas du champ vide : don anonyme
+				}
+				if (authorId<0 || isNaN(authorId)) {
+					$("p#resultContent").html("Numéro de troll invalide (ne mettez rien s'il  s'agit d'un don anonyme, mettez un numéro de troll sinon).");
+					return;
+				}
 				var bucketText = $("#bucket").val().replace(/\?/g, "-"); // si je ne fais pas cette élimination des "?", jquery fait des trucs bizarres à l'envoi
 				$.post(
 					"/chrall/jsonp",
 					JSON.stringify(
 						{
 							action: "pour",
+							author: authorId,
 							bucket: bucketText
 						}
 					),
@@ -45,6 +59,11 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		<p>Copiez vos CDM ci-dessous :
 			<form>
 				<textarea id=bucket rows=20></textarea>
+			</form>
+		</p>
+		<p>Indiquez éventuellement un numéro de troll donateur :
+			<form>
+				<input id=author>
 			</form>
 		</p>
 		<a class=gogo href="javascript:sendForAnalyse();">Déverser</a>

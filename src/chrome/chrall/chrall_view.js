@@ -540,17 +540,13 @@ function Chrall_analyseAndReformatView() {
 			);	
 
 			//> on fait pareil pour le joueur
-			$("#grid a.ch_player").each(
-				function() {
-					var link = $(this);
-					var trollId = link.attr('id');
-					if (trollId==0) {
-						bubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
-					} else {
-						bubble(link, '', "bub_player", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
-					}
-				}
-			);	
+			var link = $("#grid a.ch_player");
+			var trollId = link.attr('id');
+			if (trollId==0) {
+				bubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
+			} else {
+				bubble(link, '', "bub_player", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
+			}
 	
 			//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
 			$("#grid span.ch_object").each(

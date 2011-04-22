@@ -89,39 +89,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		fmt.Println(" Erreur : " + err.String())
 		return "Erreur : " + err.String()
 	}
-	var html string
-	if be == nil || be.NbCdm == 0 {
-		html = "g0g0chrall ne connait pas ce monstre"
-	} else {
-		if be.PreciseMonster && monsterId > 0 {
-			if be.NbMonsters < 2 {
-				html = "Cette estimation est basée sur une CDM unique de ce monstre"
-			} else {
-				html = fmt.Sprintf("Cette estimation est basée sur %d CDM du monstre.", be.NbCdm)
-			}
-		} else {
-			if be.NbMonsters < 2 {
-				if be.NbCdm == 1 {
-					html = "Une seule CDM a été reçue pour cette espèce."
-				} else {
-					html = fmt.Sprintf("Cette estimation est basée sur %d CDM d'un seul monstre.", be.NbCdm)
-				}
-			} else {
-				html = fmt.Sprintf("Cette estimation est basée sur %d CDM concernant %d monstres.", be.NbCdm, be.NbMonsters)
-			}
-		}
-		html += "<center>"
-		html += be.Fusion.HtmlTable()
-		html += "</center>"
-		if askerId > 0 {
-			ti := h.tksManager.getTrollInfos(askerId)
-			if ti != nil {
-				html += "Tuer ce monstre vous rapporterait " + be.getGainPx(ti.Niveau)
-			}
-		}
-	}
-	//fmt.Println("HTML:\n:" + html)
-	return html
+	return be.Html(monsterId, askerId, h.tksManager, 0)
 }
 
 func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *http.Request) {
@@ -156,6 +124,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 		bd.Decode(encodedCdm, h.store)
 		var answerHtml string
 		if len(bd.Cdm) > 0 {
+			cdm := bd.Cdm[0]
 			author := GetFormValue(hr, "author")
 			authorId, _ := strconv.Atoi(author)
 			_, err := h.store.WriteCdms(bd.Cdm, authorId)
@@ -163,13 +132,21 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 				fmt.Println("Erreur au stockage des CDM")
 			}
 			answerHtml = "Cette CDM ( "
-			answerHtml += bd.Cdm[0].NomComplet
+			answerHtml += cdm.NomComplet
 			answerHtml += " ) a bien été reçue par gogochrall et stockée dans le bestiaire. Merci."
+			be, err := h.store.ComputeMonsterStats(cdm.NomComplet, cdm.NumMonstre)
+			if err != nil {
+				fmt.Println(" Erreur : " + err.String())
+			} else {
+				answerHtml += "Estimation :<br>"				
+				answerHtml += be.Html(cdm.NumMonstre, authorId, h.tksManager, cdm.Blessure)
+			}
+
+			
 		} else {
 			fmt.Println("Pas de CDM ou pas compris.")
 			answerHtml += "Oups... Le serveur gogochrall n'a pas compris la requete :("
 		}
-
 		fmt.Fprint(w, "cdm_receive(")
 		mhtml, _ := json.Marshal(answerHtml)
 		w.Write(mhtml)

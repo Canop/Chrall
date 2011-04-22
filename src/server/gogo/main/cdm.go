@@ -160,15 +160,18 @@ type CDM struct {
 
 
 func (cdm *CDM) ComputeSHA1() []byte {
-	unhash := "cdm"
+	unhash := "cdm_v2_"
 	unhash += strconv.Uitoa(cdm.NumMonstre)
 	unhash += cdm.NomComplet
 	unhash += cdm.Mâle.GenderString()
 	unhash += cdm.Famille_text // parce qu'elle n'est pas toujours dans les Chars...
 	for key, value := range cdm.Chars {
+		//~ if cdm.Name=="Blessure" {
+			//~ continue
+		//~ }
 		unhash += key + value.Text
 	}
-	//fmt.Println(" UNHASH : " + unhash)
+	fmt.Println(" UNHASH : " + unhash)
 	var h hash.Hash = sha1.New()
 	h.Write([]byte(unhash))
 	return h.Sum()

@@ -105,7 +105,7 @@ func (g *DiploGraph) getNode(isTroll bool, id uint) *DiploNode {
 	return g.Guilds[id]
 }
 
-// charge un fichier de diplo (a priori il vaut mieux partir d'un graphe vide)
+// charge un fichier de diplo (il vaut mieux partir d'un graphe vide avant de charger un jeu de fichiers)
 func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader, ascii bool, subjectIsTroll bool) os.Error {
 	line, err := r.ReadString('\n')
 	for err == nil {
@@ -143,6 +143,9 @@ func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader, ascii bool, subjectIsTroll 
 		}
 		g.Vertices[v.Key()] = v
 		line, err = r.ReadString('\n')
+		if subjectIsTroll { // DEBUG de la diplo troll
+			fmt.Println(v.ColoredText())
+		}
 	}
 	if err != os.EOF {
 		fmt.Println("Erreur au parsage de la diplo :")
@@ -158,6 +161,11 @@ func (g *DiploGraph) DescribeYourRelationsWith(yourTroll, yourGuild, hisTroll, h
 	v := g.Vertices[VerticeKey(true, yourTroll, true, hisTroll)]
 	if v != nil {
 		html += "<br>Ce que vous pensez de ce troll :<br>  &nbsp; "
+		html += v.ColoredText()
+	}
+	v = g.Vertices[VerticeKey(true, yourTroll, false, hisGuild)]
+	if v != nil {
+		html += "<br>Ce que vous pensez de sa guilde :<br>  &nbsp; "
 		html += v.ColoredText()
 	}
 	v = g.Vertices[VerticeKey(true, hisTroll, true, yourTroll)]
