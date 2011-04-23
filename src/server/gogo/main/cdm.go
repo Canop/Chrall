@@ -65,7 +65,9 @@ func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 	if indexPc := strings.Index(char.Text, "%"); indexPc >= 0 {
 		// c'est le cas uniquement de la blessure
 		fields = strings.Fields(char.Text[0 : indexPc-1])
-		char.Value, _ = strconv.Atoui(fields[0])
+		if len(fields)>0 {
+			char.Value, _ = strconv.Atoui(fields[0])
+		}
 	} else if indexPar := strings.Index(char.Text, "("); indexPar >= 0 {
 		valuesText := char.Text[indexPar+1 : len(char.Text)]
 		if valuesText[len(valuesText)-1] == ')' {
@@ -160,15 +162,12 @@ type CDM struct {
 
 
 func (cdm *CDM) ComputeSHA1() []byte {
-	unhash := "cdm_v2_"
+	unhash := "cdm_v2"
 	unhash += strconv.Uitoa(cdm.NumMonstre)
 	unhash += cdm.NomComplet
 	unhash += cdm.Mâle.GenderString()
 	unhash += cdm.Famille_text // parce qu'elle n'est pas toujours dans les Chars...
 	for key, value := range cdm.Chars {
-		//~ if cdm.Name=="Blessure" {
-			//~ continue
-		//~ }
 		unhash += key + value.Text
 	}
 	fmt.Println(" UNHASH : " + unhash)

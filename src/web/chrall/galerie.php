@@ -61,7 +61,6 @@ ini_set('default_charset', 'utf-8');
 <p>Lorsque vous consultez le profil d'un troll, que ce soit depuis le jeu ou depuis le forum, vous pouvez consulter la "bulle Chrall" afin d'obtenir les informations qui ne sont pas lisibles sur le profil. Il suffit pour cela d'approcher la souris du coin en haut à gauche de la fenêtre :</p>
 <img class=screenshot src=screens/pjview_bulle.png>
 <p>Cette bulle s'affiche également si vous n'êtes pas connecté à votre troll mais les informations sont plus légères dans ce cas : les px du kill et la diplomatie ne sont alors pas disponibles.</p>
-<p><i>La bulle dans le profil ne sera disponible qu'en version 1.12</i></p>
 
 <h2>Ce que vous ne voyez pas</h2>
 <p>Certaines fonctions ne sont pas visibles mais audibles : 5 minutes avant votre DLA, un son discret (compatible avec une ambiance de bureau) vous alerte. <a href="javascript:document.getElementById('alarm').play();">Ecoutez</a>.

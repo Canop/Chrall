@@ -185,6 +185,7 @@ RECENTS / A TESTER :
 * en réponse à un envoi de CDM répondre en intégrant les données des autres CDM du même monstre et en évaluant les PV restant
 * Puits : il est possible de préciser le numéro du donateur
 
+<- v1.12
 
 EN COURS :
 ==========

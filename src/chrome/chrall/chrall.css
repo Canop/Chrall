@@ -338,3 +338,10 @@ a.gogo:hover {
 		to(indigo)
 	);
 }
+
+#gogochrall table.cdm td {
+	color: black !important;
+}
+#gogochrall table.cdm th {
+	color: black !important;
+}
