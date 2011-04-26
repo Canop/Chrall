@@ -157,6 +157,9 @@ func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader, ascii bool, subjectIsTroll 
 
 
 func (g *DiploGraph) DescribeYourRelationsWith(yourTroll, yourGuild, hisTroll, hisGuild uint) string {
+	if g==nil {
+		return "Diplo non disponible" // pb de synchro ?
+	}
 	html := ""
 	v := g.Vertices[VerticeKey(true, yourTroll, true, hisTroll)]
 	if v != nil {

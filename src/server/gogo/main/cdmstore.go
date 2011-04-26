@@ -223,10 +223,10 @@ func rowToBestiaryExtract(completeName string, row mysql.Row) *BestiaryExtract {
 	be.Fusion.NombreDAttaques = fieldAsUint(row[24])
 	be.Fusion.VitesseDeDéplacement_text = fieldAsString(row[25])
 	be.Fusion.VoirLeCaché_boolean = fieldAsBoolean(row[26])
-	be.Fusion.AttaqueADistance_boolean = fieldAsBoolean(row[26])
-	be.Fusion.DuréeTour_min = fieldAsUint(row[27])
-	be.Fusion.DuréeTour_max = fieldAsUint(row[28])
-	be.Fusion.PortéeDuPouvoir_text = fieldAsString(row[29])
+	be.Fusion.AttaqueADistance_boolean = fieldAsBoolean(row[27])
+	be.Fusion.DuréeTour_min = fieldAsUint(row[28])
+	be.Fusion.DuréeTour_max = fieldAsUint(row[29])
+	be.Fusion.PortéeDuPouvoir_text = fieldAsString(row[30])
 	return be
 }
 
@@ -240,6 +240,9 @@ func (store *CdmStore) ComputeMonsterStats(completeName string, monsterId uint) 
 		return nil, err
 	}
 	defer db.Close()
+	
+	// On utilise des max pour les champs de type chaine. C'est sans doute trop lourd (à moins que MySQL ne mette en place un index
+	//  spécifique). L'objectif réel est de récupérer la chaine la plus longue.
 
 	if monsterId != 0 {
 		sql := "select count(*), count(distinct num_monstre),"
@@ -263,6 +266,8 @@ func (store *CdmStore) ComputeMonsterStats(completeName string, monsterId uint) 
 		sql += " max(portee_du_pouvoir_text)"
 		sql += " from cdm where nom_complet=" + toMysqlString(completeName)
 		sql += " and num_monstre=" + strconv.Uitoa(monsterId)
+
+		//fmt.Println("SQL :\n" + sql + "\n")
 
 		err = db.Query(sql)
 		if err != nil {

@@ -7,7 +7,7 @@
 	"background_page": "chrome-extension.html",
 	"content_scripts": [
 		{
-			"matches": ["http://games.mountyhall.com/*"],
+			"matches": ["*://games.mountyhall.com/*", "*://www.mh.fr.nf/*"],
 			"all_frames" : true,
 			"run_at" : "document_end",
 			"css": [

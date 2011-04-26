@@ -167,10 +167,10 @@ func (be *BestiaryExtract) Html(monsterId uint, askerId int, m *TksManager, pour
 		html = "g0g0chrall ne connait pas ce monstre"
 	} else {
 		if be.PreciseMonster && monsterId > 0 {
-			if be.NbMonsters < 2 {
+			if be.NbCdm < 2 {
 				html = "Cette estimation est basée sur une CDM unique de ce monstre"
 			} else {
-				html = fmt.Sprintf("Cette estimation est basée sur %d CDM du monstre.", be.NbCdm)
+				html = fmt.Sprintf("Cette estimation est basée sur %d CDM du monstre %d.", be.NbCdm, monsterId)
 			}
 		} else {
 			if be.NbMonsters < 2 {

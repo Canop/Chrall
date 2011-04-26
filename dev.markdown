@@ -184,8 +184,14 @@ RECENTS / A TESTER :
 * profil des trolls : approcher la souris du coin en haut à gauche ouvre la bulle du troll
 * en réponse à un envoi de CDM répondre en intégrant les données des autres CDM du même monstre et en évaluant les PV restant
 * Puits : il est possible de préciser le numéro du donateur
+* site chrall : faire un lien d'install à gueule de bouton, ça sera plus clair...
 
 <- v1.12
+
+* ajout de www.mh.fr.nf et de https://games.etc à la liste des patterns pour l'extension
+* bugs au [parsage de certaines CDM](http://canop.org/chrall/fofo/viewtopic.php?f=4&t=5&start=10)
+* BUG : lorsqu'on passe la souris sur un trésor groupé dans une liste (dégroupée), la bulle n'apparait qu'un dixième de secondes.
+* bulles dans l'onglet 'trolls' de la vue
 
 EN COURS :
 ==========
@@ -195,13 +201,14 @@ TODO :
 ======
 P1 :
 ----
+* affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
+* permettre d'écrire à plusieurs trolls en les sélectionnant
+* sauvegarder les filtrages de la grille (pour besoin dragt)
 * forum MH: mettre une bulle directement sur les liens vers les trolls
 * grille : pb du clic et double-clic en même temps sur un lien
-* site chrall : faire un lien d'install à gueule de bouton, ça sera plus clair...
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * profil : après la mise à jour de Chrall, recommander d'utiliser Refresh
-* affichage des monstres et objets au même niveau [demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
 
 P2 :
@@ -216,6 +223,8 @@ P2 :
 
 P3 :
 ----
+* mini carte centrée sur le gowap
+* fonction de recherche dans la grille, en autocomplétion et centrage automatique
 * bulles de trolls sur les liens/noms de trolls du fofo MH.
 * lors d'un TP, affichage d'une carte des trous de météorite
 * détection des trolls malades

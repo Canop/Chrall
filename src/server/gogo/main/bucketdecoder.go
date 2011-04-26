@@ -36,32 +36,42 @@ func (bd *BucketDecoder) Decode(input string, store *CdmStore) {
 
 	var currentCdm *CDM
 	var numLineAtCdmStart int
+	var lastChar *CdmChar
+	lastName := ""
 	for numLine, line := range lines {
-		if len(line) < 4 {
-			continue
-		}
-		if strings.Index(line, "chrall:") == 0 {
-			fmt.Println("QUOTE: \"" + strconv.Quote(line) + "\"")
+		var name string
+		var char *CdmChar
+		if len(line) > 3 {
+			if strings.Index(line, "chrall:") == 0 {
+				fmt.Println("QUOTE: \"" + strconv.Quote(line) + "\"")
 
-			fields := strings.Fields(line)
-			if len(fields) > 1 {
-				switch fields[1] {
-				case "hello":
-					bd.Message += "Coucou<br>"
+				fields := strings.Fields(line)
+				if len(fields) > 1 {
+					switch fields[1] {
+					case "hello":
+						bd.Message += "Coucou<br>"
+					}
+				}
+			} else if cdm := NewCdm(lines[numLine:]); cdm != nil {
+				currentCdm = cdm
+				bd.addCdm(currentCdm)
+				numLineAtCdmStart = numLine
+			} else if currentCdm != nil && numLine-numLineAtCdmStart < 40 { // 40 : nombre de lignes maximal d'une cdm (à déterminer)
+				name, char = AnalyseLineAsCdmChar(line)
+				if name != "" {
+					currentCdm.SetChar(name, char)
+				} else {
+					// <- on tente éventuellement de compléter une char précédent
+					if lastChar.CompleteCdmChar(lastName, line) {					
+						currentCdm.SetChar(lastName, lastChar)
+					} else {
+						fmt.Println("Ligne pas comprise : " + line)
+					}
 				}
 			}
-		} else if cdm := NewCdm(lines[numLine:]); cdm != nil {
-			currentCdm = cdm
-			bd.addCdm(currentCdm)
-			numLineAtCdmStart = numLine
-		} else if currentCdm != nil && numLine-numLineAtCdmStart < 40 { // 40 : nombre de lignes maximal d'une cdm (à déterminer)
-			name, char := AnalyseLineAsCdmChar(line)
-			if name != "" {
-				currentCdm.AddChar(name, char)
-			} else {
-				fmt.Println("Ligne pas comprise : " + line)
-			}
 		}
+		lastName = name
+		lastChar = char
 	}
 
 	fmt.Println("Résultats :")

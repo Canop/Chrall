@@ -51,6 +51,17 @@ type CdmChar struct {
 	Boolean boolean // inconnu si pas défini
 }
 
+// renvoie true ssi la ligne complétait bien la char
+func (char *CdmChar) CompleteCdmChar(name string, line string) bool {
+	if char==nil {
+		return false
+	}
+	if name=="Capacité spéciale" { // actuellement c'est la seule caractéristique qui peut s'étendre sur plusieurs lignes
+		char.Text += " " + line
+		return true
+	}
+	return false
+}
 
 func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 	fields := strings.Split(line, ":", 4)
@@ -162,11 +173,11 @@ type CDM struct {
 
 
 func (cdm *CDM) ComputeSHA1() []byte {
-	unhash := "cdm_v2"
+	unhash := "cdm_v3"
 	unhash += strconv.Uitoa(cdm.NumMonstre)
 	unhash += cdm.NomComplet
 	unhash += cdm.Mâle.GenderString()
-	unhash += cdm.Famille_text // parce qu'elle n'est pas toujours dans les Chars...
+	unhash += cdm.Famille_text // parce qu'elle n'est pas toujours dans les Chars
 	for key, value := range cdm.Chars {
 		unhash += key + value.Text
 	}
@@ -182,7 +193,7 @@ func (cdm *CDM) ComputeSHA1() []byte {
  *   - attention, suivant l'origine des cdm des labels différents peuvent être utilisés
  *   - J'avais fait un switch initialement mais ça ne marchait pas pour tous les labels (au runtime), il semble y avoir des bugs sur les switch en go
  */
-func (cdm *CDM) AddChar(name string, c *CdmChar) {
+func (cdm *CDM) SetChar(name string, c *CdmChar) {
 	if name == "Niveau" {
 		cdm.Niveau_min = c.Min
 		cdm.Niveau_max = c.Max

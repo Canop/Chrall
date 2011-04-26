@@ -101,9 +101,10 @@ function bubble(
 			showBubble.call(this, $(this), event, text, cssClass);
 		}
 	});
-	target.mouseout(function(){
+	target.mouseout(function(event){
 		onBubbleTarget = false;
-		bubbleCloseTimeoutID = setTimeout(hideBubble, 150);
+		hideBubble();
+		//bubbleCloseTimeoutID = setTimeout(hideBubble, 150);  <= remettre cette ligne si on veut permettre le passage de la souris dans la bulle sans qu'elle se ferme
 	});
 }
 

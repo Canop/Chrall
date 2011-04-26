@@ -255,6 +255,7 @@ function Chrall_analyseTrollTable(table) {
 			troll.id = parseInt($(cells[i++]).text());
 			var cell = $(cells[i++]);
 			troll.name = cell.text();
+			cell.find('a').attr('id', troll.id);
 			troll.isIntangible = cell.html().indexOf("mh_trolls_0")>=0; // les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
 			troll.level = $(cells[i++]).text();
 			troll.race = $(cells[i++]).text();
@@ -500,7 +501,6 @@ function Chrall_analyseAndReformatView() {
 			$('a[href*="EMV"]').each(
 				function() {
 					var link = $(this);
-					var linkText = link.text();
 					var message = link.attr("message");
 					if (link.attr('class')=='ch_gowap') { 
 						if (message) {
@@ -518,6 +518,7 @@ function Chrall_analyseAndReformatView() {
 							requestId = decodeURIComponent(nomMonstre);
 						} else {
 							//> lien dans la table
+							var linkText = link.text();
 							nomMonstre = encodeURIComponent(linkText);
 							message = linkText;
 							requestId = linkText;
@@ -527,7 +528,7 @@ function Chrall_analyseAndReformatView() {
 				}
 			);
 
-			//> on ajoute un popup sur les trolls (pour avoir la distance de charge, et des stats de kill par retour jsonp)
+			//> on ajoute un popup sur les trolls de la grille (pour avoir la distance de charge, et des stats de kill par retour jsonp)
 			$("#grid a.ch_troll").each(
 				function() {
 					var link = $(this);
@@ -535,6 +536,16 @@ function Chrall_analyseAndReformatView() {
 					var trollId = link.attr('id');
 					if (trollId) {
 						bubble(link, message, "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
+					}
+				}
+			);	
+			//> la même bulle sur les troll dans la table
+			$("div#tabTrolls a.mh_trolls_1").each(
+				function() {
+					var link = $(this);
+					var trollId = link.attr('id');
+					if (trollId) {
+						bubble(link, '', "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
 					}
 				}
 			);	
