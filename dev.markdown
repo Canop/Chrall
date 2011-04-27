@@ -92,7 +92,6 @@ RECENTS / A TESTER :
 * grille/filtre : remplacer "objets" par "trésors"
 * afficher les caractéristiques des monstres y compris dans la table (pas seulement sur la grille)
 * grille : ajouter un menu déroulant de limite de vue à côté du filtre (même style arrondi) 
-* interception des cdm : ne rien envoyer au serveur si on a raté la comp [à vérifier en ratant la comp...]
 * grille : les id des gowaps et leurs noms complets sont bullés
 * vue : faire flotter en haut à droite les liens [refresh] et [logout]
 * interception des CDM : faire un retour moins barbare qu'une alerte
@@ -192,6 +191,8 @@ RECENTS / A TESTER :
 * bugs au [parsage de certaines CDM](http://canop.org/chrall/fofo/viewtopic.php?f=4&t=5&start=10)
 * BUG : lorsqu'on passe la souris sur un trésor groupé dans une liste (dégroupée), la bulle n'apparait qu'un dixième de secondes.
 * bulles dans l'onglet 'trolls' de la vue
+* les filtrages de la grille sont maintenant persistents (pour besoin dragt)
+* forum MH: mettre une bulle directement sur les liens vers les trolls
 
 EN COURS :
 ==========
@@ -203,8 +204,6 @@ P1 :
 ----
 * affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * permettre d'écrire à plusieurs trolls en les sélectionnant
-* sauvegarder les filtrages de la grille (pour besoin dragt)
-* forum MH: mettre une bulle directement sur les liens vers les trolls
 * grille : pb du clic et double-clic en même temps sur un lien
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
@@ -213,6 +212,8 @@ P1 :
 
 P2 :
 ----
+* interception des cdm : ne rien envoyer au serveur si on a raté la comp
+* fonction pour désactiver de façon durable le css d'un troll
 * BUG : le nombre de kills de monstres que j'affiche dans la liste est inférieur à celui du "Tableau de chasse"... sans doute des trous dans la liste du serveur ftp mais la liste de discussion de MH est morte...
 * profil d'un autre troll : menu pour definir le troll ou sa guilde en ami ou ennemi (même si on n'est pas guildé -> uniquement pour bd chrall) [pb : authentification ?]
 * profil : indiquer les alarmes programmées

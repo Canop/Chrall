@@ -3,7 +3,6 @@
 	"version": "1.12",
 	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"homepage_url": "http://canop.org/chrall",
-	"update_url": "http://canop.org/chrall/updates.xml",
 	"background_page": "chrome-extension.html",
 	"content_scripts": [
 		{
@@ -39,6 +38,17 @@
 				"chrall_pjview.js",
 				"chrall_action.js",
 				"chrall_main.js"
+			]
+		},
+		{
+			"matches": ["*://www.mountyhall.com/Forum/*"],
+			"css": [
+				"chrall.css"
+			],
+			"js": [
+				"jquery.js",
+				"chrall_bubbles.js",
+				"chrall_mhforum.js"
 			]
 		},
 		{

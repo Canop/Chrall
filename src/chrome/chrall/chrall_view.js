@@ -10,18 +10,20 @@ var objectsOnPlayerCell;
  */
 function Chrall_makeFiltersHtml() {
 	var html = "<script>";
-	html += "function ChrallEmbedded_toggleDisplayByName(key, display){";
+	html += "function grid_changeDisplayByName(key, display){";
 	html += " var os = document.getElementsByName(key);";
-	html += " for (var i=0; i<os.length; i++) {";
-	html += "  if (!display) {";
+	html += " if (!display) {"; // mode d'inversion d'un objet unique, non persistent
+	html += "  for (var i=0; i<os.length; i++) {";
 	html += "   if (os[i].style.display=='inline') os[i].style.display='none';";
 	html += "   else os[i].style.display='inline';";
-	html += "  } else {";
+	html += "  }";
+	html += " } else {"; // mode d'inversion de filtre global, persistent
+	html += "  for (var i=0; i<os.length; i++) {";
 	html += "   os[i].style.display=display;";
 	html += "  }";
+	html += "  localStorage['grid_filter_'+key]=display";	
 	html += " }";
 	html += "}";
-	html += "";
 	html += "</script>";
 	html += "<form id=gridFiltersForm>";
 	if (viewMaxSight>5) {
@@ -51,7 +53,7 @@ function Chrall_makeFiltersHtml() {
 	for (var key in viewFilters) {
 		html += "<span><input type=checkbox id='"+key+"'";
 		if (viewFilters[key]) html += " checked";
-		html += " onClick=\"ChrallEmbedded_toggleDisplayByName('"+key+"', this.checked?'inline':'none');\"";
+		html += " onClick=\"grid_changeDisplayByName('"+key+"', this.checked?'inline':'none');\"";
 		html += "><label for='"+key+"'>"+key+"</label></span>";
 	}
 	html += "</form>";
@@ -167,7 +169,7 @@ function Chrall_makeGridHtml() {
 							if (c>0) cellContent[c++] = "<br name='trésors' class=ch_object>";
 							var divName = "objects_"+(x<0?"_"+(-x):x)+"_"+(y<0?"_"+(-y):y)+"_"+(-level);
 							cellContent[c++] = "<span name='trésors' class=ch_object>" + level + " : ";
-							cellContent[c++] = "<a class=ch_objects_toggler href=\"javascript:ChrallEmbedded_toggleDisplayByName('"+divName+"');\">";
+							cellContent[c++] = "<a class=ch_objects_toggler href=\"javascript:grid_changeDisplayByName('"+divName+"');\">";
 							cellContent[c++] = "<b>"+list.length+" trésors</b>";
 							cellContent[c++] = "</a>";
 							cellContent[c++] = "<div name="+divName+" class=hiddenDiv>";
@@ -494,8 +496,21 @@ function Chrall_analyseAndReformatView() {
 	
 	$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
 	$('#grid_holder').dragscrollable({dragSelector: '#grid'});
+	
+	//> on applique les réglages de filtrages de la fois précédente
+	for (var key in viewFilters) {
+		var display = localStorage['grid_filter_'+key];
+		if (display!=null) {
+			var os = document.getElementsByName(key);
+			for (var i=0; i<os.length; i++) {
+				os[i].style.display=display;
+			}
+			if (display!='none') $('#'+key).attr("checked", "checked");
+			else $('#'+key).removeAttr("checked");
+		}
+	}
 
-	setTimeout( // afin d'accélérer l'affichage initial, on  repousse un peu l'ajout des bulles et menus
+	setTimeout( // afin d'accélérer l'affichage initial, on repousse un peu l'ajout des bulles et menus
 		function() {
 			//> on ajoute le popup sur les monstres
 			$('a[href*="EMV"]').each(

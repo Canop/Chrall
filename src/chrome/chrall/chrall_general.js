@@ -13,8 +13,7 @@ var chrallVersion = "1.12";
  * Attention : si vous corrigez le comportement de la ligne ci-dessus il faudra modifier Chrall_extractBasicInfos et pas mal d'autres méthodes
  */
 function Chrall_tokenize(text) {
-	return text.trim().split(new RegExp("[ /|\t\n\r\f,.:=()]+", "g"));
-	
+	return text.trim().split(new RegExp("[ /|\t\n\r\f,.:=()]+", "g"));	
 }
 
 /**
