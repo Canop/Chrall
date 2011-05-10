@@ -249,26 +249,29 @@ function Chrall_analyseMonsterTable(monsterTable) {
 }
 
 function Chrall_analyseTrollTable(table) {
-	$(table).find("tr.mh_tdpage").each(
-		function(){
-			var troll = new Troll();
-			var cells = $(this).find("td");
-			var i=1;
-			troll.id = parseInt($(cells[i++]).text());
-			var cell = $(cells[i++]);
-			troll.name = cell.text();
-			cell.find('a').attr('id', troll.id);
-			troll.isIntangible = cell.html().indexOf("mh_trolls_0")>=0; // les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
-			troll.level = $(cells[i++]).text();
-			troll.race = $(cells[i++]).text();
-			troll.guilde = $(cells[i++]).text();
-			troll.x = parseInt($(cells[i++]).text());
-			troll.y = parseInt($(cells[i++]).text());
-			troll.z = parseInt($(cells[i++]).text());
-			grid.getCellNotNull(troll.x, troll.y).addTroll(troll);
-			grid.nbTrollsInView++;
-		}
-	);
+	var rows = $(table).find("tr");
+	for (var r=3; r<rows.length; r++) {
+		var $tr = $(rows[r]);
+		var troll = new Troll();
+		var cells = $tr.find("td");
+		var i=1;
+		troll.id = parseInt($(cells[i++]).text());
+		var cell = $(cells[i++]);
+		troll.name = cell.text();
+		cell.find('a').attr('id', troll.id);
+		troll.isIntangible = cell.html().indexOf("mh_trolls_0")>=0; // les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
+		troll.level = $(cells[i++]).text();
+		troll.race = $(cells[i++]).text();
+		troll.guilde = $(cells[i++]).text();
+		troll.x = parseInt($(cells[i++]).text());
+		troll.y = parseInt($(cells[i++]).text());
+		troll.z = parseInt($(cells[i++]).text());
+		grid.getCellNotNull(troll.x, troll.y).addTroll(troll);
+		grid.nbTrollsInView++;
+		$tr.prepend('<td align=center><input type=checkbox name=cb_troll id='+troll.id+'></td>');
+	}
+	$(rows[2]).prepend($('<td align=center width=30><a class=gogo href="javascript:alert(\'hey!\');">MP</a></td>'));
+	$(rows[0]).html('<td colspan=10><b>TROLLS</b></td>');
 }
 
 function Chrall_analyseMushroomTable(table) {
@@ -635,6 +638,7 @@ function Chrall_analyseAndReformatView() {
 					});				
 				}
 			);
+						
 		}, 1000
 	);
 

@@ -194,26 +194,28 @@ RECENTS / A TESTER :
 * les filtrages de la grille sont maintenant persistents (pour besoin dragt)
 * forum MH: mettre une bulle directement sur les liens vers les trolls
 
+<- v1.13
+
 EN COURS :
 ==========
 * apprendre le langage go
+* permettre d'écrire à plusieurs trolls en les sélectionnant
 
 TODO :
 ======
 P1 :
 ----
 * affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
-* permettre d'écrire à plusieurs trolls en les sélectionnant
 * grille : pb du clic et double-clic en même temps sur un lien
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
-* profil : après la mise à jour de Chrall, recommander d'utiliser Refresh
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
 
 P2 :
 ----
 * interception des cdm : ne rien envoyer au serveur si on a raté la comp
 * fonction pour désactiver de façon durable le css d'un troll
+* profil : après la mise à jour de Chrall, recommander d'utiliser Refresh
 * BUG : le nombre de kills de monstres que j'affiche dans la liste est inférieur à celui du "Tableau de chasse"... sans doute des trous dans la liste du serveur ftp mais la liste de discussion de MH est morte...
 * profil d'un autre troll : menu pour definir le troll ou sa guilde en ami ou ennemi (même si on n'est pas guildé -> uniquement pour bd chrall) [pb : authentification ?]
 * profil : indiquer les alarmes programmées
@@ -224,6 +226,7 @@ P2 :
 
 P3 :
 ----
+* afficher les UM des matos
 * mini carte centrée sur le gowap
 * fonction de recherche dans la grille, en autocomplétion et centrage automatique
 * bulles de trolls sur les liens/noms de trolls du fofo MH.
