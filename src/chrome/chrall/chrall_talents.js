@@ -73,10 +73,16 @@ function getBubbleContentForCompetence(name) {
 			return html;
 		
 		case "Connaissance des Monstres" :
-			return "Coût : 1 PA"; // TODO indiquer la portée (implique analyser la vue)
+			return "Pour 1 PA vous pouvez analyser un monstre dans votre vue.";
 
 		case "Construire un Piège" :
-			return "Tout laisse penser que le développeur de chrall n'a jamais construit de piège...";
+			var att = 3.5*player.attac.diceNumber + player.attac.magicalBonus;
+			var degDices = Math.floor((player.dodge.diceNumber+player.sight.diceNumber)/2);
+			var html = "Piège à feu :<table>";
+			html += "<tr><td>Dégâts non résistés : " + degDices + " D3</td><td> Moyenne : " + (degDices*2) + " PV</td></tr>";
+			html += "<tr><td colspan=2>En cas de Résistance Magique, les dégâts sont divisés par deux.</td></tr>";
+			html += "</table>";	
+			return html;
 			
 		case "Contre-Attaquer" :
 			var des_att = Math.floor(player.attac.diceNumber/2);
@@ -130,9 +136,7 @@ function getBubbleContentForCompetence(name) {
 			html += "Ce calcul est fait pour votre concentration actuelle ("+player.concentration+" %).";
 			html += "<br>En vous concentrant vous augmentez d'autant votre jet de toucher.";
 			html += "<br>Si vous ratez ce jet, la potion est perdue sans effet.";
-			return html
-			
-			return "Sapristi ! Il faut que je parse la concentration...";
+			return html;
 
 		case "Miner" :
 			return "Permet d'une part de localiser les filons de minerais et d'autre part d'exploiter les filons découverts.";
@@ -264,7 +268,6 @@ function getBubbleContentForSort(name) {
 			html += "<tr><td>Sixième et suivants</td><td> : dégâts -" + decumul(5, a) + "</td></tr>";
 			html += "</table>";
 			return html;
-			
 			
 		case "Flash Aveuglant" :
 			var s = player.sight.diceNumber+player.sight.physicalBonus;
