@@ -209,8 +209,7 @@ a.gogo,  a.gogo:link {
 	color: white !important;
 }
 a.gogo:hover {
-	border-top: 1px solid darkblue;
-	border-bottom: 1px solid mediumblue;
+	color: yellow !important;
 }
 [invisible] {
 	display: none;

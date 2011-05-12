@@ -195,24 +195,27 @@ RECENTS / A TESTER :
 * forum MH: mettre une bulle directement sur les liens vers les trolls
 
 <- v1.13
+* permettre d'écrire à plusieurs trolls en les sélectionnant dans la table
+* bulle de compétence : piège (à vérifier!)
+* permettre la sélection des trolls avec qui partager des px via la table
 
 EN COURS :
 ==========
 * apprendre le langage go
-* permettre d'écrire à plusieurs trolls en les sélectionnant
 
 TODO :
 ======
 P1 :
 ----
 * affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
-* grille : pb du clic et double-clic en même temps sur un lien
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
 
 P2 :
 ----
+* indiquer dans les bulles de monstres lesquels peuvent rapporter des compos de valeur pour EM
+* indiquer dans l'équipement quels compos ont de la valeur pour EM
 * interception des cdm : ne rien envoyer au serveur si on a raté la comp
 * fonction pour désactiver de façon durable le css d'un troll
 * profil : après la mise à jour de Chrall, recommander d'utiliser Refresh
@@ -223,14 +226,18 @@ P2 :
 * affichage quelque part du nombre de CDM transmises via Chrall
 * grille : marquer les trolls ennemis ou amis
 * cron : sauvegardes de la bd
+* carte trous de météorites & parcours des gowaps
 
 P3 :
 ----
+* vue/table des trolls : ne pas afficher le bouton de partage des px si la dla n'est pas activée
+* bulle pour le camouflage
 * afficher les UM des matos
 * mini carte centrée sur le gowap
 * fonction de recherche dans la grille, en autocomplétion et centrage automatique
 * bulles de trolls sur les liens/noms de trolls du fofo MH.
 * lors d'un TP, affichage d'une carte des trous de météorite
+* grille : pb du clic et double-clic en même temps sur un lien (refusé pour l'instant : compliqué pour pas grand chose)
 * détection des trolls malades
 * grille : rendre cliquables les cénotaphes
 * calcul des bonus totaux des mouches : séparation entre présentes & toutes

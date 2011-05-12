@@ -249,6 +249,8 @@ function Chrall_analyseMonsterTable(monsterTable) {
 }
 
 function Chrall_analyseTrollTable(table) {
+	// en même temps qu'on analyse la table, on ajoute les cases à cocher
+	// de sélection des trolls pour l'envoi de MP.
 	var rows = $(table).find("tr");
 	for (var r=3; r<rows.length; r++) {
 		var $tr = $(rows[r]);
@@ -268,10 +270,16 @@ function Chrall_analyseTrollTable(table) {
 		troll.z = parseInt($(cells[i++]).text());
 		grid.getCellNotNull(troll.x, troll.y).addTroll(troll);
 		grid.nbTrollsInView++;
-		$tr.prepend('<td align=center><input type=checkbox name=cb_troll id='+troll.id+'></td>');
+		$tr.prepend('<td align=center><input type=checkbox name=cb_troll value='+troll.id+'></td>');
 	}
-	$(rows[2]).prepend($('<td align=center width=30><a class=gogo href="javascript:alert(\'hey!\');">MP</a></td>'));
-	$(rows[0]).html('<td colspan=10><b>TROLLS</b></td>');
+	$(rows[2]).prepend($('<td align=center width=20></td>'));
+	var html='<td colspan=10 height=25><script>';
+	html += 'function mhmp(cat){';
+	html += ' var dests=[];  var cbs = document.getElementsByName(\'cb_troll\');';
+	html += ' for (var i=0; i<cbs.length; i++) {if(cbs[i].checked) dests.push(cbs[i].value)}';
+	html += ' document.location.href=\'../Messagerie/MH_Messagerie.php?cat=\'+cat+\'&dest=\'+dests.join("%2C");';
+	html += '}</script><b>TROLLS</b> <a class=gogo href="javascript:mhmp(3);">Envoyer un message</a> <a class=gogo href="javascript:mhmp(8);">Partager des px</a></td>';
+	$(rows[0]).html(html);
 }
 
 function Chrall_analyseMushroomTable(table) {
