@@ -549,6 +549,7 @@ function Chrall_analyseAndReformatView() {
 							message = linkText;
 							requestId = linkText;
 						}
+						message += getEmMonsterDecoration(nomMonstre);
 						bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
 					}
 				}

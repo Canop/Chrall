@@ -166,6 +166,10 @@ func (be *BestiaryExtract) Html(monsterId uint, askerId int, m *TksManager, pour
 	if be == nil || be.NbCdm == 0 {
 		html = "g0g0chrall ne connait pas ce monstre"
 	} else {
+		html = ""
+		html += "<center>"
+		html += be.Fusion.HtmlTable()
+		html += "</center>"
 		if be.PreciseMonster && monsterId > 0 {
 			if be.NbCdm < 2 {
 				html = "Cette estimation est basée sur une CDM unique de ce monstre"
@@ -183,9 +187,6 @@ func (be *BestiaryExtract) Html(monsterId uint, askerId int, m *TksManager, pour
 				html = fmt.Sprintf("Cette estimation est basée sur %d CDM concernant %d monstres.", be.NbCdm, be.NbMonsters)
 			}
 		}
-		html += "<center>"
-		html += be.Fusion.HtmlTable()
-		html += "</center>"
 		if pourcentageBlessure>0 {
 			pvMin, pvMax := be.getPvRestant(pourcentageBlessure)
 			html += fmt.Sprintf("Blessure : %d %%<br>Points de Vie restant : entre %d et %d<br>", pourcentageBlessure, pvMin, pvMax)
