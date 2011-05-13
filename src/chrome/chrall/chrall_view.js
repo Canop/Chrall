@@ -685,6 +685,11 @@ function Chrall_analyseAndReformatView() {
 	$('#goto_player').click(gotoPlayer);
 	//> hook pour le centrage au double-clic
 	$('#grid').dblclick(gotoPlayer);
+	
+	//> le défilement à la molette perturbe objectMenu
+	document.onmousewheel = function(e) {
+		hideOm();
+	}
 
 	var time_end = (new Date()).getTime(); // <= prof
 	console.log("Profiling - Vue de " + horizontalViewLimit);
