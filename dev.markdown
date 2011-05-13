@@ -195,9 +195,15 @@ RECENTS / A TESTER :
 * forum MH: mettre une bulle directement sur les liens vers les trolls
 
 <- v1.13
+
 * permettre d'écrire à plusieurs trolls en les sélectionnant dans la table
 * bulle de compétence : piège (à vérifier!)
 * permettre la sélection des trolls avec qui partager des px via la table
+* indiquer dans les bulles de monstres lesquels peuvent rapporter des compos de valeur pour EM
+
+<- v1.14
+
+* vue/grille : fermeture des menus de cellule lors de l'usage de la molette
 
 EN COURS :
 ==========
@@ -214,8 +220,7 @@ P1 :
 
 P2 :
 ----
-* indiquer dans les bulles de monstres lesquels peuvent rapporter des compos de valeur pour EM
-* indiquer dans l'équipement quels compos ont de la valeur pour EM
+* indiquer dans l'équipement quels compos ont de la valeur pour EM et calculer les histoires de %
 * interception des cdm : ne rien envoyer au serveur si on a raté la comp
 * fonction pour désactiver de façon durable le css d'un troll
 * profil : après la mise à jour de Chrall, recommander d'utiliser Refresh

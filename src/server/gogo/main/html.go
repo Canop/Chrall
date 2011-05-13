@@ -172,19 +172,19 @@ func (be *BestiaryExtract) Html(monsterId uint, askerId int, m *TksManager, pour
 		html += "</center>"
 		if be.PreciseMonster && monsterId > 0 {
 			if be.NbCdm < 2 {
-				html = "Cette estimation est basée sur une CDM unique de ce monstre"
+				html += "Cette estimation est basée sur une CDM unique de ce monstre"
 			} else {
-				html = fmt.Sprintf("Cette estimation est basée sur %d CDM du monstre %d.", be.NbCdm, monsterId)
+				html += fmt.Sprintf("Cette estimation est basée sur %d CDM du monstre %d.", be.NbCdm, monsterId)
 			}
 		} else {
 			if be.NbMonsters < 2 {
 				if be.NbCdm == 1 {
-					html = "Une seule CDM a été reçue pour cette espèce."
+					html += "Une seule CDM a été reçue pour cette espèce."
 				} else {
-					html = fmt.Sprintf("Cette estimation est basée sur %d CDM d'un seul monstre.", be.NbCdm)
+					html += fmt.Sprintf("Cette estimation est basée sur %d CDM d'un seul monstre.", be.NbCdm)
 				}
 			} else {
-				html = fmt.Sprintf("Cette estimation est basée sur %d CDM concernant %d monstres.", be.NbCdm, be.NbMonsters)
+				html += fmt.Sprintf("Cette estimation est basée sur %d CDM concernant %d monstres.", be.NbCdm, be.NbMonsters)
 			}
 		}
 		if pourcentageBlessure>0 {
@@ -195,7 +195,7 @@ func (be *BestiaryExtract) Html(monsterId uint, askerId int, m *TksManager, pour
 		if askerId > 0 {
 			ti := m.getTrollInfos(askerId)
 			if ti != nil {
-				html += "Tuer ce monstre vous rapporterait " + be.getGainPx(ti.Niveau)
+				html += "<br>Tuer ce monstre vous rapporterait " + be.getGainPx(ti.Niveau)
 			}
 		}
 	}

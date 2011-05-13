@@ -64,7 +64,6 @@ var emCompos = [
 
 function getEmMonsterDecoration(monsterName) { // attention : on peut recevoir le nom urlencodé
 	var emn = " "+monsterName.replace('%20', ' ')+" ";
-	console.log(monsterName);
 	for (var i=0; i<emMonsterMonths.length; i++) {
 		if (~emn.indexOf(" "+emMonsterMonths[i]+" ")) {
 			return "<br>Ce monstre peut lâcher un composant variable pour EM.";

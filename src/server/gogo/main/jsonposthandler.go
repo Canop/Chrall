@@ -43,7 +43,7 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 
 	fmt.Println("\n=== JsonPostHandler : Requete reçue ====================")
 	fmt.Println(" URL : " + hr.RawURL)
-
+	
 	jd := json.NewDecoder(hr.Body)
 	jr := new(jsonRequest)
 	err := jd.Decode(jr)
