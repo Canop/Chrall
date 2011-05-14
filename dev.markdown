@@ -204,6 +204,7 @@ RECENTS / A TESTER :
 <- v1.14
 
 * vue/grille : fermeture des menus de cellule lors de l'usage de la molette
+* bulle du minage
 
 EN COURS :
 ==========
@@ -217,9 +218,12 @@ P1 :
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
+* bulle du minage : portée > (vue+ B/M)/2 horizontal et (vue+ B/M)/4
+* action recherche filon : "si tu repères un filon une fenêtre te dirait votre filon se situe entre ?<X<? et ?<Y<? et ,<N<?; idem si il ne se situe pas dans ta recherche)"
 
 P2 :
 ----
+* mettre à jour la position dans le menu gauche...
 * indiquer dans l'équipement quels compos ont de la valeur pour EM et calculer les histoires de %
 * interception des cdm : ne rien envoyer au serveur si on a raté la comp
 * fonction pour désactiver de façon durable le css d'un troll
