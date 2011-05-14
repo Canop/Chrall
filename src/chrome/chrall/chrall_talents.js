@@ -115,7 +115,7 @@ function getBubbleContentForCompetence(name) {
 			var s = player.sight.diceNumber+player.sight.physicalBonus;
 			var html = "<table>";
 			html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(s/2) + "</td></tr>";
-			html += "<tr><td>Portée verticale</td><td> : " + Math.floor(Math.ceil(s/2)/2) + "</td></tr>"; // TODO vérifier la formule
+			html += "<tr><td>Portée verticale</td><td> : " + Math.floor(Math.ceil(s/2)/2) + "</td></tr>";
 			html += "</table>";	
 			return html;
 		
@@ -139,7 +139,11 @@ function getBubbleContentForCompetence(name) {
 			return html;
 
 		case "Miner" :
-			return "Permet d'une part de localiser les filons de minerais et d'autre part d'exploiter les filons découverts.";
+			var html = "<table>";
+			html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(s/2) + "</td></tr>";
+			html += "<tr><td>Portée verticale</td><td> : " + Math.floor(Math.ceil(s/2)/2) + "</td></tr>";
+			html += "</table>";	
+			return html;
 
 		case "Parer" :
 			var parade = 3.5*Math.floor(player.attac.diceNumber/2) + Math.floor((player.attac.physicalBonus+player.attac.magicalBonus)/2);
