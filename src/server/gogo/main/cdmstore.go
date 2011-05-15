@@ -240,7 +240,7 @@ func (store *CdmStore) ComputeMonsterStats(completeName string, monsterId uint) 
 		return nil, err
 	}
 	defer db.Close()
-	
+
 	// On utilise des max pour les champs de type chaine. C'est sans doute trop lourd (à moins que MySQL ne mette en place un index
 	//  spécifique). L'objectif réel est de récupérer la chaine la plus longue.
 

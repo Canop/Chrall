@@ -8,7 +8,6 @@ import (
 	"http"
 	"fmt"
 	"json"
-	"os"
 	"strconv"
 )
 
@@ -16,7 +15,7 @@ import (
 type jsonRequest struct {
 	Action string "action"
 	Bucket string "bucket"
-	Author int "author"
+	Author int    "author"
 }
 
 type jsonAnswer struct {
@@ -31,11 +30,6 @@ type JsonPostHandler struct {
 }
 
 
-func sendError(w http.ResponseWriter, title string, err os.Error) {
-	fmt.Printf("\nErreur %s : %s", title, err.String())
-	fmt.Fprintf(w, "{\"result\":\"NOK\", \"text\": \"Erreur %s : %s\"}", title, err.String())
-}
-
 func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -43,7 +37,17 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 
 	fmt.Println("\n=== JsonPostHandler : Requete reçue ====================")
 	fmt.Println(" URL : " + hr.RawURL)
-	
+
+	////////////////////////////////////// TEST
+	//~ b, e := ioutil.ReadAll(hr.Body)
+	//~ if e!=nil {
+	//~ fmt.Println("Erreur lecture :")
+	//~ fmt.Println(e)
+	//~ }
+	//~ s := string(b)
+	//~ fmt.Print(s)
+	////////////////////////////////////// /TEST
+
 	jd := json.NewDecoder(hr.Body)
 	jr := new(jsonRequest)
 	err := jd.Decode(jr)
@@ -81,7 +85,7 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 			ja.Text += cdm.Nom
 		}
 		ja.Text += ")"
-		if len(bd.Cdm)==1 {
+		if len(bd.Cdm) == 1 {
 			// dans ce cas on fait une analyse de la blessure, en exploitant si possible également les autres cdm de ce monstre
 			cdm := bd.Cdm[0]
 			be, err := h.store.ComputeMonsterStats(cdm.NomComplet, cdm.NumMonstre)
@@ -89,7 +93,7 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 				fmt.Println(" Erreur : " + err.String())
 			} else {
 				html := be.Html(cdm.NumMonstre, jr.Author, h.tksManager, cdm.Blessure)
-				ja.Message += html				
+				ja.Message += html
 			}
 		}
 	}

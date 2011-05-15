@@ -53,6 +53,10 @@ func (server *GogoServer) Start() {
 	jsonGetHandler.parent = &chrallHandler.Hitter
 	http.Handle("/chrall/json", jsonGetHandler)
 
+	testHandler := new(TestHandler)
+	testHandler.parent = &chrallHandler.Hitter
+	http.Handle("/test", testHandler)
+
 	fmt.Printf("gogo démarré sur le port %d", port)
 	http.ListenAndServe(":"+strconv.Itoa(port), nil)
 }

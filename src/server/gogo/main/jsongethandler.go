@@ -138,11 +138,10 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 			if err != nil {
 				fmt.Println(" Erreur : " + err.String())
 			} else {
-				answerHtml += "Estimation :<br>"				
+				answerHtml += "Estimation :<br>"
 				answerHtml += be.Html(cdm.NumMonstre, authorId, h.tksManager, cdm.Blessure)
 			}
 
-			
 		} else {
 			fmt.Println("Pas de CDM ou pas compris.")
 			answerHtml += "Oups... Le serveur gogochrall n'a pas compris la requete :("

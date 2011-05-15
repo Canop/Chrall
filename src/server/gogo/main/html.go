@@ -187,10 +187,10 @@ func (be *BestiaryExtract) Html(monsterId uint, askerId int, m *TksManager, pour
 				html += fmt.Sprintf("Cette estimation est basée sur %d CDM concernant %d monstres.", be.NbCdm, be.NbMonsters)
 			}
 		}
-		if pourcentageBlessure>0 {
+		if pourcentageBlessure > 0 {
 			pvMin, pvMax := be.getPvRestant(pourcentageBlessure)
 			html += fmt.Sprintf("Blessure : %d %%<br>Points de Vie restant : entre %d et %d<br>", pourcentageBlessure, pvMin, pvMax)
-			
+
 		}
 		if askerId > 0 {
 			ti := m.getTrollInfos(askerId)
@@ -200,7 +200,7 @@ func (be *BestiaryExtract) Html(monsterId uint, askerId int, m *TksManager, pour
 		}
 	}
 	return html
-} 
+}
 
 
 // construit une description tabulaire d'un troll

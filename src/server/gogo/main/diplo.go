@@ -143,9 +143,9 @@ func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader, ascii bool, subjectIsTroll 
 		}
 		g.Vertices[v.Key()] = v
 		line, err = r.ReadString('\n')
-		if subjectIsTroll { // DEBUG de la diplo troll
-			fmt.Println(v.ColoredText())
-		}
+		//~ if subjectIsTroll { // DEBUG de la diplo troll
+		//~ fmt.Println(v.ColoredText())
+		//~ }
 	}
 	if err != os.EOF {
 		fmt.Println("Erreur au parsage de la diplo :")
@@ -157,7 +157,7 @@ func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader, ascii bool, subjectIsTroll 
 
 
 func (g *DiploGraph) DescribeYourRelationsWith(yourTroll, yourGuild, hisTroll, hisGuild uint) string {
-	if g==nil {
+	if g == nil {
 		return "Diplo non disponible" // pb de synchro ?
 	}
 	html := ""

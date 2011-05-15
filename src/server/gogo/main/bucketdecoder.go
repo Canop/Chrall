@@ -62,7 +62,7 @@ func (bd *BucketDecoder) Decode(input string, store *CdmStore) {
 					currentCdm.SetChar(name, char)
 				} else {
 					// <- on tente éventuellement de compléter une char précédent
-					if lastChar.CompleteCdmChar(lastName, line) {					
+					if lastChar.CompleteCdmChar(lastName, line) {
 						currentCdm.SetChar(lastName, lastChar)
 					} else {
 						fmt.Println("Ligne pas comprise : " + line)

@@ -53,10 +53,10 @@ type CdmChar struct {
 
 // renvoie true ssi la ligne complétait bien la char
 func (char *CdmChar) CompleteCdmChar(name string, line string) bool {
-	if char==nil {
+	if char == nil {
 		return false
 	}
-	if name=="Capacité spéciale" { // actuellement c'est la seule caractéristique qui peut s'étendre sur plusieurs lignes
+	if name == "Capacité spéciale" { // actuellement c'est la seule caractéristique qui peut s'étendre sur plusieurs lignes
 		char.Text += " " + line
 		return true
 	}
@@ -76,7 +76,7 @@ func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 	if indexPc := strings.Index(char.Text, "%"); indexPc >= 0 {
 		// c'est le cas uniquement de la blessure
 		fields = strings.Fields(char.Text[0 : indexPc-1])
-		if len(fields)>0 {
+		if len(fields) > 0 {
 			char.Value, _ = strconv.Atoui(fields[0])
 		}
 	} else if indexPar := strings.Index(char.Text, "("); indexPar >= 0 {
