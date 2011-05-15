@@ -58,3 +58,18 @@ function turnName(turn) {
 		return "+ " + turn;	
 	}
 }
+
+// envoie au serveur un message authentifié par le mdp restreint
+function sendToChrallServer(message) {
+	if ((!localStorage['mdp_restreint']) || (localStorage['mdp_restreint']=='')) return false; // on n'envoie pas au serveur si le joueur n'a pas créé de compte
+	message['numero'] = player.id;
+	message['mdp'] = localStorage['mdp_restreint'];
+	$.ajax(
+		{
+			url: 'http://canop.org:9090/chrall/json?message='+ajaxify(message),
+			crossDomain: true,
+			dataType: "jsonp"
+		}
+	);
+
+}

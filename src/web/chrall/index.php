@@ -38,7 +38,7 @@ Chrall est une extension Chrome pour le jeu <a href=http://www.mountyhall.com>Mo
 
 <h2>Photos d'écran</h2>
 <p>
-Allez jeter un oeuil à la <a href=galerie.php>galerie</a>.
+Allez jeter un œil à la <a href=galerie.php>galerie</a>.
 </p>
 
 <h2>Discuter</h2>

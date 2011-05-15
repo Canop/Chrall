@@ -7,7 +7,7 @@ function Chrall_reformatOptionsView() {
 
 	var html="<ul class=tabs>";
 	html += "<li><a href=#tabStandard>Options Standard</a></li>";
-	html += "<li><a href=#tabChrall>Chrall</a></li>";
+	html += "<li><a href=#tabChrall>Options Chrall</a></li>";
 	html += "</ul>";
 	html += "<div class=tab_container><br><br>";
 	html += " <div id=tabStandard class=tab_content></div>";
@@ -31,6 +31,17 @@ function Chrall_reformatOptionsView() {
 	html += "<li><a target=nouvelOnglet href=\"http://canop.org:9090/chrall/puits\">Le Puits</a> dans lequel vous pouvez déverser vos CDM</li>";
 	html += "<li><a target=nouvelOnglet href=\"http://canop.org:9090/chrall/bestiaire\">Le Bestiaire</a> qui vous dira en retour ce qu'il sait des monstres</li>";
 	html += "</ul>";
+	html += "<h2>Compte Chrall</h2>";
+	html += "<p>Un compte Chrall vous permet de partager des informations avec d'autres joueurs.</p>";
+	html += "<p>Afin d'authentifier les requêtes provenant au serveur Chrall, votre <a href='http://sp.mountyhall.com/md5.php' target=newTab>mot de passe restreint</a> est nécessaire :";
+	html += "<script>function changeMdpRestreint(){";
+	html += "localStorage['mdp_restreint']=document.getElementById('ch_mdp_restreint').value; console.log(localStorage['mdp_restreint']);";
+	html += "}</script>";
+	html += "<input type=password id=ch_mdp_restreint value='"+(localStorage['mdp_restreint']?localStorage['mdp_restreint']:'')+"'>";
+	html += "<a class=gogo href='javascript:changeMdpRestreint();'>Définir le mot de passe</a>";
+	html += "</p>";
+	html += "<p>Fournir votre mot de passe restreint peut (devrait) vous poser des problèmes si vous jouez un troll ennemi de la Canopée. Dans ce cas, et si vous avez des compétences informatiques, n'hésitez pas à venir causer sur le canofofo afin de voir si vous pourriez héberger un serveur afin d'éviter que votre groupe de chasse ne me confie vos données privées.</p>";
+	html += "<p>Notez que vous ne transmettez pas d'informations confidentielles au serveur Chrall tant que vous ne fournissez pas votre mot de passe restreint.</p>";
 	html += " </div>";
 	html += "</div>";
 

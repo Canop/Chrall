@@ -219,13 +219,14 @@ TODO :
 ======
 P1 :
 ----
-* affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
+* modifier la position (stockée en fond) lors des déplacements sur action (DN, DE, charge, retraite, passage de TP, TGV)
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
 
 P2 :
 ----
+* affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * indiquer dans l'équipement quels compos ont de la valeur pour EM et calculer les histoires de %
 * interception des cdm : ne rien envoyer au serveur si on a raté la comp
 * fonction pour désactiver de façon durable le css d'un troll
