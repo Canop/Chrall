@@ -27,9 +27,6 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 
 <script type="text/javascript">
 
-	var remainingPaInfos = null;
-	var trollId = 0;
-	var sendCdm = true;
 
 	// objet alarme
 	function Alarm(time) {
@@ -42,6 +39,10 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 	var alarmMargin = 5*60*1000; // décalage entre l'alarme réelle et la date de l'alarm.
 	var minimalTimeBetweenAlarms = 5*60*1000; // pour diverses raisons algorithmiques, ne pas descendre ça trop bas et pas en dessous de alarmMargin
 	var lastAlarmTime = 0; // on stocke ça pour éviter de jouer trop souvent les alarmes
+	var remainingPaInfos = null;
+	var trollId = 0;
+	var sendCdm = true;
+	var trollPosition = null;
 
 	function playSound() {
 		document.getElementById('alarm').play();
@@ -50,7 +51,7 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 	function scheduleAlarms() {
 		// Remarque : en compliquant un peu on pourrait éviter de reprogrammer
 		// les alarmes à chaque chargement de page (ce qui n'a sans doute pas d'autre effet que d'ajouter un ou deux setTimeout sans conséquence
-		// à chaque affichage du profil.
+		// à chaque affichage du profil).
 		var timeNow = (new Date()).getTime();
 		for (var key in alarms) {			
 			var alarm = alarms[key];
@@ -97,12 +98,24 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 					sendResponse({"pa":pa});					
 				} else if (key=="trollId") {
 					trollId = request[key];
+				} else if (key=="position") {
+					trollPosition = request[key];
 				} else if (key=="get_trollId") {
 					sendResponse({"trollId":trollId});					
 				} else if (key=="send_cdm") {
 					sendCdm = request[key]=='' ? false : true;
 				} else if (key=="get_send_cdm") {
-					sendResponse({"send_cdm":sendCdm});					
+					sendResponse({"send_cdm":sendCdm});
+				} else if (key=="get_bgInfos") {
+					var pa = -1;
+					if (remainingPaInfos) {
+						pa = remainingPaInfos.pa;
+					}
+					sendResponse({
+						"trollId":trollId,
+						"pa":pa,
+						"position":trollPosition
+					});					
 				}
 			}
 			scheduleAlarms();

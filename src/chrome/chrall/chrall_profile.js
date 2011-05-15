@@ -86,7 +86,7 @@ function Chrall_extractDlaInfos(text) {
 	var turnDurationString = turnDurationLine.split(':')[1];
 	player.turnDuration = Chrall_parseDuration(turnDurationString);
 	var actionPointsLine = lines[2];
-	player.pa = parseInt(Chrall_tokenize(actionPointsLine)[3]);
+	player.pa = parseInt(Chrall_tokenize(actionPointsLine)[3]); // théoriquement doublon (on lit ça dans le menu de gauche). On supprimera peut-être.
 }
 
 function Chrall_extractPvAndFatigue(text) {

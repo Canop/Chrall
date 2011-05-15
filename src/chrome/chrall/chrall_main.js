@@ -10,6 +10,7 @@ var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
 var player = new Troll();
 var playerAmAbstract = new Array(); // strings. utilisées dans le profil à la fois pour le tableau de l'am et pour la bulle de la compétence en bas
 var viewedTrollId;
+var sessionActive = false; 
 
 // note : pour l'instant il faut que ces valeurs de départ soient cohérentes avec le css (display='block' ou display='none');
 // Par ailleurs attention à un détail : les clés suivantes sont à la fois des clés dans le code et les labels dans l'ihm
@@ -25,7 +26,7 @@ var viewFilters = {
 
 console.log("pageName=\""+pageName+"\""); 
 
-function getTrollIdthenExecute(f) {
+function getTrollIdThenExecute(f) {
 	chrome.extension.sendRequest(
 		{"get_trollId": "s'il-te-plaît?"},
 		function(answer) {
@@ -34,7 +35,28 @@ function getTrollIdthenExecute(f) {
 		}
 	);
 }
-
+function getBackgroundInfosThenExecute(f) { // récupère les informations stockées en page de fond
+	chrome.extension.sendRequest(
+		{"get_bgInfos": "s'il-te-plaît?"},
+		function(answer) {
+			console.log(answer);
+			player.id = answer.trollId;
+			if (answer.pa<0) {
+				sessionActive = false;
+				player.pa = 0;
+			} else {
+				player.pa = answer.pa;
+				sessionActive = true;
+			}
+			if (answer.position!=null) {
+				player.x = answer.position.x;
+				player.y = answer.position.y;
+				player.z = answer.position.z;				
+			}
+			f.call();
+		}
+	);
+}
 
 switch (pageName) {
 	case "PlayStart.php":
@@ -44,7 +66,7 @@ switch (pageName) {
 		Chrall_analyseAndReformatProfile();	
 		break;
 	case "Play_vue.php":
-		getTrollIdthenExecute(Chrall_analyseAndReformatView);	
+		getBackgroundInfosThenExecute(Chrall_analyseAndReformatView);	
 		break;
 	case "Play_mouche.php":
 		Chrall_analyseAndReformatFlies();
@@ -53,7 +75,7 @@ switch (pageName) {
 		Chrall_analyseAndReformatBM();	
 		break;
 	case "Play_evenement.php":
-		getTrollIdthenExecute(Chrall_addBubblesToLinks);
+		getTrollIdThenExecute(Chrall_addBubblesToLinks);
 		break;
 	case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
 		Chrall_handleActionPage();
@@ -65,7 +87,7 @@ switch (pageName) {
 		Chrall_handleBeforeCdmPage();	
 		break;
 	case "Play_a_Competence16b.php": // résultat de cdm
-		getTrollIdthenExecute(Chrall_handleCdmPage);	
+		getTrollIdThenExecute(Chrall_handleCdmPage);	
 		break;
 	case "Play.php": // c'est le frameset qui engloble tout
 		Chrall_preparePlayInputs();	
@@ -80,7 +102,7 @@ switch (pageName) {
 		Chrall_handleMovePage();	
 		break;
 	case "PJView.php":
-		getTrollIdthenExecute(Chrall_analyseAndReformatPJView); 
+		getTrollIdThenExecute(Chrall_analyseAndReformatPJView); 
 		//Chrall_analyseAndReformatPJView();
 		break;
 	case "PJView_Events.php":
@@ -88,7 +110,7 @@ switch (pageName) {
 		Chrall_addBubblesToLinks();
 		break;
 	case "Play_news.php":
-		getTrollIdthenExecute(Chrall_addBubblesToLinks);
+		getTrollIdThenExecute(Chrall_addBubblesToLinks);
 		break;
 	case "MonsterView.php":
 		Chrall_addBubblesToLinks();

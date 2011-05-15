@@ -14,7 +14,7 @@ function Chrall_handleActionPage() {
 	} else {
 		// a priori si on n'a pas cette phrase c'est qu'on n'a pas activé
 		$('<script>parent.chrall_pa_restant.value=0;</script>').appendTo($('body'));
-		chrome.extension.sendRequest({"pa": 0});
+		chrome.extension.sendRequest({"pa": -1}); // -1 pour signaler que la session n'est pas active
 	}
 }
 

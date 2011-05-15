@@ -278,7 +278,9 @@ function Chrall_analyseTrollTable(table) {
 	html += ' var dests=[];  var cbs = document.getElementsByName(\'cb_troll\');';
 	html += ' for (var i=0; i<cbs.length; i++) {if(cbs[i].checked) dests.push(cbs[i].value)}';
 	html += ' document.location.href=\'../Messagerie/MH_Messagerie.php?cat=\'+cat+\'&dest=\'+dests.join("%2C");';
-	html += '}</script><b>TROLLS</b> <a class=gogo href="javascript:mhmp(3);">Envoyer un message</a> <a class=gogo href="javascript:mhmp(8);">Partager des px</a></td>';
+	html += '}</script><b>TROLLS</b> <a class=gogo href="javascript:mhmp(3);">Envoyer un message</a>';
+	if (sessionActive) html += ' <a class=gogo href="javascript:mhmp(8);">Partager des px</a>';
+	html += '</td>';
 	$(rows[0]).html(html);
 }
 
@@ -605,48 +607,39 @@ function Chrall_analyseAndReformatView() {
 				if (cost>player.pa) return '';
 				return '<a href="javascript:console.log(\'AE\');playDE('+(x-player.x)+','+(y-player.y)+','+(z-player.z)+');">DE '+x+' '+y+' '+z+'</a>';
 			}
-			// D'abord il faut voir si on a des PA et combien. On doit demander ça à la page de fond qui elle-même a reçu l'info par
-			//  la petite frame d'action en bas de l'écran.
-			// Pour l'instant on ne teste pas le gluage parce que ça imposerait d'être passé récemment par le profil
-			chrome.extension.sendRequest(
-				{"get_pa": "s'il-te-plaît?"},
-				function(answer) {
-					if (answer.pa>=0) player.pa = answer.pa;
-					$('#grid td[grid_x]').each(function() {
-						var o = $(this);
-						var x = parseInt(o.attr('grid_x'));
-						var y = parseInt(o.attr('grid_y'));
-						var links = '';
-						// on ajoute au menu la liste des trésors aux pieds du joueur, pas qu'il oublie de les prendre...
-						if (x===player.x && y===player.y) {
-							if (objectsOnPlayerCell.length>4) {
-								links += "<span class=ch_pl_object>Il y a " + objectsOnPlayerCell.length + " trésors à vos pieds.</span>";
-							} else if (objectsOnPlayerCell.length>0) {
-								links += '<span class=ch_pl_object>A vos pieds :</span>';
-								for (var i=0; i<objectsOnPlayerCell.length; i++) {
-									links += '<br><span class=ch_pl_object>'+objectsOnPlayerCell[i].name+'</span>';							
-								}
-							}
+			$('#grid td[grid_x]').each(function() {
+				var o = $(this);
+				var x = parseInt(o.attr('grid_x'));
+				var y = parseInt(o.attr('grid_y'));
+				var links = '';
+				// on ajoute au menu la liste des trésors aux pieds du joueur, pas qu'il oublie de les prendre...
+				if (x===player.x && y===player.y) {
+					if (objectsOnPlayerCell.length>4) {
+						links += "<span class=ch_pl_object>Il y a " + objectsOnPlayerCell.length + " trésors à vos pieds.</span>";
+					} else if (objectsOnPlayerCell.length>0) {
+						links += '<span class=ch_pl_object>A vos pieds :</span>';
+						for (var i=0; i<objectsOnPlayerCell.length; i++) {
+							links += '<br><span class=ch_pl_object>'+objectsOnPlayerCell[i].name+'</span>';							
 						}
-						// liste des DE possibles
-						if (answer.pa>1 || (player.cellIsFree && answer.pa>0)) {
-							var deRange = player.z===0 ? 2 : 1;
-							var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
-							if (cellIsAccessibleByDe) {
-								if (player.z<0) links += (makeDeLink(x, y, player.z+1));
-								if (x!=player.x || y!=player.y) links += (makeDeLink(x, y, player.z));
-								links += (makeDeLink(x, y, player.z-1));
-							}
-						}
-									
-						objectMenu(
-							o,
-							x + " " + y,
-							links
-						);
-					});				
+					}
 				}
-			);
+				// liste des DE possibles
+				if (player.pa>1 || (player.cellIsFree && player.pa>0)) {
+					var deRange = player.z===0 ? 2 : 1;
+					var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
+					if (cellIsAccessibleByDe) {
+						if (player.z<0) links += (makeDeLink(x, y, player.z+1));
+						if (x!=player.x || y!=player.y) links += (makeDeLink(x, y, player.z));
+						links += (makeDeLink(x, y, player.z-1));
+					}
+				}
+							
+				objectMenu(
+					o,
+					x + " " + y,
+					links
+				);
+			});				
 						
 		}, 1000
 	);

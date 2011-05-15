@@ -18,15 +18,13 @@ function Chrall_tokenize(text) {
 
 /**
  * les alarmes, dont la durée de vie peut dépasser celle de la page MH, doivent être gérées
- *  dans l'extension.
+ *  dans l'extension (la page en background).
  */ 
 function Chrall_sendDlaToExtension(dlaTime, cumulTime) {
-	chrome.extension.sendRequest(
-		{
-			"dla": dlaTime,
-			"cumul": cumulTime
-		}
-	);
+	chrome.extension.sendRequest({
+		"dla": dlaTime,
+		"cumul": cumulTime
+	});
 }
 
 /**
