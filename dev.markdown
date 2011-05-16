@@ -212,6 +212,8 @@ RECENTS / A TESTER :
 * formulaire de définition de la recherche de filon (frame action) : indication de la zone fouillée
 * action recherche filon : "si tu repères un filon une fenêtre te dirait votre filon se situe entre ?<X<? et ?<Y<? et ,<N<?; idem si il ne se situe pas dans ta recherche)"
 
+<- v1.15
+
 EN COURS :
 ==========
 * apprendre le langage go
