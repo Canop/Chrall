@@ -106,7 +106,7 @@ func (km *Killomètre) parseLigneKill(line string) {
 
 func (km *Killomètre) parseFichierTrolls(file *os.File) os.Error {
 	r := bufio.NewReader(file)
-	line, err := r.ReadString('\n')
+	line, err := r.ReadString('\n') // TODO : utiliser r.ReadLine() plutôt que r.ReadString('\n')
 	for err == nil {
 		km.parseLigneTroll(line)
 		line, err = r.ReadString('\n')
@@ -121,7 +121,7 @@ func (km *Killomètre) parseFichierTrolls(file *os.File) os.Error {
 
 func (km *Killomètre) parseFichierKills(file *os.File) os.Error {
 	r := bufio.NewReader(file)
-	line, err := r.ReadString('\n')
+	line, err := r.ReadString('\n') // TODO : utiliser r.ReadLine() plutôt que r.ReadString('\n')
 	for err == nil {
 		km.parseLigneKill(line)
 		line, err = r.ReadString('\n')

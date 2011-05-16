@@ -65,13 +65,12 @@ function Chrall_extractSight(text) {
 	for (var l=0; l<lines.length; l++) {
 		if (lines[l].indexOf("Case")>=0) { // ce test est nécessaire car des lignes peuvent s'intercaler avec la mention du camou ou de l'invi
 			var tokens = Chrall_tokenize(lines[l]);
-			//for (var i=0; i<lines.length; i++) console.log(i+" : "+lines[i]);
-			//for (var i=0; i<tokens.length; i++) console.log(i+" : \""+tokens[i]+"\"");
 			var sight = new Characteristic();
 			sight.diceNumber = parseInt(tokens[0]);
 			sight.diceSize = 1;
 			sight.physicalBonus = parseInt(tokens[2]);
 			player.sight=sight;
+			player.totalSight = sight.diceNumber+sight.physicalBonus;
 			return;
 		}
 	}
@@ -91,7 +90,6 @@ function Chrall_extractDlaInfos(text) {
 
 function Chrall_extractPvAndFatigue(text) {
 	var lines = text.split('\n');
-	//for (var i=0; i<20; i++) console.log(i+" : " + lines[i]);
 	var pvTokens = Chrall_tokenize(lines[2]);
 	player.pv = parseInt(pvTokens[1].trim());
 	pvTokens = Chrall_tokenize(lines[10]);
@@ -362,7 +360,6 @@ function Chrall_analyseAndReformatProfile() {
 	html += "<span id=mbox class=ch_box><a id=ch_messageTitle>en attente...</a>";
 	html += "<span id=ch_messageContent><br><br>...de g0g0chrall...</span></span><br><br>";
 	$($("table table table")[0]).append(html);
-	
 	$.ajax(
 		{
 			url: "http://canop.org:9090/chrall/json?action=check_messages&TrollId=" + player.id + "&ChrallVersion="+chrallVersion,
@@ -392,4 +389,5 @@ function Chrall_analyseAndReformatProfile() {
 		}
 	);	
 
+	updateTroll();
 }

@@ -73,3 +73,15 @@ function sendToChrallServer(message) {
 	);
 
 }
+
+// appelée depuis l'une des sous-frame de droite (la grande, ou bien celle d'actions), cette méthode met à jour
+// la position affichée dans le menu et signale la position au script de fond.
+function updateTroll() {
+	chrome.extension.sendRequest({
+		"player":player
+	});
+	if (player.x) {
+		var s = 'X='+player.x + ' | Y='+player.y + ' | N='+player.z;
+		$('<script>parent.parent.Sommaire.document.getElementById("ch_menu_position").innerHTML="'+s+'";</script>').appendTo($('body'));
+	}
+}

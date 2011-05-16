@@ -123,13 +123,12 @@ function getBubbleContentForCompetence(name) {
 			return "Portée : une case à l'horizontal";
 			
 		case "Lancer de Potions" :
-			var s = player.sight.diceNumber+player.sight.physicalBonus;
-			var p = Math.floor(2+s/5);
+			var p = Math.floor(2+player.totalSight/5);
 			var cppc = player.talents[name].mastering + player.concentration;
 			var html = "<table>";
 			html += "<tr><td>Portée (à l'horizontale)</td><td> : " + p + (p>1 ? " cases" : " case") + "</td></tr>";
 			for (d=1; d<=s && d<=p && d<=20; d++) {
-				var bv = Math.min(10, (1-d)*10 + s);
+				var bv = Math.min(10, (1-d)*10 + player.totalSight);
 				html += "<tr><td>Jet de toucher à "+ d+ (d>1 ? " cases" : " case") + "</td><td> : " + (cppc+bv) + " %</td></tr>";
 			} 
 			html += "</table>";	
@@ -140,8 +139,8 @@ function getBubbleContentForCompetence(name) {
 
 		case "Miner" :
 			var html = "<table>";
-			html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(s/2) + "</td></tr>";
-			html += "<tr><td>Portée verticale</td><td> : " + Math.floor(Math.ceil(s/2)/2) + "</td></tr>";
+			html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(player.totalSight/2) + "</td></tr>";
+			html += "<tr><td>Portée verticale</td><td> : " + Math.floor(Math.ceil(player.totalSight/2)/2) + "</td></tr>";
 			html += "</table>";	
 			return html;
 
@@ -154,10 +153,9 @@ function getBubbleContentForCompetence(name) {
 			return html;
 			
 		case "Pistage" :
-			var s = player.sight.diceNumber+player.sight.physicalBonus;
 			var html = "<table>";
-			html += "<tr><td>Portée horizontale</td><td> : " + (2*s) + "</td></tr>";
-			html += "<tr><td>Portée verticale</td><td> : " + 2*Math.ceil(s/2) + "</td></tr>";
+			html += "<tr><td>Portée horizontale</td><td> : " + (2*player.totalSight) + "</td></tr>";
+			html += "<tr><td>Portée verticale</td><td> : " + 2*Math.ceil(player.totalSight/2) + "</td></tr>";
 			html += "</table>";	
 			return html;
 	
@@ -188,10 +186,9 @@ function getBubbleContentForSort(name) {
 	switch (name) {
 		
 		case "Analyse Anatomique" :
-			var s = player.sight.diceNumber+player.sight.physicalBonus;
 			var html = "<table>";
-			html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(s/2) + "</td></tr>";
-			html += "<tr><td>Portée verticale</td><td> : " + Math.floor(s/4) + "</td></tr>"; // c'est sûr ça ?
+			html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(player.totalSight/2) + "</td></tr>";
+			html += "<tr><td>Portée verticale</td><td> : " + Math.floor(player.totalSight/4) + "</td></tr>"; // c'est sûr ça ?
 			html += "</table>";	
 			return html
 
@@ -274,8 +271,7 @@ function getBubbleContentForSort(name) {
 			return html;
 			
 		case "Flash Aveuglant" :
-			var s = player.sight.diceNumber+player.sight.physicalBonus;
-			var a = 1 + Math.floor(s/5);
+			var a = 1 + Math.floor(player.totalSight/5);
 			var html = "Affecte les monstres et trolls sur la case d'un malus à l'attaque, à l'esquive et à la vue :<table>";
 			html += "<tr><td>Premier FA</td><td> : -" + a + "</td></tr>";
 			html += "<tr><td>Deuxième FA</td><td> : -" + decumul(1, a) + "</td></tr>";
@@ -287,16 +283,15 @@ function getBubbleContentForSort(name) {
 			return html;
 			
 		case "Glue" :
-			var s = player.sight.diceNumber+player.sight.physicalBonus;
 			var html = "<table>";
-			html += "<tr><td>Portée (à l'horizontale uniquement)</td><td> : " + Math.floor(1+s/3) + "</td></tr>";
+			html += "<tr><td>Portée (à l'horizontale uniquement)</td><td> : " + Math.floor(1+player.totalSight/3) + "</td></tr>";
 			html += "</table>";	
 			return html;
 
 		case "Griffe du Sorcier" :
 			var att = 3.5*player.attac.diceNumber + player.attac.magicalBonus;
 			var deg = 2*Math.floor(player.damage.diceNumber/2) + player.damage.magicalBonus;
-			var dur = 1 + Math.floor((player.sight.diceNumber+player.sight.physicalBonus)/5);
+			var dur = 1 + Math.floor((player.totalSight)/5);
 			var vir = 1 + Math.floor(player.pv/30) + Math.floor(player.regeneration.diceNumber/3);
 			var html = "<table>";
 			html += "<tr><td>Attaque</td><td> : " + att + "</td></tr>";
@@ -329,7 +324,7 @@ function getBubbleContentForSort(name) {
 			return "La créature ciblée (Troll ou Monstre) par le lanceur du Sortilège sera projetée par un champ de force magique vers une zone voisine. La direction de la projection est aléatoire et la victime sera désorientée. La conséquence de cette désorientation est qu'elle perdra 1 D6 en esquive pour le tour en cours.";
 		
 		case "Projectile Magique" :
-			var s = player.sight.diceNumber+player.sight.physicalBonus;
+			var s = player.totalSight;
 			// ici j'utilise une boucle pour calculer la portée. C'est pas long (probablement pas plus que d'appeler Math.exp) mais c'est pas beau
 			//  donc si quelqu'un a une formule directe je suis preneur !
 			var range = 30;
@@ -388,8 +383,7 @@ function getBubbleContentForSort(name) {
 			return html;
 
 		case "Télékinésie" :
-			var s = player.sight.diceNumber + player.sight.physicalBonus;
-			var p = Math.floor(s/2);
+			var p = Math.floor(player.totalSight/2);
 			var f = function(p) {
 				if (p<0) return " sont trop lourds pour votre vue.";
 				var h = " sont ciblables ";
@@ -454,7 +448,7 @@ function getBubbleContentForSort(name) {
 			return html;
 			
 		case "Voir le Caché" :
-			var s = player.sight.diceNumber+player.sight.physicalBonus;
+			var s = player.totalSight;
 			// flemme de chercher une formule, j'implémente tous les tests de la doc...
 			var range;
 			if (s>34) range=5;

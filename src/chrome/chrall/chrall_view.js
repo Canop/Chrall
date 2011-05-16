@@ -1,9 +1,6 @@
 var horizontalViewLimit; // l'horizon actuel, inférieur ou égal à la vue maximale
-var viewMaxSight; // récupérée dans l'analyse de la vue ceci correspond à la vue maximale possible
 var grid; // la grille. Tout ce qui est visible est stocké là dedans
 var objectsOnPlayerCell;
-
-
 
 /**
  * construit la ligne de boites à cocher permettant de filtrer la grille
@@ -26,27 +23,27 @@ function Chrall_makeFiltersHtml() {
 	html += "}";
 	html += "</script>";
 	html += "<form id=gridFiltersForm>";
-	if (viewMaxSight>5) {
+	if (player.totalSight>5) {
 		html += '<img title="Centre la vue sur votre troll" id=goto_player class=butt src="'+chrome.extension.getURL("player_target.png")+'">';
 		html += "Horizon : <select id=viewRedux>";
 		html += "<option value="+horizontalViewLimit+">Actuel (vue de "+horizontalViewLimit+")</option>";
-		if (horizontalViewLimit!=4 && viewMaxSight>4) {
+		if (horizontalViewLimit!=4 && player.totalSight>4) {
 			html += "<option value=4>Intime (vue de 4)</option>";
 		}
-		if (horizontalViewLimit!=6 && viewMaxSight>6) {
+		if (horizontalViewLimit!=6 && player.totalSight>6) {
 			html += "<option value=6>Proche (vue de 6)</option>";
 		}
-		if (horizontalViewLimit!=8 && viewMaxSight>8) {
+		if (horizontalViewLimit!=8 && player.totalSight>8) {
 			html += "<option value=8>Ordinaire (vue de 8)</option>";
 		}
-		if (horizontalViewLimit!=12 && viewMaxSight>12) {
+		if (horizontalViewLimit!=12 && player.totalSight>12) {
 			html += "<option value=12>Lointain (vue de 12)</option>";
 		}
-		if (horizontalViewLimit!=20 && viewMaxSight>20) {
+		if (horizontalViewLimit!=20 && player.totalSight>20) {
 			html += "<option value=20>Très lointain (vue de 20)</option>";
 		}
-		if (horizontalViewLimit!=viewMaxSight) {
-			html += "<option value="+viewMaxSight+">Max (vue de "+viewMaxSight+")</option>";
+		if (horizontalViewLimit!=player.totalSight) {
+			html += "<option value="+player.totalSight+">Max (vue de "+player.totalSight+")</option>";
 		}		
 		html += "</select> &nbsp;";	
 	}
@@ -365,7 +362,7 @@ function Chrall_analyseView() {
 	//> recherche de la vue max
 	var sightLine = $('form li:contains(" porte actuellement à")'); //
 	var tokens = Chrall_tokenize(sightLine.text());
-	viewMaxSight = parseInt(tokens[5]);
+	player.totalSight = parseInt(tokens[5]);
 
 	//> recherche de l'horizon (pour dessiner la grille ensuite)
 	try {
@@ -692,4 +689,8 @@ function Chrall_analyseAndReformatView() {
 	console.log("Duration Grid Append : " + (time_after_grid_append-time_after_grid_building));
 	console.log("Duration Bubbles : " + (time_end-time_after_grid_append));
 	console.log("Total Duration : " + (time_end-time_enter));
+	
+	// On corrige si nécessaire la position affichée dans le menu de gauche et on signale
+	// cette position au script de fond
+	updateTroll();
 }

@@ -207,19 +207,20 @@ RECENTS / A TESTER :
 * bulle du minage : portée > (vue+ B/M)/2 horizontal et (vue+ B/M)/4
 * remplacer getTrollIdthenExecute par une fonction qui récupère aussi les PA et la position
 * vue/table des trolls : ne pas afficher le bouton de partage des px si la dla n'est pas activée
+* bulle monstre EM : Correction cas de la limace qui sert à la fois comme compo de mois et pour glue (vu par tdd)
+* la position affichée dans le menu de gauche est mise à jour lors des déplacements
+* formulaire de définition de la recherche de filon (frame action) : indication de la zone fouillée
+* action recherche filon : "si tu repères un filon une fenêtre te dirait votre filon se situe entre ?<X<? et ?<Y<? et ,<N<?; idem si il ne se situe pas dans ta recherche)"
 
 EN COURS :
 ==========
 * apprendre le langage go
 * branche auth : authentification par requête SOAP au serveur MH du troll
-* mettre à jour la position dans le menu gauche...
-* action recherche filon : "si tu repères un filon une fenêtre te dirait votre filon se situe entre ?<X<? et ?<Y<? et ,<N<?; idem si il ne se situe pas dans ta recherche)"
 
 TODO :
 ======
 P1 :
 ----
-* modifier la position (stockée en fond) lors des déplacements sur action (DN, DE, charge, retraite, passage de TP, TGV)
 * calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
@@ -242,6 +243,7 @@ P2 :
 
 P3 :
 ----
+* inventaire de tanière : rendre les listes triables, filtrables
 * bulle pour le camouflage
 * afficher les UM des matos
 * mini carte centrée sur le gowap

@@ -10,7 +10,7 @@ function Chrall_handleMenuPage() {
 	var ibr = html.indexOf('<br>');
 	var t1 = html.substring(0, ibr-1);
 	var t2 = html.substring(ibr+4);
-	infoMenuDiv.html('<span id=ch_menu_dla>'+t1+'</span><br><span id=ch_menu_dla>'+t2+'</span>');
+	infoMenuDiv.html('<span id=ch_menu_dla>'+t1+'</span><br><span id=ch_menu_position>'+t2+'</span>');
 	var infoTokens = Chrall_tokenize(t2);
 	var px = infoTokens[1];
 	var py = infoTokens[3];

@@ -7,6 +7,8 @@ Pour le compiler, après avoir installé l'environnement go, lancez la commande 
 
 Pour lancer le serveur, exécutez ensuite
 	gogo
+	
+Le script restart-gogo.sh compiles, kills and restarts gogo as a background application
 
 Pour le tester, utilisez un navigateur web pour accéder à l'url
 	http://localhost:9090/chrall

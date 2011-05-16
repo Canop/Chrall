@@ -107,7 +107,7 @@ func (g *DiploGraph) getNode(isTroll bool, id uint) *DiploNode {
 
 // charge un fichier de diplo (il vaut mieux partir d'un graphe vide avant de charger un jeu de fichiers)
 func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader, ascii bool, subjectIsTroll bool) os.Error {
-	line, err := r.ReadString('\n')
+	line, err := r.ReadString('\n') // TODO : utiliser r.ReadLine() plutôt que r.ReadString('\n')
 	for err == nil {
 		tokens := strings.Split(line, ";", 6)
 		if len(tokens) < 5 {

@@ -2,6 +2,7 @@
 <head>
 	<title>Chrall</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<script LANGUAGE="Javascript" SRC="chrall_things.js"/>
 </head>
 <body>
 <!--
@@ -40,9 +41,9 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 	var minimalTimeBetweenAlarms = 5*60*1000; // pour diverses raisons algorithmiques, ne pas descendre ça trop bas et pas en dessous de alarmMargin
 	var lastAlarmTime = 0; // on stocke ça pour éviter de jouer trop souvent les alarmes
 	var remainingPaInfos = null;
-	var trollId = 0;
 	var sendCdm = true;
 	var trollPosition = null;
+	var player = new Troll(); // le troll du joueur
 
 	function playSound() {
 		document.getElementById('alarm').play();
@@ -90,6 +91,13 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 						"time": (new Date()).getTime(),
 						"pa": request[key]
 					};
+					if (request[key]==-1) {
+						player.pa = 0;
+						player.sessionActive = false;
+					}  else {
+						player.pa = request[key];
+						player.sessionActive = true;
+					}
 				} else if (key=="get_pa") {
 					var pa = -1;
 					if (remainingPaInfos) {
@@ -97,11 +105,11 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 					}
 					sendResponse({"pa":pa});					
 				} else if (key=="trollId") {
-					trollId = request[key];
-				} else if (key=="position") {
-					trollPosition = request[key];
+					player.id = request[key];
+				} else if (key=="player") {
+					player = request[key];
 				} else if (key=="get_trollId") {
-					sendResponse({"trollId":trollId});					
+					sendResponse({"trollId":player.id});					
 				} else if (key=="send_cdm") {
 					sendCdm = request[key]=='' ? false : true;
 				} else if (key=="get_send_cdm") {
@@ -112,9 +120,10 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 						pa = remainingPaInfos.pa;
 					}
 					sendResponse({
-						"trollId":trollId,
-						"pa":pa,
-						"position":trollPosition
+						//"trollId":trollId,
+						//"pa":pa,
+						//"position":trollPosition,
+						 "player": player
 					});					
 				}
 			}

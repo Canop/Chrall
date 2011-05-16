@@ -7,7 +7,7 @@ var splitedPathname = document.location.pathname.split('/');
 var pageName = splitedPathname[splitedPathname.length-1];
 var viewIsEmpty=true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
-var player = new Troll();
+var player = new Troll(); // le troll du joueur. Sera éventuellement récupéré de la page de fond dans getBackgroundInfosThenExecute
 var playerAmAbstract = new Array(); // strings. utilisées dans le profil à la fois pour le tableau de l'am et pour la bulle de la compétence en bas
 var viewedTrollId;
 var sessionActive = false; 
@@ -40,19 +40,7 @@ function getBackgroundInfosThenExecute(f) { // récupère les informations stock
 		{"get_bgInfos": "s'il-te-plaît?"},
 		function(answer) {
 			console.log(answer);
-			player.id = answer.trollId;
-			if (answer.pa<0) {
-				sessionActive = false;
-				player.pa = 0;
-			} else {
-				player.pa = answer.pa;
-				sessionActive = true;
-			}
-			if (answer.position!=null) {
-				player.x = answer.position.x;
-				player.y = answer.position.y;
-				player.z = answer.position.z;				
-			}
+			player.fillFrom(answer.player);
 			f.call();
 		}
 	);
@@ -89,6 +77,12 @@ switch (pageName) {
 	case "Play_a_Competence16b.php": // résultat de cdm
 		getTrollIdThenExecute(Chrall_handleCdmPage);	
 		break;
+	case "Play_a_Competence29.php": // préparation de minage (le formulaire dans la frame d'action)
+		getBackgroundInfosThenExecute(Chrall_handleBeforeMinage);	
+		break;
+	case "Play_a_Competence29b.php": // résultat de minage
+		getBackgroundInfosThenExecute(Chrall_handleMinagePage);	
+		break;
 	case "Play.php": // c'est le frameset qui engloble tout
 		Chrall_preparePlayInputs();	
 		break;
@@ -103,7 +97,6 @@ switch (pageName) {
 		break;
 	case "PJView.php":
 		getTrollIdThenExecute(Chrall_analyseAndReformatPJView); 
-		//Chrall_analyseAndReformatPJView();
 		break;
 	case "PJView_Events.php":
 		Chrall_analysePJEventsView();

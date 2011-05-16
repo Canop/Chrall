@@ -14,7 +14,6 @@ Characteristic.prototype.readRow = function(row) {
 	var cells = $(row).find("td");
 	var s = $(cells[1]).text().trim();
 	var tokens = Chrall_tokenize(s.replace('D', ' '));
-	//for (var i=0; i<tokens.length; i++) alert(tokens[i]); 
 	if (tokens.length>=2) {
 		this.diceNumber = parseInt(tokens[0]);
 		this.diceSize = parseInt(tokens[1]);
@@ -24,8 +23,6 @@ Characteristic.prototype.readRow = function(row) {
 	}
 	this.physicalBonus = parseInt($(cells[2]).text().trim());
 	this.magicalBonus = parseInt($(cells[3]).text().trim());
-	//~ alert(this.diceNumber);
-	//~ alert(this.diceSize);
 	return this;
 }
 Characteristic.prototype.getMean = function() {
@@ -150,7 +147,9 @@ Monster.prototype.setName = function(fullName){
  *  - les characteristics...
  *  - mm, rm, baseMm, baseRm
  *  - pa (les pa restant, pas souvent disponibles)
+ *  - sessionActive (booléen)
  *  - cellIsFree (pour le malus de déplacement de case occupée)
+ *  - totalSight (parce que suivant les cas on n'a pas toujours le détail)
  */ 
 function Troll(x, y, z) {
 	Thing.call(this, x, y, z); 
@@ -174,6 +173,13 @@ Troll.prototype.addFly = function(fly) {
 Troll.prototype.addTalent = function(t) {
 	if (!this.talents) this.talents = new Object();
 	this.talents[t.name]=t;
+}
+// permet de construire un troll à partir d'un autre dont le prototype est incomplet (reçu en json depuis le script de fond, pas les méthodes)
+Troll.prototype.fillFrom = function(src) {
+	// d'abord les champs de base
+	for (var key in src) {
+		this[key]=src[key];
+	}
 }
 
 //////////////////////////////////////////////////////////////////////// Place (lieu)
