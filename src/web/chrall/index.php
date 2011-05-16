@@ -44,6 +44,7 @@ Allez jeter un œil à la <a href=galerie.php>galerie</a>.
 <h2>Discuter</h2>
 <p>
 Un forum a été mis en place : <a href=fofo/>le canofofo</a>.
+<br>On discute aussi de Chrall <a href="http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=21&TopicID=144172">sur le forum de Mounty Hall</a>.
 </p>
 
 <h2>Développement</h2>
