@@ -1,4 +1,3 @@
-
 var emMonsterMonths = [
 	"Phoenix",
 	"Mouche",
@@ -65,13 +64,13 @@ var emCompos = [
 function getEmMonsterDecoration(monsterName) { // attention : on peut recevoir le nom urlencodé
 	var emn = " "+monsterName.replace('%20', ' ')+" ";
 	var str = '';
-	for (var i=0; i<emMonsterMonths.length; i++) {
+	for (var i=emMonsterMonths.length; i-->0;) {
 		if (~emn.indexOf(" "+emMonsterMonths[i]+" ")) {
 			str += "<br>Ce monstre peut lâcher un composant variable pour EM.";
 			break;
 		}
 	}
-	for (var i=0; i<emCompos.length; i++) {
+	for (var i=emCompos.length; i-->0;) {
 		if (~emn.indexOf(" "+emCompos[i][0]+" ")) {
 			str += "<br>Compo EM : " + emCompos[i][1] + " " + emCompos[i][0] + " pour <i>" + emCompos[i][2] + "</i>.";
 		}
