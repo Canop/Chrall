@@ -59,20 +59,8 @@ function turnName(turn) {
 	}
 }
 
-// envoie au serveur un message authentifié par le mdp restreint
-function sendToChrallServer(message) {
-	if ((!localStorage['mdp_restreint']) || (localStorage['mdp_restreint']=='')) return false; // on n'envoie pas au serveur si le joueur n'a pas créé de compte
-	message['numero'] = player.id;
-	message['mdp'] = localStorage['mdp_restreint'];
-	$.ajax(
-		{
-			url: 'http://canop.org:9090/chrall/json?message='+ajaxify(message),
-			crossDomain: true,
-			dataType: "jsonp"
-		}
-	);
 
-}
+
 
 // appelée depuis l'une des sous-frame de droite (la grande, ou bien celle d'actions), cette méthode met à jour
 // la position affichée dans le menu et signale la position au script de fond.
@@ -85,3 +73,7 @@ function updateTroll() {
 		$('<script>parent.parent.Sommaire.document.getElementById("ch_menu_position").innerHTML="'+s+'";</script>').appendTo($('body'));
 	}
 }
+
+
+
+

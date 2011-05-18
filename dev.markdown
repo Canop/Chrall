@@ -214,21 +214,25 @@ RECENTS / A TESTER :
 
 <- v1.15
 
+* le baratin complexe d'optimisation de l'AM avait sauté il y a longtemps (bug), je viens de le rétablir
+
 EN COURS :
 ==========
 * apprendre le langage go
-* branche auth : authentification par requête SOAP au serveur MH du troll
+* communication authentifiée extension<->gogochrall pour le partage entre joueurs
+* transmettre la position dans updateTroll à gogochrall
 
 TODO :
 ======
 P1 :
 ----
-* calculs en roll-over sur les sorts & compétences. Reste à faire : FP, PuM, PréM, VL. A vérifier : FA, Balayage
+* options/compte : vérifier immédiatement que le mot de passe saisi fait bien 32 caractères
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
 
 P2 :
 ----
+* grille/filtre : sous-cochage par type de trésor
 * affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * indiquer dans l'équipement quels compos ont de la valeur pour EM et calculer les histoires de %
 * interception des cdm : ne rien envoyer au serveur si on a raté la comp

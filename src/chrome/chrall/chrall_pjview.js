@@ -18,7 +18,7 @@ function Chrall_analyseAndReformatPJView() {
 	console.log(html);
 	$(html.join('')).appendTo($('body'));
 
-	bubble($("#ch_pjpop_trigger"), '', "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&asker="+player.id+"&trollId="+viewedTrollId, viewedTrollId);
+	bubble($("#ch_pjpop_trigger"), '', "bub_troll", GOGOCHRALL+"json?action=get_troll_info&asker="+player.id+"&trollId="+viewedTrollId, viewedTrollId);
 
 	
 }

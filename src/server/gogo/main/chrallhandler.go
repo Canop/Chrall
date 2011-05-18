@@ -8,7 +8,7 @@ import (
 
 type ChrallHandler struct {
 	Handler
-	store *CdmStore
+	store *MysqlStore
 }
 
 

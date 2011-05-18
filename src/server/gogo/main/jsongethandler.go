@@ -23,7 +23,6 @@ type TrollBubbleJson struct {
 	IdGuilde  uint
 }
 
-
 type JsonGetHandler struct {
 	ChrallHandler
 	tksManager *TksManager
@@ -172,6 +171,7 @@ func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr
 	w.Write(blist)
 }
 
+
 func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
 	startSeconds, startNanosecs, _ := os.Time()
@@ -202,7 +202,7 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	} else if action == "check_messages" {
 		h.serveMessageJsonp(w, hr)
 	} else {
-		fmt.Println(" Requete non comprise")
+		h.serveAuthenticatedMessage(w, action, GetFormValue(hr, "message")) // par défaut on considère qu'il s'agit d'un message authentifié
 	}
 	endSeconds, endNanosecs, _ := os.Time()
 	durationMillis := 1e3*(endSeconds-startSeconds) + (endNanosecs-startNanosecs)/1e6

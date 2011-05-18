@@ -276,7 +276,7 @@ function Chrall_analyseTrollTable(table) {
 	html += ' for (var i=0; i<cbs.length; i++) {if(cbs[i].checked) dests.push(cbs[i].value)}';
 	html += ' document.location.href=\'../Messagerie/MH_Messagerie.php?cat=\'+cat+\'&dest=\'+dests.join("%2C");';
 	html += '}</script><b>TROLLS</b> <a class=gogo href="javascript:mhmp(3);">Envoyer un message</a>';
-	if (sessionActive) html += ' <a class=gogo href="javascript:mhmp(8);">Partager des px</a>';
+	if (player.sessionActive) html += ' <a class=gogo href="javascript:mhmp(8);">Partager des px</a>';
 	html += '</td>';
 	$(rows[0]).html(html);
 }
@@ -549,7 +549,7 @@ function Chrall_analyseAndReformatView() {
 							requestId = linkText;
 						}
 						message += getEmMonsterDecoration(nomMonstre);
-						bubble(link, message, "bub_monster", "http://canop.org:9090/chrall/json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
+						bubble(link, message, "bub_monster", GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
 					}
 				}
 			);
@@ -561,7 +561,7 @@ function Chrall_analyseAndReformatView() {
 					var message = link.attr("message");
 					var trollId = link.attr('id');
 					if (trollId) {
-						bubble(link, message, "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
+						bubble(link, message, "bub_troll", GOGOCHRALL+"json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
 					}
 				}
 			);	
@@ -571,7 +571,7 @@ function Chrall_analyseAndReformatView() {
 					var link = $(this);
 					var trollId = link.attr('id');
 					if (trollId) {
-						bubble(link, '', "bub_troll", "http://canop.org:9090/chrall/json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
+						bubble(link, '', "bub_troll", GOGOCHRALL+"json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
 					}
 				}
 			);	
@@ -582,7 +582,7 @@ function Chrall_analyseAndReformatView() {
 			if (trollId==0) {
 				bubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
 			} else {
-				bubble(link, '', "bub_player", "http://canop.org:9090/chrall/json?action=get_troll_info&trollId="+trollId, trollId);
+				bubble(link, '', "bub_player", GOGOCHRALL+"json?action=get_troll_info&trollId="+trollId, trollId);
 			}
 	
 			//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)

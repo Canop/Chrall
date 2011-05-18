@@ -196,24 +196,26 @@ function Chrall_makeStrainInfos() {
 								var pv0 = Math.ceil(m0/normalPvGain);
 								playerAmAbstract.push("" + normalPvGain + " minutes gagnées par PV dépensé.");
 								var mpai = "Vous devez dépenser " + pv0 + " PV pour rejouer de suite. ";
-								playerAmAbstract.push(mpai);
 								if (alternatePvGain<normalPvGain) mpai += "Voire plus. ";
 								if (pv0>=100 /* TODO : mettre les pv restant */) mpai += "Evidemment ça fait beaucoup. ";
+								var g1 = -1;
+								var pv1 = -1;
 								if (pv0>2) {
 									var pv1 = pv0-1;
-									var g1 = pv1*normalPvGain;
-									mpai += "Si vous attendez " + Math.ceil(m0-g1) + " minutes, ce qui vous mènera à " + (player.getDla().clone().addMinutes(-g1).toString("HH:mm")) + " vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
+									g1 = pv1*normalPvGain;
+									mpai += "<br>Si vous attendez " + Math.ceil(m0-g1) + " minutes, ce qui vous mènera à " + (player.getDla().clone().addMinutes(-g1).toString("HH:mm")) + " vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
 								}
 								for (var osi=0; osi<optimalStrains.length; osi++) {
 									if (pv0+normalStrain>optimalStrains[osi]) {
 										var goodAcceleration = optimalStrains[osi]-normalStrain;
 										var dateGoodAcceleration = player.getDla(0).clone().addMinutes(-goodAcceleration*normalPvGain);
-										if (dateGoodAcceleration.getTime()<player.getDla(0).getTime()) {
-											mpai += "Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour rejouer de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + " (laquelle deviendra négligeable en "+(optimalStrains.length-osi-1)+" tours). ";
+										if (dateGoodAcceleration.getTime()<player.getDla(0).getTime()  && pv1!=goodAcceleration) {
+											mpai += "<br>Si vous attendez " + dateGoodAcceleration.toString("le dd/MM à HH:mm") + " vous pourrez accélérer de " + goodAcceleration + " PV pour rejouer de suite, ce qui portera votre fatigue à " + optimalStrains[osi] + " (laquelle deviendra négligeable en "+(optimalStrains.length-osi-1)+" tours). ";
 										}
 										break;
 									}
 								}
+								playerAmAbstract.push(mpai);
 							} else {
 								playerAmAbstract.push("Vous n'auriez pas loupé votre DLA ?");
 							}
@@ -362,7 +364,7 @@ function Chrall_analyseAndReformatProfile() {
 	$($("table table table")[0]).append(html);
 	$.ajax(
 		{
-			url: "http://canop.org:9090/chrall/json?action=check_messages&TrollId=" + player.id + "&ChrallVersion="+chrallVersion,
+			url: GOGOCHRALL+"json?action=check_messages&TrollId=" + player.id + "&ChrallVersion="+chrallVersion,
 			crossDomain: true,
 			dataType: "jsonp"
 		}

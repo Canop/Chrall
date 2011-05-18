@@ -3,8 +3,9 @@
  * Il contient aussi les variables globales.
  */
 
-var splitedPathname = document.location.pathname.split('/');
-var pageName = splitedPathname[splitedPathname.length-1];
+var GOGOCHRALL = "http://localhost:9090/chrall/";
+//var GOGOCHRALL = "http://canop.org:9090/chrall/";
+
 var viewIsEmpty=true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
 var player = new Troll(); // le troll du joueur. Sera éventuellement récupéré de la page de fond dans getBackgroundInfosThenExecute
@@ -24,90 +25,86 @@ var viewFilters = {
 	"cénotaphes" : false
 };
 
-console.log("pageName=\""+pageName+"\""); 
+prepareReceiver();
 
-function getTrollIdThenExecute(f) {
-	chrome.extension.sendRequest(
-		{"get_trollId": "s'il-te-plaît?"},
-		function(answer) {
-			player.id = answer.trollId;
-			f.call();
-		}
-	);
-}
-function getBackgroundInfosThenExecute(f) { // récupère les informations stockées en page de fond
-	chrome.extension.sendRequest(
-		{"get_bgInfos": "s'il-te-plaît?"},
-		function(answer) {
-			console.log(answer);
-			player.fillFrom(answer.player);
-			f.call();
-		}
-	);
-}
+var splitedPathname = document.location.pathname.split('/');
+var pageName = splitedPathname[splitedPathname.length-1];
+console.log("pageName=\""+pageName+"\"");
 
-switch (pageName) {
-	case "PlayStart.php":
-		Chrall_analyseAndReformatStartPage();	
-		break;
-	case "Play_profil.php":
-		Chrall_analyseAndReformatProfile();	
-		break;
-	case "Play_vue.php":
-		getBackgroundInfosThenExecute(Chrall_analyseAndReformatView);	
-		break;
-	case "Play_mouche.php":
-		Chrall_analyseAndReformatFlies();
-		break;
-	case "Play_BM.php":
-		Chrall_analyseAndReformatBM();	
-		break;
-	case "Play_evenement.php":
-		getTrollIdThenExecute(Chrall_addBubblesToLinks);
-		break;
-	case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
-		Chrall_handleActionPage();
-		break;
-	case "Play_option.php":
-		Chrall_reformatOptionsView();	
-		break;
-	case "Play_a_Competence16.php": // préparation de CDM (le formulaire de choix du monstre)
-		Chrall_handleBeforeCdmPage();	
-		break;
-	case "Play_a_Competence16b.php": // résultat de cdm
-		getTrollIdThenExecute(Chrall_handleCdmPage);	
-		break;
-	case "Play_a_Competence29.php": // préparation de minage (le formulaire dans la frame d'action)
-		getBackgroundInfosThenExecute(Chrall_handleBeforeMinage);	
-		break;
-	case "Play_a_Competence29b.php": // résultat de minage
-		getBackgroundInfosThenExecute(Chrall_handleMinagePage);	
-		break;
-	case "Play.php": // c'est le frameset qui engloble tout
-		Chrall_preparePlayInputs();	
-		break;
-	case "Play_menu.php": // c'est la frame de gauche
-		Chrall_handleMenuPage();	
-		break;
-	case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la colonne menu de gauche
-		Chrall_preparePlay2Inputs();	
-		break;
-	case "Play_a_Move.php":
-		Chrall_handleMovePage();	
-		break;
-	case "PJView.php":
-		getTrollIdThenExecute(Chrall_analyseAndReformatPJView); 
-		break;
-	case "PJView_Events.php":
-		Chrall_analysePJEventsView();
-		Chrall_addBubblesToLinks();
-		break;
-	case "Play_news.php":
-		getTrollIdThenExecute(Chrall_addBubblesToLinks);
-		break;
-	case "MonsterView.php":
-		Chrall_addBubblesToLinks();
-		break;
-}
+chrome.extension.sendRequest(
+	{"get_bgInfos": "s'il-te-plaît?"},
+	function(answer) {
+		//console.log(answer);
+		player.fillFrom(answer.player);
+		sendToChrallServer('check_account', {});
+		switch (pageName) {
+		case "PlayStart.php":
+			Chrall_analyseAndReformatStartPage();	
+			break;
+		case "Play_profil.php":
+			Chrall_analyseAndReformatProfile();	
+			break;
+		case "Play_vue.php":
+			Chrall_analyseAndReformatView();	
+			break;
+		case "Play_mouche.php":
+			Chrall_analyseAndReformatFlies();
+			break;
+		case "Play_BM.php":
+			Chrall_analyseAndReformatBM();	
+			break;
+		case "Play_evenement.php":
+			Chrall_addBubblesToLinks();
+			break;
+		case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
+			Chrall_handleActionPage();
+			break;
+		case "Play_option.php":
+			Chrall_reformatOptionsView();	
+			break;
+		case "Play_a_Competence16.php": // préparation de CDM (le formulaire de choix du monstre)
+			Chrall_handleBeforeCdmPage();	
+			break;
+		case "Play_a_Competence16b.php": // résultat de cdm
+			Chrall_handleCdmPage();	
+			break;
+		case "Play_a_Competence29.php": // préparation de minage (le formulaire dans la frame d'action)
+			Chrall_handleBeforeMinage();	
+			break;
+		case "Play_a_Competence29b.php": // résultat de minage
+			Chrall_handleMinagePage();
+			break;
+		case "Play.php": // c'est le frameset qui engloble tout
+			Chrall_preparePlayInputs();	
+			break;
+		case "Play_menu.php": // c'est la frame de gauche
+			Chrall_handleMenuPage();	
+			break;
+		case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la colonne menu de gauche
+			Chrall_preparePlay2Inputs();	
+			break;
+		case "Play_a_Move.php":
+			Chrall_handleMovePage();	
+			break;
+		case "PJView.php":
+			Chrall_analyseAndReformatPJView(); 
+			break;
+		case "PJView_Events.php":
+			Chrall_analysePJEventsView();
+			Chrall_addBubblesToLinks();
+			break;
+		case "Play_news.php":
+			Chrall_addBubblesToLinks();
+			break;
+		case "MonsterView.php":
+			Chrall_addBubblesToLinks();
+			break;
+		}
+
+	}
+);
+
+
+
 
 

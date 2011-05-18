@@ -1,39 +1,17 @@
+package main
 /*
-Frontal pour la BD
-
-j'exploite ce connecteur mysql : https://github.com/Philio/GoMySQL
-
-Pour le mettre à jour, je me mets dans son répertoire et je fais
-   git fetch origin
-   git merge origin/master
-
+gère la lecture et l'écriture en mysql des CDM
 */
 
-package main
-
 import (
-	"os"
 	"fmt"
 	"mysql"
+	"os"
 	"strconv"
 	"time"
 )
 
-type CdmStore struct {
-	user     string
-	password string
-	database string
-}
-
-func NewStore(user string, password string) *CdmStore {
-	store := new(CdmStore)
-	store.user = user
-	store.password = password
-	store.database = "chrall"
-	return store
-}
-
-func (store *CdmStore) WriteCdms(cdms []*CDM, author int) (nbWrittenCdms int, err os.Error) {
+func (store *MysqlStore) WriteCdms(cdms []*CDM, author int) (nbWrittenCdms int, err os.Error) {
 
 	inserted := 0
 
@@ -71,7 +49,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM, author int) (nbWrittenCdms int, er
 	sql += " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
 	sql += " ?, ?, ?, ?, ?, ?, ?, ?)"
 
-	fmt.Println("SQL: " + sql)
+	//fmt.Println("SQL: " + sql)
 	stmt, err := db.Prepare(sql)
 	if err != nil {
 		return 0, err
@@ -124,7 +102,7 @@ func (store *CdmStore) WriteCdms(cdms []*CDM, author int) (nbWrittenCdms int, er
 }
 
 // renvoie une liste de noms pour un champ d'auto-completion
-func (store *CdmStore) getMonsterCompleteNames(partialName string, limit uint) ([]string, os.Error) {
+func (store *MysqlStore) getMonsterCompleteNames(partialName string, limit uint) ([]string, os.Error) {
 	if limit > 100 {
 		limit = 100
 	} else if limit < 5 {
@@ -166,7 +144,7 @@ func (store *CdmStore) getMonsterCompleteNames(partialName string, limit uint) (
 	return names[0:count], nil
 }
 
-func (store *CdmStore) ReadTotalStats() (*BestiaryExtract, os.Error) {
+func (store *MysqlStore) ReadTotalStats() (*BestiaryExtract, os.Error) {
 	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
 	if err != nil {
 		return nil, err
@@ -234,7 +212,7 @@ func rowToBestiaryExtract(completeName string, row mysql.Row) *BestiaryExtract {
  * estime les caractéristiques du monstre.
  * Si l'id est fourni (i.e. pas 0) et si on a des cdm concernant ce monstre précis, on n'utilise que celles là [EN COURS]
  */
-func (store *CdmStore) ComputeMonsterStats(completeName string, monsterId uint) (*BestiaryExtract, os.Error) {
+func (store *MysqlStore) ComputeMonsterStats(completeName string, monsterId uint) (*BestiaryExtract, os.Error) {
 	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
 	if err != nil {
 		return nil, err

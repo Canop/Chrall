@@ -31,7 +31,7 @@ func (bd *BucketDecoder) addCdm(cdm *CDM) {
 }
 
 
-func (bd *BucketDecoder) Decode(input string, store *CdmStore) {
+func (bd *BucketDecoder) Decode(input string, store *MysqlStore) {
 	lines := strings.Split(input, "\n", -1)
 
 	var currentCdm *CDM

@@ -20,35 +20,35 @@ func (server *GogoServer) Start() {
 	rootHandler.parent = &server.Hitter
 	http.Handle("/", rootHandler)
 
-	cdmStore := NewStore("temp_user", "temp_pwd") // TODO mettre user et mdp dans un fichier de config quelque part
+	store := NewStore("temp_user", "temp_pwd") // TODO mettre user et mdp dans un fichier de config quelque part
 
 	tksManager := new(TksManager)
 
 	chrallHandler := new(ChrallHandler)
 	chrallHandler.parent = &rootHandler.Hitter
-	chrallHandler.store = cdmStore
+	chrallHandler.store = store
 	http.Handle("/chrall", chrallHandler)
 	http.Handle("/chrall/", chrallHandler)
 
 	wellHandler := new(WellHandler)
 	wellHandler.parent = &chrallHandler.Hitter
-	wellHandler.store = cdmStore
+	wellHandler.store = store
 	http.Handle("/chrall/puits", wellHandler)
 	http.Handle("/chrall/puit", wellHandler)
 
 	bestiaryHandler := new(BestiaryHandler)
 	bestiaryHandler.parent = &chrallHandler.Hitter
-	bestiaryHandler.store = cdmStore
+	bestiaryHandler.store = store
 	http.Handle("/chrall/bestiaire", bestiaryHandler)
 
 	jsonPostHandler := new(JsonPostHandler)
-	jsonPostHandler.store = cdmStore
+	jsonPostHandler.store = store
 	jsonPostHandler.tksManager = tksManager
 	jsonPostHandler.parent = &chrallHandler.Hitter
 	http.Handle("/chrall/jsonp", jsonPostHandler)
 
 	jsonGetHandler := new(JsonGetHandler)
-	jsonGetHandler.store = cdmStore
+	jsonGetHandler.store = store
 	jsonGetHandler.tksManager = tksManager
 	jsonGetHandler.parent = &chrallHandler.Hitter
 	http.Handle("/chrall/json", jsonGetHandler)

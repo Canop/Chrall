@@ -4,6 +4,8 @@
 function Chrall_reformatOptionsView() {
 	var standardOptionContainer = $("table table td")[1];
 	var standardOptionTables = $(standardOptionContainer).find("table");
+	
+	var mdpkey = 'troll.'+player.id+'.mdp';
 
 	var html="<ul class=tabs>";
 	html += "<li><a href=#tabStandard>Options Standard</a></li>";
@@ -32,12 +34,15 @@ function Chrall_reformatOptionsView() {
 	html += "<li><a target=nouvelOnglet href=\"http://canop.org:9090/chrall/bestiaire\">Le Bestiaire</a> qui vous dira en retour ce qu'il sait des monstres</li>";
 	html += "</ul>";
 	html += "<h2>Compte Chrall</h2>";
+	html += "<p>Etat du compte Chrall : <b><span id=com_status_message>"+localStorage['com.status.message']+"</span></b></p>";
 	html += "<p>Un compte Chrall vous permet de partager des informations avec d'autres joueurs.</p>";
 	html += "<p>Afin d'authentifier les requêtes provenant au serveur Chrall, votre <a href='http://sp.mountyhall.com/md5.php' target=newTab>mot de passe restreint</a> est nécessaire :";
 	html += "<script>function changeMdpRestreint(){";
-	html += "localStorage['mdp_restreint']=document.getElementById('ch_mdp_restreint').value; console.log(localStorage['mdp_restreint']);";
+	html += " var nm=document.getElementById('ch_mdp_restreint').value;";
+	html += " if (nm.length!=32) { alert('Votre mot de passe restreint doit faire exactement 32 caractères.'); return;}";
+	html += " localStorage['"+mdpkey+"']=nm; console.log('mot de passe restreint : '+localStorage['"+mdpkey+"']);";
 	html += "}</script>";
-	html += "<input type=password id=ch_mdp_restreint value='"+(localStorage['mdp_restreint']?localStorage['mdp_restreint']:'')+"'>";
+	html += "<input type=password id=ch_mdp_restreint value='"+(localStorage[mdpkey]?localStorage[mdpkey]:'')+"'>";
 	html += "<a class=gogo href='javascript:changeMdpRestreint();'>Définir le mot de passe</a>";
 	html += "</p>";
 	html += "<p>Fournir votre mot de passe restreint peut (devrait) vous poser des problèmes si vous jouez un troll ennemi de la Canopée. Dans ce cas, et si vous avez des compétences informatiques, n'hésitez pas à venir causer sur le canofofo afin de voir si vous pourriez héberger un serveur afin d'éviter que votre groupe de chasse ne me confie vos données privées.</p>";

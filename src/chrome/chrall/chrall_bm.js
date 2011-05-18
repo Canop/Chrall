@@ -70,7 +70,6 @@ function Chrall_analyseAndReformatBM() {
 			$(cells[5]).text().trim()
 		));
 	});
-	console.log(effects);
 	const NB_TURNS_MAX = 20;
 	var lines = new Array();
 	for (var turn=0; turn<NB_TURNS_MAX; turn++) {

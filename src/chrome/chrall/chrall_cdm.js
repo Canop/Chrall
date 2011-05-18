@@ -44,7 +44,7 @@ function Chrall_handleCdmPage() {
 					//> envoi au serveur de la CDM
 					$.ajax(
 						{
-							url: "http://canop.org:9090/chrall/json?action=accept_cdm_jsonp&author="+player.id+"&cdm=" + encodeURIComponent(cdm), // <- attention, ne marche que si le text est court...
+							url: GOGOCHRALL+"json?action=accept_cdm_jsonp&author="+player.id+"&cdm=" + encodeURIComponent(cdm), // <- attention, ne marche que si le text est court...
 							crossDomain: true,
 							dataType: "jsonp"
 						}
