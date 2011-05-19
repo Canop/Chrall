@@ -6,6 +6,8 @@ function Chrall_reformatOptionsView() {
 	var standardOptionTables = $(standardOptionContainer).find("table");
 	
 	var mdpkey = 'troll.'+player.id+'.mdp';
+	
+	console.log('compteChrallActif:' + compteChrallActif());
 
 	var html="<ul class=tabs>";
 	html += "<li><a href=#tabStandard>Options Standard</a></li>";
@@ -26,7 +28,8 @@ function Chrall_reformatOptionsView() {
 	html += "<br>Chrall affiche, sur la vue, des estimations des caractéristiques des monstres, en exploitant son bestiaire (lien plus bas)."
 	html += "<br>Chrall transmet les CDM que vous effectuez à ce bestiaire, afin de l'enrichir (si vous l'acceptez)."
 	html += "<br>Aucune autre information, et en particulier aucune information pouvant donner un avantage illégitime à un autre joueur n'est récupérée"
-	html += " (donc pas de transmission des AA, des blessures des monstres, des coups, des infos de vos trolls, etc.)."
+	html += " (donc pas de transmission des AA, des blessures des monstres, des coups, des infos de vos trolls, etc.) SAUF si vous activez un compte Chrall auquel cas certaines informations"
+	html += " seront partagées avec des joueurs de votre choix."
 	html += "</p>";
 	html += "<h2>Outils Chrall</h2>";
 	html += "<ul>";
@@ -43,10 +46,17 @@ function Chrall_reformatOptionsView() {
 	html += " localStorage['"+mdpkey+"']=nm; console.log('mot de passe restreint : '+localStorage['"+mdpkey+"']);";
 	html += "}</script>";
 	html += "<input type=password id=ch_mdp_restreint value='"+(localStorage[mdpkey]?localStorage[mdpkey]:'')+"'>";
-	html += "<a class=gogo href='javascript:changeMdpRestreint();'>Définir le mot de passe</a>";
+	html += "<a class=gogo href='javascript:changeMdpRestreint();'>Modifier le mot de passe</a>";
+	console.log(player);
+	var clefCompteActif='"troll.'+player.id+'.compteActif"';
+	if (compteChrallActif()) {
+		html += " &nbsp; <a class=gogo href='javascript:localStorage["+clefCompteActif+"]=\"no\";document.location.href=\"Play_option.php\";'>Désactiver le compte</a>";
+	} else {
+		html += " &nbsp; <a class=gogo href='javascript:localStorage["+clefCompteActif+"]=\"yes\";document.location.href=\"Play_option.php\";'>Activer le compte</a>";
+	}
 	html += "</p>";
 	html += "<p>Fournir votre mot de passe restreint peut (devrait) vous poser des problèmes si vous jouez un troll ennemi de la Canopée. Dans ce cas, et si vous avez des compétences informatiques, n'hésitez pas à venir causer sur le canofofo afin de voir si vous pourriez héberger un serveur afin d'éviter que votre groupe de chasse ne me confie vos données privées.</p>";
-	html += "<p>Notez que vous ne transmettez pas d'informations confidentielles au serveur Chrall tant que vous ne fournissez pas votre mot de passe restreint.</p>";
+	html += "<p>Notez que vous ne transmettez pas d'informations confidentielles au serveur Chrall tant que vous n'activez pas le compte.</p>";
 	html += " </div>";
 	html += "</div>";
 

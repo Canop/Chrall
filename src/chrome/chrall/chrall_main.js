@@ -25,6 +25,9 @@ var viewFilters = {
 	"cénotaphes" : false
 };
 
+// on rend jquery disponible dans les pages (ça n'a pas l'air de marcher)
+//$('head').append('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>');
+
 prepareReceiver();
 
 var splitedPathname = document.location.pathname.split('/');
@@ -36,15 +39,16 @@ chrome.extension.sendRequest(
 	function(answer) {
 		//console.log(answer);
 		player.fillFrom(answer.player);
-		sendToChrallServer('check_account', {});
 		switch (pageName) {
 		case "PlayStart.php":
 			Chrall_analyseAndReformatStartPage();	
 			break;
 		case "Play_profil.php":
+			initCommunications();
 			Chrall_analyseAndReformatProfile();	
 			break;
 		case "Play_vue.php":
+			initCommunications('get_partages');
 			Chrall_analyseAndReformatView();	
 			break;
 		case "Play_mouche.php":
@@ -60,6 +64,7 @@ chrome.extension.sendRequest(
 			Chrall_handleActionPage();
 			break;
 		case "Play_option.php":
+			initCommunications();
 			Chrall_reformatOptionsView();	
 			break;
 		case "Play_a_Competence16.php": // préparation de CDM (le formulaire de choix du monstre)
@@ -100,10 +105,9 @@ chrome.extension.sendRequest(
 			Chrall_addBubblesToLinks();
 			break;
 		}
-
+		localStorage['todo']='';
 	}
 );
-
 
 
 

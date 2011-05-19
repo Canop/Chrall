@@ -72,6 +72,7 @@ function updateTroll() {
 		var s = 'X='+player.x + ' | Y='+player.y + ' | N='+player.z;
 		$('<script>parent.parent.Sommaire.document.getElementById("ch_menu_position").innerHTML="'+s+'";</script>').appendTo($('body'));
 	}
+	sendPlayerInfosToChrallServer();
 }
 
 

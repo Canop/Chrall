@@ -27,4 +27,3 @@ func NewStore(user string, password string) *MysqlStore {
 	store.database = "chrall"
 	return store
 }
-

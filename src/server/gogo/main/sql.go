@@ -45,6 +45,12 @@ func fieldAsInt64(o interface{}) int64 {
 	}
 	return o.(int64)
 }
+func fieldAsInt32(o interface{}) int32 {
+	if o == nil {
+		return 0
+	}
+	return o.(int32)
+}
 func fieldAsBoolean(o interface{}) boolean {
 	if o == nil {
 		return b_unknown

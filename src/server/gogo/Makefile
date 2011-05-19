@@ -11,6 +11,7 @@ GOFILES=\
 	main/mysqlstore.go\
 	main/cdmstore.go\
 	main/comptestore.go\
+	main/partagestore.go\
 	main/messager.go\
 	main/handler.go\
 	main/roothandler.go\

@@ -21,7 +21,7 @@ type SoapFault struct {
 	Detail      string
 }
 type SoapBody struct {
-	Fault SoapFault
+	Fault          SoapFault
 	ProfilResponse SoapProfil
 }
 type SoapEnvelope struct {
@@ -96,27 +96,27 @@ func GetSoapProfil(numero uint, mdp string) (envelope *SoapEnvelope) {
 // Ceci consomme l'une des connexions autorisées pour ce troll, il ne faut donc le faire que si le mot de passe a changé
 func CheckPassword(numero uint, mdp_restreint string) (ok bool, errorCode string, errorDetails string) {
 	env := GetSoapProfil(numero, mdp_restreint)
-	if env==nil {
-		errorCode="soap_error"
-		errorDetails="erreur connexion ou parsage"
+	if env == nil {
+		errorCode = "soap_error"
+		errorDetails = "erreur connexion ou parsage"
 		return
 	}
-	
-	if env.Body.Fault.Detail!="" {
+
+	if env.Body.Fault.Detail != "" {
 		// il semble que le serveur MH ne soit pas capable de reconnaitre un mauvais mdp : je reçois ça comme erreur : "Erreur inconnue"
-		errorCode="soap_error"
-		errorDetails=env.Body.Fault.Detail
+		errorCode = "soap_error"
+		errorDetails = env.Body.Fault.Detail
 		fmt.Printf("Fault : %s\n", env.Body.Fault.Detail)
 		return
 	}
-	
+
 	// on va considérer que si l'on a reçu un profil qui contienne un niveau initialisé alors MH a considéré le couple (numero, mdp) comme valide
-	if env.Body.ProfilResponse.Numero<=0 {
-		errorCode="soap_error"
-		errorDetails="profil incoherent"
+	if env.Body.ProfilResponse.Numero <= 0 {
+		errorCode = "soap_error"
+		errorDetails = "profil incoherent"
 		return
 	}
-	
-	ok=true	
+
+	ok = true
 	return
 }

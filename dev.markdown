@@ -249,6 +249,7 @@ P2 :
 
 P3 :
 ----
+* indiquer les points cardinaux dans les menus de DE
 * inventaire de tanière : rendre les listes triables, filtrables
 * bulle pour le camouflage
 * afficher les UM des matos

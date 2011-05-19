@@ -459,6 +459,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<li><a href=#tabMushrooms>Champignons ("+grid.nbMushroomsInView+")</a></li>";
 	html[h++] = "<li><a href=#tabCenotaphs>Cénotaphes ("+grid.nbCenotaphsInView+")</a></li>";
 	html[h++] = "<li><a href=#tabSettings>Réglages</a></li>";
+	html[h++] = "<li><a href=#tabPartages>Partages</a></li>";
 	html[h++] = "</ul>";
 	html[h++] = "<div class=tab_container view>";
 	html[h++] = "<div id=tabGrid class=tab_content>";
@@ -474,6 +475,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabMushrooms class=tab_content scroll></div>";
 	html[h++] = "<div id=tabCenotaphs class=tab_content scroll></div>";
 	html[h++] = "<div id=tabSettings class=tab_content scroll></div>";
+	html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
 	html[h++] = "</div>";
 	
 	var time_after_grid_building = (new Date()).getTime(); // <= prof
@@ -487,6 +489,7 @@ function Chrall_analyseAndReformatView() {
 	$("#tabMushrooms").append(tables[4]);
 	$("#tabPlaces").append(tables[5]);
 	$("#tabCenotaphs").append(tables[6]);
+	$("#tabPartages").append(makePartageTables());
 	$(".tab_content").hide();
 	$("ul.tabs li:first").addClass("active").show();
 	$(".tab_content:first").show();
