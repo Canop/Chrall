@@ -1,7 +1,7 @@
 package main
 
 /*
-quelques fonctions pour le formatage html des CDM
+quelques fonctions pour le formatage html
 */
 
 import (

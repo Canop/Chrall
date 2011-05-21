@@ -268,6 +268,16 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 	return nil
 }
 
+func (m *TksManager) GetNomTroll(trollId int) string {
+	ti := m.getTrollInfos(trollId)
+	if ti == nil {
+		return "Troll Inconnu"
+	}
+	return ti.Nom
+}
+
+
+
 func (m *TksManager) getTrollInfos(trollId int) *TrollInfos {
 	if trollId <= 0 {
 		return nil

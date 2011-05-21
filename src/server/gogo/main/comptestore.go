@@ -43,6 +43,8 @@ func rowToCompte(trollId uint, row mysql.Row) (c *Compte) {
 }
 
 
+
+
 // lit un compte en base. Renvoie nil si le compte n'existe pas en base.
 // db peu être null. Sinon l'appelant est responsable de l'ouverture et de la fermeture de la connexion qu'il fournit
 func (store *MysqlStore) GetCompte(db *mysql.Client, trollId uint) (c *Compte, err os.Error) {

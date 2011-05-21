@@ -11,6 +11,7 @@ function compteChrallActif(newValue) {
 	if (newValue) {
 		localStorage[key]=newValue;
 	}
+	console.log('localStorage['+key+']='+localStorage[key]);
 	return localStorage[key]=='yes';
 }
 
@@ -53,13 +54,13 @@ function initCommunications(action) { // l'action reflète surtout ce que l'on v
 	console.log('compteChrallActif():'+compteChrallActif());
 	console.log("action="+action);
 	if (compteChrallActif()) {
-		var pendingProposal = localStorage['troll.'+player.id+'.proposalToSend'];
-		if (pendingProposal) {
+		var pendingChange = localStorage['troll.'+player.id+'.actionPartage'];
+		if (pendingChange) {
 			try {
-				var otn = parseInt(pendingProposal);
-				sendToChrallServer(action, {"NouvelleProposition":otn});
+				var otn = parseInt(localStorage['troll.'+player.id+'.objetPartage']);
+				sendToChrallServer(action, {"ChangePartage":localStorage['troll.'+player.id+'.actionPartage'], "IdAutreTroll": otn});
 			} catch (e){}
-			localStorage['troll.'+player.id+'.proposalToSend']='';
+			localStorage['troll.'+player.id+'.actionPartage']='';
 		} else {
 			sendToChrallServer(action, {});
 		}
@@ -80,7 +81,7 @@ function receiveFromChrallServer(message) {\
 	} else {\
 		localStorage["com.status.message"]=message.Text;\
 	}\
-	if (message.Partages && message.Partages.length>0) {console.log("Partages reçus :");console.log(message.Partages);updateTablePartage(message.Partages);}\
+	if (message.MiPartages && message.MiPartages.length>0) {console.log("Partages reçus :");console.log(message.MiPartages);updateTablesPartage(message.MiPartages);}\
 	var com_status_message_span = document.getElementById("com_status_message");\
 	if (com_status_message_span) com_status_message_span.innerHTML = localStorage["com.status.message"];\
 }\

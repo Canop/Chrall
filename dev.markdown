@@ -226,6 +226,9 @@ TODO :
 ======
 P1 :
 ----
+* économiser les ouvertures/fermures de connexion à la BD
+* ajouter serv01.jeuxweb.org et serv03.jeuxweb.org
+* BUG : NaN au lieu de valeurs pour le minage
 * options/compte : vérifier immédiatement que le mot de passe saisi fait bien 32 caractères
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
