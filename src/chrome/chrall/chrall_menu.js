@@ -15,8 +15,11 @@ function Chrall_handleMenuPage() {
 	var px = infoTokens[1];
 	var py = infoTokens[3];
 	var pz = infoTokens[5];
+	player.x = parseInt(px);
+	player.y = parseInt(py);
+	player.z = parseInt(pz);
 	chrome.extension.sendRequest({
 		"trollId": parseInt(trollId),
-		"position": {"x":px, "y":py, "z":pz}
+		"position": {"x":player.x, "y":player.y, "z":player.z}
 	});
 }

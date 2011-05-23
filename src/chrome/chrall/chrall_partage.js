@@ -1,6 +1,6 @@
 
 // construit les tables permettant d'exploiter et visualiser les partages (actuellement
-//  dans l'onglet 'Partages' de la vue
+//  dans l'onglet 'Partages' de la vue)
 function makePartageTables() {
 	if (!compteChrallActif()) {
 		return "Pour partager des informations privées vous devez activer votre compte Chrall dans les options.";
@@ -22,24 +22,36 @@ function makePartageTables() {
 	html[h++] = "   hpa+= '</td><td class=mh_tdpage>';";
 	html[h++] = "   hpa+= '<a href=\"javascript:EPV('+p.IdAutreTroll+')\" class=mh_trolls_1 id='+p.IdAutreTroll+'>'+p.NomAutreTroll+'</a>';";
 	html[h++] = "   hpa+= '</td>';";
+	html[h++] = "   hpa+= '<td class=mh_tdpage>'+p.RaceAutreTroll+'</td>';"; 
+	html[h++] = "   hpa+= '<td class=mh_tdpage>';"; 
+	html[h++] = "   if (p.NiveauAutreTroll>0) hpa+= p.NiveauAutreTroll;"; 
+	html[h++] = "   hpa+= '</td>';";
 	html[h++] = "   if (p.AutreTroll) {";
-	html[h++] = "    if (p.AutreTroll.PV_max>0) hpa+= '<td class=mh_tdpage>'+p.AutreTroll.PV_actuels+' / '+p.AutreTroll.PV_max+'</td>';"; 
+	html[h++] = "    hpa+= '<td class=mh_tdpage>';"; 
+	html[h++] = "    if (p.AutreTroll.PV_max>0) hpa+= +p.AutreTroll.PV_actuels+' / '+p.AutreTroll.PV_max;"; 
+	html[h++] = "    hpa+= '</td>';"; 
+	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.PA+'</td>';";
+	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDate(p.AutreTroll.ProchainTour)+'</td>';"; 	
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.X+'</td>';"; 
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Y+'</td>';"; 
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Z+'</td>';"; 
+	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDate(p.AutreTroll.MiseAJour)+'</td>';"; 	
 	html[h++] = "   } else {";
-	html[h++] = "    hpa+= '<td class=mh_tdpage colspan=4>Pas de données</td>';";
+	html[h++] = "    hpa+= '<td class=mh_tdpage colspan=7>Pas de données</td>';";
 	html[h++] = "   }";	
+	html[h++] = "   var a = 'Rompre';";
+	html[h++] = "   var scra='\\\''+a+'\\\'';"; // les échappements sont la misère...
+	html[h++] = "   hpa+='<td class=mh_tdpage><a class=gogo href=\"javascript:changePartage('+scra+', '+p.IdAutreTroll+');\">'+a+'</a></td>';";	
 	html[h++] = "   hpa+= '</tr>';";
 	html[h++] = "  } else {"; // ajout dans la table des partages inactifs
 	html[h++] = "   hpp+='<tr><td class=mh_tdpage>';";
 	html[h++] = "   hpp+='<a href=\"javascript:EPV('+p.IdAutreTroll+')\" class=mh_trolls_1 id='+p.IdAutreTroll+'>'+p.NomAutreTroll+'</a>';";
 	html[h++] = "   hpp+= '</td><td class=mh_tdpage>';";
 	html[h++] = "   if (p.StatutAutreTroll=='on') hpp+='Ce partage est accepté par '+p.NomAutreTroll+'. Acceptez le pour activer.';";
-	html[h++] = "   else hpp+='Ce partage doit être accepté par '+p.NomAutreTroll+'.';";	
+	html[h++] = "   else hpp+='Pour être actif, ce partage doit être accepté par '+p.NomAutreTroll+'.';";	
 	html[h++] = "   hpp+= '</td><td class=mh_tdpage>';";
 	html[h++] = "   var a = p.Statut=='on' ? 'Rompre' : 'Accepter';";
-	html[h++] = "   var scra='\\\''+a+'\\\'';"; // les échappements sont la misère...
+	html[h++] = "   var scra='\\\''+a+'\\\'';";
 	html[h++] = "   hpp+='<a class=gogo href=\"javascript:changePartage('+scra+', '+p.IdAutreTroll+');\">'+a+'</a>';";	
 	html[h++] = "   if (p.Statut=='off') {";
 	html[h++] = "    a = 'Supprimer';";
@@ -51,18 +63,19 @@ function makePartageTables() {
 	html[h++] = " }";
 	html[h++] = " tpa.innerHTML=hpa;";
 	html[h++] = " tpp.innerHTML=hpp;";
-	//~ html[h++] = "  ";
+	html[h++] = "  ";
 	html[h++] = "}";
 	html[h++] = "function changePartage(action, autreTroll){";
 	html[h++] = " localStorage['troll."+player.id+".actionPartage']=action;";
 	html[h++] = " localStorage['troll."+player.id+".objetPartage']=autreTroll;";
+	html[h++] = " localStorage['tab_view']='tabPartages';";
 	html[h++] = " document.location.href='"+pageName+"';";
 	html[h++] = "}</script>";
 
 	html[h++] = '<h2>Partages actifs</h2>';
 
 	html[h++] = "<table border='0' cellspacing='1' cellpadding='2' class='mh_tdborder' align='center'>";
-	html[h++] = "<thead><tr class=mh_tdtitre><td>dist.</td><td>Troll</td><td>PV</td><td>X</td><td>Y</td><td>N</td></tr></thead>";
+	html[h++] = "<thead><tr class=mh_tdtitre><td>dist.</td><td>Nom</td><td>Race</td><td>Niveau</td><td>PV</td><td>PA</td><td>DLA</td><td>X</td><td>Y</td><td>N</td><td>Mise à jour</td><td>Action</td></tr></thead>";
 	html[h++] = "<tbody id=partagesActifs></tbody></table>";
 
 	html[h++] = '<h2>Propositions</h2>';
@@ -75,7 +88,7 @@ function makePartageTables() {
 	html[h++] = "<a class=gogo href=\"javascript:changePartage('Proposer',document.getElementById('partage_proposal_troll_id').value);\">Proposer</a></p>";
 	html[h++] = "</center>";
 
-	console.log(html.join('\n'));
+	//console.log(html.join('\n'));
 
 	return html.join('');
 }

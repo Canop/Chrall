@@ -491,8 +491,15 @@ function Chrall_analyseAndReformatView() {
 	$("#tabCenotaphs").append(tables[6]);
 	$("#tabPartages").append(makePartageTables());
 	$(".tab_content").hide();
-	$("ul.tabs li:first").addClass("active").show();
-	$(".tab_content:first").show();
+	
+	if (localStorage['tab_view']) {
+		$('ul.tabs li:has(a[href="#'+localStorage['tab_view']+'"])').addClass("active").show();
+		$('#'+localStorage['tab_view']).show();
+		localStorage.removeItem('tab_view');
+	} else {
+		$("ul.tabs li:first").addClass("active").show();
+		$(".tab_content:first").show();
+	}
 	
 	$("ul.tabs li").click(function() {
 		hideOm(); // fermeture des éventuels objectMenus de la grille
@@ -605,7 +612,7 @@ function Chrall_analyseAndReformatView() {
 			var makeDeLink = function(x, y, z) {
 				var cost = (player.cellIsFree ? 1 : 2) + (z===player.z ? 0 : 1);
 				if (cost>player.pa) return '';
-				return '<a href="javascript:console.log(\'AE\');playDE('+(x-player.x)+','+(y-player.y)+','+(z-player.z)+');">DE '+x+' '+y+' '+z+'</a>';
+				return '<a href="javascript:playDE('+(x-player.x)+','+(y-player.y)+','+(z-player.z)+');">DE '+x+' '+y+' '+z+'</a>';
 			}
 			$('#grid td[grid_x]').each(function() {
 				var o = $(this);

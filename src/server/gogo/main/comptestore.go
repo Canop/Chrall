@@ -9,6 +9,7 @@ import (
 	"mysql"
 	"os"
 	"strconv"
+	"time"
 )
 
 
@@ -18,6 +19,12 @@ type TrollData struct {
 	X          int64
 	Y          int64
 	Z          int64
+	Fatigue uint
+	PA uint
+	Vue uint
+	ProchainTour int64 // timestamp (stocké en secondes dans la BD)
+	DureeTour int64 // durée du tour en secondes
+	MiseAJour int64 // timestamp (stocké en secondes dans la BD)
 }
 
 type Compte struct { // les infos privées sont celles qui ne sont pas décodables telles quelles depuis les structures json
@@ -26,7 +33,6 @@ type Compte struct { // les infos privées sont celles qui ne sont pas décodabl
 	mdpRestreint string // md5, donc 32 caractères
 	Troll        *TrollData
 }
-
 
 func rowToCompte(trollId uint, row mysql.Row) (c *Compte) {
 	c = new(Compte)
@@ -39,32 +45,27 @@ func rowToCompte(trollId uint, row mysql.Row) (c *Compte) {
 	c.Troll.X = fieldAsInt64(row[4])
 	c.Troll.Y = fieldAsInt64(row[5])
 	c.Troll.Z = fieldAsInt64(row[6])
+	c.Troll.Fatigue = fieldAsUint(row[7])
+	c.Troll.PA = fieldAsUint(row[8])
+	c.Troll.Vue = fieldAsUint(row[9])
+	c.Troll.ProchainTour = fieldAsInt64(row[10])*1000
+	c.Troll.DureeTour = fieldAsInt64(row[11])
+	c.Troll.MiseAJour = fieldAsInt64(row[12])*1000
 	return
 }
 
 
-
-
 // lit un compte en base. Renvoie nil si le compte n'existe pas en base.
-// db peu être null. Sinon l'appelant est responsable de l'ouverture et de la fermeture de la connexion qu'il fournit
+// Sinon l'appelant est responsable de l'ouverture et de la fermeture de la connexion qu'il fournit
 func (store *MysqlStore) GetCompte(db *mysql.Client, trollId uint) (c *Compte, err os.Error) {
-	if db == nil {
-		db, err = mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
-		if err != nil {
-			return
-		}
-		defer db.Close()
-	}
 
 	if trollId == 0 {
 		fmt.Println("GetCompte> trollId invalide")
 		return
 	}
 
-	sql := "select statut, mdp_restreint, pv_max, pv_actuels, x, y, z"
+	sql := "select statut, mdp_restreint, pv_max, pv_actuels, x, y, z, fatigue, pa, vue, prochain_tour, duree_tour, mise_a_jour"
 	sql += " from compte where id=" + strconv.Uitoa(trollId)
-
-	fmt.Println("SQL: " + sql)
 
 	err = db.Query(sql)
 	if err != nil {
@@ -137,25 +138,22 @@ func (store *MysqlStore) UpdateInfosGestionCompte(db *mysql.Client, c *Compte) (
 	return
 }
 
-// met à jour un compte en BD, sans les infos de gestion
-func (store *MysqlStore) UpdateTroll(c *Compte) (err os.Error) {
-
-	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
-	if err != nil {
-		return
-	}
-	defer db.Close()
+// met à jour un compte en BD, sans les infos de gestion (comme le mdp)
+func (store *MysqlStore) UpdateTroll(db *mysql.Client, c *Compte) (err os.Error) {
 
 	t := c.Troll
 	if t == nil {
 		fmt.Println("Compte sans données de troll")
 		return
 	}
+	
+	updateProfil := t.ProchainTour>0 // on ne met pas toujours tout à jour
 
 	sql := "update compte set"
-	sql += " pv_max=?,"
-	sql += " pv_actuels=?,"
 	sql += " x=?, y=?, z=?"
+	if updateProfil {
+		sql += " ,pv_max=?, pv_actuels=?, fatigue=?, pa=?, vue=?, prochain_tour=?, duree_tour=?, mise_a_jour=?"
+	}
 	sql += " where id=?"
 
 	stmt, err := db.Prepare(sql)
@@ -164,7 +162,11 @@ func (store *MysqlStore) UpdateTroll(c *Compte) (err os.Error) {
 	}
 	defer stmt.Close()
 
-	err = stmt.BindParams(t.PV_max, t.PV_actuels, t.X, t.Y, t.Z, c.trollId)
+	if updateProfil {
+		err = stmt.BindParams(t.X, t.Y, t.Z, t.PV_max, t.PV_actuels, t.Fatigue, t.PA, t.Vue, (t.ProchainTour/1000), t.DureeTour, time.Seconds(), c.trollId)
+	} else {
+		err = stmt.BindParams(t.X, t.Y, t.Z, c.trollId)
+	}
 	if err != nil {
 		return
 	}
@@ -175,13 +177,8 @@ func (store *MysqlStore) UpdateTroll(c *Compte) (err os.Error) {
 
 
 // vérifie que le compte existe et que le mot de passe restreint est validé par MH
-func (store *MysqlStore) CheckCompte(trollId uint, mdpr string) (ok bool, c *Compte, err os.Error) {
+func (store *MysqlStore) CheckCompte(db *mysql.Client, trollId uint, mdpr string) (ok bool, c *Compte, err os.Error) {
 
-	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
-	if err != nil {
-		return
-	}
-	defer db.Close()
 	c, err = store.GetCompte(db, trollId)
 
 	if err != nil {

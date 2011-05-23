@@ -139,8 +139,8 @@ function getBubbleContentForCompetence(name) {
 
 		case "Miner" :
 			var html = "<table>";
-			html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(player.totalSight/2) + "</td></tr>";
-			html += "<tr><td>Portée verticale</td><td> : " + Math.floor(Math.ceil(player.totalSight/2)/2) + "</td></tr>";
+			html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(player.totalSight*2) + "</td></tr>";
+			html += "<tr><td>Portée verticale</td><td> : " + Math.floor((player.totalSight/2)*2) + "</td></tr>";
 			html += "</table>";	
 			return html;
 

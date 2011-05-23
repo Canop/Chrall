@@ -131,7 +131,7 @@ Monster.prototype.setName = function(fullName){
  *  - level
  *  - race
  * 	- guildeName
- *  - dla (instance de Date)
+ *  - dlaTime (millisecondes depuis 1970)
  *  - pv
  *  - pvMax
  *  - turnDuration (en secondes)
@@ -163,8 +163,8 @@ Troll.prototype = new Thing();
  * je vous laisse deviner pour la suite
  */
 Troll.prototype.getDla = function(nbTurnsToAdd) {
-	if (!nbTurnsToAdd) return this.dla;
-	return this.dla.clone().add({seconds: nbTurnsToAdd*this.turnDuration});
+	if (!nbTurnsToAdd) return new Date(this.dlaTime);
+	return new Date(this.dlaTime).add({seconds: nbTurnsToAdd*this.turnDuration}); // surcharge de Date définie dans date-fr-FR.js
 }
 Troll.prototype.addFly = function(fly) {
 	if (!this.flies) this.flies = new Array();

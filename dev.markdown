@@ -214,27 +214,41 @@ RECENTS / A TESTER :
 
 <- v1.15
 
-* le baratin complexe d'optimisation de l'AM avait sauté il y a longtemps (bug), je viens de le rétablir
+* le baratin d'optimisation de l'AM avait sauté il y a longtemps (bug), je viens de le rétablir
+* compte chrall et communication authentifiée extension<->gogochrall pour le partage entre joueurs
+* affichage dans la vue (onglet 'Partages') des infos des trolls avec qui un partage est établi
+* correction (je pense) du calcul de la portée dans la bulle du minage
+* correction (je pense) de l'affichage de la zone couverte lors du minage
+* ajout de *.jeuxweb.org comme serveur de jeu possible
+* stockage de la blessure des monstres lors des CDM
+
 
 EN COURS :
 ==========
 * apprendre le langage go
-* communication authentifiée extension<->gogochrall pour le partage entre joueurs
-* transmettre la position dans updateTroll à gogochrall
+* virer la plupart des console.log
+
+POUR RELEASE :
+==============
+		constante GOGOCHRALL
+		ALTER TABLE  `cdm` ADD  `blessure` INT NOT NULL
 
 TODO :
 ======
 P1 :
 ----
-* économiser les ouvertures/fermures de connexion à la BD
-* ajouter serv01.jeuxweb.org et serv03.jeuxweb.org
-* BUG : NaN au lieu de valeurs pour le minage
-* options/compte : vérifier immédiatement que le mot de passe saisi fait bien 32 caractères
+* authentification des demandes de bulles de monstres si compte actif. Inclusion de la blessure (si partages ok) dans la bulle.
+* bug : grille : les dudus et les darklings sont représentés à l'identique (e.g. D24)
+* localstorage / background : vérifier l'id du troll et si nécessaire nettoyer pour ne pas mélanger les caracs...
+* vérifier que l'on envoie les données APRES analyse
+* analyser la position dans le profil
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
 
 P2 :
 ----
+* ne pas envoyer de check_account depuis le profil
+* essayer de ne faire qu'un seul message sortant depuis la vue
 * grille/filtre : sous-cochage par type de trésor
 * affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * indiquer dans l'équipement quels compos ont de la valeur pour EM et calculer les histoires de %

@@ -11,8 +11,15 @@ puis
 	make
 	make install
 
+
+Note : on dirait que ce connecteur a des problèmes avec les int64. Il vaut mieux, donc, éviter d'en utiliser.
+
 */
 
+import (
+	"mysql"
+	"os"
+)
 
 type MysqlStore struct {
 	user     string
@@ -26,4 +33,11 @@ func NewStore(user string, password string) *MysqlStore {
 	store.password = password
 	store.database = "chrall"
 	return store
+}
+
+
+// renvoie une instance de mysql.Client connectée. Il est impératif de faire suivre
+// l'appel à cette méthode d'un defer db.Close()
+func (store *MysqlStore) Connect() (db *mysql.Client, err os.Error) {
+	return mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
 }

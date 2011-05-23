@@ -4,16 +4,12 @@
 function parseEffects(s) {
 	var map = new Object();
 	var tokens = Chrall_tokenize(s);
-	for (var i=0; i<tokens.length;i++) console.log(" i="+i+" token="+tokens[i]);
 	for (var i=0; i<tokens.length-1;) {
 		var name = tokens[i++].trim();
 		if (name=='%') name = tokens[i++].trim();
 		var value = parseInt(tokens[i++]);
-		console.log(name);
-		console.log(value);
 		if ((name.length>0) && value)	map[name] = value;
 	}
-	console.log(map);
 	return map;
 }
 
@@ -61,7 +57,6 @@ function Chrall_analyseAndReformatBM() {
 	var effects = new Array();
 	$('table table table.mh_tdborder tr.mh_tdpage').each(function() {
 		var cells = $(this).find("td");
-		//for (var i=0; i<cells.length;i++) console.log(" i="+i+" cell="+$(cells[i]).text());
 		effects.push(new BmEffect(
 			$(cells[0]).text().trim(),
 			$(cells[2]).text().trim(),

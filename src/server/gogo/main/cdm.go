@@ -166,7 +166,7 @@ type CDM struct {
 	Chargement_text           string // dépend de l'individu et du moment ?
 	BonusMalus_text           string // dépend de l'individu et du moment ?
 	PortéeDuPouvoir_text      string
-	Blessure                  uint // ce champ n'est pas persisté, mais il permet de calculer pour le donneur de CDM le nombre de PV restant
+	Blessure                  uint 
 
 	Chars map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
 }

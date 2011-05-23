@@ -4,6 +4,8 @@ Communication authentifiée avec le serveur Chrall.
 
 */
 
+var sentMessagesCount = 0;
+
 // appelée sans paramètre, indique si le compte est actif, sinon l'active ou le désactive suivant valeur de newValue ("yes" ou "no")
 function compteChrallActif(newValue) {
 	if ((!player.id)||(player.id==0)) return false;
@@ -11,15 +13,21 @@ function compteChrallActif(newValue) {
 	if (newValue) {
 		localStorage[key]=newValue;
 	}
-	console.log('localStorage['+key+']='+localStorage[key]);
 	return localStorage[key]=='yes';
 }
 
 // met à jour sur le serveur (si le compte chrall est actif) les infos du troll du joueur
 function sendPlayerInfosToChrallServer() {
 	var troll = {};
-	troll.PV_max = player.pvMax;
-	troll.PV_actuels = player.pv;
+	if (player.totalSight) troll.Vue = player.totalSight;
+	if (player.dlaTime) { // si on n'a pas ça, le reste (hormis la position) est probablement faux
+		troll.ProchainTour = player.dlaTime; // timestamp (millisecondes)
+		if (player.strainBase) troll.Fatigue = player.strainBase+player.strainMalus;
+		if (player.turnDuration) troll.DureeTour = player.turnDuration; // en secondes
+		troll.PA = player.pa;
+		if (player.pvMax) troll.PV_max = player.pvMax;
+		if (player.pv) troll.PV_actuels = player.pv;
+	}
 	troll.X = player.x;
 	troll.Y = player.y;
 	troll.Z = player.z;
@@ -35,7 +43,8 @@ function sendToChrallServer(action, message) {
 	if ((!mdpRestreint) || (mdpRestreint=='')) return false; // on n'envoie pas au serveur si le joueur n'a pas créé de compte
 	message['TrollId'] = player.id;
 	message['MDP'] = mdpRestreint;
-	console.log('Message sent : ');
+	message['MessageNum'] = ++sentMessagesCount;
+	console.log('Message sortant de '+pageName+' (action='+action+') : ');
 	console.log(message);
 	$.ajax(
 		{
@@ -47,13 +56,9 @@ function sendToChrallServer(action, message) {
 	return true;
 }
 
-function initCommunications(action) { // l'action reflète surtout ce que l'on veut obtenir dans le message de réponse
-	console.log(localStorage);
-	if (!action) action='check_account';
+function initCommunications(action) {
 	localStorage['com.status.message']='Compte inexistant ou non connecté'; // on réinitialise à chaque page car on peut être sur un autre troll
-	console.log('compteChrallActif():'+compteChrallActif());
-	console.log("action="+action);
-	if (compteChrallActif()) {
+	if (action && compteChrallActif()) {
 		var pendingChange = localStorage['troll.'+player.id+'.actionPartage'];
 		if (pendingChange) {
 			try {
@@ -73,15 +78,20 @@ function initCommunications(action) { // l'action reflète surtout ce que l'on v
 function prepareReceiver() {
 $('body').prepend(
 '<script>\
+function formatDate(timestamp) {\
+	if (timestamp==0) return "";\
+	var d = new Date(timestamp);\
+	return d.getDate()+"/"+(d.getMonth()<9?("0"+(d.getMonth()+1)):(d.getMonth()+1))+" "+d.getHours()+"h"+(d.getMinutes()<9?("0"+(d.getMinutes()+1)):(d.getMinutes()+1));\
+}\
 function receiveFromChrallServer(message) {\
-	console.log("embedded receiveFromChrallServer");\
+	console.log("Message entrant :");\
 	console.log(message);\
 	if (message.Error.length>0) {\
 		localStorage["com.status.message"]="Compte en erreur : " + message.Error;\
 	} else {\
 		localStorage["com.status.message"]=message.Text;\
 	}\
-	if (message.MiPartages && message.MiPartages.length>0) {console.log("Partages reçus :");console.log(message.MiPartages);updateTablesPartage(message.MiPartages);}\
+	if (message.MiPartages && message.MiPartages.length>0 && typeof(updateTablesPartage)=="function") updateTablesPartage(message.MiPartages);\
 	var com_status_message_span = document.getElementById("com_status_message");\
 	if (com_status_message_span) com_status_message_span.innerHTML = localStorage["com.status.message"];\
 }\

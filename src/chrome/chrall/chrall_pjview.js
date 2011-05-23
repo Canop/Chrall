@@ -15,7 +15,6 @@ function Chrall_analyseAndReformatPJView() {
 	html[h++] = '<div id=ch_pjpop>';
 	html[h++] = '</div>';
 	html[h++] = '</div>';
-	console.log(html);
 	$(html.join('')).appendTo($('body'));
 
 	bubble($("#ch_pjpop_trigger"), '', "bub_troll", GOGOCHRALL+"json?action=get_troll_info&asker="+player.id+"&trollId="+viewedTrollId, viewedTrollId);

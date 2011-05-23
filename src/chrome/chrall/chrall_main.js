@@ -34,14 +34,15 @@ var splitedPathname = document.location.pathname.split('/');
 var pageName = splitedPathname[splitedPathname.length-1];
 console.log("pageName=\""+pageName+"\"");
 
+var resetTroll = pageName=="PlayStart.php";
+
 chrome.extension.sendRequest(
-	{"get_bgInfos": "s'il-te-plaît?"},
+	{"get_bgInfos": resetTroll},
 	function(answer) {
-		//console.log(answer);
 		player.fillFrom(answer.player);
 		switch (pageName) {
 		case "PlayStart.php":
-			Chrall_analyseAndReformatStartPage();	
+			Chrall_analyseAndReformatStartPage();
 			break;
 		case "Play_profil.php":
 			initCommunications();
@@ -64,7 +65,12 @@ chrome.extension.sendRequest(
 			Chrall_handleActionPage();
 			break;
 		case "Play_option.php":
-			initCommunications();
+		//~ case "Play_o_Pwd.php": // je désactive l'onglet sur les pages d'option à part la général : l'apparence de certains blocs MH est trop perturbée
+		//~ case "Play_o_Blason.php":
+		//~ case "Play_o_Interface.php":
+		//~ case "Play_o_css.php":
+		//~ case "Play_o_Divers.php":
+			initCommunications('check_account');
 			Chrall_reformatOptionsView();	
 			break;
 		case "Play_a_Competence16.php": // préparation de CDM (le formulaire de choix du monstre)

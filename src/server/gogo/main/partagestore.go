@@ -19,10 +19,12 @@ type Partage struct {
 	StatutB string
 }
 
-// le partage vu par un troll, pour exploitation dans l'extension uniquement
+// le partage vu par un troll, pour exploitation dans l'extension
 type MiPartage struct {
 	IdAutreTroll       uint // l'autre troll, qu'il soit initiateur ou pas
 	NomAutreTroll    string
+	RaceAutreTroll string
+	NiveauAutreTroll uint
 	Statut           string // est-ce qu'on a accepté
 	StatutAutreTroll string // est-ce que l'autre a accepté
 	AutreTroll *TrollData // les données du troll. On ne renseigne ça que si le partage est actif (les deux statuts à on) et le compte de l'autre troll actif
@@ -30,23 +32,23 @@ type MiPartage struct {
 
 // transforme des Partage en MiPartage. Une condition implicite est que l'observer soit l'une des parties
 // de chacun de ces partages
-func (store *MysqlStore) PartagesToMiPartages(observer uint, partages []*Partage, m *TksManager) (miPartages []*MiPartage) {
+func (store *MysqlStore) PartagesToMiPartages(db *mysql.Client, observer uint, partages []*Partage, m *TksManager) (miPartages []*MiPartage) {
 	miPartages = make([]*MiPartage, len(partages))
 	for i, p := range partages {
 		mp := new(MiPartage)
 		if p.TrollA == observer {
 			mp.IdAutreTroll = p.TrollB
-			mp.NomAutreTroll = m.GetNomTroll(int(p.TrollB))
+			mp.NomAutreTroll, mp.RaceAutreTroll, mp.NiveauAutreTroll = m.GetNomRaceNiveauTroll(int(p.TrollB))
 			mp.Statut = p.StatutA
 			mp.StatutAutreTroll = p.StatutB
 		} else {
 			mp.IdAutreTroll = p.TrollA
-			mp.NomAutreTroll = m.GetNomTroll(int(p.TrollA))
+			mp.NomAutreTroll, mp.RaceAutreTroll, mp.NiveauAutreTroll = m.GetNomRaceNiveauTroll(int(p.TrollA))
 			mp.Statut = p.StatutB
 			mp.StatutAutreTroll = p.StatutA
 		}
 		if (mp.Statut=="on" && mp.StatutAutreTroll=="on") {
-			c, _ := store.GetCompte(nil, mp.IdAutreTroll) // réutiliser la db
+			c, _ := store.GetCompte(db, mp.IdAutreTroll) // réutiliser la db
 			if c!=nil {
 				mp.AutreTroll = c.Troll
 			}
@@ -59,14 +61,6 @@ func (store *MysqlStore) PartagesToMiPartages(observer uint, partages []*Partage
 
 // sauvegarde un nouveau partage (à l'état de proposition de a pour b)
 func (store *MysqlStore) InsertPartage(db *mysql.Client, trollA uint, trollB uint) (err os.Error) {
-	if db == nil {
-		db, err = mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
-		if err != nil {
-			return
-		}
-		defer db.Close()
-	}
-
 	sql := "insert ignore into"
 	sql += " partage (troll_a, troll_b)"
 	sql += " values (       ?,       ?)"
@@ -93,13 +87,6 @@ func (store *MysqlStore) InsertPartage(db *mysql.Client, trollA uint, trollB uin
 // modifie un partage
 // est-ce qu'on pourrait faire ça en une seule requête ?
 func (store *MysqlStore) UpdatePartage(db *mysql.Client, troll uint, autreTroll uint, statut string) (err os.Error) {
-	if db == nil {
-		db, err = mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
-		if err != nil {
-			return
-		}
-		defer db.Close()
-	}
 
 	sql := "update partage set statut_a=? where troll_a=? and troll_b=?"
 	stmt, err := db.Prepare(sql)
@@ -132,17 +119,7 @@ func (store *MysqlStore) UpdatePartage(db *mysql.Client, troll uint, autreTroll 
 }
 
 
-// modifie un partage
-// est-ce qu'on pourrait faire ça en une seule requête ?
 func (store *MysqlStore) DeletePartage(db *mysql.Client, troll uint, autreTroll uint) (err os.Error) {
-	if db == nil {
-		db, err = mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
-		if err != nil {
-			return
-		}
-		defer db.Close()
-	}
-
 	sql := "delete from partage where (troll_a=? and troll_b=?) or (troll_b=? and troll_a=?)"
 	stmt, err := db.Prepare(sql)
 	if err != nil {
@@ -159,17 +136,8 @@ func (store *MysqlStore) DeletePartage(db *mysql.Client, troll uint, autreTroll 
 
 // récupère toutes les infos de partage, acceptés ou non, impliquant un troll
 func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partages []*Partage, err os.Error) {
-	if db == nil {
-		db, err = mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
-		if err != nil {
-			return
-		}
-		defer db.Close()
-	}
-
+	
 	sql := "select troll_a, troll_b, statut_a, statut_b from partage where troll_a=" + strconv.Uitoa(trollId) + " or troll_b=" + strconv.Uitoa(trollId)
-
-	fmt.Println("SQL: " + sql)
 
 	err = db.Query(sql)
 	if err != nil {

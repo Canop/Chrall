@@ -268,12 +268,12 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 	return nil
 }
 
-func (m *TksManager) GetNomTroll(trollId int) string {
+func (m *TksManager) GetNomRaceNiveauTroll(trollId int) (string, string, uint) {
 	ti := m.getTrollInfos(trollId)
 	if ti == nil {
-		return "Troll Inconnu"
+		return "Troll Inconnu", "", 0
 	}
-	return ti.Nom
+	return ti.Nom, ti.Race.string(), ti.Niveau
 }
 
 

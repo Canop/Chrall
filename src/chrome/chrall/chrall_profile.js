@@ -60,8 +60,11 @@ function Chrall_makeXpComments() {
 	return html;
 }
 
-function Chrall_extractSight(text) {
+function Chrall_extractPositionAndSight(text) {
 	var lines = text.split('\n');
+	//> extraction de la position
+	// todo
+	//> extraction de la vue
 	for (var l=0; l<lines.length; l++) {
 		if (lines[l].indexOf("Case")>=0) { // ce test est nécessaire car des lignes peuvent s'intercaler avec la mention du camou ou de l'invi
 			var tokens = Chrall_tokenize(lines[l]);
@@ -80,7 +83,7 @@ function Chrall_extractDlaInfos(text) {
 	// pour comprendre le code qui suit il faut savoir que la page générée est segmentée en bien plus de lignes que ce qui est visible
 	var lines = text.split('\n');
 	var dlaString = lines[1].substring(8, lines[1].length).trim();
-	player.dla = Date.parse(dlaString); // remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js (le javascript est un truc de sadiques)
+	player.dlaTime = (Date.parse(dlaString)).getTime(); // remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js (le javascript est un truc de sadiques)
 	var turnDurationLine = lines[lines.length-1].trim();
 	var turnDurationString = turnDurationLine.split(':')[1];
 	player.turnDuration = Chrall_parseDuration(turnDurationString);
@@ -283,7 +286,7 @@ function Chrall_analyseAndReformatMainCharacteristicsTable(table) {
 	var agility = player.dodge.diceNumber+player.regeneration.diceNumber;
 	var stabDices = (Math.floor(agility/3)*2);
 	var stabBM = (player.dodge.physicalBonus+player.dodge.magicalBonus);
-	var html = ' => Stabilité contre le balayage : '+stabDices+'D6 + '+stabBM+'  &nbsp; Moyenne : '+(3.5*stabDices+stabBM)+' (le jet de balayage du Darkling vaut 1 D6 par dé d\'attaque + BM d\'attaque)';
+	var html = ' => Stabilité contre le balayage : '+stabDices+'D6 + '+stabBM+'  &nbsp; Moyenne : '+(3.5*stabDices+stabBM);
 	$('p:contains("Agilité")').append(html);
 }
 
@@ -300,10 +303,7 @@ function Chrall_readTalentTable(table) {
 
 // renvoie une version améliorée du texte, pouvant le remplacer
 function Chrall_extractMagic(text) {
-	//var lines = text.split('\n');
-	//for (var i=0; i<20; i++) console.log(i+" : " + lines[i]);
 	var tokens = Chrall_tokenize(text);
-	//for (var i=0; i<tokens.length; i++) console.log(i+" : \""+tokens[i]+"\"");
 	player.baseRm = parseInt(tokens[4]);
 	player.rm = player.baseRm + parseInt(tokens[6]);
 	player.baseMm = parseInt(tokens[11]);
@@ -323,7 +323,7 @@ function Chrall_analyseAndReformatProfile() {
 	
 	Chrall_extractBasicInfos($(cells[1]).text()); // la cellule qui contient l'id, le nom, la race
 	Chrall_extractDlaInfos($(cells[4]).text()); // cells[4] est la cellule en face de "Echeance du tour"
-	Chrall_extractSight($(cells[6]).text());
+	Chrall_extractPositionAndSight($(cells[6]).text());
 	Chrall_extractXpInfos($(cells[8]).text());
 	Chrall_extractPvAndFatigue($(cells[10]).text());
 	Chrall_analyseAndReformatMainCharacteristicsTable($($("table table table.mh_tdborder table")[2])); // TODO trouver plus fiable !

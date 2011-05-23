@@ -43,11 +43,12 @@ func (store *MysqlStore) WriteCdms(cdms []*CDM, author int) (nbWrittenCdms int, 
 	sql += " duree_tour_min, duree_tour_max,"
 	sql += " chargement_text,"
 	sql += " bonus_malus_text,"
-	sql += " portee_du_pouvoir_text)"
+	sql += " portee_du_pouvoir_text,"
+	sql += " blessure)"
 
 	sql += " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
 	sql += " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
-	sql += " ?, ?, ?, ?, ?, ?, ?, ?)"
+	sql += " ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
 	//fmt.Println("SQL: " + sql)
 	stmt, err := db.Prepare(sql)
@@ -85,7 +86,8 @@ func (store *MysqlStore) WriteCdms(cdms []*CDM, author int) (nbWrittenCdms int, 
 			cdm.DuréeTour_min, cdm.DuréeTour_max,
 			cdm.Chargement_text,
 			cdm.BonusMalus_text,
-			cdm.PortéeDuPouvoir_text)
+			cdm.PortéeDuPouvoir_text,
+			cdm.Blessure)
 		if err != nil {
 			return inserted, err
 		}

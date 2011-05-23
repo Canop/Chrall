@@ -6,8 +6,6 @@ function Chrall_reformatOptionsView() {
 	var standardOptionTables = $(standardOptionContainer).find("table");
 	
 	var mdpkey = 'troll.'+player.id+'.mdp';
-	
-	console.log('compteChrallActif:' + compteChrallActif());
 
 	var html="<ul class=tabs>";
 	html += "<li><a href=#tabStandard>Options Standard</a></li>";
@@ -24,12 +22,9 @@ function Chrall_reformatOptionsView() {
 	html += "</p>";
 	html += "<h2>Que fait Chrall exactement</h2>";
 	html += "<p>";
-	html += "Chrall modifie les pages que vous recevez depuis games.mountyhall.com (Chrall ne voit ni ne change les autres pages)."
-	html += "<br>Chrall affiche, sur la vue, des estimations des caractéristiques des monstres, en exploitant son bestiaire (lien plus bas)."
+	html += "Chrall modifie les pages que vous recevez depuis *.mountyhall.com et quelques adresses alternatives du jeu (Chrall ne voit ni ne change les autres pages)."
+	html += "<br>Chrall affiche, sur la vue, des estimations des caractéristiques des monstres, en exploitant son bestiaire (lien plus bas). De même pour les trolls en exploitant des informations publiques (par exemple la liste des kills)."
 	html += "<br>Chrall transmet les CDM que vous effectuez à ce bestiaire, afin de l'enrichir (si vous l'acceptez)."
-	html += "<br>Aucune autre information, et en particulier aucune information pouvant donner un avantage illégitime à un autre joueur n'est récupérée"
-	html += " (donc pas de transmission des AA, des blessures des monstres, des coups, des infos de vos trolls, etc.) SAUF si vous activez un compte Chrall auquel cas certaines informations"
-	html += " seront partagées avec des joueurs de votre choix."
 	html += "</p>";
 	html += "<h2>Outils Chrall</h2>";
 	html += "<ul>";
@@ -38,24 +33,23 @@ function Chrall_reformatOptionsView() {
 	html += "</ul>";
 	html += "<h2>Compte Chrall</h2>";
 	html += "<p>Etat du compte Chrall : <b><span id=com_status_message>"+localStorage['com.status.message']+"</span></b></p>";
-	html += "<p>Un compte Chrall vous permet de partager des informations avec d'autres joueurs.</p>";
+	html += "<p>Un compte Chrall vous permet de partager des informations avec d'autres joueurs. Il n'est nullement nécessaire d'avoir un compte sur Chrall pour exploiter l'extension. Ce compte n'a d'intérêt que si vous chassez avec d'autres.</p>";
 	html += "<p>Afin d'authentifier les requêtes provenant au serveur Chrall, votre <a href='http://sp.mountyhall.com/md5.php' target=newTab>mot de passe restreint</a> est nécessaire :";
 	html += "<script>function changeMdpRestreint(){";
 	html += " var nm=document.getElementById('ch_mdp_restreint').value;";
 	html += " if (nm.length!=32) { alert('Votre mot de passe restreint doit faire exactement 32 caractères.'); return;}";
-	html += " localStorage['"+mdpkey+"']=nm; console.log('mot de passe restreint : '+localStorage['"+mdpkey+"']);";
+	html += " localStorage['"+mdpkey+"']=nm;";
 	html += "}</script>";
 	html += "<input type=password id=ch_mdp_restreint value='"+(localStorage[mdpkey]?localStorage[mdpkey]:'')+"'>";
 	html += "<a class=gogo href='javascript:changeMdpRestreint();'>Modifier le mot de passe</a>";
-	console.log(player);
 	var clefCompteActif='"troll.'+player.id+'.compteActif"';
 	if (compteChrallActif()) {
-		html += " &nbsp; <a class=gogo href='javascript:localStorage["+clefCompteActif+"]=\"no\";document.location.href=\"Play_option.php\";'>Désactiver le compte</a>";
+		html += " &nbsp; <a class=gogo href='javascript:localStorage[\"tab_options\"]=\"tabChrall\";localStorage["+clefCompteActif+"]=\"no\";document.location.href=\"Play_option.php\";'>Désactiver le compte</a>";
 	} else {
-		html += " &nbsp; <a class=gogo href='javascript:localStorage["+clefCompteActif+"]=\"yes\";document.location.href=\"Play_option.php\";'>Activer le compte</a>";
+		html += " &nbsp; <a class=gogo href='javascript:localStorage[\"tab_options\"]=\"tabChrall\";localStorage["+clefCompteActif+"]=\"yes\";document.location.href=\"Play_option.php\";'>Activer le compte</a>";
 	}
 	html += "</p>";
-	html += "<p>Fournir votre mot de passe restreint peut (devrait) vous poser des problèmes si vous jouez un troll ennemi de la Canopée. Dans ce cas, et si vous avez des compétences informatiques, n'hésitez pas à venir causer sur le canofofo afin de voir si vous pourriez héberger un serveur afin d'éviter que votre groupe de chasse ne me confie vos données privées.</p>";
+	html += "<p>Fournir votre mot de passe restreint peut (devrait) vous poser des problèmes si vous jouez un troll ennemi de la Canopée. Dans ce cas, et si vous avez des compétences informatiques, n'hésitez pas à venir causer sur <a target=newWin href=\"http://canop.org/chrall/fofo/\">le canofofo</a> afin de voir si vous pourriez héberger un serveur afin d'éviter que votre groupe de chasse ne me confie vos données privées.</p>";
 	html += "<p>Notez que vous ne transmettez pas d'informations confidentielles au serveur Chrall tant que vous n'activez pas le compte.</p>";
 	html += " </div>";
 	html += "</div>";
@@ -66,10 +60,16 @@ function Chrall_reformatOptionsView() {
 	$("div#tabStandard").append($(standardOptionTables[1]));
 	$("div#tabStandard").append($(standardOptionTables[2]));
 	$("div#tabStandard").append($(standardOptionTables[3]));
-	
+
 	$(".tab_content").hide();
-	$("ul.tabs li:first").addClass("active").show();
-	$(".tab_content:first").show(); 
+	if (localStorage['tab_options']) {
+		$('ul.tabs li:has(a[href="#'+localStorage['tab_options']+'"])').addClass("active").show();
+		$('#'+localStorage['tab_options']).show();
+		localStorage.removeItem('tab_options');
+	} else {
+		$("ul.tabs li:first").addClass("active").show();
+		$(".tab_content:first").show();
+	}
 	$("ul.tabs li").click(function() {
 		$("ul.tabs li").removeClass("active");
 		$(this).addClass("active");

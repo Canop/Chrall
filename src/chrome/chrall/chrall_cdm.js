@@ -6,15 +6,12 @@ function Chrall_handleBeforeCdmPage() {
 	// html += '<script>functiparent.chrall_send_cdm.value='+tokens[3]+';</script></script>';	
 	html += '</span>';	
 	$(html).appendTo('div.Action');
-	console.log($('div.Action'));
 	$('#sendCdmAuto').change(function(){
 		chrome.extension.sendRequest({"send_cdm": this.value})
 	});
 }
 
-function Chrall_handleCdmPage() {
-	console.log("entering Chrall_handleCdmPage");
-	
+function Chrall_handleCdmPage() {	
 	//> récupération de la cdm (en prenant soin de séparer les lignes)
 	// TODO : vérifier que ce n'est pas un échec
 	var para = $($("table table table form p")[1]);	
@@ -56,5 +53,4 @@ function Chrall_handleCdmPage() {
 		);
 	}
 	
-	console.log("leaving Chrall_handleCdmPage");
 }
