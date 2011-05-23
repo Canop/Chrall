@@ -32,12 +32,13 @@ function makePartageTables() {
 	html[h++] = "    hpa+= '</td>';"; 
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.PA+'</td>';";
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDate(p.AutreTroll.ProchainTour)+'</td>';"; 	
+	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDuration(p.AutreTroll.DureeTour)+'</td>';"; 	
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.X+'</td>';"; 
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Y+'</td>';"; 
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Z+'</td>';"; 
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDate(p.AutreTroll.MiseAJour)+'</td>';"; 	
 	html[h++] = "   } else {";
-	html[h++] = "    hpa+= '<td class=mh_tdpage colspan=7>Pas de données</td>';";
+	html[h++] = "    hpa+= '<td class=mh_tdpage colspan=8>Pas de données</td>';";
 	html[h++] = "   }";	
 	html[h++] = "   var a = 'Rompre';";
 	html[h++] = "   var scra='\\\''+a+'\\\'';"; // les échappements sont la misère...
@@ -75,7 +76,7 @@ function makePartageTables() {
 	html[h++] = '<h2>Partages actifs</h2>';
 
 	html[h++] = "<table border='0' cellspacing='1' cellpadding='2' class='mh_tdborder' align='center'>";
-	html[h++] = "<thead><tr class=mh_tdtitre><td>dist.</td><td>Nom</td><td>Race</td><td>Niveau</td><td>PV</td><td>PA</td><td>DLA</td><td>X</td><td>Y</td><td>N</td><td>Mise à jour</td><td>Action</td></tr></thead>";
+	html[h++] = "<thead><tr class=mh_tdtitre><td>dist.</td><td>Nom</td><td>Race</td><td>Niveau</td><td>PV</td><td>PA</td><td>DLA</td><td>Durée tour</td><td>X</td><td>Y</td><td>N</td><td>Mise à jour</td><td>Action</td></tr></thead>";
 	html[h++] = "<tbody id=partagesActifs></tbody></table>";
 
 	html[h++] = '<h2>Propositions</h2>';

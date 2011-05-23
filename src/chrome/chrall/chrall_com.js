@@ -78,6 +78,13 @@ function initCommunications(action) {
 function prepareReceiver() {
 $('body').prepend(
 '<script>\
+function formatDuration(seconds) {\
+	if (seconds==0) return "";\
+	var h = Math.floor(seconds/(3600));\
+	seconds -= h*(3600);\
+	var m = Math.floor(seconds/(60));\
+	return h+"h"+m;\
+}\
 function formatDate(timestamp) {\
 	if (timestamp==0) return "";\
 	var d = new Date(timestamp);\
