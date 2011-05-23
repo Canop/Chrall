@@ -3,8 +3,8 @@
  * Il contient aussi les variables globales.
  */
 
-var GOGOCHRALL = "http://localhost:9090/chrall/";
-//var GOGOCHRALL = "http://canop.org:9090/chrall/";
+//var GOGOCHRALL = "http://localhost:9090/chrall/";
+var GOGOCHRALL = "http://canop.org:9090/chrall/";
 
 var viewIsEmpty=true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue

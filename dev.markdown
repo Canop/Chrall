@@ -222,16 +222,13 @@ RECENTS / A TESTER :
 * ajout de *.jeuxweb.org comme serveur de jeu possible
 * stockage de la blessure des monstres lors des CDM
 
+<- v2.00
 
 EN COURS :
 ==========
 * apprendre le langage go
 * virer la plupart des console.log
 
-POUR RELEASE :
-==============
-		constante GOGOCHRALL
-		ALTER TABLE  `cdm` ADD  `blessure` INT NOT NULL
 
 TODO :
 ======
@@ -239,11 +236,9 @@ P1 :
 ----
 * authentification des demandes de bulles de monstres si compte actif. Inclusion de la blessure (si partages ok) dans la bulle.
 * bug : grille : les dudus et les darklings sont représentés à l'identique (e.g. D24)
-* localstorage / background : vérifier l'id du troll et si nécessaire nettoyer pour ne pas mélanger les caracs...
-* vérifier que l'on envoie les données APRES analyse
-* analyser la position dans le profil
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
+* bulles de trolls dans vue/partages (pas facile, ça...)
 
 P2 :
 ----
@@ -268,7 +263,7 @@ P3 :
 ----
 * indiquer les points cardinaux dans les menus de DE
 * inventaire de tanière : rendre les listes triables, filtrables
-* bulle pour le camouflage
+* analyser la position dans le profil
 * afficher les UM des matos
 * mini carte centrée sur le gowap
 * fonction de recherche dans la grille, en autocomplétion et centrage automatique
@@ -320,4 +315,5 @@ NOTES :
 * pas de vrai concept d'équipe : chaque troll choisit un par un les trolls à qui il donne accés en lecture à ce qu'il mont(r)e. Et il doit être possible de bloquer les infos d'un autre joueur.
 * liste de technos : extensions chrome, git, javascript, ajax, github, mysql, jquery, go, mercurial, php, css
 * pour le serveur, j'aurais peut-être pu aussi utiliser node.js. J'aime bien le go mais node.js semble sympa aussi...
+* backup bd : mysqldump -u root -pGroLolo chrall > today_chrall.sql
 

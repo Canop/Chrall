@@ -48,7 +48,7 @@ function sendToChrallServer(action, message) {
 	console.log(message);
 	$.ajax(
 		{
-			url: 'http://localhost:9090/chrall/json?action='+action+'&message='+JSON.stringify(message),
+			url: GOGOCHRALL + 'json?action='+action+'&message='+JSON.stringify(message),
 			crossDomain: true,
 			dataType: "jsonp"
 		}
