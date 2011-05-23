@@ -4,7 +4,6 @@ gère la lecture et l'écriture en mysql des partages d'infos entre comptes
 */
 
 import (
-	"fmt"
 	"mysql"
 	"os"
 	"strconv"
