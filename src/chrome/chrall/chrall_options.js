@@ -40,7 +40,7 @@ function Chrall_reformatOptionsView() {
 	html += " if (nm.length!=32) { alert('Votre mot de passe restreint doit faire exactement 32 caractères.'); return;}";
 	html += " localStorage['"+mdpkey+"']=nm;";
 	html += "}</script>";
-	html += "<input type=password id=ch_mdp_restreint value='"+(localStorage[mdpkey]?localStorage[mdpkey]:'')+"'>";
+	html += "<input type=password id=ch_mdp_restreint value=''>";
 	html += "<a class=gogo href='javascript:changeMdpRestreint();'>Modifier le mot de passe</a>";
 	var clefCompteActif='"troll.'+player.id+'.compteActif"';
 	if (compteChrallActif()) {

@@ -584,7 +584,27 @@ function Chrall_analyseAndReformatView() {
 						bubble(link, '', "bub_troll", GOGOCHRALL+"json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
 					}
 				}
-			);	
+			);
+			//> pour les trolls listés dans le partage (je suis obligé de passer par live car la table est remplie en asynchrone sur réponse jsonp)
+			$('#tabPartages a.mh_trolls_1').live(
+				'mouseenter', function () {
+					var link = $(this);
+					var trollId = link.attr('id');
+					bubble(
+						link,
+						"",
+						"bub_troll", 
+						GOGOCHRALL+"json?action=get_troll_info&asker="+player.id+"&trollId="+trollId,
+						trollId
+					);
+				}
+			).live(
+				'mouseleave', function () {
+					onBubbleTarget = false;
+					hideBubble();
+				}
+			);
+				
 
 			//> on fait pareil pour le joueur
 			var link = $("#grid a.ch_player");

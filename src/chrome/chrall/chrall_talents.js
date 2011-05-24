@@ -25,7 +25,7 @@ function getBubbleContentForCompetence(name) {
 			return html;
 
 		case "Balayage" :
-			var att = player.attac.getMean();
+			var att = player.attac.getMean()+player.attac.physicalBonus+player.attac.magicalBonus;
 			var html = "Jet de déstabilisation moyen : " + att;
 			html += "<br>Si le jet de déstabilisation est strictement supérieur au jet de stabilité, le défenseur se retrouve à terre.";
 			html += "<br>De plus, si le jet de déstabilisation est strictement supérieur à deux fois le jet de stabilité, le défenseur active les possibles pièges sur la case.";
@@ -299,7 +299,7 @@ function getBubbleContentForSort(name) {
 			html += "<tr><td>Durée du poison</td><td> : " + dur + (dur>1?" tours":" tour") + "</td></tr>";
 			html += "<tr><td>Virulence du poison</td><td> : " + vir + " PV par tour</td></tr>";
 			html += "</table>";	
-			html += "En cas de Résistance Magique, les effets du poisons sont<br>divisés par deux et durent deux fois moins longtemps.";
+			html += "En cas de Résistance Magique, les effets du poison sont<br>divisés par deux et durent deux fois moins longtemps.";
 			return html;
 
 		case "Hypnotisme" :

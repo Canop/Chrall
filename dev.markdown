@@ -224,26 +224,35 @@ RECENTS / A TESTER :
 
 <- v2.00
 
+* bulles de trolls dans vue/partages
+* bulle balayage : ajout des BM à l'attaque
+
 EN COURS :
 ==========
 * apprendre le langage go
-* virer la plupart des console.log
-
 
 TODO :
 ======
 P1 :
 ----
+* changer de port pour gogochrall ?
 * authentification des demandes de bulles de monstres si compte actif. Inclusion de la blessure (si partages ok) dans la bulle.
+* mettre dans les événements des monstres la blessure mesurée dans la CDM en cas de partage actif avec l'auteur de la CDM
 * bug : grille : les dudus et les darklings sont représentés à l'identique (e.g. D24)
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
-* bulles de trolls dans vue/partages (pas facile, ça...)
+* affichage dans la bulle des trolls (si partage actif) des infos principales PA/PV/DLA
+* ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
+* partage : transmission de la vue au serveur
+* vue/Recherche : cet onglet doit permettre de trouver (suivant partages) un troll, monstre (num ou nom), etc.
+* partage : positionnement des pièges
+* recherche de monstres ou de compo particuliers dans la vue (n'oublions pas les toms en mission...)
+* partage : cumul des pistages avec représentation graphique (modulaire car on ne peut pas détecter un mouvement de monstre)
+* partage : cumul des recherches de filon
 
 P2 :
 ----
-* ne pas envoyer de check_account depuis le profil
-* essayer de ne faire qu'un seul message sortant depuis la vue
+* bouton pour mettre à jour le profil d'un troll avec qui un partage est actif via les scripts publics soap (en respectant les limites d'appel)
 * grille/filtre : sous-cochage par type de trésor
 * affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * indiquer dans l'équipement quels compos ont de la valeur pour EM et calculer les histoires de %

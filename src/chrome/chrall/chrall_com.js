@@ -48,7 +48,7 @@ function sendToChrallServer(action, message) {
 	console.log(message);
 	$.ajax(
 		{
-			url: GOGOCHRALL + 'json?action='+action+'&message='+JSON.stringify(message),
+			url: GOGOCHRALL + 'json?v=2&action='+action+'&message='+JSON.stringify(message),
 			crossDomain: true,
 			dataType: "jsonp"
 		}
@@ -83,12 +83,12 @@ function formatDuration(seconds) {\
 	var h = Math.floor(seconds/(3600));\
 	seconds -= h*(3600);\
 	var m = Math.floor(seconds/(60));\
-	return h+"h"+m;\
+	return h+(m<10?"h0":"h")+m;\
 }\
 function formatDate(timestamp) {\
 	if (timestamp==0) return "";\
 	var d = new Date(timestamp);\
-	return d.getDate()+"/"+(d.getMonth()<9?("0"+(d.getMonth()+1)):(d.getMonth()+1))+" "+d.getHours()+"h"+(d.getMinutes()<9?("0"+(d.getMinutes()+1)):(d.getMinutes()+1));\
+	return d.getDate()+"/"+(d.getMonth()<9?("0"+(d.getMonth()+1)):(d.getMonth()+1))+" "+d.getHours()+"h"+(d.getMinutes()<10?("0"+d.getMinutes()):d.getMinutes());\
 }\
 function receiveFromChrallServer(message) {\
 	console.log("Message entrant :");\

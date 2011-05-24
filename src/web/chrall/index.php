@@ -27,7 +27,7 @@ ini_set('default_charset', 'utf-8');
 <a href=screens/screen_01.png target=nouvelOnglet><img border=0 align=right src=screens/screen_01.png width=320></a>
 Chrall est une extension Chrome pour le jeu <a href=http://www.mountyhall.com>Mounty Hall</a>.</p>
 <p>Pour simplifier disons que c'est la première extension qui vous permet d'avoir une vue claire, directe et efficace de ce qui vous entoure dans les souterrains.</p>
-<p>Une vue que vous glissez à la souris, qui vous indique qui est TK ou ATK, vous donne les caractéristiques des monstres...</p>
+<p>Une vue que vous glissez à la souris, qui vous indique qui est TK ou ATK, vous donne les caractéristiques des monstres, vous permet de partager vos infos avec d'autres joueurs...</p>
 <p>Une extension qui vous fait les menus calculs pratiques tels la récupération de la fatigue ou des malus sur les prochaines DLA ou encore l'extension de portée de votre TP par des BUM...</p>
 
 
