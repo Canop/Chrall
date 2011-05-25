@@ -16,6 +16,12 @@ function compteChrallActif(newValue) {
 	return localStorage[key]=='yes';
 }
 
+// renvoie le mot de passe du compte chrall (il faut vérifier avant cet appel que le compte est actif)
+function mdpCompteChrall() {
+	var mdpkey = 'troll.'+player.id+'.mdp';
+	return localStorage[mdpkey];
+}
+
 // met à jour sur le serveur (si le compte chrall est actif) les infos du troll du joueur
 function sendPlayerInfosToChrallServer() {
 	var troll = {};
@@ -83,7 +89,7 @@ function formatDuration(seconds) {\
 	var h = Math.floor(seconds/(3600));\
 	seconds -= h*(3600);\
 	var m = Math.floor(seconds/(60));\
-	return h+(m<10?"h0":"h")+m;\
+	return h+(m<10?"h0":"hx")+m;\
 }\
 function formatDate(timestamp) {\
 	if (timestamp==0) return "";\

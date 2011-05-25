@@ -60,9 +60,16 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	bd := new(BucketDecoder)
 	bd.Decode(jr.Bucket, h.store)
 
+	db, err := h.store.Connect()
+	if err!=nil {
+		sendError(w, "connexion bd", err)
+		return 
+	}
+	defer db.Close()
+
 	inserted := 0
 	if len(bd.Cdm) > 0 {
-		inserted, err = h.store.WriteCdms(bd.Cdm, jr.Author)
+		inserted, err = h.store.WriteCdms(db, bd.Cdm, jr.Author) // FIXME réutiliser la bd 
 		if err != nil {
 			sendError(w, "écriture BD", err)
 		}
@@ -88,7 +95,7 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 		if len(bd.Cdm) == 1 {
 			// dans ce cas on fait une analyse de la blessure, en exploitant si possible également les autres cdm de ce monstre
 			cdm := bd.Cdm[0]
-			be, err := h.store.ComputeMonsterStats(cdm.NomComplet, cdm.NumMonstre)
+			be, err := h.store.ComputeMonsterStats(db, cdm.NomComplet, cdm.NumMonstre)
 			if err != nil {
 				fmt.Println(" Erreur : " + err.String())
 			} else {

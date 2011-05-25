@@ -4,6 +4,7 @@ gère la lecture et l'écriture en mysql des partages d'infos entre comptes
 */
 
 import (
+	"container/vector"
 	"mysql"
 	"os"
 	"strconv"
@@ -137,12 +138,10 @@ func (store *MysqlStore) DeletePartage(db *mysql.Client, troll uint, autreTroll 
 func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partages []*Partage, err os.Error) {
 	
 	sql := "select troll_a, troll_b, statut_a, statut_b from partage where troll_a=" + strconv.Uitoa(trollId) + " or troll_b=" + strconv.Uitoa(trollId)
-
 	err = db.Query(sql)
 	if err != nil {
 		return
 	}
-
 	result, err := db.UseResult()
 	if err != nil {
 		return
@@ -171,4 +170,35 @@ func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partage
 	}
 
 	return
+}
+
+// renvoie la liste des trolls avec qui le troll passé a un partage actif
+func (store *MysqlStore) GetPartageurs(db *mysql.Client, trollId uint) ([]int, os.Error) {
+	st := strconv.Uitoa(trollId)
+	sql := "select troll_a, troll_b from partage where troll_a="+st+" or troll_b="+st+" and statut_a='on' and statut_b='on'"
+	err := db.Query(sql)
+	if err != nil {
+		return nil, err
+	}
+	result, err := db.UseResult()
+	if err != nil {
+		return nil, err
+	}
+	defer result.Free()
+	
+	amis := new(vector.IntVector)
+	for {
+		row := result.FetchRow()
+		if row == nil {
+			break
+		}
+		if row[0]==trollId {
+			amis.Push(fieldAsInt(row[1]))
+		} else {
+			amis.Push(fieldAsInt(row[0]))
+		}
+	}
+
+	return *amis, nil
+
 }

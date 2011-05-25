@@ -77,18 +77,34 @@ func (h *JsonGetHandler) serveTrollStatsHtmlJsonp(w http.ResponseWriter, hr *htt
 
 func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	askerId := GetFormValueAsInt(hr, "asker")
+	mdpr := GetFormValue(hr, "mdpr") // mot de passe restreint, optionnel, permet d'authentifier la requête en cas d'existence de compte Chrall
+	compteOk := false
+
+	db, err := h.store.Connect()
+	if err!=nil {
+		fmt.Printf("Erreur ouverture connexion BD dans makeBestiaryExtractHtml : %s\n", err.String())
+		return err.String()
+	}
+	defer db.Close()
+
+	if askerId>0 && mdpr!="" {
+		compteOk, _, err = h.store.CheckCompte(db, uint(askerId), mdpr)
+	}
+
+	fmt.Println(" demande bestiaire  authentification =", compteOk)
+
 	monsterCompleteName := GetFormValue(hr, "name")
 	if monsterCompleteName == "" {
 		fmt.Println(" no monster complete name in request")
 		return "Hein ?"
 	}
 	monsterId := GetFormValueAsUint(hr, "monsterId")
-	be, err := h.store.ComputeMonsterStats(monsterCompleteName, monsterId)
+	be, err := h.store.ComputeMonsterStats(db, monsterCompleteName, monsterId)
 	if err != nil {
 		fmt.Println(" Erreur : " + err.String())
 		return "Erreur : " + err.String()
 	}
-	return be.Html(monsterId, askerId, h.tksManager, 0)
+	return be.Html(monsterId, askerId, h.tksManager, 0 /* pourcentage blessure */)
 }
 
 func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *http.Request) {
@@ -123,17 +139,26 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 		bd.Decode(encodedCdm, h.store)
 		var answerHtml string
 		if len(bd.Cdm) > 0 {
+			
+			db, err := h.store.Connect()
+			if err!=nil {
+				fmt.Printf("Erreur ouverture connexion BD dans serveAcceptCdmJsonp : %s\n", err.String())
+				return
+			}
+			defer db.Close()
+
+			
 			cdm := bd.Cdm[0]
 			author := GetFormValue(hr, "author")
 			authorId, _ := strconv.Atoi(author)
-			_, err := h.store.WriteCdms(bd.Cdm, authorId)
+			_, err = h.store.WriteCdms(db, bd.Cdm, authorId) // FIXME réutiliser la BD
 			if err != nil {
 				fmt.Println("Erreur au stockage des CDM")
 			}
 			answerHtml = "Cette CDM ( "
 			answerHtml += cdm.NomComplet
 			answerHtml += " ) a bien été reçue par gogochrall et stockée dans le bestiaire. Merci."
-			be, err := h.store.ComputeMonsterStats(cdm.NomComplet, cdm.NumMonstre)
+			be, err := h.store.ComputeMonsterStats(db, cdm.NomComplet, cdm.NumMonstre)
 			if err != nil {
 				fmt.Println(" Erreur : " + err.String())
 			} else {

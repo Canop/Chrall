@@ -11,15 +11,8 @@ import (
 	"time"
 )
 
-func (store *MysqlStore) WriteCdms(cdms []*CDM, author int) (nbWrittenCdms int, err os.Error) {
-
+func (store *MysqlStore) WriteCdms(db *mysql.Client, cdms []*CDM, author int) (nbWrittenCdms int, err os.Error) {
 	inserted := 0
-
-	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
-	if err != nil {
-		return 0, err
-	}
-	defer db.Close()
 
 	sql := "insert ignore into cdm (author, num_monstre, nom_complet, nom, age, " // En go on ne peut pas déclarer une chaine sur plusieurs lignes. J'espère que le compilo combine...
 	sql += "sha1, date_adition, "
@@ -140,7 +133,7 @@ func (store *MysqlStore) getMonsterCompleteNames(partialName string, limit uint)
 			break
 		}
 		names[count] = name
-		fmt.Println(names[count])
+		//fmt.Println(names[count])
 		count++
 	}
 	return names[0:count], nil
@@ -214,12 +207,7 @@ func rowToBestiaryExtract(completeName string, row mysql.Row) *BestiaryExtract {
  * estime les caractéristiques du monstre.
  * Si l'id est fourni (i.e. pas 0) et si on a des cdm concernant ce monstre précis, on n'utilise que celles là [EN COURS]
  */
-func (store *MysqlStore) ComputeMonsterStats(completeName string, monsterId uint) (*BestiaryExtract, os.Error) {
-	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
+func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName string, monsterId uint) (be *BestiaryExtract, err os.Error) {
 
 	// On utilise des max pour les champs de type chaine. C'est sans doute trop lourd (à moins que MySQL ne mette en place un index
 	//  spécifique). L'objectif réel est de récupérer la chaine la plus longue.
@@ -260,7 +248,7 @@ func (store *MysqlStore) ComputeMonsterStats(completeName string, monsterId uint
 		row := result.FetchRow()
 		db.FreeResult()
 		if row != nil {
-			be := rowToBestiaryExtract(completeName, row)
+			be = rowToBestiaryExtract(completeName, row)
 			if be.NbCdm > 0 {
 				be.PreciseMonster = true
 				return be, nil
@@ -307,7 +295,7 @@ func (store *MysqlStore) ComputeMonsterStats(completeName string, monsterId uint
 	}
 	db.FreeResult()
 
-	be := rowToBestiaryExtract(completeName, row)
+	be = rowToBestiaryExtract(completeName, row)
 	be.PreciseMonster = false
 	return be, nil
 }

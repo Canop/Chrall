@@ -190,7 +190,6 @@ func (be *BestiaryExtract) Html(monsterId uint, askerId int, m *TksManager, pour
 		if pourcentageBlessure > 0 {
 			pvMin, pvMax := be.getPvRestant(pourcentageBlessure)
 			html += fmt.Sprintf("Blessure : %d %%<br>Points de Vie restant : entre %d et %d<br>", pourcentageBlessure, pvMin, pvMax)
-
 		}
 		if askerId > 0 {
 			ti := m.getTrollInfos(askerId)

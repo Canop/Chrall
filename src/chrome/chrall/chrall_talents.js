@@ -297,7 +297,7 @@ function getBubbleContentForSort(name) {
 			html += "<tr><td>Attaque</td><td> : " + att + "</td></tr>";
 			html += "<tr><td>Dégâts de la frappe</td><td> : " + deg + " PV</td></tr>";
 			html += "<tr><td>Durée du poison</td><td> : " + dur + (dur>1?" tours":" tour") + "</td></tr>";
-			html += "<tr><td>Virulence du poison</td><td> : " + vir + " PV par tour</td></tr>";
+			html += "<tr><td>Virulence du poison</td><td> : " + vir + " D3 PV par tour</td></tr>";
 			html += "</table>";	
 			html += "En cas de Résistance Magique, les effets du poison sont<br>divisés par deux et durent deux fois moins longtemps.";
 			return html;

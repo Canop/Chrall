@@ -39,6 +39,12 @@ func fieldAsUint(o interface{}) uint {
 	}
 	return uint(o.(int64))
 }
+func fieldAsInt(o interface{}) int {
+	if o == nil {
+		return 0
+	}
+	return int(o.(int64))
+}
 func fieldAsInt64(o interface{}) int64 {
 	if o == nil {
 		return 0

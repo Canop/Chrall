@@ -559,7 +559,11 @@ function Chrall_analyseAndReformatView() {
 							requestId = linkText;
 						}
 						message += getEmMonsterDecoration(nomMonstre);
-						bubble(link, message, "bub_monster", GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId, requestId);
+						var url = GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId;
+						if (compteChrallActif()) {
+							url+='&mdpr='+mdpCompteChrall();
+						}
+						bubble(link, message, "bub_monster", url, requestId);
 					}
 				}
 			);
