@@ -8,8 +8,9 @@ import (
 	"http"
 	"fmt"
 	"json"
-	"strconv"
 	"os"
+	"strconv"
+	"time"
 )
 
 type BubbleJson struct {
@@ -79,16 +80,32 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	askerId := GetFormValueAsInt(hr, "asker")
 	mdpr := GetFormValue(hr, "mdpr") // mot de passe restreint, optionnel, permet d'authentifier la requête en cas d'existence de compte Chrall
 	compteOk := false
+	monsterId := GetFormValueAsUint(hr, "monsterId")
 
 	db, err := h.store.Connect()
-	if err!=nil {
+	if err != nil {
 		fmt.Printf("Erreur ouverture connexion BD dans makeBestiaryExtractHtml : %s\n", err.String())
 		return err.String()
 	}
 	defer db.Close()
+	html := ""
 
-	if askerId>0 && mdpr!="" {
+	var amis []int
+	if askerId > 0 && mdpr != "" && monsterId>0 {
 		compteOk, _, err = h.store.CheckCompte(db, uint(askerId), mdpr)
+		if compteOk {
+			amis, err = h.store.GetPartageurs(db, askerId)
+			if err != nil {
+				fmt.Printf("Erreur récupération amis dans makeBestiaryExtractHtml : %s\n", err.String())
+			}
+			fmt.Printf("Amis : %v\n", amis)
+			blessure, auteurCDM, dateCDM, _ := h.store.GetBlessure(db, monsterId, askerId, amis)
+			if auteurCDM!=0 {
+				nomAuteur, _, _ := h.tksManager.GetNomRaceNiveauTroll(auteurCDM)
+				t := time.SecondsToLocalTime(dateCDM)
+				html += fmt.Sprintf("Blessure: <b>%d %%</b> (CDM de %s le %s)<br>", blessure, nomAuteur, t.Format("02/01 à 15h04")) // oui les gars de Google ont fumé lorsqu'ils ont fait leur bibliothèque de formatage de date
+			}
+		}
 	}
 
 	fmt.Println(" demande bestiaire  authentification =", compteOk)
@@ -98,13 +115,14 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		fmt.Println(" no monster complete name in request")
 		return "Hein ?"
 	}
-	monsterId := GetFormValueAsUint(hr, "monsterId")
 	be, err := h.store.ComputeMonsterStats(db, monsterCompleteName, monsterId)
 	if err != nil {
 		fmt.Println(" Erreur : " + err.String())
 		return "Erreur : " + err.String()
 	}
-	return be.Html(monsterId, askerId, h.tksManager, 0 /* pourcentage blessure */)
+	
+	html += be.Html(monsterId, askerId, h.tksManager, 0 /* pourcentage blessure */ )
+	return html
 }
 
 func (h *JsonGetHandler) serveBestiaryExtractHtml(w http.ResponseWriter, hr *http.Request) {
@@ -139,15 +157,14 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 		bd.Decode(encodedCdm, h.store)
 		var answerHtml string
 		if len(bd.Cdm) > 0 {
-			
+
 			db, err := h.store.Connect()
-			if err!=nil {
+			if err != nil {
 				fmt.Printf("Erreur ouverture connexion BD dans serveAcceptCdmJsonp : %s\n", err.String())
 				return
 			}
 			defer db.Close()
 
-			
 			cdm := bd.Cdm[0]
 			author := GetFormValue(hr, "author")
 			authorId, _ := strconv.Atoi(author)

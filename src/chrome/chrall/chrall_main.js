@@ -3,7 +3,7 @@
  * Il contient aussi les variables globales.
  */
 
-var GOGOCHRALL = "http://localhost:9090/chrall/";
+var GOGOCHRALL = "http://localhost:8000/chrall/";
 //var GOGOCHRALL = "http://canop.org:9090/chrall/";
 
 var viewIsEmpty=true; // correspond à un état d'analyse de la vue
@@ -110,6 +110,8 @@ chrome.extension.sendRequest(
 		case "MonsterView.php":
 			Chrall_addBubblesToLinks();
 			break;
+		case "Play_a_Combat.php": //  résultat de combat (vérifié pour CDB)
+			Chrall_analyseResultatCombat();
 		}
 		localStorage['todo']='';
 	}

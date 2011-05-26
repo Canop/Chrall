@@ -277,7 +277,6 @@ func (m *TksManager) GetNomRaceNiveauTroll(trollId int) (string, string, uint) {
 }
 
 
-
 func (m *TksManager) getTrollInfos(trollId int) *TrollInfos {
 	if trollId <= 0 {
 		return nil

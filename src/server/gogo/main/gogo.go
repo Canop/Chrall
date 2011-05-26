@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	port = 9090
+	port = 8000
 )
 
 
@@ -57,8 +57,11 @@ func (server *GogoServer) Start() {
 	testHandler.parent = &chrallHandler.Hitter
 	http.Handle("/test", testHandler)
 
-	fmt.Printf("gogo démarré sur le port %d", port)
-	http.ListenAndServe(":"+strconv.Itoa(port), nil)
+	fmt.Printf("gogo démarre sur le port %d\n", port)
+	err := http.ListenAndServe(":"+strconv.Itoa(port), nil)
+	if err!=nil { // notons qu'en principe si on arrive là c'est qu'il y a une erreur...
+		fmt.Println("Erreur au lancement : ", err)		
+	}
 }
 
 func main() {

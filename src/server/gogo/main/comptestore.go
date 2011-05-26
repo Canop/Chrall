@@ -14,17 +14,17 @@ import (
 
 
 type TrollData struct {
-	PV_max     uint
-	PV_actuels uint
-	X          int64
-	Y          int64
-	Z          int64
-	Fatigue uint
-	PA uint
-	Vue uint
+	PV_max       uint
+	PV_actuels   uint
+	X            int64
+	Y            int64
+	Z            int64
+	Fatigue      uint
+	PA           uint
+	Vue          uint
 	ProchainTour int64 // timestamp (stocké en secondes dans la BD)
-	DureeTour int64 // durée du tour en secondes
-	MiseAJour int64 // timestamp (stocké en secondes dans la BD)
+	DureeTour    int64 // durée du tour en secondes
+	MiseAJour    int64 // timestamp (stocké en secondes dans la BD)
 }
 
 type Compte struct { // les infos privées sont celles qui ne sont pas décodables telles quelles depuis les structures json
@@ -48,9 +48,9 @@ func rowToCompte(trollId uint, row mysql.Row) (c *Compte) {
 	c.Troll.Fatigue = fieldAsUint(row[7])
 	c.Troll.PA = fieldAsUint(row[8])
 	c.Troll.Vue = fieldAsUint(row[9])
-	c.Troll.ProchainTour = fieldAsInt64(row[10])*1000
+	c.Troll.ProchainTour = fieldAsInt64(row[10]) * 1000
 	c.Troll.DureeTour = fieldAsInt64(row[11])
-	c.Troll.MiseAJour = fieldAsInt64(row[12])*1000
+	c.Troll.MiseAJour = fieldAsInt64(row[12]) * 1000
 	return
 }
 
@@ -146,8 +146,8 @@ func (store *MysqlStore) UpdateTroll(db *mysql.Client, c *Compte) (err os.Error)
 		fmt.Println("Compte sans données de troll")
 		return
 	}
-	
-	updateProfil := t.ProchainTour>0 // on ne met pas toujours tout à jour
+
+	updateProfil := t.ProchainTour > 0 // on ne met pas toujours tout à jour
 
 	sql := "update compte set"
 	sql += " x=?, y=?, z=?"
@@ -163,7 +163,7 @@ func (store *MysqlStore) UpdateTroll(db *mysql.Client, c *Compte) (err os.Error)
 	defer stmt.Close()
 
 	if updateProfil {
-		err = stmt.BindParams(t.X, t.Y, t.Z, t.PV_max, t.PV_actuels, t.Fatigue, t.PA, t.Vue, (t.ProchainTour/1000), t.DureeTour, time.Seconds(), c.trollId)
+		err = stmt.BindParams(t.X, t.Y, t.Z, t.PV_max, t.PV_actuels, t.Fatigue, t.PA, t.Vue, (t.ProchainTour / 1000), t.DureeTour, time.Seconds(), c.trollId)
 	} else {
 		err = stmt.BindParams(t.X, t.Y, t.Z, c.trollId)
 	}

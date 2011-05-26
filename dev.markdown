@@ -226,18 +226,19 @@ RECENTS / A TESTER :
 
 * bulles de trolls dans vue/partages
 * bulle balayage : ajout des BM à l'attaque
+* authentification des demandes de bulles de monstres si compte actif. Inclusion de la blessure (si partages ok) dans la bulle.
+* changement de port pour gogochrall : bascule vers le port 8000
+* interception des frappes et transmission à Chrall en cas de compte
 
 EN COURS :
 ==========
 * apprendre le langage go
+* mettre dans les événements des monstres la blessure mesurée dans la CDM en cas de partage actif avec l'auteur de la CDM
 
 TODO :
 ======
 P1 :
 ----
-* changer de port pour gogochrall ?
-* authentification des demandes de bulles de monstres si compte actif. Inclusion de la blessure (si partages ok) dans la bulle.
-* mettre dans les événements des monstres la blessure mesurée dans la CDM en cas de partage actif avec l'auteur de la CDM
 * bug : grille : les dudus et les darklings sont représentés à l'identique (e.g. D24)
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"

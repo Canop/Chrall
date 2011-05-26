@@ -21,13 +21,13 @@ type Partage struct {
 
 // le partage vu par un troll, pour exploitation dans l'extension
 type MiPartage struct {
-	IdAutreTroll       uint // l'autre troll, qu'il soit initiateur ou pas
+	IdAutreTroll     uint // l'autre troll, qu'il soit initiateur ou pas
 	NomAutreTroll    string
-	RaceAutreTroll string
+	RaceAutreTroll   string
 	NiveauAutreTroll uint
-	Statut           string // est-ce qu'on a accepté
-	StatutAutreTroll string // est-ce que l'autre a accepté
-	AutreTroll *TrollData // les données du troll. On ne renseigne ça que si le partage est actif (les deux statuts à on) et le compte de l'autre troll actif
+	Statut           string     // est-ce qu'on a accepté
+	StatutAutreTroll string     // est-ce que l'autre a accepté
+	AutreTroll       *TrollData // les données du troll. On ne renseigne ça que si le partage est actif (les deux statuts à on) et le compte de l'autre troll actif
 }
 
 // transforme des Partage en MiPartage. Une condition implicite est que l'observer soit l'une des parties
@@ -47,13 +47,13 @@ func (store *MysqlStore) PartagesToMiPartages(db *mysql.Client, observer uint, p
 			mp.Statut = p.StatutB
 			mp.StatutAutreTroll = p.StatutA
 		}
-		if (mp.Statut=="on" && mp.StatutAutreTroll=="on") {
+		if mp.Statut == "on" && mp.StatutAutreTroll == "on" {
 			c, _ := store.GetCompte(db, mp.IdAutreTroll) // réutiliser la db
-			if c!=nil {
+			if c != nil {
 				mp.AutreTroll = c.Troll
 			}
 		}
-		
+
 		miPartages[i] = mp
 	}
 	return
@@ -136,7 +136,7 @@ func (store *MysqlStore) DeletePartage(db *mysql.Client, troll uint, autreTroll 
 
 // récupère toutes les infos de partage, acceptés ou non, impliquant un troll
 func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partages []*Partage, err os.Error) {
-	
+
 	sql := "select troll_a, troll_b, statut_a, statut_b from partage where troll_a=" + strconv.Uitoa(trollId) + " or troll_b=" + strconv.Uitoa(trollId)
 	err = db.Query(sql)
 	if err != nil {
@@ -173,9 +173,9 @@ func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partage
 }
 
 // renvoie la liste des trolls avec qui le troll passé a un partage actif
-func (store *MysqlStore) GetPartageurs(db *mysql.Client, trollId uint) ([]int, os.Error) {
-	st := strconv.Uitoa(trollId)
-	sql := "select troll_a, troll_b from partage where troll_a="+st+" or troll_b="+st+" and statut_a='on' and statut_b='on'"
+func (store *MysqlStore) GetPartageurs(db *mysql.Client, trollId int) ([]int, os.Error) {
+	st := strconv.Itoa(trollId)
+	sql := "select troll_a, troll_b from partage where (troll_a=" + st + " or troll_b=" + st + ") and statut_a='on' and statut_b='on'"
 	err := db.Query(sql)
 	if err != nil {
 		return nil, err
@@ -185,17 +185,19 @@ func (store *MysqlStore) GetPartageurs(db *mysql.Client, trollId uint) ([]int, o
 		return nil, err
 	}
 	defer result.Free()
-	
+
 	amis := new(vector.IntVector)
 	for {
 		row := result.FetchRow()
 		if row == nil {
 			break
 		}
-		if row[0]==trollId {
-			amis.Push(fieldAsInt(row[1]))
+		r0 := fieldAsInt(row[0])
+		r1 := fieldAsInt(row[1])
+		if r0 == trollId {
+			amis.Push(r1)
 		} else {
-			amis.Push(fieldAsInt(row[0]))
+			amis.Push(r0)
 		}
 	}
 

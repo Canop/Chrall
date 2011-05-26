@@ -61,9 +61,9 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	bd.Decode(jr.Bucket, h.store)
 
 	db, err := h.store.Connect()
-	if err!=nil {
+	if err != nil {
 		sendError(w, "connexion bd", err)
-		return 
+		return
 	}
 	defer db.Close()
 

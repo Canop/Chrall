@@ -58,12 +58,12 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		out.Error = "Mot de passe restreint invalide"
 		return
 	}
-	
+
 	db, err := h.store.Connect()
-	if err!=nil {
+	if err != nil {
 		out.Error = err.String()
 		fmt.Printf("Erreur ouverture connexion BD sur action %s : %s\n", action, err.String())
-		return		
+		return
 	}
 	defer db.Close()
 
@@ -122,10 +122,10 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		if action == "updateTroll" {
 			// contournement de bug. J'ai sinon une erreur lors du listage qui suit.
 			db, err = h.store.Connect()
-			if err!=nil {
+			if err != nil {
 				out.Error = err.String()
 				fmt.Printf("Erreur réouverture connexion BD sur action %s : %s\n", action, err.String())
-				return		
+				return
 			}
 			defer db.Close()
 
