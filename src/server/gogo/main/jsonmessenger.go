@@ -16,7 +16,8 @@ type JsonMessageIn struct {
 	MessageNum    int        // l'id de message entrant
 	Troll         *TrollData // les infos du troll du joueur (structure définie dans comptestore.go)
 	ChangePartage string
-	IdAutreTroll  uint // l'id d'un autre troll
+	IdCible  uint // l'id d'un autre troll ou d'un monstre, le sujet optionnel de l'action
+	Action *Action
 }
 
 type JsonMessageOut struct {
@@ -24,6 +25,7 @@ type JsonMessageOut struct {
 	Error      string
 	Text       string
 	MiPartages []*MiPartage
+	Actions []*Action
 }
 
 func (h *JsonGetHandler) writeJsonAnswer(w http.ResponseWriter, out *JsonMessageOut) {
@@ -48,6 +50,10 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		return
 	}
 	out.AnswersTo = in.MessageNum
+
+	fmt.Printf("Message reçu décodé : \n%+v\n", in)
+	if in.Troll!=nil {fmt.Printf(" in.Troll : \n%+v\n", in.Troll)}
+	if in.Action!=nil {fmt.Printf(" in.Action : \n%+v\n", in.Action)}
 
 	fmt.Printf("Message entrant du troll %d avec l'action %s\n", in.TrollId, action)
 	if in.TrollId == 0 {
@@ -85,34 +91,43 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				return
 			}
 		}
+		if in.Action!=nil {
+			in.Action.Auteur = int(in.TrollId)
+			err = h.store.InsertAction(db, in.Action)
+			if err != nil {
+				out.Error = err.String()
+				fmt.Printf("Erreur sauvegarde événement sur action %s : %s\n", action, err.String())
+				return
+			}
+		}
 		switch in.ChangePartage {
 		case "Proposer":
-			fmt.Printf("Demande insertion partage %d -> %d\n", in.TrollId, in.IdAutreTroll)
-			err = h.store.InsertPartage(db, in.TrollId, in.IdAutreTroll)
+			fmt.Printf("Demande insertion partage %d -> %d\n", in.TrollId, in.IdCible)
+			err = h.store.InsertPartage(db, in.TrollId, in.IdCible)
 			if err != nil {
 				out.Error = err.String()
 				fmt.Printf("Erreur sauvegarde proposition partage sur action %s : %s\n", action, err.String())
 				return
 			}
 		case "Accepter":
-			fmt.Printf("Demande accept partage %d -> %d\n", in.TrollId, in.IdAutreTroll)
-			err = h.store.UpdatePartage(db, in.TrollId, in.IdAutreTroll, "on")
+			fmt.Printf("Demande accept partage %d -> %d\n", in.TrollId, in.IdCible)
+			err = h.store.UpdatePartage(db, in.TrollId, in.IdCible, "on")
 			if err != nil {
 				out.Error = err.String()
 				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.String())
 				return
 			}
 		case "Rompre":
-			fmt.Printf("Demande fin partage %d -> %d\n", in.TrollId, in.IdAutreTroll)
-			err = h.store.UpdatePartage(db, in.TrollId, in.IdAutreTroll, "off")
+			fmt.Printf("Demande fin partage %d -> %d\n", in.TrollId, in.IdCible)
+			err = h.store.UpdatePartage(db, in.TrollId, in.IdCible, "off")
 			if err != nil {
 				out.Error = err.String()
 				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.String())
 				return
 			}
 		case "Supprimer":
-			fmt.Printf("Demande suppression partage %d -> %d\n", in.TrollId, in.IdAutreTroll)
-			err = h.store.DeletePartage(db, in.TrollId, in.IdAutreTroll)
+			fmt.Printf("Demande suppression partage %d -> %d\n", in.TrollId, in.IdCible)
+			err = h.store.DeletePartage(db, in.TrollId, in.IdCible)
 			if err != nil {
 				out.Error = err.String()
 				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.String())
@@ -138,6 +153,14 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				return
 			}
 			out.MiPartages = h.store.PartagesToMiPartages(db, in.TrollId, partages, h.tksManager)
+		}
+		var amis []int
+		if action=="getMonsterEvents" {
+			amis, err = h.store.GetPartageurs(db, int(in.TrollId))
+			if err != nil {
+				fmt.Printf("Erreur récupération amis sur action %s : %s\n", action, err.String())
+			}
+			out.Actions, err = h.store.GetActions(db, "monstre", int(in.IdCible), int(in.TrollId), amis)
 		}
 	} else {
 		if c != nil {

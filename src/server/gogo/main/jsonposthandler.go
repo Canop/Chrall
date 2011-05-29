@@ -69,7 +69,7 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 
 	inserted := 0
 	if len(bd.Cdm) > 0 {
-		inserted, err = h.store.WriteCdms(db, bd.Cdm, jr.Author) // FIXME réutiliser la bd 
+		inserted, err = h.store.WriteCdms(db, bd.Cdm, jr.Author, 0)
 		if err != nil {
 			sendError(w, "écriture BD", err)
 		}

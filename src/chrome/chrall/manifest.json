@@ -41,6 +41,8 @@
 				"chrall_menu.js",
 				"chrall_pjview.js",
 				"chrall_action.js",
+				"chrall_resultatCombat.js",
+				"chrall_insulte.js",
 				"chrall_main.js"
 			]
 		},

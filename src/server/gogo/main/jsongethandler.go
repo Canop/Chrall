@@ -166,9 +166,9 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 			defer db.Close()
 
 			cdm := bd.Cdm[0]
-			author := GetFormValue(hr, "author")
-			authorId, _ := strconv.Atoi(author)
-			_, err = h.store.WriteCdms(db, bd.Cdm, authorId) // FIXME réutiliser la BD
+			authorId := GetFormValueAsInt(hr, "author")
+			seconds := GetFormValueAsInt64(hr, "seconds")
+			_, err = h.store.WriteCdms(db, bd.Cdm, authorId, seconds)
 			if err != nil {
 				fmt.Println("Erreur au stockage des CDM")
 			}

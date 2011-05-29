@@ -229,6 +229,9 @@ RECENTS / A TESTER :
 * authentification des demandes de bulles de monstres si compte actif. Inclusion de la blessure (si partages ok) dans la bulle.
 * changement de port pour gogochrall : bascule vers le port 8000
 * interception des frappes et transmission à Chrall en cas de compte
+* interception des cdm : récupérer et transmettre aussi la date (comme pour les actions)
+* interception des insultes et transmission à Chrall en cas de compte actif
+* mettre dans les événements des monstres les caractéristiques des frappes si partage
 
 EN COURS :
 ==========
@@ -239,11 +242,14 @@ TODO :
 ======
 P1 :
 ----
-* bug : grille : les dudus et les darklings sont représentés à l'identique (e.g. D24)
-* bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo...)
+* le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code !
+* liens ancres MH en haut des tables : changer d'onglet.
+* ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
+* événements des monstres : si partage indiquer les caracts des hypno
+* bug : grille : les dudus et les darklings sont représentés à l'identique (e.g. D24) -> utiliser 'd' ?
+* bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
 * affichage dans la bulle des trolls (si partage actif) des infos principales PA/PV/DLA
-* ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
 * partage : transmission de la vue au serveur
 * vue/Recherche : cet onglet doit permettre de trouver (suivant partages) un troll, monstre (num ou nom), etc.
 * partage : positionnement des pièges

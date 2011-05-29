@@ -21,6 +21,8 @@ function Chrall_handleCdmPage() {
 		cdm += "\n"+$(this).text();
 	});
 	
+	//> recherche de la date envoyée par MH (c'est ce qu'on trouve de plus près de l'événement)
+	
 	//> écriture du script de récupération de la réponse (mécanisme JSONP)
 	html = "<div id=gogochrall></div>";
 	html += "<script>";
@@ -41,7 +43,7 @@ function Chrall_handleCdmPage() {
 					//> envoi au serveur de la CDM
 					$.ajax(
 						{
-							url: GOGOCHRALL+"json?action=accept_cdm_jsonp&author="+player.id+"&cdm=" + encodeURIComponent(cdm), // <- attention, ne marche que si le text est court...
+							url: GOGOCHRALL+"json?action=accept_cdm_jsonp&author="+player.id+"&cdm="+encodeURIComponent(cdm)+"&seconds="+findMHSeconds(), // <- attention, ne marche que si le text est court...
 							crossDomain: true,
 							dataType: "jsonp"
 						}

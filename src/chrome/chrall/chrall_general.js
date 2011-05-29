@@ -59,8 +59,14 @@ function turnName(turn) {
 	}
 }
 
-
-
+// remplace la fonction parseInt, trop capricieuse ( parseInt("05")=5 mais parseInt("08")=0 )
+// Traite aussi des cas spéciaux de Chrall.
+function atoi(s) {
+	if (!s) return undefined; // à valider
+	s = s.trim();
+	while(s.charAt(0)=='0' || s.charAt(0)==':' || s.charAt(0)=='0') s = s.substring(1, s.length);
+	return parseInt(s);
+}
 
 // appelée depuis l'une des sous-frame de droite (la grande, ou bien celle d'actions), cette méthode met à jour
 // la position affichée dans le menu et signale la position au script de fond.
@@ -74,6 +80,23 @@ function updateTroll() {
 	}
 	sendPlayerInfosToChrallServer();
 }
+
+// récupère la date de génération de la page et renvoie ça sous forme de secondes depuis 1970
+// Renvoie 0 si pas trouvé
+function findMHSeconds() {
+	var text = $('body').text();
+	var lines = text.split('\n');
+	for (var i=lines.length; i-->0;) {
+		var line = lines[i];
+		if (line.indexOf("Page générée")>0) {
+			var t = Chrall_tokenize(line);
+			var d = new Date(atoi(t[2]), atoi(t[1])-1, atoi(t[0]), atoi(t[3]), atoi(t[4]), atoi(t[5]));
+			return d.getTime()/1000;
+		}
+	}
+	return 0;
+}
+
 
 
 

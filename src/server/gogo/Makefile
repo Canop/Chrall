@@ -9,6 +9,7 @@ GOFILES=\
 	main/diplo.go\
 	main/bestiaryextract.go\
 	main/mysqlstore.go\
+	main/actionstore.go\
 	main/cdmstore.go\
 	main/comptestore.go\
 	main/partagestore.go\

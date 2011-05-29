@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func (store *MysqlStore) WriteCdms(db *mysql.Client, cdms []*CDM, author int) (nbWrittenCdms int, err os.Error) {
+func (store *MysqlStore) WriteCdms(db *mysql.Client, cdms []*CDM, author int, seconds int64) (nbWrittenCdms int, err os.Error) {
 	inserted := 0
 
 	sql := "insert ignore into cdm (author, num_monstre, nom_complet, nom, age, " // En go on ne peut pas déclarer une chaine sur plusieurs lignes. J'espère que le compilo combine...
@@ -49,15 +49,17 @@ func (store *MysqlStore) WriteCdms(db *mysql.Client, cdms []*CDM, author int) (n
 	}
 	defer stmt.Close()
 
-	time := time.Seconds()
-
+	if seconds==0 {
+		seconds = time.Seconds()
+	}
+	
 	for _, cdm := range cdms {
 		err = stmt.BindParams(
 			author,
 			cdm.NumMonstre, cdm.NomComplet,
 			cdm.Nom, cdm.TagAge,
 			cdm.ComputeSHA1(),
-			time,
+			seconds,
 			cdm.Niveau_min, cdm.Niveau_max,
 			cdm.PointsDeVie_min, cdm.PointsDeVie_max,
 			cdm.Capacite_text,

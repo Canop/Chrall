@@ -69,7 +69,7 @@ function initCommunications(action) {
 		if (pendingChange) {
 			try {
 				var otn = parseInt(localStorage['troll.'+player.id+'.objetPartage']);
-				sendToChrallServer(action, {"ChangePartage":localStorage['troll.'+player.id+'.actionPartage'], "IdAutreTroll": otn});
+				sendToChrallServer(action, {"ChangePartage":localStorage['troll.'+player.id+'.actionPartage'], "IdCible": otn});
 			} catch (e){}
 			localStorage['troll.'+player.id+'.actionPartage']='';
 		} else {
@@ -105,6 +105,7 @@ function receiveFromChrallServer(message) {\
 		localStorage["com.status.message"]=message.Text;\
 	}\
 	if (message.MiPartages && message.MiPartages.length>0 && typeof(updateTablesPartage)=="function") updateTablesPartage(message.MiPartages);\
+	if (message.Actions && message.Actions.length>0 && typeof(addActionsToMonsterEvents)=="function") addActionsToMonsterEvents(message.Actions);\
 	var com_status_message_span = document.getElementById("com_status_message");\
 	if (com_status_message_span) com_status_message_span.innerHTML = localStorage["com.status.message"];\
 }\

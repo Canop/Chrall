@@ -79,6 +79,12 @@ chrome.extension.sendRequest(
 		case "Play_a_Competence16b.php": // résultat de cdm
 			Chrall_handleCdmPage();	
 			break;
+		case "Play_a_Competence18b.php": // résultat d'insulte
+			Chrall_analyseResultatInsulte();	
+			break;
+		case "Play_a_Competence18.php": // préparation d'insulte
+			Chrall_prepareInsulte();	
+			break;
 		case "Play_a_Competence29.php": // préparation de minage (le formulaire dans la frame d'action)
 			Chrall_handleBeforeMinage();	
 			break;
@@ -108,6 +114,7 @@ chrome.extension.sendRequest(
 			Chrall_addBubblesToLinks();
 			break;
 		case "MonsterView.php":
+			Chrall_addInfosToMonsterEvents();
 			Chrall_addBubblesToLinks();
 			break;
 		case "Play_a_Combat.php": //  résultat de combat (vérifié pour CDB)

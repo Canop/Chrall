@@ -727,4 +727,5 @@ function Chrall_analyseAndReformatView() {
 	// On corrige si nécessaire la position affichée dans le menu de gauche et on signale
 	// cette position au script de fond
 	updateTroll();
+	
 }

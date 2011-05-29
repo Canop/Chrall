@@ -39,6 +39,14 @@ func GetFormValueAsInt(hr *http.Request, name string) int {
 	}
 	return 0
 }
+func GetFormValueAsInt64(hr *http.Request, name string) int64 {
+	values := hr.Form[name]
+	if len(values) > 0 {
+		v, _ := strconv.Atoi64(values[0])
+		return v
+	}
+	return 0
+}
 func GetFormValueAsUint(hr *http.Request, name string) uint {
 	values := hr.Form[name]
 	if len(values) > 0 {
