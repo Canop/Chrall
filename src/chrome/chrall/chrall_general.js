@@ -3,7 +3,7 @@
  et des utilitaires. Contient aussi la constante donnant la version courante de Chrall
 */
 
-var chrallVersion = "2.0";
+var chrallVersion = "2.1";
 
 
 /**

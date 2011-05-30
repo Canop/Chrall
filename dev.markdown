@@ -232,17 +232,18 @@ RECENTS / A TESTER :
 * interception des cdm : récupérer et transmettre aussi la date (comme pour les actions)
 * interception des insultes et transmission à Chrall en cas de compte actif
 * mettre dans les événements des monstres les caractéristiques des frappes si partage
+* mettre dans les événements des monstres la blessure mesurée en cas de partage actif avec l'auteur de la CDM
 
 EN COURS :
 ==========
 * apprendre le langage go
-* mettre dans les événements des monstres la blessure mesurée dans la CDM en cas de partage actif avec l'auteur de la CDM
 
 TODO :
 ======
 P1 :
 ----
-* le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code !
+* le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
+* indiquer directement dans la bulle si un monstre est insulté (et par qui)
 * liens ancres MH en haut des tables : changer d'onglet.
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
 * événements des monstres : si partage indiquer les caracts des hypno
@@ -256,6 +257,7 @@ P1 :
 * recherche de monstres ou de compo particuliers dans la vue (n'oublions pas les toms en mission...)
 * partage : cumul des pistages avec représentation graphique (modulaire car on ne peut pas détecter un mouvement de monstre)
 * partage : cumul des recherches de filon
+* essayer gb (code.google.com/p/go-gb/)
 
 P2 :
 ----

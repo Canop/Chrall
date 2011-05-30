@@ -13,6 +13,7 @@ GOFILES=\
 	main/cdmstore.go\
 	main/comptestore.go\
 	main/partagestore.go\
+	main/observationstore.go\
 	main/messager.go\
 	main/handler.go\
 	main/roothandler.go\

@@ -49,10 +49,10 @@ func (store *MysqlStore) WriteCdms(db *mysql.Client, cdms []*CDM, author int, se
 	}
 	defer stmt.Close()
 
-	if seconds==0 {
+	if seconds == 0 {
 		seconds = time.Seconds()
 	}
-	
+
 	for _, cdm := range cdms {
 		err = stmt.BindParams(
 			author,
@@ -302,21 +302,27 @@ func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName stri
 }
 
 // un résultat sans auteur (0) ni dateCdm (valeur 0) signifie qu'on n'a pas la réponse à la question
-func (store *MysqlStore) GetBlessure(db *mysql.Client, numMonstre uint, trollId int, amis []int) (blessure uint, auteurCDM int , dateCDM int64, err os.Error) {
+func (store *MysqlStore) GetBlessure(db *mysql.Client, numMonstre uint, trollId int, amis []int) (blessure uint, auteurCDM int, dateCDM int64, err os.Error) {
 	sql := "select blessure, author, date_adition from cdm where"
-	sql += " num_monstre="+strconv.Uitoa(numMonstre)+" and"
-	sql += " author in ("+strconv.Itoa(trollId)
-	for _, id := range(amis) {
-		sql += ","+strconv.Itoa(id)
+	sql += " num_monstre=" + strconv.Uitoa(numMonstre) + " and"
+	sql += " author in (" + strconv.Itoa(trollId)
+	for _, id := range amis {
+		sql += "," + strconv.Itoa(id)
 	}
 	sql += ") order by date_adition desc limit 1"
 	err = db.Query(sql)
-	if err != nil { return }
+	if err != nil {
+		return
+	}
 	result, err := db.UseResult()
-	if err != nil {	return }
+	if err != nil {
+		return
+	}
 	row := result.FetchRow()
 	db.FreeResult()
-	if row == nil {	return }
+	if row == nil {
+		return
+	}
 	blessure = fieldAsUint(row[0])
 	auteurCDM = fieldAsInt(row[1])
 	dateCDM = fieldAsInt64(row[2])

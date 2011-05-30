@@ -62,6 +62,10 @@ ini_set('default_charset', 'utf-8');
 <img class=screenshot src=screens/pjview_bulle.png>
 <p>Cette bulle s'affiche également si vous n'êtes pas connecté à votre troll mais les informations sont plus légères dans ce cas : les px du kill et la diplomatie ne sont alors pas disponibles.</p>
 
+<h2>Le partage d'informations entre joueurs</h2>
+<p>Si vous activez un compte sur Chrall, vous pouvez savoir où sont (et dans quel état) vos amis. Et les événements des monstres sont un peu plus détaillés pour ce qui est de vos actions et de celles de vos amis :</p>
+<img class=screenshot src=screens/events-monstre.png>
+
 <h2>Ce que vous ne voyez pas</h2>
 <p>Certaines fonctions ne sont pas visibles mais audibles : 5 minutes avant votre DLA, un son discret (compatible avec une ambiance de bureau) vous alerte. <a href="javascript:document.getElementById('alarm').play();">Ecoutez</a>.
 </p>

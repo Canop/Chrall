@@ -16,8 +16,8 @@ type JsonMessageIn struct {
 	MessageNum    int        // l'id de message entrant
 	Troll         *TrollData // les infos du troll du joueur (structure définie dans comptestore.go)
 	ChangePartage string
-	IdCible  uint // l'id d'un autre troll ou d'un monstre, le sujet optionnel de l'action
-	Action *Action
+	IdCible       uint // l'id d'un autre troll ou d'un monstre, le sujet optionnel de l'action
+	Action        *Action
 }
 
 type JsonMessageOut struct {
@@ -25,7 +25,7 @@ type JsonMessageOut struct {
 	Error      string
 	Text       string
 	MiPartages []*MiPartage
-	Actions []*Action
+	Actions    []*Action
 }
 
 func (h *JsonGetHandler) writeJsonAnswer(w http.ResponseWriter, out *JsonMessageOut) {
@@ -52,8 +52,12 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 	out.AnswersTo = in.MessageNum
 
 	fmt.Printf("Message reçu décodé : \n%+v\n", in)
-	if in.Troll!=nil {fmt.Printf(" in.Troll : \n%+v\n", in.Troll)}
-	if in.Action!=nil {fmt.Printf(" in.Action : \n%+v\n", in.Action)}
+	if in.Troll != nil {
+		fmt.Printf(" in.Troll : \n%+v\n", in.Troll)
+	}
+	if in.Action != nil {
+		fmt.Printf(" in.Action : \n%+v\n", in.Action)
+	}
 
 	fmt.Printf("Message entrant du troll %d avec l'action %s\n", in.TrollId, action)
 	if in.TrollId == 0 {
@@ -91,7 +95,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				return
 			}
 		}
-		if in.Action!=nil {
+		if in.Action != nil {
 			in.Action.Auteur = int(in.TrollId)
 			err = h.store.InsertAction(db, in.Action)
 			if err != nil {
@@ -155,7 +159,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			out.MiPartages = h.store.PartagesToMiPartages(db, in.TrollId, partages, h.tksManager)
 		}
 		var amis []int
-		if action=="getMonsterEvents" {
+		if action == "getMonsterEvents" {
 			amis, err = h.store.GetPartageurs(db, int(in.TrollId))
 			if err != nil {
 				fmt.Printf("Erreur récupération amis sur action %s : %s\n", action, err.String())

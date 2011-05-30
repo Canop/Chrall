@@ -91,7 +91,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	html := ""
 
 	var amis []int
-	if askerId > 0 && mdpr != "" && monsterId>0 {
+	if askerId > 0 && mdpr != "" && monsterId > 0 {
 		compteOk, _, err = h.store.CheckCompte(db, uint(askerId), mdpr)
 		if compteOk {
 			amis, err = h.store.GetPartageurs(db, askerId)
@@ -100,7 +100,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 			}
 			fmt.Printf("Amis : %v\n", amis)
 			blessure, auteurCDM, dateCDM, _ := h.store.GetBlessure(db, monsterId, askerId, amis)
-			if auteurCDM!=0 {
+			if auteurCDM != 0 {
 				nomAuteur, _, _ := h.tksManager.GetNomRaceNiveauTroll(auteurCDM)
 				t := time.SecondsToLocalTime(dateCDM)
 				html += fmt.Sprintf("Blessure: <b>%d %%</b> (CDM de %s le %s)<br>", blessure, nomAuteur, t.Format("02/01 à 15h04")) // oui les gars de Google ont fumé lorsqu'ils ont fait leur bibliothèque de formatage de date
@@ -120,7 +120,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		fmt.Println(" Erreur : " + err.String())
 		return "Erreur : " + err.String()
 	}
-	
+
 	html += be.Html(monsterId, askerId, h.tksManager, 0 /* pourcentage blessure */ )
 	return html
 }

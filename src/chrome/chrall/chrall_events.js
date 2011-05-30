@@ -66,7 +66,7 @@ function Chrall_addInfosToMonsterEvents() {
 				if (dd>10) continue;\
 				text += a.Type;\
 				text += a.Succes ? " réussi" : " raté";\
-				if (a.Type=="Insulte" || a.Type=="CDM") text += "e";\
+				if (a.Type=="Insulte" || a.Type=="CDM" || a.Type.indexOf("Botte ")==0) text += "e";\
 				if (a.PV>0) text += "<br><b>-"+a.PV+" PV</b>";\
 				if (a.Degats>0) text += " Deg: "+a.Degats;\
 				if (a.Esquive>0) text += " Esq: "+a.Esquive;\

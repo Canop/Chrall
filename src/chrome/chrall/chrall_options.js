@@ -28,8 +28,8 @@ function Chrall_reformatOptionsView() {
 	html += "</p>";
 	html += "<h2>Outils Chrall</h2>";
 	html += "<ul>";
-	html += "<li><a target=nouvelOnglet href=\"http://canop.org:9090/chrall/puits\">Le Puits</a> dans lequel vous pouvez déverser vos CDM</li>";
-	html += "<li><a target=nouvelOnglet href=\"http://canop.org:9090/chrall/bestiaire\">Le Bestiaire</a> qui vous dira en retour ce qu'il sait des monstres</li>";
+	html += "<li><a target=nouvelOnglet href=\""+GOGOCHRALL+"puits\">Le Puits</a> dans lequel vous pouvez déverser vos CDM</li>";
+	html += "<li><a target=nouvelOnglet href=\""+GOGOCHRALL+"bestiaire\">Le Bestiaire</a> qui vous dira en retour ce qu'il sait des monstres</li>";
 	html += "</ul>";
 	html += "<h2>Compte Chrall</h2>";
 	html += "<p>Etat du compte Chrall : <b><span id=com_status_message>"+localStorage['com.status.message']+"</span></b></p>";
@@ -40,8 +40,8 @@ function Chrall_reformatOptionsView() {
 	html += " if (nm.length!=32) { alert('Votre mot de passe restreint doit faire exactement 32 caractères.'); return;}";
 	html += " localStorage['"+mdpkey+"']=nm;";
 	html += "}</script>";
-	html += "<input type=password id=ch_mdp_restreint value=''>";
-	html += "<a class=gogo href='javascript:changeMdpRestreint();'>Modifier le mot de passe</a>";
+	html += "<br><input type=password id=ch_mdp_restreint value=''>";
+	html += "<a class=gogo href='javascript:changeMdpRestreint();localStorage[\"tab_options\"]=\"tabChrall\";document.location.href=\"Play_option.php\";'>Modifier le mot de passe</a>";
 	var clefCompteActif='"troll.'+player.id+'.compteActif"';
 	if (compteChrallActif()) {
 		html += " &nbsp; <a class=gogo href='javascript:localStorage[\"tab_options\"]=\"tabChrall\";localStorage["+clefCompteActif+"]=\"no\";document.location.href=\"Play_option.php\";'>Désactiver le compte</a>";

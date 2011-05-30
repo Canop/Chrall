@@ -89,7 +89,7 @@ function formatDuration(seconds) {\
 	var h = Math.floor(seconds/(3600));\
 	seconds -= h*(3600);\
 	var m = Math.floor(seconds/(60));\
-	return h+(m<10?"h0":"hx")+m;\
+	return h+(m<10?"h0":"h")+m;\
 }\
 function formatDate(timestamp) {\
 	if (timestamp==0) return "";\
@@ -100,7 +100,7 @@ function receiveFromChrallServer(message) {\
 	console.log("Message entrant :");\
 	console.log(message);\
 	if (message.Error.length>0) {\
-		localStorage["com.status.message"]="Compte en erreur : " + message.Error;\
+		localStorage["com.status.message"]="Compte en erreur ou problème authentification";\
 	} else {\
 		localStorage["com.status.message"]=message.Text;\
 	}\

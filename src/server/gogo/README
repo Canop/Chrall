@@ -1,6 +1,7 @@
 
 Le serveur gogo est écrit en go (http://golang.org). Il est conçu pour être disponible à l'adresse
-	http://canop.org:9090/chrall
+	http://canop.org:8000/chrall
+	(anciennement sur le port 9090)
 
 Pour le compiler, après avoir installé l'environnement go, lancez la commande suivante dans ce répertoire :
 	gomake
@@ -11,4 +12,4 @@ Pour lancer le serveur, exécutez ensuite
 Le script restart-gogo.sh compiles, kills and restarts gogo as a background application
 
 Pour le tester, utilisez un navigateur web pour accéder à l'url
-	http://localhost:9090/chrall
+	http://localhost:8000/chrall
