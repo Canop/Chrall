@@ -237,11 +237,14 @@ RECENTS / A TESTER :
 EN COURS :
 ==========
 * apprendre le langage go
+* partage : transmission de la vue au serveur
+* vue/Recherche : cet onglet doit permettre de trouver (suivant partages) un troll, monstre (num ou nom), etc.
 
 TODO :
 ======
 P1 :
 ----
+* fenêtre événements monstres : affichage dans le coin supérieur gauche de la bulle du monstre
 * le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
 * indiquer directement dans la bulle si un monstre est insulté (et par qui)
 * liens ancres MH en haut des tables : changer d'onglet.
@@ -251,8 +254,6 @@ P1 :
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo)
 * comprendre la gestion des packages en go pour factoriser le code online et offline et tout simplement éviter de tout avoir dans "main"
 * affichage dans la bulle des trolls (si partage actif) des infos principales PA/PV/DLA
-* partage : transmission de la vue au serveur
-* vue/Recherche : cet onglet doit permettre de trouver (suivant partages) un troll, monstre (num ou nom), etc.
 * partage : positionnement des pièges
 * recherche de monstres ou de compo particuliers dans la vue (n'oublions pas les toms en mission...)
 * partage : cumul des pistages avec représentation graphique (modulaire car on ne peut pas détecter un mouvement de monstre)

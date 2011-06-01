@@ -137,19 +137,39 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.String())
 				return
 			}
+		case "TestVue": // TRES PROVISOIRE - CHANGER LA CLEF POUR LA RECUP DE LA VUE
+			fmt.Printf("TestVue %d\n", in.IdCible)
+			compteCible, err := h.store.GetCompte(db, in.IdCible)
+			if err != nil {
+				out.Error = err.String()
+				fmt.Printf("Erreur récupération compte cible sur action %s : %s\n", action, err.String())
+				return
+			}
+			if compteCible==nil {
+				out.Error = err.String()
+				fmt.Printf("Pas de compte cible sur action %s\n", action)
+				return
+			}
+			if compteCible.statut!="ok" {
+				fmt.Printf("Compte cible invalide sur action %s\n", action)
+				return
+			}
+			items, _, _ := FetchVue(in.IdCible, compteCible.mdpRestreint) // gérer le cas du mdp qui n'est plus bon et changer en conséquence le statut
+			err = h.store.SaveSoapItems(db, in.IdCible, items)
+			if err != nil {
+				out.Error = err.String()
+				fmt.Printf("Erreur sauvegarde vue sur action %s : %s\n", action, err.String())
+				return
+			}
 		}
-		if action == "updateTroll" {
-			// contournement de bug. J'ai sinon une erreur lors du listage qui suit.
-			db, err = h.store.Connect()
+		if action == "get_partages" {
+			db, err = h.store.Connect()// contournement de bug. J'ai sinon une erreur lors du listage qui suit.
 			if err != nil {
 				out.Error = err.String()
 				fmt.Printf("Erreur réouverture connexion BD sur action %s : %s\n", action, err.String())
 				return
 			}
 			defer db.Close()
-
-		}
-		if action == "get_partages" || action == "updateTroll" {
 			partages, err := h.store.GetAllPartages(db, in.TrollId)
 			if err != nil {
 				out.Error = err.String()

@@ -5,6 +5,7 @@ gère la lecture et l'écriture en mysql des partages d'infos entre comptes
 
 import (
 	"container/vector"
+	"fmt"
 	"mysql"
 	"os"
 	"strconv"
@@ -77,9 +78,6 @@ func (store *MysqlStore) InsertPartage(db *mysql.Client, trollA uint, trollB uin
 	}
 
 	err = stmt.Execute()
-	if err != nil {
-		return
-	}
 
 	return
 }
@@ -136,6 +134,41 @@ func (store *MysqlStore) DeletePartage(db *mysql.Client, troll uint, autreTroll 
 
 // récupère toutes les infos de partage, acceptés ou non, impliquant un troll
 func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partages []*Partage, err os.Error) {
+
+	sql := "select troll_a, troll_b, statut_a, statut_b from partage where troll_a=? or troll_b=?"
+	stmt, err := db.Prepare(sql)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+	err = stmt.BindParams(trollId, trollId)
+	if err != nil {
+		return
+	}
+	
+	err = stmt.Execute()  
+	if err != nil {  
+		os.Exit(1)  
+	}  
+	r := new(Partage)
+	stmt.BindResult(&r.TrollA, &r.TrollB, &r.StatutA, &r.StatutB)
+	partages = make([]*Partage, 0, 10)
+	for {
+		fmt.Println("Avant fetch")
+		eof, err := stmt.Fetch()  
+		fmt.Printf("err : %+v\n", err)
+		fmt.Printf("eof : %+v\n", eof)
+		if err != nil || eof {
+			return  
+		}
+		fmt.Printf("r : %+v\n", r)
+		p := &Partage{r.TrollA, r.TrollB, r.StatutA, r.StatutB} // on dirait qu'on ne peut pas dupliquer l'objet plus simplement
+		partages = append(partages, p)
+	}
+
+	return
+}
+func (store *MysqlStore) GetAllPartages_old(db *mysql.Client, trollId uint) (partages []*Partage, err os.Error) {
 
 	sql := "select troll_a, troll_b, statut_a, statut_b from partage where troll_a=" + strconv.Uitoa(trollId) + " or troll_b=" + strconv.Uitoa(trollId)
 	err = db.Query(sql)

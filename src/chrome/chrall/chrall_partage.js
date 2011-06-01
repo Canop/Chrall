@@ -36,13 +36,18 @@ function makePartageTables() {
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.X+'</td>';"; 
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Y+'</td>';"; 
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Z+'</td>';"; 
-	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDate(p.AutreTroll.MiseAJour)+'</td>';"; 	
+	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDate(p.AutreTroll.MiseAJour)+'</td>';";
 	html[h++] = "   } else {";
 	html[h++] = "    hpa+= '<td class=mh_tdpage colspan=8>Pas de données</td>';";
 	html[h++] = "   }";	
+	html[h++] = "   hpa+='<td class=mh_tdpage>';";	
 	html[h++] = "   var a = 'Rompre';";
 	html[h++] = "   var scra='\\\''+a+'\\\'';"; // les échappements sont la misère...
-	html[h++] = "   hpa+='<td class=mh_tdpage><a class=gogo href=\"javascript:changePartage('+scra+', '+p.IdAutreTroll+');\">'+a+'</a></td>';";	
+	html[h++] = "   hpa+='<a class=gogo href=\"javascript:changePartage('+scra+', '+p.IdAutreTroll+');\">'+a+'</a>';";	
+	html[h++] = "   a = 'TestVue';";
+	html[h++] = "   scra='\\\''+a+'\\\'';";
+	html[h++] = "   hpa+='<a class=gogo href=\"javascript:changePartage('+scra+', '+p.IdAutreTroll+');\">'+a+'</a>';";	
+	html[h++] = "   hpa+='</td>';";	
 	html[h++] = "   hpa+= '</tr>';";
 	html[h++] = "  } else {"; // ajout dans la table des partages inactifs
 	html[h++] = "   hpp+='<tr><td class=mh_tdpage>';";
