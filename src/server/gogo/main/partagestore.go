@@ -145,21 +145,21 @@ func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partage
 	if err != nil {
 		return
 	}
-	
-	err = stmt.Execute()  
-	if err != nil {  
-		os.Exit(1)  
-	}  
+
+	err = stmt.Execute()
+	if err != nil {
+		return
+	}
 	r := new(Partage)
 	stmt.BindResult(&r.TrollA, &r.TrollB, &r.StatutA, &r.StatutB)
 	partages = make([]*Partage, 0, 10)
 	for {
 		fmt.Println("Avant fetch")
-		eof, err := stmt.Fetch()  
+		eof, err := stmt.Fetch()
 		fmt.Printf("err : %+v\n", err)
 		fmt.Printf("eof : %+v\n", eof)
 		if err != nil || eof {
-			return  
+			return
 		}
 		fmt.Printf("r : %+v\n", r)
 		p := &Partage{r.TrollA, r.TrollB, r.StatutA, r.StatutB} // on dirait qu'on ne peut pas dupliquer l'objet plus simplement

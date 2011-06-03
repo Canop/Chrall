@@ -16,7 +16,7 @@ import (
 type TrollData struct {
 	PV_max       uint
 	PV_actuels   uint
-	X            int64
+	X            int64 // parce que l'api gomysql ne sait pas gérer les int32
 	Y            int64
 	Z            int64
 	Fatigue      uint

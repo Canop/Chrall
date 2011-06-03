@@ -84,6 +84,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		return
 	}
 	if mdpok {
+		var amis []int
 		out.Text = "Compte connecté et authentifié"
 		if in.Troll != nil {
 			fmt.Printf("*** Infos troll reçues de %d ***", in.TrollId)
@@ -137,33 +138,9 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.String())
 				return
 			}
-		case "TestVue": // TRES PROVISOIRE - CHANGER LA CLEF POUR LA RECUP DE LA VUE
-			fmt.Printf("TestVue %d\n", in.IdCible)
-			compteCible, err := h.store.GetCompte(db, in.IdCible)
-			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur récupération compte cible sur action %s : %s\n", action, err.String())
-				return
-			}
-			if compteCible==nil {
-				out.Error = err.String()
-				fmt.Printf("Pas de compte cible sur action %s\n", action)
-				return
-			}
-			if compteCible.statut!="ok" {
-				fmt.Printf("Compte cible invalide sur action %s\n", action)
-				return
-			}
-			items, _, _ := FetchVue(in.IdCible, compteCible.mdpRestreint) // gérer le cas du mdp qui n'est plus bon et changer en conséquence le statut
-			err = h.store.SaveSoapItems(db, in.IdCible, items)
-			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur sauvegarde vue sur action %s : %s\n", action, err.String())
-				return
-			}
 		}
 		if action == "get_partages" {
-			db, err = h.store.Connect()// contournement de bug. J'ai sinon une erreur lors du listage qui suit.
+			db, err = h.store.Connect() // contournement de bug. J'ai sinon une erreur lors du listage qui suit.
 			if err != nil {
 				out.Error = err.String()
 				fmt.Printf("Erreur réouverture connexion BD sur action %s : %s\n", action, err.String())
@@ -177,14 +154,46 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				return
 			}
 			out.MiPartages = h.store.PartagesToMiPartages(db, in.TrollId, partages, h.tksManager)
-		}
-		var amis []int
-		if action == "getMonsterEvents" {
+		} else if action == "getMonsterEvents" {
 			amis, err = h.store.GetPartageurs(db, int(in.TrollId))
 			if err != nil {
 				fmt.Printf("Erreur récupération amis sur action %s : %s\n", action, err.String())
 			}
 			out.Actions, err = h.store.GetActions(db, "monstre", int(in.IdCible), int(in.TrollId), amis)
+		} else if action == "maj_vue" {
+			fmt.Printf("MAJ Vue %d\n", in.IdCible)
+			compteCible, err := h.store.GetCompte(db, in.IdCible)
+			if err != nil {
+				out.Error = err.String()
+				fmt.Printf("Erreur récupération compte cible sur action %s : %s\n", action, err.String())
+				return
+			}
+			if compteCible == nil {
+				out.Error = err.String()
+				fmt.Printf("Pas de compte cible sur action %s\n", action)
+				return
+			}
+			if compteCible.statut != "ok" {
+				fmt.Printf("Compte cible invalide sur action %s\n", action)
+				return
+			}
+			ok, err := h.store.CheckBeforeSoapCall(db, in.TrollId, in.IdCible, "Dynamiques", 24)
+			if err != nil {
+				out.Error = err.String()
+				fmt.Printf("Erreur sur action %s : %s\n", action, err.String())
+				return
+			}
+			if !ok {
+				fmt.Println("Déjà trop d'appels, appel soap refusé")
+				return
+			}
+			items, _, _ := FetchVue(in.IdCible, compteCible.mdpRestreint) // gérer le cas du mdp qui n'est plus bon et changer en conséquence le statut
+			err = h.store.SaveSoapItems(db, in.IdCible, items)
+			if err != nil {
+				out.Error = err.String()
+				fmt.Printf("Erreur sauvegarde vue sur action %s : %s\n", action, err.String())
+				return
+			}
 		}
 	} else {
 		if c != nil {

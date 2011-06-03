@@ -11,6 +11,8 @@ type WellHandler struct {
 
 func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	h.hit()
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Request-Method", "GET")
 	h.head(w, "Le Puits de gOgOchrall")
 	w.Write([]byte(`
 		<script>

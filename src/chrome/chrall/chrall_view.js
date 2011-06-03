@@ -460,6 +460,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<li><a href=#tabCenotaphs>Cénotaphes ("+grid.nbCenotaphsInView+")</a></li>";
 	html[h++] = "<li><a href=#tabSettings>Réglages</a></li>";
 	html[h++] = "<li><a href=#tabPartages>Partages</a></li>";
+	html[h++] = "<li><a href=#tabRecherche>Recherche</a></li>";
 	html[h++] = "</ul>";
 	html[h++] = "<div class=tab_container view>";
 	html[h++] = "<div id=tabGrid class=tab_content>";
@@ -476,10 +477,10 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabCenotaphs class=tab_content scroll></div>";
 	html[h++] = "<div id=tabSettings class=tab_content scroll></div>";
 	html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
+	html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
 	html[h++] = "</div>";
 	
 	var time_after_grid_building = (new Date()).getTime(); // <= prof
-
 	
 	$($("table.mh_tdborder")[0]).parent().parent().prepend(html.join(''));	
 	$("#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
@@ -490,6 +491,7 @@ function Chrall_analyseAndReformatView() {
 	$("#tabPlaces").append(tables[5]);
 	$("#tabCenotaphs").append(tables[6]);
 	$("#tabPartages").append(makePartageTables());
+	makeSearchPanel($("#tabRecherche"));
 	$(".tab_content").hide();
 	
 	if (localStorage['tab_view']) {

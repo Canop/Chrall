@@ -36,6 +36,16 @@ func (server *GogoServer) Start() {
 	http.Handle("/chrall/puits", wellHandler)
 	http.Handle("/chrall/puit", wellHandler)
 
+	searchPanelHandler := new(SearchPanelHandler)
+	searchPanelHandler.parent = &chrallHandler.Hitter
+	searchPanelHandler.store = store
+	http.Handle("/chrall/searchpanel", searchPanelHandler)
+
+	vueHandler := new(VueHandler)
+	vueHandler.parent = &chrallHandler.Hitter
+	vueHandler.store = store
+	http.Handle("/chrall/vue", vueHandler)
+
 	bestiaryHandler := new(BestiaryHandler)
 	bestiaryHandler.parent = &chrallHandler.Hitter
 	bestiaryHandler.store = store

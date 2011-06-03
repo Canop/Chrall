@@ -45,8 +45,7 @@ function makePartageTables() {
 	html[h++] = "   var scra='\\\''+a+'\\\'';"; // les échappements sont la misère...
 	html[h++] = "   hpa+='<a class=gogo href=\"javascript:changePartage('+scra+', '+p.IdAutreTroll+');\">'+a+'</a>';";	
 	html[h++] = "   a = 'TestVue';";
-	html[h++] = "   scra='\\\''+a+'\\\'';";
-	html[h++] = "   hpa+='<a class=gogo href=\"javascript:changePartage('+scra+', '+p.IdAutreTroll+');\">'+a+'</a>';";	
+	html[h++] = "   hpa+='<a class=gogo href=\"javascript:majVue('+p.IdAutreTroll+');\">Met à jour la vue</a>';";	
 	html[h++] = "   hpa+='</td>';";	
 	html[h++] = "   hpa+= '</tr>';";
 	html[h++] = "  } else {"; // ajout dans la table des partages inactifs
@@ -71,7 +70,12 @@ function makePartageTables() {
 	html[h++] = " tpp.innerHTML=hpp;";
 	html[h++] = "  ";
 	html[h++] = "}";
-	html[h++] = "function changePartage(action, autreTroll){";
+	html[h++] = "function majVue(autreTroll){";
+	html[h++] = " localStorage['troll."+player.id+".majVue']=autreTroll;";
+	html[h++] = " localStorage['tab_view']='tabPartages';";
+	html[h++] = " document.location.href='"+pageName+"';";
+	html[h++] = "}";
+	html[h++] = "function changePartage(autreTroll){";
 	html[h++] = " localStorage['troll."+player.id+".actionPartage']=action;";
 	html[h++] = " localStorage['troll."+player.id+".objetPartage']=autreTroll;";
 	html[h++] = " localStorage['tab_view']='tabPartages';";

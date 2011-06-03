@@ -98,7 +98,6 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 			if err != nil {
 				fmt.Printf("Erreur récupération amis dans makeBestiaryExtractHtml : %s\n", err.String())
 			}
-			fmt.Printf("Amis : %v\n", amis)
 			blessure, auteurCDM, dateCDM, _ := h.store.GetBlessure(db, monsterId, askerId, amis)
 			if auteurCDM != 0 {
 				nomAuteur, _, _ := h.tksManager.GetNomRaceNiveauTroll(auteurCDM)

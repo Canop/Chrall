@@ -1,0 +1,37 @@
+
+// 
+function makeSearchPanel($panel) {
+	if (!compteChrallActif()) {
+		return "La recherche nécessite (cela changera peut-être) un compte chrall actif.";
+	}
+	var html = [];
+	var mdpRestreint = localStorage['troll.'+player.id+'.mdp'];
+	var h=0;
+	html[h++] = "<script>";
+	html[h++] = "function montre(x, y, z){";
+	html[h++] = " var url = '"+GOGOCHRALL+"vue?asker="+player.id+"&mdpr="+mdpRestreint+"&x='+x+'&y='+y+'&z='+z;";
+	html[h++] = " window.open(url);";
+	html[h++] = "";
+	html[h++] = "";
+	html[h++] = "}";
+	html[h++] = "</script>";
+
+	html[h++] = "<a id=btn_maj class=gogo>Mettre à jour les vues</a> <span id=resultat_maj_vue></span>";
+	html[h++] = "<br><input style='width:150px' id=ch_search_pattern value=''>";
+	html[h++] = "<a id=btn_search class=gogo>Chercher</a>";
+	html[h++] = "<div id=search_result style='width:100%;'></div>";
+	html[h++] = "<div id=search_details style='width:100%;'></div>";
+
+	$panel.append(html.join(''));
+	
+	var search = function(){
+		console.log('click!');
+		var tok = $('#ch_search_pattern').val();
+		$('#search_result').load(GOGOCHRALL+'searchpanel?asker='+player.id+'&mdpr='+mdpRestreint+'&tok='+encodeURIComponent(tok));
+	};
+	
+	$('#ch_search_pattern').change(search);
+	$('#btn_search').click(search);
+	console.log('click added');
+}
+

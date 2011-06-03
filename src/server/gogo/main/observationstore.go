@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"mysql"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -19,9 +20,9 @@ type Observation struct {
 	Type   string // 'troll', 'monstre' ou 'lieu'
 	Date   int64  // la date de l'observation (en secondes)
 	Nom    string // le nom du truc observé
-	X      int
-	Y      int
-	Z      int
+	X      int64  // parce que l'api gomysql ne sait pas gérer les int32
+	Y      int64
+	Z      int64
 }
 
 
@@ -60,6 +61,93 @@ func (store *MysqlStore) SaveSoapItems(db *mysql.Client, trollId uint, items []S
 			return
 		}
 		err = stmt.Execute()
+	}
+
+	return
+}
+
+func (store *MysqlStore) SearchObservations(db *mysql.Client, tok string, trollId int, amis []int) (observations []*Observation, err os.Error) {
+	sql := "select auteur, num, date, type, nom, x, y, z from observation where"
+	if num, _ := strconv.Atoi(tok); num != 0 {
+		sql += " num=" + tok
+	} else {
+		sql += " nom like '%" + tok + "%'"
+	}
+	sql += " and auteur in (" + strconv.Itoa(trollId)
+	for _, id := range amis {
+		sql += "," + strconv.Itoa(id)
+	}
+	sql += ") order by num, date desc limit 100"
+
+	fmt.Println("SQL : ", sql)
+
+	stmt, err := db.Prepare(sql)
+	if err != nil {
+		return
+	}
+	err = stmt.Execute()
+	if err != nil {
+		return
+	}
+	r := new(Observation)
+	stmt.BindResult(&r.Auteur, &r.Num, &r.Date, &r.Type, &r.Nom, &r.X, &r.Y, &r.Z)
+	observations = make([]*Observation, 0, 20)
+
+	for {
+		eof, err := stmt.Fetch()
+		if err != nil || eof {
+			return
+		}
+		fmt.Printf("r : %+v\n", r)
+		if len(observations) > 0 && r.Num == observations[len(observations)-1].Num { // dédoublonnage
+			continue
+		}
+		o := &Observation{r.Auteur, r.Num, r.Type, r.Date, r.Nom, r.X, r.Y, r.Z}
+		observations = append(observations, o)
+	}
+
+	return
+}
+
+
+func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z int, dist int, trollId int, amis []int) (observations []*Observation, err os.Error) {
+
+	sql := "select auteur, num, date, type, nom, x, y, z from observation where"
+	sql += " abs(x-" + strconv.Itoa(x) + ")<=" + strconv.Itoa(dist)
+	sql += " and abs(y-" + strconv.Itoa(y) + ")<=" + strconv.Itoa(dist)
+	sql += " and abs(z-" + strconv.Itoa(z) + ")<=" + strconv.Itoa(dist/2)
+
+	sql += " and auteur in (" + strconv.Itoa(trollId)
+	for _, id := range amis {
+		sql += "," + strconv.Itoa(id)
+	}
+	sql += ") order by num, date desc limit 100"
+
+	fmt.Println("SQL : ", sql)
+
+	stmt, err := db.Prepare(sql)
+	if err != nil {
+		return
+	}
+	err = stmt.Execute()
+	if err != nil {
+		return
+	}
+	r := new(Observation)
+	stmt.BindResult(&r.Auteur, &r.Num, &r.Date, &r.Type, &r.Nom, &r.X, &r.Y, &r.Z)
+	observations = make([]*Observation, 0, 20)
+
+	for {
+		eof, err := stmt.Fetch()
+		if err != nil || eof {
+			return
+		}
+		fmt.Printf("r : %+v\n", r)
+		if len(observations) > 0 && r.Num == observations[len(observations)-1].Num {
+			continue
+		}
+		o := &Observation{r.Auteur, r.Num, r.Type, r.Date, r.Nom, r.X, r.Y, r.Z}
+		observations = append(observations, o)
 	}
 
 	return

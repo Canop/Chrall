@@ -20,12 +20,15 @@ GOFILES=\
 	main/bucketdecoder.go\
 	main/wellhandler.go\
 	main/bestiaryhandler.go\
+	main/searchpanelhandler.go\
+	main/vuehandler.go\
 	main/jsonposthandler.go\
 	main/jsonmessenger.go\
 	main/jsongethandler.go\
 	main/testhandler.go\
 	main/chrallhandler.go\
 	main/mhsoapclient.go\
+	main/soapstore.go\
 	main/iso88591.go\
 	main/gogo.go\
 

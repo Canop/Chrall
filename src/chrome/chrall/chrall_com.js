@@ -71,10 +71,19 @@ function initCommunications(action) {
 				var otn = parseInt(localStorage['troll.'+player.id+'.objetPartage']);
 				sendToChrallServer(action, {"ChangePartage":localStorage['troll.'+player.id+'.actionPartage'], "IdCible": otn});
 			} catch (e){}
-			localStorage['troll.'+player.id+'.actionPartage']='';
+			localStorage.removeItem('troll.'+player.id+'.actionPartage');
 		} else {
 			sendToChrallServer(action, {});
 		}
+		// on lance en parallèle séparément la maj de la vue car gogochrall devra attendre la réponse du serveur soap de MH
+		var demandeMajVue = localStorage['troll.'+player.id+'.majVue'];
+		if (demandeMajVue) {
+			try {
+				var numMajVue = parseInt(localStorage['troll.'+player.id+'.majVue']);
+				sendToChrallServer("maj_vue", {"IdCible": numMajVue});
+			} catch (e){}
+			localStorage.removeItem('troll.'+player.id+'.majVue');
+		}		
 	}	
 }
 
