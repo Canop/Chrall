@@ -113,7 +113,9 @@ function receiveFromChrallServer(message) {\
 	} else {\
 		localStorage["com.status.message"]=message.Text;\
 	}\
+	var span_resultat_maj_vue = document.getElementById("resultat_maj_vue");\
 	if (message.MiPartages && message.MiPartages.length>0 && typeof(updateTablesPartage)=="function") updateTablesPartage(message.MiPartages);\
+	if (message.TextMajVue && span_resultat_maj_vue) span_resultat_maj_vue.innerHTML = message.TextMajVue;\
 	if (message.Actions && message.Actions.length>0 && typeof(addActionsToMonsterEvents)=="function") addActionsToMonsterEvents(message.Actions);\
 	var com_status_message_span = document.getElementById("com_status_message");\
 	if (com_status_message_span) com_status_message_span.innerHTML = localStorage["com.status.message"];\

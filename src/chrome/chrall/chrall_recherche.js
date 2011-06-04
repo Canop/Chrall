@@ -16,8 +16,8 @@ function makeSearchPanel($panel) {
 	html[h++] = "}";
 	html[h++] = "</script>";
 
-	html[h++] = "<a id=btn_maj class=gogo>Mettre à jour les vues</a> <span id=resultat_maj_vue></span>";
-	html[h++] = "<br><input style='width:150px' id=ch_search_pattern value=''>";
+	html[h++] = " &nbsp; <a id=btn_maj href='javascript:majVue(0);' class=gogo>Mettre à jour les vues</a> <span id=resultat_maj_vue></span>";
+	html[h++] = "<br> &nbsp; <input style='width:150px' id=ch_search_pattern value=''>";
 	html[h++] = "<a id=btn_search class=gogo>Chercher</a>";
 	html[h++] = "<div id=search_result style='width:100%;'></div>";
 	html[h++] = "<div id=search_details style='width:100%;'></div>";
@@ -25,7 +25,6 @@ function makeSearchPanel($panel) {
 	$panel.append(html.join(''));
 	
 	var search = function(){
-		console.log('click!');
 		var tok = $('#ch_search_pattern').val();
 		$('#search_result').load(GOGOCHRALL+'searchpanel?asker='+player.id+'&mdpr='+mdpRestreint+'&tok='+encodeURIComponent(tok));
 	};

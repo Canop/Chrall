@@ -61,13 +61,8 @@ function letBubbleClose() {
 	onBubbleDiv = false;
 	hideBubble();
 }
-function bubble(
-	target,  // un objet jquery, par exemple  $("a.ch_monster")
-	text, // le contenu de la bulle
-	cssClass, // une classe css ajoutée à la bulle
-	ajaxUrl, // une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
-	ajaxRequestId
-) {
+
+function initBubble() {
 	if (!bubbleInitDone) {
 		var html = "<input type=hidden id=bubbleRequestId value=''>";
 		html += "<script>";
@@ -85,6 +80,16 @@ function bubble(
 		$(html).appendTo("body");
 		bubbleInitDone = true;
 	}
+}
+
+function bubble(
+	target,  // un objet jquery, par exemple  $("a.ch_monster")
+	text, // le contenu de la bulle
+	cssClass, // une classe css ajoutée à la bulle
+	ajaxUrl, // une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
+	ajaxRequestId
+) {
+	initBubble();
 	target.mouseenter(function(event) {
 		if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
 		onBubbleTarget = true;
@@ -106,5 +111,44 @@ function bubble(
 		hideBubble();
 		//bubbleCloseTimeoutID = setTimeout(hideBubble, 150);  <= remettre cette ligne si on veut permettre le passage de la souris dans la bulle sans qu'elle se ferme
 	});
+}
+
+// pour un ajout dynamique similaire au live. Uniquement si nécessaire
+function bubbleLive(
+	selector,
+	cssClass,
+	getArgs // fonction prenant en argument un objet jquery résultat de $(selector) et renvoyant une map avec text, ajaxUrl, ajaxRequestId
+) {
+	console.log(selector);
+	console.log($(selector));
+	initBubble();
+	$(selector).live(
+		'mouseenter', function(event) {
+			console.log('bubbleLive mouseenter');
+			console.log(this);
+			var target = $(this);
+			var args = getArgs(target);
+			if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
+			onBubbleTarget = true;
+			if (args.ajaxUrl) {
+				$.ajax(
+					{
+						url: args.ajaxUrl,
+						crossDomain: true,
+						dataType: "jsonp"
+					}
+				);
+				showBubble.call(this, target, event, args.text, cssClass, args.ajaxRequestId);
+			} else {
+				showBubble.call(this, target, event, args.text, cssClass);
+			}
+			
+		}
+	).live(
+		'mouseout', function(event){
+			onBubbleTarget = false;
+			hideBubble();
+		}
+	);
 }
 

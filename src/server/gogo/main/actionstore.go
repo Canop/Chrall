@@ -42,7 +42,7 @@ func (store *MysqlStore) InsertAction(db *mysql.Client, a *Action) (err os.Error
 	if err != nil {
 		return
 	}
-	defer stmt.Close()
+	defer stmt.FreeResult()
 
 	succès := "non"
 	if a.Succes {

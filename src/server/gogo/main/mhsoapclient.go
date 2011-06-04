@@ -120,7 +120,7 @@ func FetchVue(numero uint, mdp_restreint string) (items []SoapItem, errorCode st
 		return
 	}
 
-	fmt.Println("Résultat : ", env.XMLName)
+	//~ fmt.Println("Résultat : ", env.XMLName)
 
 	if env.Body.Fault.Detail != "" {
 		// il semble que le serveur MH ne soit pas capable de reconnaitre un mauvais mdp : je reçois ça comme erreur : "Erreur inconnue"
@@ -133,7 +133,7 @@ func FetchVue(numero uint, mdp_restreint string) (items []SoapItem, errorCode st
 	items = env.Body.VueResponse.Items
 
 	fmt.Printf("Vue > Nombre d'items : %d\n", len(items))
-	fmt.Printf("Vue > Item : %+v\n", items)
+	//~ fmt.Printf("Vue > Item : %+v\n", items)
 	return
 }
 

@@ -16,7 +16,7 @@ div.floatTopRight {
 	overflow: auto;
 	border-left: 1px solid #999;
 }
-table#grid {
+table.grid {
 	background: white;
 	border-collapse: collapse;
 	border: thin solid #333333;
@@ -27,10 +27,10 @@ table#grid {
 	user-select: none;
 	-webkit-user-select: none;
 }
-table#grid th {
+table.grid th {
 	border: thin solid #333333;
 }
-table#grid td {
+table.grid td {
 	border: thin solid #333333;
 }
 .ch_monster, .ch_monster:hover {
@@ -73,18 +73,18 @@ span.ch_tag {
 	color: green !important;
 	font-weight: bold;
 }
-table#grid td.grad {
+table.grid td.grad {
 	text-align: center;
 	min-width: 25px;
 	min-height: 25px;
 }
-table#grid td.d0 {
+table.grid td.d0 {
 	background-color:white;
 }
-table#grid td.d1 {
+table.grid td.d1 {
 	background-color:#e5decb;
 }
-table#grid td[hasContent]{
+table.grid td[hasContent]{
 	min-width:100px;
 }
 form#gridFiltersForm {
@@ -207,6 +207,7 @@ a.gogo,  a.gogo:link {
 	padding-right: 8px;
 	border-radius: 10px;
 	text-decoration: none;
+	cursor: pointer;
 	color: white !important;
 }
 a.gogo:hover {
@@ -344,4 +345,18 @@ a.gogo:hover {
 }
 #gogochrall table.cdm th {
 	color: black !important;
+}
+
+#zoom {
+	z-index: 6;
+	position: fixed;
+	display: none;
+	top: 20px;
+	left: 10px;
+	right: 10px;
+	bottom: 10px;
+	background: url(/MH_Packs/packMH_parchemin/fond/fond2.jpg);
+	box-shadow: 0px 4px 14px #666;
+	padding: 4px;
+	border: solid black 1px;
 }

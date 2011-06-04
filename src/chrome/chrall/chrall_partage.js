@@ -33,12 +33,13 @@ function makePartageTables() {
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.PA+'</td>';";
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDate(p.AutreTroll.ProchainTour)+'</td>';"; 	
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDuration(p.AutreTroll.DureeTour)+'</td>';"; 	
-	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.X+'</td>';"; 
-	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Y+'</td>';"; 
-	html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Z+'</td>';"; 
+	html[h++] = "    hpa+= '<td class=mh_tdpage><a name=zoom class=gogo x='+p.AutreTroll.X+' y='+p.AutreTroll.Y+' z='+p.AutreTroll.Z+' >'+p.AutreTroll.X+' '+p.AutreTroll.Y+' '+p.AutreTroll.Z+'</a></td>';"; 	
+	//~ html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.X+'</td>';"; 
+	//~ html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Y+'</td>';"; 
+	//~ html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Z+'</td>';"; 
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDate(p.AutreTroll.MiseAJour)+'</td>';";
 	html[h++] = "   } else {";
-	html[h++] = "    hpa+= '<td class=mh_tdpage colspan=8>Pas de données</td>';";
+	html[h++] = "    hpa+= '<td class=mh_tdpage colspan=6>Pas de données</td>';";
 	html[h++] = "   }";	
 	html[h++] = "   hpa+='<td class=mh_tdpage>';";	
 	html[h++] = "   var a = 'Rompre';";
@@ -68,14 +69,18 @@ function makePartageTables() {
 	html[h++] = " }";
 	html[h++] = " tpa.innerHTML=hpa;";
 	html[h++] = " tpp.innerHTML=hpp;";
-	html[h++] = "  ";
 	html[h++] = "}";
 	html[h++] = "function majVue(autreTroll){";
+	html[h++] = " console.log('majVue');";
 	html[h++] = " localStorage['troll."+player.id+".majVue']=autreTroll;";
-	html[h++] = " localStorage['tab_view']='tabPartages';";
+	html[h++] = " if (autreTroll==0) {";
+	html[h++] = "  localStorage['tab_view']='tabRecherche';";
+	html[h++] = " } else {";
+	html[h++] = "  localStorage['tab_view']='tabPartages';";
+	html[h++] = " }";
 	html[h++] = " document.location.href='"+pageName+"';";
 	html[h++] = "}";
-	html[h++] = "function changePartage(autreTroll){";
+	html[h++] = "function changePartage(action, autreTroll){";
 	html[h++] = " localStorage['troll."+player.id+".actionPartage']=action;";
 	html[h++] = " localStorage['troll."+player.id+".objetPartage']=autreTroll;";
 	html[h++] = " localStorage['tab_view']='tabPartages';";
@@ -85,7 +90,7 @@ function makePartageTables() {
 	html[h++] = '<h2>Partages actifs</h2>';
 
 	html[h++] = "<table border='0' cellspacing='1' cellpadding='2' class='mh_tdborder' align='center'>";
-	html[h++] = "<thead><tr class=mh_tdtitre><td>dist.</td><td>Nom</td><td>Race</td><td>Niveau</td><td>PV</td><td>PA</td><td>DLA</td><td>Durée tour</td><td>X</td><td>Y</td><td>N</td><td>Mise à jour</td><td>Action</td></tr></thead>";
+	html[h++] = "<thead><tr class=mh_tdtitre><td>dist.</td><td>Nom</td><td>Race</td><td>Niveau</td><td>PV</td><td>PA</td><td>DLA</td><td>Durée tour</td><td>Position</td><td>Mise à jour</td><td>Action</td></tr></thead>";
 	html[h++] = "<tbody id=partagesActifs></tbody></table>";
 
 	html[h++] = '<h2>Propositions</h2>';

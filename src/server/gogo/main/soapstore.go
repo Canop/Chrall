@@ -8,7 +8,6 @@ gère la persistence en bd des appels soap (pour vérifier qu'on ne dépasse pas
 import (
 	"mysql"
 	"os"
-	"strconv"
 	"time"
 )
 
@@ -19,12 +18,15 @@ func (store *MysqlStore) CheckBeforeSoapCall(db *mysql.Client, pour uint, troll 
 	seconds := time.Seconds()
 	// on commence par compter
 	hier := seconds - 24*60*60
-	sql := "select count(*) from appel_soap where troll=? and type=? and date>" + strconv.Itoa64(hier)
+	sql := "select count(*) from appel_soap where troll=? and type=? and date>?"
 	stmt, err := db.Prepare(sql)
 	if err != nil {
 		return
 	}
-	defer stmt.Close()
+	err = stmt.BindParams(troll, cat, hier)
+	if err != nil {
+		return
+	}
 	err = stmt.Execute()
 	if err != nil {
 		return
@@ -32,17 +34,14 @@ func (store *MysqlStore) CheckBeforeSoapCall(db *mysql.Client, pour uint, troll 
 	var r int64
 	stmt.BindResult(&r)
 	_, err = stmt.Fetch()
-	if err != nil {
-		stmt.Close()
-		return
-	}
-	if r >= limite {
-		stmt.Close()
+	stmt.FreeResult()
+	if err != nil || r >= limite {
 		return
 	}
 
 	// c'est bon, donc on va noter l'appel qui va suivre
 	sql = "insert into appel_soap (troll, pour, date, type) values (?, ?, ?, ?)"
+	
 	stmt, err = db.Prepare(sql)
 	if err != nil {
 		return
@@ -51,7 +50,7 @@ func (store *MysqlStore) CheckBeforeSoapCall(db *mysql.Client, pour uint, troll 
 	if err != nil {
 		return
 	}
-	defer stmt.Close()
+	defer stmt.FreeResult()
 	err = stmt.Execute()
 	ok = true
 	return

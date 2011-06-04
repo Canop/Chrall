@@ -99,7 +99,7 @@ func (store *MysqlStore) InsertCompte(db *mysql.Client, c *Compte) (err os.Error
 	if err != nil {
 		return
 	}
-	defer stmt.Close()
+	defer stmt.FreeResult()
 
 	err = stmt.BindParams(c.trollId, c.statut, c.mdpRestreint)
 	if err != nil {
@@ -127,7 +127,7 @@ func (store *MysqlStore) UpdateInfosGestionCompte(db *mysql.Client, c *Compte) (
 	if err != nil {
 		return
 	}
-	defer stmt.Close()
+	defer stmt.FreeResult()
 
 	err = stmt.BindParams(c.statut, c.mdpRestreint, c.trollId)
 	if err != nil {
@@ -160,7 +160,7 @@ func (store *MysqlStore) UpdateTroll(db *mysql.Client, c *Compte) (err os.Error)
 	if err != nil {
 		return
 	}
-	defer stmt.Close()
+	defer stmt.FreeResult()
 
 	if updateProfil {
 		err = stmt.BindParams(t.X, t.Y, t.Z, t.PV_max, t.PV_actuels, t.Fatigue, t.PA, t.Vue, (t.ProchainTour / 1000), t.DureeTour, time.Seconds(), c.trollId)

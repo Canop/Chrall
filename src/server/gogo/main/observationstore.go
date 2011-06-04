@@ -39,7 +39,7 @@ func (store *MysqlStore) SaveSoapItems(db *mysql.Client, trollId uint, items []S
 	if err != nil {
 		return
 	}
-	defer stmt.Close()
+	defer stmt.FreeResult()
 
 	for _, i := range items {
 
@@ -54,9 +54,56 @@ func (store *MysqlStore) SaveSoapItems(db *mysql.Client, trollId uint, items []S
 			continue // on ne va pas s'amuser à stocker tous les trésors
 		}
 
-		fmt.Printf("Item à sauver : %+v\n", i)
-
 		err = stmt.BindParams(trollId, i.Numero, seconds, t, i.Nom, i.PositionX, i.PositionY, i.PositionN, seconds, i.Nom, i.PositionX, i.PositionY, i.PositionN)
+		if err != nil {
+			return
+		}
+		err = stmt.Execute()
+	}
+
+	return
+}
+
+
+// supprime la vue de trollID puis sauvegarde des observations reçues par SOAP de MH, observées juste maintenant par trollId
+func (store *MysqlStore) CleanAndSaveSoapItems(db *mysql.Client, trollId uint, items []SoapItem) (err os.Error) {
+	seconds := time.Seconds()
+
+	sql := "delete from observation where auteur="+strconv.Uitoa(trollId)
+	stmt, err := db.Prepare(sql)
+	if err != nil {
+		return
+	}
+	err = stmt.Execute()
+	if err != nil {
+		return
+	}
+	stmt.FreeResult() // nécessaire ?
+
+	sql = "insert into observation"
+	sql += "        (auteur, num, date, type, nom, x, y, z)"
+	sql += " values (      ?,  ?,    ?,    ?,   ?, ?, ?, ?)"
+
+	stmt, err = db.Prepare(sql)
+	if err != nil {
+		return
+	}
+	defer stmt.FreeResult()
+
+	for _, i := range items {
+
+		var t string
+		if i.Type == "TROLL" {
+			t = "troll"
+		} else if i.Type == "MONSTRE" {
+			t = "monstre"
+		} else if i.Type == "LIEU" {
+			t = "lieu"
+		} else {
+			continue // on ne va pas s'amuser à stocker tous les trésors
+		}
+
+		err = stmt.BindParams(trollId, i.Numero, seconds, t, i.Nom, i.PositionX, i.PositionY, i.PositionN)
 		if err != nil {
 			return
 		}
@@ -85,6 +132,7 @@ func (store *MysqlStore) SearchObservations(db *mysql.Client, tok string, trollI
 	if err != nil {
 		return
 	}
+	defer stmt.FreeResult()
 	err = stmt.Execute()
 	if err != nil {
 		return
@@ -98,7 +146,6 @@ func (store *MysqlStore) SearchObservations(db *mysql.Client, tok string, trollI
 		if err != nil || eof {
 			return
 		}
-		fmt.Printf("r : %+v\n", r)
 		if len(observations) > 0 && r.Num == observations[len(observations)-1].Num { // dédoublonnage
 			continue
 		}
@@ -121,11 +168,12 @@ func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z in
 	for _, id := range amis {
 		sql += "," + strconv.Itoa(id)
 	}
-	sql += ") order by num, date desc limit 100"
+	sql += ") order by type, num, date desc limit 100"
 
 	fmt.Println("SQL : ", sql)
 
 	stmt, err := db.Prepare(sql)
+	defer stmt.FreeResult()
 	if err != nil {
 		return
 	}
@@ -142,7 +190,7 @@ func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z in
 		if err != nil || eof {
 			return
 		}
-		fmt.Printf("r : %+v\n", r)
+		//fmt.Printf("r : %+v\n", r)
 		if len(observations) > 0 && r.Num == observations[len(observations)-1].Num {
 			continue
 		}
@@ -151,4 +199,35 @@ func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z in
 	}
 
 	return
+}
+
+
+func (store *MysqlStore) majVue(db *mysql.Client, cible uint, pour uint) string {
+	fmt.Printf("MAJ Vue %d\n", cible)
+	compteCible, err := store.GetCompte(db, cible)
+	if err != nil {
+		return fmt.Sprintf("Erreur récupération compte de %d : %s", cible, err.String())
+	}
+	if compteCible == nil {
+		return fmt.Sprintf("Pas de compte pour %d", cible)
+	}
+	if compteCible.statut != "ok" {
+		return fmt.Sprintf("Compte de %d invalide", cible)
+	}
+	ok, err := store.CheckBeforeSoapCall(db, pour, cible, "Dynamiques", 15)
+	if err != nil {
+		return fmt.Sprintf("Erreur appel soap : %s", err.String())
+	}
+	if !ok {
+		return "Trop d'appels en 24h, appel soap refusé"
+	}
+	items, _, _ := FetchVue(cible, compteCible.mdpRestreint) // gérer le cas du mdp qui n'est plus bon et changer en conséquence le statut
+	if len(items)==0 {
+		return fmt.Sprintf("Vue de %d vide", cible)
+	}
+	err = store.CleanAndSaveSoapItems(db, cible, items)
+	if err != nil {
+		return fmt.Sprintf("Erreur sauvegarde vue de %d: %d", cible, err.String())
+	}
+	return fmt.Sprintf("Vue de %d mise à jour", cible)
 }

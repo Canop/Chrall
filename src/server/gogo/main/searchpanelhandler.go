@@ -88,7 +88,7 @@ func (h *SearchPanelHandler) getSearchPanelHtml(hr *http.Request) string {
 			lien = o.Nom
 		}
 		dist := dist(compte.Troll.X, o.X, compte.Troll.Y, o.Y, compte.Troll.Z, o.Z)
-		btnVoir := fmt.Sprintf("<a href='javascript:montre(%d,%d,%d);'>%d  %d  %d</a>", o.X, o.Y, o.Z, o.X, o.Y, o.Z)
+		btnVoir := fmt.Sprintf("<a x=%d y=%d z=%d class=gogo name=zoom>%d  %d  %d</a>", o.X, o.Y, o.Z, o.X, o.Y, o.Z)
 		html += fmt.Sprintf("<tr class=mh_tdpage><td>%d</td><td>%d</td><td>%s</td><td>%s</td><td>%d</td><td>%s</td></tr>", dist, o.Num, lien, btnVoir, o.Auteur, t.Format("02/01 à 15h04"))
 	}
 	html += "</table>"

@@ -24,6 +24,7 @@ type JsonMessageOut struct {
 	AnswersTo  int // reprise de l'id de message entrant (celui auquel on répond, donc)
 	Error      string
 	Text       string
+	TextMajVue string
 	MiPartages []*MiPartage
 	Actions    []*Action
 }
@@ -140,13 +141,6 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			}
 		}
 		if action == "get_partages" {
-			db, err = h.store.Connect() // contournement de bug. J'ai sinon une erreur lors du listage qui suit.
-			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur réouverture connexion BD sur action %s : %s\n", action, err.String())
-				return
-			}
-			defer db.Close()
 			partages, err := h.store.GetAllPartages(db, in.TrollId)
 			if err != nil {
 				out.Error = err.String()
@@ -161,38 +155,19 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			}
 			out.Actions, err = h.store.GetActions(db, "monstre", int(in.IdCible), int(in.TrollId), amis)
 		} else if action == "maj_vue" {
-			fmt.Printf("MAJ Vue %d\n", in.IdCible)
-			compteCible, err := h.store.GetCompte(db, in.IdCible)
-			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur récupération compte cible sur action %s : %s\n", action, err.String())
-				return
-			}
-			if compteCible == nil {
-				out.Error = err.String()
-				fmt.Printf("Pas de compte cible sur action %s\n", action)
-				return
-			}
-			if compteCible.statut != "ok" {
-				fmt.Printf("Compte cible invalide sur action %s\n", action)
-				return
-			}
-			ok, err := h.store.CheckBeforeSoapCall(db, in.TrollId, in.IdCible, "Dynamiques", 24)
-			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur sur action %s : %s\n", action, err.String())
-				return
-			}
-			if !ok {
-				fmt.Println("Déjà trop d'appels, appel soap refusé")
-				return
-			}
-			items, _, _ := FetchVue(in.IdCible, compteCible.mdpRestreint) // gérer le cas du mdp qui n'est plus bon et changer en conséquence le statut
-			err = h.store.SaveSoapItems(db, in.IdCible, items)
-			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur sauvegarde vue sur action %s : %s\n", action, err.String())
-				return
+			if (in.IdCible==0) { // demande de mise à jour de toutes les vues
+				fmt.Printf("MAJ vues des amis de %d\n", in.TrollId)
+				amis, err = h.store.GetPartageurs(db, int(in.TrollId))
+				if err != nil {
+					fmt.Printf("Erreur récupération amis sur action %s : %s\n", action, err.String())
+				}
+				out.TextMajVue = h.store.majVue(db, in.TrollId, in.TrollId)
+				for _, ami := range(amis) {
+					out.TextMajVue += ". "+ h.store.majVue(db, uint(ami), in.TrollId)
+				}
+			} else { // demande de mise à jour spécifique			
+				fmt.Printf("MAJ Vue %d\n", in.IdCible)
+				out.TextMajVue = h.store.majVue(db, in.IdCible, in.TrollId)
 			}
 		}
 	} else {
@@ -203,3 +178,5 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		}
 	}
 }
+
+

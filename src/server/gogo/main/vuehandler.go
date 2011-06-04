@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"http"
 	"time"
@@ -21,6 +22,7 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 	x := GetFormValueAsInt(hr, "x")
 	y := GetFormValueAsInt(hr, "y")
 	z := GetFormValueAsInt(hr, "z")
+	portée := 8
 	compteOk := false
 	var compte *Compte
 
@@ -41,34 +43,55 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 	if err != nil {
 		return fmt.Sprintf("Erreur récupération amis : %s\n", err.String())
 	}
-	observations, err := h.store.ObservationsAutour(db, x, y, z, 5, askerId, amis)
+	observations, err := h.store.ObservationsAutour(db, x, y, z, portée, askerId, amis)
 	if err != nil {
 		return fmt.Sprintf("Erreur recherche : %s\n", err.String())
 	}
 	if len(observations) == 0 {
 		return "Rien trouvé"
 	}
-	html := fmt.Sprintf("%d résultats :", len(observations))
-	html += "<table border='0' cellspacing='1' cellpadding='2' class='mh_tdborder' align='center'>"
-	html += "<tr class=mh_tdtitre><td class=mh_tdpage><b>Dist.</b></td><td class=mh_tdpage><b>Réf.</b></td><td class=mh_tdpage><b>Nom</b></td>"
-	html += "<td class=mh_tdpage><b>Position</b></td>"
-	html += "<td class=mh_tdpage><b>Vu par</b></td><td class=mh_tdpage><b>Le</b></td><td class=mh_tdpage></td></tr>"
-	for _, o := range observations {
-		t := time.SecondsToLocalTime(o.Date)
-		var lien string
-		if o.Type == "troll" {
-			lien = fmt.Sprintf("<a href='javascript:EPV(%d)' class=mh_trolls_1 id=%d>%s</a>", o.Num, o.Num, o.Nom)
-		} else if o.Type == "monstre" {
-			lien = fmt.Sprintf("<a href='javascript:EMV(%d, 750, 550)' class=mh_monstres id=%d>%s</a>", o.Num, o.Num, o.Nom)
-		} else {
-			lien = o.Nom
+	xmin := x-portée
+	xmax := x+portée
+	ymin := y-portée
+	ymax := y+portée
+	
+	html := bytes.NewBufferString("")
+	fmt.Fprint(html, "<table class=grid>")
+	for cy:=ymax; cy>=ymin; cy-- {
+		fmt.Fprint(html, "<tr>")
+		for cx:=xmin; cx<=xmax; cx++ {
+			hdcx := cx-x+xmin
+			hdcy := cy-y+ymin
+			hdc := hdcx
+			if hdcy>hdc {
+				hdc=hdcy
+			}
+			empty := true
+			fmt.Fprintf(html, "<td class=d%d>", (hdc-portée+20001)%2)
+			for _, o := range(observations) {
+				if o.X==int64(cx) && o.Y==int64(cy) {
+					dist := dist(compte.Troll.X, o.X, compte.Troll.Y, o.Y, compte.Troll.Z, o.Z) // en attente...
+					t := time.SecondsToLocalTime(o.Date)
+					if empty {
+						empty = false
+					} else {
+						fmt.Fprint(html, "<br>")
+					}
+					if o.Type=="troll" {
+						fmt.Fprintf (html, "<a name=trolls class=ch_troll href='javascript:EPV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
+					} else if o.Type=="monstre" {
+						fmt.Fprintf (html, "<a name=monstres class=ch_monstre href='javascript:EMV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
+					} else if o.Type=="lieu" {
+						fmt.Fprintf (html, "<a name=lieux class=ch_place id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
+					}
+				}
+			}
+			fmt.Fprint(html, "</td>")
 		}
-		dist := dist(compte.Troll.X, o.X, compte.Troll.Y, o.Y, compte.Troll.Z, o.Z)
-		btnVoir := fmt.Sprintf("<a href='javascript:montre(%d,%d,%d);'>%d  %d  %d</a>", o.X, o.Y, o.Z, o.X, o.Y, o.Z)
-		html += fmt.Sprintf("<tr class=mh_tdpage><td>%d</td><td>%d</td><td>%s</td><td>%s</td><td>%d</td><td>%s</td></tr>", dist, o.Num, lien, btnVoir, o.Auteur, t.Format("02/01 à 15h04"))
+		fmt.Fprint(html, "</tr>")
 	}
-	html += "</table>"
-	return html
+	
+	return string(html.Bytes())
 }
 
 func (h *VueHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {

@@ -75,7 +75,7 @@ function Chrall_makeGridHtml() {
 	html[h++] = "}";
 	html[h++] = "</script>";
 	
-	html[h++] = "<table id=grid><tbody>";
+	html[h++] = "<table id=grid class=grid><tbody>";
 	html[h++] = "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center>Nordhikan (Y+)</td><td bgcolor=#BABABA></td></tr>";
 	html[h++] = "<tr>";
 	html[h++] = "<td nowrap rowspan="+(ymax-ymin+3)+"\"><span style='display:block;-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-moz-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;'>Oxhykan&nbsp;(X-)</span></td>";
@@ -479,6 +479,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
 	html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
 	html[h++] = "</div>";
+	html[h++] = "<div id=zoom><a class=gogo style='position:fixed;right:14px;top:24px;' id=btn_close_zoom>Fermer</a><div id=zoom_content>En attente de gogochrall...</div></div>";
 	
 	var time_after_grid_building = (new Date()).getTime(); // <= prof
 	
@@ -569,6 +570,24 @@ function Chrall_analyseAndReformatView() {
 					}
 				}
 			);
+			//> des popups dynamiques pour les monstres du zoom et de la recherche
+			bubbleLive(
+				'#zoom_content a.ch_monstre, #tabRecherche a.mh_monstres',
+				'bub_monster',
+				function(link) {
+					var message = link.attr("message");
+					var monsterId = link.attr('id');
+					var tokens = link.text().split(':');
+					var linkText = tokens[tokens.length-1].trim();
+					var nomMonstre = encodeURIComponent(linkText);
+					var url = GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId;
+					if (compteChrallActif()) {
+						url+='&mdpr='+mdpCompteChrall();
+					}
+					return {'text':message, 'ajaxUrl':url, 'ajaxRequestId':linkText};
+				}
+			);
+
 
 			//> on ajoute un popup sur les trolls de la grille (pour avoir la distance de charge, et des stats de kill par retour jsonp)
 			$("#grid a.ch_troll").each(
@@ -591,25 +610,40 @@ function Chrall_analyseAndReformatView() {
 					}
 				}
 			);
-			//> pour les trolls listés dans le partage (je suis obligé de passer par live car la table est remplie en asynchrone sur réponse jsonp)
-			$('#tabPartages a.mh_trolls_1').live(
-				'mouseenter', function () {
-					var link = $(this);
+			
+			//> pour les trolls listés dans le partage et le zoom (je suis obligé de passer par live car la table est remplie en asynchrone sur réponse jsonp)
+			bubbleLive(
+				'#tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll',
+				'bub_troll',
+				function(link) {
 					var trollId = link.attr('id');
-					bubble(
-						link,
-						"",
-						"bub_troll", 
-						GOGOCHRALL+"json?action=get_troll_info&asker="+player.id+"&trollId="+trollId,
-						trollId
-					);
-				}
-			).live(
-				'mouseleave', function () {
-					onBubbleTarget = false;
-					hideBubble();
+					return {
+						'text':'',
+						'ajaxUrl':GOGOCHRALL+'json?action=get_troll_info&asker='+player.id+'&trollId='+trollId,
+						'ajaxRequestId':trollId
+					};
 				}
 			);
+				
+			//~ 
+			//~ $('#tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll').live(
+				//~ 'mouseenter', function () {
+					//~ var link = $(this);
+					//~ var trollId = link.attr('id');
+					//~ bubble(
+						//~ link,
+						//~ "",
+						//~ "bub_troll", 
+						//~ GOGOCHRALL+"json?action=get_troll_info&asker="+player.id+"&trollId="+trollId,
+						//~ trollId
+					//~ );
+				//~ }
+			//~ ).live(
+				//~ 'mouseleave', function () {
+					//~ onBubbleTarget = false;
+					//~ hideBubble();
+				//~ }
+			//~ );
 				
 
 			//> on fait pareil pour le joueur
@@ -729,5 +763,19 @@ function Chrall_analyseAndReformatView() {
 	// On corrige si nécessaire la position affichée dans le menu de gauche et on signale
 	// cette position au script de fond
 	updateTroll();
+	
+	// lien de fermeture de la "fenêtre" de zoom
+	$('#btn_close_zoom').click(function() {
+		$('#zoom').hide();
+	});
+	$('a[name="zoom"]').live('click', function() {
+		var $link = $(this);
+		var x=$link.attr('x');
+		var y=$link.attr('y');
+		var z=$link.attr('z');
+		var url = GOGOCHRALL+"vue?asker="+player.id+"&mdpr="+mdpCompteChrall()+"&x="+x+"&y="+y+"&z="+z;
+		$('#zoom_content').load(url);
+		$('#zoom').show();
+	});
 	
 }
