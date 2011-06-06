@@ -60,14 +60,18 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 	for cy:=ymax; cy>=ymin; cy-- {
 		fmt.Fprint(html, "<tr>")
 		for cx:=xmin; cx<=xmax; cx++ {
-			hdcx := cx-x+xmin
-			hdcy := cy-y+ymin
+			hdcx := cx-x
+			if hdcx<0 {hdcx=-hdcx}
+			hdcy := cy-y
+			if hdcy<0 {hdcy=-hdcy}
 			hdc := hdcx
 			if hdcy>hdc {
 				hdc=hdcy
 			}
 			empty := true
-			fmt.Fprintf(html, "<td class=d%d>", (hdc-portée+20001)%2)
+			hasHole := false
+			fmt.Fprintf(html, "<td hasContent class=d%d grid_x=%d grid_y=%d>", (hdc-portée+20001)%2, cx, cy)
+			cellContent := bytes.NewBufferString("")
 			for _, o := range(observations) {
 				if o.X==int64(cx) && o.Y==int64(cy) {
 					dist := dist(compte.Troll.X, o.X, compte.Troll.Y, o.Y, compte.Troll.Z, o.Z) // en attente...
@@ -75,16 +79,28 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 					if empty {
 						empty = false
 					} else {
-						fmt.Fprint(html, "<br>")
+						fmt.Fprint(cellContent, "<br>")
 					}
 					if o.Type=="troll" {
-						fmt.Fprintf (html, "<a name=trolls class=ch_troll href='javascript:EPV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
+						fmt.Fprintf (cellContent, "<a name=trolls class=ch_troll href='javascript:EPV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
 					} else if o.Type=="monstre" {
-						fmt.Fprintf (html, "<a name=monstres class=ch_monstre href='javascript:EMV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
+						fmt.Fprintf (cellContent, "<a name=monstres class=ch_monster href='javascript:EMV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
 					} else if o.Type=="lieu" {
-						fmt.Fprintf (html, "<a name=lieux class=ch_place id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
+						if o.Nom=="Trou de Météorite" {
+							hasHole = true
+						} else {
+							fmt.Fprintf (cellContent, "<a name=lieux class=ch_place id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
+						}
 					}
 				}
+			}
+			if empty {
+				fmt.Fprint(html, "&nbsp;")
+			} else {
+				if hasHole {
+					fmt.Fprint(html, "Trou de Météorite<br>")					
+				}
+				fmt.Fprint(html, string(cellContent.Bytes()))
 			}
 			fmt.Fprint(html, "</td>")
 		}

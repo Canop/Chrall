@@ -129,3 +129,25 @@ function objectMenu(
 		checkHideOm();
 	});
 }
+
+
+function objectMenuLive(
+	selector,  // un sélecteur jquery, par exemple  "#myObject"
+	getArgs // fonction prenant en argument un objet jquery résultat de $(selector) et renvoyant une map avec html_top, html_bottom
+) {
+	$(selector).live(
+		'mouseenter', function(event) {
+			var target = $(this);
+			var args = getArgs(target);
+			if (scrollInProgress || onOmTopMenu || onOmBottomMenu) return false;
+			onOmTarget = true;
+			showOm(target, args.html_top, args.html_bottom);
+		}
+	).live(
+		'mouseout', function(event){
+			if (eventIsOver(event, omTarget)) return;
+			onOmTarget = false;
+			checkHideOm();
+		}
+	);
+}

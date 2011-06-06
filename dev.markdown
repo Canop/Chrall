@@ -234,17 +234,24 @@ RECENTS / A TESTER :
 * mettre dans les événements des monstres les caractéristiques des frappes si partage
 * mettre dans les événements des monstres la blessure mesurée en cas de partage actif avec l'auteur de la CDM
 
+<- v2.01
+
+* partage : transmission de la vue au serveur
+* vue/Recherche : cet onglet permet de trouver (suivant partages) un troll, monstre (num ou nom), etc.
+
+<- v2.02
+
+* fenêtre événements monstres : affichage dans le coin supérieur gauche de la bulle du monstre
+
+
 EN COURS :
 ==========
 * apprendre le langage go
-* partage : transmission de la vue au serveur
-* vue/Recherche : cet onglet doit permettre de trouver (suivant partages) un troll, monstre (num ou nom), etc.
 
 TODO :
 ======
 P1 :
 ----
-* fenêtre événements monstres : affichage dans le coin supérieur gauche de la bulle du monstre
 * le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
 * indiquer directement dans la bulle si un monstre est insulté (et par qui)
 * liens ancres MH en haut des tables : changer d'onglet.
@@ -259,6 +266,8 @@ P1 :
 * partage : cumul des pistages avec représentation graphique (modulaire car on ne peut pas détecter un mouvement de monstre)
 * partage : cumul des recherches de filon
 * essayer gb (code.google.com/p/go-gb/)
+* recherche par guilde
+* recherche par niveau de monstre pour mission
 
 P2 :
 ----

@@ -40,7 +40,6 @@ function sendPlayerInfosToChrallServer() {
 	sendToChrallServer("updateTroll", {"Troll":troll});
 }
 
-
 // envoie au serveur un message authentifié par le mdp restreint
 function sendToChrallServer(action, message) {
 	if (!compteChrallActif()) return false
@@ -83,6 +82,7 @@ function initCommunications(action) {
 				sendToChrallServer("maj_vue", {"IdCible": numMajVue});
 			} catch (e){}
 			localStorage.removeItem('troll.'+player.id+'.majVue');
+			localStorage['troll.'+player.id+'.messageMaj']='GogoChrall attend les vues du serveur Mounty Hall pour tous vos amis. Cela peut prendre quelques minutes. Vous pouvez faire des recherches avant le résultat mais elles ne seront pas forcément correctes.';
 		}		
 	}	
 }

@@ -160,15 +160,15 @@ func (store *MysqlStore) SearchObservations(db *mysql.Client, tok string, trollI
 func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z int, dist int, trollId int, amis []int) (observations []*Observation, err os.Error) {
 
 	sql := "select auteur, num, date, type, nom, x, y, z from observation where"
-	sql += " abs(x-" + strconv.Itoa(x) + ")<=" + strconv.Itoa(dist)
-	sql += " and abs(y-" + strconv.Itoa(y) + ")<=" + strconv.Itoa(dist)
-	sql += " and abs(z-" + strconv.Itoa(z) + ")<=" + strconv.Itoa(dist/2)
+	sql += " x>" + strconv.Itoa(x-dist-1) + " and x<" + strconv.Itoa(x+dist+1) 
+	sql += " and y>" + strconv.Itoa(y-dist-1) + " and x<" + strconv.Itoa(y+dist+1) 
+	sql += " and z>" + strconv.Itoa(z-dist/2-1) + " and z<" + strconv.Itoa(z+dist/2+1) 
 
 	sql += " and auteur in (" + strconv.Itoa(trollId)
 	for _, id := range amis {
 		sql += "," + strconv.Itoa(id)
 	}
-	sql += ") order by type, num, date desc limit 100"
+	sql += ") order by type, num, date desc"
 
 	fmt.Println("SQL : ", sql)
 

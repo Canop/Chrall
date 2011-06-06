@@ -2,6 +2,12 @@ var horizontalViewLimit; // l'horizon actuel, inférieur ou égal à la vue maxi
 var grid; // la grille. Tout ce qui est visible est stocké là dedans
 var objectsOnPlayerCell;
 
+function makeDeLink(x, y, z) {
+	var cost = (player.cellIsFree ? 1 : 2) + (z===player.z ? 0 : 1);
+	if (cost>player.pa) return '';
+	return '<a href="javascript:playDE('+(x-player.x)+','+(y-player.y)+','+(z-player.z)+');">DE '+x+' '+y+' '+z+'</a>';
+}
+
 /**
  * construit la ligne de boites à cocher permettant de filtrer la grille
  */
@@ -479,7 +485,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
 	html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
 	html[h++] = "</div>";
-	html[h++] = "<div id=zoom><a class=gogo style='position:fixed;right:14px;top:24px;' id=btn_close_zoom>Fermer</a><div id=zoom_content>En attente de gogochrall...</div></div>";
+	html[h++] = "<div id=zoom><a class=gogo style='position:fixed;right:24px;top:24px;' id=btn_close_zoom>Fermer</a><div id=zoom_content>En attente de gogochrall...</div></div>";
 	
 	var time_after_grid_building = (new Date()).getTime(); // <= prof
 	
@@ -572,7 +578,7 @@ function Chrall_analyseAndReformatView() {
 			);
 			//> des popups dynamiques pour les monstres du zoom et de la recherche
 			bubbleLive(
-				'#zoom_content a.ch_monstre, #tabRecherche a.mh_monstres',
+				'#zoom_content a.ch_monster, #tabRecherche a.mh_monstres',
 				'bub_monster',
 				function(link) {
 					var message = link.attr("message");
@@ -624,27 +630,6 @@ function Chrall_analyseAndReformatView() {
 					};
 				}
 			);
-				
-			//~ 
-			//~ $('#tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll').live(
-				//~ 'mouseenter', function () {
-					//~ var link = $(this);
-					//~ var trollId = link.attr('id');
-					//~ bubble(
-						//~ link,
-						//~ "",
-						//~ "bub_troll", 
-						//~ GOGOCHRALL+"json?action=get_troll_info&asker="+player.id+"&trollId="+trollId,
-						//~ trollId
-					//~ );
-				//~ }
-			//~ ).live(
-				//~ 'mouseleave', function () {
-					//~ onBubbleTarget = false;
-					//~ hideBubble();
-				//~ }
-			//~ );
-				
 
 			//> on fait pareil pour le joueur
 			var link = $("#grid a.ch_player");
@@ -669,13 +654,7 @@ function Chrall_analyseAndReformatView() {
 			);
 			
 			//> on ajoute le menu des DE, le titre de chaque cellule
-			var makeDeLink = function(x, y, z) {
-				var cost = (player.cellIsFree ? 1 : 2) + (z===player.z ? 0 : 1);
-				if (cost>player.pa) return '';
-				return '<a href="javascript:playDE('+(x-player.x)+','+(y-player.y)+','+(z-player.z)+');">DE '+x+' '+y+' '+z+'</a>';
-			}
-			$('#grid td[grid_x]').each(function() {
-				var o = $(this);
+			objectMenuLive('table.grid td[grid_x]', function(o) {
 				var x = parseInt(o.attr('grid_x'));
 				var y = parseInt(o.attr('grid_y'));
 				var links = '';
@@ -700,13 +679,47 @@ function Chrall_analyseAndReformatView() {
 						links += (makeDeLink(x, y, player.z-1));
 					}
 				}
-							
-				objectMenu(
-					o,
-					x + " " + y,
-					links
-				);
-			});				
+				return {
+					'html_top':x+' '+y,
+					'html_bottom':links
+				}
+			});
+			
+			
+			
+			//~ $('#grid td[grid_x]').each(function() {
+				//~ var o = $(this);
+				//~ var x = parseInt(o.attr('grid_x'));
+				//~ var y = parseInt(o.attr('grid_y'));
+				//~ var links = '';
+				//~ // on ajoute au menu la liste des trésors aux pieds du joueur, pas qu'il oublie de les prendre...
+				//~ if (x===player.x && y===player.y) {
+					//~ if (objectsOnPlayerCell.length>4) {
+						//~ links += "<span class=ch_pl_object>Il y a " + objectsOnPlayerCell.length + " trésors à vos pieds.</span>";
+					//~ } else if (objectsOnPlayerCell.length>0) {
+						//~ links += '<span class=ch_pl_object>A vos pieds :</span>';
+						//~ for (var i=0; i<objectsOnPlayerCell.length; i++) {
+							//~ links += '<br><span class=ch_pl_object>'+objectsOnPlayerCell[i].name+'</span>';							
+						//~ }
+					//~ }
+				//~ }
+				//~ // liste des DE possibles
+				//~ if (player.pa>1 || (player.cellIsFree && player.pa>0)) {
+					//~ var deRange = player.z===0 ? 2 : 1;
+					//~ var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
+					//~ if (cellIsAccessibleByDe) {
+						//~ if (player.z<0) links += (makeDeLink(x, y, player.z+1));
+						//~ if (x!=player.x || y!=player.y) links += (makeDeLink(x, y, player.z));
+						//~ links += (makeDeLink(x, y, player.z-1));
+					//~ }
+				//~ }
+							//~ 
+				//~ objectMenu(
+					//~ o,
+					//~ x + " " + y,
+					//~ links
+				//~ );
+			//~ });				
 						
 		}, 1000
 	);
@@ -768,6 +781,8 @@ function Chrall_analyseAndReformatView() {
 	$('#btn_close_zoom').click(function() {
 		$('#zoom').hide();
 	});
+	
+	// outillage des liens d'ouvertures de vue "zoom"
 	$('a[name="zoom"]').live('click', function() {
 		var $link = $(this);
 		var x=$link.attr('x');
@@ -776,6 +791,7 @@ function Chrall_analyseAndReformatView() {
 		var url = GOGOCHRALL+"vue?asker="+player.id+"&mdpr="+mdpCompteChrall()+"&x="+x+"&y="+y+"&z="+z;
 		$('#zoom_content').load(url);
 		$('#zoom').show();
+		$('#zoom').dragscrollable({dragSelector: '#zoom_content'});
 	});
 	
 }

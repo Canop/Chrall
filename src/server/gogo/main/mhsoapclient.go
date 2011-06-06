@@ -6,6 +6,7 @@ import (
 	"http"
 	"io"
 	"io/ioutil"
+	"strings"
 	"xml"
 	//"os"
 )
@@ -88,16 +89,27 @@ func DumpAll(r io.Reader) {
 func GetSoapEnvelope(query string, numero uint, mdp string) (envelope *SoapEnvelope) {
 	httpClient := new(http.Client)
 	soapRequestContent := fmt.Sprintf(query, numero, mdp)
+	
 	resp, err := httpClient.Post(MH_SOAP_URL, "text/xml; charset=utf-8", bytes.NewBufferString(soapRequestContent))
 
 	if err != nil {
 		fmt.Println("Erreur : " + err.String())
 		return nil
 	}
-
-	//DumpAll(resp.Body)
-
-	parser := xml.NewParser(resp.Body)
+	// là on fait du lourd : on passe par une chaine car j'ai pas le temps ce soir de trouver comment sauter directement un bout du flux jusqu'au début du xml
+	b, e := ioutil.ReadAll(resp.Body)
+	if e != nil {
+		fmt.Println("Erreur lecture :")
+		fmt.Println(e)
+	}
+	in := string(b)
+	indexDebutXml := strings.Index(in, "<?xml version")
+	if indexDebutXml>0 {
+		fmt.Printf("Erreur message SOAP. Début XML à l'index %d\n", indexDebutXml)
+		in = in[indexDebutXml:len(in)]
+	}
+	//fmt.Print(in)
+	parser := xml.NewParser(bytes.NewBufferString(in))
 	parser.CharsetReader = CharsetReader
 	envelope = new(SoapEnvelope)
 	err = parser.Unmarshal(&envelope, nil)

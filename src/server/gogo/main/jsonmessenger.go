@@ -88,13 +88,19 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		var amis []int
 		out.Text = "Compte connecté et authentifié"
 		if in.Troll != nil {
-			fmt.Printf("*** Infos troll reçues de %d ***", in.TrollId)
+			fmt.Printf("*** Infos troll reçues de %d ***\n", in.TrollId)
+			// on regarde si la position a changé
+			aBougé := c.Troll.X!=in.Troll.X || c.Troll.Y!=in.Troll.Y || c.Troll.Z!=in.Troll.Z 
 			c.Troll = in.Troll
 			err = h.store.UpdateTroll(db, c)
 			if err != nil {
 				out.Error = err.String()
 				fmt.Printf("Erreur sauvegarde troll sur action %s : %s\n", action, err.String())
 				return
+			}
+			fmt.Printf("A bougé : %v\n", aBougé)
+			if aBougé {
+				h.store.majVue(db, in.TrollId, in.TrollId)
 			}
 		}
 		if in.Action != nil {

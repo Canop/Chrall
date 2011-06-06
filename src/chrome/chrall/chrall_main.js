@@ -3,8 +3,8 @@
  * Il contient aussi les variables globales.
  */
 
-var GOGOCHRALL = "http://localhost:8000/chrall/";
-//var GOGOCHRALL = "http://canop.org:8000/chrall/";
+//var GOGOCHRALL = "http://localhost:8000/chrall/";
+var GOGOCHRALL = "http://canop.org:8000/chrall/";
 
 var viewIsEmpty=true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
@@ -114,6 +114,7 @@ chrome.extension.sendRequest(
 			Chrall_addBubblesToLinks();
 			break;
 		case "MonsterView.php":
+			Chrall_analyseAndReformatMonsterView();
 			Chrall_addInfosToMonsterEvents();
 			Chrall_addBubblesToLinks();
 			break;

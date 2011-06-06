@@ -124,8 +124,6 @@ function bubbleLive(
 	initBubble();
 	$(selector).live(
 		'mouseenter', function(event) {
-			console.log('bubbleLive mouseenter');
-			console.log(this);
 			var target = $(this);
 			var args = getArgs(target);
 			if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
