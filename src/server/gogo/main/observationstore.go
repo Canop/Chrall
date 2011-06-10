@@ -66,7 +66,7 @@ func (store *MysqlStore) SaveSoapItems(db *mysql.Client, trollId uint, items []S
 
 
 // supprime la vue de trollID puis sauvegarde des observations reçues par SOAP de MH, observées juste maintenant par trollId
-func (store *MysqlStore) CleanAndSaveSoapItems(db *mysql.Client, trollId uint, items []SoapItem) (err os.Error) {
+func (store *MysqlStore) CleanAndSaveSoapItems(db *mysql.Client, trollId uint, items []*SoapItem) (err os.Error) {
 	seconds := time.Seconds()
 
 	sql := "delete from observation where auteur="+strconv.Uitoa(trollId)
@@ -91,7 +91,7 @@ func (store *MysqlStore) CleanAndSaveSoapItems(db *mysql.Client, trollId uint, i
 	defer stmt.FreeResult()
 
 	for _, i := range items {
-
+		//~ fmt.Printf(" saving %+v\n", i)
 		var t string
 		if i.Type == "TROLL" {
 			t = "troll"
@@ -161,7 +161,7 @@ func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z in
 
 	sql := "select auteur, num, date, type, nom, x, y, z from observation where"
 	sql += " x>" + strconv.Itoa(x-dist-1) + " and x<" + strconv.Itoa(x+dist+1) 
-	sql += " and y>" + strconv.Itoa(y-dist-1) + " and x<" + strconv.Itoa(y+dist+1) 
+	sql += " and y>" + strconv.Itoa(y-dist-1) + " and y<" + strconv.Itoa(y+dist+1) 
 	sql += " and z>" + strconv.Itoa(z-dist/2-1) + " and z<" + strconv.Itoa(z+dist/2+1) 
 
 	sql += " and auteur in (" + strconv.Itoa(trollId)
@@ -202,7 +202,7 @@ func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z in
 }
 
 
-func (store *MysqlStore) majVue(db *mysql.Client, cible uint, pour uint) string {
+func (store *MysqlStore) majVue(db *mysql.Client, cible uint, pour uint, tksManager *TksManager) string {
 	fmt.Printf("MAJ Vue %d\n", cible)
 	compteCible, err := store.GetCompte(db, cible)
 	if err != nil {
@@ -221,9 +221,11 @@ func (store *MysqlStore) majVue(db *mysql.Client, cible uint, pour uint) string 
 	if !ok {
 		return "Trop d'appels en 24h, appel soap refusé"
 	}
-	items, _, _ := FetchVue(cible, compteCible.mdpRestreint) // gérer le cas du mdp qui n'est plus bon et changer en conséquence le statut
+	items, _ := FetchVueSp(cible, compteCible.mdpRestreint, 0, 1, tksManager) // gérer le cas du mdp qui n'est plus bon et changer en conséquence le statut
 	if len(items)==0 {
 		return fmt.Sprintf("Vue de %d vide", cible)
+	} else {
+		fmt.Printf("%d trucs dans la vue de %d\n", len(items), cible)		
 	}
 	err = store.CleanAndSaveSoapItems(db, cible, items)
 	if err != nil {

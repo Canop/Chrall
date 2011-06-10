@@ -1,6 +1,6 @@
 {
 	"name": "Chrall",
-	"version": "2.2",
+	"version": "2.3",
 	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"homepage_url": "http://canop.org/chrall",
 	"background_page": "chrome-extension.html",
@@ -24,6 +24,7 @@
 				"chrall_general.js",
 				"chrall_partage.js",
 				"chrall_em.js",
+				"chrall_monstres.js",
 				"chrall_minage.js",
 				"chrall_talents.js",
 				"chrall_recherche.js",

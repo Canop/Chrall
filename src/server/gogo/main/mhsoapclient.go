@@ -1,5 +1,10 @@
 package main
 
+/*
+Interrogations du serveur SOAP de MH
+
+*/
+
 import (
 	"bytes"
 	"fmt"
@@ -123,7 +128,7 @@ func GetSoapEnvelope(query string, numero uint, mdp string) (envelope *SoapEnvel
 	return
 }
 
-func FetchVue(numero uint, mdp_restreint string) (items []SoapItem, errorCode string, errorDetails string) {
+func FetchVueSoap(numero uint, mdp_restreint string) (items []SoapItem, errorCode string, errorDetails string) {
 	env := GetSoapEnvelope(SOAP_VUE_QUERY_FORMAT, numero, mdp_restreint)
 
 	if env == nil {

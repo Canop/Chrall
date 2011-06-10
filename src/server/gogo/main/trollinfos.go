@@ -36,7 +36,6 @@ func race(s string) raceTroll {
 	return race_inconnue
 }
 
-
 // statistiques concernant un troll
 type TrollInfos struct {
 	NbKillsTrolls           uint
@@ -54,7 +53,6 @@ type GuildInfos struct {
 	Nom string
 }
 
-
 type DiplomaticRelation struct {
 	FirstIsGuild  bool
 	FirstId       uint
@@ -63,7 +61,6 @@ type DiplomaticRelation struct {
 	foe           bool
 	Text          string
 }
-
 
 //===========================================================================================================================================
 

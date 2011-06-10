@@ -32,7 +32,7 @@ ini_set('default_charset', 'utf-8');
 <img class=screenshot src=screens/tresors-800.png>
 
 <p>Au passage de la souris sur les objets, trolls, monstres, des informations supplémentaires s'affichent sans qu'il soit besoin de cliquer :</p>
-<img class=screenshot src=screens/bestiaire-800.png>
+<img class=screenshot src=screens/bulle_monstre_01.png>
 <img class=screenshot src=screens/diplo_001.png>
 <img class=screenshot src=screens/diplo_002.png>
 

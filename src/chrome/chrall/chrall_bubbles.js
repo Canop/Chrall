@@ -6,7 +6,9 @@
  *  - empêche les bulles de recouvrir la souris (indispensable si on a un lien)
  * 
  * Usage :
- *  - la seule méthode "publique" est la méthode bubble. C'est celle là qu'il faut appeler.
+ *  Deux méthodes publiques
+ *  - la méthode bubble. C'est celle là qu'il faut appeler si toutes vos cibles sont déjà connues.
+ *  - la méthode bubbleLive si des cibles de bulles peuvent apparaitre par la suite (page générée dynamiquement)
  * 
  * Notes :
  *  - Le callback de l'appel JSONP s'appelle grid_receive (on changera sans doute ça)
@@ -32,7 +34,7 @@ function hideBubble() {
 		bubbleExists = false;
 	}
 }
-function showBubble(target, event, text, cssClass, ajaxRequestId) {
+function showBubble(target, event, text, cssClass, ajaxRequestId, leftCol) {
 	if (bubbleExists) hideBubble();
 	var html = '<div id="bubble" style="';
 	var tPosX = event.pageX-pageXOffset;
@@ -44,9 +46,15 @@ function showBubble(target, event, text, cssClass, ajaxRequestId) {
 	var h = document.body.clientHeight;
 	if (tPosY<h/2)	html += "top:"+(tPosY+20);
 	else 			html += "bottom:"+(h-tPosY+20);
-	if (ajaxRequestId) {
+	if (ajaxRequestId && ajaxRequestId!=null) {
 		document.getElementById('bubbleRequestId').value = ajaxRequestId; // je ne sais pas pourquoi mais utiliser $('#bubbleRequestId').val ne marche pas bien
-		html += ';" class="'+cssClass+'"><div class=bubbleTitle>'+text+'</div><div id=bubbleContent>en attente de gogochrall...</div></div>';
+		html += ';" class="'+cssClass+'">';
+		if (text) html += '<div class=bubbleTitle>'+text+'</div>';
+		if (leftCol) {
+			html += '<table border=0><tr><td valign=top>'+leftCol+'</td><td valign=top><div id=bubbleContent>en attente de gogochrall...</div></td></tr></table></div>';
+		} else {
+			html += '<div id=bubbleContent>en attente de gogochrall...</div></div>';			
+		}
 	} else {
 		html += ';" class="'+cssClass+'"><div class=bubbleContent>'+text+'</div></div>';
 	}
@@ -113,14 +121,12 @@ function bubble(
 	});
 }
 
-// pour un ajout dynamique similaire au live. Uniquement si nécessaire
+// pour un ajout dynamique similaire au live de jquery.
 function bubbleLive(
 	selector,
 	cssClass,
-	getArgs // fonction prenant en argument un objet jquery résultat de $(selector) et renvoyant une map avec text, ajaxUrl, ajaxRequestId
+	getArgs // fonction prenant en argument un objet jquery résultat de $(selector) et renvoyant une map avec text, ajaxUrl, ajaxRequestId (plus en optionnel leftCol)
 ) {
-	console.log(selector);
-	console.log($(selector));
 	initBubble();
 	$(selector).live(
 		'mouseenter', function(event) {
@@ -136,9 +142,9 @@ function bubbleLive(
 						dataType: "jsonp"
 					}
 				);
-				showBubble.call(this, target, event, args.text, cssClass, args.ajaxRequestId);
+				showBubble.call(this, target, event, args.text, cssClass, args.ajaxRequestId, args.leftCol);
 			} else {
-				showBubble.call(this, target, event, args.text, cssClass);
+				showBubble.call(this, target, event, args.text, cssClass, null, args.leftCol);
 			}
 			
 		}

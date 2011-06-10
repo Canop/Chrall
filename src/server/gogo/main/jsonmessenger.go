@@ -100,7 +100,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			}
 			fmt.Printf("A bougé : %v\n", aBougé)
 			if aBougé {
-				h.store.majVue(db, in.TrollId, in.TrollId)
+				h.store.majVue(db, in.TrollId, in.TrollId, h.tksManager)
 			}
 		}
 		if in.Action != nil {
@@ -167,13 +167,13 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				if err != nil {
 					fmt.Printf("Erreur récupération amis sur action %s : %s\n", action, err.String())
 				}
-				out.TextMajVue = h.store.majVue(db, in.TrollId, in.TrollId)
+				out.TextMajVue = h.store.majVue(db, in.TrollId, in.TrollId, h.tksManager)
 				for _, ami := range(amis) {
-					out.TextMajVue += ". "+ h.store.majVue(db, uint(ami), in.TrollId)
+					out.TextMajVue += ". "+ h.store.majVue(db, uint(ami), in.TrollId, h.tksManager)
 				}
 			} else { // demande de mise à jour spécifique			
 				fmt.Printf("MAJ Vue %d\n", in.IdCible)
-				out.TextMajVue = h.store.majVue(db, in.IdCible, in.TrollId)
+				out.TextMajVue = h.store.majVue(db, in.IdCible, in.TrollId, h.tksManager)
 			}
 		}
 	} else {

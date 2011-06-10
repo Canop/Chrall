@@ -28,6 +28,7 @@ GOFILES=\
 	main/testhandler.go\
 	main/chrallhandler.go\
 	main/mhsoapclient.go\
+	main/mhspclient.go\
 	main/soapstore.go\
 	main/iso88591.go\
 	main/gogo.go\

@@ -234,21 +234,20 @@ function Chrall_makeGridHtml() {
 }
 
 function Chrall_analyseMonsterTable(monsterTable) {
-	$(monsterTable).find("tr.mh_tdpage").each(
-		function(){
-			var monster = new Monster();
-			var cells = $(this).find("td");
-			var i=1;
-			monster.id = parseInt($(cells[i++]).text());
-			monster.setName($(cells[i++]).text());
-			monster.x = parseInt($(cells[i++]).text());
-			monster.y = parseInt($(cells[i++]).text());
-			monster.z = parseInt($(cells[i++]).text());
-			grid.getCellNotNull(monster.x, monster.y).addMonster(monster);
-			grid.nbMonstersInView++;
-		}
-	);
-	// TODO trier par z pour la construction de la grille
+	var rows = $(monsterTable).find("tr");
+	for (var r=3; r<rows.length; r++) {
+		var $tr = $(rows[r]);
+		var cells = $tr.find("td");
+		var monster = new Monster();
+		var i=1;
+		monster.id = parseInt($(cells[i++]).text());
+		monster.setName($(cells[i++]).text());
+		monster.x = parseInt($(cells[i++]).text());
+		monster.y = parseInt($(cells[i++]).text());
+		monster.z = parseInt($(cells[i++]).text());
+		grid.getCellNotNull(monster.x, monster.y).addMonster(monster);
+		grid.nbMonstersInView++;		
+	}
 }
 
 function Chrall_analyseTrollTable(table) {
@@ -542,55 +541,26 @@ function Chrall_analyseAndReformatView() {
 	setTimeout( // afin d'accélérer l'affichage initial, on repousse un peu l'ajout des bulles et menus
 		function() {
 			//> on ajoute le popup sur les monstres
-			$('a[href*="EMV"]').each(
-				function() {
-					var link = $(this);
-					var message = link.attr("message");
-					if (link.attr('class')=='ch_gowap') { 
-						if (message) {
-							bubble(link, message, "bub_gowap");
-						}
-					} else {
-						// ce qui suit est peut-être un peu trop compliqué mais je n'arrive pas à obtenir un bon formatage (sans retour chariot) des liens des monstres (z:nom) sans mettre le z (la profondeur) dans le a
-						var nomMonstre;
-						var requestId;
-						var monsterId;
-						if (message) {
-							//> lien dans la grille
-							nomMonstre = link.attr("nom_complet_monstre");
-							monsterId = link.attr('id');
-							requestId = decodeURIComponent(nomMonstre);
-						} else {
-							//> lien dans la table
-							var linkText = link.text();
-							nomMonstre = encodeURIComponent(linkText);
-							message = linkText;
-							requestId = linkText;
-						}
-						message += getEmMonsterDecoration(nomMonstre);
-						var url = GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId;
-						if (compteChrallActif()) {
-							url+='&mdpr='+mdpCompteChrall();
-						}
-						bubble(link, message, "bub_monster", url, requestId);
-					}
-				}
-			);
-			//> des popups dynamiques pour les monstres du zoom et de la recherche
 			bubbleLive(
-				'#zoom_content a.ch_monster, #tabRecherche a.mh_monstres',
+				'a[href*="EMV"]',
 				'bub_monster',
 				function(link) {
-					var message = link.attr("message");
+					var args = {};
 					var monsterId = link.attr('id');
 					var tokens = link.text().split(':');
 					var linkText = tokens[tokens.length-1].trim();
 					var nomMonstre = encodeURIComponent(linkText);
-					var url = GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId;
-					if (compteChrallActif()) {
-						url+='&mdpr='+mdpCompteChrall();
+					args.text = link.attr("message"); // peut être undefined
+					var imgUrl = getMonsterMhImageUrl(linkText);
+					if (imgUrl!=null) {
+						args.leftCol = "<img class=illus src=\""+imgUrl+"\">";
 					}
-					return {'text':message, 'ajaxUrl':url, 'ajaxRequestId':linkText};
+					args.ajaxUrl = GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId;
+					if (compteChrallActif()) {
+						args.ajaxUrl += '&mdpr='+mdpCompteChrall();
+					}
+					args.ajaxRequestId = linkText;
+					return args;
 				}
 			);
 
@@ -684,42 +654,6 @@ function Chrall_analyseAndReformatView() {
 					'html_bottom':links
 				}
 			});
-			
-			
-			
-			//~ $('#grid td[grid_x]').each(function() {
-				//~ var o = $(this);
-				//~ var x = parseInt(o.attr('grid_x'));
-				//~ var y = parseInt(o.attr('grid_y'));
-				//~ var links = '';
-				//~ // on ajoute au menu la liste des trésors aux pieds du joueur, pas qu'il oublie de les prendre...
-				//~ if (x===player.x && y===player.y) {
-					//~ if (objectsOnPlayerCell.length>4) {
-						//~ links += "<span class=ch_pl_object>Il y a " + objectsOnPlayerCell.length + " trésors à vos pieds.</span>";
-					//~ } else if (objectsOnPlayerCell.length>0) {
-						//~ links += '<span class=ch_pl_object>A vos pieds :</span>';
-						//~ for (var i=0; i<objectsOnPlayerCell.length; i++) {
-							//~ links += '<br><span class=ch_pl_object>'+objectsOnPlayerCell[i].name+'</span>';							
-						//~ }
-					//~ }
-				//~ }
-				//~ // liste des DE possibles
-				//~ if (player.pa>1 || (player.cellIsFree && player.pa>0)) {
-					//~ var deRange = player.z===0 ? 2 : 1;
-					//~ var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
-					//~ if (cellIsAccessibleByDe) {
-						//~ if (player.z<0) links += (makeDeLink(x, y, player.z+1));
-						//~ if (x!=player.x || y!=player.y) links += (makeDeLink(x, y, player.z));
-						//~ links += (makeDeLink(x, y, player.z-1));
-					//~ }
-				//~ }
-							//~ 
-				//~ objectMenu(
-					//~ o,
-					//~ x + " " + y,
-					//~ links
-				//~ );
-			//~ });				
 						
 		}, 1000
 	);

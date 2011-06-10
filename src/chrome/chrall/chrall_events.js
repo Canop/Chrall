@@ -20,7 +20,7 @@ function Chrall_addBubblesToLinks() {
 			var href = link.attr('href');
 			var numMonstre = href.split('\'')[1];
 			var nomMonstre = link.text().substr(3).trim();
-			bubble(link, nomMonstre, "bub_monster", GOGOCHRALL+"json?action=get_extract_jsonp&name=" + encodeURIComponent(nomMonstre) + "&monsterId="+numMonstre, nomMonstre);
+			bubble(link, '', "bub_monster", GOGOCHRALL+"json?action=get_extract_jsonp&name=" + encodeURIComponent(nomMonstre) + "&monsterId="+numMonstre, nomMonstre);
 		}
 	);	
 	
