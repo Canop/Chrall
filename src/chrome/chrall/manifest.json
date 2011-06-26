@@ -17,6 +17,11 @@
 				"jquery.js",
 				"dragscrollable.js",
 				"date-fr-FR.js",
+				"gogol_rect.js",
+				"gogol_col.js",
+				"gogol_trous.js",
+				"gogol_carte.js",
+				"gogol_chemins.js",
 				"chrall_bubbles.js",
 				"chrall_objectMenu.js",
 				"chrall_things.js",
@@ -46,6 +51,7 @@
 				"chrall_action.js",
 				"chrall_resultatCombat.js",
 				"chrall_insulte.js",
+				"chrall_suivants.js",
 				"chrall_main.js"
 			]
 		},

@@ -257,6 +257,7 @@ TODO :
 ======
 P1 :
 ----
+* utiliser ARCHIVE comme engine pour les trucs non modifiables
 * bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
 * recherche : trier par distance (un peu compliqué en raison du tri par date de vue)
 * Vue/Partages : mise à jour de la position des trolls lors de la mise à jour de la vue

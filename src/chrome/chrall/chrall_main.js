@@ -120,6 +120,9 @@ chrome.extension.sendRequest(
 			break;
 		case "Play_a_Combat.php": //  résultat de combat (vérifié pour CDB)
 			Chrall_analyseResultatCombat();
+		case "FO_Ordres.php":
+			Chrall_handleFollowerOrders();
+			break;
 		}
 		localStorage['todo']='';
 	}

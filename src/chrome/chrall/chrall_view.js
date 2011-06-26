@@ -466,6 +466,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<li><a href=#tabSettings>Réglages</a></li>";
 	html[h++] = "<li><a href=#tabPartages>Partages</a></li>";
 	html[h++] = "<li><a href=#tabRecherche>Recherche</a></li>";
+	html[h++] = "<li><a href=#tabGogol>Gogol Map</a></li>";
 	html[h++] = "</ul>";
 	html[h++] = "<div class=tab_container view>";
 	html[h++] = "<div id=tabGrid class=tab_content>";
@@ -483,6 +484,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabSettings class=tab_content scroll></div>";
 	html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
 	html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
+	html[h++] = "<div id=tabGogol class=tab_content scroll></div>";
 	html[h++] = "</div>";
 	html[h++] = "<div id=zoom><a class=gogo style='position:fixed;right:24px;top:24px;' id=btn_close_zoom>Fermer</a><div id=zoom_content>En attente de gogochrall...</div></div>";
 	
