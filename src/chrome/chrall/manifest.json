@@ -17,6 +17,7 @@
 				"jquery.js",
 				"dragscrollable.js",
 				"date-fr-FR.js",
+				"gogol_point.js",
 				"gogol_rect.js",
 				"gogol_col.js",
 				"gogol_trous.js",

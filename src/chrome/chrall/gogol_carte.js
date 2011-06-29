@@ -38,22 +38,9 @@ CarteHall.prototype.computeOptimalZoom = function() {
 
 CarteHall.prototype.recomputeCanvasPosition = function() {
 	var obj = this.canvas;
-	
-	// le calcul qui suit ne marche pas quand la page est dans un frameset (le cas normal). Bug Chrome ?
-	//~ var oX = 0;
-	//~ var oY = 0;
-	//~ while(obj.parentNode!=null) {
-		//~ oX+=obj.offsetLeft;
-		//~ oY+=obj.offsetTop;
-		//~ obj=obj.parentNode;
-	//~ }
-	//~ this.canvas_position_x = oX;
-	//~ this.canvas_position_y = oY;
-    
 	var pos = $(this.canvas).position();
 	this.canvas_position_x = pos.left;
 	this.canvas_position_y = pos.top;
-
     this.screenRect.x = 0;
     this.screenRect.y = 0;
     this.screenRect.w = this.canvas.clientWidth;
@@ -92,7 +79,7 @@ CarteHall.prototype.redraw = function() {
     this.redrawStacked = false;
     try {
         this.drawInProgress = true;
-        this.context.fillStyle="#e5decb";
+        this.context.fillStyle='white';//"#e5decb";
         this.context.fillRect(0, 0, this.screenRect.w, this.screenRect.h);
         var n=this.objects.length;
         this.drawGrid();
@@ -143,6 +130,11 @@ CarteHall.prototype.mouseDown = function(e) {
 }
 CarteHall.prototype.mouseUp = function(e) {
 	this.mouseIsDown = false;
+	if (this.onClick) {
+		var x = Math.floor((e.pageX-this.canvas_position_x)/this.zoom-this.originX);
+		var y = Math.floor(this.originY-(e.pageY-this.canvas_position_y)/this.zoom);
+		this.onClick(x, y);
+	}
 }
 
 CarteHall.prototype.mouseLeave = function(e) {

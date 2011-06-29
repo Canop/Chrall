@@ -257,6 +257,8 @@ TODO :
 ======
 P1 :
 ----
+* suivant/ordres et suivants/liste : bouton d'affichage de la vue proche du gowap [nécessite récupération dans la vue des trésors]
+* options bulles/photos : illustration normale/petite illustration/pas d'illustration
 * utiliser ARCHIVE comme engine pour les trucs non modifiables
 * bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
 * recherche : trier par distance (un peu compliqué en raison du tri par date de vue)

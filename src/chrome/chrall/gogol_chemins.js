@@ -7,6 +7,16 @@ function Chemin(p) {
 Chemin.prototype = new ChCol();
 
 Chemin.prototype.add = function(p) {
+	var lastPoint = this.points[this.points.length-1];
+	var dx = p.x-lastPoint.x;
+	var dy = p.y-lastPoint.y;
+	var adx = Math.abs(dx);
+	var ady = Math.abs(dy);
+	if (adx>ady) {
+		this.points.push(new Point(dx>0 ? lastPoint.x+ady : lastPoint.x-ady, p.y));
+	} else {
+		this.points.push(new Point(p.x, dy>0 ? lastPoint.y+adx : lastPoint.y-adx));
+	}
 	this.points.push(p);
 	this.rect.makeContain(p);
 	return this;
@@ -21,7 +31,7 @@ Chemin.prototype.computeScreenRect = function(carte) {
 
 
 Chemin.prototype.draw = function(carte) {
-	carte.context.strokeStyle = "#c99b1f";
+	carte.context.strokeStyle = '#e61803';//"#c99b1f";
 	//~ this.screenRect.drawThin(carte.context);
 	carte.context.lineWidth = Math.sqrt(carte.zoom);
 	carte.context.lineCap = "round";

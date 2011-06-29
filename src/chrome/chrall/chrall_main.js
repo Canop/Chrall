@@ -29,7 +29,7 @@ var viewFilters = {
 //$('head').append('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>');
 
 prepareReceiver();
-
+//console.log(document.location.href);
 var splitedPathname = document.location.pathname.split('/');
 var pageName = splitedPathname[splitedPathname.length-1];
 console.log("pageName=\""+pageName+"\"");
@@ -122,6 +122,9 @@ chrome.extension.sendRequest(
 			Chrall_analyseResultatCombat();
 		case "FO_Ordres.php":
 			Chrall_handleFollowerOrders();
+			break;
+		case "FO_NewOrder.php":
+			Chrall_fillFollowerNewOrderForm();
 			break;
 		}
 		localStorage['todo']='';

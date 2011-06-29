@@ -48,10 +48,12 @@ func (store *MysqlStore) SaveSoapItems(db *mysql.Client, trollId uint, items []S
 			t = "troll"
 		} else if i.Type == "MONSTRE" {
 			t = "monstre"
+		} else if i.Type == "TRESOR" {
+			t = "tresor"
 		} else if i.Type == "LIEU" {
 			t = "lieu"
 		} else {
-			continue // on ne va pas s'amuser à stocker tous les trésors
+			continue
 		}
 
 		err = stmt.BindParams(trollId, i.Numero, seconds, t, i.Nom, i.PositionX, i.PositionY, i.PositionN, seconds, i.Nom, i.PositionX, i.PositionY, i.PositionN)
@@ -99,8 +101,10 @@ func (store *MysqlStore) CleanAndSaveSoapItems(db *mysql.Client, trollId uint, i
 			t = "monstre"
 		} else if i.Type == "LIEU" {
 			t = "lieu"
+		} else if i.Type == "TRESOR" {
+			t = "tresor"
 		} else {
-			continue // on ne va pas s'amuser à stocker tous les trésors
+			continue 
 		}
 
 		err = stmt.BindParams(trollId, i.Numero, seconds, t, i.Nom, i.PositionX, i.PositionY, i.PositionN)
@@ -157,12 +161,16 @@ func (store *MysqlStore) SearchObservations(db *mysql.Client, tok string, trollI
 }
 
 
-func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z int, dist int, trollId int, amis []int) (observations []*Observation, err os.Error) {
+func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z int, dist int, trollId int, amis []int, withTresors bool) (observations []*Observation, err os.Error) {
 
 	sql := "select auteur, num, date, type, nom, x, y, z from observation where"
 	sql += " x>" + strconv.Itoa(x-dist-1) + " and x<" + strconv.Itoa(x+dist+1) 
 	sql += " and y>" + strconv.Itoa(y-dist-1) + " and y<" + strconv.Itoa(y+dist+1) 
 	sql += " and z>" + strconv.Itoa(z-dist/2-1) + " and z<" + strconv.Itoa(z+dist/2+1) 
+	
+	if (!withTresors) {
+		sql += " and type<>'tresor'"
+	}
 
 	sql += " and auteur in (" + strconv.Itoa(trollId)
 	for _, id := range amis {
@@ -221,7 +229,7 @@ func (store *MysqlStore) majVue(db *mysql.Client, cible uint, pour uint, tksMana
 	if !ok {
 		return "Trop d'appels en 24h, appel soap refusé"
 	}
-	items, _ := FetchVueSp(cible, compteCible.mdpRestreint, 0, 1, tksManager) // gérer le cas du mdp qui n'est plus bon et changer en conséquence le statut
+	items, _ := FetchVueSp(cible, compteCible.mdpRestreint, 1, 1, tksManager) // gérer le cas du mdp qui n'est plus bon et changer en conséquence le statut
 	if len(items)==0 {
 		return fmt.Sprintf("Vue de %d vide", cible)
 	} else {
