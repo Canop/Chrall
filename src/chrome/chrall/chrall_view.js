@@ -12,22 +12,7 @@ function makeDeLink(x, y, z) {
  * construit la ligne de boites à cocher permettant de filtrer la grille
  */
 function Chrall_makeFiltersHtml() {
-	var html = "<script>";
-	html += "function grid_changeDisplayByName(key, display){";
-	html += " var os = document.getElementsByName(key);";
-	html += " if (!display) {"; // mode d'inversion d'un objet unique, non persistent
-	html += "  for (var i=0; i<os.length; i++) {";
-	html += "   if (os[i].style.display=='inline') os[i].style.display='none';";
-	html += "   else os[i].style.display='inline';";
-	html += "  }";
-	html += " } else {"; // mode d'inversion de filtre global, persistent
-	html += "  for (var i=0; i<os.length; i++) {";
-	html += "   os[i].style.display=display;";
-	html += "  }";
-	html += "  localStorage['grid_filter_'+key]=display";	
-	html += " }";
-	html += "}";
-	html += "</script>";
+	html = '';
 	html += "<form id=gridFiltersForm>";
 	if (player.totalSight>5) {
 		html += '<img title="Centre la vue sur votre troll" id=goto_player class=butt src="'+chrome.extension.getURL("player_target.png")+'">';
@@ -466,7 +451,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<li><a href=#tabSettings>Réglages</a></li>";
 	html[h++] = "<li><a href=#tabPartages>Partages</a></li>";
 	html[h++] = "<li><a href=#tabRecherche>Recherche</a></li>";
-	html[h++] = "<li><a href=#tabGogol>Gogol Map</a></li>";
+	//html[h++] = "<li><a href=#tabGogol>Gogol Map</a></li>";
 	html[h++] = "</ul>";
 	html[h++] = "<div class=tab_container view>";
 	html[h++] = "<div id=tabGrid class=tab_content>";
@@ -484,9 +469,8 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabSettings class=tab_content scroll></div>";
 	html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
 	html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
-	html[h++] = "<div id=tabGogol class=tab_content scroll></div>";
+	//html[h++] = "<div id=tabGogol class=tab_content scroll></div>";
 	html[h++] = "</div>";
-	html[h++] = "<div id=zoom><a class=gogo style='position:fixed;right:24px;top:24px;' id=btn_close_zoom>Fermer</a><div id=zoom_content>En attente de gogochrall...</div></div>";
 	
 	var time_after_grid_building = (new Date()).getTime(); // <= prof
 	
@@ -542,68 +526,10 @@ function Chrall_analyseAndReformatView() {
 
 	setTimeout( // afin d'accélérer l'affichage initial, on repousse un peu l'ajout des bulles et menus
 		function() {
-			//> on ajoute le popup sur les monstres
-			bubbleLive(
-				'a[href*="EMV"]',
-				'bub_monster',
-				function(link) {
-					var args = {};
-					var monsterId = link.attr('id');
-					var tokens = link.text().split(':');
-					var linkText = tokens[tokens.length-1].trim();
-					var nomMonstre = encodeURIComponent(linkText);
-					args.text = link.attr("message"); // peut être undefined
-					var imgUrl = getMonsterMhImageUrl(linkText);
-					if (imgUrl!=null) {
-						args.leftCol = "<img class=illus src=\""+imgUrl+"\">";
-					}
-					args.ajaxUrl = GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId;
-					if (compteChrallActif()) {
-						args.ajaxUrl += '&mdpr='+mdpCompteChrall();
-					}
-					args.ajaxRequestId = linkText;
-					return args;
-				}
-			);
 
+			Chrall_gridLive();
 
-			//> on ajoute un popup sur les trolls de la grille (pour avoir la distance de charge, et des stats de kill par retour jsonp)
-			$("#grid a.ch_troll").each(
-				function() {
-					var link = $(this);
-					var message = link.attr("message");
-					var trollId = link.attr('id');
-					if (trollId) {
-						bubble(link, message, "bub_troll", GOGOCHRALL+"json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
-					}
-				}
-			);	
-			//> la même bulle sur les troll dans la table
-			$("div#tabTrolls a.mh_trolls_1").each(
-				function() {
-					var link = $(this);
-					var trollId = link.attr('id');
-					if (trollId) {
-						bubble(link, '', "bub_troll", GOGOCHRALL+"json?action=get_troll_info&asker="+player.id+"&trollId="+trollId, trollId);
-					}
-				}
-			);
-			
-			//> pour les trolls listés dans le partage et le zoom (je suis obligé de passer par live car la table est remplie en asynchrone sur réponse jsonp)
-			bubbleLive(
-				'#tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll',
-				'bub_troll',
-				function(link) {
-					var trollId = link.attr('id');
-					return {
-						'text':'',
-						'ajaxUrl':GOGOCHRALL+'json?action=get_troll_info&asker='+player.id+'&trollId='+trollId,
-						'ajaxRequestId':trollId
-					};
-				}
-			);
-
-			//> on fait pareil pour le joueur
+			//> bulle popup sur le lien du joueur
 			var link = $("#grid a.ch_player");
 			var trollId = link.attr('id');
 			if (trollId==0) {
@@ -624,38 +550,6 @@ function Chrall_analyseAndReformatView() {
 					}
 				}
 			);
-			
-			//> on ajoute le menu des DE, le titre de chaque cellule
-			objectMenuLive('table.grid td[grid_x]', function(o) {
-				var x = parseInt(o.attr('grid_x'));
-				var y = parseInt(o.attr('grid_y'));
-				var links = '';
-				// on ajoute au menu la liste des trésors aux pieds du joueur, pas qu'il oublie de les prendre...
-				if (x===player.x && y===player.y) {
-					if (objectsOnPlayerCell.length>4) {
-						links += "<span class=ch_pl_object>Il y a " + objectsOnPlayerCell.length + " trésors à vos pieds.</span>";
-					} else if (objectsOnPlayerCell.length>0) {
-						links += '<span class=ch_pl_object>A vos pieds :</span>';
-						for (var i=0; i<objectsOnPlayerCell.length; i++) {
-							links += '<br><span class=ch_pl_object>'+objectsOnPlayerCell[i].name+'</span>';							
-						}
-					}
-				}
-				// liste des DE possibles
-				if (player.pa>1 || (player.cellIsFree && player.pa>0)) {
-					var deRange = player.z===0 ? 2 : 1;
-					var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
-					if (cellIsAccessibleByDe) {
-						if (player.z<0) links += (makeDeLink(x, y, player.z+1));
-						if (x!=player.x || y!=player.y) links += (makeDeLink(x, y, player.z));
-						links += (makeDeLink(x, y, player.z-1));
-					}
-				}
-				return {
-					'html_top':x+' '+y,
-					'html_bottom':links
-				}
-			});
 						
 		}, 1000
 	);
@@ -667,7 +561,6 @@ function Chrall_analyseAndReformatView() {
 		document.getElementsByName("ai_MaxVueVert")[0].value = Math.ceil(limit/2);
 		$('form[name="LimitViewForm"]').submit();
 	});
-
 	
 	var $gridHolder = $('#grid_holder');
 	var $playerCell = $('#cellp0p0');
@@ -695,11 +588,6 @@ function Chrall_analyseAndReformatView() {
 	//> hook pour le centrage au double-clic
 	$('#grid').dblclick(gotoPlayer);
 	
-	//> le défilement à la molette perturbe objectMenu
-	document.onmousewheel = function(e) {
-		hideOm();
-	}
-
 	var time_end = (new Date()).getTime(); // <= prof
 	console.log("Profiling - Vue de " + horizontalViewLimit);
 	console.log("Duration Cleaning : " + (time_after_cleaning-time_enter));
@@ -713,21 +601,6 @@ function Chrall_analyseAndReformatView() {
 	// cette position au script de fond
 	updateTroll();
 	
-	// lien de fermeture de la "fenêtre" de zoom
-	$('#btn_close_zoom').click(function() {
-		$('#zoom').hide();
-	});
 	
-	// outillage des liens d'ouvertures de vue "zoom"
-	$('a[name="zoom"]').live('click', function() {
-		var $link = $(this);
-		var x=$link.attr('x');
-		var y=$link.attr('y');
-		var z=$link.attr('z');
-		var url = GOGOCHRALL+"vue?asker="+player.id+"&mdpr="+mdpCompteChrall()+"&x="+x+"&y="+y+"&z="+z;
-		$('#zoom_content').load(url);
-		$('#zoom').show();
-		$('#zoom').dragscrollable({dragSelector: '#zoom_content'});
-	});
 	
 }

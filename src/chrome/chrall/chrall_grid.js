@@ -61,3 +61,148 @@ Grid.prototype.getCellNotNull = function(x, y) {
 	}
 	return c;
 }
+
+// enregistre les modifications 'live' (au sens jquery)
+function Chrall_gridLive() {
+	
+	// ajout de la fenêtre de zoom et de quelques fonctions
+	var html = "<script>";
+	html += "function grid_changeDisplayByName(key, display){";
+	html += " var os = document.getElementsByName(key);";
+	html += " if (!display) {"; // mode d'inversion d'un objet unique, non persistent
+	html += "  for (var i=0; i<os.length; i++) {";
+	html += "   if (os[i].style.display=='inline') os[i].style.display='none';";
+	html += "   else os[i].style.display='inline';";
+	html += "  }";
+	html += " } else {"; // mode d'inversion de filtre global, persistent
+	html += "  for (var i=0; i<os.length; i++) {";
+	html += "   os[i].style.display=display;";
+	html += "  }";
+	html += "  localStorage['grid_filter_'+key]=display";
+	html += " }";
+	html += "}";
+	html += "</script>";
+	html += "<div id=zoom><a class=gogo style='position:fixed;right:24px;top:24px;' id=btn_close_zoom>Fermer</a><div id=zoom_content>En attente de gogochrall...</div></div>";
+	$(html).appendTo($('body'));
+
+	
+	//> on ajoute le popup sur les monstres
+	bubbleLive(
+		'a[href*="EMV"]',
+		'bub_monster',
+		function(link) {
+			var args = {};
+			var monsterId = link.attr('id');
+			var tokens = link.text().split(':');
+			var linkText = tokens[tokens.length-1].trim();
+			var nomMonstre = encodeURIComponent(linkText);
+			args.text = link.attr("message"); // peut être undefined
+			var imgUrl = getMonsterMhImageUrl(linkText);
+			if (imgUrl!=null) {
+				args.leftCol = "<img class=illus src=\""+imgUrl+"\">";
+			}
+			args.ajaxUrl = GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId;
+			if (compteChrallActif()) {
+				args.ajaxUrl += '&mdpr='+mdpCompteChrall();
+			}
+			args.ajaxRequestId = linkText;
+			return args;
+		}
+	);
+	
+	//> popup sur les trolls
+	bubbleLive(
+		'#grid a.ch_troll, div#tabTrolls a.mh_trolls_1, #tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll',
+		'bub_troll',
+		function(link) {
+			var trollId = link.attr('id');
+			var message = link.attr("message");
+			if (!message) message='';
+			return {
+				'text':message,
+				'ajaxUrl':GOGOCHRALL+'json?action=get_troll_info&asker='+player.id+'&trollId='+trollId,
+				'ajaxRequestId':trollId
+			};
+		}
+	);
+	
+	//> on ajoute le menu des DE, le titre de chaque cellule
+	objectMenuLive('table.grid td[grid_x]', function(o) {
+		var x = parseInt(o.attr('grid_x'));
+		var y = parseInt(o.attr('grid_y'));
+		var links = '';
+		// on ajoute au menu la liste des trésors aux pieds du joueur, pas qu'il oublie de les prendre...
+		if (objectsOnPlayerCell) {
+			if (x===player.x && y===player.y) {
+				if (objectsOnPlayerCell.length>4) {
+					links += "<span class=ch_pl_object>Il y a " + objectsOnPlayerCell.length + " trésors à vos pieds.</span>";
+				} else if (objectsOnPlayerCell.length>0) {
+					links += '<span class=ch_pl_object>A vos pieds :</span>';
+					for (var i=0; i<objectsOnPlayerCell.length; i++) {
+						links += '<br><span class=ch_pl_object>'+objectsOnPlayerCell[i].name+'</span>';							
+					}
+				}
+			}
+		}
+		// liste des DE possibles
+		if (player.pa>1 || (player.cellIsFree && player.pa>0)) {
+			var deRange = player.z===0 ? 2 : 1;
+			var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
+			if (cellIsAccessibleByDe) {
+				if (player.z<0) links += (makeDeLink(x, y, player.z+1));
+				if (x!=player.x || y!=player.y) links += (makeDeLink(x, y, player.z));
+				links += (makeDeLink(x, y, player.z-1));
+			}
+		}
+		return {
+			'html_top':x+' '+y,
+			'html_bottom':links
+		}
+	});
+	
+	//> le défilement à la molette perturbe objectMenu
+	document.onmousewheel = function(e) {
+		hideOm();
+	}
+	
+	// outillage des liens d'ouvertures de vue "zoom"
+	$('a[name="zoom"]').live('click', function() {
+		if (compteChrallActif()) {
+			var $link = $(this);
+			var x=$link.attr('x');
+			var y=$link.attr('y');
+			var z=$link.attr('z');
+			var url = GOGOCHRALL+"vue?asker="+player.id+"&mdpr="+mdpCompteChrall()+"&x="+x+"&y="+y+"&z="+z+"&tresors=1";
+			$('#zoom').show();
+			$('#zoom_content').load(url, function(){
+				setTimeout(function() {
+					// centrage de la vue
+					hideOm();
+					scrollInProgress = true;
+					$targetCell = $('#zoom_content').find('td[grid_x="'+x+'"][grid_y="'+y+'"]');
+					$grid_holder = $('#zoom');
+					$grid_holder.animate(
+						{
+							scrollLeft: ($grid_holder.scrollLeft()+$targetCell.offset().left + ($targetCell.innerWidth()-window.innerWidth)/2),
+							scrollTop: ($grid_holder.scrollTop()+$targetCell.offset().top + ($targetCell.innerHeight()-window.innerHeight)/2)
+						},
+						'slow',
+						function() {
+							scrollInProgress = false;
+						}
+					);
+				}, 200);	
+			});
+			$('#zoom').dragscrollable({dragSelector: '#zoom_content'});
+		} else {
+			alert("Un compte Chrall actif est nécessaire pour utiliser cette fonction.");
+		}
+	});
+	// lien de fermeture de la "fenêtre" de zoom
+	$('#btn_close_zoom').live('click', function() {
+		$('#zoom').hide();
+	});
+
+}
+
+

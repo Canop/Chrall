@@ -60,7 +60,7 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 	
 	html := bytes.NewBufferString("")
 	nextDivId := time.Seconds()
-	fmt.Fprint(html, "<table class=grid>")
+	fmt.Fprint(html, "<table class=grid id=zoom_grid>")
 	for cy:=ymax; cy>=ymin; cy-- {
 		fmt.Fprint(html, "<tr>")
 		for cx:=xmin; cx<=xmax; cx++ {
@@ -94,7 +94,7 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 						if objectsByLevel[o.Z]==nil {
 							objectsByLevel[o.Z] = make([]string, 1, 10)
 						}
-						objectsByLevel[o.Z] = append(objectsByLevel[o.Z], fmt.Sprintf("<span name='trésors' class=ch_object>%d: %d %s</span>", o.Z, o.Num, o.Nom))
+						objectsByLevel[o.Z] = append(objectsByLevel[o.Z], fmt.Sprintf("<span name='trésors' class=ch_visible_object>%d: %d %s</span>", o.Z, o.Num, o.Nom))
 					} else if o.Type=="lieu" {
 						if o.Nom=="Trou de Météorite" {
 							hasHole = true
@@ -114,15 +114,15 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 				for z, objects := range (objectsByLevel) {
 					merge := len(objects)>3
 					if merge {
-						fmt.Fprintf (html, "<br name='trésors' class=ch_object>")
-						fmt.Fprintf (html, "<span name='trésors' class=ch_object>%d : ", z)
+						fmt.Fprintf (html, "<br>")
+						fmt.Fprintf (html, "<span name='trésors' class=ch_visible_object>%d : ", z)
 						fmt.Fprintf (html, "<a class=ch_objects_toggler href=\"javascript:grid_changeDisplayByName('objects_%d');\">", nextDivId)
 						fmt.Fprintf (html, "<b>%d trésors</b>", len(objects))
 						fmt.Fprintf (html, "</a>")
 						fmt.Fprintf (html, "<div name=objects_%d class=hiddenDiv>", nextDivId)
 						nextDivId++
 					}
-					fmt.Fprintf (html, strings.Join(objects, "<br name='trésors' class=ch_object>"))
+					fmt.Fprintf (html, strings.Join(objects, "<br>"))
 					if merge {
 						fmt.Fprintf (html, "</div></span>")
 					}
@@ -140,7 +140,7 @@ func (h *VueHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Request-Method", "GET")
-	w.Write([]byte(`<div id=searchResult>`))
+	//~ w.Write([]byte(`<div id=searchResult>`))
 	w.Write([]byte(h.getVueHtml(hr)))
-	w.Write([]byte(`</div>`))
+	//~ w.Write([]byte(`</div>`))
 }

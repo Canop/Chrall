@@ -1,6 +1,9 @@
 
 // enrichit la page des ordres d'un suivant
 function Chrall_handleFollowerOrders() {
+	
+	Chrall_gridLive(); // <- ça c'est parce qu'on va sans doute 
+	
 	var tableOrdre = $('p table.mh_tdborder_fo');	
 	var lignes = tableOrdre.find('tr');
 	var str = $(lignes[0]).text();
@@ -10,9 +13,13 @@ function Chrall_handleFollowerOrders() {
 	var op = str.lastIndexOf('(');
 	var posText = str.substring(op+1, str.length-3);
 	var posToken=posText.split(',');
-	var chemin = new Chemin(new Point(parseInt(posToken[0].trim()), parseInt(posToken[1].trim())));
+	var gowap_x = parseInt(posToken[0].trim());
+	var gowap_y = parseInt(posToken[1].trim());
+	var gowap_z = parseInt(posToken[2].trim());
+	var chemin = new Chemin(new Point(gowap_x, gowap_y));
+	var chGowap = new ChGowap(gowap_x, gowap_y, gowap_z, numGowap);
 	var numMaxOrdre = 0;
-	var gowap_z; // la position en z en fin des ordres déjà donnés
+	$('<td width=150px><a name=zoom class=gogo x='+gowap_x+' y='+gowap_y+' z='+gowap_z+'>Montrer les alentours</a></td>').appendTo($(lignes[0]));
 	for (var i=1; i<lignes.length; i++) {
 		var cells = $(lignes[i]).find('td');
 		var numOrdre = parseInt($(cells[0]).text());
@@ -22,10 +29,13 @@ function Chrall_handleFollowerOrders() {
 		if (index>0) {
 			var posText = str.substring(index+5, str.length);
 			var posToken=posText.split('|');
-			var s0 = posToken[0].trim().split('=')[1];
-			var s1 = posToken[1].trim().split('=')[1];
-			chemin.add(new  Point(parseInt(s0), parseInt(s1)));
-			gowap_z = posToken[2].trim().split('=')[1];
+			var gowap_x = parseInt(posToken[0].trim().split('=')[1]);
+			var gowap_y = parseInt(posToken[1].trim().split('=')[1]);
+			gowap_z = parseInt(posToken[2].trim().split('=')[1]);
+			chemin.add(new  Point(gowap_x, gowap_y));
+			$('<td><a name=zoom class=gogo x='+gowap_x+' y='+gowap_y+' z='+gowap_z+'>Montrer les alentours</a></td>').appendTo($(lignes[i]));
+		} else {
+			$('<td></td>').appendTo($(lignes[i]));
 		}
 	}
 
@@ -41,11 +51,15 @@ function Chrall_handleFollowerOrders() {
 	html += '</center>';
 	$(html).appendTo($('form[name="form1"]'));
 
-
 	var ch = new CarteHall("cartehall", "messageCarte");
 	ajouteTrous(ch);
 	ch.recomputeCanvasPosition();
 	ch.add(chemin);
+	if (player) {
+		ch.add(new ChTroll(player.x, player.y, player.z, "blue", player.name, player.sight?(player.sight.diceNumber+player.sight.physicalBonus):0));		
+	}
+	ch.add(chGowap);
+	
 	ch.onClick = function(x, y, z) {
 		localStorage['troll.'+player.id+'.gowap-order'] = 'move';
 		localStorage['troll.'+player.id+'.gowap-x'] = x;

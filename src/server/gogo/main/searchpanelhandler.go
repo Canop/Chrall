@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-
+// ça, c'est l'exemple type de cas où le Go est lourd...
 func dist(x1 int64, x2 int64, y1 int64, y2 int64, z1 int64, z2 int64) int64 {
 	dx := x1 - x2
 	if dx < 0 {

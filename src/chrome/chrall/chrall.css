@@ -16,6 +16,9 @@ div.floatTopRight {
 	overflow: auto;
 	border-left: 1px solid #999;
 }
+#zoom_content {
+	overflow: auto;
+}
 
 table.grid {
 	background: white;
@@ -60,6 +63,9 @@ table.grid td {
 .ch_object, .ch_object:hover {
 	color: grey  !important;
 	display: none;
+}
+.ch_visible_object, .ch_visible_object:hover {
+	color: grey  !important;
 }
 
 .ch_pl_object, .ch_pl_object:hover {

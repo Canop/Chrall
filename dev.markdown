@@ -248,6 +248,12 @@ RECENTS / A TESTER :
 
 <- v2.03
 
+* ordres des gowaps : carte avec trous de météorites et trajet
+* affichage des objets dans les vues zooom (et donc récupération dans la base chrall)
+* les vues zoom sont autocentrées
+* suivant/ordres et suivants/liste : bouton d'affichage de la vue proche du gowap
+* illustrations des monstres généralement plus petites dans les vues
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -257,9 +263,7 @@ TODO :
 ======
 P1 :
 ----
-* suivant/ordres et suivants/liste : bouton d'affichage de la vue proche du gowap [nécessite récupération dans la vue des trésors]
 * options bulles/photos : illustration normale/petite illustration/pas d'illustration
-* utiliser ARCHIVE comme engine pour les trucs non modifiables
 * bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
 * recherche : trier par distance (un peu compliqué en raison du tri par date de vue)
 * Vue/Partages : mise à jour de la position des trolls lors de la mise à jour de la vue
@@ -350,7 +354,8 @@ P3 :
 * grille : flèches pour indiquer les directions des lieux intéressants (bookmarkés ou bien sur recherche)
 * système 'mappy' intégré en exploitant la liste des gares TGV du ftp MH
 * bulle et profil d'un troll : indiquer si le troll nous a tué ou la réciproque
-* je viens de voir que les scripts publics MH étaient maintenant en web-service et surtout que le DM envisage de lever la limite d'appels. Il faudra que je regarde ça !
+* préférence pour la valeur par défaut de la case à cocher d'activation au login
+
 
 NOTES :
 =======

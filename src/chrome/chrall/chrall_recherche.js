@@ -7,15 +7,6 @@ function makeSearchPanel($panel) {
 	var html = [];
 	var mdpRestreint = localStorage['troll.'+player.id+'.mdp'];
 	var h=0;
-	html[h++] = "<script>";
-	html[h++] = "function montre(x, y, z){";
-	html[h++] = " var url = '"+GOGOCHRALL+"vue?asker="+player.id+"&mdpr="+mdpRestreint+"&x='+x+'&y='+y+'&z='+z;";
-	html[h++] = " window.open(url);";
-	html[h++] = "";
-	html[h++] = "";
-	html[h++] = "}";
-	html[h++] = "</script>";
-
 	html[h++] = " &nbsp; <a id=btn_maj href='javascript:majVue(0);' class=gogo>Mettre à jour les vues</a> <span id=resultat_maj_vue>";
 	html[h++] = localStorage['troll.'+player.id+'.messageMaj'];
 	localStorage.removeItem('troll.'+player.id+'.messageMaj');
