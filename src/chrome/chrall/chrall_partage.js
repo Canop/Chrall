@@ -71,7 +71,6 @@ function makePartageTables() {
 	html[h++] = " tpp.innerHTML=hpp;";
 	html[h++] = "}";
 	html[h++] = "function majVue(autreTroll){";
-	html[h++] = " console.log('majVue');";
 	html[h++] = " localStorage['troll."+player.id+".majVue']=autreTroll;";
 	html[h++] = " if (autreTroll==0) {";
 	html[h++] = "  localStorage['tab_view']='tabRecherche';";
@@ -102,8 +101,6 @@ function makePartageTables() {
 	html[h++] = "<p>Nouveau partage avec le troll <input id=partage_proposal_troll_id value=''>";
 	html[h++] = "<a class=gogo href=\"javascript:changePartage('Proposer',document.getElementById('partage_proposal_troll_id').value);\">Proposer</a></p>";
 	html[h++] = "</center>";
-
-	//console.log(html.join('\n'));
 
 	return html.join('');
 }

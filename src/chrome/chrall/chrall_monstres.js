@@ -147,14 +147,11 @@ var monster_data = [
 ];
 
 function getMonsterMhImageUrl(monsterName) {
-	console.log(monsterName);
 	var emn = " "+monsterName.replace('%20', ' ')+" ";// attention : on peut recevoir le nom urlencodé
-	console.log(emn);
 	for (var i=monster_data.length; i-->0;) {
 		if (~emn.indexOf(" "+monster_data[i][1]+" ")) {
 			var s = monster_data[i][3];
 			if (s && s.length>4) {
-				console.log("Found ! : " + s);
 				return s;
 			}
 		}

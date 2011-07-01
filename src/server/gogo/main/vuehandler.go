@@ -81,20 +81,25 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 				if o.X==int64(cx) && o.Y==int64(cy) {
 					dist := dist(compte.Troll.X, o.X, compte.Troll.Y, o.Y, compte.Troll.Z, o.Z) // en attente...
 					t := time.SecondsToLocalTime(o.Date)
-					if empty {
-						empty = false
-					} else {
-						fmt.Fprint(cellContent, "<br>")
-					}
 					if o.Type=="troll" {
+						if empty {
+							empty = false
+						} else {
+							fmt.Fprint(cellContent, "<br>")
+						}
 						fmt.Fprintf (cellContent, "<a name=trolls class=ch_troll href='javascript:EPV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
 					} else if o.Type=="monstre" {
+						if empty {
+							empty = false
+						} else {
+							fmt.Fprint(cellContent, "<br>")
+						}
 						fmt.Fprintf (cellContent, "<a name=monstres class=ch_monster href='javascript:EMV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
 					} else if o.Type=="tresor" {
 						if objectsByLevel[o.Z]==nil {
 							objectsByLevel[o.Z] = make([]string, 1, 10)
 						}
-						objectsByLevel[o.Z] = append(objectsByLevel[o.Z], fmt.Sprintf("<span name='trésors' class=ch_visible_object>%d: %d %s</span>", o.Z, o.Num, o.Nom))
+						objectsByLevel[o.Z] = append(objectsByLevel[o.Z], fmt.Sprintf("<span class=ch_visible_object>%d: %d %s</span>", o.Z, o.Num, o.Nom))
 					} else if o.Type=="lieu" {
 						if o.Nom=="Trou de Météorite" {
 							hasHole = true
@@ -115,7 +120,7 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 					merge := len(objects)>3
 					if merge {
 						fmt.Fprintf (html, "<br>")
-						fmt.Fprintf (html, "<span name='trésors' class=ch_visible_object>%d : ", z)
+						fmt.Fprintf (html, "<span class=ch_visible_object>%d : ", z)
 						fmt.Fprintf (html, "<a class=ch_objects_toggler href=\"javascript:grid_changeDisplayByName('objects_%d');\">", nextDivId)
 						fmt.Fprintf (html, "<b>%d trésors</b>", len(objects))
 						fmt.Fprintf (html, "</a>")

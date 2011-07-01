@@ -254,15 +254,17 @@ RECENTS / A TESTER :
 * suivant/ordres et suivants/liste : bouton d'affichage de la vue proche du gowap
 * illustrations des monstres généralement plus petites dans les vues
 
+<- v2.04
+
 EN COURS :
 ==========
 * apprendre le langage go
-* carte trous de météorites & parcours des gowaps
 
 TODO :
 ======
 P1 :
 ----
+* ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
 * options bulles/photos : illustration normale/petite illustration/pas d'illustration
 * bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
 * recherche : trier par distance (un peu compliqué en raison du tri par date de vue)
@@ -272,7 +274,6 @@ P1 :
 * le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
 * indiquer directement dans la bulle si un monstre est insulté (et par qui)
 * liens ancres MH en haut des tables : changer d'onglet.
-* ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
 * événements des monstres : si partage indiquer les caracts des hypno
 * bug : grille : les dudus et les darklings sont représentés à l'identique (e.g. D24) -> utiliser 'd' ?
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo)

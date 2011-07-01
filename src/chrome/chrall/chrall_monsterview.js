@@ -5,8 +5,6 @@ function Chrall_analyseAndReformatMonsterView() {
 	var titre = $('div.titre2').text();
 	var nomMonstre = titre.substring(0, titre.indexOf('(')-1).trim();
 	
-	console.log(nomMonstre);
-	
 	var html = [];
 	var h = 0;
 	html[h++] = '<div id=ch_pjpop_trigger>';
@@ -16,6 +14,4 @@ function Chrall_analyseAndReformatMonsterView() {
 	$(html.join('')).appendTo($('body'));
 
 	bubble($("#ch_pjpop_trigger"), '', "bub_monster", GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + encodeURIComponent(nomMonstre) + "&monsterId="+monsterId, nomMonstre);
-
-	
 }

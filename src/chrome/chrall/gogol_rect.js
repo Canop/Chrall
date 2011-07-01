@@ -1,9 +1,9 @@
 
 /**
- * Trace une ligne horizontale Ã©paisse d'un pixel Ã©cran (contourne un problÃ¨me des canvas).
+ * Trace une ligne horizontale épaisse d'un pixel écran (contourne un problème des canvas).
  * 
  * @param c : le contexte 2D du canvas
- * @param x1, x2, y : coordonnÃ©es Ã©cran
+ * @param x1, x2, y : coordonnées écran
  */
 function drawThinHorizontalLine(c, x1, x2, y) {
 	c.lineWidth = 1;
@@ -18,7 +18,7 @@ function drawThinHorizontalLine(c, x1, x2, y) {
  * Trace une ligne verticale épaisse d'un pixel écran (contourne un problème des canvas).
  * 
  * @param c : le contexte 2D du canvas
- * @param x1, x2, y : coordonnÃ©es Ã©cran
+ * @param x1, x2, y : coordonnées écran
  */
 function drawThinVerticalLine(c, x, y1, y2) {
 	c.lineWidth = 1;

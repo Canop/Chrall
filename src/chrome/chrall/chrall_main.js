@@ -3,8 +3,8 @@
  * Il contient aussi les variables globales.
  */
 
-var GOGOCHRALL = "http://localhost:8000/chrall/";
-//var GOGOCHRALL = "http://canop.org:8000/chrall/";
+//var GOGOCHRALL = "http://localhost:8000/chrall/";
+var GOGOCHRALL = "http://canop.org:8000/chrall/";
 
 var viewIsEmpty=true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
@@ -29,7 +29,6 @@ var viewFilters = {
 //$('head').append('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>');
 
 prepareReceiver();
-//console.log(document.location.href);
 var splitedPathname = document.location.pathname.split('/');
 var pageName = splitedPathname[splitedPathname.length-1];
 console.log("pageName=\""+pageName+"\"");

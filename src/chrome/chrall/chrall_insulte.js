@@ -14,8 +14,8 @@ function Chrall_analyseResultatInsulte() {
 	if (!compteChrallActif()) return;
 	var text = $('body').text();
 	var lines = text.split('\n');
-	console.log('Texte résultat insulte :');
-	console.log(lines);
+	//~ console.log('Texte résultat insulte :');
+	//~ console.log(lines);
 	
 	var result = {};
 	for (var i=lines.length; i-->0;) {
@@ -28,10 +28,7 @@ function Chrall_analyseResultatInsulte() {
 			}
 		} else if (line.indexOf("Page générée")>0) {
 			var t = Chrall_tokenize(line);
-			console.log("Date tokens :")
-			console.log(t);
 			var d = new Date(atoi(t[2]), atoi(t[1])-1, atoi(t[0]), atoi(t[3]), atoi(t[4]), atoi(t[5]));
-			console.log(d);
 			result.Date = d.getTime()/1000;
 		}
 	}

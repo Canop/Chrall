@@ -25,8 +25,6 @@ function eventIsOver(event, o) {
 	var pos = o.offset();
 	var ex = event.pageX;
 	var ey = event.pageY;
-	//~ console.log("pos.top="+pos.top);
-	//~ console.log("e.pageY="+event.pageY);
 	if (
 		ex>=pos.left
 		&& ex<=pos.left+o.width()

@@ -25,6 +25,5 @@ function makeSearchPanel($panel) {
 	
 	$('#ch_search_pattern').change(search);
 	$('#btn_search').click(search);
-	console.log('click added');
 }
 

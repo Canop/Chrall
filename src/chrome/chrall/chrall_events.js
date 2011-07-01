@@ -30,13 +30,10 @@ function Chrall_addInfosToMonsterEvents() {
 	if (!compteChrallActif()) return;
 	var eventTable = $('body > table.mh_tdborder')[1];
 	$(eventTable).attr('id', 'monster_events');
-	console.log(eventTable);
 	if (!eventTable) return; // arrive s'il n'y a pas encore d'événements je crois
 	// on ajoute une méthode pour l'insertion des données supplémentaires
 	$('body').prepend('<script>\
 	function addActionsToMonsterEvents(actions) {\
-		console.log("addActionsToMonsterEvents");\
-		console.log(actions);\
 		var et = document.getElementById("monster_events");\
 		var etb = et.tBodies[0];\
 		var td = document.createElement("td");\
@@ -52,8 +49,6 @@ function Chrall_addInfosToMonsterEvents() {
 			var type = row.cells[1].innerHTML;\
 			var description = row.cells[2].innerHTML;\
 			var text = "";\
-			console.log("event date : " + date);\
-			console.log("event seconds : " + seconds);\
 			for (var j=0; j<actions.length; j++) {\
 				var a = actions[j];\
 				var i0 = description.indexOf("( "+a.Auteur+" )");\
@@ -61,8 +56,6 @@ function Chrall_addInfosToMonsterEvents() {
 				var i1 = description.indexOf("( "+a.NumCible+" )");\
 				if (i1<i0) continue;\
 				var dd = Math.abs(a.Date-seconds);\
-				console.log("action date : " + (new Date(a.Date*1000)));\
-				console.log("delta date : " + dd);\
 				if (dd>10) continue;\
 				text += a.Type;\
 				text += a.Succes ? " réussi" : " raté";\

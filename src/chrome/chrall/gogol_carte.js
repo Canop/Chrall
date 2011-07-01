@@ -1,7 +1,6 @@
 
 function CarteHall(canvasId, posmarkid) {
 	this.canvas = document.getElementById(canvasId);
-	console.log(this.canvas);
 	this.context = this.canvas.getContext("2d");
 	this.posmarkdiv = document.getElementById(posmarkid);
 	this.screenRect = new Rect();
