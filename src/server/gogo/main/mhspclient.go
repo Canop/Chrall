@@ -41,7 +41,7 @@ func FetchVueSp(numero uint, mdp_restreint string, avecTresors uint, avecLieux u
 			}
 		} else {
 			tokens := strings.Split(line, ";", 5)
-			//~ fmt.Printf(" %s %+v\n", currentType, tokens)
+			//fmt.Printf(" %s %+v\n", currentType, tokens)
 			item := new(SoapItem)
 			item.Numero, _ = strconv.Atoi(tokens[0])
 			if item.Numero>0 {
