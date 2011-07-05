@@ -256,6 +256,9 @@ RECENTS / A TESTER :
 
 <- v2.04
 
+* liens ancres MH en haut des tables -> changement d'onglet [demande de Laz]
+
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -264,16 +267,16 @@ TODO :
 ======
 P1 :
 ----
+* mettre à jour la base pour les niveaux des monstres (faire un max ?)
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
+* gowaps/ordres : intégrer le bouton de mise à jour de vue
 * options bulles/photos : illustration normale/petite illustration/pas d'illustration
 * bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
-* recherche : trier par distance (un peu compliqué en raison du tri par date de vue)
 * Vue/Partages : mise à jour de la position des trolls lors de la mise à jour de la vue
-* table de trolls et de monstres : bouton de vue zoomée (si possible sans compte chrall et sans passer par le gogochrall...)
+* table de trolls et de monstres : bouton de vue zoomée
 * CDM : gestion du vol et du sang-froid (entre autres, voir http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=5&TopicID=145805)
 * le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
 * indiquer directement dans la bulle si un monstre est insulté (et par qui)
-* liens ancres MH en haut des tables : changer d'onglet.
 * événements des monstres : si partage indiquer les caracts des hypno
 * bug : grille : les dudus et les darklings sont représentés à l'identique (e.g. D24) -> utiliser 'd' ?
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo)
@@ -281,10 +284,10 @@ P1 :
 * affichage dans la bulle des trolls (si partage actif) des infos principales PA/PV/DLA
 * partage : positionnement des pièges
 * recherche de monstres ou de compo particuliers dans la vue (n'oublions pas les toms en mission...)
+* recherche : trier par distance (un peu compliqué en raison du tri par date de vue)
 * partage : cumul des pistages avec représentation graphique (modulaire car on ne peut pas détecter un mouvement de monstre)
 * partage : cumul des recherches de filon
 * essayer gb (code.google.com/p/go-gb/)
-* recherche par guilde
 * recherche par niveau de monstre pour mission
 * recherche : liste sauvegardée de cibles (tékas, monstres, copains, etc.)
 
@@ -304,6 +307,7 @@ P2 :
 * lien pour les lieux proches bricotrolls
 * affichage quelque part du nombre de CDM transmises via Chrall
 * grille : marquer les trolls ennemis ou amis
+* recherche par guilde
 * cron : sauvegardes de la bd
 
 P3 :

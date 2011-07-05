@@ -106,6 +106,11 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 						if o.Nom=="Trou de Météorite" {
 							hasHole = true
 						} else {
+							if hasNoLine {
+								hasNoLine = false
+							} else {
+								fmt.Fprint(cellContent, "<br>")
+							}
 							fmt.Fprintf (cellContent, "<a name=lieux class=ch_place id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
 						}
 					}
@@ -129,7 +134,7 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 						fmt.Fprintf (html, "<div name=objects_%d class=hiddenDiv>", nextDivId)
 						nextDivId++
 					}
-					fmt.Fprintf (html, strings.Join(objects, "<br>"))
+					fmt.Fprint (html, "<br>", strings.Join(objects, "<br>"))
 					if merge {
 						fmt.Fprintf (html, "</div></span>")
 					}
