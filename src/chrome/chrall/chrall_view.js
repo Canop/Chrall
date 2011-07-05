@@ -485,7 +485,6 @@ function Chrall_analyseAndReformatView() {
 	$("#tabPartages").append(makePartageTables());
 	makeSearchPanel($("#tabRecherche"));
 	$(".tab_content").hide();
-	
 	if (localStorage['tab_view']) {
 		$('ul.tabs li:has(a[href="#'+localStorage['tab_view']+'"])').addClass("active").show();
 		$('#'+localStorage['tab_view']).show();
@@ -494,17 +493,23 @@ function Chrall_analyseAndReformatView() {
 		$("ul.tabs li:first").addClass("active").show();
 		$(".tab_content:first").show();
 	}
-	
-	$("ul.tabs li").click(function() {
+	var changeTab = function($tab) {
 		hideOm(); // fermeture des éventuels objectMenus de la grille
 		$("ul.tabs li").removeClass("active");
-		$(this).addClass("active");
+		$tab.addClass("active");
 		$(".tab_content").hide();
-		var activeTab = $(this).find("a").attr("href");
+		var activeTab = $tab.find("a").attr("href");
 		window.scroll(0, 0);
 		$(activeTab).fadeIn("fast");
-		return false;
-	});
+	}
+	$("ul.tabs li").click(function() { changeTab($(this)); });
+	// on corrige les liens internes, pour qu'ils agissent sur les onglets
+	$('a[href$="#monstres"]').click(function() { changeTab($('a[href="#tabMonsters"]').parent()); });
+	$('a[href$="#trolls"]').click(function() { changeTab($('a[href="#tabTrolls"]').parent()); });
+	$('a[href$="#tresors"]').click(function() { changeTab($('a[href="#tabObjects"]').parent()); });
+	$('a[href$="#champignons"]').click(function() { changeTab($('a[href="#tabMushrooms"]').parent()); });
+	$('a[href$="#lieux"]').click(function() { changeTab($('a[href="#tabPlaces"]').parent()); });
+	$('a[href$="#cadavre"]').click(function() { changeTab($('a[href="#tabCenotaphs"]').parent()); });
 	
 	var time_after_grid_append = (new Date()).getTime(); // <= prof
 	
@@ -600,7 +605,6 @@ function Chrall_analyseAndReformatView() {
 	// On corrige si nécessaire la position affichée dans le menu de gauche et on signale
 	// cette position au script de fond
 	updateTroll();
-	
 	
 	
 }
