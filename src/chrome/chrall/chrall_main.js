@@ -1,4 +1,4 @@
-/*
+﻿/*
  * ce script lance les actions (les autres ne contiennent que des classes et des fonctions appelées depuis ici).
  * Il contient aussi les variables globales.
  */
@@ -61,6 +61,7 @@ chrome.extension.sendRequest(
 			Chrall_addBubblesToLinks();
 			break;
 		case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
+			Chrall_displayDiggingIsPossible();
 			Chrall_handleActionPage();
 			break;
 		case "Play_option.php":
