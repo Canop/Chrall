@@ -5,6 +5,7 @@ GOFILES=\
 	main/html.go\
 	main/sql.go\
 	main/trollinfos.go\
+	main/trollinfossort.go\
 	main/cdm.go\
 	main/diplo.go\
 	main/bestiaryextract.go\

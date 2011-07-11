@@ -36,6 +36,8 @@ func race(s string) raceTroll {
 	return race_inconnue
 }
 
+
+
 // statistiques concernant un troll
 type TrollInfos struct {
 	NbKillsTrolls           uint
@@ -62,6 +64,11 @@ type DiplomaticRelation struct {
 	Text          string
 }
 
+type KillometreExtract struct {
+	Trolls []*TrollInfos
+	StartIndex int
+}
+
 //===========================================================================================================================================
 
 // l'objet qui contient les stats
@@ -74,8 +81,13 @@ type TksManager struct {
 	lastGuildFileCheck int64
 	lastGuildFileRead  int64
 	Diplo              *DiploGraph
+	NbTrolls	uint
 	lastDiploFileCheck int64
 	lastDiploFileRead  int64
+	TrollsByKills []*TrollInfos
+	TrollsByKillsMonstres []*TrollInfos
+	TrollsByKillsTrolls []*TrollInfos
+	AtkByKillsTrolls []*TrollInfos
 }
 
 
@@ -87,6 +99,40 @@ func AsciiToUTF8(c []byte) string {
 	return string(u)
 }
 
+
+func (m *TksManager) GetKillometreExtract(typeExtract string, startIndex int, pageSize int) (ke *KillometreExtract) {
+	m.checkTrollInfosLoaded()
+	var source []*TrollInfos
+	switch (typeExtract) {
+	case "TrollsByKills" :
+	source =  m.TrollsByKills
+	case "TrollsByKillsMonstres" :
+	source =  m.TrollsByKillsMonstres
+	case "TrollsByKillsTrolls" :
+	source =  m.TrollsByKillsTrolls
+	case "AtkByKillsTrolls" :
+	source =  m.AtkByKillsTrolls
+	default :
+		fmt.Println("Erreur GetKillometreExtract : type non reconnu : " + typeExtract)
+		return
+	}
+	if startIndex<0 || startIndex>len(source) {
+		fmt.Printf("Erreur GetKillometreExtract : index invalide : %d\n", startIndex)
+		return
+	}
+	if pageSize<0 || pageSize>100 {
+		fmt.Printf("Erreur GetKillometreExtract : pageSize invalide : %d\n", pageSize)
+		return
+	} else if pageSize==0 {
+		pageSize  = 20
+	}
+	fmt.Printf("startIndex=%d  pageSize=%d\n", startIndex, pageSize)
+	ke = new(KillometreExtract)
+	ke.Trolls = source[startIndex:pageSize+startIndex]
+	ke.StartIndex = startIndex
+	ke.StartIndex = startIndex
+	return
+}
 
 func (m *TksManager) ReadDiploCsvFilesIfNew() os.Error {
 	standardDiploFilename := "/home/dys/chrall/Public_Diplomatie.txt"
@@ -200,7 +246,8 @@ func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
 
 
 // Lit un fichier csv contenant, triés par nombre de kills de trolls, une ligne pour
-//  chaque troll connu (voir troll.go)
+//  chaque troll connu (voir troll.go).
+// Calcule les tableaux triés en fin de chargement
 func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 	// TODO comment assurer en go qu'il n'y a pas plusieurs exécutions en parallèle ?
 	filename := "/home/dys/chrall/killometre/kom.csv" // oui, c'est pas bien... mais proposez de l'aide au lieu de critiquer ;)
@@ -223,6 +270,7 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 		return err
 	}
 	defer f.Close()
+	m.NbTrolls = 0
 	r := bufio.NewReader(f)
 	line, err := r.ReadString('\n')
 	// notons qu'on ne supprime pas les anciennes stats avant, on remplace directement
@@ -252,6 +300,7 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 				m.Trolls = m.Trolls[0 : trollId+1]
 			}
 			m.Trolls[trollId] = tks
+			m.NbTrolls++
 		}
 		line, err = r.ReadString('\n')
 	}
@@ -262,6 +311,22 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 	}
 	m.lastTrollFileRead, _, _ = os.Time()
 	fmt.Println("TksManager : Fichier des trolls lu")
+	m.TrollsByKills = SortTrollInfos(m.Trolls, m.NbTrolls, func(troll *TrollInfos) uint { return troll.NbKillsTrolls+troll.NbKillsMonstres })
+	//~ fmt.Println("\nTrollsByKills :")
+	//~ for i, t := range(m.TrollsByKills) {
+		//~ fmt.Printf(" #%d %s NbKillsTrolls=%d NbKillsMonstres=%d tag : %s \n", i+1, t.Nom, t.NbKillsTrolls, t.NbKillsMonstres, t.ClassifChrall)
+		//~ if i==40 {
+			//~ break
+		//~ }
+	//~ }
+	m.TrollsByKillsMonstres = SortTrollInfos(m.Trolls, m.NbTrolls, func(troll *TrollInfos) uint { return troll.NbKillsMonstres })
+	m.TrollsByKillsTrolls = SortTrollInfos(m.Trolls, m.NbTrolls, func(troll *TrollInfos) uint { return troll.NbKillsTrolls+troll.NbKillsMonstres })
+	m.AtkByKillsTrolls = SortTrollInfos(m.Trolls, m.NbTrolls, func(troll *TrollInfos) uint {
+		if strings.Index(troll.ClassifChrall, "ATK")>=0 {
+			return troll.NbKillsTrolls
+		}
+		return 0
+	})
 	return nil
 }
 
@@ -273,11 +338,7 @@ func (m *TksManager) GetNomRaceNiveauTroll(trollId int) (string, string, uint) {
 	return ti.Nom, ti.Race.string(), ti.Niveau
 }
 
-
-func (m *TksManager) getTrollInfos(trollId int) *TrollInfos {
-	if trollId <= 0 {
-		return nil
-	}
+func (m *TksManager) checkTrollInfosLoaded() {
 	now, _, _ := os.Time()
 	if now-m.lastTrollFileCheck > 300 {
 		m.lastTrollFileCheck = now
@@ -287,6 +348,14 @@ func (m *TksManager) getTrollInfos(trollId int) *TrollInfos {
 			fmt.Println(err)
 		}
 	}
+}
+
+
+func (m *TksManager) getTrollInfos(trollId int) *TrollInfos {
+	if trollId <= 0 {
+		return nil
+	}
+	m.checkTrollInfosLoaded()
 	if trollId < len(m.Trolls) {
 		return m.Trolls[trollId]
 	}

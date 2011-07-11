@@ -257,7 +257,7 @@ function Chrall_analyseTrollTable(table) {
 		troll.z = parseInt($(cells[i++]).text());
 		grid.getCellNotNull(troll.x, troll.y).addTroll(troll);
 		grid.nbTrollsInView++;
-		$tr.prepend('<td align=center><input type=checkbox name=cb_troll value='+troll.id+'></td>');
+		$tr.prepend('<td align=center><input type=checkbox name=cb_troll value='+troll.id+'></td>'); // TODO : sur les grosses tables on pourrait peut-être envisager un detach() ? 
 	}
 	$(rows[2]).prepend($('<td align=center width=20></td>'));
 	var html='<td colspan=10 height=25><script>';

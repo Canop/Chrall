@@ -267,10 +267,12 @@ TODO :
 ======
 P1 :
 ----
+* optm Chrall_analyseObjectTable : essayer le parcours direct du dom
+* éditeur pour la diplo trollienne (et la stocker en bd)
+* vue centrée des gowaps : ajouter un bouton pour limiter au niveau cible ("niveau -34")
 * mettre à jour la base pour les niveaux des monstres (faire un max ?)
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
 * gowaps/ordres : intégrer le bouton de mise à jour de vue
-* options bulles/photos : illustration normale/petite illustration/pas d'illustration
 * bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
 * Vue/Partages : mise à jour de la position des trolls lors de la mise à jour de la vue
 * table de trolls et de monstres : bouton de vue zoomée
@@ -294,6 +296,7 @@ P1 :
 P2 :
 ----
 * fonction (menu droit ?) de recherche sur mountypedia (exemple : lieu)
+* options bulles/photos : illustration normale/petite illustration/pas d'illustration
 * bouton pour mettre à jour le profil d'un troll avec qui un partage est actif via les scripts publics soap (en respectant les limites d'appel)
 * grille/filtre : sous-cochage par type de trésor
 * affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
