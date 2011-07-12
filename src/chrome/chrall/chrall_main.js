@@ -57,6 +57,9 @@ chrome.extension.sendRequest(
 		case "Play_BM.php":
 			Chrall_analyseAndReformatBM();	
 			break;
+		case "Play_equipement.php":
+			Chrall_analyseAndReformatEquipment();	
+			break;
 		case "Play_evenement.php":
 			Chrall_addBubblesToLinks();
 			break;
