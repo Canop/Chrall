@@ -257,7 +257,10 @@ RECENTS / A TESTER :
 <- v2.04
 
 * liens ancres MH en haut des tables -> changement d'onglet [demande de Laz]
+* affichage dans les actions, le cas échéant, de la possibilité de creuser [dév Chouia/Dragtara]
+* total des BM du matériel porté [dév Chouia/Dragtara]
 
+<- v2.05
 
 EN COURS :
 ==========

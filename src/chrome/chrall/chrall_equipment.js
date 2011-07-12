@@ -27,17 +27,14 @@ function parseEquipmentBm(s) {
    		else {
    			map[bmName] = new Array(parseInt(bmValues[0],10), undefined);
    		}
-  	}
-		else{
+  	} else{
 			map[bmName][0] += parseInt(bmValues[0],10);
 			
 			//On ajoute le magique seulement si nécessaire.
 			if (typeof(bmValues[1]) !== 'undefined'){
 				if (typeof(map[bmName][1]) !== 'undefined'){
 					map[bmName][1] += parseInt(bmValues[1],10);
-				}
-				//Attention au cas où le magique n'etait pas encore defini
-				else{
+				} else{ //Attention au cas où le magique n'etait pas encore defini
 					map[bmName][1] = parseInt(bmValues[1],10);
 				}
 			}
@@ -65,8 +62,7 @@ function constructTotalEquipmentBm(map) {
 			// Recupere les BM physiques.
 			if ( map[carac[i]][0] >= 0 ){
 				physValue = "+" + map[carac[i]][0] + " ";
-			}
-			else{
+			} else{
 				physValue = map[carac[i]][0] + " ";
 			}
 			
@@ -74,8 +70,7 @@ function constructTotalEquipmentBm(map) {
 			if (typeof(map[carac[i]][1]) != 'undefined'){
 				if ( map[carac[i]][1] >= 0){
 					magValue = "/+" + map[carac[i]][1] + " ";
-				}
-				else{
+				} else{
 					magValue = map[carac[i]][1] + " ";
 				}
 			}
@@ -83,11 +78,10 @@ function constructTotalEquipmentBm(map) {
 			/* Certaines carac ont une unité affichée*/
 			if ( (carac[i] == 'MM') || (carac[i] == 'RM') ) {
 				caracUnit = "% ";
-			}
-			else if ( carac[i] == 'TOUR') {
+			} else if ( carac[i] == 'TOUR') {
 				caracUnit = "min ";
 			}
-						
+				
 			s += carac[i] + " " + physValue + magValue + caracUnit + "| ";
 		}
 	}
