@@ -1,4 +1,4 @@
-var horizontalViewLimit; // l'horizon actuel, inférieur ou égal à la vue maximale
+﻿var horizontalViewLimit; // l'horizon actuel, inférieur ou égal à la vue maximale
 var grid; // la grille. Tout ce qui est visible est stocké là dedans
 var objectsOnPlayerCell;
 
@@ -304,6 +304,13 @@ function Chrall_analysePlaceTable(table) {
 		}
 	);
 }
+
+function Chrall_analyseWallTable(table) {
+	alert("Traitement des couloirs");
+	
+}
+
+
 function Chrall_analyseObjectTable(table) {
 	// optm : cette méthode consomme beaucoup, peut-être l'itération sur les cellules
 	// il faudrait peut-être, comme il n'y a pas de vraies recherches, itérer directement sur le DOM
@@ -340,10 +347,9 @@ function Chrall_analyseCenotaphTable(table) {
 
 
 function Chrall_analyseView() {
-	var tables = $("table.mh_tdborder");
 
 	//> recherche de la position du joueur
-	var positionSentenceText = $($(tables[0]).find("li")[0]).text();
+	var positionSentenceText = $($($("table.mh_tdborder").first()).find("li")[0]).text();
 	var positionSentenceTokens = positionSentenceText.split(new RegExp("[ ,:=]+", "g"));
 	player.x = parseInt(positionSentenceTokens[5]);
 	player.y = parseInt(positionSentenceTokens[8]);
@@ -365,12 +371,35 @@ function Chrall_analyseView() {
 	grid = new Grid(player.x, player.y, horizontalViewLimit);
 	
 	//> chargement des trucs en vue (monstres, trolls, etc.). On remplit la grille au fur et à mesure
-	Chrall_analyseMonsterTable(tables[1]);
-	Chrall_analyseTrollTable(tables[2]);
-	Chrall_analyseObjectTable(tables[3]);
-	Chrall_analyseMushroomTable(tables[4]);
-	Chrall_analysePlaceTable(tables[5]);
-	Chrall_analyseCenotaphTable(tables[6]);
+	$("table.mh_tdborder:has(a[name])").each(function() { 
+		  	
+  	switch ($(this).find("a[name]").first().attr("name")) {
+			case "monstres":
+				Chrall_analyseMonsterTable($(this))
+			break;
+			case "trolls":
+				Chrall_analyseTrollTable($(this))
+			break;
+			case "tresors":
+				Chrall_analyseObjectTable($(this))
+			break;
+			case "champignons":
+				Chrall_analyseMushroomTable($(this))
+			break;
+			case "lieux":
+				Chrall_analysePlaceTable($(this))
+			break;
+			case "cadavre":
+				Chrall_analyseCenotaphTable($(this))
+			break;
+			case "murs":
+				//Chrall_analyseWallTable($(this))
+			break;
+			default: 
+				alert("Cet écran de Vue n'est pas conforme aux écrans de vue classiques de MountyHall. Il n'a donc pas été totalement traité. Contacter un développeur Chrall pour voir ce qu'il y a moyen de faire. Partie non traitée: \"" + $(this).find("a[name]").first().text() + "\"" )
+			break;
+		}
+	});
 	
 	//> on regarde si la case du joueur est encombrée
 	// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case
@@ -437,11 +466,15 @@ function Chrall_analyseAndReformatView() {
 	var time_before_grid = (new Date()).getTime(); // <= prof
 	
 	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
-	var tables = $("table.mh_tdborder");
+	//var tables = $("table.mh_tdborder");
 	var html = []
 	var h = 0;
 	html[h++] = "<ul class=tabs view>";
 	html[h++] = "<li><a href=#tabGrid>Grille</a></li>";
+	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
+	if ($("a[name=murs]").length > 0 ) {
+		html[h++] = "<li><a href=#tabWalls>Murs et couloirs</a></li>";
+	}	
 	html[h++] = "<li><a href=#tabTrolls>Trolls ("+grid.nbTrollsInView+")</a></li>";
 	html[h++] = "<li><a href=#tabMonsters>Monstres ("+grid.nbMonstersInView+")</a></li>";
 	html[h++] = "<li><a href=#tabPlaces>Lieux ("+grid.nbPlacesInView+")</a></li>";
@@ -460,6 +493,10 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = Chrall_makeGridHtml();
 	html[h++] = "</div>";
 	html[h++] = "</div>";
+	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
+	if ($("a[name=murs]").length > 0 ) {
+		html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
+	}
 	html[h++] = "<div id=tabTrolls class=tab_content scroll></div>";
 	html[h++] = "<div id=tabMonsters class=tab_content scroll></div>";
 	html[h++] = "<div id=tabPlaces class=tab_content scroll></div>";
@@ -469,6 +506,10 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabSettings class=tab_content scroll></div>";
 	html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
 	html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
+	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
+	if ($("a[name=murs]").length > 0 ) {
+		html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
+	}
 	//html[h++] = "<div id=tabGogol class=tab_content scroll></div>";
 	html[h++] = "</div>";
 	
@@ -476,12 +517,16 @@ function Chrall_analyseAndReformatView() {
 	
 	$($("table.mh_tdborder")[0]).parent().parent().prepend(html.join(''));	
 	$("#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
-	$("#tabMonsters").append(tables[1]);
-	$("#tabTrolls").append(tables[2]);
-	$("#tabObjects").append(tables[3]);
-	$("#tabMushrooms").append(tables[4]);
-	$("#tabPlaces").append(tables[5]);
-	$("#tabCenotaphs").append(tables[6]);
+	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
+	if ($("a[name=murs]").length > 0 ) {
+		$("#tabWalls").append($("table.mh_tdborder:has(a[name=murs])").first());		
+	}
+	$("#tabMonsters").append($("table.mh_tdborder:has(a[name=monstres])").first());
+	$("#tabTrolls").append($("table.mh_tdborder:has(b:contains('TROLLS'))").first());
+	$("#tabObjects").append($("table.mh_tdborder:has(a[name=tresors])").first());
+	$("#tabMushrooms").append($("table.mh_tdborder:has(a[name=champignons])").first());
+	$("#tabPlaces").append($("table.mh_tdborder:has(a[name=lieux])").first());
+	$("#tabCenotaphs").append($("table.mh_tdborder:has(a[name=cadavre])").first());
 	$("#tabPartages").append(makePartageTables());
 	makeSearchPanel($("#tabRecherche"));
 	$(".tab_content").hide();
