@@ -36,6 +36,7 @@
 				"chrall_recherche.js",
 				"chrall_cdm.js",
 				"chrall_bm.js",
+				"chrall_equipment.js",
 				"chrall_com.js",
 				"chrall_profile.js",
 				"chrall_options.js",
