@@ -90,7 +90,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		if in.Troll != nil {
 			fmt.Printf("*** Infos troll reçues de %d ***\n", in.TrollId)
 			// on regarde si la position a changé
-			aBougé := c.Troll.X!=in.Troll.X || c.Troll.Y!=in.Troll.Y || c.Troll.Z!=in.Troll.Z 
+			aBougé := c.Troll.X != in.Troll.X || c.Troll.Y != in.Troll.Y || c.Troll.Z != in.Troll.Z
 			c.Troll = in.Troll
 			err = h.store.UpdateTroll(db, c)
 			if err != nil {
@@ -161,15 +161,15 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			}
 			out.Actions, err = h.store.GetActions(db, "monstre", int(in.IdCible), int(in.TrollId), amis)
 		} else if action == "maj_vue" {
-			if (in.IdCible==0) { // demande de mise à jour de toutes les vues
+			if in.IdCible == 0 { // demande de mise à jour de toutes les vues
 				fmt.Printf("MAJ vues des amis de %d\n", in.TrollId)
 				amis, err = h.store.GetPartageurs(db, int(in.TrollId))
 				if err != nil {
 					fmt.Printf("Erreur récupération amis sur action %s : %s\n", action, err.String())
 				}
 				out.TextMajVue = h.store.majVue(db, in.TrollId, in.TrollId, h.tksManager)
-				for _, ami := range(amis) {
-					out.TextMajVue += ". "+ h.store.majVue(db, uint(ami), in.TrollId, h.tksManager)
+				for _, ami := range amis {
+					out.TextMajVue += ". " + h.store.majVue(db, uint(ami), in.TrollId, h.tksManager)
 				}
 			} else { // demande de mise à jour spécifique			
 				fmt.Printf("MAJ Vue %d\n", in.IdCible)
@@ -184,5 +184,3 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		}
 	}
 }
-
-

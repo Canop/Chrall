@@ -94,7 +94,7 @@ func DumpAll(r io.Reader) {
 func GetSoapEnvelope(query string, numero uint, mdp string) (envelope *SoapEnvelope) {
 	httpClient := new(http.Client)
 	soapRequestContent := fmt.Sprintf(query, numero, mdp)
-	
+
 	resp, err := httpClient.Post(MH_SOAP_URL, "text/xml; charset=utf-8", bytes.NewBufferString(soapRequestContent))
 
 	if err != nil {
@@ -109,7 +109,7 @@ func GetSoapEnvelope(query string, numero uint, mdp string) (envelope *SoapEnvel
 	}
 	in := string(b)
 	indexDebutXml := strings.Index(in, "<?xml version")
-	if indexDebutXml>0 {
+	if indexDebutXml > 0 {
 		fmt.Printf("Erreur message SOAP. Début XML à l'index %d\n", indexDebutXml)
 		in = in[indexDebutXml:len(in)]
 	}

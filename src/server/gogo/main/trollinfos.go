@@ -37,11 +37,12 @@ func race(s string) raceTroll {
 }
 
 
-
 // statistiques concernant un troll
 type TrollInfos struct {
+	Num                     int
 	NbKillsTrolls           uint
 	NbKillsMonstres         uint
+	ClassementKills         uint
 	ClassementKillsTrolls   uint
 	ClassementKillsMonstres uint
 	ClassifChrall           string
@@ -65,7 +66,7 @@ type DiplomaticRelation struct {
 }
 
 type KillometreExtract struct {
-	Trolls []*TrollInfos
+	Trolls     []*TrollInfos
 	StartIndex int
 }
 
@@ -74,20 +75,20 @@ type KillometreExtract struct {
 // l'objet qui contient les stats
 // A priori ce sera toujours un singleton.
 type TksManager struct {
-	Trolls             []*TrollInfos // les infos des trolls, indexées par id de troll (certes, avec un table de hash spécifique ce ne serait pas lent et le tableau serait deux fois plus court mais... la flemme...)
-	lastTrollFileCheck int64         // la date, en secondes, à laquelle on a vérifié si le fichier csv source avait changé pour la dernière fois
-	lastTrollFileRead  int64         // la date, en secondes, à laquelle on a lu le fichier csv source pour la dernière fois
-	Guildes            []*GuildInfos
-	lastGuildFileCheck int64
-	lastGuildFileRead  int64
-	Diplo              *DiploGraph
-	NbTrolls	uint
-	lastDiploFileCheck int64
-	lastDiploFileRead  int64
-	TrollsByKills []*TrollInfos
+	Trolls                []*TrollInfos // les infos des trolls, indexées par id de troll (certes, avec un table de hash spécifique ce ne serait pas lent et le tableau serait deux fois plus court mais... la flemme...)
+	lastTrollFileCheck    int64         // la date, en secondes, à laquelle on a vérifié si le fichier csv source avait changé pour la dernière fois
+	lastTrollFileRead     int64         // la date, en secondes, à laquelle on a lu le fichier csv source pour la dernière fois
+	Guildes               []*GuildInfos
+	lastGuildFileCheck    int64
+	lastGuildFileRead     int64
+	Diplo                 *DiploGraph
+	NbTrolls              uint
+	lastDiploFileCheck    int64
+	lastDiploFileRead     int64
+	TrollsByKills         []*TrollInfos
 	TrollsByKillsMonstres []*TrollInfos
-	TrollsByKillsTrolls []*TrollInfos
-	AtkByKillsTrolls []*TrollInfos
+	TrollsByKillsTrolls   []*TrollInfos
+	AtkByKillsTrolls      []*TrollInfos
 }
 
 
@@ -103,32 +104,32 @@ func AsciiToUTF8(c []byte) string {
 func (m *TksManager) GetKillometreExtract(typeExtract string, startIndex int, pageSize int) (ke *KillometreExtract) {
 	m.checkTrollInfosLoaded()
 	var source []*TrollInfos
-	switch (typeExtract) {
-	case "TrollsByKills" :
-	source =  m.TrollsByKills
-	case "TrollsByKillsMonstres" :
-	source =  m.TrollsByKillsMonstres
-	case "TrollsByKillsTrolls" :
-	source =  m.TrollsByKillsTrolls
-	case "AtkByKillsTrolls" :
-	source =  m.AtkByKillsTrolls
-	default :
+	switch typeExtract {
+	case "TrollsByKills":
+		source = m.TrollsByKills
+	case "TrollsByKillsMonstres":
+		source = m.TrollsByKillsMonstres
+	case "TrollsByKillsTrolls":
+		source = m.TrollsByKillsTrolls
+	case "AtkByKillsTrolls":
+		source = m.AtkByKillsTrolls
+	default:
 		fmt.Println("Erreur GetKillometreExtract : type non reconnu : " + typeExtract)
 		return
 	}
-	if startIndex<0 || startIndex>len(source) {
+	if startIndex < 0 || startIndex > len(source) {
 		fmt.Printf("Erreur GetKillometreExtract : index invalide : %d\n", startIndex)
 		return
 	}
-	if pageSize<0 || pageSize>100 {
+	if pageSize < 0 || pageSize > 100 {
 		fmt.Printf("Erreur GetKillometreExtract : pageSize invalide : %d\n", pageSize)
 		return
-	} else if pageSize==0 {
-		pageSize  = 20
+	} else if pageSize == 0 {
+		pageSize = 20
 	}
 	fmt.Printf("startIndex=%d  pageSize=%d\n", startIndex, pageSize)
 	ke = new(KillometreExtract)
-	ke.Trolls = source[startIndex:pageSize+startIndex]
+	ke.Trolls = source[startIndex : pageSize+startIndex]
 	ke.StartIndex = startIndex
 	ke.StartIndex = startIndex
 	return
@@ -291,6 +292,7 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 			tks.Race = race(tokens[10])
 			tks.Niveau, _ = strconv.Atoui(tokens[11])
 			tks.IdGuilde, _ = strconv.Atoui(strings.Trim(tokens[12], " \n"))
+			tks.Num = trollId
 			if trollId >= len(m.Trolls) {
 				if trollId >= cap(m.Trolls) {
 					newSlice := make([]*TrollInfos, ((trollId+1)*5/4)+100)
@@ -311,18 +313,31 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 	}
 	m.lastTrollFileRead, _, _ = os.Time()
 	fmt.Println("TksManager : Fichier des trolls lu")
-	m.TrollsByKills = SortTrollInfos(m.Trolls, m.NbTrolls, func(troll *TrollInfos) uint { return troll.NbKillsTrolls+troll.NbKillsMonstres })
+	m.TrollsByKills = SortTrollInfos(m.Trolls, m.NbTrolls, func(troll *TrollInfos) uint { return troll.NbKillsTrolls + troll.NbKillsMonstres })
+	// on remplit le classement par kill, que l'on ne connait pas avant
+	classement := -1
+	nbKills := uint(0)
+	for i, t := range m.TrollsByKills {
+		if t == nil {
+			break
+		}
+		if t.NbKillsTrolls+t.NbKillsMonstres != nbKills {
+			classement = i + 1
+			nbKills = t.NbKillsTrolls + t.NbKillsMonstres
+		}
+		t.ClassementKills = uint(classement)
+	}
 	//~ fmt.Println("\nTrollsByKills :")
 	//~ for i, t := range(m.TrollsByKills) {
-		//~ fmt.Printf(" #%d %s NbKillsTrolls=%d NbKillsMonstres=%d tag : %s \n", i+1, t.Nom, t.NbKillsTrolls, t.NbKillsMonstres, t.ClassifChrall)
-		//~ if i==40 {
-			//~ break
-		//~ }
+	//~ fmt.Printf(" #%d %s NbKillsTrolls=%d NbKillsMonstres=%d tag : %s \n", i+1, t.Nom, t.NbKillsTrolls, t.NbKillsMonstres, t.ClassifChrall)
+	//~ if i==40 {
+	//~ break
+	//~ }
 	//~ }
 	m.TrollsByKillsMonstres = SortTrollInfos(m.Trolls, m.NbTrolls, func(troll *TrollInfos) uint { return troll.NbKillsMonstres })
-	m.TrollsByKillsTrolls = SortTrollInfos(m.Trolls, m.NbTrolls, func(troll *TrollInfos) uint { return troll.NbKillsTrolls+troll.NbKillsMonstres })
+	m.TrollsByKillsTrolls = SortTrollInfos(m.Trolls, m.NbTrolls, func(troll *TrollInfos) uint { return troll.NbKillsTrolls })
 	m.AtkByKillsTrolls = SortTrollInfos(m.Trolls, m.NbTrolls, func(troll *TrollInfos) uint {
-		if strings.Index(troll.ClassifChrall, "ATK")>=0 {
+		if strings.Index(troll.ClassifChrall, "ATK") >= 0 {
 			return troll.NbKillsTrolls
 		}
 		return 0

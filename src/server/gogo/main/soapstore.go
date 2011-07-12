@@ -41,7 +41,7 @@ func (store *MysqlStore) CheckBeforeSoapCall(db *mysql.Client, pour uint, troll 
 
 	// c'est bon, donc on va noter l'appel qui va suivre
 	sql = "insert into appel_soap (troll, pour, date, type) values (?, ?, ?, ?)"
-	
+
 	stmt, err = db.Prepare(sql)
 	if err != nil {
 		return

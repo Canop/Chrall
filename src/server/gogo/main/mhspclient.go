@@ -33,34 +33,34 @@ func FetchVueSp(numero uint, mdp_restreint string, avecTresors uint, avecLieux u
 	bline, _, _ := r.ReadLine()
 	line := string(bline)
 	currentType := ""
-	for line!="" {
-		if line[0]=='#' {
+	for line != "" {
+		if line[0] == '#' {
 			tokens := strings.Split(line, " ", 2)
-			if tokens[0]=="#DEBUT" && len(tokens)>1 {
-				currentType = (tokens[1])[0:len(tokens[1])-1]
+			if tokens[0] == "#DEBUT" && len(tokens) > 1 {
+				currentType = (tokens[1])[0 : len(tokens[1])-1]
 			}
 		} else {
 			tokens := strings.Split(line, ";", 5)
 			//fmt.Printf(" %s %+v\n", currentType, tokens)
 			item := new(SoapItem)
 			item.Numero, _ = strconv.Atoi(tokens[0])
-			if item.Numero>0 {
-				if currentType=="TROLL" && len(tokens)>3 {
+			if item.Numero > 0 {
+				if currentType == "TROLL" && len(tokens) > 3 {
 					item.Nom, _, _ = tksManager.GetNomRaceNiveauTroll(item.Numero)
 					item.PositionX, _ = strconv.Atoi(tokens[1])
 					item.PositionY, _ = strconv.Atoi(tokens[2])
 					item.PositionN, _ = strconv.Atoi(tokens[3])
-				} else if len(tokens)>4 {
+				} else if len(tokens) > 4 {
 					item.Nom = AsciiToUTF8([]uint8(tokens[1]))
 					item.PositionX, _ = strconv.Atoi(tokens[2])
 					item.PositionY, _ = strconv.Atoi(tokens[3])
 					item.PositionN, _ = strconv.Atoi(tokens[4])
 				}
-				if item.Nom!="" && currentType!="" {
+				if item.Nom != "" && currentType != "" {
 					item.Type = currentType
-					items =  append(items, item)
+					items = append(items, item)
 				}
-			}			
+			}
 		}
 		bline, _, _ = r.ReadLine()
 		line = string(bline)

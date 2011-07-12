@@ -262,11 +262,13 @@ RECENTS / A TESTER :
 EN COURS :
 ==========
 * apprendre le langage go
+* killomètre : classement & visu des tags hors extension
 
 TODO :
 ======
 P1 :
 ----
+* bulle TP : afficher les zones atteignables et pas seulement la distance (demande prop)
 * optm Chrall_analyseObjectTable : essayer le parcours direct du dom
 * éditeur pour la diplo trollienne (et la stocker en bd)
 * vue centrée des gowaps : ajouter un bouton pour limiter au niveau cible ("niveau -34")
