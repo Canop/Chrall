@@ -274,7 +274,6 @@ P1 :
 ----
 * rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
 * bulle TP : afficher les zones atteignables et pas seulement la distance (demande prop)
-* optm Chrall_analyseObjectTable : essayer le parcours direct du dom
 * éditeur pour la diplo trollienne (et la stocker en bd)
 * vue centrée des gowaps : ajouter un bouton pour limiter au niveau cible ("niveau -34")
 * mettre à jour la base pour les niveaux des monstres (faire un max ?)

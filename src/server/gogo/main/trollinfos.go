@@ -66,10 +66,10 @@ type DiplomaticRelation struct {
 }
 
 type KillometreExtract struct {
-	Trolls     []*TrollInfos
-	StartIndex int
+	Trolls             []*TrollInfos
+	StartIndex         int
 	SearchedTrollIndex int
-	Error string
+	Error              string
 }
 
 //===========================================================================================================================================
@@ -123,34 +123,34 @@ func (m *TksManager) GetKillometreExtract(typeExtract string, startIndex int, pa
 		return
 	}
 	searchedNum, _ := strconv.Atoi(searched)
-	if searchedNum>0 {
+	if searchedNum > 0 {
 		foundIndex := -1
-		for i, t := range (source) {
-			if t.Num==searchedNum {
+		for i, t := range source {
+			if t.Num == searchedNum {
 				foundIndex = i
 				break
 			}
 		}
-		pageNum := foundIndex/pageSize
-		startIndex = pageNum*pageSize
-		ke.SearchedTrollIndex = foundIndex-startIndex
-	} else if searched!="" {
+		pageNum := foundIndex / pageSize
+		startIndex = pageNum * pageSize
+		ke.SearchedTrollIndex = foundIndex - startIndex
+	} else if searched != "" {
 		upperSearched := strings.ToUpper(searched)
 		foundIndex := -1
-		for i, t := range (source) {
-			if strings.Index(strings.ToUpper(t.Nom), upperSearched)>=0 {
+		for i, t := range source {
+			if strings.Index(strings.ToUpper(t.Nom), upperSearched) >= 0 {
 				foundIndex = i
 				break
 			}
 		}
-		pageNum := foundIndex/pageSize
-		startIndex = pageNum*pageSize
-		ke.SearchedTrollIndex = foundIndex-startIndex
+		pageNum := foundIndex / pageSize
+		startIndex = pageNum * pageSize
+		ke.SearchedTrollIndex = foundIndex - startIndex
 	} else {
 		if startIndex < 0 || startIndex > len(source) {
 			ke.Error = fmt.Sprintf("Erreur GetKillometreExtract : index invalide : %d\n", startIndex)
 			return
-		}		
+		}
 	}
 	if pageSize < 0 || pageSize > 100 {
 		ke.Error = fmt.Sprintf("Erreur GetKillometreExtract : pageSize invalide : %d\n", pageSize)
