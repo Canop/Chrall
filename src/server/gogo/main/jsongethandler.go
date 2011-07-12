@@ -31,7 +31,7 @@ type JsonGetHandler struct {
 
 func (h *JsonGetHandler) servePageKillometre(w http.ResponseWriter, hr *http.Request) {
 	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
-	out := h.tksManager.GetKillometreExtract(GetFormValue(hr, "cat"), GetFormValueAsInt(hr, "startIndex"), GetFormValueAsInt(hr, "pageSize"))
+	out := h.tksManager.GetKillometreExtract(GetFormValue(hr, "cat"), GetFormValueAsInt(hr, "startIndex"), GetFormValueAsInt(hr, "pageSize"), GetFormValue(hr, "searched"))
 	bout, _ := json.Marshal(out)
 	fmt.Fprint(w, "chrall_receiveKillometreExtract(")
 	w.Write(bout)

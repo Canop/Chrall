@@ -262,15 +262,17 @@ RECENTS / A TESTER :
 
 <- v2.05
 
+* killomètre : classement & visu des tags hors extension
+
 EN COURS :
 ==========
 * apprendre le langage go
-* killomètre : classement & visu des tags hors extension
 
 TODO :
 ======
 P1 :
 ----
+* rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
 * bulle TP : afficher les zones atteignables et pas seulement la distance (demande prop)
 * optm Chrall_analyseObjectTable : essayer le parcours direct du dom
 * éditeur pour la diplo trollienne (et la stocker en bd)
@@ -300,6 +302,7 @@ P1 :
 
 P2 :
 ----
+* trollinfos/kills des atk : tronquer le tableau en comptant les ATK
 * fonction (menu droit ?) de recherche sur mountypedia (exemple : lieu)
 * options bulles/photos : illustration normale/petite illustration/pas d'illustration
 * bouton pour mettre à jour le profil d'un troll avec qui un partage est actif via les scripts publics soap (en respectant les limites d'appel)

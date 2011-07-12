@@ -68,6 +68,8 @@ type DiplomaticRelation struct {
 type KillometreExtract struct {
 	Trolls     []*TrollInfos
 	StartIndex int
+	SearchedTrollIndex int
+	Error string
 }
 
 //===========================================================================================================================================
@@ -101,7 +103,10 @@ func AsciiToUTF8(c []byte) string {
 }
 
 
-func (m *TksManager) GetKillometreExtract(typeExtract string, startIndex int, pageSize int) (ke *KillometreExtract) {
+func (m *TksManager) GetKillometreExtract(typeExtract string, startIndex int, pageSize int, searched string) (ke *KillometreExtract) {
+	// comme il n'y a pas la moindre structure d'index, les recherches, en particulier sur le nom, sont forcément lentes
+	ke = new(KillometreExtract)
+	ke.SearchedTrollIndex = -1
 	m.checkTrollInfosLoaded()
 	var source []*TrollInfos
 	switch typeExtract {
@@ -114,23 +119,47 @@ func (m *TksManager) GetKillometreExtract(typeExtract string, startIndex int, pa
 	case "AtkByKillsTrolls":
 		source = m.AtkByKillsTrolls
 	default:
-		fmt.Println("Erreur GetKillometreExtract : type non reconnu : " + typeExtract)
+		ke.Error = "Erreur GetKillometreExtract : type non reconnu : " + typeExtract
 		return
 	}
-	if startIndex < 0 || startIndex > len(source) {
-		fmt.Printf("Erreur GetKillometreExtract : index invalide : %d\n", startIndex)
-		return
+	searchedNum, _ := strconv.Atoi(searched)
+	if searchedNum>0 {
+		foundIndex := -1
+		for i, t := range (source) {
+			if t.Num==searchedNum {
+				foundIndex = i
+				break
+			}
+		}
+		pageNum := foundIndex/pageSize
+		startIndex = pageNum*pageSize
+		ke.SearchedTrollIndex = foundIndex-startIndex
+	} else if searched!="" {
+		upperSearched := strings.ToUpper(searched)
+		foundIndex := -1
+		for i, t := range (source) {
+			if strings.Index(strings.ToUpper(t.Nom), upperSearched)>=0 {
+				foundIndex = i
+				break
+			}
+		}
+		pageNum := foundIndex/pageSize
+		startIndex = pageNum*pageSize
+		ke.SearchedTrollIndex = foundIndex-startIndex
+	} else {
+		if startIndex < 0 || startIndex > len(source) {
+			ke.Error = fmt.Sprintf("Erreur GetKillometreExtract : index invalide : %d\n", startIndex)
+			return
+		}		
 	}
 	if pageSize < 0 || pageSize > 100 {
-		fmt.Printf("Erreur GetKillometreExtract : pageSize invalide : %d\n", pageSize)
+		ke.Error = fmt.Sprintf("Erreur GetKillometreExtract : pageSize invalide : %d\n", pageSize)
 		return
 	} else if pageSize == 0 {
 		pageSize = 20
 	}
-	fmt.Printf("startIndex=%d  pageSize=%d\n", startIndex, pageSize)
-	ke = new(KillometreExtract)
+	//fmt.Printf("startIndex=%d  pageSize=%d\n", startIndex, pageSize)
 	ke.Trolls = source[startIndex : pageSize+startIndex]
-	ke.StartIndex = startIndex
 	ke.StartIndex = startIndex
 	return
 }
