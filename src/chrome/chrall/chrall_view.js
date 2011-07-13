@@ -140,6 +140,15 @@ function Chrall_makeGridHtml() {
 						}
 					}
 				}
+				if (cell.walls) {
+					for (var i=0; i<cell.walls.length; i++) {
+						var t = cell.walls[i];
+						
+						if (c>0) cellContent[c++] = "<br name='murs' class=ch_wall>";
+							cellContent[c++] = ">" + "<a name='murs' class=ch_wall";
+							cellContent[c++] = ">"+t.z+": "+t.name+"</a>";
+					}
+				}
 				if (cell.objects) {
 					//> on regroupe les objets par étage et pour chaque étage on les compte afin de ne pas afficher des milliers de lignes quand une tanière est écroulée
 					var objectsByLevel = {};
@@ -306,8 +315,21 @@ function Chrall_analysePlaceTable(table) {
 }
 
 function Chrall_analyseWallTable(table) {
-	alert("Traitement des couloirs");
-	
+	$(table).find("tr.mh_tdpage").each(
+		function(){
+			var thing = new Wall();
+			var cells = $(this).find("td");
+			//alert( $(cells[0]).text() + " / " + $(cells[1]).text() + " / " + $(cells[2]).text() + " / " + $(cells[3]).text() + " / " + $(cells[4]).text() + " ");
+			thing.id = parseInt($(cells[0]).text());
+			var nameCell = $(cells[1]);
+			thing.setName(nameCell.text());
+			thing.x = parseInt($(cells[2]).text());
+			thing.y = parseInt($(cells[3]).text());
+			thing.z = parseInt($(cells[4]).text());
+			grid.getCellNotNull(thing.x, thing.y).addWall(thing);
+			//grid.nbWallsInView++;
+		}
+	);	
 }
 
 
@@ -393,7 +415,7 @@ function Chrall_analyseView() {
 				Chrall_analyseCenotaphTable($(this))
 			break;
 			case "murs":
-				//Chrall_analyseWallTable($(this))
+				Chrall_analyseWallTable($(this))
 			break;
 			default: 
 				alert("Cet écran de Vue n'est pas conforme aux écrans de vue classiques de MountyHall. Il n'a donc pas été totalement traité. Contacter un développeur Chrall pour voir ce qu'il y a moyen de faire. Partie non traitée: \"" + $(this).find("a[name]").first().text() + "\"" )
