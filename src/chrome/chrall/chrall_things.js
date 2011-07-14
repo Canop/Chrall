@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////// Characteristic
+﻿//////////////////////////////////////////////////////////////////////// Characteristic
 /**
  * une caractéristique est décomposée en :
  *  - diceNumber : un nombre de dés
@@ -13,6 +13,7 @@ function Characteristic() {
 Characteristic.prototype.readRow = function(row) {
 	var cells = $(row).find("td");
 	var s = $(cells[1]).text().trim();
+	s = s.split('/')[0]; // pour éliminer la seconde partie dans 1 D3 / 2 D3
 	var tokens = Chrall_tokenize(s.replace('D', ' '));
 	if (tokens.length>=2) {
 		this.diceNumber = parseInt(tokens[0]);
@@ -202,7 +203,6 @@ Place.prototype.setName = function(fullName){
 
 /**
  * Wall hérite de Thing.
- * Sert pour les murs et couloirs rencontrés dans les Pocket Hall de type labyrinthe
  * Params :
  *  - isCouloir (on peut se déplacer dedans)
  *  - isMur (on rebondit dessus)
