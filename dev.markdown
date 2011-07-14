@@ -274,6 +274,7 @@ TODO :
 ======
 P1 :
 ----
+* bugs dans chrall_equipment.js
 * gérer les caractéristiques x/x+1 D3 + y + z
 * rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
 * éditeur pour la diplo trollienne (et la stocker en bd)
