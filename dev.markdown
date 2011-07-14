@@ -263,6 +263,8 @@ RECENTS / A TESTER :
 <- v2.05
 
 * killomètre : classement & visu des tags hors extension
+* améliorer la lisibilité de la police dans les bulles
+* bulle TP : afficher les zones atteignables et pas seulement la distance (demande prop)
 
 EN COURS :
 ==========
@@ -272,8 +274,8 @@ TODO :
 ======
 P1 :
 ----
+* gérer les caractéristiques x/x+1 D3 + y + z
 * rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
-* bulle TP : afficher les zones atteignables et pas seulement la distance (demande prop)
 * éditeur pour la diplo trollienne (et la stocker en bd)
 * vue centrée des gowaps : ajouter un bouton pour limiter au niveau cible ("niveau -34")
 * mettre à jour la base pour les niveaux des monstres (faire un max ?)
