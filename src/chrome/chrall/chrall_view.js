@@ -84,7 +84,7 @@ function Chrall_makeGridHtml() {
 			var cell = grid.getCellOrNull(x, y);
 			var hasHole = false;
 			var cellContent = [];
-			var c = 0;
+			var c = 0; 
 			var cellId=null;
 			//var cellMenuInfos = null;
 			if (x===player.x && y===player.y) {
@@ -136,17 +136,8 @@ function Chrall_makeGridHtml() {
 						if (c>0) cellContent[c++] = "<br name='lieux' class=ch_place>";
 							cellContent[c++] = "<a name='lieux' class=ch_place";
 							if (t.hasLink) cellContent[c++] = ' href="javascript:Enter(\'/mountyhall/View/TaniereDescription.php?ai_IDLieu='+t.id+'\',750,500)"';
-							cellContent[c++] = ">"+t.z+": "+t.name+"</a>";
+							cellContent[c++] = ">"+t.z+": "+t.name+"</a>"
 						}
-					}
-				}
-				if (cell.walls) {
-					for (var i=0; i<cell.walls.length; i++) {
-						var t = cell.walls[i];
-						
-						if (c>0) cellContent[c++] = "<br name='murs' class=ch_wall>";
-							cellContent[c++] = ">" + "<a name='murs' class=ch_wall";
-							cellContent[c++] = ">"+t.z+": "+t.name+"</a>";
 					}
 				}
 				if (cell.objects) {
@@ -197,6 +188,69 @@ function Chrall_makeGridHtml() {
 					}					
 				}
 			}
+			
+			alert("avant");
+			// S'il y a un mur, c'est probablement qu'on est dans un labyrinthe et que la vue est limitée à 1.
+			// On va donc se permettre d'afficher toutes les cases de la même taille pour que ce soit plus joli.
+			// On va aussi mettre une image de mur en arrière fond pour les cases qui en sont
+			// A noter qu'on se limite au minimum, mais je pense que ça suffit. (Dans la version normale toujours accessible dans l'onglet murs et couloirs d'ailleurs,, il y a des images de trolls, de lieux, ...)
+			if (cell.walls) {
+				alert("dedans0");
+				for (var i=0; i<cell.walls.length; i++) {
+					alert("dedans");
+					var t = cell.walls[i];
+					
+					if (c>0) cellContent[c++] = "<br name='murs' class=ch_wall>";
+					if (t.name == "Mur") {
+						//On met une image de mur en background et on n'affiche rien dans la case, chrall suffit pour obtenir les coordonnées.
+						cellContent[c++] = '<div style="background-image:url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/mur.gif);background-repeat:repeat;min-height:160;min-width:160"/>';
+					} else {						
+						// Compte le nombre d'éléments dans la case. L'utilité sera d'estimer plus ou moins la hauteur de la case en fonction de ce qu'elle contient.
+						// On aurait pu le faire avce un compteur tout au long du parcours global des éléments, mais comme l'utilité sera très spécifique au labyrinthe, autant le faire ici.
+						var elementsNumber = 0;
+						if (cell.trolls) elementsNumber += cell.trolls.length;
+						if (cell.monsters) elementsNumber += cell.monsters.length;
+						if (cell.places) elementsNumber += cell.places.length;
+						if (cell.objects) elementsNumber += cell.objects.length;
+						if (cell.mushrooms) elementsNumber += cell.mushrooms.length;
+						if (cell.cenotaphs) elementsNumber += cell.cenotaphs.length;
+						
+						// On affiche le couloir dans un div dont la hauteur est relative au nombre d'éléments dans cette case.
+						// C'est très approcimatif, clairement pas au pixel prêt, mais ça permet plus ou moins de garder des cases carrées tant qu'il n'y a pas trop déléments dedans.
+						// (Par exemple, ça ne prend pas en compte qu'un élément est affiché ou non pour définir la hauteur de base.)
+						// A noter qu'avec ce fonctionnement, les éléments d'un couloir sont listés en haut de la case, et en sont donc plus centrés.
+						// Je n'affiche pas le z de profondeur avant le mot couloir. Un labyrinthe est plat, et de toute façon on a encore l'info pour tous les autres trucs de la vue, notamment soi-même dans la case centrale.
+						switch (elementsNumber) {
+							case 0:
+								cellContent[c++] = '<div style="min-height:160;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+							break;
+							case 1:
+								cellContent[c++] = '<div style="min-height:140;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+							break;
+							case 2:
+								cellContent[c++] = '<div style="min-height:120;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+							break;
+							case 3:
+								cellContent[c++] = '<div style="min-height:100;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+							break;
+							case 4:
+								cellContent[c++] = '<div style="min-height:80;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+							break;
+							case 5:
+								cellContent[c++] = '<div style="min-height:60;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+							break;
+							case 7:
+								cellContent[c++] = '<div style="min-height:400;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+							break;
+							default: 
+								cellContent[c++] = '<div style="min-height:20;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+							break;
+						}	
+					}
+				}
+			}
+			
+			alert("après");
 
 			html[h++] = "<td class=d"+((hdist-horizontalViewLimit+20001)%2);
 			html[h++] = " grid_x=" + x;
@@ -487,6 +541,8 @@ function Chrall_analyseAndReformatView() {
 
 	var time_before_grid = (new Date()).getTime(); // <= prof
 	
+	alert("1");
+	
 	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 	//var tables = $("table.mh_tdborder");
 	var html = []
@@ -535,6 +591,8 @@ function Chrall_analyseAndReformatView() {
 	//html[h++] = "<div id=tabGogol class=tab_content scroll></div>";
 	html[h++] = "</div>";
 	
+	
+	alert("2")
 	var time_after_grid_building = (new Date()).getTime(); // <= prof
 	
 	$($("table.mh_tdborder")[0]).parent().parent().prepend(html.join(''));	
@@ -572,6 +630,8 @@ function Chrall_analyseAndReformatView() {
 		$(activeTab).fadeIn("fast");
 		return false;
 	});
+	
+	alert("3")
 	
 	var time_after_grid_append = (new Date()).getTime(); // <= prof
 	
