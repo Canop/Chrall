@@ -32,7 +32,7 @@ Chrall est une extension Chrome pour le jeu <a href=http://www.mountyhall.com>Mo
 
 
 <h2>Installation</h2>
-<p><a href=chrall_v002_004.crx class=install>Installer Chrall</a> Version actuelle : <span id=version>2.4</span></p>
+<p><a href=chrall_v002_005.crx class=install>Installer Chrall</a> Version actuelle : <span id=version>2.5</span></p>
 <p id=browserInfos></p>
 
 
@@ -47,15 +47,22 @@ Un forum a été mis en place : <a href=fofo/>le canofofo</a>.
 <br>On discute aussi de Chrall <a href="http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=21&TopicID=144172">sur le forum de Mounty Hall</a>.
 </p>
 
+<h2>Les outils annexes de Chrall</h2>
+<p>
+Le <a href=killometre.html>Kill-O-Mètre</a> vous permet de savoir qui est TK, MK ou ATK et de consulter les classements par kill.
+</p>
+<p>
+Le <a href="http://canop.org:8000/chrall/bestiaire">Bestiaire</a> vous donne les caractéristiques des monstres.
+</p>
+<p>
+Le <a href="http://canop.org:8000/chrall/puits">Puits</a> vous permet d'enrichir le bestiaire.
+</p>
+
+
 <h2>Développement</h2>
 <p>
 Chrall est open-source.<br>
 Vous pouvez participer au développement, signaler des bugs, ou simplement consulter les sources par curiosité via <a href=http://www.github.com/Canop/Chrall>github</a>.
-</p>
-
-<h2>Bestiaire & co</h2>
-<p>
-Vous pouvez <a href="http://canop.org:8000/chrall/bestiaire">consulter le bestiaire</a> ou <a href="http://canop.org:8000/chrall/puits">y contribuer</a>.
 </p>
 
 </div> <!-- content_wrapper -->

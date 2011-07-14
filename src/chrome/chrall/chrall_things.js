@@ -13,6 +13,7 @@ function Characteristic() {
 Characteristic.prototype.readRow = function(row) {
 	var cells = $(row).find("td");
 	var s = $(cells[1]).text().trim();
+	s = s.split('/')[0]; // pour éliminer la seconde partie dans 1 D3 / 2 D3
 	var tokens = Chrall_tokenize(s.replace('D', ' '));
 	if (tokens.length>=2) {
 		this.diceNumber = parseInt(tokens[0]);

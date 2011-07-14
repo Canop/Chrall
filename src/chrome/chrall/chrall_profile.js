@@ -282,7 +282,7 @@ function Chrall_analyseAndReformatMainCharacteristicsTable(table) {
 	player.damage = new Characteristic().readRow(rows[3]);
 	$(rows[3]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne AN : " + player.damage.getMean() + "/" + player.damage.getCriticalMean() + "</td>");
 	player.armor = new Characteristic().readRow(rows[4]);
-	$(rows[4]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Total : " + player.armor.getMean() + "</td>");
+	$(rows[4]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne : " + player.armor.getMean() + "</td>");
 	var agility = player.dodge.diceNumber+player.regeneration.diceNumber;
 	var stabDices = (Math.floor(agility/3)*2);
 	var stabBM = (player.dodge.physicalBonus+player.dodge.magicalBonus);

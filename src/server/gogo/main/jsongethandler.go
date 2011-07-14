@@ -29,6 +29,16 @@ type JsonGetHandler struct {
 	tksManager *TksManager
 }
 
+func (h *JsonGetHandler) servePageKillometre(w http.ResponseWriter, hr *http.Request) {
+	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
+	out := h.tksManager.GetKillometreExtract(GetFormValue(hr, "cat"), GetFormValueAsInt(hr, "startIndex"), GetFormValueAsInt(hr, "pageSize"), GetFormValue(hr, "searched"))
+	bout, _ := json.Marshal(out)
+	fmt.Fprint(w, "chrall_receiveKillometreExtract(")
+	w.Write(bout)
+	fmt.Fprint(w, ")")
+}
+
+
 func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Request) {
 	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
 	out := GetMessage(GetFormValue(hr, "TrollId"), GetFormValue(hr, "ChrallVersion"))
@@ -232,6 +242,8 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	}
 	if action == "get_monster_names" {
 		h.serveAutocompleteMonsterNames(w, hr)
+	} else if action == "get_page_killometre" {
+		h.servePageKillometre(w, hr)
 	} else if action == "get_extract" {
 		h.serveBestiaryExtractHtml(w, hr)
 	} else if action == "get_troll_info" {

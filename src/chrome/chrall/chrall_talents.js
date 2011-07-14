@@ -402,9 +402,11 @@ function getBubbleContentForSort(name) {
 			var s = player.sight.diceNumber;
 			var f = function(mm) {
 				var d = Math.ceil((Math.sqrt(19+8*(Math.floor(mm/5)+3))-7)/2);
+				var dh = (d+20+s);
+				var dv = Math.floor(d/3+3);
 				var html = "<table>";
-				html += "<tr><td>Portée horizontale</td><td> : " + (d+20+s) + "</td></tr>";
-				html += "<tr><td>Portée verticale</td><td> : " + Math.floor(d/3+3) + "</td></tr>";
+				html += "<tr><td>Portée horizontale</td><td> : " + dh + "</td><td>&rArr; &nbsp; "+(player.x-dh)+" &le; X &le; "+(player.x+dh)+"</td><td>| &nbsp; "+(player.y-dh)+" &le; Y &le; "+(player.y+dh)+"</td></tr>";
+				html += "<tr><td>Portée verticale</td><td> : " + dv + "</td><td>&rArr; &nbsp; "+(player.z-dv)+" &le; N &le; "+Math.min(0, player.z+dv)+"</td></tr>";
 				html += "</table>";
 				return html;
 			}

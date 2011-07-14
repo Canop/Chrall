@@ -320,7 +320,7 @@ function Chrall_analyseTrollTable(table) {
 		troll.z = parseInt($(cells[i++]).text());
 		grid.getCellNotNull(troll.x, troll.y).addTroll(troll);
 		grid.nbTrollsInView++;
-		$tr.prepend('<td align=center><input type=checkbox name=cb_troll value='+troll.id+'></td>');
+		$tr.prepend('<td align=center><input type=checkbox name=cb_troll value='+troll.id+'></td>'); // TODO : sur les grosses tables on pourrait peut-être envisager un detach() ? 
 	}
 	$(rows[2]).prepend($('<td align=center width=20></td>'));
 	var html='<td colspan=10 height=25><script>';
@@ -610,7 +610,6 @@ function Chrall_analyseAndReformatView() {
 	$("#tabPartages").append(makePartageTables());
 	makeSearchPanel($("#tabRecherche"));
 	$(".tab_content").hide();
-	
 	if (localStorage['tab_view']) {
 		$('ul.tabs li:has(a[href="#'+localStorage['tab_view']+'"])').addClass("active").show();
 		$('#'+localStorage['tab_view']).show();
@@ -619,17 +618,23 @@ function Chrall_analyseAndReformatView() {
 		$("ul.tabs li:first").addClass("active").show();
 		$(".tab_content:first").show();
 	}
-	
-	$("ul.tabs li").click(function() {
+	var changeTab = function($tab) {
 		hideOm(); // fermeture des éventuels objectMenus de la grille
 		$("ul.tabs li").removeClass("active");
-		$(this).addClass("active");
+		$tab.addClass("active");
 		$(".tab_content").hide();
-		var activeTab = $(this).find("a").attr("href");
+		var activeTab = $tab.find("a").attr("href");
 		window.scroll(0, 0);
 		$(activeTab).fadeIn("fast");
-		return false;
-	});
+	}
+	$("ul.tabs li").click(function() { changeTab($(this)); });
+	// on corrige les liens internes, pour qu'ils agissent sur les onglets
+	$('a[href$="#monstres"]').click(function() { changeTab($('a[href="#tabMonsters"]').parent()); });
+	$('a[href$="#trolls"]').click(function() { changeTab($('a[href="#tabTrolls"]').parent()); });
+	$('a[href$="#tresors"]').click(function() { changeTab($('a[href="#tabObjects"]').parent()); });
+	$('a[href$="#champignons"]').click(function() { changeTab($('a[href="#tabMushrooms"]').parent()); });
+	$('a[href$="#lieux"]').click(function() { changeTab($('a[href="#tabPlaces"]').parent()); });
+	$('a[href$="#cadavre"]').click(function() { changeTab($('a[href="#tabCenotaphs"]').parent()); });
 	
 	alert("3")
 	
@@ -727,7 +732,6 @@ function Chrall_analyseAndReformatView() {
 	// On corrige si nécessaire la position affichée dans le menu de gauche et on signale
 	// cette position au script de fond
 	updateTroll();
-	
 	
 	
 }

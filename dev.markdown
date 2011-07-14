@@ -256,6 +256,16 @@ RECENTS / A TESTER :
 
 <- v2.04
 
+* liens ancres MH en haut des tables -> changement d'onglet [demande de Laz]
+* affichage dans les actions, le cas échéant, de la possibilité de creuser [dév Chouia/Dragtara]
+* total des BM du matériel porté [dév Chouia/Dragtara]
+
+<- v2.05
+
+* killomètre : classement & visu des tags hors extension
+* améliorer la lisibilité de la police dans les bulles
+* bulle TP : afficher les zones atteignables et pas seulement la distance (demande prop)
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -264,16 +274,20 @@ TODO :
 ======
 P1 :
 ----
+* bugs dans chrall_equipment.js
+* gérer les caractéristiques x/x+1 D3 + y + z
+* rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
+* éditeur pour la diplo trollienne (et la stocker en bd)
+* vue centrée des gowaps : ajouter un bouton pour limiter au niveau cible ("niveau -34")
+* mettre à jour la base pour les niveaux des monstres (faire un max ?)
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
-* options bulles/photos : illustration normale/petite illustration/pas d'illustration
+* gowaps/ordres : intégrer le bouton de mise à jour de vue
 * bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
-* recherche : trier par distance (un peu compliqué en raison du tri par date de vue)
 * Vue/Partages : mise à jour de la position des trolls lors de la mise à jour de la vue
-* table de trolls et de monstres : bouton de vue zoomée (si possible sans compte chrall et sans passer par le gogochrall...)
+* table de trolls et de monstres : bouton de vue zoomée
 * CDM : gestion du vol et du sang-froid (entre autres, voir http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=5&TopicID=145805)
 * le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
 * indiquer directement dans la bulle si un monstre est insulté (et par qui)
-* liens ancres MH en haut des tables : changer d'onglet.
 * événements des monstres : si partage indiquer les caracts des hypno
 * bug : grille : les dudus et les darklings sont représentés à l'identique (e.g. D24) -> utiliser 'd' ?
 * bulles des monstres : indiquer leur jet de stabilité (j'attends la présence d'un darkling sur le fofo)
@@ -281,16 +295,18 @@ P1 :
 * affichage dans la bulle des trolls (si partage actif) des infos principales PA/PV/DLA
 * partage : positionnement des pièges
 * recherche de monstres ou de compo particuliers dans la vue (n'oublions pas les toms en mission...)
+* recherche : trier par distance (un peu compliqué en raison du tri par date de vue)
 * partage : cumul des pistages avec représentation graphique (modulaire car on ne peut pas détecter un mouvement de monstre)
 * partage : cumul des recherches de filon
 * essayer gb (code.google.com/p/go-gb/)
-* recherche par guilde
 * recherche par niveau de monstre pour mission
 * recherche : liste sauvegardée de cibles (tékas, monstres, copains, etc.)
 
 P2 :
 ----
+* trollinfos/kills des atk : tronquer le tableau en comptant les ATK
 * fonction (menu droit ?) de recherche sur mountypedia (exemple : lieu)
+* options bulles/photos : illustration normale/petite illustration/pas d'illustration
 * bouton pour mettre à jour le profil d'un troll avec qui un partage est actif via les scripts publics soap (en respectant les limites d'appel)
 * grille/filtre : sous-cochage par type de trésor
 * affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
@@ -304,6 +320,7 @@ P2 :
 * lien pour les lieux proches bricotrolls
 * affichage quelque part du nombre de CDM transmises via Chrall
 * grille : marquer les trolls ennemis ou amis
+* recherche par guilde
 * cron : sauvegardes de la bd
 
 P3 :

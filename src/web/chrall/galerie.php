@@ -55,7 +55,7 @@ ini_set('default_charset', 'utf-8');
 <br>
 <img class=screenshot src=screens/add.png>
 <br>
-<img class=screenshot src=screens/teleport.png>
+<img class=screenshot src=screens/bulle_TP.png>
 
 <h2>Les profils des autres trolls</h2>
 <p>Lorsque vous consultez le profil d'un troll, que ce soit depuis le jeu ou depuis le forum, vous pouvez consulter la "bulle Chrall" afin d'obtenir les informations qui ne sont pas lisibles sur le profil. Il suffit pour cela d'approcher la souris du coin en haut à gauche de la fenêtre :</p>

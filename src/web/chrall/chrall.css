@@ -1,6 +1,6 @@
 body {
 	background-color: #EFE0BF;
-	font-family: Lucida Sans Unicode, Verdana;
+	font-family: Arial;
 	font-size: 14px;
 	padding: 0px;
 	margin: 0px;
@@ -29,12 +29,10 @@ div#title_stripe {
 	box-shadow: 0px 10px 15px #666;
 	-moz-box-shadow: 0px 10px 15px #666;
 	-webkit-box-shadow: 0px 10px 15px #666;
-	font-family: Lucida Sans Unicode, Verdana;
 	color: white;
 	font-size: 20px;
 }
 div#title_stripe a {
-	font-family: Lucida Sans Unicode, Verdana;
 	color: white;
 	font-size: 20px;
 	text-decoration: none;
@@ -165,21 +163,21 @@ img.screenshot {
 }
 
 a.install {
-				-o-background-size: 100% 100%;
-				-moz-background-size: 100% 100%;
-				-webkit-background-size: 100% 100%;
-				background-size: 100% 100%;
-				background: -moz-linear-gradient(
-					top,
-					dodgerblue,
-					indigo
-				);
-				background: -webkit-gradient(
-					linear,
-					left top, left bottom,
-					from(dodgerblue),
-					to(indigo)
-				);
+	-o-background-size: 100% 100%;
+	-moz-background-size: 100% 100%;
+	-webkit-background-size: 100% 100%;
+	background-size: 100% 100%;
+	background: -moz-linear-gradient(
+		top,
+		dodgerblue,
+		indigo
+	);
+	background: -webkit-gradient(
+		linear,
+		left top, left bottom,
+		from(dodgerblue),
+		to(indigo)
+	);
 	margin : 4px;
 	padding: 8px;
 	border-radius: 10px;
@@ -191,4 +189,8 @@ a.install {
 }
 a.install:hover {
 	color: orange;
+}
+
+td.tab {
+	font-size: 14px;
 }
