@@ -273,13 +273,13 @@ DONE :
 * bulle TP : afficher les zones atteignables et pas seulement la distance (demande prop)
 * corrections de divers bugs du calcul des BM du matériel
 * gestion des caractéristiques x/x+1 D3 + y + z (caractéristiques dont l'effet n'est pas immédiat à l'"apprentissage")
+* correction bug armes à deux mains sur les BM de l'équipement
 
 
 EN COURS :
 ==========
 * apprendre le langage go
 * (dragt) vue dans le labyrinthe
-* (dragt) correction bug armes à deux mains sur les BM de l'équipement
 
 TODO :
 ======
