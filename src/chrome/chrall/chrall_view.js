@@ -439,6 +439,7 @@ function Chrall_analyseView() {
 	}
 	horizontalViewLimit = Math.max(horizontalViewLimit, 0);
 	
+	
 	//> initialisation de la grille
 	grid = new Grid(player.x, player.y, horizontalViewLimit);
 	
@@ -517,6 +518,9 @@ function Chrall_analyseView() {
 function Chrall_analyseAndReformatView() {
 	var time_enter = (new Date()).getTime(); // <= prof
 	
+	var laby = ($("table.mh_tdborder:has(a[name=cadavre])").length > 0);
+	alert(laby);
+	
 	// prof : les quelques suppressions qui suivent peuvent prendre près de 2 secondes avec une vue de 30
 	//> on vire la frise latérale
 	$($("td[width=55]")).remove();
@@ -544,7 +548,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<ul class=tabs view>";
 	html[h++] = "<li><a href=#tabGrid>Grille</a></li>";
 	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
-	if ($("a[name=murs]").length > 0 ) {
+	if (laby) {
 		html[h++] = "<li><a href=#tabWalls>Murs et couloirs</a></li>";
 	}	
 	html[h++] = "<li><a href=#tabTrolls>Trolls ("+grid.nbTrollsInView+")</a></li>";
@@ -566,7 +570,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "</div>";
 	html[h++] = "</div>";
 	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
-	if ($("a[name=murs]").length > 0 ) {
+	if (laby) {
 		html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
 	}
 	html[h++] = "<div id=tabTrolls class=tab_content scroll></div>";
@@ -579,7 +583,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
 	html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
 	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
-	if ($("a[name=murs]").length > 0 ) {
+	if (laby) {
 		html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
 	}
 	//html[h++] = "<div id=tabGogol class=tab_content scroll></div>";
@@ -590,7 +594,7 @@ function Chrall_analyseAndReformatView() {
 	$($("table.mh_tdborder")[0]).parent().parent().prepend(html.join(''));	
 	$("#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
-	if ($("a[name=murs]").length > 0 ) {
+	if (laby) {
 		$("#tabWalls").append($("table.mh_tdborder:has(a[name=murs])").first());		
 	}
 	$("#tabMonsters").append($("table.mh_tdborder:has(a[name=monstres])").first());
