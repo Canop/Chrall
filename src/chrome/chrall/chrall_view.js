@@ -519,7 +519,6 @@ function Chrall_analyseAndReformatView() {
 	var time_enter = (new Date()).getTime(); // <= prof
 	
 	var laby = ($("table.mh_tdborder:has(a[name=cadavre])").length > 0);
-	alert(laby);
 	
 	// prof : les quelques suppressions qui suivent peuvent prendre près de 2 secondes avec une vue de 30
 	//> on vire la frise latérale
