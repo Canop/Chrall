@@ -1,15 +1,6 @@
 ﻿
-/**
- * 
- * bugs restant :
- * - pas d'affichage du % sur les trucs genre "Connaissance de Analyse Anatomique : +2 %"
- * - CRITIQUE : mauvais traitement des armes à 2 mains (on lit deux fois). 
- * 
- */ 
-
 // Parcoure une liste texte complete de Bonus malus et renvoie une map en fonction des caracs avec comme valeur la somme des BM et la somme des BMM.
-function parseEquipmentBm(s) {
-	var effects = s.split('|');
+function mergeEquipmentBm(effects) {
 	var map = new Object();
 	for (var ie=0; ie<effects.length; ie++) {
 		var nameAndValues = effects[ie].split(':');
@@ -19,7 +10,17 @@ function parseEquipmentBm(s) {
 		} else {
 			var bmName = nameAndValues[0].trim();
 			var pattern = /\\/;
-			var bmValues = nameAndValues[1].trim().split(pattern);  //Sépare physique et magique
+			var bmValuesAndUnit = nameAndValues[1];
+			var bmValues = bmValuesAndUnit;
+			// on essaye de détecter l'unité
+			var unit = '';
+			var tokens = bmValuesAndUnit.trim().split(' ');
+			var lastToken=tokens[tokens.length-1];
+			if (isNaN(parseInt(lastToken))) {
+				unit = ' '+lastToken;
+				bmValues = tokens.slice(0, tokens.length-1).join(' ');
+			}
+			bmValues = bmValues.split(pattern);
 			//Si la carac n'existe pas deja on cree une nouvelle carac dans la map, sinon on additionne.
 			if (!map[bmName]){
 				if (bmValues.length>1){
@@ -38,6 +39,7 @@ function parseEquipmentBm(s) {
 					}
 				}
 			}
+			map[bmName].unit = unit;
 		}	
 	}
 	return map;
@@ -74,14 +76,7 @@ function constructTotalEquipmentBm(map) {
 			}
 		}
 		
-		/* Certaines carac ont une unité affichée*/
-		if ( (name == 'MM') || (name == 'RM') ) {
-			caracUnit = "% ";
-		} else if ( name == 'TOUR') {
-			caracUnit = "min ";
-		}
-			
-		s += name + " " + physValue + magValue + caracUnit + "| ";
+		s += name + " " + physValue + magValue + values.unit + "| ";
 		values.done = true;
 	};
 	
@@ -103,19 +98,26 @@ function constructTotalEquipmentBm(map) {
  
 //Dans la page d'équipement, ajoute le total des Bonus Malus de l'équipement porté
 function Chrall_analyseAndReformatEquipment() {
-  
-	// Recupere en string tous les bonus malus de l'equipement porte			   
-	var textEqBm = $('table.TableEq td:contains("Etat") b, table.TableEq li').map(function(){
-		return $(this).text();
-	}).get().join('|');
-	
-	// Nettoie la string de tous les bonus malus recuperes pour ne garder que les noms des caracs et les valeurs				   
-	textEqBm = textEqBm.replace(/([%]|min)/g,'').trim();
-	
-	// Parcourt la liste des bonus malus et recupere une map de chaque carac impactee par des bonus malus.
-	// chaque carac référencant une petite table de deux entiers: le total pour la valeur physique et la valeur magique.
-	// S'il n'y a pas de valeur magique, cette valeur n'est pas definie.
-	var mapEqBm = parseEquipmentBm(textEqBm);
+
+	var eqCells = $('table.TableEq td:contains("Etat")');
+	var ids = {}; // clé : id matos
+	var effects = []; // chaque élément de ce tableau est une chaine de la forme "nomEffet:valeurEffet"
+	eqCells.each(function() {
+		var $this = $(this);
+		var id = $this.find('input[name="ai_IDObjet"]').val();
+		if (id && !ids[id]) { // il y a un id, et c'est la première fois qu'on le rencontre (il pourrait être en double dans le cas d'une arme à 2 mains)
+			var bcontent = $this.find('b');
+			if (bcontent.length>0) effects = effects.concat(bcontent.text().split('|'));
+			effects = effects.concat(
+				$this.find('li').map(function(){
+					return $(this).text();
+				}).get()
+			);
+			ids[id]=true;
+		}
+	});
+
+	var mapEqBm = mergeEquipmentBm(effects);
 	
 	//Construit la string des bonus malus cumule de l'equipement que l'on veut afficher dans la page
 	var textTotalEqBm = constructTotalEquipmentBm(mapEqBm);

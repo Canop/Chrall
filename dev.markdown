@@ -1,5 +1,11 @@
-RECENTS / A TESTER :
-====================
+Ce document liste :
+
+* DONE : ce qui a été fait et les versions par ordre chronologique
+* EN COURS : ce qui est... en cours ^^ 
+* TODO : ce qui reste à faire, classé par priorité
+
+DONE :
+======
 * site web : détection browser (indiquer qu'il faut Chrome, si nécessaire)
 * site web : détecter si l'extension est installée
 * améliorer les couleurs de la grille
@@ -263,21 +269,25 @@ RECENTS / A TESTER :
 <- v2.05
 
 * killomètre : classement & visu des tags hors extension
-* améliorer la lisibilité de la police dans les bulles
+* amélioration de la lisibilité de la police dans les bulles
 * bulle TP : afficher les zones atteignables et pas seulement la distance (demande prop)
+* corrections de divers bugs du calcul des BM du matériel
+* gestion des caractéristiques x/x+1 D3 + y + z (caractéristiques dont l'effet n'est pas immédiat à l'"apprentissage")
+* correction bug armes à deux mains sur les BM de l'équipement
+
 
 EN COURS :
 ==========
 * apprendre le langage go
+* (dragt) vue dans le labyrinthe
 
 TODO :
 ======
 P1 :
 ----
-* bugs dans chrall_equipment.js
-* gérer les caractéristiques x/x+1 D3 + y + z
 * rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
 * éditeur pour la diplo trollienne (et la stocker en bd)
+* killomètre : affichage par guilde
 * vue centrée des gowaps : ajouter un bouton pour limiter au niveau cible ("niveau -34")
 * mettre à jour la base pour les niveaux des monstres (faire un max ?)
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
@@ -330,6 +340,7 @@ P3 :
 * analyser la position dans le profil
 * afficher les UM des matos
 * mini carte centrée sur le gowap
+* mouches : récapitulatif (en haut) à la fois sur les mouches actuelles et sur le total (en comptant celles en vadrouille)
 * fonction de recherche dans la grille, en autocomplétion et centrage automatique
 * bulles de trolls sur les liens/noms de trolls du fofo MH.
 * lors d'un TP, affichage d'une carte des trous de météorite
@@ -338,13 +349,11 @@ P3 :
 * grille : rendre cliquables les cénotaphes
 * calcul des bonus totaux des mouches : séparation entre présentes & toutes
 * grille : coût des déplacements et charges (en tenant compte du gluage éventuel) _(attention : besoin scripts publics)_
-* équipement : afficher les bonus [demande Fabdi](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=13&p=71#p71)
 * grille/bulles monstres : afficher (après activation d'une option) moyenne et écart-type des caractéristiques
 * liste des trolls : envoi de MP par case à cocher (comme dans ZZ)
 * profil : affichage rapport tués/décés
 * bulles de bestiaire sur les gowaps ?
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
-* mouches : récapitulatif (en haut) à la fois sur les mouches actuelles et sur le total (en comptant celles en vadrouille)
 * icône (un troll qui nage le crawl ?)
 * interface de troll (suivants identifiés)
 * corriger le calcul des prochaines DLA si on passe sur la vue des malus
@@ -371,13 +380,11 @@ P3 :
 * recherche de lieux intégrée
 * grille : flèches pour indiquer les directions des lieux intéressants (bookmarkés ou bien sur recherche)
 * système 'mappy' intégré en exploitant la liste des gares TGV du ftp MH
-* bulle et profil d'un troll : indiquer si le troll nous a tué ou la réciproque
 * préférence pour la valeur par défaut de la case à cocher d'activation au login
 
 
 NOTES :
 =======
-* pas de vrai concept d'équipe : chaque troll choisit un par un les trolls à qui il donne accés en lecture à ce qu'il mont(r)e. Et il doit être possible de bloquer les infos d'un autre joueur.
 * liste de technos : extensions chrome, git, javascript, ajax, github, mysql, jquery, go, mercurial, php, css
 * pour le serveur, j'aurais peut-être pu aussi utiliser node.js. J'aime bien le go mais node.js semble sympa aussi...
 * backup bd : mysqldump -u root -pGroLolo chrall > today_chrall.sql
