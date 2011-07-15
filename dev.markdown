@@ -1,5 +1,6 @@
 Ce document liste :
-* DONE : ce qui a été fait, avec les versions, dans l'ordre
+
+* DONE : ce qui a été fait et les versions par ordre chronologique
 * EN COURS : ce qui est... en cours ^^ 
 * TODO : ce qui reste à faire, classé par priorité
 
@@ -339,6 +340,7 @@ P3 :
 * analyser la position dans le profil
 * afficher les UM des matos
 * mini carte centrée sur le gowap
+* mouches : récapitulatif (en haut) à la fois sur les mouches actuelles et sur le total (en comptant celles en vadrouille)
 * fonction de recherche dans la grille, en autocomplétion et centrage automatique
 * bulles de trolls sur les liens/noms de trolls du fofo MH.
 * lors d'un TP, affichage d'une carte des trous de météorite
@@ -347,13 +349,11 @@ P3 :
 * grille : rendre cliquables les cénotaphes
 * calcul des bonus totaux des mouches : séparation entre présentes & toutes
 * grille : coût des déplacements et charges (en tenant compte du gluage éventuel) _(attention : besoin scripts publics)_
-* équipement : afficher les bonus [demande Fabdi](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=13&p=71#p71)
 * grille/bulles monstres : afficher (après activation d'une option) moyenne et écart-type des caractéristiques
 * liste des trolls : envoi de MP par case à cocher (comme dans ZZ)
 * profil : affichage rapport tués/décés
 * bulles de bestiaire sur les gowaps ?
 * expliquer (par une bulle au passage de la souris sur le tableau ?) pourquoi on a parfois deux niveaux de fatigue affichés pour la prochaine DLA
-* mouches : récapitulatif (en haut) à la fois sur les mouches actuelles et sur le total (en comptant celles en vadrouille)
 * icône (un troll qui nage le crawl ?)
 * interface de troll (suivants identifiés)
 * corriger le calcul des prochaines DLA si on passe sur la vue des malus
