@@ -272,6 +272,8 @@ RECENTS / A TESTER :
 EN COURS :
 ==========
 * apprendre le langage go
+* (dragt) vue dans le labyrinthe
+* (dragt) correction bug armes à deux mains sur les BM de l'équipement
 
 TODO :
 ======
