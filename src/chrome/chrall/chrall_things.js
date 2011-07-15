@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////// Characteristic
+﻿//////////////////////////////////////////////////////////////////////// Characteristic
 /**
  * une caractéristique est décomposée en :
  *  - diceNumber : un nombre de dés
@@ -199,4 +199,22 @@ Place.prototype = new Thing();
 Place.prototype.setName = function(fullName){
 	this.name = fullName;
 	this.isHole = fullName.indexOf("Trou de Météorite")>=0;
+}
+
+/**
+ * Wall hérite de Thing.
+ * Sert pour les murs et couloirs rencontrés dans les Pocket Hall de type labyrinthe
+ * Params :
+ *  - isCouloir (on peut se déplacer dedans)
+ *  - isMur (on rebondit dessus)
+ */ 
+function Wall(x, y, z) {
+	Thing.call(this, x, y, z);
+}
+Wall.prototype = new Thing();
+
+Wall.prototype.setName = function(fullName){
+	this.name = fullName;
+	this.isCouloir = fullName.indexOf("Couloir")>=0;
+	this.isMur = fullName.indexOf("Mur")>=0;
 }

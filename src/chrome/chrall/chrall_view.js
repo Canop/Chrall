@@ -1,4 +1,4 @@
-var horizontalViewLimit; // l'horizon actuel, inférieur ou égal à la vue maximale
+﻿var horizontalViewLimit; // l'horizon actuel, inférieur ou égal à la vue maximale
 var grid; // la grille. Tout ce qui est visible est stocké là dedans
 var objectsOnPlayerCell;
 
@@ -84,7 +84,7 @@ function Chrall_makeGridHtml() {
 			var cell = grid.getCellOrNull(x, y);
 			var hasHole = false;
 			var cellContent = [];
-			var c = 0;
+			var c = 0; 
 			var cellId=null;
 			//var cellMenuInfos = null;
 			if (x===player.x && y===player.y) {
@@ -187,8 +187,68 @@ function Chrall_makeGridHtml() {
 						cellContent[c++] = "<a name='cénotaphes' class=ch_cenotaph>"+t.z+": "+t.name+"</a>";
 					}					
 				}
+			
+				// S'il y a un mur, c'est probablement qu'on est dans un labyrinthe et que la vue est limitée à 1.
+				// On va donc se permettre d'afficher toutes les cases de la même taille pour que ce soit plus joli.
+				// Pour bien faire, il faudrait fixer initialement la taille des cases à une certaine taille si on est dans un labyrinthe.
+				// Ainsi, tout se centrarait bien sans souci. (Là c'est une peu tard pour le faire, y a un peu de bidouille...)
+				// On va aussi mettre une image de mur en arrière fond pour les cases qui en sont
+				// A noter qu'on se limite au minimum, mais je pense que ça suffit pour Chrall.
+				// (Dans la version normale toujours accessible dans l'onglet murs et couloirs d'ailleurs, il y a des images de trolls, de lieux, ...)
+				if (cell.walls)
+					for (var i=0; i<cell.walls.length; i++) {
+						var t = cell.walls[i];
+						
+						if (c>0) cellContent[c++] = "<br name='murs' class=ch_wall>";
+						if (t.name == "Mur") {
+							//On met une image de mur en background et on n'affiche rien dans la case, chrall suffit pour obtenir les coordonnées.
+							cellContent[c++] = '<div style="background-image:url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/mur.gif);background-repeat:repeat;min-height:160;min-width:160"/>';
+						} else {						
+							// Compte le nombre d'éléments dans la case. L'utilité sera d'estimer plus ou moins la hauteur de la case en fonction de ce qu'elle contient.
+							// On aurait pu le faire avce un compteur tout au long du parcours global des éléments, mais comme l'utilité sera très spécifique au labyrinthe, autant le faire ici.
+							var elementsNumber = 0;
+							if (cell.trolls) elementsNumber += cell.trolls.length;
+							if (cell.monsters) elementsNumber += cell.monsters.length;
+							if (cell.places) elementsNumber += cell.places.length;
+							if (cell.objects) elementsNumber += cell.objects.length;
+							if (cell.mushrooms) elementsNumber += cell.mushrooms.length;
+							if (cell.cenotaphs) elementsNumber += cell.cenotaphs.length;
+							
+							// On affiche le couloir dans un div dont la hauteur est relative au nombre d'éléments dans cette case.
+							// C'est très approcimatif, clairement pas au pixel prêt, mais ça permet plus ou moins de garder des cases carrées tant qu'il n'y a pas trop déléments dedans.
+							// (Par exemple, ça ne prend pas en compte qu'un élément est affiché ou non pour définir la hauteur de base.)
+							// A noter qu'avec ce fonctionnement, les éléments d'un couloir sont listés en haut de la case, et en sont donc plus centrés.
+							// Je n'affiche pas le z de profondeur avant le mot couloir. Un labyrinthe est plat, et de toute façon on a encore l'info pour tous les autres trucs de la vue, notamment soi-même dans la case centrale.
+							switch (elementsNumber) {
+								case 0:
+									cellContent[c++] = '<div style="min-height:160;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+								break;
+								case 1:
+									cellContent[c++] = '<div style="min-height:140;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+								break;
+								case 2:
+									cellContent[c++] = '<div style="min-height:120;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+								break;
+								case 3:
+									cellContent[c++] = '<div style="min-height:100;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+								break;
+								case 4:
+									cellContent[c++] = '<div style="min-height:80;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+								break;
+								case 5:
+									cellContent[c++] = '<div style="min-height:60;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+								break;
+								case 7:
+									cellContent[c++] = '<div style="min-height:40;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+								break;
+								default: 
+									cellContent[c++] = '<div style="min-height:20;min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name+ ')</a></div>'
+								break;
+							}
+						}
+					}	
 			}
-
+			
 			html[h++] = "<td class=d"+((hdist-horizontalViewLimit+20001)%2);
 			html[h++] = " grid_x=" + x;
 			html[h++] = " grid_y=" + y;
@@ -257,7 +317,7 @@ function Chrall_analyseTrollTable(table) {
 		troll.z = parseInt($(cells[i++]).text());
 		grid.getCellNotNull(troll.x, troll.y).addTroll(troll);
 		grid.nbTrollsInView++;
-		$tr.prepend('<td align=center><input type=checkbox name=cb_troll value='+troll.id+'></td>'); // TODO : sur les grosses tables on pourrait peut-être envisager un detach() ? 
+		$tr.prepend('<td align=center><input type=checkbox name=cb_troll value='+troll.id+'></td>'); // TODO : sur les grosses tables on pourrait peut-être envisager un detach() ?
 	}
 	$(rows[2]).prepend($('<td align=center width=20></td>'));
 	var html='<td colspan=10 height=25><script>';
@@ -304,6 +364,25 @@ function Chrall_analysePlaceTable(table) {
 		}
 	);
 }
+
+function Chrall_analyseWallTable(table) {
+	$(table).find("tr.mh_tdpage").each(
+		function(){
+			var thing = new Wall();
+			var cells = $(this).find("td");
+			thing.id = parseInt($(cells[0]).text());
+			var nameCell = $(cells[1]);
+			thing.setName(nameCell.text());
+			thing.x = parseInt($(cells[2]).text());
+			thing.y = parseInt($(cells[3]).text());
+			thing.z = parseInt($(cells[4]).text());
+			grid.getCellNotNull(thing.x, thing.y).addWall(thing);
+			//grid.nbWallsInView++;
+		}
+	);	
+}
+
+
 function Chrall_analyseObjectTable(table) {
 	// optm : cette méthode consomme beaucoup, peut-être l'itération sur les cellules
 	// il faudrait peut-être, comme il n'y a pas de vraies recherches, itérer directement sur le DOM
@@ -340,10 +419,9 @@ function Chrall_analyseCenotaphTable(table) {
 
 
 function Chrall_analyseView() {
-	var tables = $("table.mh_tdborder");
 
 	//> recherche de la position du joueur
-	var positionSentenceText = $($(tables[0]).find("li")[0]).text();
+	var positionSentenceText = $($($("table.mh_tdborder").first()).find("li")[0]).text();
 	var positionSentenceTokens = positionSentenceText.split(new RegExp("[ ,:=]+", "g"));
 	player.x = parseInt(positionSentenceTokens[5]);
 	player.y = parseInt(positionSentenceTokens[8]);
@@ -361,16 +439,40 @@ function Chrall_analyseView() {
 	}
 	horizontalViewLimit = Math.max(horizontalViewLimit, 0);
 	
+	
 	//> initialisation de la grille
 	grid = new Grid(player.x, player.y, horizontalViewLimit);
 	
-	//> chargement des trucs en vue (monstres, trolls, etc.). On remplit la grille au fur et à mesure
-	Chrall_analyseMonsterTable(tables[1]);
-	Chrall_analyseTrollTable(tables[2]);
-	Chrall_analyseObjectTable(tables[3]);
-	Chrall_analyseMushroomTable(tables[4]);
-	Chrall_analysePlaceTable(tables[5]);
-	Chrall_analyseCenotaphTable(tables[6]);
+	//> chargement des trucs en vue (monstres, trolls, etc.). On remplit la grille au fur et à mesure en fonction des nomns des tables rencontrées
+	$("table.mh_tdborder:has(a[name])").each(function() { 
+		  	
+  	switch ($(this).find("a[name]").first().attr("name")) {
+			case "monstres":
+				Chrall_analyseMonsterTable($(this))
+			break;
+			case "trolls":
+				Chrall_analyseTrollTable($(this))
+			break;
+			case "tresors":
+				Chrall_analyseObjectTable($(this))
+			break;
+			case "champignons":
+				Chrall_analyseMushroomTable($(this))
+			break;
+			case "lieux":
+				Chrall_analysePlaceTable($(this))
+			break;
+			case "cadavre":
+				Chrall_analyseCenotaphTable($(this))
+			break;
+			case "murs":
+				Chrall_analyseWallTable($(this))
+			break;
+			default: 
+				alert("Cet écran de Vue n'est pas conforme aux écrans de vue classiques de MountyHall. Il n'a donc pas été totalement traité. Contacter un développeur Chrall pour voir ce qu'il y a moyen de faire. Partie non traitée: \"" + $(this).find("a[name]").first().text() + "\"" )
+			break;
+		}
+	});
 	
 	//> on regarde si la case du joueur est encombrée
 	// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case
@@ -416,6 +518,8 @@ function Chrall_analyseView() {
 function Chrall_analyseAndReformatView() {
 	var time_enter = (new Date()).getTime(); // <= prof
 	
+	var laby = ($("table.mh_tdborder:has(a[name=cadavre])").length > 0);
+	
 	// prof : les quelques suppressions qui suivent peuvent prendre près de 2 secondes avec une vue de 30
 	//> on vire la frise latérale
 	$($("td[width=55]")).remove();
@@ -437,11 +541,15 @@ function Chrall_analyseAndReformatView() {
 	var time_before_grid = (new Date()).getTime(); // <= prof
 	
 	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
-	var tables = $("table.mh_tdborder");
+	//var tables = $("table.mh_tdborder");
 	var html = []
 	var h = 0;
 	html[h++] = "<ul class=tabs view>";
 	html[h++] = "<li><a href=#tabGrid>Grille</a></li>";
+	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
+	if (laby) {
+		html[h++] = "<li><a href=#tabWalls>Murs et couloirs</a></li>";
+	}	
 	html[h++] = "<li><a href=#tabTrolls>Trolls ("+grid.nbTrollsInView+")</a></li>";
 	html[h++] = "<li><a href=#tabMonsters>Monstres ("+grid.nbMonstersInView+")</a></li>";
 	html[h++] = "<li><a href=#tabPlaces>Lieux ("+grid.nbPlacesInView+")</a></li>";
@@ -460,6 +568,10 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = Chrall_makeGridHtml();
 	html[h++] = "</div>";
 	html[h++] = "</div>";
+	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
+	if (laby) {
+		html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
+	}
 	html[h++] = "<div id=tabTrolls class=tab_content scroll></div>";
 	html[h++] = "<div id=tabMonsters class=tab_content scroll></div>";
 	html[h++] = "<div id=tabPlaces class=tab_content scroll></div>";
@@ -469,6 +581,10 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabSettings class=tab_content scroll></div>";
 	html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
 	html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
+	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
+	if (laby) {
+		html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
+	}
 	//html[h++] = "<div id=tabGogol class=tab_content scroll></div>";
 	html[h++] = "</div>";
 	
@@ -476,15 +592,20 @@ function Chrall_analyseAndReformatView() {
 	
 	$($("table.mh_tdborder")[0]).parent().parent().prepend(html.join(''));	
 	$("#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
-	$("#tabMonsters").append(tables[1]);
-	$("#tabTrolls").append(tables[2]);
-	$("#tabObjects").append(tables[3]);
-	$("#tabMushrooms").append(tables[4]);
-	$("#tabPlaces").append(tables[5]);
-	$("#tabCenotaphs").append(tables[6]);
+	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
+	if (laby) {
+		$("#tabWalls").append($("table.mh_tdborder:has(a[name=murs])").first());		
+	}
+	$("#tabMonsters").append($("table.mh_tdborder:has(a[name=monstres])").first());
+	$("#tabTrolls").append($("table.mh_tdborder:has(b:contains('TROLLS'))").first());
+	$("#tabObjects").append($("table.mh_tdborder:has(a[name=tresors])").first());
+	$("#tabMushrooms").append($("table.mh_tdborder:has(a[name=champignons])").first());
+	$("#tabPlaces").append($("table.mh_tdborder:has(a[name=lieux])").first());
+	$("#tabCenotaphs").append($("table.mh_tdborder:has(a[name=cadavre])").first());
 	$("#tabPartages").append(makePartageTables());
 	makeSearchPanel($("#tabRecherche"));
 	$(".tab_content").hide();
+	
 	if (localStorage['tab_view']) {
 		$('ul.tabs li:has(a[href="#'+localStorage['tab_view']+'"])').addClass("active").show();
 		$('#'+localStorage['tab_view']).show();
@@ -512,7 +633,7 @@ function Chrall_analyseAndReformatView() {
 	$('a[href$="#cadavre"]').click(function() { changeTab($('a[href="#tabCenotaphs"]').parent()); });
 	
 	var time_after_grid_append = (new Date()).getTime(); // <= prof
-	
+
 	$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
 	$('#grid_holder').dragscrollable({dragSelector: '#grid'});
 	
@@ -605,6 +726,7 @@ function Chrall_analyseAndReformatView() {
 	// On corrige si nécessaire la position affichée dans le menu de gauche et on signale
 	// cette position au script de fond
 	updateTroll();
+	
 	
 	
 }
