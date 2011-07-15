@@ -1,10 +1,13 @@
-
 // cellule dans la grille (correspond à une colonne du jeu : x et y fixés mais z variable)
 function Cell() {
 }
 Cell.prototype.addPlace = function(o){
 	if (!this.places) this.places = new Array();
 	this.places.push(o);
+}
+Cell.prototype.addWall = function(o){
+	if (!this.walls) this.walls = new Array();
+	this.walls.push(o);
 }
 Cell.prototype.addTroll = function(o){
 	if (!this.trolls) this.trolls = new Array();
@@ -43,6 +46,8 @@ function Grid(xp, yp, sight) {
 	this.nbObjectsInView = 0;
 	this.nbMushroomsInView = 0;
 	this.nbCenotaphsInView = 0;
+	// Pas utile
+	//this.nbWallsInView = 0;
 }
 
 // renvoie la cellule de coordonnées passées.
@@ -64,7 +69,7 @@ Grid.prototype.getCellNotNull = function(x, y) {
 
 // enregistre les modifications 'live' (au sens jquery)
 function Chrall_gridLive() {
-	
+
 	// ajout de la fenêtre de zoom et de quelques fonctions
 	var html = "<script>";
 	html += "function grid_changeDisplayByName(key, display){";
@@ -85,7 +90,7 @@ function Chrall_gridLive() {
 	html += "<div id=zoom><a class=gogo style='position:fixed;right:24px;top:24px;' id=btn_close_zoom>Fermer</a><div id=zoom_content>En attente de gogochrall...</div></div>";
 	$(html).appendTo($('body'));
 
-	
+
 	//> on ajoute le popup sur les monstres
 	bubbleLive(
 		'a[href*="EMV"]',
@@ -109,7 +114,7 @@ function Chrall_gridLive() {
 			return args;
 		}
 	);
-	
+
 	//> popup sur les trolls
 	bubbleLive(
 		'#grid a.ch_troll, div#tabTrolls a.mh_trolls_1, #tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll',
@@ -125,7 +130,7 @@ function Chrall_gridLive() {
 			};
 		}
 	);
-	
+
 	//> on ajoute le menu des DE, le titre de chaque cellule
 	objectMenuLive('table.grid td[grid_x]', function(o) {
 		var x = parseInt(o.attr('grid_x'));
@@ -159,12 +164,12 @@ function Chrall_gridLive() {
 			'html_bottom':links
 		}
 	});
-	
+
 	//> le défilement à la molette perturbe objectMenu
 	document.onmousewheel = function(e) {
 		hideOm();
 	}
-	
+
 	// outillage des liens d'ouvertures de vue "zoom"
 	$('a[name="zoom"]').live('click', function() {
 		if (compteChrallActif()) {
@@ -204,5 +209,3 @@ function Chrall_gridLive() {
 	});
 
 }
-
-
