@@ -6,6 +6,18 @@ function Chrall_reformatOptionsView() {
 	var standardOptionTables = $(standardOptionContainer).find("table");
 	
 	var mdpkey = 'troll.'+player.id+'.mdp';
+	var mdp = localStorage[mdpkey];
+	var mdpIsValid = mdp && (mdp.length==32);
+	var compteActif = compteChrallActif();
+	var clefCompteActif='"troll.'+player.id+'.compteActif"';
+	
+	var activationButtonHtml = " &nbsp; <a id=activationButton class=gogo";
+	if (!mdpIsValid) activationButtonHtml += " invisible";
+	activationButtonHtml += " href='javascript:localStorage[\"tab_options\"]=\"tabChrall\";localStorage["+clefCompteActif+"]=\"";
+	activationButtonHtml += compteActif ? "no" : "yes";
+	activationButtonHtml += "\";document.location.href=\"Play_option.php\";'>";
+	activationButtonHtml += compteActif ? "Désactiver le compte" : "Activer le compte";
+	activationButtonHtml += "</a>";
 
 	var html="<ul class=tabs>";
 	html += "<li><a href=#tabStandard>Options Standard</a></li>";
@@ -39,15 +51,11 @@ function Chrall_reformatOptionsView() {
 	html += " var nm=document.getElementById('ch_mdp_restreint').value;";
 	html += " if (nm.length!=32) { alert('Votre mot de passe restreint doit faire exactement 32 caractères.'); return;}";
 	html += " localStorage['"+mdpkey+"']=nm;";
+	html += " document.getElementById('activationButton').display='inline';";
 	html += "}</script>";
-	html += "<br><input type=password id=ch_mdp_restreint value=''>";
+	html += "<br><input type=password id=ch_mdp_restreint value=''>";	
 	html += "<a class=gogo href='javascript:changeMdpRestreint();localStorage[\"tab_options\"]=\"tabChrall\";document.location.href=\"Play_option.php\";'>Modifier le mot de passe</a>";
-	var clefCompteActif='"troll.'+player.id+'.compteActif"';
-	if (compteChrallActif()) {
-		html += " &nbsp; <a class=gogo href='javascript:localStorage[\"tab_options\"]=\"tabChrall\";localStorage["+clefCompteActif+"]=\"no\";document.location.href=\"Play_option.php\";'>Désactiver le compte</a>";
-	} else {
-		html += " &nbsp; <a class=gogo href='javascript:localStorage[\"tab_options\"]=\"tabChrall\";localStorage["+clefCompteActif+"]=\"yes\";document.location.href=\"Play_option.php\";'>Activer le compte</a>";
-	}
+	html += activationButtonHtml;
 	html += "</p>";
 	html += "<p>Fournir votre mot de passe restreint peut (devrait) vous poser des problèmes si vous jouez un troll ennemi de la Canopée. Dans ce cas, et si vous avez des compétences informatiques, n'hésitez pas à venir causer sur <a target=newWin href=\"http://canop.org/chrall/fofo/\">le canofofo</a> afin de voir si vous pourriez héberger un serveur afin d'éviter que votre groupe de chasse ne me confie vos données privées.</p>";
 	html += "<p>Notez que vous ne transmettez pas d'informations confidentielles au serveur Chrall tant que vous n'activez pas le compte.</p>";
