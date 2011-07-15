@@ -263,8 +263,11 @@ RECENTS / A TESTER :
 <- v2.05
 
 * killomètre : classement & visu des tags hors extension
-* améliorer la lisibilité de la police dans les bulles
+* amélioration de la lisibilité de la police dans les bulles
 * bulle TP : afficher les zones atteignables et pas seulement la distance (demande prop)
+* corrections de divers bugs du calcul des BM du matériel
+* gestion des caractéristiques x/x+1 D3 + y + z (caractéristiques dont l'effet n'est pas immédiat à l'"apprentissage")
+
 
 EN COURS :
 ==========
@@ -274,10 +277,9 @@ TODO :
 ======
 P1 :
 ----
-* bugs dans chrall_equipment.js
-* gérer les caractéristiques x/x+1 D3 + y + z
 * rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
 * éditeur pour la diplo trollienne (et la stocker en bd)
+* killomètre : affichage par guilde
 * vue centrée des gowaps : ajouter un bouton pour limiter au niveau cible ("niveau -34")
 * mettre à jour la base pour les niveaux des monstres (faire un max ?)
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
