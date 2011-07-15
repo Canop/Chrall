@@ -104,11 +104,25 @@ function constructTotalEquipmentBm(map) {
 //Dans la page d'équipement, ajoute le total des Bonus Malus de l'équipement porté
 function Chrall_analyseAndReformatEquipment() {
   
-	// Recupere en string tous les bonus malus de l'equipement porte			   
-	var textEqBm = $('table.TableEq td:contains("Etat") b, table.TableEq li').map(function(){
+	// Recupere en string tous les bonus malus de l'equipement porte qui ne sont pas affiche en liste (tete, cou et pieds)			   
+	var textEqBm = $('table.TableEq td:contains("Etat") b').map(function(){
 		return $(this).text();
 	}).get().join('|');
-	
+
+	// Recupere en string tous les bonus malus de l'equipement porte qui sont affichés en liste (main droite, corps, main gauche)
+	// Si le premier équipement (main droite)	a le même numéro que le deuxième équipement (main gauche), c'est une arme à 2 mains, et on ne compte pas le premier.
+	// On vérifie qu'il y a au moins 2 éléments avec des BM parmi les trois possibles, pour que la comparaison soit pertinente.
+	if (($('table.TableEq td:has(li) input').length >= 2) && ($('table.TableEq td:has(li) input').first().attr("value") == $('table.TableEq td:has(li) input').last().attr("value"))) {
+		textEqBm += $('table.TableEq td:has(li)+td:has(li)').find('li').map(function(){
+			return $(this).text();
+		}).get().join('|');
+	}
+	else {
+		textEqBm += $('table.TableEq li').map(function(){
+			return $(this).text();
+		}).get().join('|');
+	}
+
 	// Nettoie la string de tous les bonus malus recuperes pour ne garder que les noms des caracs et les valeurs				   
 	textEqBm = textEqBm.replace(/([%]|min)/g,'').trim();
 	
