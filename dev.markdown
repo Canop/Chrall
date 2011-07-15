@@ -1,5 +1,10 @@
-RECENTS / A TESTER :
-====================
+Ce document liste :
+* DONE : ce qui a été fait, avec les versions, dans l'ordre
+* EN COURS : ce qui est... en cours ^^ 
+* TODO : ce qui reste à faire, classé par priorité
+
+DONE :
+======
 * site web : détection browser (indiquer qu'il faut Chrome, si nécessaire)
 * site web : détecter si l'extension est installée
 * améliorer les couleurs de la grille
@@ -375,13 +380,11 @@ P3 :
 * recherche de lieux intégrée
 * grille : flèches pour indiquer les directions des lieux intéressants (bookmarkés ou bien sur recherche)
 * système 'mappy' intégré en exploitant la liste des gares TGV du ftp MH
-* bulle et profil d'un troll : indiquer si le troll nous a tué ou la réciproque
 * préférence pour la valeur par défaut de la case à cocher d'activation au login
 
 
 NOTES :
 =======
-* pas de vrai concept d'équipe : chaque troll choisit un par un les trolls à qui il donne accés en lecture à ce qu'il mont(r)e. Et il doit être possible de bloquer les infos d'un autre joueur.
 * liste de technos : extensions chrome, git, javascript, ajax, github, mysql, jquery, go, mercurial, php, css
 * pour le serveur, j'aurais peut-être pu aussi utiliser node.js. J'aime bien le go mais node.js semble sympa aussi...
 * backup bd : mysqldump -u root -pGroLolo chrall > today_chrall.sql
