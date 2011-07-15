@@ -201,19 +201,22 @@ Place.prototype.setName = function(fullName){
 	this.isHole = fullName.indexOf("Trou de Météorite")>=0;
 }
 
+
+//////////////////////////////////////////////////////////////////////// LabySquare (case du labyrinthe)
+
 /**
- * Wall hérite de Thing.
+ * LabySquare hérite de Thing.
  * Sert pour les murs et couloirs rencontrés dans les Pocket Hall de type labyrinthe
  * Params :
  *  - isCouloir (on peut se déplacer dedans)
  *  - isMur (on rebondit dessus)
  */ 
-function Wall(x, y, z) {
+function LabySquare(x, y, z) {
 	Thing.call(this, x, y, z);
 }
-Wall.prototype = new Thing();
+LabySquare.prototype = new Thing();
 
-Wall.prototype.setName = function(fullName){
+LabySquare.prototype.setName = function(fullName){
 	this.name = fullName;
 	this.isCouloir = fullName.indexOf("Couloir")>=0;
 	this.isMur = fullName.indexOf("Mur")>=0;

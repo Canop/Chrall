@@ -274,17 +274,19 @@ DONE :
 * corrections de divers bugs du calcul des BM du matériel
 * gestion des caractéristiques x/x+1 D3 + y + z (caractéristiques dont l'effet n'est pas immédiat à l'"apprentissage")
 * correction bug armes à deux mains sur les BM de l'équipement
+* le bouton d'activation du compte chrall n'est présent que si le mot de passe est correct
+* (dragt) vue dans le labyrinthe
 
 
 EN COURS :
 ==========
 * apprendre le langage go
-* (dragt) vue dans le labyrinthe
 
 TODO :
 ======
 P1 :
 ----
+* bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
 * éditeur pour la diplo trollienne (et la stocker en bd)
 * killomètre : affichage par guilde

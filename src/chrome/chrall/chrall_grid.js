@@ -31,7 +31,6 @@ Cell.prototype.addCenotaph = function(o){
 }
 
 
-
 // une grille correspond à la vue passée (et donc de taille (2*vue+1)²)
 function Grid(xp, yp, sight) {
 	this.sight = sight;
