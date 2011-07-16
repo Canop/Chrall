@@ -280,6 +280,8 @@ DONE :
 
 <- v2.06
 
+* bug : on essaye de calculer les BM de l'équipement sur la page des suivants
+
 
 EN COURS :
 ==========
@@ -289,9 +291,8 @@ TODO :
 ======
 P1 :
 ----
-* bug : on essaye de calculer les BM de l'équipement sur la page des suivants
-* bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
+* bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * éditeur pour la diplo trollienne (et la stocker en bd)
 * killomètre : affichage par guilde
 * vue centrée des gowaps : ajouter un bouton pour limiter au niveau cible ("niveau -34")

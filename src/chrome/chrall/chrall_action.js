@@ -9,7 +9,23 @@ function Chrall_displayDiggingIsPossible() {
 	}
 }
 
+function Chrall_addMenuOutilsIfPossible() {
+	if ($(document).width() < 808+200) return; // 808 : taille de l'image de fond que je ne veux pas recouvrir
+	var html = '<div id=menuOutilsChrall>';
+	html += '<span class=titre>Outils : </span>';
+	html += '<a target=bestiaire href="http://canop.org:8000/chrall/bestiaire">Bestiaire</a>';
+	html += '<a target=killometre href="http://canop.org/chrall/killometre.html">Kill-O-Mètre</a>';
+	html += '<a target=canofofo href="http://canop.org/chrall/fofo">Forum Chrall</a>';
+	html += '<a target=fofomh href="http://www.mountyhall.com/Forum/">Forum Mounty-Hall</a>';
+	html += '<a target=mountypedia href="http://mountypedia.mountyhall.com/">MountyPedia</a>';
+	html += '<a target=mappy href="http://trolls.ratibus.net/mountyhall/itineraireBis.php?x1='+player.x+'&y1='+player.y+'&n1='+player.z+'">MappyTrolls</a>';
+	
+	
+	html += '</div>';
+	$('body').append(html);
+}
 
+http://canop.org/chrall/fofo/
 function Chrall_handleActionPage() {
 	//> on va essayer de lire les PA disponibles
 	var sentence = $('b:contains("Il me reste ")');
@@ -28,6 +44,7 @@ function Chrall_handleActionPage() {
 		chrome.extension.sendRequest({"pa": -1}); // -1 pour signaler que la session n'est pas active
 	}
 	
+	Chrall_addMenuOutilsIfPossible();
 	Chrall_displayDiggingIsPossible();
 }
 
