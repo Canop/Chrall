@@ -3,8 +3,18 @@
  et des utilitaires. Contient aussi la constante donnant la version courante de Chrall
 */
 
-var chrallVersion = "2.5";
+var chrallVersion = "2.6";
 
+function getUrlParameter(name, defaultValue) {
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( document.location.href );
+  if( results == null )
+    return defaultValue;
+  else
+    return results[1];
+}
 
 /**
  * découpe en mots (un nombre peut être un mot).

@@ -4,8 +4,6 @@ function Chrall_analyseResultatCombat() {
 	if (!compteChrallActif()) return;
 	var text = $('body').text();
 	var lines = text.split('\n');
-	console.log('Texte résultat combat :');
-	console.log(lines);
 	
 	var result = {};
 	for (var i=lines.length; i-->0;) {

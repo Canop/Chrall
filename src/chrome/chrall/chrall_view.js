@@ -340,6 +340,8 @@ function Chrall_analysePlaceTable(table) {
 }
 
 function Chrall_analyseWallTable(table) {
+	if (!table) return;
+	isInLaby = true;
 	table.find("tr.mh_tdpage").each(
 		function(){
 			var thing = new LabySquare();
@@ -391,12 +393,12 @@ function Chrall_analyseCenotaphTable(table) {
 	);
 }
 
-
+// renvoie les tables
 function Chrall_analyseView() {
 	isInLaby = false;
 
 	//> recherche de la position du joueur
-	var positionSentenceText = $($($("table.mh_tdborder").first()).find("li")[0]).text();
+	var positionSentenceText = $("table.mh_tdborder").first().find("li").first().text();
 	var positionSentenceTokens = positionSentenceText.split(new RegExp("[ ,:=]+", "g"));
 	player.x = parseInt(positionSentenceTokens[5]);
 	player.y = parseInt(positionSentenceTokens[8]);
@@ -418,37 +420,23 @@ function Chrall_analyseView() {
 	grid = new Grid(player.x, player.y, horizontalViewLimit);
 	
 	//> chargement des trucs en vue (monstres, trolls, etc.).
-	var $tables = $("table.mh_tdborder:has(a[name])");
-	for (var i=0; i<$tables.length; i++) {
-		var $table = $($tables[i]);
-		switch ($table.find("a[name]").first().attr("name")) {
-			case "monstres":
-				Chrall_analyseMonsterTable($table);
-			break;
-			case "trolls":
-				Chrall_analyseTrollTable($table);
-			break;
-			case "tresors":
-				Chrall_analyseObjectTable($table);
-			break;
-			case "champignons":
-				Chrall_analyseMushroomTable($table);
-			break;
-			case "lieux":
-				Chrall_analysePlaceTable($table);
-			break;
-			case "cadavre":
-				Chrall_analyseCenotaphTable($table);
-			break;
-			case "murs":
-				isInLaby = true;
-				Chrall_analyseWallTable($table);
-			break;
-			default: 
-				alert("Cet écran de Vue n'est pas conforme aux écrans de vue classiques de MountyHall. Il n'a donc pas été totalement traité. Contacter un développeur Chrall pour voir ce qu'il y a moyen de faire. Partie non traitée: \"" + $table.find("a[name]").first().text() + "\"" )
-			break;
+	var $tables = {};
+	var $allTables = $("table.mh_tdborder");
+	for (var i=0; i<$allTables.length; i++) {
+		var $table = $($allTables[i]);
+		var tableName = $table.find("a[name]").first().attr("name");
+		if (tableName) {
+			$tables[tableName]=$table;
+			$table.detach(); // grosse accélération. Mais effet de bord : si ça plante on n'a plus rien...
 		}
 	}
+	Chrall_analyseMonsterTable($tables['monstres']);
+	Chrall_analyseTrollTable($tables['trolls']);
+	Chrall_analyseObjectTable($tables['tresors']);
+	Chrall_analyseMushroomTable($tables['champignons']);
+	Chrall_analysePlaceTable($tables['lieux']);
+	Chrall_analyseCenotaphTable($tables['cadavre']);
+	Chrall_analyseWallTable($tables['murs']);
 	
 	//> on regarde si la case du joueur est encombrée
 	// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case
@@ -486,6 +474,7 @@ function Chrall_analyseView() {
 	xmax = player.x+horizontalViewLimit;
 	ymin = player.y-horizontalViewLimit;
 	ymax = player.y+horizontalViewLimit;
+	return $tables;
 }
 
 // OPTM : le plus long, dans cette opération, est le append de la grille, c'est-à-dire la construction par le browser de la
@@ -494,20 +483,20 @@ function Chrall_analyseView() {
 function Chrall_analyseAndReformatView() {
 	var time_enter = (new Date()).getTime(); // <= prof
 		
-	// prof : les quelques suppressions qui suivent peuvent prendre près de 2 secondes avec une vue de 30
-	//> on vire la frise latérale
-	$($("td[width=55]")).remove();
-	//> on vire la bannière "Mounty Hall la terre des trolls" qu'on a vu pendant 5 ans déjà...
-	$($("tr")[0]).remove();
-	//> on vire le titre "Ma Vue" et les liens vers les tableaux
-	$($("table table table")[0]).remove();
-	$($("table table center")[0]).remove();
-	
-	var time_after_cleaning = (new Date()).getTime(); // <= prof
-	
 	//> on analyse la vue
-	Chrall_analyseView();
+	var $tables = Chrall_analyseView();
+
+	//> on vire la frise latérale
+	$("td[width=55]").remove();
+	//> on vire la bannière "Mounty Hall la terre des trolls" qu'on a vu pendant 5 ans déjà...
+	$("tr").first().remove();
+	//> on vire le titre "Ma Vue" et les liens vers les tableaux
+	$("table table table").first().remove();
+	$("table table center").first().remove();
+	$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
 	
+	var time_after_cleaning = (new Date()).getTime(); // <= prof	
+
 	//> on colle en haut à droite les liens [Refresh] et [Logout]
 	var refreshLogout = $("table table div");
 	refreshLogout.addClass("floatTopRight");
@@ -518,7 +507,7 @@ function Chrall_analyseAndReformatView() {
 	//var tables = $("table.mh_tdborder");
 	var html = []
 	var h = 0;
-	html[h++] = "<ul class=tabs view>";
+	html[h++] = "<ul id=tabs_view class=tabs view>";
 	html[h++] = "<li><a href=#tabGrid>Grille</a></li>";
 	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
 	if (isInLaby) {
@@ -541,10 +530,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = Chrall_makeGridHtml();
 	html[h++] = "</div>";
 	html[h++] = "</div>";
-	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
-	if (isInLaby) {
-		html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
-	}
+	if (isInLaby) html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
 	html[h++] = "<div id=tabTrolls class=tab_content scroll></div>";
 	html[h++] = "<div id=tabMonsters class=tab_content scroll></div>";
 	html[h++] = "<div id=tabPlaces class=tab_content scroll></div>";
@@ -554,7 +540,6 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabSettings class=tab_content scroll></div>";
 	html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
 	html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
-	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
 	if (isInLaby) {
 		html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
 	}
@@ -562,51 +547,48 @@ function Chrall_analyseAndReformatView() {
 	
 	var time_after_grid_building = (new Date()).getTime(); // <= prof
 	
-	$($("table.mh_tdborder")[0]).parent().parent().prepend(html.join(''));	
+	$("table.mh_tdborder").first().parent().parent().prepend(html.join(''));
 	$("#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
-	if (isInLaby) {
-		$("#tabWalls").append($("table.mh_tdborder:has(a[name=murs])").first());		
-	}
-	$("#tabMonsters").append($("table.mh_tdborder:has(a[name=monstres])").first());
-	$("#tabTrolls").append($("table.mh_tdborder:has(b:contains('TROLLS'))").first());
-	$("#tabObjects").append($("table.mh_tdborder:has(a[name=tresors])").first());
-	$("#tabMushrooms").append($("table.mh_tdborder:has(a[name=champignons])").first());
-	$("#tabPlaces").append($("table.mh_tdborder:has(a[name=lieux])").first());
-	$("#tabCenotaphs").append($("table.mh_tdborder:has(a[name=cadavre])").first());
+	if (isInLaby) $("#tabWalls").append($tables['murs']);		
+	$("#tabMonsters").append($tables['monstres']);
+	$("#tabTrolls").append($tables['trolls']);
+	$("#tabObjects").append($tables['tresors']);
+	$("#tabMushrooms").append($tables['champignons']);
+	$("#tabPlaces").append($tables['lieux']);
+	$("#tabCenotaphs").append($tables['cadavre']);
 	$("#tabPartages").append(makePartageTables());
 	makeSearchPanel($("#tabRecherche"));
 	$(".tab_content").hide();
 	
 	if (localStorage['tab_view']) {
-		$('ul.tabs li:has(a[href="#'+localStorage['tab_view']+'"])').addClass("active").show();
+		$('#tabs_view li:has(a[href="#'+localStorage['tab_view']+'"])').addClass("active").show();
 		$('#'+localStorage['tab_view']).show();
 		localStorage.removeItem('tab_view');
 	} else {
-		$("ul.tabs li:first").addClass("active").show();
+		$("#tabs_view li:first").addClass("active").show();
 		$(".tab_content:first").show();
 	}
 	var changeTab = function($tab) {
 		hideOm(); // fermeture des éventuels objectMenus de la grille
-		$("ul.tabs li").removeClass("active");
+		$("#tabs_view li").removeClass("active");
 		$tab.addClass("active");
 		$(".tab_content").hide();
 		var activeTab = $tab.find("a").attr("href");
 		window.scroll(0, 0);
 		$(activeTab).fadeIn("fast");
 	}
-	$("ul.tabs li").click(function() { changeTab($(this)); });
+	$("#tabs_view li").click(function() { changeTab($(this)); });
 	// on corrige les liens internes, pour qu'ils agissent sur les onglets
-	$('a[href$="#monstres"]').click(function() { changeTab($('a[href="#tabMonsters"]').parent()); });
-	$('a[href$="#trolls"]').click(function() { changeTab($('a[href="#tabTrolls"]').parent()); });
-	$('a[href$="#tresors"]').click(function() { changeTab($('a[href="#tabObjects"]').parent()); });
-	$('a[href$="#champignons"]').click(function() { changeTab($('a[href="#tabMushrooms"]').parent()); });
-	$('a[href$="#lieux"]').click(function() { changeTab($('a[href="#tabPlaces"]').parent()); });
-	$('a[href$="#cadavre"]').click(function() { changeTab($('a[href="#tabCenotaphs"]').parent()); });
+	$('a[href$="#monstres"]').click(function() { changeTab($('#tabs_view a[href="#tabMonsters"]').parent()); });
+	$('a[href$="#trolls"]').click(function() { changeTab($('#tabs_view a[href="#tabTrolls"]').parent()); });
+	$('a[href$="#tresors"]').click(function() { changeTab($('#tabs_view a[href="#tabObjects"]').parent()); });
+	$('a[href$="#champignons"]').click(function() { changeTab($('#tabs_view a[href="#tabMushrooms"]').parent()); });
+	$('a[href$="#lieux"]').click(function() { changeTab($('#tabs_view a[href="#tabPlaces"]').parent()); });
+	$('a[href$="#cadavre"]').click(function() { changeTab($('#tabs_view a[href="#tabCenotaphs"]').parent()); });
 	
 	var time_after_grid_append = (new Date()).getTime(); // <= prof
 
-	$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
 	$('#grid_holder').dragscrollable({dragSelector: '#grid'});
 	
 	//> on applique les réglages de filtrages de la fois précédente
@@ -624,9 +606,7 @@ function Chrall_analyseAndReformatView() {
 
 	setTimeout( // afin d'accélérer l'affichage initial, on repousse un peu l'ajout des bulles et menus
 		function() {
-
 			Chrall_gridLive();
-
 			//> bulle popup sur le lien du joueur
 			var link = $("#grid a.ch_player");
 			var trollId = link.attr('id');
@@ -647,8 +627,7 @@ function Chrall_analyseAndReformatView() {
 						bubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
 					}
 				}
-			);
-						
+			);			
 		}, 1000
 	);
 

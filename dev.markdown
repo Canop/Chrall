@@ -276,6 +276,9 @@ DONE :
 * correction bug armes à deux mains sur les BM de l'équipement
 * le bouton d'activation du compte chrall n'est présent que si le mot de passe est correct
 * (dragt) vue dans le labyrinthe
+* grosses optimisations de la vue
+
+<- v2.06
 
 
 EN COURS :
@@ -286,6 +289,7 @@ TODO :
 ======
 P1 :
 ----
+* bug : on essaye de calculer les BM de l'équipement sur la page des suivants
 * bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
 * éditeur pour la diplo trollienne (et la stocker en bd)

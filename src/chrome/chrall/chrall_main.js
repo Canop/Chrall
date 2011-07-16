@@ -58,7 +58,8 @@ chrome.extension.sendRequest(
 			Chrall_analyseAndReformatBM();	
 			break;
 		case "Play_equipement.php":
-			Chrall_analyseAndReformatEquipment();	
+			var section = getUrlParameter('as_CurSect', 'equip');
+			if (section=='equip') Chrall_analyseAndReformatEquipment();	
 			break;
 		case "Play_evenement.php":
 			Chrall_addBubblesToLinks();
