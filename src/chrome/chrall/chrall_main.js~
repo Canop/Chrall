@@ -35,16 +35,6 @@ console.log("pageName=\""+pageName+"\"");
 
 var resetTroll = pageName=="PlayStart.php";
 
-function ReadCookie(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-	}
-	return null;
-}
 
 chrome.extension.sendRequest(
 	{"get_bgInfos": resetTroll},
@@ -60,7 +50,7 @@ chrome.extension.sendRequest(
 			break;
 		case "Play_vue.php":
 			initCommunications('get_partages');			
-			if(ReadCookie("vueGrille") == "true"){
+			if(ReadCookie("vueGrille") == "true" || ReadCookie("vueGrille")==null){
 				Chrall_analyseAndReformatView();	
 			}
 			break;
