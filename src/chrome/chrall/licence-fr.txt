@@ -1,0 +1,14 @@
+
+= licence "canop" version 20110214 =
+
+Ce document que je vais essayer de garder sobre et simple pour ne pas embrouiller vos avocats liste vos droits liés à l'usage du code source de ce logiciel.
+Il est à noter que les librairies utilisées peuvent être soumises à d'autres licences que la licence "canop".
+
+- vous avez le droit d'utiliser ce code source pour construire ce que vous voulez, à des fins commerciales ou non.
+- vous avez le droit de conserver secret l'usage de ce code source et de ne pas inclure cette licence (de toutes façons je suis sûr que vous n'iriez pas la montrer à votre boss).
+- vous avez le droit d'utiliser tout ça pour des usages critiques tels que pilotage de centrale nucléaire ou de fusée intergalactique ou bien programmation de nano-robots pour réguler le rythme cardiaque mais j'avoue que je suis dubitatif.
+- vous avez le droit d'exploiter ce code pour faciliter volontairement la réelection de Sarkozy mais dans ce cas je vous octroie en prime celui de mourir dans d'atroces souffrances.
+
+C'est tout pour aujourd'hui, vous pouvez sortir.
+
+Contact : cano.petrole@gmail.com

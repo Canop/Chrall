@@ -1,0 +1,81 @@
+{
+	"name": "Chrall",
+	"version": "2.6",
+	"description": "Une extension Chrome open-source pour Mounty Hall",
+	"homepage_url": "http://canop.org/chrall",
+	"background_page": "chrome-extension.html",
+	"content_scripts": [
+		{
+			"matches": ["*://games.mountyhall.com/*", "*://www.mh.fr.nf/*", "*://*.jeuxweb.org/*"],
+			"all_frames" : true,
+			"run_at" : "document_end",
+			"css": [
+				"chrall.css",
+				"tabs.css"
+			],
+			"js": [
+				"jquery.js",
+				"dragscrollable.js",
+				"date-fr-FR.js",
+				"gogol_point.js",
+				"gogol_rect.js",
+				"gogol_col.js",
+				"gogol_trous.js",
+				"gogol_carte.js",
+				"gogol_chemins.js",
+				"chrall_bubbles.js",
+				"chrall_objectMenu.js",
+				"chrall_things.js",
+				"chrall_grid.js",
+				"chrall_general.js",
+				"chrall_partage.js",
+				"chrall_em.js",
+				"chrall_monstres.js",
+				"chrall_minage.js",
+				"chrall_talents.js",
+				"chrall_recherche.js",
+				"chrall_cdm.js",
+				"chrall_bm.js",
+				"chrall_equipment.js",
+				"chrall_com.js",
+				"chrall_profile.js",
+				"chrall_options.js",
+				"chrall_events.js",
+				"chrall_start.js",
+				"chrall_view.js",
+				"chrall_flies.js",
+				"chrall_move.js",
+				"chrall_play.js",
+				"chrall_play2.js",
+				"chrall_menu.js",
+				"chrall_pjview.js",
+				"chrall_monsterview.js",
+				"chrall_action.js",
+				"chrall_resultatCombat.js",
+				"chrall_insulte.js",
+				"chrall_suivants.js",
+				"chrall_main.js"
+			]
+		},
+		{
+			"matches": ["*://www.mountyhall.com/Forum/*"],
+			"css": [
+				"chrall.css"
+			],
+			"js": [
+				"jquery.js",
+				"chrall_bubbles.js",
+				"chrall_mhforum.js"
+			]
+		},
+		{
+			"matches": ["http://canop.org/chrall/*", "http://www.canop.org/chrall/*"],
+			"run_at" : "document_end",
+			"js": [
+				"jquery.js",
+				"chrall_general.js",
+				"chrall_detect.js"
+			]
+		}
+	]
+}

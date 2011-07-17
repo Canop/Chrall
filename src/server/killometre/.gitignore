@@ -1,0 +1,13 @@
+
+# l'application compilée
+killometre
+*.8
+*.6
+
+# les fichiers de logs de l'application
+*.out
+*.err
+*.out-old
+*.err-old
+
+
