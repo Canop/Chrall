@@ -19,8 +19,6 @@ function Chrall_addMenuOutilsIfPossible() {
 	html += '<a target=fofomh href="http://www.mountyhall.com/Forum/">Forum Mounty-Hall</a>';
 	html += '<a target=mountypedia href="http://mountypedia.mountyhall.com/">MountyPedia</a>';
 	html += '<a target=mappy href="http://trolls.ratibus.net/mountyhall/itineraireBis.php?x1='+player.x+'&y1='+player.y+'&n1='+player.z+'">MappyTrolls</a>';
-	
-	
 	html += '</div>';
 	$('body').append(html);
 }
@@ -46,6 +44,8 @@ function Chrall_handleActionPage() {
 	
 	Chrall_addMenuOutilsIfPossible();
 	Chrall_displayDiggingIsPossible();
+	
+	$('body').css('overflow', 'hidden'); // supprime l'ascenseur tout moche de la frame Actions
 }
 
 

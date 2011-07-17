@@ -281,7 +281,8 @@ DONE :
 <- v2.06
 
 * bug : on essaye de calculer les BM de l'équipement sur la page des suivants
-
+* rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
+* suppression de l'ascenseur tout moche de la frame Actions
 
 EN COURS :
 ==========
@@ -291,7 +292,6 @@ TODO :
 ======
 P1 :
 ----
-* rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
 * bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * éditeur pour la diplo trollienne (et la stocker en bd)
 * killomètre : affichage par guilde
