@@ -109,7 +109,6 @@ function findMHSeconds() {
 
 // permet de lire un cookie
 // retourne null si aucun cookie n'a été trouvé
-// retourne la valeur sinon
 function ReadCookie(name) {
 	var nameEQ = name + "=";
 	var ca = document.cookie.split(';');

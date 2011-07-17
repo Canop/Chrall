@@ -49,6 +49,9 @@ table.grid td {
 }
 
 .ch_troll, .ch_troll:hover {
+	background-image:url('http://fofotrollos.free.fr/chrall/troll_icon.png');
+	background-repeat:no-repeat;
+	padding-left:20px;
 	color: blue  !important;
 }
 

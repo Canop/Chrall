@@ -26,7 +26,7 @@ function Chrall_reformatOptionsView() {
 	html += "document.cookie = \"vueGrille=true\" + \"; expires=\" + expdate.toGMTString();";
 	html += "}";
 	html += "}";
-	html += "function ReadCookie(name) {"; // ici, il y a duplication de code (avec chrall_general), pas trouvé mieux pour l'instant :/
+	html += "function ReadCookie(name) {"; // ici, il y a duplication de code (avec chrall_general), pas trouvé mieux :(
 	html += "var nameEQ = name + \"=\";";
 	html += "var ca = document.cookie.split(';');";
 	html += "for(var i=0;i < ca.length;i++) {";
