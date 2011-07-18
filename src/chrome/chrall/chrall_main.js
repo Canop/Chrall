@@ -22,7 +22,8 @@ var viewFilters = {
 	"lieux" : true,
 	"trésors" : false,
 	"champignons" : false,
-	"cénotaphes" : false
+	"cénotaphes" : false,
+	"3D" : true
 };
 
 // on rend jquery disponible dans les pages (ça n'a pas l'air de marcher)

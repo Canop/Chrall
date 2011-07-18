@@ -38,11 +38,6 @@ function Chrall_reformatOptionsView() {
 	html += "<br>Chrall affiche, sur la vue, des estimations des caractéristiques des monstres, en exploitant son bestiaire (lien plus bas). De même pour les trolls en exploitant des informations publiques (par exemple la liste des kills)."
 	html += "<br>Chrall transmet les CDM que vous effectuez à ce bestiaire, afin de l'enrichir (si vous l'acceptez)."
 	html += "</p>";
-	html += "<h2>Outils Chrall</h2>";
-	html += "<ul>";
-	html += "<li><a target=nouvelOnglet href=\""+GOGOCHRALL+"puits\">Le Puits</a> dans lequel vous pouvez déverser vos CDM</li>";
-	html += "<li><a target=nouvelOnglet href=\""+GOGOCHRALL+"bestiaire\">Le Bestiaire</a> qui vous dira en retour ce qu'il sait des monstres</li>";
-	html += "</ul>";
 	html += "<h2>Compte Chrall</h2>";
 	html += "<p>Etat du compte Chrall : <b><span id=com_status_message>"+localStorage['com.status.message']+"</span></b></p>";
 	html += "<p>Un compte Chrall vous permet de partager des informations avec d'autres joueurs. Il n'est nullement nécessaire d'avoir un compte sur Chrall pour exploiter l'extension. Ce compte n'a d'intérêt que si vous chassez avec d'autres.</p>";

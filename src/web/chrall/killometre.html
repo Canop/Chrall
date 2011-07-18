@@ -1,8 +1,3 @@
-<?php
-header("Pragma: no-cache");
-header('Content-Type: text/html; charset=utf-8');
-ini_set('default_charset', 'utf-8');
-?>
 <html>
 <head>
 	<title>Le Kill-O-Mètre de Chrall</title>
@@ -253,12 +248,11 @@ ini_set('default_charset', 'utf-8');
 		$.ajax({
 			url: url,
 			crossDomain: true,
-			dataType: 'jsonp',
+			dataType: 'jsonp'
 		});
 	}
 	
 	function chrall_receiveKillometreExtract(list) { // méthode appelée (jsonp) par le serveur
-		console.log(list);
 		var html = '';
 		indexStartPage = 1+list.StartIndex/pageSize;
 		$('#pageIndex').val(indexStartPage);

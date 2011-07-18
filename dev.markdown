@@ -281,8 +281,10 @@ DONE :
 <- v2.06
 
 * bug : on essaye de calculer les BM de l'équipement sur la page des suivants
-* rendre plus accessibles dans l'application les liens vers les outils (bestiaire, killometre)
+* les liens vers les outils (bestiaire, killometre, mountypedia) sont maintenant accessibles dans l'application
 * suppression de l'ascenseur tout moche de la frame Actions
+* bouton 3D pour filtrer la grille générale
+* bouton 3D pour filtrer les grilles "zoomées"
 
 EN COURS :
 ==========
@@ -312,7 +314,6 @@ P1 :
 * affichage dans la bulle des trolls (si partage actif) des infos principales PA/PV/DLA
 * partage : positionnement des pièges
 * recherche de monstres ou de compo particuliers dans la vue (n'oublions pas les toms en mission...)
-* recherche : trier par distance (un peu compliqué en raison du tri par date de vue)
 * partage : cumul des pistages avec représentation graphique (modulaire car on ne peut pas détecter un mouvement de monstre)
 * partage : cumul des recherches de filon
 * essayer gb (code.google.com/p/go-gb/)
@@ -324,7 +325,7 @@ P2 :
 * trollinfos/kills des atk : tronquer le tableau en comptant les ATK
 * fonction (menu droit ?) de recherche sur mountypedia (exemple : lieu)
 * options bulles/photos : illustration normale/petite illustration/pas d'illustration
-* bouton pour mettre à jour le profil d'un troll avec qui un partage est actif via les scripts publics soap (en respectant les limites d'appel)
+* recherche : trier par distance (un peu compliqué en raison du tri par date de vue)
 * grille/filtre : sous-cochage par type de trésor
 * affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * indiquer dans l'équipement quels compos ont de la valeur pour EM et calculer les histoires de %

@@ -71,7 +71,8 @@ function Chrall_gridLive() {
 
 	// ajout de la fenêtre de zoom et de quelques fonctions
 	var html = "<script>";
-	html += "function grid_changeDisplayByName(key, display){";
+	html += "function grid_changeDisplayByName(key, display, transiant){";
+	html += " console.log(key);";
 	html += " var os = document.getElementsByName(key);";
 	html += " if (!display) {"; // mode d'inversion d'un objet unique, non persistent
 	html += "  for (var i=0; i<os.length; i++) {";
@@ -82,13 +83,20 @@ function Chrall_gridLive() {
 	html += "  for (var i=0; i<os.length; i++) {";
 	html += "   os[i].style.display=display;";
 	html += "  }";
-	html += "  localStorage['grid_filter_'+key]=display";
+	html += "  if (!transiant) localStorage['grid_filter_'+key]=display";
 	html += " }";
 	html += "}";
 	html += "</script>";
-	html += "<div id=zoom><a class=gogo style='position:fixed;right:24px;top:24px;' id=btn_close_zoom>Fermer</a><div id=zoom_content>En attente de gogochrall...</div></div>";
+	html += "<div id=zoom>";
+	html += "<a class=gogo style='position:fixed;right:24px;top:24px;' id=btn_close_zoom>Fermer</a>";
+	html += "<form class=gridFiltersForm>";
+	var key = '3D';
+	html += "<span><input type=checkbox id='"+key+"'"; // on va la checker automatiquement à chaque ouverture (voir plus loin)
+	html += " onClick=\"grid_changeDisplayByName('"+key+"', this.checked?'inline':'none', true);\"";
+	html += "><label for='"+key+"'>"+key+"</label></span>";
+	html += "</form>";
+	html += "<div id=zoom_content>En attente de gogochrall...</div></div>";
 	$(html).appendTo($('body'));
-
 
 	//> on ajoute le popup sur les monstres
 	bubbleLive(
@@ -197,6 +205,7 @@ function Chrall_gridLive() {
 					);
 				}, 200);	
 			});
+			$('#3D').attr("checked", "checked"); // à chaque ouverture on est en 3D initialement
 			$('#zoom').dragscrollable({dragSelector: '#zoom_content'});
 		} else {
 			alert("Un compte Chrall actif est nécessaire pour utiliser cette fonction.");

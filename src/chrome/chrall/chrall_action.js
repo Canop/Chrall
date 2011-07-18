@@ -10,7 +10,7 @@ function Chrall_displayDiggingIsPossible() {
 }
 
 function Chrall_addMenuOutilsIfPossible() {
-	if ($(document).width() < 808+200) return; // 808 : taille de l'image de fond que je ne veux pas recouvrir
+	if ($(document).width() < 808+150) return; // 808 : taille de l'image de fond que je ne veux pas recouvrir
 	var html = '<div id=menuOutilsChrall>';
 	html += '<span class=titre>Outils : </span>';
 	html += '<a target=bestiaire href="http://canop.org:8000/chrall/bestiaire">Bestiaire</a>';

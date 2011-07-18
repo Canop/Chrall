@@ -113,7 +113,7 @@ table.grid td[hasContent] {
 	min-width: 100px;
 }
 
-form#gridFiltersForm {
+form.gridFiltersForm {
 	position: fixed;
 	font-size: 12px;
 	left: 15px;
@@ -127,12 +127,12 @@ form#gridFiltersForm {
 	z-index: 3;
 }
 
-form#gridFiltersForm img.butt {
+form.gridFiltersForm img.butt {
 	margin-right: 6px;
 	vertical-align: text-top;
 }
 
-form#gridFiltersForm img.butt:hover {
+form.gridFiltersForm img.butt:hover {
 	border-radius: 8px;
 	box-shadow: 0px 0px 3px green;
 	cursor: pointer;
@@ -446,7 +446,7 @@ a.gogo:hover {
 #menuOutilsChrall {
 	background-image:url(http://canop.org/chrall/fondDante.png);
 	position: fixed;
-	width: 180px;
+	width: 150px;
 	right:0;
 	top:0;
 	bottom:0;
@@ -454,7 +454,7 @@ a.gogo:hover {
 	overflow:hidden;
 }
 #menuOutilsChrall span.titre {
-	margin-top:7px;
+	margin-top:9px;
 	margin-left:40px;
 	display: block;
 	font-weight: bold;

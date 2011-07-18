@@ -87,35 +87,36 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 					dist := dist(compte.Troll.X, o.X, compte.Troll.Y, o.Y, compte.Troll.Z, o.Z) // en attente...
 					empty = false
 					t := time.SecondsToLocalTime(o.Date)
-					if o.Type == "troll" {
-						if hasNoLine {
-							hasNoLine = false
-						} else {
-							fmt.Fprint(cellContent, "<br>")
-						}
-						fmt.Fprintf(cellContent, "<a name=trolls class=ch_troll href='javascript:EPV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
-					} else if o.Type == "monstre" {
-						if hasNoLine {
-							hasNoLine = false
-						} else {
-							fmt.Fprint(cellContent, "<br>")
-						}
-						fmt.Fprintf(cellContent, "<a name=monstres class=ch_monster href='javascript:EMV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
-					} else if o.Type == "tresor" {
+
+					if o.Type == "tresor" {
 						if objectsByLevel[o.Z] == nil {
 							objectsByLevel[o.Z] = make([]string, 0, 10)
 						}
 						objectsByLevel[o.Z] = append(objectsByLevel[o.Z], fmt.Sprintf("<span class=ch_visible_object>%d: %d %s</span>", o.Z, o.Num, o.Nom))
-					} else if o.Type == "lieu" {
-						if o.Nom == "Trou de Météorite" {
-							hasHole = true
+					} else {
+						an := o.Z != int64(z)
+						if an {
+							fmt.Fprintf(cellContent, "<span name=3D>")
+						}
+						if hasNoLine {
+							hasNoLine = false
 						} else {
-							if hasNoLine {
-								hasNoLine = false
+							fmt.Fprint(cellContent, "<br>")
+						}
+						switch o.Type {
+						case "troll":
+							fmt.Fprintf(cellContent, "<a name=trolls class=ch_troll href='javascript:EPV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
+						case "monstre":
+							fmt.Fprintf(cellContent, "<a name=monstres class=ch_monster href='javascript:EMV(%d);' id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
+						case "lieu":
+							if o.Nom == "Trou de Météorite" {
+								hasHole = true
 							} else {
-								fmt.Fprint(cellContent, "<br>")
+								fmt.Fprintf(cellContent, "<a name=lieux class=ch_place id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
 							}
-							fmt.Fprintf(cellContent, "<a name=lieux class=ch_place id=%d message='distance : %d<br>vu par %d le %s'>%d: %s</a>", o.Num, dist, o.Auteur, t.Format("02/01 à 15h04"), o.Z, o.Nom)
+						}
+						if an {
+							fmt.Fprintf(cellContent, "</span>")
 						}
 					}
 				}
@@ -127,11 +128,15 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 					fmt.Fprint(html, "Trou de Météorite<br>")
 				}
 				fmt.Fprint(html, string(cellContent.Bytes()))
-				for z, objects := range objectsByLevel {
+				for zo, objects := range objectsByLevel {
+					an := zo != int64(z)
 					merge := len(objects) > 3
+					if an {
+						fmt.Fprintf(html, "<span name=3D>")
+					}
 					if merge {
 						fmt.Fprintf(html, "<br>")
-						fmt.Fprintf(html, "<span class=ch_visible_object>%d : ", z)
+						fmt.Fprintf(html, "<span class=ch_visible_object>%d : ", zo)
 						fmt.Fprintf(html, "<a class=ch_objects_toggler href=\"javascript:grid_changeDisplayByName('objects_%d');\">", nextDivId)
 						fmt.Fprintf(html, "<b>%d trésors</b>", len(objects))
 						fmt.Fprintf(html, "</a>")
@@ -141,6 +146,9 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 					fmt.Fprint(html, "<br>", strings.Join(objects, "<br>"))
 					if merge {
 						fmt.Fprintf(html, "</div></span>")
+					}
+					if an {
+						fmt.Fprintf(html, "</span>")
 					}
 				}
 			}

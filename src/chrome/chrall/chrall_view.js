@@ -14,7 +14,7 @@ function makeDeLink(x, y, z) {
  */
 function Chrall_makeFiltersHtml() {
 	html = '';
-	html += "<form id=gridFiltersForm>";
+	html += "<form class=gridFiltersForm>";
 	if (player.totalSight>5) {
 		html += '<img title="Centre la vue sur votre troll" id=goto_player class=butt src="'+chrome.extension.getURL("player_target.png")+'">';
 		html += "Horizon : <select id=viewRedux>";
@@ -99,11 +99,14 @@ function Chrall_makeGridHtml() {
 					for (var i=0; i<cell.trolls.length; i++) {
 						var t = cell.trolls[i];
 						if (c>0) cellContent[c++] = "<br name='trolls' class=ch_troll>";
+						var an = player.z!=t.z;
+						if (an) cellContent[c++] = "<span name=3D>";
 						cellContent[c++] = "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\"";
 						cellContent[c++] = ' message="en X='+x+' Y='+y+' Z='+t.z+'<br>Distance horizontale : ' + hdist+'"';
 						cellContent[c++] = " id="+t.id;
 						if (t.isIntangible) cellContent[c++] = " intangible";
 						cellContent[c++] = ">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a>";
+						if (an) cellContent[c++] = "</span>";
 					}
 				}
 				if (cell.monsters) {
@@ -111,18 +114,24 @@ function Chrall_makeGridHtml() {
 						var m = cell.monsters[i];
 						if (m.isGowap) {
 							if (c>0) cellContent[c++] = "<br name='gowaps' class=ch_gowap>";
+							var an = player.z!=m.z;
+							if (an) cellContent[c++] = "<span name=3D>";
 							cellContent[c++] = "<a name='gowaps' class=ch_gowap href=\"javascript:EMV("+m.id+",750,550);\"";
 							cellContent[c++] = ' message="'+m.fullName+' ( '+m.id+' )<br>en X='+x+' Y='+y+' Z='+m.z+'<br>Distance horizontale : ' + hdist+'"';
 							cellContent[c++] = ">"+m.z+": "+m.name+"";
 							if (m.isSick) cellContent[c++] = "<span class=ch_tag>[M]</span>";
 							cellContent[c++] = "</a>";
+							if (an) cellContent[c++] = "</span>";
 						} else {
 							if (c>0) cellContent[c++] = "<br name='monstres' class=ch_monster>";
+							var an = player.z!=m.z;
+							if (an) cellContent[c++] = "<span name=3D>";
 							cellContent[c++] = "<a name='monstres' class=ch_monster href=\"javascript:EMV("+m.id+",750,550);\"";
 							cellContent[c++] = ' message="'+m.fullName+' ( '+m.id+' )<br>en X='+x+' Y='+y+' Z='+m.z+'<br>Distance horizontale : ' + hdist+'"';
 							cellContent[c++] = " id="+m.id;
 							cellContent[c++] = " nom_complet_monstre=\""+encodeURIComponent(m.fullName)+"\"";
 							cellContent[c++] = ">"+m.z+": "+m.fullName+"</a>";
+							if (an) cellContent[c++] = "</span>";
 						}
 					}
 				}
@@ -133,9 +142,12 @@ function Chrall_makeGridHtml() {
 							hasHole = true;
 						} else {
 						if (c>0) cellContent[c++] = "<br name='lieux' class=ch_place>";
+							var an = player.z!=t.z;
+							if (an) cellContent[c++] = "<span name=3D>";
 							cellContent[c++] = "<a name='lieux' class=ch_place";
 							if (t.hasLink) cellContent[c++] = ' href="javascript:Enter(\'/mountyhall/View/TaniereDescription.php?ai_IDLieu='+t.id+'\',750,500)"';
 							cellContent[c++] = ">"+t.z+": "+t.name+"</a>";
+							if (an) cellContent[c++] = "</span>";
 						}
 					}
 				}
@@ -155,16 +167,22 @@ function Chrall_makeGridHtml() {
 						if (merge) {
 							if (c>0) cellContent[c++] = "<br name='trésors' class=ch_object>";
 							var divName = "objects_"+(x<0?"_"+(-x):x)+"_"+(y<0?"_"+(-y):y)+"_"+(-level);
+							var an = player.z!=level;
+							if (an) cellContent[c++] = "<span name=3D>";
 							cellContent[c++] = "<span name='trésors' class=ch_object>" + level + " : ";
 							cellContent[c++] = "<a class=ch_objects_toggler href=\"javascript:grid_changeDisplayByName('"+divName+"');\">";
 							cellContent[c++] = "<b>"+list.length+" trésors</b>";
 							cellContent[c++] = "</a>";
 							cellContent[c++] = "<div name="+divName+" class=hiddenDiv>";
+							if (an) cellContent[c++] = "</span>";
 						}
 						for (var i=0; i<list.length; i++) {
 							var t = list[i];
 							if (c>0) cellContent[c++] = "<br name='trésors' class=ch_object>";
+							var an = player.z!=t.z;
+							if (an) cellContent[c++] = "<span name=3D>";
 							cellContent[c++] = "<span name='trésors' bub=\""+t.id+" : "+t.name+"\" class=ch_object>"+t.z+": "+t.name+"</span>"; // note :pb à attendre si le nom du trésor contient un guillement
+							if (an) cellContent[c++] = "</span>";
 						}
 						if (merge) {
 							cellContent[c++] = "</div></span>";
@@ -175,15 +193,20 @@ function Chrall_makeGridHtml() {
 					for (var i=0; i<cell.mushrooms.length; i++) {
 						var t = cell.mushrooms[i];
 						if (c>0) cellContent[c++] = "<br name='champignons' class=ch_mushroom>";
+						var an = player.z!=t.z;
+						if (an) cellContent[c++] = "<span name=3D>";
 						cellContent[c++] = "<a name='champignons' class=ch_mushroom>"+t.z+": "+t.name+"</a>";
-					}
-					
+						if (an) cellContent[c++] = "</span>";
+					}					
 				}
 				if (cell.cenotaphs) {
 					for (var i=0; i<cell.cenotaphs.length; i++) {
 						var t = cell.cenotaphs[i];
 						if (c>0) cellContent[c++] = "<br name='cénotaphes' class=ch_cenotaph>";
+						var an = player.z!=t.z;
+						if (an) cellContent[c++] = "<span name=3D>";
 						cellContent[c++] = "<a name='cénotaphes' class=ch_cenotaph>"+t.z+": "+t.name+"</a>";
+						if (an) cellContent[c++] = "</span>";
 					}					
 				}
 			
@@ -627,7 +650,8 @@ function Chrall_analyseAndReformatView() {
 						bubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
 					}
 				}
-			);			
+			);
+			
 		}, 1000
 	);
 
