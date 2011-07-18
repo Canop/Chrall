@@ -201,7 +201,6 @@ function Chrall_makeGridHtml() {
 						if (t.name == "Mur") {
 							//On met une image de mur en background et on n'affiche rien dans la case, chrall suffit pour obtenir les coordonnées.
 							cellContent[c++] = '<div style="background-image:url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/mur.gif);background-repeat:repeat;min-height:160;min-width:160"/>';
-						// Si on est aveugle, ça ne sert à rien d'afficher les couloirs ils sont faux.
 						} else {	
 							// Compte le nombre d'éléments dans la case. L'utilité sera d'estimer plus ou moins la hauteur de la case en fonction de ce qu'elle contient.
 							// On aurait pu le faire avce un compteur tout au long du parcours global des éléments, mais comme l'utilité sera très spécifique au labyrinthe, autant le faire ici.
@@ -224,8 +223,8 @@ function Chrall_makeGridHtml() {
 					}
 				}
 			}
-			// si on est aveugle, on indique les les cases autour sont inconnues avec un point d'interrogation.
-			// La vue étant minimaliste, on peut fixer une taille par défaut pour les cases.
+			// Si on est aveugle, on indique que les cases autour sont inconnues avec un point d'interrogation.
+			// La vue étant minimaliste dans ce cas-là, on peut fixer une taille par défaut pour les cases.
 			if ( (horizontalViewLimit == 0) && ( (player.x != x) || (player.y != y) ) ) {
 				cellContent[c++] = '<div style="background-image:url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/null.gif);background-repeat:repeat;min-height:160;min-width:160"/>';
 			}
@@ -403,7 +402,6 @@ function Chrall_analyseCenotaphTable(table) {
 function Chrall_analyseView() {
 	isInLaby = false;
 
-
 	//> recherche de la position du joueur
 	var positionSentenceText = $("table.mh_tdborder").first().find("li").first().text();
 	var positionSentenceTokens = positionSentenceText.split(new RegExp("[ ,:=]+", "g"));
@@ -427,7 +425,11 @@ function Chrall_analyseView() {
 	if(horizontalViewLimit > 0){	
 		grid = new Grid(player.x, player.y, horizontalViewLimit);
 	}
-	// Ainsi la grille permet tout de même de voir à 1 de distance, histoire de pouvoir introduire des infos fournies par MH à 1 de distance même si on est aveugle.
+	// Ainsi la grille permet tout de même de stocker des infos à 1 de distance même si on est aveugle.
+	// A priori inutile, mais on ne sait jamais: il y a eu le coup pour les murs, est-ce que ça pourrait arriver pour autre chose?
+	// (Bon OK Canop, tu peux supprimer ce test s'il te dérange... ;) Une autre façon de procéder serait que plutôt que de baser horizontalViewLimit sur la vue du troll, de le baser sur la distance entre le troll et l'objet le plus lointain de sa vue.
+	// Ainsi, un troll avec une vue de 1000 qui n'a rien autour de lui aurait une vue adaptée. De même, si MH décide que tous les trolls même les aveugles voient toujours un lieu particulier, ça ne poserait pas de souci.
+	// Mais je sais bien que se prendre la tête sur des problèmes qui n'existent pas encore, c'est inutile. ;-) D'autant plus que c'est plus compliqué à faire. )
 	else{
 		grid = new Grid(player.x, player.y, 1);
 	}
@@ -480,6 +482,7 @@ function Chrall_analyseView() {
 			}			
 		}
 	};
+	
 	//> on détermine la zone visible 
 	if (horizontalViewLimit > 0){
 		xmin = player.x-horizontalViewLimit;
@@ -514,6 +517,7 @@ function Chrall_analyseAndReformatView() {
 	$("table table table").first().remove();
 	$("table table center").first().remove();
 	$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
+	
 	var time_after_cleaning = (new Date()).getTime(); // <= prof	
 
 	//> on colle en haut à droite les liens [Refresh] et [Logout]
@@ -521,6 +525,7 @@ function Chrall_analyseAndReformatView() {
 	refreshLogout.addClass("floatTopRight");
 
 	var time_before_grid = (new Date()).getTime(); // <= prof
+	
 	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 	//var tables = $("table.mh_tdborder");
 	var html = []
@@ -564,6 +569,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "</div>";
 	
 	var time_after_grid_building = (new Date()).getTime(); // <= prof
+	
 	$("table.mh_tdborder").first().parent().parent().prepend(html.join(''));
 	$("#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
