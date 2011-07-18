@@ -201,7 +201,8 @@ function Chrall_makeGridHtml() {
 						if (t.name == "Mur") {
 							//On met une image de mur en background et on n'affiche rien dans la case, chrall suffit pour obtenir les coordonnées.
 							cellContent[c++] = '<div style="background-image:url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/mur.gif);background-repeat:repeat;min-height:160;min-width:160"/>';
-						} else {						
+						// Si on est aveugle, ça ne sert à rien d'afficher les couloirs ils sont faux.
+						} else {	
 							// Compte le nombre d'éléments dans la case. L'utilité sera d'estimer plus ou moins la hauteur de la case en fonction de ce qu'elle contient.
 							// On aurait pu le faire avce un compteur tout au long du parcours global des éléments, mais comme l'utilité sera très spécifique au labyrinthe, autant le faire ici.
 							var elementsNumber = 0;
@@ -222,6 +223,11 @@ function Chrall_makeGridHtml() {
 						}
 					}
 				}
+			}
+			// si on est aveugle, on indique les les cases autour sont inconnues avec un point d'interrogation.
+			// La vue étant minimaliste, on peut fixer une taille par défaut pour les cases.
+			if ( (horizontalViewLimit == 0) && ( (player.x != x) || (player.y != y) ) ) {
+				cellContent[c++] = '<div style="background-image:url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/null.gif);background-repeat:repeat;min-height:160;min-width:160"/>';
 			}
 			
 			html[h++] = "<td class=d"+((hdist-horizontalViewLimit+20001)%2);
@@ -397,18 +403,19 @@ function Chrall_analyseCenotaphTable(table) {
 function Chrall_analyseView() {
 	isInLaby = false;
 
+
 	//> recherche de la position du joueur
 	var positionSentenceText = $("table.mh_tdborder").first().find("li").first().text();
 	var positionSentenceTokens = positionSentenceText.split(new RegExp("[ ,:=]+", "g"));
 	player.x = parseInt(positionSentenceTokens[5]);
 	player.y = parseInt(positionSentenceTokens[8]);
 	player.z = parseInt(positionSentenceTokens[10]);
-
+	
 	//> recherche de la vue max
 	var sightLine = $('form li:contains(" porte actuellement à")'); //
 	var tokens = Chrall_tokenize(sightLine.text());
 	player.totalSight = parseInt(tokens[5]);
-
+	
 	//> recherche de l'horizon (pour dessiner la grille ensuite)
 	try {
 		horizontalViewLimit = parseInt(document.getElementsByName("ai_MaxVue")[0].value);
@@ -417,8 +424,13 @@ function Chrall_analyseView() {
 	horizontalViewLimit = Math.max(horizontalViewLimit, 0);
 	
 	//> initialisation de la grille
-	grid = new Grid(player.x, player.y, horizontalViewLimit);
-	
+	if(horizontalViewLimit > 0){	
+		grid = new Grid(player.x, player.y, horizontalViewLimit);
+	}
+	// Ainsi la grille permet tout de même de voir à 1 de distance, histoire de pouvoir introduire des infos fournies par MH à 1 de distance même si on est aveugle.
+	else{
+		grid = new Grid(player.x, player.y, 1);
+	}
 	//> chargement des trucs en vue (monstres, trolls, etc.).
 	var $tables = {};
 	var $allTables = $("table.mh_tdborder");
@@ -436,8 +448,8 @@ function Chrall_analyseView() {
 	Chrall_analyseMushroomTable($tables['champignons']);
 	Chrall_analysePlaceTable($tables['lieux']);
 	Chrall_analyseCenotaphTable($tables['cadavre']);
-	Chrall_analyseWallTable($tables['murs']);
-	
+	//Si on est aveugle, on sait que les infos des murs et couloirs sont incorrects
+	if (horizontalViewLimit != 0)	Chrall_analyseWallTable($tables['murs']);
 	//> on regarde si la case du joueur est encombrée
 	// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case
 	player.cellIsFree = true;
@@ -467,13 +479,21 @@ function Chrall_analyseView() {
 				}
 			}			
 		}
-	}
-	
+	};
 	//> on détermine la zone visible 
-	xmin = player.x-horizontalViewLimit;
-	xmax = player.x+horizontalViewLimit;
-	ymin = player.y-horizontalViewLimit;
-	ymax = player.y+horizontalViewLimit;
+	if (horizontalViewLimit > 0){
+		xmin = player.x-horizontalViewLimit;
+		xmax = player.x+horizontalViewLimit;
+		ymin = player.y-horizontalViewLimit;
+		ymax = player.y+horizontalViewLimit;
+	}
+	// Ainsi on affiche quand même une case de distance même si la vue est de 0, pour que l'on puisse encore se déplacer avec la vue.
+	else		{
+		xmin = player.x-1;
+		xmax = player.x+1;
+		ymin = player.y-1;
+		ymax = player.y+1;
+	}
 	return $tables;
 }
 
@@ -485,7 +505,7 @@ function Chrall_analyseAndReformatView() {
 		
 	//> on analyse la vue
 	var $tables = Chrall_analyseView();
-
+	
 	//> on vire la frise latérale
 	$("td[width=55]").remove();
 	//> on vire la bannière "Mounty Hall la terre des trolls" qu'on a vu pendant 5 ans déjà...
@@ -494,7 +514,6 @@ function Chrall_analyseAndReformatView() {
 	$("table table table").first().remove();
 	$("table table center").first().remove();
 	$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
-	
 	var time_after_cleaning = (new Date()).getTime(); // <= prof	
 
 	//> on colle en haut à droite les liens [Refresh] et [Logout]
@@ -502,7 +521,6 @@ function Chrall_analyseAndReformatView() {
 	refreshLogout.addClass("floatTopRight");
 
 	var time_before_grid = (new Date()).getTime(); // <= prof
-	
 	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 	//var tables = $("table.mh_tdborder");
 	var html = []
@@ -546,7 +564,6 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "</div>";
 	
 	var time_after_grid_building = (new Date()).getTime(); // <= prof
-	
 	$("table.mh_tdborder").first().parent().parent().prepend(html.join(''));
 	$("#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
