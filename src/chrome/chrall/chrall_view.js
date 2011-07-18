@@ -52,7 +52,7 @@ function Chrall_makeFiltersHtml() {
 /**
  * cette fonction construit le HTML de la grille. Ce HTML est construit une fois pour toute, le filtrage opérant via des modifications de style.
  */ 
-function Chrall_makeGridHtml() {
+function Chrall_makeGridHtml() {	
 	var grey_closed_png_url = chrome.extension.getURL("grey_closed.png");
 	var grey_open_png_url = chrome.extension.getURL("grey_open.png");
 	var h=0;
@@ -246,15 +246,15 @@ function Chrall_makeGridHtml() {
 					}
 				}
 			}
-			// Si on est aveugle, on indique que les cases autour sont inconnues avec un point d'interrogation.
-			// La vue étant minimaliste dans ce cas-là, on peut fixer une taille par défaut pour les cases.
-			if ( (horizontalViewLimit == 0) && ( (player.x != x) || (player.y != y) ) ) {
-				cellContent[c++] = '<div style="background-image:url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/null.gif);background-repeat:repeat;min-height:160;min-width:160"/>';
-			}
-			
+				
 			html[h++] = "<td class=d"+((hdist-horizontalViewLimit+20001)%2);
 			html[h++] = " grid_x=" + x;
 			html[h++] = " grid_y=" + y;
+			if ( (horizontalViewLimit == 0) && ( (player.x != x) || (player.y != y) ) ) {
+				// Si on est aveugle, on indique que les cases autour sont inconnues avec un point d'interrogation.
+				// La vue étant minimaliste dans ce cas-là, on peut fixer une taille par défaut pour les cases.
+				html[h++] = " uncharted";
+			}
 			if (cellId!=null) html[h++] = ' id='+cellId;
 			var deRange = player.z===0 ? 2 : 1;
 			var cellIsAccessibleByDe = x>=player.x-deRange && x<=player.x+deRange && y>=player.y-deRange && y<=player.y+deRange;
@@ -443,19 +443,11 @@ function Chrall_analyseView() {
 	} catch(error) {
 	}
 	horizontalViewLimit = Math.max(horizontalViewLimit, 0);
+	var horizontalGridLimit = Math.max(horizontalViewLimit, 1); // la grille dépasse la vue pour le menu (TODO : on pourrait limiter ça au cas où la session est active ou bien est-ce que ça gauffrerait le labyrinthe ?)
 	
 	//> initialisation de la grille
-	if(horizontalViewLimit > 0){	
-		grid = new Grid(player.x, player.y, horizontalViewLimit);
-	}
-	// Ainsi la grille permet tout de même de stocker des infos à 1 de distance même si on est aveugle.
-	// A priori inutile, mais on ne sait jamais: il y a eu le coup pour les murs, est-ce que ça pourrait arriver pour autre chose?
-	// (Bon OK Canop, tu peux supprimer ce test s'il te dérange... ;) Une autre façon de procéder serait que plutôt que de baser horizontalViewLimit sur la vue du troll, de le baser sur la distance entre le troll et l'objet le plus lointain de sa vue.
-	// Ainsi, un troll avec une vue de 1000 qui n'a rien autour de lui aurait une vue adaptée. De même, si MH décide que tous les trolls même les aveugles voient toujours un lieu particulier, ça ne poserait pas de souci.
-	// Mais je sais bien que se prendre la tête sur des problèmes qui n'existent pas encore, c'est inutile. ;-) D'autant plus que c'est plus compliqué à faire. )
-	else{
-		grid = new Grid(player.x, player.y, 1);
-	}
+	grid = new Grid(player.x, player.y, Math.max(1, horizontalGridLimit)); 
+
 	//> chargement des trucs en vue (monstres, trolls, etc.).
 	var $tables = {};
 	var $allTables = $("table.mh_tdborder");
@@ -464,7 +456,7 @@ function Chrall_analyseView() {
 		var tableName = $table.find("a[name]").first().attr("name");
 		if (tableName) {
 			$tables[tableName]=$table;
-			$table.detach(); // grosse accélération. Mais effet de bord : si ça plante on n'a plus rien...
+			$table.detach(); // grosse accélération. Mais effet de bord : si ça plante on n'a plus rien. Il faudra sans doute que je fasse un gros try/catch et que je m'arrange pour remettre les tables en cas d'exception
 		}
 	}
 	Chrall_analyseMonsterTable($tables['monstres']);
@@ -473,8 +465,8 @@ function Chrall_analyseView() {
 	Chrall_analyseMushroomTable($tables['champignons']);
 	Chrall_analysePlaceTable($tables['lieux']);
 	Chrall_analyseCenotaphTable($tables['cadavre']);
-	//Si on est aveugle, on sait que les infos des murs et couloirs sont incorrects
-	if (horizontalViewLimit != 0)	Chrall_analyseWallTable($tables['murs']);
+	if (horizontalViewLimit > 0) Chrall_analyseWallTable($tables['murs']); // Si on est aveugle, on sait que les infos des murs et couloirs sont incorrectes
+	
 	//> on regarde si la case du joueur est encombrée
 	// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case
 	player.cellIsFree = true;
@@ -507,19 +499,10 @@ function Chrall_analyseView() {
 	};
 	
 	//> on détermine la zone visible 
-	if (horizontalViewLimit > 0){
-		xmin = player.x-horizontalViewLimit;
-		xmax = player.x+horizontalViewLimit;
-		ymin = player.y-horizontalViewLimit;
-		ymax = player.y+horizontalViewLimit;
-	}
-	// Ainsi on affiche quand même une case de distance même si la vue est de 0, pour que l'on puisse encore se déplacer avec la vue.
-	else		{
-		xmin = player.x-1;
-		xmax = player.x+1;
-		ymin = player.y-1;
-		ymax = player.y+1;
-	}
+	xmin = player.x-horizontalGridLimit;
+	xmax = player.x+horizontalGridLimit;
+	ymin = player.y-horizontalGridLimit;
+	ymax = player.y+horizontalGridLimit;
 	return $tables;
 }
 
