@@ -37,7 +37,7 @@ function Chrall_reformatOptionsView() {
 	html +=	"return null;";
 	html += "}";
 	html += "function checkVueGrille(){";
-	html += "if(ReadCookie(\"vueGrille\") == null || ReadCookie(\"vueGrille\") == \"true\"){";
+	html += "if(ReadCookie(\"vueGrille\") == \"true\"){";
 	html += "document.getElementById('chk_vueGrille').checked = false;";
 	html += "return true;";
 	html += "}";

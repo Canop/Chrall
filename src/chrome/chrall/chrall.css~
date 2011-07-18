@@ -43,7 +43,6 @@ table.grid td {
 .ch_monster, .ch_monster:hover {
 	background-image:url('http://fofotrollos.free.fr/chrall/monster_icon.png');
 	background-repeat:no-repeat;
-	padding-left:20px;
 	color: brown !important;
 }
 

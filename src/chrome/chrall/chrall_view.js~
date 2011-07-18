@@ -513,6 +513,7 @@ function Chrall_analyseAndReformatView() {
 	if (isInLaby) {
 		html[h++] = "<li><a href=#tabWalls>Murs et couloirs</a></li>";
 	}	
+	html[h++] = "<li><a href=#tabVueClassique>Vue classique</a></li>";
 	html[h++] = "<li><a href=#tabTrolls>Trolls ("+grid.nbTrollsInView+")</a></li>";
 	html[h++] = "<li><a href=#tabMonsters>Monstres ("+grid.nbMonstersInView+")</a></li>";
 	html[h++] = "<li><a href=#tabPlaces>Lieux ("+grid.nbPlacesInView+")</a></li>";

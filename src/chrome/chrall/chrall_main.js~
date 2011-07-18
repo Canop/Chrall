@@ -50,7 +50,7 @@ chrome.extension.sendRequest(
 			break;
 		case "Play_vue.php":
 			initCommunications('get_partages');			
-			if(ReadCookie("vueGrille")==null || ReadCookie("vueGrille") == "true"){
+			if(ReadCookie("vueGrille") == "true" || ReadCookie("vueGrille")==null){
 				Chrall_analyseAndReformatView();	
 			}
 			break;
