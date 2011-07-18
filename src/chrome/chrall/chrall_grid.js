@@ -45,8 +45,6 @@ function Grid(xp, yp, sight) {
 	this.nbObjectsInView = 0;
 	this.nbMushroomsInView = 0;
 	this.nbCenotaphsInView = 0;
-	// Pas utile
-	//this.nbWallsInView = 0;
 }
 
 // renvoie la cellule de coordonnées passées.
@@ -217,3 +215,4 @@ function Chrall_gridLive() {
 	});
 
 }
+

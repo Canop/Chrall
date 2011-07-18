@@ -297,7 +297,6 @@ P1 :
 * bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * éditeur pour la diplo trollienne (et la stocker en bd)
 * killomètre : affichage par guilde
-* vue centrée des gowaps : ajouter un bouton pour limiter au niveau cible ("niveau -34")
 * mettre à jour la base pour les niveaux des monstres (faire un max ?)
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
 * gowaps/ordres : intégrer le bouton de mise à jour de vue

@@ -42,6 +42,7 @@
 				"chrall_options.js",
 				"chrall_events.js",
 				"chrall_start.js",
+				"chrall_view_analysis.js",
 				"chrall_view.js",
 				"chrall_flies.js",
 				"chrall_move.js",
