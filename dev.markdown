@@ -289,20 +289,22 @@ DONE :
 EN COURS :
 ==========
 * apprendre le langage go
+* nouvelle grille
 
 TODO :
 ======
 P1 :
 ----
-* bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
+* table de trolls et de monstres : bouton de vue zoomée
 * éditeur pour la diplo trollienne (et la stocker en bd)
+
+* bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * killomètre : affichage par guilde
 * mettre à jour la base pour les niveaux des monstres (faire un max ?)
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
 * gowaps/ordres : intégrer le bouton de mise à jour de vue
 * bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
 * Vue/Partages : mise à jour de la position des trolls lors de la mise à jour de la vue
-* table de trolls et de monstres : bouton de vue zoomée
 * CDM : gestion du vol et du sang-froid (entre autres, voir http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=5&TopicID=145805)
 * le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
 * indiquer directement dans la bulle si un monstre est insulté (et par qui)
@@ -318,14 +320,12 @@ P1 :
 * essayer gb (code.google.com/p/go-gb/)
 * recherche par niveau de monstre pour mission
 * recherche : liste sauvegardée de cibles (tékas, monstres, copains, etc.)
+* grille/filtre : sous-cochage par type de trésor
 
 P2 :
 ----
 * trollinfos/kills des atk : tronquer le tableau en comptant les ATK
-* fonction (menu droit ?) de recherche sur mountypedia (exemple : lieu)
-* options bulles/photos : illustration normale/petite illustration/pas d'illustration
 * recherche : trier par distance (un peu compliqué en raison du tri par date de vue)
-* grille/filtre : sous-cochage par type de trésor
 * affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
 * indiquer dans l'équipement quels compos ont de la valeur pour EM et calculer les histoires de %
 * interception des cdm : ne rien envoyer au serveur si on a raté la comp
