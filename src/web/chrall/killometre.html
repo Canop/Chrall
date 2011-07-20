@@ -224,8 +224,6 @@
 	var currentCat = getUrlParameter('cat', 'TrollsByKills');
 	var indexStartPage = 1;
 	var pageSize = 20;
-	var searchedToken = null;
-
 	
 	function getUrlParameter(name, defaultValue) {
 		name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
@@ -237,14 +235,12 @@
 	}
 	
 	function search() {
-		searchedToken = $('#trollPattern').val();
-		updatePage();
-		searchedToken = null;
+		updatePage($('#trollPattern').val());
 	}
 
-	function updatePage() {
+	function updatePage(searchedToken) {
 		var url = 'http://canop.org:8000/chrall/json?action=get_page_killometre&cat='+currentCat+'&startIndex='+((indexStartPage-1)*pageSize)+'&pageSize='+pageSize;
-		if (searchedToken!=null) url += '&searched='+encodeURIComponent(searchedToken);
+		if (searchedToken) url += '&searched='+encodeURIComponent(searchedToken);
 		$.ajax({
 			url: url,
 			crossDomain: true,
@@ -264,9 +260,9 @@
 			html += '<td>'+races[t.Race]+'</td>';
 			html += '<td>'+t.Niveau+'</td>';
 			html += '<td class=lb>'+(t.NbKillsMonstres+t.NbKillsTrolls)+'</td><td># '+t.ClassementKills+'</td>';
-			html += '<td class=lb>'+(t.NbKillsMonstres)+'</td><td># '+t.ClassementKillsMonstres+'</td>';
-			html += '<td class=lb>'+(t.NbKillsTrolls)+'</td><td># '+t.ClassementKillsTrolls+'</td>';
-			html += '<td class=lb>'+(t.ClassifChrall)+'</td>';
+			html += '<td class=lb>'+t.NbKillsMonstres+'</td><td># '+t.ClassementKillsMonstres+'</td>';
+			html += '<td class=lb>'+t.NbKillsTrolls+'</td><td># '+t.ClassementKillsTrolls+'</td>';
+			html += '<td class=lb>'+t.ClassifChrall+'</td>';
 			html += '</tr>';
 		}
 		$('#kmTable tbody').html(html);
@@ -301,7 +297,14 @@
 		$('#trollPattern').change(search);
 		
 		var choosenTab=$('#kmTabs span.Tab[cat="'+currentCat+'"]');
-		if(choosenTab.length==1){choosenTab.click();}
+		if(choosenTab.length==1){
+			choosenTab.click();
+		}
+		var searched = getUrlParameter('search');
+		if (searched) {
+			$('#trollPattern').val(searched);
+			search();
+		}
 	});
 
 	//> google analytics
