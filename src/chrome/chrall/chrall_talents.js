@@ -1,4 +1,4 @@
-/**
+﻿/**
  * renvoie le baratin informatif à afficher dans une bulle lorsque la souris passe au dessus du nom
  *  d'une compétence.
  * 
@@ -423,15 +423,30 @@ function getBubbleContentForSort(name) {
 			
 		
 		case "Vampirisme" :
-			var att = 3.5*2*Math.floor(player.damage.diceNumber/3) + player.attac.magicalBonus;
+			var diceAttVamp= Math.floor(player.damage.diceNumber*2/3);
+			var attMagicalBonus="+0";
+			var degMagicalBonus="+0";
+			if (player.attac.magicalBonus > 0 ) {
+				attMagicalBonus = "+" + player.attac.magicalBonus;
+			} else {
+				attMagicalBonus = player.attac.magicalBonus;
+			}
+			if (player.damage.magicalBonus > 0 ) {
+				degMagicalBonus = "+" + player.damage.magicalBonus;
+			} else {
+				degMagicalBonus = player.damage.magicalBonus;
+			}
+			var att = 3.5*diceAttVamp + player.attac.magicalBonus;
 			var deg = player.damage.diceNumber * 2 + player.damage.magicalBonus;
 			var degCrit = Math.floor(player.damage.diceNumber*1.5)*2 + player.damage.magicalBonus;
 			var html = "<table>";
-			html += "<tr><td>Attaque moyenne</td><td> : " + att + "</td></tr>";
-			html += "<tr><td>Dégâts moyens</td><td> : " + deg + " / " + degCrit + "</td></tr>";
+			html += "<tr><td>Attaque moyenne</td><td> : " + att + "&nbsp&nbsp&nbsp(" + diceAttVamp + "D6 " + attMagicalBonus + ")"+"</td></tr>";
+			html += "<tr><td>Dégâts moyens</td><td> : " + deg + " / " + degCrit + "&nbsp&nbsp&nbsp(" + player.damage.diceNumber + "D3 " + degMagicalBonus + ")"+"</td></tr>";
 			html += "</table>";
 			html += "L'armure physique de la cible est ignorée.";
-			html += "<br>PV gagnés par vampirisme : moitié des dégâts réellement infligés.<br>Un Jet de Résistance : permet de ne subir que la moitié des dégats.";
+			html += "<br>PV gagnés par vampirisme : moitié des dégâts réellement infligés.<br>";
+			html += "Maximum de PV regagnés: nombre de dés de dégâts, et pas plus que les PV restant de la cible.<br>";
+			html += "Jet de Résistance : permet de ne subir que la moitié des dégats.";
 			return html;
 
 		case "Vision Accrue" :
