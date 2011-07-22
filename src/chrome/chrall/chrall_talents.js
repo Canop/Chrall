@@ -368,6 +368,7 @@ function getBubbleContentForSort(name) {
 		case "Sacrifice" :
 			var html = "Vous pouvez soigner un troll situé sur votre case ou une case voisine.";
 			html += "<br>Cela vous coûte 1D3 PV + 1D3 par tranche entière de 5 points de vie soignés.";
+			html += "<br>Un sacrifice optimal finit donc par 4 ou 9 (par exemple 79 PV).";
 			return html;
 
 		case "Siphon des âmes" :
