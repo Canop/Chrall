@@ -298,7 +298,7 @@ TODO :
 ======
 P1 :
 ----
-* table de trolls et de monstres : bouton de vue zoomée
+* table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
 * éditeur pour la diplo trollienne (et la stocker en bd)
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
 

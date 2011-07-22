@@ -440,13 +440,15 @@ function getBubbleContentForSort(name) {
 			var deg = player.damage.diceNumber * 2 + player.damage.magicalBonus;
 			var degCrit = Math.floor(player.damage.diceNumber*1.5)*2 + player.damage.magicalBonus;
 			var html = "<table>";
-			html += "<tr><td>Attaque moyenne</td><td> : " + att + "&nbsp&nbsp&nbsp(" + diceAttVamp + "D6 " + attMagicalBonus + ")"+"</td></tr>";
-			html += "<tr><td>Dégâts moyens</td><td> : " + deg + " / " + degCrit + "&nbsp&nbsp&nbsp(" + player.damage.diceNumber + "D3 " + degMagicalBonus + ")"+"</td></tr>";
+			html += "<tr><td>Attaque moyenne</td><td> : " + att + "</td><td>(" + diceAttVamp + "D6 " + attMagicalBonus + ")"+"</td></tr>";
+			html += "<tr><td>Dégâts moyens</td><td> : " + deg + " / " + degCrit + "</td><td>(" + player.damage.diceNumber + "D3 " + degMagicalBonus + ")"+"</td></tr>";
 			html += "</table>";
-			html += "L'armure physique de la cible est ignorée.";
-			html += "<br>PV gagnés par vampirisme : moitié des dégâts réellement infligés.<br>";
-			html += "Maximum de PV regagnés: nombre de dés de dégâts, et pas plus que les PV restant de la cible.<br>";
-			html += "Jet de Résistance : permet de ne subir que la moitié des dégats.";
+			// Canop : Les commentaires ci dessous sont incomplets (exemple si moins de 10 dés de dégâts) et ne font au final
+			// que reprendre moins clairement ce qui est accessible en cliquant sur le lien. Je supprime tout.
+			//~ html += "L'armure physique de la cible est ignorée.";
+			//~ html += "<br>PV gagnés par vampirisme : moitié des dégâts réellement infligés.<br>";
+			//~ html += "Maximum de PV regagnés: nombre de dés de dégâts, et pas plus que les PV restant de la cible.<br>";
+			//~ html += "Jet de Résistance : permet de ne subir que la moitié des dégats.";
 			return html;
 
 		case "Vision Accrue" :
