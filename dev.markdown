@@ -286,6 +286,9 @@ DONE :
 * bouton 3D pour filtrer la grille générale
 * bouton 3D pour filtrer les grilles "zoomées"
 
+<- v2.07
+* BUG : les bulles de troll n'apparaissaient plus sur le forum MH
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -297,6 +300,7 @@ P1 :
 ----
 * table de trolls et de monstres : bouton de vue zoomée
 * éditeur pour la diplo trollienne (et la stocker en bd)
+* bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
 
 * bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * killomètre : affichage par guilde
