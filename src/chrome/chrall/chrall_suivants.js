@@ -2,7 +2,7 @@
 // enrichit la page des ordres d'un suivant
 function Chrall_handleFollowerOrders() {
 	
-	Chrall_gridLive(); // <- ça c'est parce qu'on va sans doute 
+	Chrall_gridLive(); // <- ça c'est parce qu'on va sans doute ajouter des liens d'ouverture de vues "zoom"
 	
 	var tableOrdre = $('p table.mh_tdborder_fo');	
 	var lignes = tableOrdre.find('tr');

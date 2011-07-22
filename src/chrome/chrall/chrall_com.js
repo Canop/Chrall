@@ -1,10 +1,8 @@
 /*
 Communication authentifiée avec le serveur Chrall.
-
-
 */
 
-var sentMessagesCount = 0;
+var sentMessagesCount = 0; // ceci est inutile et sera sans doute supprimé
 
 // appelée sans paramètre, indique si le compte est actif, sinon l'active ou le désactive suivant valeur de newValue ("yes" ou "no")
 function compteChrallActif(newValue) {

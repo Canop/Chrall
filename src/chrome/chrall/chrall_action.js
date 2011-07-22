@@ -23,7 +23,6 @@ function Chrall_addMenuOutilsIfPossible() {
 	$('body').append(html);
 }
 
-http://canop.org/chrall/fofo/
 function Chrall_handleActionPage() {
 	//> on va essayer de lire les PA disponibles
 	var sentence = $('b:contains("Il me reste ")');

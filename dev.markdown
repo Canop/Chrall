@@ -288,6 +288,8 @@ DONE :
 
 <- v2.07
 * BUG : les bulles de troll n'apparaissaient plus sur le forum MH
+* correction bulle vampi
+* correction problèmes de date et positionnement (en pocket hall) dans le menu MH
 
 EN COURS :
 ==========

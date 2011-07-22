@@ -16,7 +16,6 @@ function Chrall_handleMenuPage() {
 	if (ibr1 != ibr2) html += t2+'</span><br><span id=ch_menu_pocketHall>';
 	html += t3+'</span>'
 	infoMenuDiv.html(html);
-	
 	if (ibr1 != ibr2) t2 = t3; 
 	var infoTokens = Chrall_tokenize(t2);
 	var px = infoTokens[1];
@@ -28,6 +27,7 @@ function Chrall_handleMenuPage() {
 	chrome.extension.sendRequest({
 		"trollId": parseInt(trollId),
 		"position": {"x":player.x, "y":player.y, "z":player.z}
-		//TODO "pocketHall": t3 or Hall... Who catches the request?
+		// TODO     chouia : "pocketHall": t3 or Hall... Who catches the request?
+		//  canop-> chouia : chrome.extension.onRequest.addListener dans chrome-extension.html (le "background")
 	});
 }

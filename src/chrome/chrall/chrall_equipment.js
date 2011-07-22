@@ -98,7 +98,6 @@ function constructTotalEquipmentBm(map) {
  
 //Dans la page d'équipement, ajoute le total des Bonus Malus de l'équipement porté
 function Chrall_analyseAndReformatEquipment() {
-
 	var eqCells = $('table.TableEq td:contains("Etat")');
 	var ids = {}; // clé : id matos
 	var effects = []; // chaque élément de ce tableau est une chaine de la forme "nomEffet:valeurEffet"
@@ -124,6 +123,5 @@ function Chrall_analyseAndReformatEquipment() {
 	
 	var html = '<br><table width="98%" border="0" cellspacing="1" cellpadding="5" align="CENTER" class="mh_tdborder"><tr class=mh_tdpage><td class=mh_tdtitre><b>Total</b></td><td><b>' + textTotalEqBm + '</b></td></tr></table><br>';
 	$('form[action="Play_action_Equipement.php"]').prepend(html);
-
 }
 	

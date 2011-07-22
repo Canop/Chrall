@@ -122,7 +122,7 @@ chrome.extension.sendRequest(
 			Chrall_addInfosToMonsterEvents();
 			Chrall_addBubblesToLinks();
 			break;
-		case "Play_a_Combat.php": //  résultat de combat (vérifié pour CDB)
+		case "Play_a_Combat.php": //  résultat de combat
 			Chrall_analyseResultatCombat();
 		case "FO_Ordres.php":
 			Chrall_handleFollowerOrders();

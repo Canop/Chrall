@@ -1,6 +1,5 @@
 
 
-
 // il faut stocker le numéro du monstre sélectionné car on ne l'a pas dans les résultats de l'insulte
 function Chrall_prepareInsulte() {
 	$('select[name="ai_IDTarget"]').change(function() {
