@@ -287,9 +287,12 @@ DONE :
 * bouton 3D pour filtrer les grilles "zoomées"
 
 <- v2.07
+
 * BUG : les bulles de troll n'apparaissaient plus sur le forum MH
 * correction bulle vampi
 * correction problèmes de date et positionnement (en pocket hall) dans le menu MH
+
+<- v2.08
 
 EN COURS :
 ==========
@@ -300,10 +303,17 @@ TODO :
 ======
 P1 :
 ----
+* bug : menu avec changement de niveau affiché même si pas assez de PA
+* interface de sélection des liens utiles + deux colonnes de lien si disponible
+* prises de notes générales
+* prise de notes sur monstre ou troll [public/partageux/privé]
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
 * éditeur pour la diplo trollienne (et la stocker en bd)
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
+* refactoring go : utiliser http.FileServer pour supprimer du code les trucs statiques (http://code.google.com/p/go-wiki/wiki/HttpStaticFiles)
 
+* palmarès des monstres meilleurs tueurs
+* bulle minage : faire comme TP : http://canop.org/chrall/fofo/viewtopic.php?f=1&t=11&sid=bbb609f56c08490ff542ce597d33df0a&p=503#p503
 * bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * killomètre : affichage par guilde
 * mettre à jour la base pour les niveaux des monstres (faire un max ?)

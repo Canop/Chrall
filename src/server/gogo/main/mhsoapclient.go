@@ -3,6 +3,7 @@ package main
 /*
 Interrogations du serveur SOAP de MH
 
+http://www.mountyhall.com/Forum/display_topic_threads.php?ThreadID=2171938
 */
 
 import (
@@ -15,8 +16,6 @@ import (
 	"xml"
 	//"os"
 )
-
-// http://www.mountyhall.com/Forum/display_topic_threads.php?ThreadID=2171938
 
 const MH_SOAP_URL = "http://sp.mountyhall.com/SP_WebService.php"
 

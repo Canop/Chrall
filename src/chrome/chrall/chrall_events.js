@@ -2,7 +2,6 @@
 
   
 function Chrall_addBubblesToLinks() {
-	
 	$("a.mh_trolls_1").each(
 		function() {
 			var link = $(this);
@@ -22,8 +21,7 @@ function Chrall_addBubblesToLinks() {
 			var nomMonstre = link.text().substr(3).trim();
 			bubble(link, '', "bub_monster", GOGOCHRALL+"json?action=get_extract_jsonp&name=" + encodeURIComponent(nomMonstre) + "&monsterId="+numMonstre, nomMonstre);
 		}
-	);	
-	
+	);
 }
 
 function Chrall_addInfosToMonsterEvents() {
