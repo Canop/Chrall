@@ -57,8 +57,10 @@ func (km *Killomètre) addKill(kill *Kill) {
 	km.Kills[l] = kill
 	if kill.TueurEstTroll {
 		km.initTroll(kill.Tueur)
-		if kill.TuéEstTroll && kill.Tué != kill.Tueur {
-			km.Trolls[kill.Tueur].NbKillsTrolls++
+		if kill.TuéEstTroll {
+			if kill.Tué != kill.Tueur {
+				km.Trolls[kill.Tueur].NbKillsTrolls++
+			}
 		} else {
 			km.Trolls[kill.Tueur].NbKillsMonstres++
 		}
