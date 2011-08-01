@@ -298,13 +298,14 @@ EN COURS :
 ==========
 * apprendre le langage go
 * nouvelle grille
+* interface de sélection des liens utiles + deux colonnes de lien si disponible
+
 
 TODO :
 ======
 P1 :
 ----
 * bug : menu avec changement de niveau affiché même si pas assez de PA
-* interface de sélection des liens utiles + deux colonnes de lien si disponible
 * prises de notes générales
 * prise de notes sur monstre ou troll [public/partageux/privé]
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]

@@ -22,6 +22,7 @@ function Chrall_reformatOptionsView() {
 	var html="<ul class=tabs>";
 	html += "<li><a href=#tabStandard>Options Standard</a></li>";
 	html += "<li><a href=#tabChrall>Options Chrall</a></li>";
+	html += "<li><a href=#tabLinks>Liens</a></li>";
 	html += "</ul>";
 	html += "<div class=tab_container><br><br>";
 	html += " <div id=tabStandard class=tab_content></div>";
@@ -54,6 +55,9 @@ function Chrall_reformatOptionsView() {
 	html += "</p>";
 	html += "<p>Fournir votre mot de passe restreint peut (devrait) vous poser des problèmes si vous jouez un troll ennemi de la Canopée. Dans ce cas, et si vous avez des compétences informatiques, n'hésitez pas à venir causer sur <a target=newWin href=\"http://canop.org/chrall/fofo/\">le canofofo</a> afin de voir si vous pourriez héberger un serveur afin d'éviter que votre groupe de chasse ne me confie vos données privées.</p>";
 	html += "<p>Notez que vous ne transmettez pas d'informations confidentielles au serveur Chrall tant que vous n'activez pas le compte.</p>";
+	html += " </div>";
+	html += " <div id=tabLinks class=tab_content>";
+	html += Chrall_makeLinkOptionPage();
 	html += " </div>";
 	html += "</div>";
 
