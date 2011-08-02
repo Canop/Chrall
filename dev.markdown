@@ -294,30 +294,31 @@ DONE :
 
 <- v2.08
 
+* interface de sélection des liens utiles, liens sur plusieurs colonnes si nécessaire
+* utiliser localStorage+json plutôt que chrome-extension.html pour persister localement les infos du troll
+
 EN COURS :
 ==========
 * apprendre le langage go
 * nouvelle grille
-* interface de sélection des liens utiles + deux colonnes de lien si disponible
-
+* bug : menu avec changement de niveau affiché même si pas assez de PA
+* prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : interface séparée
+* prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : visu en bulles
 
 TODO :
 ======
 P1 :
 ----
-* bug : menu avec changement de niveau affiché même si pas assez de PA
-* prises de notes générales
-* prise de notes sur monstre ou troll [public/partageux/privé]
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
 * éditeur pour la diplo trollienne (et la stocker en bd)
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
-* refactoring go : utiliser http.FileServer pour supprimer du code les trucs statiques (http://code.google.com/p/go-wiki/wiki/HttpStaticFiles)
+* faire des statistiques d'accès via Chrall plutôt que via Google Analytics
 
 * palmarès des monstres meilleurs tueurs
 * bulle minage : faire comme TP : http://canop.org/chrall/fofo/viewtopic.php?f=1&t=11&sid=bbb609f56c08490ff542ce597d33df0a&p=503#p503
 * bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * killomètre : affichage par guilde
-* mettre à jour la base pour les niveaux des monstres (faire un max ?)
+* mettre à jour la base pour les nouveaux niveaux des monstres (faire un max ?)
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
 * gowaps/ordres : intégrer le bouton de mise à jour de vue
 * bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
@@ -359,6 +360,7 @@ P2 :
 
 P3 :
 ----
+* refactoring go : utiliser http.FileServer pour supprimer du code les trucs statiques (http://code.google.com/p/go-wiki/wiki/HttpStaticFiles)
 * indiquer les points cardinaux dans les menus de DE
 * inventaire de tanière : rendre les listes triables, filtrables
 * analyser la position dans le profil

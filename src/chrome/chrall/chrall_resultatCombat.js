@@ -51,8 +51,7 @@ function testeFauxResultatCombat() {
 	result.PV=89;
 	result.Succes = true;
 	sendToChrallServer(
-		"combat",
-		{"Action":result}
+		"combat", {"Action":result}
 	);
 }
 

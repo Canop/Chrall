@@ -1,6 +1,4 @@
-
-
-
+// enrichit la page d'actions
 function Chrall_reformatOptionsView() {
 	var standardOptionContainer = $("table table td")[1];
 	var standardOptionTables = $(standardOptionContainer).find("table");

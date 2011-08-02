@@ -69,26 +69,23 @@ function turnName(turn) {
 	}
 }
 
-// remplace la fonction parseInt, trop capricieuse ( parseInt("05")=5 mais parseInt("08")=0 )
+// remplace la fonction parseInt, trop capricieuse ( parseInt("05")=5 mais parseInt("08")=0 ) (pb de radix ?)
 // Traite aussi des cas spéciaux de Chrall.
 function atoi(s) {
 	if (!s) return undefined; // à valider
 	s = s.trim();
-	while(s.charAt(0)=='0' || s.charAt(0)==':' || s.charAt(0)=='0') s = s.substring(1, s.length);
+	while(s.charAt(0)=='0' || s.charAt(0)==':') s = s.substring(1, s.length);
 	return parseInt(s);
 }
 
 // appelée depuis l'une des sous-frame de droite (la grande, ou bien celle d'actions), cette méthode met à jour
-// la position affichée dans le menu et signale la position au script de fond.
+// la position affichée dans le menu et signale la position au serveur Chrall
 function updateTroll() {
-	chrome.extension.sendRequest({
-		"player":player
-	});
 	if (player.x) {
 		var s = 'X='+player.x + ' | Y='+player.y + ' | N='+player.z;
 		$('<script>parent.parent.Sommaire.document.getElementById("ch_menu_position").innerHTML="'+s+'";</script>').appendTo($('body'));
+		sendPlayerInfosToChrallServer();
 	}
-	sendPlayerInfosToChrallServer();
 }
 
 // récupère la date de génération de la page et renvoie ça sous forme de secondes depuis 1970
@@ -106,8 +103,6 @@ function findMHSeconds() {
 	}
 	return 0;
 }
-
-
 
 
 

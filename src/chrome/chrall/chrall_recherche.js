@@ -2,7 +2,7 @@
 // 
 function makeSearchPanel($panel) {
 	if (!compteChrallActif()) {
-		return "La recherche nécessite (cela changera peut-être) un compte chrall actif.";
+		return "La recherche nécessite un compte chrall actif. Vous pouvez activer votre compte Chrall dans la page Option.";
 	}
 	var html = [];
 	var mdpRestreint = localStorage['troll.'+player.id+'.mdp'];

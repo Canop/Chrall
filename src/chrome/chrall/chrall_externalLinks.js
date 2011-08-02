@@ -30,15 +30,13 @@ function Chrall_getExternalLinks(){
 			new ExternalLink("Anatrolliseur", false, "http://mountyhall.dispas.net/dynamic/outils_anatrolliseur.php", "Le simulateur de croissance de troll des Psyko'Chasseurs."),
 			new ExternalLink("Cachette", false, "http://mountyhall.dispas.net/dynamic/outils_capitan.php?", "Aide à la recherche de cachette de Capitan par les Psyko'Chasseurs."),
 			new ExternalLink("Troc", false, "http://troc.mountyhall.com/index.php", "Le Troc de l'Hydre, pour l'échange de composants."),
-			new ExternalLink("Le Matos", false, "http://lematos.free.fr/MH/matos/index.php", "Les caractéristiques de base de toutes les équipements."),
-			//~ new ExternalLink("", false, "", "")
+			new ExternalLink("Le Matos", false, "http://lematos.free.fr/MH/matos/index.php", "Les caractéristiques de base de toutes les équipements.")
 		],
 	};
 	for (var cat in links) {
 		var catLinks = links[cat];
 		for (var i=0; i<catLinks.length; i++) {
 			var stored = localStorage['dysplayLink_'+catLinks[i].name];
-			//console.log('Stored for ' + catLinks[i].name + ' : ' + stored);
 			if (stored) {
 				catLinks[i].display = stored=='yes';
 			}
@@ -66,11 +64,9 @@ function Chrall_makeLinkOptionPage() {
 	}
 	html += '<p><input type=button onClick="top.document.location.href=\'http://games.mountyhall.com/mountyhall/MH_Play/Play.php\';" value="Appliquer les modifications"></p>';
 	$('input.externalLinkActivator').live('change', function() {
-		//console.log($(this));
 		var name = $(this).attr('name');
 		var checked = $(this).attr('checked');
 		localStorage['dysplayLink_'+name]=checked?'yes':'no';
-		//console.log(localStorage);
 	});
 	return html;
 }
@@ -89,8 +85,6 @@ function Chrall_makeLinksDiv() {
 	}
 	var nbCols = Math.ceil(linkArray.length/NB_LINES_MAX);
 	var nbItemsPerCol = Math.ceil(linkArray.length/nbCols);
-	var width = 40 + nbCols*70;
-	if ($(document).width()<808+width) return; // 808 : taille de l'image de fond que je ne veux pas recouvrir
 	var i=0;
 	var html = '<div id=menuOutilsChrall>';
 	html += '<table cellspacing=2 cellpadding=2>';
@@ -109,5 +103,4 @@ function Chrall_makeLinksDiv() {
 	html += '</table>';
 	html += '</div>';
 	$('body').append(html);
-	console.log('width:'+width);
 }

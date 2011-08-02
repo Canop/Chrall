@@ -18,14 +18,16 @@ function Chrall_handleActionPage() {
 		try {
 			rpa = parseInt(tokens[3]);
 			$('<script>parent.chrall_pa_restant.value='+tokens[3]+';</script>').appendTo($('body'));
-			chrome.extension.sendRequest({"pa": rpa});
+			player.pa = rpa;
+			player.sessionActive = true;
 		} catch(error) {
 			console.log(error);
 		}
 	} else {
 		// a priori si on n'a pas cette phrase c'est qu'on n'a pas activé
 		$('<script>parent.chrall_pa_restant.value=0;</script>').appendTo($('body'));
-		chrome.extension.sendRequest({"pa": -1}); // -1 pour signaler que la session n'est pas active
+		player.sessionActive = false;
+		player.pa = 0;
 	}
 	
 	Chrall_makeLinksDiv();

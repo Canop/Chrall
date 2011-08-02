@@ -16,18 +16,14 @@ function Chrall_handleMenuPage() {
 	if (ibr1 != ibr2) html += t2+'</span><br><span id=ch_menu_pocketHall>';
 	html += t3+'</span>'
 	infoMenuDiv.html(html);
-	if (ibr1 != ibr2) t2 = t3; 
-	var infoTokens = Chrall_tokenize(t2);
+	var locationString = t2.indexOf('X=')>=0 ? t2 : t3;
+	var infoTokens = Chrall_tokenize(locationString);
 	var px = infoTokens[1];
 	var py = infoTokens[3];
 	var pz = infoTokens[5];
+	
+	player.id = parseInt(trollId);
 	player.x = parseInt(px);
 	player.y = parseInt(py);
 	player.z = parseInt(pz);
-	chrome.extension.sendRequest({
-		"trollId": parseInt(trollId),
-		"position": {"x":player.x, "y":player.y, "z":player.z}
-		// TODO     chouia : "pocketHall": t3 or Hall... Who catches the request?
-		//  canop-> chouia : chrome.extension.onRequest.addListener dans chrome-extension.html (le "background")
-	});
 }

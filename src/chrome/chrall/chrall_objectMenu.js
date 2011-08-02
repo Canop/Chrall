@@ -2,10 +2,6 @@
  * La méthode objectMenu, la seule publique, permet d'ajouter un ou deux menu(s) (en fait un div
  *  dont le contenu est fourni par l'appelant) au dessus et au dessous d'un objet.
  * 
- * 
- * 
- * TODO : tester si les performances restent correctes avec http://cherne.net/brian/resources/jquery.hoverIntent.html
- * 
  */ 
 
 var onOmTarget = false;
@@ -120,9 +116,7 @@ function objectMenu(
 		showOm($(this), html_top, html_bottom);
 	});
 	target.mouseout(function(event){
-		//console.log('target.mouseout');
 		if (eventIsOver(event, omTarget)) return;
-		//console.log('eventIsOver false');
 		onOmTarget = false;
 		checkHideOm();
 	});

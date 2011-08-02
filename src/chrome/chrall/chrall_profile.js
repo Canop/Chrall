@@ -1,3 +1,4 @@
+// modifie la page du profil, et lit les informations disponibles concernant le troll
 
 /**
  * renvoie une durée en secondes à partir d'une expression MH de type "3 jours 25 minutes 1 seconde"

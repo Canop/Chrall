@@ -12,6 +12,7 @@ GOFILES=\
 	main/mysqlstore.go\
 	main/actionstore.go\
 	main/cdmstore.go\
+	main/notestore.go\
 	main/comptestore.go\
 	main/partagestore.go\
 	main/observationstore.go\

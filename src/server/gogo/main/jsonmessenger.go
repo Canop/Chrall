@@ -18,6 +18,7 @@ type JsonMessageIn struct {
 	ChangePartage string
 	IdCible       uint // l'id d'un autre troll ou d'un monstre, le sujet optionnel de l'action
 	Action        *Action
+	Note          *Note
 }
 
 type JsonMessageOut struct {
@@ -174,6 +175,16 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			} else { // demande de mise à jour spécifique			
 				fmt.Printf("MAJ Vue %d\n", in.IdCible)
 				out.TextMajVue = h.store.majVue(db, in.IdCible, in.TrollId, h.tksManager)
+			}
+		} else if action == "save_note" && in.Note!=nil {
+			in.Note.Auteur = int(in.TrollId)
+			fmt.Printf("Stockage note ù+v\n", in.Note)
+			err = h.store.SaveNote(db, in.Note)
+			if err != nil {
+				fmt.Printf("Erreur stockage note : %s\n", err.String())
+				out.Error = err.String()
+			} else {
+				out.Text = "Note sauvegardée"
 			}
 		}
 	} else {

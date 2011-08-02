@@ -70,7 +70,6 @@ function Chrall_gridLive() {
 	// ajout de la fenêtre de zoom et de quelques fonctions
 	var html = "<script>";
 	html += "function grid_changeDisplayByName(key, display, transiant){";
-	html += " console.log(key);";
 	html += " var os = document.getElementsByName(key);";
 	html += " if (!display) {"; // mode d'inversion d'un objet unique, non persistent
 	html += "  for (var i=0; i<os.length; i++) {";

@@ -15,9 +15,9 @@ Structure :
 
 1. **l'extension Chrome** qui reformate les pages de la forme `games.mountyhall.com/*` : le code source est dans `src/chrome`. Il s'agit essentiellement de javascript.
 
-2. **le serveur gogochrall** : Il offre sur http://canop.org:8000/chrall un bestiaire et un outil d'alimentation mais surtout il répond aux requètes de l'extension. Son code source est dans `src/server`. Il s'agit de [go](http://golang.org) et d'une base MySQL.
+2. **le serveur gogochrall** : Il offre sur http://canop.org:8000/chrall un bestiaire et un outil d'alimentation mais surtout il répond aux requètes de l'extension (essentiellement en JSON/JSONP). Son code source est dans `src/server`. Il s'agit de [go](http://golang.org) et d'une base MySQL.
 
-3. **le site web** : il s'agit du site présentant l'extension et les outils Chrall à l'adresse http://canop.org/chrall. 
+3. **le site web** : il s'agit du site présentant l'extension et les outils Chrall à l'adresse http://canop.org/chrall.
 
 Compiler vous même l'extension :
 ================================

@@ -182,6 +182,30 @@ Troll.prototype.fillFrom = function(src) {
 		this[key]=src[key];
 	}
 }
+// sauvegarde localement les infos du troll. Utilisé en particulier pour le passage entre frames
+Troll.prototype.save = function() {
+	if (!this.id) {
+		console.log('no id -> troll non sauvable');
+		return;
+	}
+	console.log('SAVE');
+	localStorage['last_saved_troll_id'] = this.id;
+	localStorage['troll.'+this.id] = JSON.stringify(this);
+	//console.log(localStorage);
+}
+Troll.prototype.restore = function() {
+	if (!this.id) {
+		this.id = parseInt(localStorage['last_saved_troll_id']);
+	}
+	var json = localStorage['troll.'+this.id];
+	if (!json) {
+		console.log('troll ' + this.id + ' non trouvé');
+		return;
+	}
+	this.fillFrom(eval('('+json+')'));
+	console.log('troll restauré :');
+	console.log(player);
+}
 
 //////////////////////////////////////////////////////////////////////// Place (lieu)
 

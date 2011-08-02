@@ -29,7 +29,6 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 
 <script type="text/javascript">
 
-
 	// objet alarme
 	function Alarm(time) {
 		this.time = time; // la date à laquelle on veut que ça sonne
@@ -41,10 +40,7 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 	var alarmMargin = 5*60*1000; // décalage entre l'alarme réelle et la date de l'alarm.
 	var minimalTimeBetweenAlarms = 5*60*1000; // pour diverses raisons algorithmiques, ne pas descendre ça trop bas et pas en dessous de alarmMargin
 	var lastAlarmTime = 0; // on stocke ça pour éviter de jouer trop souvent les alarmes
-	var remainingPaInfos = null;
 	var sendCdm = true;
-	var trollPosition = null;
-	var player = new Troll(); // le troll du joueur
 
 	function playSound() {
 		document.getElementById('alarm').play();
@@ -88,51 +84,10 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 			for (var key in request) {
 				if (key=="dla" || key=="cumul") {
 					alarms[key] = new Alarm(request[key]-alarmMargin);
-				} else if (key=="pa") {
-					remainingPaInfos = {
-						"time": (new Date()).getTime(),
-						"pa": request[key]
-					};
-					if (request[key]==-1) {
-						player.pa = 0;
-						player.sessionActive = false;
-					}  else {
-						player.pa = request[key];
-						player.sessionActive = true;
-					}
-				} else if (key=="get_pa") {
-					var pa = -1;
-					if (remainingPaInfos) {
-						pa = remainingPaInfos.pa;
-					}
-					sendResponse({"pa":pa});					
-				} else if (key=="trollId") {
-					player.id = request[key];
-				} else if (key=="position") {
-					var pos = request[key];
-					player.x = pos.x;
-					player.y = pos.y;
-					player.z = pos.z;
-				} else if (key=="player") {
-					player = request[key];
-				} else if (key=="get_trollId") {
-					sendResponse({"trollId":player.id});					
 				} else if (key=="send_cdm") {
 					sendCdm = request[key]=='' ? false : true;
 				} else if (key=="get_send_cdm") {
 					sendResponse({"send_cdm":sendCdm});
-				} else if (key=="get_bgInfos") {
-					var pa = -1;
-					if (request[key]) {
-						player = new Troll();
-					} else {
-						if (remainingPaInfos) {
-							pa = remainingPaInfos.pa;
-						}						
-					}
-					sendResponse({
-						 "player": player
-					});					
 				}
 			}
 			scheduleAlarms();
