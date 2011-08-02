@@ -221,6 +221,7 @@
 									<option value=grotte>une grotte</option>
 									<option value=monstre>un monstre</option>
 									<option value=troll>un troll</option>
+									<option value=guilde>une guilde</option>
 								</select>
 								<input class=sujet type=text id=idSujet size=6 >
 								<input class=sujet type=text id=xSujet size=3 ><input class=sujet type=text id=ySujet size=3><input class=sujet type=text id=zSujet size=3>
@@ -235,6 +236,18 @@
 									<option value=0>uniquement vous</option>
 									<option value=1>les joueurs avec qui vous avez établi un partage</option>
 									<option value=2>tout le monde</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td align=right>
+								Diplomatie
+							</td>
+							<td align=left>
+								<select id=diplo>
+									<option value=neutre>Neutre</option>
+									<option value=ami>Ami</option>
+									<option value=ennemi>Ennemi</option>
 								</select>
 							</td>
 						</tr>
@@ -257,7 +270,7 @@
 				</div>
 			
 			<span class=Tab cat=NotesGenerales>Notes générales</span>
-			<span class=Tab cat=NotesLieux>Notes de lieux</span>
+			<span class=Tab cat=NotesGrottes>Notes de grottes</span>
 			<span class=Tab cat=NotesTrolls>Notes de trolls</span>
 			<span class=Tab cat=NotesMonstres>Notes de monstres</span>
 		</div>
@@ -352,9 +365,11 @@
 					break;
 				case 'monstre':
 				case 'troll':
+				case 'guilde':
 					note.IdSujet = atoi($('#idSujet').val());
 			}
 			note.Contenu = $('#contenu').val();
+			note.Diplo = $('#diplo').val();
 			note.Partage = atoi($('#partage').val());
 			sendToServer('save_note', {'Note':note});
 		});
@@ -372,6 +387,7 @@
 					break;
 				case 'monstre':
 				case 'troll':
+				case 'guilde':
 					$('#idSujet').show();
 			}
 		});

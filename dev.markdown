@@ -295,7 +295,8 @@ DONE :
 <- v2.08
 
 * interface de sélection des liens utiles, liens sur plusieurs colonnes si nécessaire
-* utiliser localStorage+json plutôt que chrome-extension.html pour persister localement les infos du troll
+* correction d'un bug sur le comptage des morts par poison pour le Kill-O-Mètre
+* utilisation de localStorage+json plutôt que chrome-extension.html pour persister localement les infos du troll
 
 EN COURS :
 ==========
@@ -314,6 +315,7 @@ P1 :
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
 * faire des statistiques d'accès via Chrall plutôt que via Google Analytics
 
+* virer l'ancienne diplo Trollienne, que remplace la prise de notes (avec son champ diplo)
 * palmarès des monstres meilleurs tueurs
 * bulle minage : faire comme TP : http://canop.org/chrall/fofo/viewtopic.php?f=1&t=11&sid=bbb609f56c08490ff542ce597d33df0a&p=503#p503
 * bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
@@ -342,6 +344,7 @@ P1 :
 
 P2 :
 ----
+* permettre la prise de notes sur les trésors ?
 * trollinfos/kills des atk : tronquer le tableau en comptant les ATK
 * recherche : trier par distance (un peu compliqué en raison du tri par date de vue)
 * affichage des monstres et objets au même niveau. [Demande](http://canop.org/chrall/fofo/viewtopic.php?f=5&t=14)
