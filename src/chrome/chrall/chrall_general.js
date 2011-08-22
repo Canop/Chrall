@@ -3,7 +3,7 @@
  et des utilitaires. Contient aussi la constante donnant la version courante de Chrall
 */
 
-var chrallVersion = "2.8";
+var chrallVersion = "2.9";
 
 function getUrlParameter(name, defaultValue) {
   name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");

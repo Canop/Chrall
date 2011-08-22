@@ -56,3 +56,11 @@ func (store *MysqlStore) SaveNote(db *mysql.Client, note *Note) (err os.Error) {
 	}
 	return
 }
+
+// typeSujet : "" si on ne veut pas filtrer par type
+// idSujet : "" si on ne veut pas filtrer par id
+// auteur : "" si on ne veut pas filtrer par auteur
+// 
+func (store *MysqlStore) GetNotes(typeSujet string, idSujet string, auteur string, trollId int, amis []int) (notes []*Note) {
+	return // not yet implemented !
+}

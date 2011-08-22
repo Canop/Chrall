@@ -297,6 +297,9 @@ DONE :
 * interface de sélection des liens utiles, liens sur plusieurs colonnes si nécessaire
 * correction d'un bug sur le comptage des morts par poison pour le Kill-O-Mètre
 * utilisation de localStorage+json plutôt que chrome-extension.html pour persister localement les infos du troll
+* ajout de 109.69.220.90 aux adresses possibles (et suppression de certaines obsolètes)
+
+<- v2.09
 
 EN COURS :
 ==========
@@ -305,17 +308,18 @@ EN COURS :
 * bug : menu avec changement de niveau affiché même si pas assez de PA
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : interface séparée
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : visu en bulles
+* killomètre : modifier l'url automatiquement (comme sur re7210)
+* BUG : pas d'image pour le pseudo-dragon ? -> il n'est pas dans le fichier ftp://ftp.mountyhall.com/Public_Monstres.txt
 
 TODO :
 ======
 P1 :
 ----
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
-* éditeur pour la diplo trollienne (et la stocker en bd)
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
 * faire des statistiques d'accès via Chrall plutôt que via Google Analytics
-
 * virer l'ancienne diplo Trollienne, que remplace la prise de notes (avec son champ diplo)
+
 * palmarès des monstres meilleurs tueurs
 * bulle minage : faire comme TP : http://canop.org/chrall/fofo/viewtopic.php?f=1&t=11&sid=bbb609f56c08490ff542ce597d33df0a&p=503#p503
 * bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
