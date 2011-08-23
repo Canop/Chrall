@@ -221,8 +221,6 @@
 <script type="text/javascript">
 	
 	var races = ["?", "Da", "D", "K", "S", "T"];
-	var currentCat = getUrlParameter('cat', 'TrollsByKills');
-	var indexStartPage = 1;
 	var pageSize = 20;
 	
 	function getUrlParameter(name, defaultValue) {
@@ -234,24 +232,60 @@
 		else return results[1];
 	}
 	
+	var state = {
+		cat: getUrlParameter('cat', 'TrollsByKills'),
+		searched: getUrlParameter('search'),
+		indexStartPage: getUrlParameter('indexStartPage', 1),
+		URL: function() {
+			var url = 'killometre.html?';
+			if (this.cat) url+='cat='+this.cat+'&';
+			if (this.searched) url+='search='+this.searched+'&';
+			if (this.indexStartPage) url+='indexStartPage='+this.indexStartPage+'&';
+			return url;
+		},
+		apply: function() {
+			var url = 'http://canop.org:8000/chrall/json?action=get_page_killometre&cat='+this.cat+'&startIndex='+((this.indexStartPage-1)*pageSize)+'&pageSize='+pageSize;
+			if (this.searched) {
+				url += '&searched='+encodeURIComponent(this.searched);
+				this.searched=null;
+			}
+			$.ajax({
+				url: url,
+				crossDomain: true,
+				dataType: 'jsonp'
+			});
+		}
+	};
+	
+	window.onpopstate = function(event) {
+		if (!event.state) return;
+		state.cat = event.state['cat'];
+		state.searched = event.state['searched'];
+		state.indexStartPage = event.state['indexStartPage'];
+		if (state.searched) $('#trollPattern').val(state.searched);
+		$('#kmTabs span.Tab').removeAttr('active');
+		$('#kmTabs span.Tab[cat="'+state.cat+'"]').attr('active', true);
+		state.apply();
+	};
+	
 	function search() {
 		updatePage($('#trollPattern').val());
 	}
 
 	function updatePage(searchedToken) {
-		var url = 'http://canop.org:8000/chrall/json?action=get_page_killometre&cat='+currentCat+'&startIndex='+((indexStartPage-1)*pageSize)+'&pageSize='+pageSize;
-		if (searchedToken) url += '&searched='+encodeURIComponent(searchedToken);
-		$.ajax({
-			url: url,
-			crossDomain: true,
-			dataType: 'jsonp'
-		});
+		if (searchedToken) state.searched=searchedToken; // sera enlevé par la méthode apply
+		try {
+			history.pushState({cat:state.cat, searched:state.searched,indexStartPage:state.indexStartPage}, "Burp!", state.URL());
+		} catch (e) {
+			if (console && console.log) console.log(e);
+		}
+		state.apply();
 	}
 	
 	function chrall_receiveKillometreExtract(list) { // méthode appelée (jsonp) par le serveur
 		var html = '';
-		indexStartPage = 1+list.StartIndex/pageSize;
-		$('#pageIndex').val(indexStartPage);
+		state.indexStartPage = 1+list.StartIndex/pageSize;
+		$('#pageIndex').val(state.indexStartPage);
 		for (var i=0; i<list.Trolls.length; i++) {
 			var t = list.Trolls[i];
 			if (list.SearchedTrollIndex==i) html += '<tr found>';
@@ -269,42 +303,36 @@
 	}
 	
 	$(document).ready(function() {
+		if (state.searched) $('#trollPattern').val(state.searched);
+		$('#kmTabs span.Tab[cat="'+state.cat+'"]').attr('active', true);
 		$('#kmTabs span.Tab').click(function(){
 			var $this =$(this);
 			$('#kmTabs span.Tab').removeAttr('active');
 			$this.attr('active', true);
-			currentCat = $this.attr('cat');
-			indexStartPage=1;
+			state.cat = $this.attr('cat');
+			state.indexStartPage=1;
 			updatePage();
 		});
 		$('#nextPage').click(function() {
-			indexStartPage++;
+			state.indexStartPage++;
 			updatePage();
 		});
 		$('#previousPage').click(function() {
-			if (indexStartPage<2) return;
-			indexStartPage--;
+			if (state.indexStartPage<2) return;
+			state.indexStartPage--;
 			updatePage();
 		});
 		$('#pageIndex').change(function(){
 			var $this = $(this);
 			var v = parseInt($this.val());
-			if (v>0) indexStartPage=v;
-			else indexStartPage=1;
+			if (v>0) state.indexStartPage=v;
+			else state.indexStartPage=1;
 			updatePage();
 		});
 		$('#searchButton').click(search);
 		$('#trollPattern').change(search);
 		
-		var choosenTab=$('#kmTabs span.Tab[cat="'+currentCat+'"]');
-		if(choosenTab.length==1){
-			choosenTab.click();
-		}
-		var searched = getUrlParameter('search');
-		if (searched) {
-			$('#trollPattern').val(searched);
-			search();
-		}
+		state.apply();
 	});
 
 	//> google analytics

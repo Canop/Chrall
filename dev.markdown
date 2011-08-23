@@ -301,6 +301,8 @@ DONE :
 
 <- v2.09
 
+* killomètre : modifier l'url automatiquement
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -308,13 +310,13 @@ EN COURS :
 * bug : menu avec changement de niveau affiché même si pas assez de PA
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : interface séparée
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : visu en bulles
-* killomètre : modifier l'url automatiquement (comme sur re7210)
 * BUG : pas d'image pour le pseudo-dragon ? -> il n'est pas dans le fichier ftp://ftp.mountyhall.com/Public_Monstres.txt
 
 TODO :
 ======
 P1 :
 ----
+* bestiaire : gérer le changement des monstres à 4M
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
 * faire des statistiques d'accès via Chrall plutôt que via Google Analytics
