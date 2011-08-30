@@ -210,6 +210,9 @@ func rowToBestiaryExtract(completeName string, row mysql.Row) *BestiaryExtract {
  */
 func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName string, monsterId uint) (be *BestiaryExtract, err os.Error) {
 
+	// les monstres ont changé de catégorie à partir du numéro 4M
+	Ante4M := monsterId > 0 && monsterId < 4000000
+
 	// On utilise des max pour les champs de type chaine. C'est sans doute trop lourd (à moins que MySQL ne mette en place un index
 	//  spécifique). L'objectif réel est de récupérer la chaine la plus longue.
 
@@ -252,6 +255,7 @@ func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName stri
 			be = rowToBestiaryExtract(completeName, row)
 			if be.NbCdm > 0 {
 				be.PreciseMonster = true
+				be.Ante4M = Ante4M
 				return be, nil
 			}
 		}
@@ -277,6 +281,11 @@ func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName stri
 	sql += naminmax("duree_tour") + ", "
 	sql += " max(portee_du_pouvoir_text)"
 	sql += " from cdm where nom_complet=" + toMysqlString(completeName)
+	if Ante4M {
+		sql += " and num_monstre<4000000"
+	} else {
+		sql += " and num_monstre>3999999"
+	}
 
 	//fmt.Println(sql)
 
@@ -298,6 +307,7 @@ func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName stri
 
 	be = rowToBestiaryExtract(completeName, row)
 	be.PreciseMonster = false
+	be.Ante4M = Ante4M
 	return be, nil
 }
 

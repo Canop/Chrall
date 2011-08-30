@@ -9,6 +9,7 @@ type BestiaryExtract struct {
 	NbMonsters     int64
 	Fusion         *CDM
 	PreciseMonster bool // indique si les CDM concerne exactement le monstre
+	Ante4M         bool // true ssi on donne les caractéristiques d'avant le numéro 4M
 }
 
 func pxkill(niveauTueur uint, niveauTué uint) int {

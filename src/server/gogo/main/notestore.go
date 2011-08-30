@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"mysql"
 	"os"
+	"strconv"
 	"time"
 )
 
+// une note
 type Note struct {
 	Id        int64 // autoincrément BD, 0 si pas en provenance de la BD
 	Auteur    int
@@ -20,7 +22,18 @@ type Note struct {
 	Partage   int   // 0 (auteur uniquement), 1 (partageux) ou 2 (tout le monde)
 	Date      int64 // secondes
 	Contenu   string
-	Diplo string // neutre, ami, ennemi
+	Diplo     string // neutre, ami, ennemi
+}
+
+// les éléments (reçevables en json) d'une demande de notes
+type NoteRequest struct {
+	XMin      int
+	XMax      int
+	YMin      int
+	YMax      int
+	ZMin      int
+	ZMax      int
+	NumTrolls []int
 }
 
 // stocke une note en BD 
@@ -52,15 +65,76 @@ func (store *MysqlStore) SaveNote(db *mysql.Client, note *Note) (err os.Error) {
 		if err != nil {
 			return
 		}
-
 	}
 	return
 }
 
-// typeSujet : "" si on ne veut pas filtrer par type
-// idSujet : "" si on ne veut pas filtrer par id
-// auteur : "" si on ne veut pas filtrer par auteur
-// 
-func (store *MysqlStore) GetNotes(typeSujet string, idSujet string, auteur string, trollId int, amis []int) (notes []*Note) {
-	return // not yet implemented !
+// les paramètres passés sont des filtres optionnels
+// TODO ajouter filtres position
+func (store *MysqlStore) GetNotes(db *mysql.Client, typeSujet string, idSujet int, asker int, amis []int, showOnlyFromThisAuthor bool) (notes []*Note) {
+	sql := "select id, auteur, type_sujet, id_sujet, x_sujet, y_sujet, z_sujet, partage, date_changement, contenu, diplo" +
+		" from note "
+	hasWhere := false
+	if typeSujet != "" {
+		sql += " where type_sujet='" + typeSujet + "'" // TODO vérifier le type avant...
+		hasWhere = true
+	}
+	if idSujet != 0 {
+		if hasWhere {
+			sql += " and"
+		} else {
+			sql += " where"
+		}
+		sql += " id_sujet=" + strconv.Itoa(idSujet)
+		hasWhere = true
+	}
+	if showOnlyFromThisAuthor {
+		if hasWhere {
+			sql += " and"
+		} else {
+			sql += " where"
+		}
+		sql += " auteur=" + strconv.Itoa(asker)
+	} else {
+		if hasWhere {
+			sql += " and"
+		} else {
+			sql += " where"
+		}
+		sql += " (auteur=" + strconv.Itoa(asker)
+		sql += " or (auteur in ("
+		for i, id := range amis {
+			if i > 0 {
+				sql += ","
+			}
+			sql += strconv.Itoa(id)
+		}
+		sql += ") and partage>0) or partage>1)"
+	}
+	fmt.Printf("SQL : %s\n", sql)
+
+	stmt, err := db.Prepare(sql)
+	if err != nil {
+		return
+	}
+	defer stmt.FreeResult()
+	err = stmt.Execute()
+	if err != nil {
+		return
+	}
+
+	r := new(Note)
+	stmt.BindResult(&r.Id, &r.Auteur, &r.TypeSujet, &r.IdSujet, &r.XSujet, &r.YSujet, &r.ZSujet, &r.Partage, &r.Date, &r.Contenu, &r.Diplo)
+	notes = make([]*Note, 0, 20)
+
+	for {
+		eof, err := stmt.Fetch()
+		if err != nil || eof {
+			return
+		}
+		note := &Note{r.Id, r.Auteur, r.TypeSujet, r.IdSujet, r.XSujet, r.YSujet, r.ZSujet, r.Partage, r.Date, r.Contenu, r.Diplo}
+		notes = append(notes, note)
+	}
+
+	return
 }

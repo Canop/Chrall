@@ -36,7 +36,6 @@ func race(s string) raceTroll {
 	return race_inconnue
 }
 
-
 // statistiques concernant un troll
 type TrollInfos struct {
 	Num                     int
@@ -93,7 +92,6 @@ type TksManager struct {
 	AtkByKillsTrolls      []*TrollInfos
 }
 
-
 func AsciiToUTF8(c []byte) string {
 	u := make([]int, len(c))
 	for i := 0; i < len(u); i++ {
@@ -101,7 +99,6 @@ func AsciiToUTF8(c []byte) string {
 	}
 	return string(u)
 }
-
 
 func (m *TksManager) GetKillometreExtract(typeExtract string, startIndex int, pageSize int, searched string) (ke *KillometreExtract) {
 	// comme il n'y a pas la moindre structure d'index, les recherches, en particulier sur le nom, sont forcément lentes
@@ -245,7 +242,7 @@ func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
 	r := bufio.NewReader(f)
 	line, err := r.ReadString('\n')
 	for err == nil {
-		tokens := strings.Split(line, ";", 4)
+		tokens := strings.SplitN(line, ";", 4)
 		if len(tokens) < 2 {
 			fmt.Println("Ligne invalide")
 		} else {
@@ -273,7 +270,6 @@ func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
 	fmt.Println("TksManager : Fichier des guildes lu")
 	return nil
 }
-
 
 // Lit un fichier csv contenant, triés par nombre de kills de trolls, une ligne pour
 //  chaque troll connu (voir troll.go).
@@ -306,7 +302,7 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 	// notons qu'on ne supprime pas les anciennes stats avant, on remplace directement
 	// Et au final on ne devrait pas souvent redimensionner la table
 	for err == nil {
-		tokens := strings.Split(line, ";", 13)
+		tokens := strings.SplitN(line, ";", 13)
 		if len(tokens) < 13 {
 			fmt.Println("Ligne invalide")
 		} else {
@@ -393,7 +389,6 @@ func (m *TksManager) checkTrollInfosLoaded() {
 		}
 	}
 }
-
 
 func (m *TksManager) getTrollInfos(trollId int) *TrollInfos {
 	if trollId <= 0 {

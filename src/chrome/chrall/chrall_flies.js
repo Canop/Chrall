@@ -3,7 +3,7 @@
  */ 
 function Chrall_analyseFlies() {
 	var flyRows = $("tr.mh_tdpage");
-
+	player.cleanFlies();
     // parcours 
 	for (var i=0;i<flyRows.length; i++) {
 		var cells = $(flyRows[i]).find("td");

@@ -30,9 +30,8 @@ func (bd *BucketDecoder) addCdm(cdm *CDM) {
 	bd.nbResults++
 }
 
-
 func (bd *BucketDecoder) Decode(input string, store *MysqlStore) {
-	lines := strings.Split(input, "\n", -1)
+	lines := strings.Split(input, "\n")
 
 	var currentCdm *CDM
 	var numLineAtCdmStart int

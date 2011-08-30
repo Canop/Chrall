@@ -19,6 +19,7 @@ type JsonMessageIn struct {
 	IdCible       uint // l'id d'un autre troll ou d'un monstre, le sujet optionnel de l'action
 	Action        *Action
 	Note          *Note
+	NoteRequest   *NoteRequest
 }
 
 type JsonMessageOut struct {
@@ -28,6 +29,7 @@ type JsonMessageOut struct {
 	TextMajVue string
 	MiPartages []*MiPartage
 	Actions    []*Action
+	Notes      []*Note
 }
 
 func (h *JsonGetHandler) writeJsonAnswer(w http.ResponseWriter, out *JsonMessageOut) {
@@ -176,7 +178,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				fmt.Printf("MAJ Vue %d\n", in.IdCible)
 				out.TextMajVue = h.store.majVue(db, in.IdCible, in.TrollId, h.tksManager)
 			}
-		} else if action == "save_note" && in.Note!=nil {
+		} else if action == "save_note" && in.Note != nil {
 			in.Note.Auteur = int(in.TrollId)
 			fmt.Printf("Stockage note ù+v\n", in.Note)
 			err = h.store.SaveNote(db, in.Note)

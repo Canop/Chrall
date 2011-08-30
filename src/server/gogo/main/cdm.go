@@ -64,7 +64,7 @@ func (char *CdmChar) CompleteCdmChar(name string, line string) bool {
 }
 
 func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
-	fields := strings.Split(line, ":", 4)
+	fields := strings.SplitN(line, ":", 4)
 	if len(fields) < 2 || len(fields) > 3 {
 		return "", nil
 	}
@@ -171,7 +171,6 @@ type CDM struct {
 	Chars map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
 }
 
-
 func (cdm *CDM) ComputeSHA1() []byte {
 	unhash := "cdm_v3"
 	unhash += strconv.Uitoa(cdm.NumMonstre)
@@ -261,7 +260,6 @@ func (cdm *CDM) SetChar(name string, c *CdmChar) {
 	cdm.Chars[name] = c
 }
 
-
 // renvoie une nouvelle CDM si cette ligne est l'entame d'une CDM
 func NewCdm(lines []string) *CDM {
 	if len(lines) < 4 {
@@ -343,7 +341,6 @@ func NewCdm(lines []string) *CDM {
 	cdm.Mâle = male
 	return cdm
 }
-
 
 func (cdm *CDM) SetNomComplet(nc string) {
 	cdm.NomComplet = nc

@@ -5,7 +5,6 @@ Interrogations des Scripts Publics MH (la version non SOAP)
 
 */
 
-
 import (
 	"bufio"
 	"fmt"
@@ -35,12 +34,12 @@ func FetchVueSp(numero uint, mdp_restreint string, avecTresors uint, avecLieux u
 	currentType := ""
 	for line != "" {
 		if line[0] == '#' {
-			tokens := strings.Split(line, " ", 2)
+			tokens := strings.SplitN(line, " ", 2)
 			if tokens[0] == "#DEBUT" && len(tokens) > 1 {
 				currentType = (tokens[1])[0 : len(tokens[1])-1]
 			}
 		} else {
-			tokens := strings.Split(line, ";", 5)
+			tokens := strings.SplitN(line, ";", 5)
 			//fmt.Printf(" %s %+v\n", currentType, tokens)
 			item := new(SoapItem)
 			item.Numero, _ = strconv.Atoi(tokens[0])

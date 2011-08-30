@@ -11,7 +11,6 @@ puis
 	make
 	make install
 
-
 Note : on dirait que ce connecteur a des problèmes avec les int64. Il vaut mieux, donc, éviter d'en utiliser.
 
 */

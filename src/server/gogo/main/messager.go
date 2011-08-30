@@ -26,7 +26,7 @@ func ParseVersion(s string) (v *Version, err os.Error) {
 	if len(s) == 0 {
 		return nil, os.NewError("empty string")
 	}
-	tokens := strings.Split(strings.Trim(s, " "), ".", -1)
+	tokens := strings.Split(strings.Trim(s, " "), ".")
 	v = new(Version)
 	v.Parts = make([]uint, len(tokens))
 	for i, t := range tokens {
@@ -70,7 +70,6 @@ type G2cMessage struct { // on définira peut-être plus tard une structure hié
 	Title   string
 	Content string
 }
-
 
 func GetMessage(TrollId string, ChrallVersion string) (out *G2cMessage) {
 	out = new(G2cMessage)

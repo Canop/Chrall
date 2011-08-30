@@ -109,7 +109,7 @@ func (g *DiploGraph) getNode(isTroll bool, id uint) *DiploNode {
 func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader, ascii bool, subjectIsTroll bool) os.Error {
 	line, err := r.ReadString('\n') // TODO : utiliser r.ReadLine() plutôt que r.ReadString('\n')
 	for err == nil {
-		tokens := strings.Split(line, ";", 6)
+		tokens := strings.SplitN(line, ";", 6)
 		if len(tokens) < 5 {
 			fmt.Println("Ligne invalide")
 			continue
@@ -154,7 +154,6 @@ func (g *DiploGraph) ReadDiploGraph(r *bufio.Reader, ascii bool, subjectIsTroll 
 	}
 	return nil
 }
-
 
 func (g *DiploGraph) DescribeYourRelationsWith(yourTroll, yourGuild, hisTroll, hisGuild uint) string {
 	if g == nil {

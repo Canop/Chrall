@@ -3,8 +3,19 @@
  * Il contient aussi les variables globales.
  */
 
-//var GOGOCHRALL = "http://localhost:8000/chrall/";
+
 var GOGOCHRALL = "http://canop.org:8000/chrall/";
+var TEST_LOCAL = false; // je passe à true pour tester localement
+
+var SERVEUR_CHRALL_PUBLIC = GOGOCHRALL; // l'adresse du serveur principal (celui qui hébèrge le bestaire et les infos publiques)
+var SERVEUR_CHRALL_PRIVE = SERVEUR_CHRALL_PUBLIC; // l'adresse du serveur privé (par défaut le public mais peut être modifié)
+if (TEST_LOCAL) {
+	SERVEUR_CHRALL_PUBLIC = "http://localhost:8000/chrall/";
+	SERVEUR_CHRALL_PRIVE = SERVEUR_CHRALL_PUBLIC;
+} else {
+	var serveur_prive_in_prefs = localStorage['private_chrall_server'];
+	if (serveur_prive_in_prefs) SERVEUR_CHRALL_PRIVE = serveur_prive_in_prefs;
+}
 
 var viewIsEmpty=true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
@@ -23,6 +34,7 @@ var viewFilters = {
 	"trésors" : false,
 	"champignons" : false,
 	"cénotaphes" : false,
+	"intangibles" : true,
 	"3D" : true
 };
 

@@ -13,5 +13,5 @@ function Chrall_analyseAndReformatMonsterView() {
 	html[h++] = '</div>';
 	$(html.join('')).appendTo($('body'));
 
-	bubble($("#ch_pjpop_trigger"), '', "bub_monster", GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + encodeURIComponent(nomMonstre) + "&monsterId="+monsterId, nomMonstre);
+	bubble($("#ch_pjpop_trigger"), '', "bub_monster", SERVEUR_CHRALL_PUBLIC+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + encodeURIComponent(nomMonstre) + "&monsterId="+monsterId, nomMonstre);
 }

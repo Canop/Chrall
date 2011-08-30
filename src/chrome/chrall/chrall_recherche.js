@@ -20,7 +20,7 @@ function makeSearchPanel($panel) {
 	
 	var search = function(){
 		var tok = $('#ch_search_pattern').val();
-		$('#search_result').load(GOGOCHRALL+'searchpanel?asker='+player.id+'&mdpr='+mdpRestreint+'&tok='+encodeURIComponent(tok));
+		$('#search_result').load(SERVEUR_CHRALL_PRIVE+'searchpanel?asker='+player.id+'&mdpr='+mdpRestreint+'&tok='+encodeURIComponent(tok));
 	};
 	
 	$('#ch_search_pattern').change(search);

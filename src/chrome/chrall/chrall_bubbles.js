@@ -76,7 +76,7 @@ function initBubble() {
 		html += "<script>";
 		html += "function grid_receive(answer) {"; // ce nom n'est pas générique parce que je n'ai  pas eu envie de couper la compatibilité client-serveur le temps que les testeurs changent de version...
 		html += " if (document.getElementById('bubbleRequestId').value!=answer.RequestId) {"; // on vérifie que la réponse correspond à la bulle actuelle (et pas à une bulle fermée)
-		html += "  console.log('answer received to old request : ' + answer.RequestId);";
+		//html += "  console.log('answer received to old request : ' + answer.RequestId);";
 		html += "  return;";
 		html += " }";
 		html += " var div = document.getElementById('bubbleContent');";

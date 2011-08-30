@@ -302,6 +302,18 @@ DONE :
 <- v2.09
 
 * killomètre : modifier l'url automatiquement
+* BUG : le nombre de mouches s'incrémentait à chaque chargement de la page mouches
+* bestiaire : gérer le changement des monstres à 4M
+* paramétrage du serveur utilisé pour les infos confidentielles
+* log du serveur avec les messages dans la console
+
+<- v2.10 (spéciale PH des accros)
+
+* filtrage des intangibles
+
+<- v2.11 (spéciale PH des accros)
+
+* les trolls intangibles sont maintenant en bleu pâle, bien distinct des tangibles
 
 EN COURS :
 ==========
@@ -310,13 +322,13 @@ EN COURS :
 * bug : menu avec changement de niveau affiché même si pas assez de PA
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : interface séparée
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : visu en bulles
-* BUG : pas d'image pour le pseudo-dragon ? -> il n'est pas dans le fichier ftp://ftp.mountyhall.com/Public_Monstres.txt
+* BUG : pas d'image pour le pseudo-dragon ? -> il n'est pas dans le fichier ftp://ftp.mountyhall.com/Public_Monstres.txt [pareil pour le diablotin, à gérer en hard]
 
 TODO :
 ======
 P1 :
 ----
-* bestiaire : gérer le changement des monstres à 4M
+* système de scripts externes
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
 * faire des statistiques d'accès via Chrall plutôt que via Google Analytics

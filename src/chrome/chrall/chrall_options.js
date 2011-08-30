@@ -51,8 +51,10 @@ function Chrall_reformatOptionsView() {
 	html += "<a class=gogo href='javascript:changeMdpRestreint();localStorage[\"tab_options\"]=\"tabChrall\";document.location.href=\"Play_option.php\";'>Modifier le mot de passe</a>";
 	html += activationButtonHtml;
 	html += "</p>";
-	html += "<p>Fournir votre mot de passe restreint peut (devrait) vous poser des problèmes si vous jouez un troll ennemi de la Canopée. Dans ce cas, et si vous avez des compétences informatiques, n'hésitez pas à venir causer sur <a target=newWin href=\"http://canop.org/chrall/fofo/\">le canofofo</a> afin de voir si vous pourriez héberger un serveur afin d'éviter que votre groupe de chasse ne me confie vos données privées.</p>";
-	html += "<p>Notez que vous ne transmettez pas d'informations confidentielles au serveur Chrall tant que vous n'activez pas le compte.</p>";
+	html += "<p>Notez que vous ne transmettez pas d'informations confidentielles tant que vous n'activez pas le compte.</p>";
+	html += "<p>Si votre compte est actif, l'extension communique par défaut les données partagées avec le serveur canop.org mais vous pouvez spécifier un autre serveur si vous lui accordez confiance : </p>";
+	html += "<br>Serveur Chrall alternatif pour les données partagées : <input size=30 id=input_private_chrall_server value='"+(localStorage['private_chrall_server']?localStorage['private_chrall_server']:"")+"'>";
+	html += " <a class=gogo id=save_private_chrall_server'>sauver</a> (laisser vide pour exploiter le serveur par défaut)</p>";
 	html += " </div>";
 	html += " <div id=tabLinks class=tab_content>";
 	html += Chrall_makeLinkOptionPage();
@@ -83,6 +85,14 @@ function Chrall_reformatOptionsView() {
 		window.scroll(0, 0);
 		$(activeTab).fadeIn("fast");
 		return false;
+	});
+	$('save_private_chrall_server').click(function() {
+		var s = $('input_private_chrall_server').val();
+		if (s.length()>3) {
+			localStorage['private_chrall_server'] = s;
+		} else {
+			localStorage.removeItem('private_chrall_server');
+		}
 	});
 
 }

@@ -38,6 +38,45 @@ func (h *JsonGetHandler) servePageKillometre(w http.ResponseWriter, hr *http.Req
 	fmt.Fprint(w, ")")
 }
 
+func (h *JsonGetHandler) serveNotes(w http.ResponseWriter, hr *http.Request) {
+	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
+
+	fmt.Println("serveNotes")
+
+	db, err := h.store.Connect()
+	if err != nil {
+		fmt.Printf("Erreur ouverture connexion BD dans serveAcceptCdmJsonp : %s\n", err.String())
+		return
+	}
+	defer db.Close()
+
+	askerId := GetFormValueAsInt(hr, "asker")
+	mdpr := GetFormValue(hr, "mdpr") // mot de passe restreint
+	compteOk := false
+
+	if askerId > 0 && mdpr != "" { // <-- vérif authentification
+		fmt.Println("askerId présent")
+		compteOk, _, err = h.store.CheckCompte(db, uint(askerId), mdpr)
+		fmt.Printf("compteOk : %+v\n", compteOk)
+		if compteOk {
+			amis, err := h.store.GetPartageurs(db, askerId)
+			if err != nil {
+				fmt.Printf("Erreur récupération amis dans serveNotes : %s\n", err.String())
+			}
+			out := h.store.GetNotes(db, GetFormValue(hr, "cat"), GetFormValueAsInt(hr, "idSujet"), askerId, amis, true)
+			for i, n := range out {
+				fmt.Printf("Note %d : %+v\n", i, n)
+			}
+			bout, _ := json.Marshal(out)
+			fmt.Fprint(w, "receiveNotes(")
+			w.Write(bout)
+			fmt.Fprint(w, ")")
+			return
+		}
+	}
+	fmt.Fprint(w, "receiveNotes({Error:'mauvaise authentification'})")
+}
+
 
 func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Request) {
 	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
@@ -244,6 +283,8 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 		h.serveAutocompleteMonsterNames(w, hr)
 	} else if action == "get_page_killometre" {
 		h.servePageKillometre(w, hr)
+	} else if action == "get_notes" {
+		h.serveNotes(w, hr)
 	} else if action == "get_extract" {
 		h.serveBestiaryExtractHtml(w, hr)
 	} else if action == "get_troll_info" {

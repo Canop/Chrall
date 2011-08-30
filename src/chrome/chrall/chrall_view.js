@@ -53,8 +53,11 @@ function Chrall_makeFiltersHtml() {
  * construit le HTML de la grille. Ce HTML est construit une fois pour toute, le filtrage opérant via des modifications de style.
  * 
  * Cette fonction n'est utilisée que pour la grille de la vue principale, pas pour les vues "zoom" qui proviennent du serveur chrall.
+ * 
+ * Remplit au passage un objet contenant des infos sur ce qui est visible (pour les notes)
  */ 
-function Chrall_makeGridHtml() {	
+function Chrall_makeGridHtml(noteRequest) {
+	noteRequest.NumTrolls = [];
 	var grey_closed_png_url = chrome.extension.getURL("grey_closed.png");
 	var grey_open_png_url = chrome.extension.getURL("grey_open.png");
 	var h=0;
@@ -100,14 +103,17 @@ function Chrall_makeGridHtml() {
 				if (cell.trolls) {
 					for (var i=0; i<cell.trolls.length; i++) {
 						var t = cell.trolls[i];
+						noteRequest.NumTrolls.push(t.id);
 						if (c>0) cellContent[c++] = "<br name='trolls' class=ch_troll>";
 						var an = player.z!=t.z;
 						if (an) cellContent[c++] = "<span name=3D>";
+						if (t.isIntangible) cellContent[c++] = "<span name=intangibles>";
 						cellContent[c++] = "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\"";
+						if (t.isIntangible) cellContent[c++] = " intangible";
 						cellContent[c++] = ' message="en X='+x+' Y='+y+' Z='+t.z+'<br>Distance horizontale : ' + hdist+'"';
 						cellContent[c++] = " id="+t.id;
-						if (t.isIntangible) cellContent[c++] = " intangible";
 						cellContent[c++] = ">"+t.z+": "+t.name+"&nbsp;"+t.race[0]+t.level+"</a>";
+						if (t.isIntangible) cellContent[c++] = "</span>";
 						if (an) cellContent[c++] = "</span>";
 					}
 				}
@@ -287,10 +293,11 @@ function Chrall_makeGridHtml() {
 //         page. Il me semble difficile d'optimiser ça.
 //         "table-layout: fixed;" ne change rien
 function Chrall_analyseAndReformatView() {
-	var time_enter = (new Date()).getTime(); // <= prof
+	//var time_enter = (new Date()).getTime(); // <= prof
 		
 	//> on analyse la vue
 	var $tables = Chrall_analyseView();
+	var noteRequest = {}; 
 	
 	//> on vire la frise latérale
 	$("td[width=55]").remove();
@@ -333,7 +340,7 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabGrid class=tab_content>";
 	html[h++] = Chrall_makeFiltersHtml();
 	html[h++] = "<div id=grid_holder>";
-	html[h++] = Chrall_makeGridHtml();
+	html[h++] = Chrall_makeGridHtml(noteRequest);
 	html[h++] = "</div>";
 	html[h++] = "</div>";
 	if (isInLaby) html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
@@ -409,17 +416,21 @@ function Chrall_analyseAndReformatView() {
 			else $('#'+key).removeAttr("checked");
 		}
 	}
+	
+	console.log('noteRequest:');
+	console.log(noteRequest);
 
 	setTimeout( // afin d'accélérer l'affichage initial, on repousse un peu l'ajout des bulles et menus
 		function() {
 			Chrall_gridLive();
+			
 			//> bulle popup sur le lien du joueur
 			var link = $("#grid a.ch_player");
 			var trollId = link.attr('id');
 			if (trollId==0) {
 				bubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
 			} else {
-				bubble(link, '', "bub_player", GOGOCHRALL+"json?action=get_troll_info&trollId="+trollId, trollId);
+				bubble(link, '', "bub_player", SERVEUR_CHRALL_PUBLIC+"json?action=get_troll_info&trollId="+trollId, trollId);
 			}
 	
 			//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
@@ -434,6 +445,10 @@ function Chrall_analyseAndReformatView() {
 					}
 				}
 			);
+			
+			//> demande de notes
+			sendToChrallServer('get_notes', {'NoteRequest':noteRequest});
+			
 			
 		}, 1000
 	);
@@ -471,7 +486,8 @@ function Chrall_analyseAndReformatView() {
 	$('#goto_player').click(gotoPlayer);
 	//> hook pour le centrage au double-clic
 	$('#grid').dblclick(gotoPlayer);
-	
+
+	/*
 	var time_end = (new Date()).getTime(); // <= prof
 	console.log("Profiling - Vue de " + horizontalViewLimit);
 	console.log("Duration Cleaning : " + (time_after_cleaning-time_enter));
@@ -480,6 +496,7 @@ function Chrall_analyseAndReformatView() {
 	console.log("Duration Grid Append : " + (time_after_grid_append-time_after_grid_building));
 	console.log("Duration Bubbles : " + (time_end-time_after_grid_append));
 	console.log("Total Duration : " + (time_end-time_enter));
+	*/
 	
 	// On corrige si nécessaire la position affichée dans le menu de gauche et on signale
 	// cette position au serveur Chrall

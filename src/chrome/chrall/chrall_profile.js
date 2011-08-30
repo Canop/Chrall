@@ -365,7 +365,7 @@ function Chrall_analyseAndReformatProfile() {
 	$($("table table table")[0]).append(html);
 	$.ajax(
 		{
-			url: GOGOCHRALL+"json?action=check_messages&TrollId=" + player.id + "&ChrallVersion="+chrallVersion,
+			url: SERVEUR_CHRALL_PUBLIC+"json?action=check_messages&TrollId=" + player.id + "&ChrallVersion="+chrallVersion,
 			crossDomain: true,
 			dataType: "jsonp"
 		}

@@ -171,6 +171,9 @@ Troll.prototype.addFly = function(fly) {
 	if (!this.flies) this.flies = new Array();
 	this.flies.push(fly);
 }
+Troll.prototype.cleanFlies = function() {
+	this.flies = new Array();
+}
 Troll.prototype.addTalent = function(t) {
 	if (!this.talents) this.talents = new Object();
 	this.talents[t.name]=t;
@@ -188,10 +191,8 @@ Troll.prototype.save = function() {
 		console.log('no id -> troll non sauvable');
 		return;
 	}
-	console.log('SAVE');
 	localStorage['last_saved_troll_id'] = this.id;
 	localStorage['troll.'+this.id] = JSON.stringify(this);
-	//console.log(localStorage);
 }
 Troll.prototype.restore = function() {
 	if (!this.id) {
@@ -203,8 +204,6 @@ Troll.prototype.restore = function() {
 		return;
 	}
 	this.fillFrom(eval('('+json+')'));
-	console.log('troll restauré :');
-	console.log(player);
 }
 
 //////////////////////////////////////////////////////////////////////// Place (lieu)

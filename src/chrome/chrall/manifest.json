@@ -1,12 +1,12 @@
 {
 	"name": "Chrall",
-	"version": "2.9",
+	"version": "2.11",
 	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"homepage_url": "http://canop.org/chrall",
 	"background_page": "chrome-extension.html",
 	"content_scripts": [
 		{
-			"matches": ["*://games.mountyhall.com/*", "*://109.69.220.90/*"],
+			"matches": ["*://accro.mountyhall.com/*", "*://games.mountyhall.com/*", "*://mh.fr.nf/*", "*://109.69.220.90/*"],
 			"all_frames" : true,
 			"run_at" : "document_end",
 			"css": [

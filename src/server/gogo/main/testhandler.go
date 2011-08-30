@@ -10,11 +10,9 @@ import (
 	"io/ioutil"
 )
 
-
 type TestHandler struct {
 	ChrallHandler
 }
-
 
 func (h *TestHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
@@ -26,7 +24,7 @@ func (h *TestHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	fmt.Println(" URL : " + hr.RawURL)
 	fmt.Println(" Proto : " + hr.Proto)
 	fmt.Printf(" ContentLength : %d\n", hr.ContentLength)
-	fmt.Println(" UserAgent : " + hr.UserAgent)
+	fmt.Println(" UserAgent : " + hr.UserAgent())
 	fmt.Println(" Header :")
 	for key, value := range hr.Header {
 		fmt.Printf("  %s=%v\n", key, value)

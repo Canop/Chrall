@@ -198,7 +198,7 @@
 		<div id=kmTabs>
 			<br><br><br>
 			&nbsp; &nbsp;
-			<span class=wl>Num Troll :</span> <input type=text id=numTroll size=6> &nbsp; &nbsp; &nbsp; 
+			<span class=wl>Num Troll :</span> <input type=text id=numTroll size=6 value=57760> &nbsp; &nbsp; &nbsp; 
 			<span class=wl>Mot de passe restreint :</span> <input type=password id=mdpTroll size=32> &nbsp; &nbsp; &nbsp;
 			<a class=kmButton id=connect>Connexion</a>
 			<br>
@@ -223,7 +223,7 @@
 									<option value=troll>un troll</option>
 									<option value=guilde>une guilde</option>
 								</select>
-								<input class=sujet type=text id=idSujet size=6 >
+								<input class=sujet type=text id=idSujet size=6>
 								<input class=sujet type=text id=xSujet size=3 ><input class=sujet type=text id=ySujet size=3><input class=sujet type=text id=zSujet size=3>
 							</td>
 						</tr>
@@ -269,13 +269,26 @@
 					<br>
 				</div>
 			
-			<span class=Tab cat=NotesGenerales>Notes générales</span>
-			<span class=Tab cat=NotesGrottes>Notes de grottes</span>
-			<span class=Tab cat=NotesTrolls>Notes de trolls</span>
-			<span class=Tab cat=NotesMonstres>Notes de monstres</span>
+			<span class=Tab cat=rien>Notes générales</span>
+			<span class=Tab cat=grotte>Notes de grottes</span>
+			<span class=Tab cat=troll>Notes de trolls</span>
+			<span class=Tab cat=guilde>Notes de guildes</span>
+			<span class=Tab cat=monstre>Notes de monstres</span>
 		</div>
 		<div id=kmPage>
 			
+			<table id=kmTable>
+				<thead>
+					<tr>
+						<th width=10%>Id</th>
+						<th width=10%>Cible</th>
+						<th width=10%>Partage</th>
+						<th width=10%>Diplo</th>
+						<th width=60%>Contenu</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
 
 		</div>
 	</div>
@@ -289,17 +302,8 @@
 
 	var GOGOCHRALL = "http://localhost:8000/chrall/"; // oui, l'interface des notes est en développement !
 	//var GOGOCHRALL = "http://canop.org:8000/chrall/";
-	var currentCat = getUrlParameter('cat', 'NotesGenerales');
-	var indexStartPage = 1;
 	var pageSize = 20;
-	
-	// remplace la fonction parseInt, trop capricieuse ( parseInt("05")==5 mais parseInt("08")==0 )
-	function atoi(s) {
-		if (!s) return undefined;
-		s = s.trim();
-		while(s.charAt(0)=='0' || s.charAt(0)==':') s = s.substring(1, s.length);
-		return parseInt(s);
-	}
+	var labels_partage = ['personne', 'amis', 'tous'];
 	
 	function getUrlParameter(name, defaultValue) {
 		name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
@@ -310,6 +314,50 @@
 		else return results[1];
 	}
 	
+	var state = {
+		cat: getUrlParameter('cat', 'rien'),
+		URL: function() {
+			var url = 'notes.html?';
+			if (this.cat) url+='cat='+this.cat+'&';
+			return url;
+		},
+		apply: function() {
+			var trollId = parseInt($('#numTroll').val());
+			var url = 'http://localhost:8000/chrall/json?action=get_notes&cat='+this.cat;
+			url += '&asker='+trollId;
+			url += '&mdpr='+$('#mdpTroll').val();
+			console.log($('#mdpTroll').val());
+			console.log("Appel sortant : ");
+			console.log(url);
+			$.ajax({
+				url: url,
+				crossDomain: true,
+				dataType: 'jsonp'
+			});
+		}
+	};
+
+	window.onpopstate = function(event) {
+		if (!event.state) return;
+		state.cat = event.state['cat'];
+		$('#kmTabs span.Tab').removeAttr('active');
+		$('#kmTabs span.Tab[cat="'+state.cat+'"]').attr('active', true);
+		state.apply();
+	};
+
+	
+	// remplace la fonction parseInt, trop capricieuse ( parseInt("05")==5 mais parseInt("08")==0 )
+	function atoi(s) {
+		if (!s) return undefined;
+		s = s.trim();
+		while(s.charAt(0)=='0' || s.charAt(0)==':') {
+			s = s.substring(1, s.length);
+			if (s.length==0) return 0;
+		 }
+		return parseInt(s);
+	}
+
+	
 	function sendToServer(action, msg) {
 		msg.TrollId = parseInt($('#numTroll').val());
 		msg.MDP = $('#mdpTroll').val();
@@ -317,19 +365,50 @@
 		console.log(msg);
 		$.ajax(
 			{
-				url: GOGOCHRALL + 'json?v=2&action='+action+'&message='+JSON.stringify(msg),
+				url: 'http://localhost:8000/chrall/json?v=2&action='+action+'&message='+JSON.stringify(msg),
 				crossDomain: true,
 				dataType: "jsonp"
 			}
 		);		
 	}
+	
+	function updatePage() {
+		try {
+			history.pushState({cat:state.cat}, "Notes", state.URL());
+		} catch (e) {
+			if (console && console.log) console.log(e);
+		}
+		state.apply();
+	}
 		
 	function receiveFromChrallServer(msg) { // méthode appelée (jsonp) par le serveur
-		console.log("Message entrant :");
+		console.log("Message entrant dans receiveFromChrallServer :");
 		console.log(msg);
 		$('#messageHolder').html('');
 		if (msg.Error) $('#messageHolder').append('<p class=error>'+msg.Error+'</p>');
 		if (msg.Text) $('#messageHolder').append('<p>'+msg.Text+'</p>');
+		state.apply();
+	}
+
+	function receiveNotes(list) { // méthode appelée (jsonp) par le serveur
+		console.log("Message entrant dans receiveNotes:");
+		console.log(list);
+		if (list.Error) {
+			$('#messageHolder').append('<p class=error>'+list.Error+'</p>');
+		} else {
+			html = '';
+			for (var i=0; i<list.length; i++) {
+				var t = list[i];
+				html += '<tr>';
+				html += '<td>'+t.Id+'</td>';
+				html += '<td>'+t.IdSujet+'</td>';
+				html += '<td>'+labels_partage[t.Partage]+'</td>';
+				html += '<td>'+t.Diplo+'</td>';
+				html += '<td>'+t.Contenu+'</td>';
+				html += '</tr>';
+			}
+			$('#kmTable tbody').html(html);
+		}
 	}
 	
 	$(document).ready(function() {
@@ -337,11 +416,10 @@
 			var $this =$(this);
 			$('#kmTabs span.Tab').removeAttr('active');
 			$this.attr('active', true);
-			currentCat = $this.attr('cat');
-			indexStartPage=1;
-			//updatePage();
+			state.cat = $this.attr('cat');
+			updatePage();
 		});		
-		var choosenTab=$('#kmTabs span.Tab[cat="'+currentCat+'"]');
+		var choosenTab=$('#kmTabs span.Tab[cat="'+state.cat+'"]');
 		if(choosenTab.length==1){
 			choosenTab.click();
 		}
@@ -370,6 +448,8 @@
 			}
 			note.Contenu = $('#contenu').val();
 			note.Diplo = $('#diplo').val();
+			console.log('#partage val');
+			console.log($('#partage').val());
 			note.Partage = atoi($('#partage').val());
 			sendToServer('save_note', {'Note':note});
 		});

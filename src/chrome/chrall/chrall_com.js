@@ -47,11 +47,11 @@ function sendToChrallServer(action, message) {
 	message['TrollId'] = player.id;
 	message['MDP'] = mdpRestreint;
 	message['MessageNum'] = ++sentMessagesCount;
-	console.log('Message sortant de '+pageName+' (action='+action+') : ');
+	console.log('Message sortant de '+pageName+' (action='+action+') vers '+SERVEUR_CHRALL_PRIVE+' : ');
 	console.log(message);
 	$.ajax(
 		{
-			url: GOGOCHRALL + 'json?v=2&action='+action+'&message='+JSON.stringify(message),
+			url: SERVEUR_CHRALL_PRIVE + 'json?v=2&action='+action+'&message='+JSON.stringify(message),
 			crossDomain: true,
 			dataType: "jsonp"
 		}

@@ -275,7 +275,7 @@
 	function updatePage(searchedToken) {
 		if (searchedToken) state.searched=searchedToken; // sera enlevé par la méthode apply
 		try {
-			history.pushState({cat:state.cat, searched:state.searched,indexStartPage:state.indexStartPage}, "Burp!", state.URL());
+			history.pushState({cat:state.cat, searched:state.searched, indexStartPage:state.indexStartPage}, "Burp!", state.URL());
 		} catch (e) {
 			if (console && console.log) console.log(e);
 		}

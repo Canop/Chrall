@@ -74,7 +74,10 @@ function turnName(turn) {
 function atoi(s) {
 	if (!s) return undefined; // à valider
 	s = s.trim();
-	while(s.charAt(0)=='0' || s.charAt(0)==':') s = s.substring(1, s.length);
+	while(s.charAt(0)=='0' || s.charAt(0)==':') {
+		s = s.substring(1, s.length);
+		if (s.length==0) return 0;
+	 }
 	return parseInt(s);
 }
 

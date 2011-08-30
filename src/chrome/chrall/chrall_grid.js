@@ -129,7 +129,7 @@ function Chrall_gridLive() {
 			if (!message) message='';
 			return {
 				'text':message,
-				'ajaxUrl':GOGOCHRALL+'json?action=get_troll_info&asker='+player.id+'&trollId='+trollId,
+				'ajaxUrl':SERVEUR_CHRALL_PUBLIC+'json?action=get_troll_info&asker='+player.id+'&trollId='+trollId,
 				'ajaxRequestId':trollId
 			};
 		}
@@ -181,7 +181,7 @@ function Chrall_gridLive() {
 			var x=$link.attr('x');
 			var y=$link.attr('y');
 			var z=$link.attr('z');
-			var url = GOGOCHRALL+"vue?asker="+player.id+"&mdpr="+mdpCompteChrall()+"&x="+x+"&y="+y+"&z="+z+"&tresors=1";
+			var url = SERVEUR_CHRALL_PRIVE+"vue?asker="+player.id+"&mdpr="+mdpCompteChrall()+"&x="+x+"&y="+y+"&z="+z+"&tresors=1";
 			$('#zoom').show();
 			$('#zoom_content').load(url, function(){
 				setTimeout(function() {

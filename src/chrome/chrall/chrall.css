@@ -62,6 +62,7 @@ table.grid td {
 
 .ch_troll[intangible] {
     font-style: italic;
+    color: #8686ec !important;
 }
 
 .ch_place, .ch_place:hover {

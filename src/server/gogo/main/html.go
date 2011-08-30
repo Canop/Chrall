@@ -185,6 +185,11 @@ func (be *BestiaryExtract) Html(monsterId uint, askerId int, m *TksManager, pour
 				}
 			} else {
 				html += fmt.Sprintf("Cette estimation est basée sur %d CDM concernant %d monstres.", be.NbCdm, be.NbMonsters)
+				if be.Ante4M {
+					html += fmt.Sprintf("<br>Seules les cdm de monstres de numéro inférieur à 4000000 sont prises en compte")
+				} else {
+					html += fmt.Sprintf("<br>Seules les cdm de monstres de numéro supérieur à 4000000 sont prises en compte")
+				}
 			}
 		}
 		if pourcentageBlessure > 0 {
