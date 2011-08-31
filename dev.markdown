@@ -314,6 +314,7 @@ DONE :
 <- v2.11 (spéciale PH des accros)
 
 * les trolls intangibles sont maintenant en bleu pâle, bien distinct des tangibles
+* accès depuis le forum aux profils de accro.mountyhall.com (il faudra virer ça...)
 
 EN COURS :
 ==========
@@ -328,6 +329,7 @@ TODO :
 ======
 P1 :
 ----
+* BUG : sur le forum le numéro du troll appelant n'est plus trouvé (car localStorage n'est pas le même => il faut repasser par chrome_extension.html)
 * système de scripts externes
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
