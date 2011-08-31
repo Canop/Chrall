@@ -22,10 +22,10 @@ function eventIsOver(event, o) {
 	var ex = event.pageX;
 	var ey = event.pageY;
 	if (
-		ex>=pos.left
-		&& ex<=pos.left+o.width()
-		&& ey>=pos.top
-		&& ey<=pos.top+o.height()
+		ex>pos.left
+		&& ex<pos.left+o.width()
+		&& ey>pos.top
+		&& ey<pos.top+o.height()
 	) {
 		return true;
 	}
