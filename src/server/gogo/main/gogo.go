@@ -10,7 +10,6 @@ const (
 	port = 8000
 )
 
-
 type GogoServer struct {
 	Hitter
 }

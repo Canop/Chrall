@@ -41,6 +41,10 @@ function sendPlayerInfosToChrallServer() {
 // envoie au serveur un message authentifié par le mdp restreint
 function sendToChrallServer(action, message) {
 	if (!compteChrallActif()) return false
+	if (hallIsAccro) {
+		console.log("l'envoi de messages est désactivé dans le hall des accros");
+		return false;
+	}
 	var mdpkey = 'troll.'+player.id+'.mdp';
 	var mdpRestreint = localStorage[mdpkey];
 	if ((!mdpRestreint) || (mdpRestreint=='')) return false; // on n'envoie pas au serveur si le joueur n'a pas créé de compte

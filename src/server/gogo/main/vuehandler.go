@@ -8,7 +8,6 @@ import (
 	"time"
 )
 
-
 type VueHandler struct {
 	ChrallHandler
 }

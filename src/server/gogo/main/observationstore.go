@@ -25,7 +25,6 @@ type Observation struct {
 	Z      int64
 }
 
-
 // sauvegarde des observations reçues par SOAP de MH, observées juste maintenant par trollId
 func (store *MysqlStore) SaveSoapItems(db *mysql.Client, trollId uint, items []SoapItem) (err os.Error) {
 	seconds := time.Seconds()
@@ -65,7 +64,6 @@ func (store *MysqlStore) SaveSoapItems(db *mysql.Client, trollId uint, items []S
 
 	return
 }
-
 
 // supprime la vue de trollID puis sauvegarde des observations reçues par SOAP de MH, observées juste maintenant par trollId
 func (store *MysqlStore) CleanAndSaveSoapItems(db *mysql.Client, trollId uint, items []*SoapItem) (err os.Error) {
@@ -160,7 +158,6 @@ func (store *MysqlStore) SearchObservations(db *mysql.Client, tok string, trollI
 	return
 }
 
-
 func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z int, dist int, trollId int, amis []int, withTresors bool) (observations []*Observation, err os.Error) {
 
 	sql := "select auteur, num, date, type, nom, x, y, z from observation where"
@@ -208,7 +205,6 @@ func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z in
 
 	return
 }
-
 
 func (store *MysqlStore) majVue(db *mysql.Client, cible uint, pour uint, tksManager *TksManager) string {
 	fmt.Printf("MAJ Vue %d\n", cible)

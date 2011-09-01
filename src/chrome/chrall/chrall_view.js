@@ -189,7 +189,11 @@ function Chrall_makeGridHtml(noteRequest) {
 							if (c>0) cellContent[c++] = "<br name='trésors' class=ch_object>";
 							var an = player.z!=t.z;
 							if (an) cellContent[c++] = "<span name=3D>";
-							cellContent[c++] = "<span name='trésors' bub=\""+t.id+" : "+t.name+"\" class=ch_object>"+t.z+": "+t.name+"</span>"; // note :pb à attendre si le nom du trésor contient un guillement
+							cellContent[c++] = "<a name='trésors' bub=\""+t.id+" : "+t.name+"\" class=ch_object";
+							if (t.hasLink) {
+								cellContent[c++] = " href=\"javascript:Enter('/mountyhall/View/TresorHistory2.php?ai_IDTresor="+t.id+"',750,500);\"";
+							}
+							cellContent[c++] = ">"+t.z+": "+t.name+"</a>";
 							if (an) cellContent[c++] = "</span>";
 						}
 						if (merge) {
@@ -213,7 +217,7 @@ function Chrall_makeGridHtml(noteRequest) {
 						if (c>0) cellContent[c++] = "<br name='cénotaphes' class=ch_cenotaph>";
 						var an = player.z!=t.z;
 						if (an) cellContent[c++] = "<span name=3D>";
-						cellContent[c++] = "<a name='cénotaphes' class=ch_cenotaph>"+t.z+": "+t.name+"</a>";
+						cellContent[c++] = '<a name="cénotaphes" class=ch_cenotaph href="javascript:EPV('+t.trollId+');">'+t.z+': '+t.name+'</a>';
 						if (an) cellContent[c++] = "</span>";
 					}					
 				}
@@ -234,7 +238,7 @@ function Chrall_makeGridHtml(noteRequest) {
 							cellContent[c++] = '<div style="background-image:url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/mur.gif);background-repeat:repeat;min-height:160;min-width:160"/>';
 						} else {	
 							// Compte le nombre d'éléments dans la case. L'utilité sera d'estimer plus ou moins la hauteur de la case en fonction de ce qu'elle contient.
-							// On aurait pu le faire avce un compteur tout au long du parcours global des éléments, mais comme l'utilité sera très spécifique au labyrinthe, autant le faire ici.
+							// On aurait pu le faire avec un compteur tout au long du parcours global des éléments, mais comme l'utilité sera très spécifique au labyrinthe, autant le faire ici.
 							var elementsNumber = 0;
 							if (cell.trolls) elementsNumber += cell.trolls.length;
 							if (cell.monsters) elementsNumber += cell.monsters.length;
@@ -333,8 +337,10 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<li><a href=#tabMushrooms>Champignons ("+grid.nbMushroomsInView+")</a></li>";
 	html[h++] = "<li><a href=#tabCenotaphs>Cénotaphes ("+grid.nbCenotaphsInView+")</a></li>";
 	html[h++] = "<li><a href=#tabSettings>Réglages</a></li>";
-	html[h++] = "<li><a href=#tabPartages>Partages</a></li>";
-	html[h++] = "<li><a href=#tabRecherche>Recherche</a></li>";
+	if (!hallIsAccro) {
+		html[h++] = "<li><a href=#tabPartages>Partages</a></li>";
+		html[h++] = "<li><a href=#tabRecherche>Recherche</a></li>";
+	}
 	html[h++] = "</ul>";
 	html[h++] = "<div class=tab_container view>";
 	html[h++] = "<div id=tabGrid class=tab_content>";
@@ -351,10 +357,12 @@ function Chrall_analyseAndReformatView() {
 	html[h++] = "<div id=tabMushrooms class=tab_content scroll></div>";
 	html[h++] = "<div id=tabCenotaphs class=tab_content scroll></div>";
 	html[h++] = "<div id=tabSettings class=tab_content scroll></div>";
-	html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
-	html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
-	if (isInLaby) {
-		html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
+	if (!hallIsAccro) {
+		html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
+		html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
+		if (isInLaby) {
+			html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
+		}
 	}
 	html[h++] = "</div>";
 	
@@ -370,8 +378,10 @@ function Chrall_analyseAndReformatView() {
 	$("#tabMushrooms").append($tables['champignons']);
 	$("#tabPlaces").append($tables['lieux']);
 	$("#tabCenotaphs").append($tables['cadavre']);
-	$("#tabPartages").append(makePartageTables());
-	makeSearchPanel($("#tabRecherche"));
+	if (!hallIsAccro) {
+		$("#tabPartages").append(makePartageTables());
+		makeSearchPanel($("#tabRecherche"));
+	}
 	$(".tab_content").hide();
 	
 	if (localStorage['tab_view']) {

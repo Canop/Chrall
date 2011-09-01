@@ -79,7 +79,6 @@ Troll inexistant
 
 */
 
-
 func DumpAll(r io.Reader) {
 	b, e := ioutil.ReadAll(r)
 	if e != nil {
@@ -152,7 +151,6 @@ func FetchVueSoap(numero uint, mdp_restreint string) (items []SoapItem, errorCod
 	//~ fmt.Printf("Vue > Item : %+v\n", items)
 	return
 }
-
 
 // vérifie, par une connexion SOAP, que le couple (numero, mdp_restreint) est authentifié par MH.
 // Ceci consomme l'une des connexions autorisées pour ce troll, il ne faut donc le faire que si le mot de passe a changé

@@ -3,7 +3,6 @@ package main
 gère la lecture et l'écriture en mysql des comptes de troll
 */
 
-
 import (
 	"fmt"
 	"mysql"
@@ -11,7 +10,6 @@ import (
 	"strconv"
 	"time"
 )
-
 
 type TrollData struct {
 	PV_max       uint
@@ -53,7 +51,6 @@ func rowToCompte(trollId uint, row mysql.Row) (c *Compte) {
 	c.Troll.MiseAJour = fieldAsInt64(row[12]) * 1000
 	return
 }
-
 
 // lit un compte en base. Renvoie nil si le compte n'existe pas en base.
 // Sinon l'appelant est responsable de l'ouverture et de la fermeture de la connexion qu'il fournit
@@ -174,7 +171,6 @@ func (store *MysqlStore) UpdateTroll(db *mysql.Client, c *Compte) (err os.Error)
 	err = stmt.Execute()
 	return
 }
-
 
 // vérifie que le compte existe et que le mot de passe restreint est validé par MH
 func (store *MysqlStore) CheckCompte(db *mysql.Client, trollId uint, mdpr string) (ok bool, c *Compte, err os.Error) {

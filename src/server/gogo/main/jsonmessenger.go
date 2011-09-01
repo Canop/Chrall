@@ -9,7 +9,6 @@ import (
 	"json"
 )
 
-
 type JsonMessageIn struct {
 	TrollId       uint       // le numéro du troll
 	MDP           string     // le mot de passe restreint
@@ -38,7 +37,6 @@ func (h *JsonGetHandler) writeJsonAnswer(w http.ResponseWriter, out *JsonMessage
 	w.Write(bout)
 	fmt.Fprint(w, ")")
 }
-
 
 func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action string, message string) {
 	w.Header().Set("Content-Type", "application/json ;charset=utf-8")

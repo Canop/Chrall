@@ -4,7 +4,6 @@ import (
 	"http"
 )
 
-
 type WellHandler struct {
 	ChrallHandler
 }

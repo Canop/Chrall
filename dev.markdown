@@ -316,6 +316,13 @@ DONE :
 * les trolls intangibles sont maintenant en bleu pâle, bien distinct des tangibles
 * accès depuis le forum aux profils de accro.mountyhall.com (il faudra virer ça...)
 
+<- v2.12 (spéciale PH des accros)
+
+* désactivation de certaines fonctions (essentiellement le partage et les comptes chrall) dans le hall des accros
+* rétablissement des accès aux profils normaux depuis le forum MH (fin du renvoi vers le truc des accros)
+* grille : les cénotaphes sont maintenant cliquables
+* les trésors cliquables dans les tables (bidouilles par exemple) le sont aussi maintenant dans la grille
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -324,29 +331,28 @@ EN COURS :
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : interface séparée
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : visu en bulles
 * BUG : pas d'image pour le pseudo-dragon ? -> il n'est pas dans le fichier ftp://ftp.mountyhall.com/Public_Monstres.txt [pareil pour le diablotin, à gérer en hard]
+* le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
 
 TODO :
 ======
 P1 :
 ----
-* BUG : sur le forum le numéro du troll appelant n'est plus trouvé (car localStorage n'est pas le même => il faut repasser par chrome_extension.html)
 * système de scripts externes
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
 * faire des statistiques d'accès via Chrall plutôt que via Google Analytics
 * virer l'ancienne diplo Trollienne, que remplace la prise de notes (avec son champ diplo)
 
+* BUG : sur le forum le numéro du troll appelant n'est plus trouvé (car localStorage n'est pas le même => il faut repasser par chrome_extension.html)
 * palmarès des monstres meilleurs tueurs
 * bulle minage : faire comme TP : http://canop.org/chrall/fofo/viewtopic.php?f=1&t=11&sid=bbb609f56c08490ff542ce597d33df0a&p=503#p503
 * bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * killomètre : affichage par guilde
 * mettre à jour la base pour les nouveaux niveaux des monstres (faire un max ?)
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
-* gowaps/ordres : intégrer le bouton de mise à jour de vue
 * bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
 * Vue/Partages : mise à jour de la position des trolls lors de la mise à jour de la vue
 * CDM : gestion du vol et du sang-froid (entre autres, voir http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=5&TopicID=145805)
-* le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
 * indiquer directement dans la bulle si un monstre est insulté (et par qui)
 * événements des monstres : si partage indiquer les caracts des hypno
 * bug : grille : les dudus et les darklings sont représentés à l'identique (e.g. D24) -> utiliser 'd' ?

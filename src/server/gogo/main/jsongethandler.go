@@ -77,7 +77,6 @@ func (h *JsonGetHandler) serveNotes(w http.ResponseWriter, hr *http.Request) {
 	fmt.Fprint(w, "receiveNotes({Error:'mauvaise authentification'})")
 }
 
-
 func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Request) {
 	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
 	out := GetMessage(GetFormValue(hr, "TrollId"), GetFormValue(hr, "ChrallVersion"))
@@ -86,7 +85,6 @@ func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Reque
 	w.Write(bout)
 	fmt.Fprint(w, ")")
 }
-
 
 func (h *JsonGetHandler) makeTrollStats(hr *http.Request) *TrollBubbleJson {
 	bejs := new(TrollBubbleJson)
@@ -260,7 +258,6 @@ func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr
 	blist, _ := json.Marshal(list)
 	w.Write(blist)
 }
-
 
 func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()

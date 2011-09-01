@@ -5,7 +5,6 @@ import (
 	"fmt"
 )
 
-
 type BestiaryHandler struct {
 	ChrallHandler
 }

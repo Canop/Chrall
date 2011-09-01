@@ -88,6 +88,24 @@ Thing.prototype.setName = function(name) { // méthode surchargée pour les mons
 	this.name = name;
 }
 
+//////////////////////////////////////////////////////////////////////// Cenotaphe
+
+/**
+ * Params :
+ *  - trollId : l'id du troll décédé
+ */
+function Cenotaphe(x, y, z) {
+	Thing.call(this, x, y, z);
+}
+Cenotaphe.prototype = new Thing(); // ça signifie que Monster est une sous-classe de Thing
+Cenotaphe.prototype.setName = function(fullName){
+	this.name = fullName;
+	var i = fullName.lastIndexOf('(');
+	var s = fullName.substring(i+1, fullName.length-1);
+	this.trollId = atoi(s);
+}
+
+
 //////////////////////////////////////////////////////////////////////// Monstre
 
 /**

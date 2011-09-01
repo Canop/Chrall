@@ -105,7 +105,6 @@ function Chrall_analyseWallTable(table) {
 			thing.y = parseInt($(cells[3]).text());
 			thing.z = parseInt($(cells[4]).text());
 			grid.getCellNotNull(thing.x, thing.y).addWall(thing);
-			//grid.nbWallsInView++;
 		}
 	);	
 }
@@ -120,7 +119,9 @@ function Chrall_analyseObjectTable(table) {
 		var cells = $(lines[l]).find("td");
 		var i=1;
 		thing.id = parseInt($(cells[i++]).text());
-		thing.name = $(cells[i++]).text();
+		var nameCell = $(cells[i++]);
+		thing.name = nameCell.text();
+		thing.hasLink = nameCell.find('a').length>0;
 		thing.x = parseInt($(cells[i++]).text());
 		thing.y = parseInt($(cells[i++]).text());
 		thing.z = parseInt($(cells[i++]).text());
@@ -131,11 +132,11 @@ function Chrall_analyseObjectTable(table) {
 function Chrall_analyseCenotaphTable(table) {
 	table.find("tr.mh_tdpage").each(
 		function(){
-			var thing = new Thing();
+			var thing = new Cenotaphe();
 			var cells = $(this).find("td");
 			var i=1;
 			thing.id = parseInt($(cells[i++]).text());
-			thing.name = $(cells[i++]).text();
+			thing.setName($(cells[i++]).text());
 			thing.x = parseInt($(cells[i++]).text());
 			thing.y = parseInt($(cells[i++]).text());
 			thing.z = parseInt($(cells[i++]).text());

@@ -206,7 +206,6 @@ func (be *BestiaryExtract) Html(monsterId uint, askerId int, m *TksManager, pour
 	return html
 }
 
-
 // construit une description tabulaire d'un troll
 func (tks *TrollInfos) HtmlTable(id int, m *TksManager) string {
 	sum := tks.NbKillsTrolls + tks.NbKillsMonstres

@@ -10,7 +10,6 @@ import (
 	"strconv"
 )
 
-
 // décrit un partage d'infos dans Chrall entre deux trolls
 type Partage struct {
 	TrollA  uint // l'id du troll initiateur du partage
@@ -114,7 +113,6 @@ func (store *MysqlStore) UpdatePartage(db *mysql.Client, troll uint, autreTroll 
 
 	return
 }
-
 
 func (store *MysqlStore) DeletePartage(db *mysql.Client, troll uint, autreTroll uint) (err os.Error) {
 	sql := "delete from partage where (troll_a=? and troll_b=?) or (troll_b=? and troll_a=?)"

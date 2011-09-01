@@ -34,7 +34,6 @@ func NewStore(user string, password string) *MysqlStore {
 	return store
 }
 
-
 // renvoie une instance de mysql.Client connectée. Il est impératif de faire suivre
 // l'appel à cette méthode d'un defer db.Close()
 func (store *MysqlStore) Connect() (db *mysql.Client, err os.Error) {

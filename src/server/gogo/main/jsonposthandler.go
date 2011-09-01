@@ -11,7 +11,6 @@ import (
 	"strconv"
 )
 
-
 type jsonRequest struct {
 	Action string "action"
 	Bucket string "bucket"
@@ -28,7 +27,6 @@ type JsonPostHandler struct {
 	ChrallHandler
 	tksManager *TksManager
 }
-
 
 func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()

@@ -54,7 +54,7 @@ function Chrall_reformatOptionsView() {
 	html += "<p>Notez que vous ne transmettez pas d'informations confidentielles tant que vous n'activez pas le compte.</p>";
 	html += "<p>Si votre compte est actif, l'extension communique par défaut les données partagées avec le serveur canop.org mais vous pouvez spécifier un autre serveur si vous lui accordez confiance : </p>";
 	html += "<br>Serveur Chrall alternatif pour les données partagées : <input size=30 id=input_private_chrall_server value='"+(localStorage['private_chrall_server']?localStorage['private_chrall_server']:"")+"'>";
-	html += " <a class=gogo id=save_private_chrall_server'>sauver</a> (laisser vide pour exploiter le serveur par défaut)</p>";
+	html += " <a class=gogo id=save_private_chrall_server'>sauver</a> (laisser vide pour exploiter le serveur par défaut, n'utilisez un serveur alternatif que si vous lui faites pleine confiance)</p>";
 	html += " </div>";
 	html += " <div id=tabLinks class=tab_content>";
 	html += Chrall_makeLinkOptionPage();

@@ -87,13 +87,13 @@ func GetMessage(TrollId string, ChrallVersion string) (out *G2cMessage) {
 			out.Title = "L'extension Chrall n'est pas à jour"
 			out.Content += "Votre version : " + ChrallVersion
 			out.Content += "<br>La version actuelle : " + currentChralVersion.String()
-			//out.Content += "<br>Cette version corrige quelques bugs mineurs."
+			out.Content += "<br>Cette version privilégie le fonctionnement sur le serveur MH normal (et non celui des accros)."
 			out.Content += "<br><br>Vous pouvez mettre à jour l'extension sur <a target=newwin class=gogo href=http://canop.org/chrall>le site officiel de Chrall</a>."
 		case 1:
 			out.Nature = "normal"
 			fmt.Println("User version is younger than current (???) : " + ChrallVersion)
-			out.Title = "Votre version de Chrall est plus récente que celle du serveur"
-			out.Content = "Vous disposez probablement d'une version spéciale de développement. Sinon, il faudrait prévenir Canop..."
+			out.Title = "Votre version de Chrall est plus récente que la version officielle"
+			out.Content = "Vous disposez probablement d'une version spéciale de développement. Sinon, il faudrait prévenir Canop."
 		}
 	}
 

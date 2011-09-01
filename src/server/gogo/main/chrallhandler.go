@@ -5,12 +5,10 @@ import (
 	"fmt"
 )
 
-
 type ChrallHandler struct {
 	Handler
 	store *MysqlStore
 }
-
 
 func (h *ChrallHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	h.hit()
