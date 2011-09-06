@@ -323,6 +323,8 @@ DONE :
 * grille : les cénotaphes sont maintenant cliquables
 * les trésors cliquables dans les tables (bidouilles par exemple) le sont aussi maintenant dans la grille
 
+<- v2.13
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -332,6 +334,8 @@ EN COURS :
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : visu en bulles
 * BUG : pas d'image pour le pseudo-dragon ? -> il n'est pas dans le fichier ftp://ftp.mountyhall.com/Public_Monstres.txt [pareil pour le diablotin, à gérer en hard]
 * le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
+* armure, vol, sang froid dans les cdm http://canop.org/chrall/fofo/viewtopic.php?f=6&t=84&p=605#p605
+
 
 TODO :
 ======

@@ -10,7 +10,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Structure de la table `action`
 --
 
-CREATE TABLE IF NOT EXISTS `action` (
+CREATE TABLE `action` (
   `date_action` int(11) NOT NULL,
   `type_action` varchar(200) character set utf8 collate utf8_unicode_ci NOT NULL,
   `auteur` int(11) NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `action` (
 -- Structure de la table `appel_soap`
 --
 
-CREATE TABLE IF NOT EXISTS `appel_soap` (
+CREATE TABLE `appel_soap` (
   `troll` int(11) NOT NULL,
   `pour` int(11) NOT NULL,
   `date` int(11) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `appel_soap` (
 -- Structure de la table `cdm`
 --
 
-CREATE TABLE IF NOT EXISTS `cdm` (
+CREATE TABLE `cdm` (
   `id` int(11) NOT NULL auto_increment,
   `origine` char(1) collate utf8_unicode_ci NOT NULL default 'U',
   `author` int(11) NOT NULL,
@@ -86,14 +86,21 @@ CREATE TABLE IF NOT EXISTS `cdm` (
   `bonus_malus_text` varchar(255) collate utf8_unicode_ci NOT NULL,
   `portee_du_pouvoir_text` varchar(255) collate utf8_unicode_ci NOT NULL,
   `blessure` int(11) NOT NULL,
+  `armure_physique_min` int(11) NOT NULL,
+  `armure_physique_max` int(11) NOT NULL,
+  `armure_magique_min` int(11) NOT NULL,
+  `armure_magique_max` int(11) NOT NULL,
+  `vole_boolean` tinyint(4) NOT NULL,
+  `sang_froid_text` varchar(10) collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `sha1` (`sha1`),
   KEY `caracs1` (`niveau_min`,`niveau_max`,`des_attaque_min`,`des_attaque_max`,`des_esquive_min`,`des_esquive_max`,`des_degats_min`,`des_degats_max`,`des_regeneration_min`,`des_regeneration_max`,`armure_min`,`armure_max`,`vue_min`,`vue_max`),
   KEY `nom_complet` (`nom_complet`),
   KEY `famille_text` (`famille_text`),
   KEY `caracs2` (`maitrise_magique_min`,`maitrise_magique_max`,`resistance_magique_min`,`resistance_magique_max`,`nombre_attaques`,`voir_le_cache_boolean`,`attaque_a_distance_boolean`,`duree_tour_min`,`duree_tour_max`),
-  KEY `author` (`author`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5505 ;
+  KEY `author` (`author`),
+  KEY `armure_physique_min` (`armure_physique_min`,`armure_physique_max`,`armure_magique_min`,`armure_magique_max`,`vole_boolean`,`sang_froid_text`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5580 ;
 
 -- --------------------------------------------------------
 
@@ -101,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `cdm` (
 -- Structure de la table `compte`
 --
 
-CREATE TABLE IF NOT EXISTS `compte` (
+CREATE TABLE `compte` (
   `id` int(11) NOT NULL,
   `statut` enum('ok','off','soap_error','bad_pwd') collate utf8_unicode_ci NOT NULL,
   `mdp_restreint` char(32) collate utf8_unicode_ci NOT NULL,
@@ -125,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `compte` (
 -- Structure de la table `note`
 --
 
-CREATE TABLE IF NOT EXISTS `note` (
+CREATE TABLE `note` (
   `id` int(11) NOT NULL auto_increment,
   `auteur` int(11) NOT NULL,
   `id_sujet` int(11) NOT NULL,
@@ -148,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `note` (
 -- Structure de la table `observation`
 --
 
-CREATE TABLE IF NOT EXISTS `observation` (
+CREATE TABLE `observation` (
   `auteur` int(11) NOT NULL,
   `num` int(11) NOT NULL,
   `date` int(11) NOT NULL,
@@ -167,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `observation` (
 -- Structure de la table `partage`
 --
 
-CREATE TABLE IF NOT EXISTS `partage` (
+CREATE TABLE `partage` (
   `troll_a` int(11) NOT NULL,
   `troll_b` int(11) NOT NULL,
   `statut_a` enum('on','off') collate utf8_unicode_ci NOT NULL default 'on',

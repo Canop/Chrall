@@ -147,8 +147,8 @@ type CDM struct {
 	DésDégâts_max             uint
 	DésRégénération_min       uint
 	DésRégénération_max       uint
-	Armure_min                uint
-	Armure_max                uint
+	Armure_min                uint // obsolète je pense
+	Armure_max                uint // obsolète je pense
 	Vue_min                   uint
 	Vue_max                   uint
 	MaitriseMagique_min       uint
@@ -167,6 +167,12 @@ type CDM struct {
 	BonusMalus_text           string // dépend de l'individu et du moment ?
 	PortéeDuPouvoir_text      string
 	Blessure                  uint
+	ArmurePhysique_min        uint
+	ArmurePhysique_max        uint
+	ArmureMagique_min         uint
+	ArmureMagique_max         uint
+	Vole_boolean              boolean
+	SangFroid_text            string
 
 	Chars map[string]*CdmChar // il s'agit de la version non hardcodée des paramètres qui apparaissent sous la forme "Nom : Valeur"
 }
@@ -250,6 +256,16 @@ func (cdm *CDM) SetChar(name string, c *CdmChar) {
 		cdm.PortéeDuPouvoir_text = c.Text
 	} else if name == "Blessure" || name == "Blessure (Approximatif)" {
 		cdm.Blessure = c.Value
+	} else if name == "Armure Physique" {
+		cdm.ArmurePhysique_min = c.Min
+		cdm.ArmurePhysique_max = c.Max
+	} else if name == "Armure Magique" {
+		cdm.ArmureMagique_min = c.Min
+		cdm.ArmureMagique_max = c.Max
+	} else if name == "Vole" {
+		cdm.Vole_boolean = c.Boolean
+	} else if name == "Sang froid" {
+		cdm.SangFroid_text = c.Text
 	} else if name == "Points de Vie restants (Approximatif)" {
 		// ça vient de MountyZilla : on ignore
 	} else {

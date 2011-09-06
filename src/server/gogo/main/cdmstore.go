@@ -36,11 +36,15 @@ func (store *MysqlStore) WriteCdms(db *mysql.Client, cdms []*CDM, author int, se
 	sql += " chargement_text,"
 	sql += " bonus_malus_text,"
 	sql += " portee_du_pouvoir_text,"
-	sql += " blessure)"
+	sql += " blessure,"
+	sql += " armure_physique_min, armure_physique_max,"
+	sql += " armure_magique_min, armure_magique_max,"
+	sql += " vole_boolean,"
+	sql += " sang_froid_text)"
 
 	sql += " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
 	sql += " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
-	sql += " ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+	sql += " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
 	//fmt.Println("SQL: " + sql)
 	stmt, err := db.Prepare(sql)
@@ -81,7 +85,13 @@ func (store *MysqlStore) WriteCdms(db *mysql.Client, cdms []*CDM, author int, se
 			cdm.Chargement_text,
 			cdm.BonusMalus_text,
 			cdm.PortéeDuPouvoir_text,
-			cdm.Blessure)
+			cdm.Blessure,
+			cdm.ArmurePhysique_min,
+			cdm.ArmurePhysique_max,
+			cdm.ArmureMagique_min,
+			cdm.ArmureMagique_max,
+			uint8(cdm.Vole_boolean),
+			cdm.SangFroid_text)
 		if err != nil {
 			return inserted, err
 		}
@@ -201,6 +211,12 @@ func rowToBestiaryExtract(completeName string, row mysql.Row) *BestiaryExtract {
 	be.Fusion.DuréeTour_min = fieldAsUint(row[28])
 	be.Fusion.DuréeTour_max = fieldAsUint(row[29])
 	be.Fusion.PortéeDuPouvoir_text = fieldAsString(row[30])
+	be.Fusion.ArmurePhysique_min = fieldAsUint(row[31])
+	be.Fusion.ArmurePhysique_max = fieldAsUint(row[32])
+	be.Fusion.ArmureMagique_min = fieldAsUint(row[33])
+	be.Fusion.ArmureMagique_max = fieldAsUint(row[34])
+	be.Fusion.Vole_boolean = fieldAsBoolean(row[35])
+	be.Fusion.SangFroid_text = fieldAsString(row[36])
 	return be
 }
 
@@ -235,11 +251,16 @@ func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName stri
 		sql += " max(voir_le_cache_boolean), "
 		sql += " max(attaque_a_distance_boolean), "
 		sql += namaxmin("duree_tour") + ", "
-		sql += " max(portee_du_pouvoir_text)"
+		sql += " max(portee_du_pouvoir_text), "
+		sql += namaxmin("armure_physique") + ", "
+		sql += namaxmin("armure_magique") + ", "
+		sql += " max(vole_boolean), "
+		sql += " max(sang_froid_text)"
+
 		sql += " from cdm where nom_complet=" + toMysqlString(completeName)
 		sql += " and num_monstre=" + strconv.Uitoa(monsterId)
 
-		//fmt.Println("SQL :\n" + sql + "\n")
+		//fmt.Println("SQL (with monsterId) :\n" + sql + "\n")
 
 		err = db.Query(sql)
 		if err != nil {
@@ -279,13 +300,18 @@ func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName stri
 	sql += " max(voir_le_cache_boolean), "
 	sql += " max(attaque_a_distance_boolean), "
 	sql += naminmax("duree_tour") + ", "
-	sql += " max(portee_du_pouvoir_text)"
+	sql += " max(portee_du_pouvoir_text), "
+	sql += namaxmin("armure_physique") + ", "
+	sql += namaxmin("armure_magique") + ", "
+	sql += " max(vole_boolean), "
+	sql += " max(sang_froid_text)"
 	sql += " from cdm where nom_complet=" + toMysqlString(completeName)
+	/*
 	if Ante4M {
 		sql += " and num_monstre<4000000"
 	} else {
 		sql += " and num_monstre>3999999"
-	}
+	}*/
 
 	//fmt.Println(sql)
 

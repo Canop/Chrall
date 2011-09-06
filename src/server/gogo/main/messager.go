@@ -76,7 +76,7 @@ func GetMessage(TrollId string, ChrallVersion string) (out *G2cMessage) {
 	out.Nature = "empty"
 
 	//> on va regarder si l'utilisateur n'a pas une version ancienne de Chrall
-	currentChralVersion := &Version{[]uint{2, 9}} // il serait sans doute préférable de trouver un moyen d'avoir ça en "constante", ou bien une variable accrochée
+	currentChralVersion := &Version{[]uint{2, 13}} // il serait sans doute préférable de trouver un moyen d'avoir ça en "constante", ou bien une variable accrochée
 	if userVersion, err := ParseVersion(ChrallVersion); err != nil {
 		fmt.Println("user's Chrall Version not understood : " + ChrallVersion)
 	} else {
