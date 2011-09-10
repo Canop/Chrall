@@ -306,12 +306,11 @@ func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName stri
 	sql += " max(vole_boolean), "
 	sql += " max(sang_froid_text)"
 	sql += " from cdm where nom_complet=" + toMysqlString(completeName)
-	/*
 	if Ante4M {
 		sql += " and num_monstre<4000000"
 	} else {
 		sql += " and num_monstre>3999999"
-	}*/
+	}
 
 	//fmt.Println(sql)
 
