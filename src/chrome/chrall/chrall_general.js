@@ -17,6 +17,15 @@ function getUrlParameter(name, defaultValue) {
 }
 
 /**
+ * injecte un fichier javascript présent dans l'extension, de telle sorte
+ *  qu'il soit exécuté dans le contexte de la page et non celui de l'extension
+ * 
+ */
+function Chrall_inject(fileName) {
+	$.getScript(chrome.extension.getURL(fileName));
+}
+
+/**
  * découpe en mots (un nombre peut être un mot).
  * 
  * Note : comme je ne suis pas fort en expressions régulières, si un "-" est isolé, il sort comme un mot...

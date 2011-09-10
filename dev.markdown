@@ -325,6 +325,8 @@ DONE :
 
 <- v2.13
 
+* armure, vol, sang froid dans les cdm http://canop.org/chrall/fofo/viewtopic.php?f=6&t=84&p=605#p605
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -334,7 +336,6 @@ EN COURS :
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : visu en bulles
 * BUG : pas d'image pour le pseudo-dragon ? -> il n'est pas dans le fichier ftp://ftp.mountyhall.com/Public_Monstres.txt [pareil pour le diablotin, à gérer en hard]
 * le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
-* armure, vol, sang froid dans les cdm http://canop.org/chrall/fofo/viewtopic.php?f=6&t=84&p=605#p605
 
 
 TODO :
@@ -346,13 +347,13 @@ P1 :
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
 * faire des statistiques d'accès via Chrall plutôt que via Google Analytics
 * virer l'ancienne diplo Trollienne, que remplace la prise de notes (avec son champ diplo)
+* liste de lieux paramétrable pour définir les coordonnées dans les actions de déplacement des gowap et les TP
 
 * BUG : sur le forum le numéro du troll appelant n'est plus trouvé (car localStorage n'est pas le même => il faut repasser par chrome_extension.html)
 * palmarès des monstres meilleurs tueurs
 * bulle minage : faire comme TP : http://canop.org/chrall/fofo/viewtopic.php?f=1&t=11&sid=bbb609f56c08490ff542ce597d33df0a&p=503#p503
 * bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * killomètre : affichage par guilde
-* mettre à jour la base pour les nouveaux niveaux des monstres (faire un max ?)
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
 * bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
 * Vue/Partages : mise à jour de la position des trolls lors de la mise à jour de la vue

@@ -13,7 +13,7 @@ Le plus simple pour profiter de Chrall est d'installer l'extension déjà prépa
 Structure :
 ===========
 
-1. **l'extension Chrome** qui reformate les pages de la forme `games.mountyhall.com/*` : le code source est dans `src/chrome`. Il s'agit essentiellement de javascript.
+1. **l'extension Chrome** qui reformate les pages de la forme `games.mountyhall.com/*` : le code source est dans `src/chrome`. Il s'agit essentiellement de javascript. Les fichiers dont le nom commence par "chrall_" sont exécutés dans le contexte de l'extension. Ceux dont le nom commence par "injected_" sont injectables dans le contexte de la page.
 
 2. **le serveur gogochrall** : Il offre sur http://canop.org:8000/chrall un bestiaire et un outil d'alimentation mais surtout il répond aux requètes de l'extension (essentiellement en JSON/JSONP). Son code source est dans `src/server`. Il s'agit de [go](http://golang.org) et d'une base MySQL.
 

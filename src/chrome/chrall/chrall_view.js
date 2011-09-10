@@ -58,6 +58,13 @@ function Chrall_makeFiltersHtml() {
  */ 
 function Chrall_makeGridHtml(noteRequest) {
 	noteRequest.NumTrolls = [];
+	noteRequest.NumMonstres = [];
+	noteRequest.XMin = xmin;
+	noteRequest.XMax = xmax;
+	noteRequest.YMin = ymin;
+	noteRequest.YMax = ymax;
+	noteRequest.ZMin = zmin;
+	noteRequest.ZMax = zmax;
 	var grey_closed_png_url = chrome.extension.getURL("grey_closed.png");
 	var grey_open_png_url = chrome.extension.getURL("grey_open.png");
 	var h=0;
@@ -120,6 +127,7 @@ function Chrall_makeGridHtml(noteRequest) {
 				if (cell.monsters) {
 					for (var i=0; i<cell.monsters.length; i++) {
 						var m = cell.monsters[i];
+						noteRequest.NumMonstres.push(m.id);
 						if (m.isGowap) {
 							if (c>0) cellContent[c++] = "<br name='gowaps' class=ch_gowap>";
 							var an = player.z!=m.z;

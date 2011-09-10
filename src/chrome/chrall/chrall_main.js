@@ -38,7 +38,6 @@ var viewFilters = {
 	"3D" : true
 };
 
-prepareReceiver();
 var splitedPathname = document.location.pathname.split('/');
 var hallIsAccro = document.location.host == "accro.mountyhall.com"; // est-ce qu'on est dans le PH spécial des accros ?
 var pageName = splitedPathname[splitedPathname.length-1];
@@ -48,6 +47,9 @@ var resetTroll = pageName=="PlayStart.php";
 if (!resetTroll) {
 	player.restore(); // on récupère les infos qui ont pu être obtenues dans d'autres frames ou pages
 }
+
+Chrall_inject('injected_com.js');
+Chrall_inject('injected_notes.js');
 
 switch (pageName) {
 case "PlayStart.php":
@@ -78,11 +80,6 @@ case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
 	Chrall_handleActionPage();
 	break;
 case "Play_option.php":
-//~ case "Play_o_Pwd.php": // je désactive l'onglet sur les pages d'option à part la général : l'apparence de certains blocs MH est trop perturbée
-//~ case "Play_o_Blason.php":
-//~ case "Play_o_Interface.php":
-//~ case "Play_o_css.php":
-//~ case "Play_o_Divers.php":
 	initCommunications('check_account');
 	Chrall_reformatOptionsView();	
 	break;
@@ -114,7 +111,7 @@ case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la col
 	Chrall_preparePlay2Inputs();	
 	break;
 case "Play_a_Move.php":
-	Chrall_handleMovePage();	
+	Chrall_inject('injected_move.js');	
 	break;
 case "PJView.php":
 	Chrall_analyseAndReformatPJView(); 

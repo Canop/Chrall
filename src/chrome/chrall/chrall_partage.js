@@ -34,9 +34,6 @@ function makePartageTables() {
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDate(p.AutreTroll.ProchainTour)+'</td>';"; 	
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDuration(p.AutreTroll.DureeTour)+'</td>';"; 	
 	html[h++] = "    hpa+= '<td class=mh_tdpage><a name=zoom class=gogo x='+p.AutreTroll.X+' y='+p.AutreTroll.Y+' z='+p.AutreTroll.Z+' >'+p.AutreTroll.X+' '+p.AutreTroll.Y+' '+p.AutreTroll.Z+'</a></td>';"; 	
-	//~ html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.X+'</td>';"; 
-	//~ html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Y+'</td>';"; 
-	//~ html[h++] = "    hpa+= '<td class=mh_tdpage>'+p.AutreTroll.Z+'</td>';"; 
 	html[h++] = "    hpa+= '<td class=mh_tdpage>'+formatDate(p.AutreTroll.MiseAJour)+'</td>';";
 	html[h++] = "   } else {";
 	html[h++] = "    hpa+= '<td class=mh_tdpage colspan=6>Pas de données</td>';";
