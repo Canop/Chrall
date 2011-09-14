@@ -138,6 +138,7 @@ CarteHall.prototype.mouseUp = function(e) {
 
 CarteHall.prototype.mouseLeave = function(e) {
 	this.mouseIsDown = false;
+    this.posmarkdiv.innerHTML = "Cliquez sur la carte pour donner un ordre de mouvement.";
 	this.redraw();
 }
 
