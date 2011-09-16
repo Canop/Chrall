@@ -20,7 +20,7 @@ function CarteHall(canvasId, posmarkid) {
 	var _this = this;
 	this.canvas.addEventListener("mousedown", function(e) {_this.mouseDown(e)}, false);
 	this.canvas.addEventListener("mouseup", function(e) {_this.mouseUp(e)}, false);
-	this.canvas.addEventListener("mouseleave", function(e) {_this.mouseLeave(e)}, false);
+	this.canvas.addEventListener("mouseout", function(e) {_this.mouseLeave(e)}, false);
 	this.canvas.addEventListener("mousemove", function(e) {_this.mouseMove(e)}, false);
 	window.onmousewheel = document.onmousewheel = function(e) {_this.mouseWheel(e)};
 	var that = this;
