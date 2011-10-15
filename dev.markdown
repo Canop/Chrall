@@ -326,6 +326,13 @@ DONE :
 <- v2.13
 
 * armure, vol, sang froid dans les cdm http://canop.org/chrall/fofo/viewtopic.php?f=6&t=84&p=605#p605
+* modifs ordres gowaps par Kalamar
+
+<- v2.14
+
+* bouton "rafraichir" sur l'onglet "Trolls" de la vue
+
+<- v2.15
 
 EN COURS :
 ==========
@@ -342,6 +349,8 @@ TODO :
 ======
 P1 :
 ----
+* bug [godrage] : "Certains profils de trolls : stats trop difficile d'accès"
+* bug : "en attente de gogochrall..." pour les Gremlins
 * système de scripts externes
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).

@@ -2,5 +2,6 @@
 chrall.crx
 
 # la clef nécessaire à sa mise à jour (si vous faites une extension dérivée de chrall, vous devrez lui donner un autre nom)
-compile.sh
 chrall.pem
+
+compile.sh

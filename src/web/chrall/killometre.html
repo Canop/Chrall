@@ -277,7 +277,8 @@
 		try {
 			history.pushState({cat:state.cat, searched:state.searched, indexStartPage:state.indexStartPage}, "Burp!", state.URL());
 		} catch (e) {
-			if (console && console.log) console.log(e);
+			// je désactive la ligne suivante car elle semble faire planter "Firefox 3.6.23 sous XUbuntu 10.04"
+			// if (console && console.log) console.log(e);
 		}
 		state.apply();
 	}
