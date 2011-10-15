@@ -97,7 +97,7 @@ func addTextNV(c []NameValue, label string, t string) []NameValue {
 	return c
 }
 
-const CDM_MAX_ITEMS_IN_COL = 10
+const CDM_MAX_ITEMS_IN_COL = 11 // attention à l'augmenter si le nombre de caractéristiques augmente...
 
 // construit une description tabulaire d'une CDM (réelle ou estimée)
 func (cdm *CDM) HtmlTable() string {
@@ -207,7 +207,7 @@ func (be *BestiaryExtract) Html(monsterId uint, askerId int, m *TksManager, pour
 			}
 		}
 	}
-	return html
+	return
 }
 
 // construit une description tabulaire d'un troll

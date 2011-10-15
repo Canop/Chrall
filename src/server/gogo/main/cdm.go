@@ -326,7 +326,7 @@ func NewCdm(lines []string) *CDM {
 		ib := strings.Index(line, "]")
 		if ip >= 0 && ia >= ip && ib > ia {
 			famille = strings.Trim(line[ip+2:ia-1], " ")
-			fmt.Println("Fam : '" + famille + "'")
+			//~ fmt.Println("Fam : '" + famille + "'")
 			nomComplet = line[ia+1 : ib+1]
 		} else {
 			fmt.Println("Impossible de trouver le nom")
