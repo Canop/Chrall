@@ -6,7 +6,6 @@ gère la lecture et l'écriture en mysql des comptes de troll
 import (
 	"fmt"
 	"mysql"
-	"os"
 	"strconv"
 	"time"
 )
@@ -54,7 +53,7 @@ func rowToCompte(trollId uint, row mysql.Row) (c *Compte) {
 
 // lit un compte en base. Renvoie nil si le compte n'existe pas en base.
 // Sinon l'appelant est responsable de l'ouverture et de la fermeture de la connexion qu'il fournit
-func (store *MysqlStore) GetCompte(db *mysql.Client, trollId uint) (c *Compte, err os.Error) {
+func (store *MysqlStore) GetCompte(db *mysql.Client, trollId uint) (c *Compte, err error) {
 
 	if trollId == 0 {
 		fmt.Println("GetCompte> trollId invalide")
@@ -86,7 +85,7 @@ func (store *MysqlStore) GetCompte(db *mysql.Client, trollId uint) (c *Compte, e
 
 // sauvegarde un nouveau compte.
 // L'appelant est responsable de l'ouverture et de la fermeture de la connexion.
-func (store *MysqlStore) InsertCompte(db *mysql.Client, c *Compte) (err os.Error) {
+func (store *MysqlStore) InsertCompte(db *mysql.Client, c *Compte) (err error) {
 
 	sql := "insert into"
 	sql += " compte (id, statut, mdp_restreint)"
@@ -113,7 +112,7 @@ func (store *MysqlStore) InsertCompte(db *mysql.Client, c *Compte) (err os.Error
 
 // met à jour les champs de gestion d'un compte en BD
 // L'appelant est responsable de l'ouverture et de la fermeture de la connexion.
-func (store *MysqlStore) UpdateInfosGestionCompte(db *mysql.Client, c *Compte) (err os.Error) {
+func (store *MysqlStore) UpdateInfosGestionCompte(db *mysql.Client, c *Compte) (err error) {
 
 	sql := "update compte set"
 	sql += " statut=?,"
@@ -136,7 +135,7 @@ func (store *MysqlStore) UpdateInfosGestionCompte(db *mysql.Client, c *Compte) (
 }
 
 // met à jour un compte en BD, sans les infos de gestion (comme le mdp)
-func (store *MysqlStore) UpdateTroll(db *mysql.Client, c *Compte) (err os.Error) {
+func (store *MysqlStore) UpdateTroll(db *mysql.Client, c *Compte) (err error) {
 
 	t := c.Troll
 	if t == nil {
@@ -173,7 +172,7 @@ func (store *MysqlStore) UpdateTroll(db *mysql.Client, c *Compte) (err os.Error)
 }
 
 // vérifie que le compte existe et que le mot de passe restreint est validé par MH
-func (store *MysqlStore) CheckCompte(db *mysql.Client, trollId uint, mdpr string) (ok bool, c *Compte, err os.Error) {
+func (store *MysqlStore) CheckCompte(db *mysql.Client, trollId uint, mdpr string) (ok bool, c *Compte, err error) {
 
 	c, err = store.GetCompte(db, trollId)
 

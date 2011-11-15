@@ -5,7 +5,7 @@
   
 function Chrall_analyseMonsterTable(monsterTable) {
 	var rows = monsterTable.find("tr");
-	for (var r=3; r<rows.length; r++) {
+	for (var r=1; r<rows.length; r++) {
 		var $tr = $(rows[r]);
 		var cells = $tr.find("td");
 		var monster = new Monster();
@@ -24,7 +24,7 @@ function Chrall_analyseTrollTable(table) {
 	// en même temps qu'on analyse la table, on ajoute les cases à cocher
 	// de sélection des trolls pour l'envoi de MP.
 	var rows = table.find("tr");
-	for (var r=3; r<rows.length; r++) {
+	for (var r=1; r<rows.length; r++) {
 		var $tr = $(rows[r]);
 		var troll = new Troll();
 		var cells = $tr.find("td");
@@ -176,6 +176,7 @@ function Chrall_analyseView() {
 
 	//> chargement des trucs en vue (monstres, trolls, etc.).
 	var $tables = {};
+	/*
 	var $allTables = $("table.mh_tdborder");
 	for (var i=0; i<$allTables.length; i++) {
 		var $table = $($allTables[i]);
@@ -184,7 +185,21 @@ function Chrall_analyseView() {
 			$tables[tableName]=$table;
 			$table.detach(); // grosse accélération. Mais effet de bord : si ça plante on n'a plus rien. Il faudra sans doute que je fasse un gros try/catch et que je m'arrange pour remettre les tables en cas d'exception
 		}
+	}*/
+	
+	var findTable=function(key) {
+		var $t =  $('#mh_vue_hidden_'+key+' table');
+		$t.detach();
+		$tables[key]=$t;
 	}
+	findTable('monstres');
+	findTable('trolls');
+	findTable('tresors');
+	findTable('champignons');
+	findTable('lieux');
+	findTable('cadavre');
+	findTable('murs');
+	
 	Chrall_analyseMonsterTable($tables['monstres']);
 	Chrall_analyseTrollTable($tables['trolls']);
 	Chrall_analyseObjectTable($tables['tresors']);
@@ -192,6 +207,7 @@ function Chrall_analyseView() {
 	Chrall_analysePlaceTable($tables['lieux']);
 	Chrall_analyseCenotaphTable($tables['cadavre']);
 	if (horizontalViewLimit > 0) Chrall_analyseWallTable($tables['murs']); // Si on est aveugle, on sait que les infos des murs et couloirs sont incorrectes
+	
 	
 	//> on regarde si la case du joueur est encombrée
 	// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case

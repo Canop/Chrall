@@ -2,10 +2,12 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
+	"io"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 type raceTroll uint8
@@ -161,7 +163,7 @@ func (m *TksManager) GetKillometreExtract(typeExtract string, startIndex int, pa
 	return
 }
 
-func (m *TksManager) ReadDiploCsvFilesIfNew() os.Error {
+func (m *TksManager) ReadDiploCsvFilesIfNew() error {
 	standardDiploFilename := "/home/dys/chrall/Public_Diplomatie.txt"
 	trollDiploFilename := "/home/dys/chrall/Diplodotrolls.csv"
 	mustRead := false
@@ -171,7 +173,7 @@ func (m *TksManager) ReadDiploCsvFilesIfNew() os.Error {
 			return err
 		}
 		if !fi.IsRegular() {
-			return os.NewError("TksManager : Fichier " + standardDiploFilename + " introuvable ou anormal")
+			return errors.New("TksManager : Fichier " + standardDiploFilename + " introuvable ou anormal")
 		}
 		mustRead = fi.Mtime_ns > m.lastDiploFileRead*1000000000
 	}
@@ -181,7 +183,7 @@ func (m *TksManager) ReadDiploCsvFilesIfNew() os.Error {
 			return err
 		}
 		if !fi.IsRegular() {
-			return os.NewError("TksManager : Fichier " + trollDiploFilename + " introuvable ou anormal")
+			return errors.New("TksManager : Fichier " + trollDiploFilename + " introuvable ou anormal")
 		}
 		mustRead = fi.Mtime_ns > m.lastDiploFileRead*1000000000
 		fmt.Printf("mustRead trollDiploFile = %v \n", mustRead)
@@ -219,7 +221,7 @@ func (m *TksManager) ReadDiploCsvFilesIfNew() os.Error {
 	return nil
 }
 
-func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
+func (m *TksManager) ReadGuildCsvFileIfNew() error {
 	filename := "/home/dys/chrall/Public_Guildes.txt"
 	if m.lastGuildFileRead > 0 {
 		fi, err := os.Stat(filename)
@@ -227,7 +229,7 @@ func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
 			return err
 		}
 		if !fi.IsRegular() {
-			return os.NewError("TksManager : Fichier " + filename + " introuvable ou anormal")
+			return errors.New("TksManager : Fichier " + filename + " introuvable ou anormal")
 		}
 		if fi.Mtime_ns < m.lastGuildFileRead*1000000000 {
 			return nil
@@ -261,7 +263,7 @@ func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
 		}
 		line, err = r.ReadString('\n')
 	}
-	if err != os.EOF {
+	if err != io.EOF {
 		fmt.Println("Erreur au parsage :")
 		fmt.Println(err)
 		return err
@@ -274,7 +276,7 @@ func (m *TksManager) ReadGuildCsvFileIfNew() os.Error {
 // Lit un fichier csv contenant, triés par nombre de kills de trolls, une ligne pour
 //  chaque troll connu (voir troll.go).
 // Calcule les tableaux triés en fin de chargement
-func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
+func (m *TksManager) ReadTrollCsvFileIfNew() error {
 	// TODO comment assurer en go qu'il n'y a pas plusieurs exécutions en parallèle ?
 	filename := "/home/dys/chrall/killometre/kom.csv" // oui, c'est pas bien... mais proposez de l'aide au lieu de critiquer ;)
 	if m.lastTrollFileRead > 0 {
@@ -283,7 +285,7 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 			return err
 		}
 		if !fi.IsRegular() {
-			return os.NewError("TksManager : Fichier de stats " + filename + " introuvable ou anormal")
+			return errors.New("TksManager : Fichier de stats " + filename + " introuvable ou anormal")
 		}
 		if fi.Mtime_ns < m.lastTrollFileRead*1000000000 { // conversion secondes - nanosecondes...
 			//fmt.Println("TksManager : le fichier n'a pas changé")
@@ -331,7 +333,7 @@ func (m *TksManager) ReadTrollCsvFileIfNew() os.Error {
 		}
 		line, err = r.ReadString('\n')
 	}
-	if err != os.EOF {
+	if err != io.EOF {
 		fmt.Println("Erreur au parsage :")
 		fmt.Println(err)
 		return err

@@ -17,7 +17,7 @@ ini_set('default_charset', 'utf-8');
 &nbsp;</div>
 
 <div id="title_stripe">
-<a href="/">canop.org</a> &gt; Chrall
+<a href="/blog/">canop.org</a> &gt; Chrall
 </div>
 
 <div class=column_wrapper id="content_column_wrapper">
@@ -32,7 +32,7 @@ Chrall est une extension Chrome pour le jeu <a href=http://www.mountyhall.com>Mo
 
 
 <h2>Installation</h2>
-<p><a href=chrall_v002_015.crx class=install>Installer Chrall</a> Version actuelle : <span id=version>2.15</span></p>
+<p><a href=chrall_v002_016.crx class=install>Installer Chrall</a> Version actuelle : <span id=version>2.16</span></p>
 <p id=browserInfos></p>
 
 

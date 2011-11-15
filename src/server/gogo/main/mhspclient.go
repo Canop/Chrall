@@ -8,7 +8,7 @@ Interrogations des Scripts Publics MH (la version non SOAP)
 import (
 	"bufio"
 	"fmt"
-	"http"
+	"net/http"
 	"strconv"
 	"strings"
 )
@@ -24,7 +24,7 @@ func FetchVueSp(numero uint, mdp_restreint string, avecTresors uint, avecLieux u
 	request := fmt.Sprintf("http://sp.mountyhall.com/SP_Vue2.php?Numero=%d&Motdepasse=%s&Tresors=%d&Lieux=%d", numero, mdp_restreint, avecTresors, avecLieux)
 	resp, err := httpClient.Get(request)
 	if err != nil {
-		errorDetails = err.String()
+		errorDetails = err.Error()
 		return
 	}
 	defer resp.Body.Close()

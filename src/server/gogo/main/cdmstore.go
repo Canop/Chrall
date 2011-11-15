@@ -5,12 +5,11 @@ gère la lecture et l'écriture en mysql des CDM
 
 import (
 	"mysql"
-	"os"
 	"strconv"
 	"time"
 )
 
-func (store *MysqlStore) WriteCdms(db *mysql.Client, cdms []*CDM, author int, seconds int64) (nbWrittenCdms int, err os.Error) {
+func (store *MysqlStore) WriteCdms(db *mysql.Client, cdms []*CDM, author int, seconds int64) (nbWrittenCdms int, err error) {
 	inserted := 0
 
 	sql := "insert ignore into cdm (author, num_monstre, nom_complet, nom, age, " // En go on ne peut pas déclarer une chaine sur plusieurs lignes. J'espère que le compilo combine...
@@ -108,7 +107,7 @@ func (store *MysqlStore) WriteCdms(db *mysql.Client, cdms []*CDM, author int, se
 }
 
 // renvoie une liste de noms pour un champ d'auto-completion
-func (store *MysqlStore) getMonsterCompleteNames(partialName string, limit uint) ([]string, os.Error) {
+func (store *MysqlStore) getMonsterCompleteNames(partialName string, limit uint) ([]string, error) {
 	if limit > 100 {
 		limit = 100
 	} else if limit < 5 {
@@ -150,7 +149,7 @@ func (store *MysqlStore) getMonsterCompleteNames(partialName string, limit uint)
 	return names[0:count], nil
 }
 
-func (store *MysqlStore) ReadTotalStats() (*BestiaryExtract, os.Error) {
+func (store *MysqlStore) ReadTotalStats() (*BestiaryExtract, error) {
 	db, err := mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
 	if err != nil {
 		return nil, err
@@ -224,7 +223,7 @@ func rowToBestiaryExtract(completeName string, row mysql.Row) *BestiaryExtract {
  * estime les caractéristiques du monstre.
  * Si l'id est fourni (i.e. pas 0) et si on a des cdm concernant ce monstre précis, on n'utilise que celles là [EN COURS]
  */
-func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName string, monsterId uint) (be *BestiaryExtract, err os.Error) {
+func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName string, monsterId uint) (be *BestiaryExtract, err error) {
 
 	// les monstres ont changé de catégorie à partir du numéro 4M
 	Ante4M := monsterId > 0 && monsterId < 4000000
@@ -337,7 +336,7 @@ func (store *MysqlStore) ComputeMonsterStats(db *mysql.Client, completeName stri
 }
 
 // un résultat sans auteur (0) ni dateCdm (valeur 0) signifie qu'on n'a pas la réponse à la question
-func (store *MysqlStore) GetBlessure(db *mysql.Client, numMonstre uint, trollId int, amis []int) (blessure uint, auteurCDM int, dateCDM int64, err os.Error) {
+func (store *MysqlStore) GetBlessure(db *mysql.Client, numMonstre uint, trollId int, amis []int) (blessure uint, auteurCDM int, dateCDM int64, err error) {
 	sql := "select blessure, author, date_adition from cdm where"
 	sql += " num_monstre=" + strconv.Uitoa(numMonstre) + " and"
 	sql += " author in (" + strconv.Itoa(trollId)

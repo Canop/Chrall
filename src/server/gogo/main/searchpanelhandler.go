@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"http"
+	"net/http"
 	"time"
 )
 
@@ -35,8 +35,8 @@ type SearchPanelHandler struct {
 }
 
 func (h *SearchPanelHandler) getSearchPanelHtml(hr *http.Request) string {
-	fmt.Println("\n=== SearchPanelHandler : Requete reçue ====================")
-	fmt.Println(" URL : " + hr.RawURL)
+	//~ fmt.Println("\n=== SearchPanelHandler : Requete reçue ====================")
+	//~ fmt.Println(" URL : " + hr.RawURL)
 	hr.ParseForm()
 
 	askerId := GetFormValueAsInt(hr, "asker")
@@ -47,8 +47,8 @@ func (h *SearchPanelHandler) getSearchPanelHtml(hr *http.Request) string {
 
 	db, err := h.store.Connect()
 	if err != nil {
-		fmt.Printf("Erreur ouverture connexion BD dans makeBestiaryExtractHtml : %s\n", err.String())
-		return err.String()
+		fmt.Printf("Erreur ouverture connexion BD dans makeBestiaryExtractHtml : %s\n", err.Error())
+		return err.Error()
 	}
 	defer db.Close()
 
@@ -63,11 +63,11 @@ func (h *SearchPanelHandler) getSearchPanelHtml(hr *http.Request) string {
 	}
 	amis, err := h.store.GetPartageurs(db, askerId)
 	if err != nil {
-		return fmt.Sprintf("Erreur récupération amis : %s\n", err.String())
+		return fmt.Sprintf("Erreur récupération amis : %s\n", err.Error())
 	}
 	observations, err := h.store.SearchObservations(db, tok, askerId, amis)
 	if err != nil {
-		return fmt.Sprintf("Erreur recherche : %s\n", err.String())
+		return fmt.Sprintf("Erreur recherche : %s\n", err.Error())
 	}
 	if len(observations) == 0 {
 		return "Rien trouvé"

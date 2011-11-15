@@ -5,9 +5,9 @@ Ce service répond aux requètes JSON contenues dans le body (en POST donc)
 */
 
 import (
-	"http"
+	"encoding/json"
 	"fmt"
-	"json"
+	"net/http"
 	"strconv"
 )
 
@@ -33,8 +33,8 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Request-Method", "GET")
 
-	fmt.Println("\n=== JsonPostHandler : Requete reçue ====================")
-	fmt.Println(" URL : " + hr.RawURL)
+	//~ fmt.Println("\n=== JsonPostHandler : Requete reçue ====================")
+	//~ fmt.Println(" URL : " + hr.RawURL)
 
 	////////////////////////////////////// TEST
 	//~ b, e := ioutil.ReadAll(hr.Body)
@@ -95,7 +95,7 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 			cdm := bd.Cdm[0]
 			be, err := h.store.ComputeMonsterStats(db, cdm.NomComplet, cdm.NumMonstre)
 			if err != nil {
-				fmt.Println(" Erreur : " + err.String())
+				fmt.Println(" Erreur : " + err.Error())
 			} else {
 				html := be.Html(cdm.NumMonstre, jr.Author, h.tksManager, cdm.Blessure)
 				ja.Message += html

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"http"
 	"fmt"
+	"net/http"
 )
 
 type ChrallHandler struct {

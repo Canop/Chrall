@@ -66,7 +66,7 @@ func fieldAsBoolean(o interface{}) boolean {
 // ceci est en particulier nécessaire parce que je n'ai pas le même type sur le serveur debian (64 bits) et mon petit ubuntu (32 bits)
 func fieldAsString(o interface{}) string {
 	if o != nil {
-		switch t := o.(type) {
+		switch o.(type) {
 		case string:
 			return o.(string)
 		case []uint8:

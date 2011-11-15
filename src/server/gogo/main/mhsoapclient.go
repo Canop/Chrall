@@ -8,12 +8,12 @@ http://www.mountyhall.com/Forum/display_topic_threads.php?ThreadID=2171938
 
 import (
 	"bytes"
+	"encoding/xml"
 	"fmt"
-	"http"
 	"io"
 	"io/ioutil"
+	"net/http"
 	"strings"
-	"xml"
 	//"os"
 )
 
@@ -96,7 +96,7 @@ func GetSoapEnvelope(query string, numero uint, mdp string) (envelope *SoapEnvel
 	resp, err := httpClient.Post(MH_SOAP_URL, "text/xml; charset=utf-8", bytes.NewBufferString(soapRequestContent))
 
 	if err != nil {
-		fmt.Println("Erreur : " + err.String())
+		fmt.Println("Erreur : " + err.Error())
 		return nil
 	}
 	// là on fait du lourd : on passe par une chaine car j'ai pas le temps ce soir de trouver comment sauter directement un bout du flux jusqu'au début du xml
@@ -117,7 +117,7 @@ func GetSoapEnvelope(query string, numero uint, mdp string) (envelope *SoapEnvel
 	envelope = new(SoapEnvelope)
 	err = parser.Unmarshal(&envelope, nil)
 	if err != nil {
-		fmt.Println("Erreur au décodage du XML : " + err.String())
+		fmt.Println("Erreur au décodage du XML : " + err.Error())
 		return nil
 	}
 

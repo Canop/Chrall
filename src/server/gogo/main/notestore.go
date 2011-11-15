@@ -5,7 +5,6 @@ gère la persistance en BD des notes
 import (
 	"fmt"
 	"mysql"
-	"os"
 	"strconv"
 	"time"
 )
@@ -37,7 +36,7 @@ type NoteRequest struct {
 }
 
 // stocke une note en BD 
-func (store *MysqlStore) SaveNote(db *mysql.Client, note *Note) (err os.Error) {
+func (store *MysqlStore) SaveNote(db *mysql.Client, note *Note) error {
 	if note.Id > 0 {
 		// update
 		// TODO utiliser comme clef l'id ET l'auteur, par sécurité (qu'on ne puisse pas effacer une note de quelqu'un d'autre) (pareil pour le delete)
@@ -49,7 +48,7 @@ func (store *MysqlStore) SaveNote(db *mysql.Client, note *Note) (err os.Error) {
 
 		stmt, err := db.Prepare(sql)
 		if err != nil {
-			return
+			return err
 		}
 		defer stmt.FreeResult()
 
@@ -57,16 +56,16 @@ func (store *MysqlStore) SaveNote(db *mysql.Client, note *Note) (err os.Error) {
 
 		err = stmt.BindParams(note.Auteur, note.TypeSujet, note.IdSujet, note.XSujet, note.YSujet, note.ZSujet, note.Partage, seconds, note.Contenu, note.Diplo)
 		if err != nil {
-			fmt.Printf("Erreur stockage (in) note : %s\n", err.String()) // FIXME l'erreur ne semble pas retransmise ???
-			return
+			fmt.Printf("Erreur stockage (in) note : %s\n", err.Error()) // FIXME l'erreur ne semble pas retransmise ???
+			return err
 		}
 
 		err = stmt.Execute()
 		if err != nil {
-			return
+			return err
 		}
 	}
-	return
+	return nil
 }
 
 // les paramètres passés sont des filtres optionnels

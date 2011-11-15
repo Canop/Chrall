@@ -9,7 +9,6 @@ gère le stockage sous MySQL de la vue des trolls.
 import (
 	"fmt"
 	"mysql"
-	"os"
 	"strconv"
 	"time"
 )
@@ -26,7 +25,7 @@ type Observation struct {
 }
 
 // sauvegarde des observations reçues par SOAP de MH, observées juste maintenant par trollId
-func (store *MysqlStore) SaveSoapItems(db *mysql.Client, trollId uint, items []SoapItem) (err os.Error) {
+func (store *MysqlStore) SaveSoapItems(db *mysql.Client, trollId uint, items []SoapItem) (err error) {
 	seconds := time.Seconds()
 
 	sql := "insert into observation"
@@ -66,7 +65,7 @@ func (store *MysqlStore) SaveSoapItems(db *mysql.Client, trollId uint, items []S
 }
 
 // supprime la vue de trollID puis sauvegarde des observations reçues par SOAP de MH, observées juste maintenant par trollId
-func (store *MysqlStore) CleanAndSaveSoapItems(db *mysql.Client, trollId uint, items []*SoapItem) (err os.Error) {
+func (store *MysqlStore) CleanAndSaveSoapItems(db *mysql.Client, trollId uint, items []*SoapItem) (err error) {
 	seconds := time.Seconds()
 
 	sql := "delete from observation where auteur=" + strconv.Uitoa(trollId)
@@ -115,7 +114,7 @@ func (store *MysqlStore) CleanAndSaveSoapItems(db *mysql.Client, trollId uint, i
 	return
 }
 
-func (store *MysqlStore) SearchObservations(db *mysql.Client, tok string, trollId int, amis []int) (observations []*Observation, err os.Error) {
+func (store *MysqlStore) SearchObservations(db *mysql.Client, tok string, trollId int, amis []int) (observations []*Observation, err error) {
 	sql := "select auteur, num, date, type, nom, x, y, z from observation where"
 	if num, _ := strconv.Atoi(tok); num != 0 {
 		sql += " num=" + tok
@@ -144,9 +143,9 @@ func (store *MysqlStore) SearchObservations(db *mysql.Client, tok string, trollI
 	observations = make([]*Observation, 0, 20)
 
 	for {
-		eof, err := stmt.Fetch()
-		if err != nil || eof {
-			return
+		eof, _err := stmt.Fetch()
+		if _err != nil || eof {
+			return nil, _err
 		}
 		if len(observations) > 0 && r.Num == observations[len(observations)-1].Num { // dédoublonnage
 			continue
@@ -158,7 +157,7 @@ func (store *MysqlStore) SearchObservations(db *mysql.Client, tok string, trollI
 	return
 }
 
-func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z int, dist int, trollId int, amis []int, withTresors bool) (observations []*Observation, err os.Error) {
+func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z int, dist int, trollId int, amis []int, withTresors bool) (observations []*Observation, err error) {
 
 	sql := "select auteur, num, date, type, nom, x, y, z from observation where"
 	sql += " x>" + strconv.Itoa(x-dist-1) + " and x<" + strconv.Itoa(x+dist+1)
@@ -191,9 +190,9 @@ func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z in
 	observations = make([]*Observation, 0, 20)
 
 	for {
-		eof, err := stmt.Fetch()
-		if err != nil || eof {
-			return
+		eof, _err := stmt.Fetch()
+		if _err != nil || eof {
+			return nil, _err
 		}
 		//fmt.Printf("r : %+v\n", r)
 		if len(observations) > 0 && r.Num == observations[len(observations)-1].Num {
@@ -210,7 +209,7 @@ func (store *MysqlStore) majVue(db *mysql.Client, cible uint, pour uint, tksMana
 	fmt.Printf("MAJ Vue %d\n", cible)
 	compteCible, err := store.GetCompte(db, cible)
 	if err != nil {
-		return fmt.Sprintf("Erreur récupération compte de %d : %s", cible, err.String())
+		return fmt.Sprintf("Erreur récupération compte de %d : %s", cible, err.Error())
 	}
 	if compteCible == nil {
 		return fmt.Sprintf("Pas de compte pour %d", cible)
@@ -220,7 +219,7 @@ func (store *MysqlStore) majVue(db *mysql.Client, cible uint, pour uint, tksMana
 	}
 	ok, err := store.CheckBeforeSoapCall(db, pour, cible, "Dynamiques", 15)
 	if err != nil {
-		return fmt.Sprintf("Erreur appel soap : %s", err.String())
+		return fmt.Sprintf("Erreur appel soap : %s", err.Error())
 	}
 	if !ok {
 		return "Trop d'appels en 24h, appel soap refusé"
@@ -233,7 +232,7 @@ func (store *MysqlStore) majVue(db *mysql.Client, cible uint, pour uint, tksMana
 	}
 	err = store.CleanAndSaveSoapItems(db, cible, items)
 	if err != nil {
-		return fmt.Sprintf("Erreur sauvegarde vue de %d: %d", cible, err.String())
+		return fmt.Sprintf("Erreur sauvegarde vue de %d: %d", cible, err.Error())
 	}
 	return fmt.Sprintf("Vue de %d mise à jour", cible)
 }

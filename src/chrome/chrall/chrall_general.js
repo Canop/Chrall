@@ -3,7 +3,7 @@
  et des utilitaires. Contient aussi la constante donnant la version courante de Chrall
 */
 
-var chrallVersion = "2.15";
+var chrallVersion = "2.16";
 
 function getUrlParameter(name, defaultValue) {
   name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
@@ -78,8 +78,7 @@ function turnName(turn) {
 	}
 }
 
-// remplace la fonction parseInt, trop capricieuse ( parseInt("05")=5 mais parseInt("08")=0 ) (pb de radix ?)
-// Traite aussi des cas spéciaux de Chrall.
+// Traite des cas spéciaux de Chrall.
 function atoi(s) {
 	if (!s) return undefined; // à valider
 	s = s.trim();
@@ -87,7 +86,7 @@ function atoi(s) {
 		s = s.substring(1, s.length);
 		if (s.length==0) return 0;
 	 }
-	return parseInt(s);
+	return parseInt(s, 10);
 }
 
 // appelée depuis l'une des sous-frame de droite (la grande, ou bien celle d'actions), cette méthode met à jour

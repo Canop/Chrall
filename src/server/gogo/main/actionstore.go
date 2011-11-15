@@ -8,7 +8,6 @@ différemment et sont écrites différemment en BD.
 import (
 	"fmt"
 	"mysql"
-	"os"
 	"strconv"
 )
 
@@ -26,7 +25,7 @@ type Action struct { // addition des structure reçues en json (RésultatCombat,
 }
 
 // stocke une action en BD (résultat de sort ou de frappe ou compétence, à l'exclusion des CDM)
-func (store *MysqlStore) InsertAction(db *mysql.Client, a *Action) (err os.Error) {
+func (store *MysqlStore) InsertAction(db *mysql.Client, a *Action) (err error) {
 
 	// on corrige
 	if a.Degats > 0 && a.PV == 0 {
@@ -63,7 +62,7 @@ func (store *MysqlStore) InsertAction(db *mysql.Client, a *Action) (err os.Error
 }
 
 // renvoie les actions, en incluant les résumés de CDM
-func (store *MysqlStore) GetActions(db *mysql.Client, typeCible string, numCible int, trollId int, amis []int) (actions []*Action, err os.Error) {
+func (store *MysqlStore) GetActions(db *mysql.Client, typeCible string, numCible int, trollId int, amis []int) (actions []*Action, err error) {
 	strnum := strconv.Itoa(numCible)
 	//> d'abord les vraies "actions"
 	sql := "select date_action, type_action, auteur, succes, degats, pv, esquive from action where type_cible='" + typeCible + "' and num_cible=" + strnum

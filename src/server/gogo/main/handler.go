@@ -3,9 +3,8 @@ package main
 import (
 	"fmt"
 	"io"
-	"http"
+	"net/http"
 	"strconv"
-	"os"
 )
 
 type Hitter struct {
@@ -56,9 +55,9 @@ func GetFormValueAsUint(hr *http.Request, name string) uint {
 	return 0
 }
 
-func sendError(w http.ResponseWriter, title string, err os.Error) {
-	fmt.Printf("\nErreur %s : %s", title, err.String())
-	fmt.Fprintf(w, "{\"result\":\"NOK\", \"text\": \"Erreur %s : %s\"}", title, err.String())
+func sendError(w http.ResponseWriter, title string, err error) {
+	fmt.Printf("\nErreur %s : %s", title, err.Error())
+	fmt.Fprintf(w, "{\"result\":\"NOK\", \"text\": \"Erreur %s : %s\"}", title, err.Error())
 }
 
 func (h *Handler) head(w io.Writer, title string) {

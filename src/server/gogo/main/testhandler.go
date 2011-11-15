@@ -5,9 +5,9 @@ Ce service répond aux requètes JSON contenues dans le body (en POST donc)
 */
 
 import (
-	"http"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 )
 
 type TestHandler struct {
@@ -21,7 +21,7 @@ func (h *TestHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 
 	fmt.Println("\n=== TestHandler : Requete reçue ====================")
 	fmt.Println(" Method : " + hr.Method)
-	fmt.Println(" URL : " + hr.RawURL)
+	//~ fmt.Println(" URL : " + hr.RawURL)
 	fmt.Println(" Proto : " + hr.Proto)
 	fmt.Printf(" ContentLength : %d\n", hr.ContentLength)
 	fmt.Println(" UserAgent : " + hr.UserAgent())

@@ -7,14 +7,13 @@ gère la persistence en bd des appels soap (pour vérifier qu'on ne dépasse pas
 
 import (
 	"mysql"
-	"os"
 	"time"
 )
 
 // pour : le troll qui demande
 // troll : celui dont le compte est incrémenté
 // si ok est true, alors il faut faire l'appel (on le compte)
-func (store *MysqlStore) CheckBeforeSoapCall(db *mysql.Client, pour uint, troll uint, cat string, limite int64) (ok bool, err os.Error) {
+func (store *MysqlStore) CheckBeforeSoapCall(db *mysql.Client, pour uint, troll uint, cat string, limite int64) (ok bool, err error) {
 	seconds := time.Seconds()
 	// on commence par compter
 	hier := seconds - 24*60*60

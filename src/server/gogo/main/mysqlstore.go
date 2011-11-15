@@ -15,10 +15,7 @@ Note : on dirait que ce connecteur a des problèmes avec les int64. Il vaut mieu
 
 */
 
-import (
-	"mysql"
-	"os"
-)
+import "mysql"
 
 type MysqlStore struct {
 	user     string
@@ -36,6 +33,6 @@ func NewStore(user string, password string) *MysqlStore {
 
 // renvoie une instance de mysql.Client connectée. Il est impératif de faire suivre
 // l'appel à cette méthode d'un defer db.Close()
-func (store *MysqlStore) Connect() (db *mysql.Client, err os.Error) {
+func (store *MysqlStore) Connect() (db *mysql.Client, err error) {
 	return mysql.DialUnix(mysql.DEFAULT_SOCKET, store.user, store.password, store.database)
 }

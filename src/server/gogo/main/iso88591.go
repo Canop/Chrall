@@ -8,10 +8,11 @@ contenu fourni par peterSO sur stackoverflow :
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"os"
 	"strings"
-	"utf8"
+	"unicode/utf8"
 )
 
 type CharsetISO88591er struct {
@@ -24,7 +25,7 @@ func NewCharsetISO88591(r io.Reader) *CharsetISO88591er {
 	return &CharsetISO88591er{r.(io.ByteReader), buf}
 }
 
-func (cs *CharsetISO88591er) ReadByte() (b byte, err os.Error) {
+func (cs *CharsetISO88591er) ReadByte() (b byte, err error) {
 	// http://unicode.org/Public/MAPPINGS/ISO8859/8859-1.TXT
 	// Date: 1999 July 27; Last modified: 27-Feb-2001 05:08
 	if cs.buf.Len() <= 0 {
@@ -40,7 +41,7 @@ func (cs *CharsetISO88591er) ReadByte() (b byte, err os.Error) {
 	return cs.buf.ReadByte()
 }
 
-func (cs *CharsetISO88591er) Read(p []byte) (int, os.Error) {
+func (cs *CharsetISO88591er) Read(p []byte) (int, error) {
 	// Use ReadByte method.
 	return 0, os.EINVAL
 }
@@ -84,12 +85,12 @@ func IsCharsetUTF8(charset string) bool {
 	return isCharset(charset, names)
 }
 
-func CharsetReader(charset string, input io.Reader) (io.Reader, os.Error) {
+func CharsetReader(charset string, input io.Reader) (io.Reader, error) {
 	switch {
 	case IsCharsetUTF8(charset):
 		return input, nil
 	case IsCharsetISO88591(charset):
 		return NewCharsetISO88591(input), nil
 	}
-	return nil, os.NewError("CharsetReader: unexpected charset: " + charset)
+	return nil, errors.New("CharsetReader: unexpected charset: " + charset)
 }

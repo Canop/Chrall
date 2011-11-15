@@ -1,8 +1,8 @@
 package main
 
 import (
-	"http"
 	"fmt"
+	"net/http"
 )
 
 type BestiaryHandler struct {
@@ -60,7 +60,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	be, err := h.store.ReadTotalStats()
 	if err != nil {
-		fmt.Fprint(w, "<p>La base de données du bestiaire semble innacessible :   <span class=emphase>"+err.String()+"</span></p>")
+		fmt.Fprint(w, "<p>La base de données du bestiaire semble innacessible :   <span class=emphase>"+err.Error()+"</span></p>")
 	} else {
 		fmt.Fprintf(w, "<p>Le bestiaire contient actuellement : <span class=emphase>%d</span> CDM concernant <span class=emphase>%d</span> monstres. Notez que cette interface, contrairement aux bulles de l'extension Chrall, ne vous fournit que des données issues de monstres au numéro supérieur à 4 000 000.</p>", be.NbCdm, be.NbMonsters)
 	}

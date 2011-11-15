@@ -5,9 +5,9 @@ Ce service répond aux requètes JSON et JSONP en GET
 */
 
 import (
-	"http"
+	"encoding/json"
 	"fmt"
-	"json"
+	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -45,7 +45,7 @@ func (h *JsonGetHandler) serveNotes(w http.ResponseWriter, hr *http.Request) {
 
 	db, err := h.store.Connect()
 	if err != nil {
-		fmt.Printf("Erreur ouverture connexion BD dans serveAcceptCdmJsonp : %s\n", err.String())
+		fmt.Printf("Erreur ouverture connexion BD dans serveAcceptCdmJsonp : %s\n", err.Error())
 		return
 	}
 	defer db.Close()
@@ -61,7 +61,7 @@ func (h *JsonGetHandler) serveNotes(w http.ResponseWriter, hr *http.Request) {
 		if compteOk {
 			amis, err := h.store.GetPartageurs(db, askerId)
 			if err != nil {
-				fmt.Printf("Erreur récupération amis dans serveNotes : %s\n", err.String())
+				fmt.Printf("Erreur récupération amis dans serveNotes : %s\n", err.Error())
 			}
 			out := h.store.GetNotes(db, GetFormValue(hr, "cat"), GetFormValueAsInt(hr, "idSujet"), askerId, amis, true)
 			for i, n := range out {
@@ -117,7 +117,7 @@ func (h *JsonGetHandler) serveTrollStatsHtmlJsonp(w http.ResponseWriter, hr *htt
 	fmt.Fprint(w, "grid_receive(")
 	mb, err := json.Marshal(bejs)
 	if err != nil {
-		fmt.Println("Erreur encodage : " + err.String())
+		fmt.Println("Erreur encodage : " + err.Error())
 	}
 	w.Write(mb)
 	fmt.Fprint(w, ")")
@@ -131,8 +131,8 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 
 	db, err := h.store.Connect()
 	if err != nil {
-		fmt.Printf("Erreur ouverture connexion BD dans makeBestiaryExtractHtml : %s\n", err.String())
-		return err.String()
+		fmt.Printf("Erreur ouverture connexion BD dans makeBestiaryExtractHtml : %s\n", err.Error())
+		return err.Error()
 	}
 	defer db.Close()
 	html := ""
@@ -143,7 +143,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		if compteOk {
 			amis, err = h.store.GetPartageurs(db, askerId)
 			if err != nil {
-				fmt.Printf("Erreur récupération amis dans makeBestiaryExtractHtml : %s\n", err.String())
+				fmt.Printf("Erreur récupération amis dans makeBestiaryExtractHtml : %s\n", err.Error())
 			}
 			blessure, auteurCDM, dateCDM, _ := h.store.GetBlessure(db, monsterId, askerId, amis)
 			if auteurCDM != 0 {
@@ -163,8 +163,8 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	}
 	be, err := h.store.ComputeMonsterStats(db, monsterCompleteName, monsterId)
 	if err != nil {
-		fmt.Println(" Erreur : " + err.String())
-		return "Erreur : " + err.String()
+		fmt.Println(" Erreur : " + err.Error())
+		return "Erreur : " + err.Error()
 	}
 
 	html += be.Html(monsterId, askerId, h.tksManager, 0 /* pourcentage blessure */ )
@@ -206,7 +206,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 
 			db, err := h.store.Connect()
 			if err != nil {
-				fmt.Printf("Erreur ouverture connexion BD dans serveAcceptCdmJsonp : %s\n", err.String())
+				fmt.Printf("Erreur ouverture connexion BD dans serveAcceptCdmJsonp : %s\n", err.Error())
 				return
 			}
 			defer db.Close()
@@ -223,7 +223,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 			answerHtml += " ) a bien été reçue par gogochrall et stockée dans le bestiaire. Merci."
 			be, err := h.store.ComputeMonsterStats(db, cdm.NomComplet, cdm.NumMonstre)
 			if err != nil {
-				fmt.Println(" Erreur : " + err.String())
+				fmt.Println(" Erreur : " + err.Error())
 			} else {
 				answerHtml += "Estimation :<br>"
 				answerHtml += be.Html(cdm.NumMonstre, authorId, h.tksManager, cdm.Blessure)
@@ -252,7 +252,7 @@ func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr
 	limit, _ := strconv.Atoui(GetFormValue(hr, "limit"))
 	list, err := h.store.getMonsterCompleteNames(monsterPartialName, limit)
 	if err != nil {
-		fmt.Println(" Erreur : " + err.String())
+		fmt.Println(" Erreur : " + err.Error())
 		return
 	}
 	blist, _ := json.Marshal(list)
@@ -265,8 +265,8 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Request-Method", "GET")
 
-	fmt.Println("\n=== JsonGetHandler : Requete reçue ====================")
-	fmt.Println(" URL : " + hr.RawURL)
+	//~ fmt.Println("\n=== JsonGetHandler : Requete reçue ====================")
+	//~ fmt.Println(" URL : " + hr.RawURL)
 	hr.ParseForm()
 
 	actions := hr.Form["action"]

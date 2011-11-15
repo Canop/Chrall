@@ -4,9 +4,9 @@ Gère les communications json-json authentifiées avec l'extension Chrall
 */
 
 import (
-	"http"
+	"encoding/json"
 	"fmt"
-	"json"
+	"net/http"
 )
 
 type JsonMessageIn struct {
@@ -47,8 +47,8 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 
 	err := json.Unmarshal([]byte(message), in)
 	if err != nil {
-		out.Error = err.String()
-		fmt.Printf("Erreur décodage JSON sur action %s : %s\n", action, err.String())
+		out.Error = err.Error()
+		fmt.Printf("Erreur décodage JSON sur action %s : %s\n", action, err.Error())
 		return
 	}
 	out.AnswersTo = in.MessageNum
@@ -73,16 +73,16 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 
 	db, err := h.store.Connect()
 	if err != nil {
-		out.Error = err.String()
-		fmt.Printf("Erreur ouverture connexion BD sur action %s : %s\n", action, err.String())
+		out.Error = err.Error()
+		fmt.Printf("Erreur ouverture connexion BD sur action %s : %s\n", action, err.Error())
 		return
 	}
 	defer db.Close()
 
 	mdpok, c, err := h.store.CheckCompte(db, in.TrollId, in.MDP)
 	if err != nil {
-		out.Error = err.String()
-		fmt.Printf("Erreur validation compte sur action %s : %s\n", action, err.String())
+		out.Error = err.Error()
+		fmt.Printf("Erreur validation compte sur action %s : %s\n", action, err.Error())
 		return
 	}
 	if mdpok {
@@ -95,8 +95,8 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			c.Troll = in.Troll
 			err = h.store.UpdateTroll(db, c)
 			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur sauvegarde troll sur action %s : %s\n", action, err.String())
+				out.Error = err.Error()
+				fmt.Printf("Erreur sauvegarde troll sur action %s : %s\n", action, err.Error())
 				return
 			}
 			fmt.Printf("A bougé : %v\n", aBougé)
@@ -108,8 +108,8 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			in.Action.Auteur = int(in.TrollId)
 			err = h.store.InsertAction(db, in.Action)
 			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur sauvegarde événement sur action %s : %s\n", action, err.String())
+				out.Error = err.Error()
+				fmt.Printf("Erreur sauvegarde événement sur action %s : %s\n", action, err.Error())
 				return
 			}
 		}
@@ -118,47 +118,47 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			fmt.Printf("Demande insertion partage %d -> %d\n", in.TrollId, in.IdCible)
 			err = h.store.InsertPartage(db, in.TrollId, in.IdCible)
 			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur sauvegarde proposition partage sur action %s : %s\n", action, err.String())
+				out.Error = err.Error()
+				fmt.Printf("Erreur sauvegarde proposition partage sur action %s : %s\n", action, err.Error())
 				return
 			}
 		case "Accepter":
 			fmt.Printf("Demande accept partage %d -> %d\n", in.TrollId, in.IdCible)
 			err = h.store.UpdatePartage(db, in.TrollId, in.IdCible, "on")
 			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.String())
+				out.Error = err.Error()
+				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.Error())
 				return
 			}
 		case "Rompre":
 			fmt.Printf("Demande fin partage %d -> %d\n", in.TrollId, in.IdCible)
 			err = h.store.UpdatePartage(db, in.TrollId, in.IdCible, "off")
 			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.String())
+				out.Error = err.Error()
+				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.Error())
 				return
 			}
 		case "Supprimer":
 			fmt.Printf("Demande suppression partage %d -> %d\n", in.TrollId, in.IdCible)
 			err = h.store.DeletePartage(db, in.TrollId, in.IdCible)
 			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.String())
+				out.Error = err.Error()
+				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.Error())
 				return
 			}
 		}
 		if action == "get_partages" {
 			partages, err := h.store.GetAllPartages(db, in.TrollId)
 			if err != nil {
-				out.Error = err.String()
-				fmt.Printf("Erreur lecture partages sur action %s : %s\n", action, err.String())
+				out.Error = err.Error()
+				fmt.Printf("Erreur lecture partages sur action %s : %s\n", action, err.Error())
 				return
 			}
 			out.MiPartages = h.store.PartagesToMiPartages(db, in.TrollId, partages, h.tksManager)
 		} else if action == "getMonsterEvents" {
 			amis, err = h.store.GetPartageurs(db, int(in.TrollId))
 			if err != nil {
-				fmt.Printf("Erreur récupération amis sur action %s : %s\n", action, err.String())
+				fmt.Printf("Erreur récupération amis sur action %s : %s\n", action, err.Error())
 			}
 			out.Actions, err = h.store.GetActions(db, "monstre", int(in.IdCible), int(in.TrollId), amis)
 		} else if action == "maj_vue" {
@@ -166,7 +166,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				fmt.Printf("MAJ vues des amis de %d\n", in.TrollId)
 				amis, err = h.store.GetPartageurs(db, int(in.TrollId))
 				if err != nil {
-					fmt.Printf("Erreur récupération amis sur action %s : %s\n", action, err.String())
+					fmt.Printf("Erreur récupération amis sur action %s : %s\n", action, err.Error())
 				}
 				out.TextMajVue = h.store.majVue(db, in.TrollId, in.TrollId, h.tksManager)
 				for _, ami := range amis {
@@ -181,8 +181,8 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			fmt.Printf("Stockage note ù+v\n", in.Note)
 			err = h.store.SaveNote(db, in.Note)
 			if err != nil {
-				fmt.Printf("Erreur stockage note : %s\n", err.String())
-				out.Error = err.String()
+				fmt.Printf("Erreur stockage note : %s\n", err.Error())
+				out.Error = err.Error()
 			} else {
 				out.Text = "Note sauvegardée"
 			}

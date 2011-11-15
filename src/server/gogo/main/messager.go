@@ -1,10 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
-	"os"
 )
 
 type Version struct {
@@ -22,9 +22,9 @@ func (v *Version) String() string {
 	return s
 }
 
-func ParseVersion(s string) (v *Version, err os.Error) {
+func ParseVersion(s string) (v *Version, err error) {
 	if len(s) == 0 {
-		return nil, os.NewError("empty string")
+		return nil, errors.New("empty string")
 	}
 	tokens := strings.Split(strings.Trim(s, " "), ".")
 	v = new(Version)
@@ -76,7 +76,7 @@ func GetMessage(TrollId string, ChrallVersion string) (out *G2cMessage) {
 	out.Nature = "empty"
 
 	//> on va regarder si l'utilisateur n'a pas une version ancienne de Chrall
-	currentChralVersion := &Version{[]uint{2, 15}} // il serait sans doute préférable de trouver un moyen d'avoir ça en "constante", ou bien une variable accrochée
+	currentChralVersion := &Version{[]uint{2, 16}} // il serait sans doute préférable de trouver un moyen d'avoir ça en "constante", ou bien une variable accrochée
 	if userVersion, err := ParseVersion(ChrallVersion); err != nil {
 		fmt.Println("user's Chrall Version not understood : " + ChrallVersion)
 	} else {

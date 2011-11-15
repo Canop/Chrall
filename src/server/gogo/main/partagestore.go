@@ -4,9 +4,7 @@ gère la lecture et l'écriture en mysql des partages d'infos entre comptes
 */
 
 import (
-	"container/vector"
 	"mysql"
-	"os"
 	"strconv"
 )
 
@@ -59,7 +57,7 @@ func (store *MysqlStore) PartagesToMiPartages(db *mysql.Client, observer uint, p
 }
 
 // sauvegarde un nouveau partage (à l'état de proposition de a pour b)
-func (store *MysqlStore) InsertPartage(db *mysql.Client, trollA uint, trollB uint) (err os.Error) {
+func (store *MysqlStore) InsertPartage(db *mysql.Client, trollA uint, trollB uint) (err error) {
 	sql := "insert ignore into"
 	sql += " partage (troll_a, troll_b)"
 	sql += " values (       ?,       ?)"
@@ -82,7 +80,7 @@ func (store *MysqlStore) InsertPartage(db *mysql.Client, trollA uint, trollB uin
 
 // modifie un partage
 // est-ce qu'on pourrait faire ça en une seule requête ?
-func (store *MysqlStore) UpdatePartage(db *mysql.Client, troll uint, autreTroll uint, statut string) (err os.Error) {
+func (store *MysqlStore) UpdatePartage(db *mysql.Client, troll uint, autreTroll uint, statut string) (err error) {
 
 	sql := "update partage set statut_a=? where troll_a=? and troll_b=?"
 	stmt, err := db.Prepare(sql)
@@ -114,7 +112,7 @@ func (store *MysqlStore) UpdatePartage(db *mysql.Client, troll uint, autreTroll 
 	return
 }
 
-func (store *MysqlStore) DeletePartage(db *mysql.Client, troll uint, autreTroll uint) (err os.Error) {
+func (store *MysqlStore) DeletePartage(db *mysql.Client, troll uint, autreTroll uint) (err error) {
 	sql := "delete from partage where (troll_a=? and troll_b=?) or (troll_b=? and troll_a=?)"
 	stmt, err := db.Prepare(sql)
 	if err != nil {
@@ -130,7 +128,7 @@ func (store *MysqlStore) DeletePartage(db *mysql.Client, troll uint, autreTroll 
 }
 
 // récupère toutes les infos de partage, acceptés ou non, impliquant un troll
-func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partages []*Partage, err os.Error) {
+func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partages []*Partage, err error) {
 
 	sql := "select troll_a, troll_b, statut_a, statut_b from partage where troll_a=? or troll_b=?"
 	stmt, err := db.Prepare(sql)
@@ -151,9 +149,9 @@ func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partage
 	stmt.BindResult(&r.TrollA, &r.TrollB, &r.StatutA, &r.StatutB)
 	partages = make([]*Partage, 0, 10)
 	for {
-		eof, err := stmt.Fetch()
-		if err != nil || eof {
-			return
+		eof, _err := stmt.Fetch()
+		if _err != nil || eof {
+			return nil, _err
 		}
 		p := &Partage{r.TrollA, r.TrollB, r.StatutA, r.StatutB} // on dirait qu'on ne peut pas dupliquer l'objet plus simplement
 		partages = append(partages, p)
@@ -161,7 +159,7 @@ func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partage
 
 	return
 }
-func (store *MysqlStore) GetAllPartages_old(db *mysql.Client, trollId uint) (partages []*Partage, err os.Error) {
+func (store *MysqlStore) GetAllPartages_old(db *mysql.Client, trollId uint) (partages []*Partage, err error) {
 
 	sql := "select troll_a, troll_b, statut_a, statut_b from partage where troll_a=" + strconv.Uitoa(trollId) + " or troll_b=" + strconv.Uitoa(trollId)
 	err = db.Query(sql)
@@ -199,7 +197,7 @@ func (store *MysqlStore) GetAllPartages_old(db *mysql.Client, trollId uint) (par
 }
 
 // renvoie la liste des trolls avec qui le troll passé a un partage actif
-func (store *MysqlStore) GetPartageurs(db *mysql.Client, trollId int) ([]int, os.Error) {
+func (store *MysqlStore) GetPartageurs(db *mysql.Client, trollId int) ([]int, error) {
 	st := strconv.Itoa(trollId)
 	sql := "select troll_a, troll_b from partage where (troll_a=" + st + " or troll_b=" + st + ") and statut_a='on' and statut_b='on'"
 	err := db.Query(sql)
@@ -212,7 +210,7 @@ func (store *MysqlStore) GetPartageurs(db *mysql.Client, trollId int) ([]int, os
 	}
 	defer result.Free()
 
-	amis := new(vector.IntVector)
+	amis := make([]int, 0, 5)
 	for {
 		row := result.FetchRow()
 		if row == nil {
@@ -221,12 +219,12 @@ func (store *MysqlStore) GetPartageurs(db *mysql.Client, trollId int) ([]int, os
 		r0 := fieldAsInt(row[0])
 		r1 := fieldAsInt(row[1])
 		if r0 == trollId {
-			amis.Push(r1)
+			amis = append(amis, r1)
 		} else {
-			amis.Push(r0)
+			amis = append(amis, r0)
 		}
 	}
 
-	return *amis, nil
+	return amis, nil
 
 }
