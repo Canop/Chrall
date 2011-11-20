@@ -6,3 +6,4 @@ trav
 *.log
 .idea
 *.iml
+*.csv

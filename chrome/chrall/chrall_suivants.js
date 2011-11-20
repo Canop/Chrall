@@ -9,11 +9,11 @@ function Chrall_handleFollowerOrders() {
 	var firstDot = str.indexOf('.');
 	var numGowap = parseInt(str.substring(firstDot - 10, firstDot));
 	var position = str.lastIndexOf('X =');
-	var positionText = str.substring(position + 2);
-	var posToken = positionText.split('|');
-	var gowap_x = parseInt(posToken[0].trim());
-	var gowap_y = parseInt(posToken[1].trim());
-	var gowap_z = parseInt(posToken[2].trim());
+	var positionText = str.substring(position);
+	var posToken = positionText.split('| ');
+	var gowap_x = parseInt(posToken[0].substring(3).trim());
+	var gowap_y = parseInt(posToken[1].substring(3).trim());
+	var gowap_z = parseInt(posToken[2].substring(3).trim());
 	var chemin = new Chemin(new Point(gowap_x, gowap_y));
 	var chGowap = new ChGowap(gowap_x, gowap_y, gowap_z, numGowap);
 	var numMaxOrdre = 0;

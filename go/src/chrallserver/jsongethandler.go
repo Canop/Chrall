@@ -46,15 +46,16 @@ func (h *JsonGetHandler) serveNotes(w http.ResponseWriter, hr *http.Request) {
 	askerId := GetFormValueAsId(hr, "asker")
 	mdpr := GetFormValue(hr, "mdpr") // mot de passe restreint
 	compteOk := false
-	if askerId > 0 && mdpr != "" { // <-- vérif authentification
+	if (askerId <= 0 || mdpr == "") {
 		//fmt.Println("askerId présent")
 		compteOk, _, err = h.store.CheckCompte(db, int(askerId), mdpr)
 		//fmt.Printf("compteOk : %+v\n", compteOk)
-		if compteOk {
-			amis, err := h.store.GetPartageurs(db, askerId)
-			if err != nil {
+
+	if compteOk {
+		amis, err := h.store.GetPartageurs(db, askerId)
+		if err != nil {
 				log.Printf("Erreur récupération amis dans serveNotes : %s\n", err.Error())
-			}
+		}
 			out, err := h.store.GetNotes(db, GetFormValue(hr, "cat"), GetFormValueAsId(hr, "idSujet"), askerId, amis, true)
 			if err != nil {
 				log.Println("Erreur dans GetNotes :", err)
@@ -62,15 +63,13 @@ func (h *JsonGetHandler) serveNotes(w http.ResponseWriter, hr *http.Request) {
 				for i, n := range out {
 					log.Printf("Note %d : %+v\n", i, n)
 				}
-			}
-			bout, _ := json.Marshal(out)
-			fmt.Fprint(w, "receiveNotes(")
-			w.Write(bout)
-			fmt.Fprint(w, ")")
-			return
 		}
+		bout, _ := json.Marshal(out)
+		fmt.Fprint(w, "receiveNotes(")
+		w.Write(bout)
+		fmt.Fprint(w, ")")
+		return
 	}
-	fmt.Fprint(w, "receiveNotes({Error:'mauvaise authentification'})")
 }
 
 func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Request) {

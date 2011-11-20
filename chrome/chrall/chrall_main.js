@@ -5,7 +5,7 @@
 
 
 var GOGOCHRALL = "http://canop.org:8000/chrall/";
-var TEST_LOCAL = false; // passer à true pour tester localement, ce qui suppose évidemment de disposer d'un serveur chrall localement 
+var TEST_LOCAL = true; // passer à true pour tester localement, ce qui suppose évidemment de disposer d'un serveur chrall localement
 
 var SERVEUR_CHRALL_PUBLIC = GOGOCHRALL; // l'adresse du serveur principal (celui qui hébèrge le bestaire et les infos publiques)
 var SERVEUR_CHRALL_PRIVE = SERVEUR_CHRALL_PUBLIC; // l'adresse du serveur privé (par défaut le public mais peut être modifié)
