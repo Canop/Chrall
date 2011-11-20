@@ -143,7 +143,6 @@ func (store *MysqlStore) getMonsterCompleteNames(partialName string, limit uint)
 			break
 		}
 		names[count] = name
-		//fmt.Println(names[count])
 		count++
 	}
 	return names[0:count], nil

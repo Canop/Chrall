@@ -53,15 +53,15 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 	}
 	out.AnswersTo = in.MessageNum
 
-	fmt.Printf("Message reçu décodé : \n%+v\n", in)
-	if in.Troll != nil {
-		fmt.Printf(" in.Troll : \n%+v\n", in.Troll)
-	}
-	if in.Action != nil {
-		fmt.Printf(" in.Action : \n%+v\n", in.Action)
-	}
+	//~ fmt.Printf("Message reçu décodé : \n%+v\n", in)
+	//~ if in.Troll != nil {
+		//~ fmt.Printf(" in.Troll : \n%+v\n", in.Troll)
+	//~ }
+	//~ if in.Action != nil {
+		//~ fmt.Printf(" in.Action : \n%+v\n", in.Action)
+	//~ }
 
-	fmt.Printf("Message entrant du troll %d avec l'action %s\n", in.TrollId, action)
+	//~ fmt.Printf("Message entrant du troll %d avec l'action %s\n", in.TrollId, action)
 	if in.TrollId == 0 {
 		out.Error = "Troll Absent"
 		return
@@ -89,7 +89,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		var amis []int
 		out.Text = "Compte connecté et authentifié"
 		if in.Troll != nil {
-			fmt.Printf("*** Infos troll reçues de %d ***\n", in.TrollId)
+			//~ fmt.Printf("*** Infos troll reçues de %d ***\n", in.TrollId)
 			// on regarde si la position a changé
 			aBougé := c.Troll.X != in.Troll.X || c.Troll.Y != in.Troll.Y || c.Troll.Z != in.Troll.Z
 			c.Troll = in.Troll
@@ -99,7 +99,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				fmt.Printf("Erreur sauvegarde troll sur action %s : %s\n", action, err.Error())
 				return
 			}
-			fmt.Printf("A bougé : %v\n", aBougé)
+			//~ fmt.Printf("A bougé : %v\n", aBougé)
 			if aBougé {
 				h.store.majVue(db, in.TrollId, in.TrollId, h.tksManager)
 			}

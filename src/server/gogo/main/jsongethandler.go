@@ -8,7 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
+	//~ "os"
 	"strconv"
 	"time"
 )
@@ -41,7 +41,7 @@ func (h *JsonGetHandler) servePageKillometre(w http.ResponseWriter, hr *http.Req
 func (h *JsonGetHandler) serveNotes(w http.ResponseWriter, hr *http.Request) {
 	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
 
-	fmt.Println("serveNotes")
+	//~ fmt.Println("serveNotes")
 
 	db, err := h.store.Connect()
 	if err != nil {
@@ -154,8 +154,6 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		}
 	}
 
-	fmt.Println(" demande bestiaire  authentification =", compteOk)
-
 	monsterCompleteName := GetFormValue(hr, "name")
 	if monsterCompleteName == "" {
 		fmt.Println(" no monster complete name in request")
@@ -261,12 +259,12 @@ func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr
 
 func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
-	startSeconds, startNanosecs, _ := os.Time()
+	//~ startSeconds, startNanosecs, _ := os.Time()
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Request-Method", "GET")
 
 	//~ fmt.Println("\n=== JsonGetHandler : Requete reçue ====================")
-	//~ fmt.Println(" URL : " + hr.RawURL)
+	//~ fmt.Printf(" URL %v\n",hr.URL)
 	hr.ParseForm()
 
 	actions := hr.Form["action"]
@@ -295,7 +293,7 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	} else {
 		h.serveAuthenticatedMessage(w, action, GetFormValue(hr, "message")) // par défaut on considère qu'il s'agit d'un message authentifié
 	}
-	endSeconds, endNanosecs, _ := os.Time()
-	durationMillis := 1e3*(endSeconds-startSeconds) + (endNanosecs-startNanosecs)/1e6
-	fmt.Printf(" Duration : %d ms\n", durationMillis)
+	//~ endSeconds, endNanosecs, _ := os.Time()
+	//~ durationMillis := 1e3*(endSeconds-startSeconds) + (endNanosecs-startNanosecs)/1e6
+	//~ fmt.Printf(" Duration : %d ms\n", durationMillis)
 }

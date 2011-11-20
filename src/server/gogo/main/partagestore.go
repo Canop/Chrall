@@ -4,6 +4,7 @@ gère la lecture et l'écriture en mysql des partages d'infos entre comptes
 */
 
 import (
+	//~ "fmt"
 	"mysql"
 	"strconv"
 )
@@ -151,12 +152,11 @@ func (store *MysqlStore) GetAllPartages(db *mysql.Client, trollId uint) (partage
 	for {
 		eof, _err := stmt.Fetch()
 		if _err != nil || eof {
-			return nil, _err
+			return partages, _err
 		}
 		p := &Partage{r.TrollA, r.TrollB, r.StatutA, r.StatutB} // on dirait qu'on ne peut pas dupliquer l'objet plus simplement
 		partages = append(partages, p)
 	}
-
 	return
 }
 func (store *MysqlStore) GetAllPartages_old(db *mysql.Client, trollId uint) (partages []*Partage, err error) {

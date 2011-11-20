@@ -145,7 +145,7 @@ func (store *MysqlStore) SearchObservations(db *mysql.Client, tok string, trollI
 	for {
 		eof, _err := stmt.Fetch()
 		if _err != nil || eof {
-			return nil, _err
+			return observations, _err
 		}
 		if len(observations) > 0 && r.Num == observations[len(observations)-1].Num { // dédoublonnage
 			continue
@@ -192,9 +192,8 @@ func (store *MysqlStore) ObservationsAutour(db *mysql.Client, x int, y int, z in
 	for {
 		eof, _err := stmt.Fetch()
 		if _err != nil || eof {
-			return nil, _err
+			return observations, _err
 		}
-		//fmt.Printf("r : %+v\n", r)
 		if len(observations) > 0 && r.Num == observations[len(observations)-1].Num {
 			continue
 		}
