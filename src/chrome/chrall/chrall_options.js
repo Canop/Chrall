@@ -1,7 +1,15 @@
 // enrichit la page d'actions
 function Chrall_reformatOptionsView() {
-	var standardOptionContainer = $("table table td")[1];
-	var standardOptionTables = $(standardOptionContainer).find("table");
+	
+	
+	
+	var standardOptionContainer = $($("table table td")[1]);
+
+	console.log('A', standardOptionContainer);
+
+
+
+	var standardOptionTables = standardOptionContainer.find("table");
 	
 	var mdpkey = 'troll.'+player.id+'.mdp';
 	var mdp = localStorage[mdpkey];
@@ -61,12 +69,12 @@ function Chrall_reformatOptionsView() {
 	html += " </div>";
 	html += "</div>";
 
-	$(standardOptionContainer).prepend(html);
+	standardOptionContainer.html(html);
 		
 	$("div#tabStandard").append($(standardOptionTables[0]));
 	$("div#tabStandard").append($(standardOptionTables[1]));
 	$("div#tabStandard").append($(standardOptionTables[2]));
-	$("div#tabStandard").append($(standardOptionTables[3]));
+	
 
 	$(".tab_content").hide();
 	if (localStorage['tab_options']) {

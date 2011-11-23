@@ -334,6 +334,16 @@ DONE :
 
 <- v2.15
 
+* BUG : GoMysql ne compile pas sur la dernière version du go [du coup j'ai dû corriger le driver]
+* adaptation aux évolutions de certaines pages de MH, en particulier la vue
+
+<- v2.16
+
+* adaptation à l'évolution de la page d'options de MH
+
+<- v2.17
+
+
 EN COURS :
 ==========
 * apprendre le langage go
@@ -349,8 +359,8 @@ TODO :
 ======
 P1 :
 ----
-* BUG : GoMysql ne compile pas sur la dernière version du go
 * bug [godrage] : "Certains profils de trolls : stats trop difficile d'accès"
+* bug : la carte ne s'affiche plus sur la page d'ordre des gowaps depuis les changements de MH
 * système de scripts externes
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
