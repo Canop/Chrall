@@ -46,6 +46,12 @@ ini_set('default_charset', 'utf-8');
 <img class=screenshot src=screens/bouton_perdu.png>
 
 
+<h2>Calcul Bonus-Malus</h2>
+
+<p>Pour prévoir votre situation demain (sans doute en surface dans mon cas :) )</p>
+<img class=screenshot src=screens/bonus-malus.png>
+<br>
+
 
 <h2>Votre profil</h2>
 <p>Quelques calculs pratiques sont effectués pour vous faciliter la vie.</p>
@@ -61,6 +67,7 @@ ini_set('default_charset', 'utf-8');
 <p>Lorsque vous consultez le profil d'un troll, que ce soit depuis le jeu ou depuis le forum, vous pouvez consulter la "bulle Chrall" afin d'obtenir les informations qui ne sont pas lisibles sur le profil. Il suffit pour cela d'approcher la souris du coin en haut à gauche de la fenêtre :</p>
 <img class=screenshot src=screens/pjview_bulle.png>
 <p>Cette bulle s'affiche également si vous n'êtes pas connecté à votre troll mais les informations sont plus légères dans ce cas : les px du kill et la diplomatie ne sont alors pas disponibles.</p>
+
 
 <h2>Le partage d'informations entre joueurs</h2>
 <p>Si vous activez un compte sur Chrall, vous pouvez savoir où sont (et dans quel état) vos amis. Et les événements des monstres sont un peu plus détaillés pour ce qui est de vos actions et de celles de vos amis :</p>

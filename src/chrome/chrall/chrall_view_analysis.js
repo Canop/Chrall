@@ -44,8 +44,8 @@ function Chrall_analyseTrollTable(table) {
 		grid.nbTrollsInView++;
 		$tr.prepend('<td align=center><input type=checkbox name=cb_troll value='+troll.id+'></td>'); // TODO : sur les grosses tables on pourrait peut-être envisager un detach() ?
 	}
-	$(rows[2]).prepend($('<td align=center width=20></td>'));
-	var html='<td colspan=10 height=25><script>';
+	//$(rows[2]).prepend($('<td align=center width=20></td>'));
+	var html='<td colspan=11 height=25><script>';
 	html += 'function mhmp(cat){';
 	html += ' var dests=[];  var cbs = document.getElementsByName(\'cb_troll\');';
 	html += ' for (var i=0; i<cbs.length; i++) {if(cbs[i].checked) dests.push(cbs[i].value)}';
@@ -93,7 +93,7 @@ function Chrall_analysePlaceTable(table) {
 }
 
 function Chrall_analyseWallTable(table) {
-	if (!table) return;
+	if (table.length==0) return;
 	isInLaby = true;
 	table.find("tr.mh_tdpage").each(
 		function(){

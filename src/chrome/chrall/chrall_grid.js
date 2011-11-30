@@ -118,7 +118,7 @@ function Chrall_gridLive() {
 			return args;
 		}
 	);
-
+	
 	//> popup sur les trolls
 	bubbleLive(
 		'#grid a.ch_troll, div#tabTrolls a.mh_trolls_1, #tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll',

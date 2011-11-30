@@ -452,7 +452,7 @@ function Chrall_analyseAndReformatView() {
 			}
 	
 			//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
-			$("#grid span.ch_object").each(
+			$("#grid a.ch_object").each(
 				function() {
 					var o = $(this);
 					var text = o.attr("bub");

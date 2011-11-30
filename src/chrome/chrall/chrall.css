@@ -395,7 +395,7 @@ a.gogo:hover {
     position: fixed;
     top: 0px;
     left: 0px;
-    z-index: 3;
+    z-index: 9903;
     width: 30px;
     height: 30px;
     border-radius: 0 0 10px 0;
@@ -404,7 +404,7 @@ a.gogo:hover {
     position: fixed;
     top: 0px;
     left: 0px;
-    z-index: 20;
+    z-index: 9920;
     width: 8px;
     height: 8px;
     border-radius: 0 0 10px 0;

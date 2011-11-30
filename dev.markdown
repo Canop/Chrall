@@ -343,24 +343,30 @@ DONE :
 
 <- v2.17
 
+* bug : décalage dans le tableau des trolls
+* bug : on affiche l'onglet "Murs et couloirs" y compris hors du laby
+* bug : plus de numéro des trésors sur la grille
+* bug [godrage] : "Certains profils de trolls : stats trop difficile d'accès" (simplement augmenté mon z-index)
 
 EN COURS :
 ==========
-* apprendre le langage go
+
 * nouvelle grille
 * bug : menu avec changement de niveau affiché même si pas assez de PA
+
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : interface séparée
 * prises de notes générales, sur lieu, monstre ou troll (publiques/partagées/privées) : visu en bulles
 * BUG : pas d'image pour le pseudo-dragon ? -> il n'est pas dans le fichier ftp://ftp.mountyhall.com/Public_Monstres.txt [pareil pour le diablotin, à gérer en hard]
-* le go a maintenant l'opérateur append => l'utiliser partout pour simplifier le code
 
 
 TODO :
 ======
 P1 :
 ----
-* bug [godrage] : "Certains profils de trolls : stats trop difficile d'accès"
+
+* bug ? à vérifier : affichage des cénotaphes
 * bug : la carte ne s'affiche plus sur la page d'ordre des gowaps depuis les changements de MH
+
 * système de scripts externes
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
 * bouton de mise à jour de la vue : le rendre disponible ailleurs (en particulier avec les ordres des gowaps).
@@ -374,7 +380,6 @@ P1 :
 * bouton pour proposer le partage à tous les membres de la guilde (demande tdd)
 * killomètre : affichage par guilde
 * ajout d'infos supplémentaires du profil au partage : invi, glue, compétences programmées
-* bug : "laz" n'est pas trouvé alors que je partage avec lazarus -> le script public renvoie une vue vide (il a une vue de 0 mais voit les monstres dans l'interface MH...)
 * Vue/Partages : mise à jour de la position des trolls lors de la mise à jour de la vue
 * CDM : gestion du vol et du sang-froid (entre autres, voir http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=5&TopicID=145805)
 * indiquer directement dans la bulle si un monstre est insulté (et par qui)
