@@ -366,6 +366,10 @@ P1 :
 
 * bug ? à vérifier : affichage des cénotaphes
 * bug : la carte ne s'affiche plus sur la page d'ordre des gowaps depuis les changements de MH
+* bug : les CDM envoyées par l'extension ne sont plus comprises (mais ça marche par le Puits) http://canop.org/chrall/fofo/viewtopic.php?f=6&t=101
+* bug : pb avec les grandes vues http://canop.org/chrall/fofo/viewtopic.php?f=6&t=99
+
+* utiliser l'API Omnibox pour lancer des recherches depuis l'omnibox de Chrome
 
 * système de scripts externes
 * table de trolls et de monstres (si partage actif) : bouton de vue zoomée [reconstruire les tables ?]
