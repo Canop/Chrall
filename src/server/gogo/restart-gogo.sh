@@ -7,6 +7,10 @@ rm -f _go_.8
 killall -q gogo
 gomake
 mv gogo.out gogo.out-old
-mv gogo.err gogo.err-old
-nohup ./gogo > gogo.out 2> gogo.err < /dev/null &
+
+echo "*** Ctrl C stoppe l'affichage de la trace mais pas le serveur ***" > gogo.out
+
+nohup ./gogo >> gogo.out 2>&1 < /dev/null &
+
+tail -f gogo.out
 
