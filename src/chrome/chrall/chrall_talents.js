@@ -291,8 +291,8 @@ function getBubbleContentForSort(name) {
 		case "Griffe du Sorcier" :
 			var att = 3.5*player.attac.diceNumber + player.attac.magicalBonus;
 			var deg = 2*Math.floor(player.damage.diceNumber/2) + player.damage.magicalBonus;
-			var dur = 1 + Math.floor((player.totalSight)/5);
-			var vir = 1 + Math.floor(player.pv/30) + Math.floor(player.regeneration.diceNumber/3);
+			var dur = 1 + Math.floor(player.sight.diceNumber/5);
+			var vir = 1 + Math.floor(player.pvMaxSansBMM/30) + Math.floor(player.regeneration.diceNumber/3);
 			var html = "<table>";
 			html += "<tr><td>Attaque</td><td> : " + att + "</td></tr>";
 			html += "<tr><td>Dégâts de la frappe</td><td> : " + deg + " PV</td></tr>";

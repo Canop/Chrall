@@ -97,7 +97,8 @@ function Chrall_extractPvAndFatigue(text) {
 	var pvTokens = Chrall_tokenize(lines[2]);
 	player.pv = parseInt(pvTokens[1].trim());
 	pvTokens = Chrall_tokenize(lines[10]);
-	player.pvMax = parseInt(pvTokens[1].trim());
+	player.pvMaxSansBMM = parseInt(pvTokens[1].trim());
+	player.pvMax = player.pvMaxSansBMM;
 	try {
 		player.pvMax += parseInt(pvTokens[2].trim());
 	} catch (error) {}
@@ -390,7 +391,9 @@ function Chrall_analyseAndReformatProfile() {
 			var text = getBubbleContentForSort(link.text().trim());
 			bubble(link, text, "bub_sort");
 		}
-	);	
+	);
+	
+	console.log(player);
 
 	updateTroll();
 }

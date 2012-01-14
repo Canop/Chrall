@@ -195,6 +195,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 	encodedCdms := hr.Form["cdm"]
 	if len(encodedCdms) > 0 {
 		encodedCdm := encodedCdms[0]
+		fmt.Println("EncodedCDM : ")
 		fmt.Println(w, encodedCdm)
 
 		bd := new(BucketDecoder)
@@ -263,8 +264,8 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Request-Method", "GET")
 
-	//~ fmt.Println("\n=== JsonGetHandler : Requete reçue ====================")
-	//~ fmt.Printf(" URL %v\n",hr.URL)
+	fmt.Println("\n=== JsonGetHandler : Requete reçue ====================")
+	fmt.Printf(" URL %v\n",hr.URL)
 	hr.ParseForm()
 
 	actions := hr.Form["action"]

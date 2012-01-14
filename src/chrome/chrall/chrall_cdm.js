@@ -14,15 +14,22 @@ function Chrall_handleBeforeCdmPage() {
 function Chrall_handleCdmPage() {	
 	//> récupération de la cdm (en prenant soin de séparer les lignes)
 	// TODO : vérifier que ce n'est pas un échec
-	var para = $($("table table table form p")[1]);	
-	cdm = "";
-	cdm += $(para.find("b")[0]).text();
-	para.find("tr").each(function() {
-		cdm += "\n"+$(this).text();
-	});
-	
-	//> recherche de la date envoyée par MH (c'est ce qu'on trouve de plus près de l'événement)
-	
+	var para = $("table table table form p");	
+	var cdm = "";
+	for (var ip=0; ip<para.length; ip++) {
+		var p = $(para[ip]);
+		var t = p.find("table");
+		if (t.length>0) {
+			// c'est le bon paragraphe, composé d'une ligne en gras et d'un tableau
+			cdm += $(p.find("b")[0]).text(); // contient l'intitullé du monstre
+			t.find("tr").each(function() {
+				cdm += "\n"+$(this).text();
+			});
+			break;
+		}
+	}
+
+		
 	//> écriture du script de récupération de la réponse (mécanisme JSONP)
 	html = "<div id=gogochrall></div>";
 	html += "<script>";

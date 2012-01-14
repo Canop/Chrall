@@ -33,6 +33,11 @@ func (bd *BucketDecoder) addCdm(cdm *CDM) {
 func (bd *BucketDecoder) Decode(input string, store *MysqlStore) {
 	lines := strings.Split(input, "\n")
 
+	fmt.Println("Lines :")
+	for _, line := range lines {
+		fmt.Println(line)
+	}
+
 	var currentCdm *CDM
 	var numLineAtCdmStart int
 	var lastChar *CdmChar

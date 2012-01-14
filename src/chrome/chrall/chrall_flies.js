@@ -1,3 +1,4 @@
+
 /**
  * cette fonction parcoure la table de mouches et renseigne le tableau flies de la classe Troll
  */ 
@@ -13,7 +14,7 @@ function Chrall_analyseFlies() {
 	}
 }
 
-
+// deprecated
 function Chrall_analyseAndReformatFlies() {
 	
 	// analyse du tableau de mouches

@@ -64,7 +64,7 @@ case "Play_vue.php":
 	Chrall_analyseAndReformatView();	
 	break;
 case "Play_mouche.php":
-	Chrall_analyseAndReformatFlies();
+	//Chrall_analyseAndReformatFlies();
 	break;
 case "Play_BM.php":
 	Chrall_analyseAndReformatBM();	
