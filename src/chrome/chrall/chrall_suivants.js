@@ -6,12 +6,11 @@ function Chrall_handleFollowerOrders() {
 	var tableOrdre = $('p table.mh_tdborder_fo');
 	var lignes = tableOrdre.find('tr');
 	var str = $(lignes[0]).text();
-	var ocl = str.indexOf('[');
-	var ocr = str.indexOf(']');
-	var numGowap = str.substring(ocl + 1, ocr);
-	var op = str.lastIndexOf('(');
-	var posText = str.substring(op + 1, str.length - 3);
-	var posToken = posText.split(',');
+	var firstDot = str.indexOf('.');
+	var numGowap = parseInt(str.substring(firstDot - 10, firstDot));
+	var position = str.lastIndexOf('X =');
+	var positionText = str.substring(position + 2);
+	var posToken = positionText.split('|');
 	var gowap_x = parseInt(posToken[0].trim());
 	var gowap_y = parseInt(posToken[1].trim());
 	var gowap_z = parseInt(posToken[2].trim());
@@ -20,7 +19,7 @@ function Chrall_handleFollowerOrders() {
 	var numMaxOrdre = 0;
 
 	$('<td width=150px><a name=zoom class=gogo x=' + gowap_x + ' y=' + gowap_y + ' z=' + gowap_z + '>Montrer les alentours</a></td>').appendTo($(lignes[0]));
-	for (var i = 1; i < lignes.length; i++) {
+	for (var i = 2; i < lignes.length; i++) {
 		var cells = $(lignes[i]).find('td');
 		var numOrdre = parseInt($(cells[0]).text());
 		if (numOrdre > numMaxOrdre) numMaxOrdre = numOrdre;
@@ -29,8 +28,8 @@ function Chrall_handleFollowerOrders() {
 		if (index > 0) {
 			var posText = str.substring(index + 5, str.length);
 			var posToken = posText.split('|');
-			var gowap_x = parseInt(posToken[0].trim().split('=')[1]);
-			var gowap_y = parseInt(posToken[1].trim().split('=')[1]);
+			gowap_x = parseInt(posToken[0].trim().split('=')[1]);
+			gowap_y = parseInt(posToken[1].trim().split('=')[1]);
 			gowap_z = parseInt(posToken[2].trim().split('=')[1]);
 			chemin.add(new Point(gowap_x, gowap_y));
 			$('<td><a name=zoom class=gogo x=' + gowap_x + ' y=' + gowap_y + ' z=' + gowap_z + '>Montrer les alentours</a></td>').appendTo($(lignes[i]));
@@ -38,7 +37,6 @@ function Chrall_handleFollowerOrders() {
 			$('<td></td>').appendTo($(lignes[i]));
 		}
 	}
-
 	var html = '';
 	html += "<script>";
 	html += "function lanceMouvementGowap(){";
