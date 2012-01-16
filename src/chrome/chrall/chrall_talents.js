@@ -107,7 +107,15 @@ function getBubbleContentForCompetence(name) {
 
 		case "Ecriture Magique" :
 			return "Une EM vous coûtera 5 PA mais surtout de nombreux investissements et des recherches savantes qui ne tiendraient pas dans une petite bulle...";
-
+		
+		case "Frénésie":
+			var html = "Frapper deux fois en un seul tour avec les caractéristiques suivantes pour les deux attaques :<table>";
+			html += "<tr><td>Attaque moyenne</td><td> : " + player.attac.getMean() + "</td></tr>";
+			html += "<tr><td>Dégâts moyens</td><td> : " + player.damage.getMean() + " / " + player.damage.getCriticalMean() + "</td></tr>";
+			html += "<tr><td>Esquive réduite à zéro jusqu'à la prochaine DLA.</td></tr>";
+			html += "</table>";
+			return html;
+			
 		case "Golemologie" :
 			return "Je n'ai pas trouvé d'information sur Wikipédia concernant la golémologie mais par contre voici ce qu'ils ont sur la Polémologie :<br><i>La polémologie (littéralement « science de la guerre ») est une discipline fondée après la Seconde Guerre mondiale par le sociologue français Gaston Bouthoul (1896-1980).<br>Elle étudie les facteurs dits « polémogènes » : les corrélations éventuelles entre les explosions de violence et des phénomènes économiques, culturels, psychologiques et surtout démographiques récurrents.</i>";
 
