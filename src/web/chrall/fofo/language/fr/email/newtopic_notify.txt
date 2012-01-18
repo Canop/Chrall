@@ -1,0 +1,13 @@
+Subject: Avertissement d'un nouveau sujet - "{FORUM_NAME}"
+
+Bonjour {USERNAME},
+
+Vous recevez cet avertissement car vous surveillez le forum "{FORUM_NAME}" sur "{SITENAME}". Ce forum a reçu un nouveau sujet depuis votre dernière visite, "{TOPIC_TITLE}". Vous pouvez utiliser le lien suivant afin de consulter le forum, aucun nouvel avertissement ne vous sera envoyé jusqu'à ce que vous visitiez le forum.
+
+{U_FORUM}
+
+Si vous ne souhaitez plus surveiller ce forum, vous pouvez cliquer sur le lien "Se désabonner au forum" situé au-dessous du forum en question ou cliquer sur le lien suivant :
+
+{U_STOP_WATCHING_FORUM}
+
+{EMAIL_SIG}
