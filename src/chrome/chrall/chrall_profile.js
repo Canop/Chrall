@@ -181,7 +181,8 @@ function Chrall_makeStrainInfos() {
 			if (alternateChargeMalus>1 || normalChargeMalus>1) html += " cases";
 			else if (normalChargeMalus>0) html += " case";
 			html += "</td>";
-			if (player.race=="Kastar") {
+			//player.race = 'Kastar';
+			if (player.race=='Kastar') {
 				//> calcul et affichage du gain d'une AM en minutes par pv pour la dla i
 				html += "<td align=center>";
 				var normalPvGain = Math.min(30, Math.floor(120/(normalStrain*(1+Math.floor(normalStrain/10)))));
