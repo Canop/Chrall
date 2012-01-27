@@ -21,7 +21,7 @@ func handleMailFile(filename string, destfile *os.File) error {
 	}
 	defer sourcefile.Close()
 	r := bufio.NewReader(sourcefile)
-	nbstarlines := 0
+	afterstarline := false
 	for {
 		line, err := r.ReadString('\n')
 		if err != nil {
@@ -30,15 +30,15 @@ func handleMailFile(filename string, destfile *os.File) error {
 			}
 			return nil
 		}
+		// on renvoie ce qui se trouve entre les deux lignes d'étoiles, en incluant la première qui sert de séparateur
 		if strings.HasPrefix(line, "*************") {
-			nbstarlines++
+			if afterstarline {
+				return nil
+			}
+			afterstarline = true
 		}
-		switch nbstarlines {
-		case 0:
-		case 1:
+		if afterstarline {
 			fmt.Fprint(destfile, line)
-		default:
-			return nil	
 		}
 	}
 	return nil
