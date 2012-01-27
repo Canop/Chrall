@@ -32,7 +32,7 @@ function Chrall_analyseTrollTable(table) {
 		troll.id = parseInt($(cells[i++]).text());
 		var cell = $(cells[i++]);
 		troll.name = cell.text();
-		cell.find('a').attr('id', troll.id);
+		cell.find('a').attr('id', troll.id).attr('team', troll.pogoTeam = getPogoTeam(troll.id));
 		troll.isIntangible = cell.html().indexOf("mh_trolls_0")>=0; // les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
 		troll.level = $(cells[i++]).text();
 		troll.race = $(cells[i++]).text();

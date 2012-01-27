@@ -127,6 +127,8 @@ function Chrall_gridLive() {
 			var trollId = link.attr('id');
 			var message = link.attr("message");
 			if (!message) message='';
+			var team = getPogoTeam(parseInt(trollId));
+			if (team) message += '<br>Pogo : '+pogoTeamLabels[team]+'<br>';
 			return {
 				'text':message,
 				'ajaxUrl':SERVEUR_CHRALL_PUBLIC+'json?action=get_troll_info&asker='+player.id+'&trollId='+trollId,

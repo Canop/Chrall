@@ -101,6 +101,8 @@ function Chrall_makeGridHtml(noteRequest) {
 			var cellId=null;
 			if (x===player.x && y===player.y) {
 				cellContent[c++] = "<a class=ch_player href=\"javascript:EPV("+player.id+");\"";
+				player.pogoTeam = getPogoTeam(player.id);
+				if (player.pogoTeam) cellContent[c++] = ' team="'+player.pogoTeam+'"';
 				cellContent[c++] = " id="+player.id;
 				if (player.isIntangible) cellContent[c++] = " intangible";
 				cellContent[c++] = ">"+player.z+":Vous êtes ici</a>";
@@ -116,6 +118,7 @@ function Chrall_makeGridHtml(noteRequest) {
 						if (an) cellContent[c++] = "<span name=3D>";
 						if (t.isIntangible) cellContent[c++] = "<span name=intangibles>";
 						cellContent[c++] = "<a name='trolls' class=ch_troll href=\"javascript:EPV("+t.id+");\"";
+						if (t.pogoTeam) cellContent[c++] = ' team="'+t.pogoTeam+'"';
 						if (t.isIntangible) cellContent[c++] = " intangible";
 						cellContent[c++] = ' message="en X='+x+' Y='+y+' Z='+t.z+'<br>Distance horizontale : ' + hdist+'"';
 						cellContent[c++] = " id="+t.id;

@@ -65,6 +65,13 @@ table.grid td {
     color: #8686ec !important;
 }
 
+.ch_troll[team=H], .mh_trolls_1[team=H], .ch_player[team=H] {
+	background-color:#acf9ac;
+}
+.ch_troll[team=P], .mh_trolls_1[team=P], .ch_player[team=P] {
+	background-color:#d2bc8c;
+}
+
 .ch_place, .ch_place:hover {
     color: black  !important;
 }
