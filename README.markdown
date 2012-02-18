@@ -15,9 +15,11 @@ Structure :
 
 1. **l'extension Chrome** qui reformate les pages de la forme `games.mountyhall.com/*` : le code source est dans `src/chrome`. Il s'agit essentiellement de javascript. Les fichiers dont le nom commence par "chrall_" sont exécutés dans le contexte de l'extension. Ceux dont le nom commence par "injected_" sont injectables dans le contexte de la page.
 
-2. **le serveur gogochrall** : Il offre sur http://canop.org:8000/chrall un bestiaire et un outil d'alimentation mais surtout il répond aux requètes de l'extension (essentiellement en JSON/JSONP). Son code source est dans `src/server`. Il s'agit de [go](http://golang.org) et d'une base MySQL.
+2. **le serveur chrallserver** : Il offre sur http://canop.org:8000/chrall un bestiaire et un outil d'alimentation mais surtout il répond aux requètes de l'extension (essentiellement en JSON/JSONP). Son code source est dans `go/chrallserver`. Il s'agit de [go](http://golang.org) et d'une base MySQL.
 
-3. **le site web** : il s'agit du site présentant l'extension et les outils Chrall à l'adresse http://canop.org/chrall.
+3. **le programme killometre** : Il analyse les fichiers de kills fournis en ftp par le serveur MH et construit des statistiques concernant les trolls, ainsi que la distinction MK/TK/ATK.
+
+4. **le site web** : il s'agit du site présentant l'extension et les outils Chrall à l'adresse http://canop.org/chrall.
 
 Compiler vous même l'extension :
 ================================
@@ -28,7 +30,6 @@ Contribuer :
 ============
 
 Si vous envisagez de participer au développement, vous pouvez faire un fork du projet. N'hésitez pas à venir en discuter sur [le forum de Chrall](http://canop.org/chrall/fofo). Vous pouvez également me contacter pour causer des technologies mises en oeuvre si vous êtes curieux.
-
 
 Licence :
 =========
