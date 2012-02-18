@@ -1,0 +1,7 @@
+# l'extension compilée
+chrall.crx
+
+# la clef nécessaire à sa mise à jour (si vous faites une extension dérivée de chrall, vous devrez lui donner un autre nom)
+chrall.pem
+
+compile.sh

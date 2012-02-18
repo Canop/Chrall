@@ -1,0 +1,168 @@
+* Choix de la compétence "Miner"
+pageName="Play_a_Competence29.php"
+
+- Deux menu, un bouton OK, et un Annuler
+
+
+===============================================================================================================================================================
+pageName="Play_a_Competence29.php"
+
+
+
+	
+
+	<HTML>
+
+	<HEAD>
+
+	<TITLE>Mounty Hall - Le Monde des Trõlls</TITLE>
+
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+
+	<LINK REL="stylesheet" TYPE="text/css" HREF="/MH_Packs/packMH_parchemin/css/MH_Style_Play.css">
+
+	<SCRIPT LANGUAGE="JavaScript" SRC="../../../JavaScripts/MH_Validation.js"></SCRIPT>
+
+	<SCRIPT LANGUAGE="JavaScript">
+
+	function validate_form() {
+
+	with (document.ActionForm) {
+
+	if (as_TypeAction.value == 'Rechercher')
+
+	return(validNumeric(ai_IdTarget, 'Le Minerai', true, 1))
+
+	else
+
+	return(true)
+
+	}
+
+	}
+
+	</SCRIPT>
+
+	</HEAD>
+
+	
+
+	<BODY>
+
+	<SCRIPT LANGUAGE="JavaScript" SRC="/mountyhall/JavaScripts/dw_swap.js"></SCRIPT>
+
+	
+
+	<FORM NAME="ActionForm" METHOD="POST" ACTION="Play_a_Competence29b.php" onSubmit="return(validate_form())" TARGET="Main";>
+
+	
+
+	
+
+	<TABLE HEIGHT=128 CELLSPACING=0 CELLPADDING=0 WIDTH="800" BACKGROUND="/MH_Packs/packMH_parchemin/action/action.jpg" BORDER=0>
+
+	<TR>
+
+	
+
+	<TD ROWSPAN=2 WIDTH=170 ALIGN="RIGHT" VALIGN="MIDDLE">
+
+	<DIV CLASS="AnnulerButton">
+
+	<A HREF="/mountyhall/MH_Play/Play_action.php">
+
+	<IMG ID=Annule
+
+	onMouseOver="MM_swapImage('Annule','','/MH_Packs/packMH_parchemin/boutons/btnannuler2.gif',1)"
+
+	onMouseOut=MM_swapImgRestore()
+
+	SRC="/MH_Packs/packMH_parchemin/boutons/btnannuler.gif" BORDER=0
+
+	NAME=Annule>
+
+	</A>
+
+	</DIV>
+
+	</TD>
+
+	
+
+	<TD HEIGHT=20></TD>
+
+	
+
+	<TD WIDTH=150 ROWSPAN=2 ALIGN="LEFT" VALIGN="MIDDLE">
+
+	
+
+	<INPUT TYPE="IMAGE" SRC="/MH_Packs/packMH_parchemin/boutons/btnaction.gif" onMouseOver="this.style.cursor='hand';">
+
+	<INPUT TYPE="hidden" NAME="as_Action" VALUE="ACTION !!">
+
+	</TD>
+
+	<TR><TD VALIGN="top">
+
+	<DIV CLASS="Action" ALIGN="center">
+
+	
+
+	
+
+	<B>Action : <SELECT NAME="as_TypeAction" CLASS="SelectboxV2">
+
+	<OPTION VALUE="Rechercher">Rechercher un filon</OPTION>
+
+	<OPTION VALUE="Miner">Exploiter un filon</OPTION>
+
+	</SELECT> Minerai : <SELECT NAME="ai_IdTarget" CLASS="SelectboxV2">
+
+	<OPTION VALUE="">*** Minerai à Rechercher ***</OPTION>
+
+	<OPTION VALUE="7">Cristal de Sâl</OPTION>
+
+	<OPTION VALUE="4">Flaaschy</OPTION>
+
+	<OPTION VALUE="1">Kibrille</OPTION>
+
+	<OPTION VALUE="5">Mithril</OPTION>
+
+	<OPTION VALUE="2">Obsidienne</OPTION>
+
+	<OPTION VALUE="6">Pierre de Sang</OPTION>
+
+	<OPTION VALUE="3">Woeepaah</OPTION>
+
+	</SELECT>
+
+	<INPUT NAME="as_CodePage" TYPE="hidden" VALUE="II7UTLTZ6U">
+
+	<INPUT NAME="ai_IdLogin" TYPE="hidden" VALUE="93268">
+
+	<INPUT NAME="ai_IdComp" TYPE="hidden" VALUE="29">
+
+	</B>
+
+	<SCRIPT LANGUAGE=javascript>
+
+	document.ActionForm.as_TypeAction.focus();
+
+	</SCRIPT>
+
+	</div>
+
+	
+
+	</TD></TR></TBODY></TABLE>
+
+	</FORM></BODY>
+
+	</HTML>
+
+
+
+===============================================================================================================================================================
+Après recherche de filon :
+Name="Play_a_Competence29b.php"

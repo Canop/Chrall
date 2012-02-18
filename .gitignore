@@ -1,2 +1,8 @@
+log
+doc
+pub
+trav
+
+*.log
 .idea
 *.iml

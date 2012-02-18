@@ -1,0 +1,105 @@
+<html>
+<head>
+	<title>Chrall</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<script LANGUAGE="Javascript" SRC="chrall_things.js"/>
+</head>
+<body>
+<!--
+This extension is mainly made by cano.petrole@gmail.org
+More info : http://canop.org/chrall
+-->
+
+
+<!--
+Le script suivant me permet de mesurer l'utilisation de Chrall via Google Analytics.
+-->
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-15064357-4']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = 'https://ssl.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+<script type="text/javascript">
+
+	// objet alarme
+	function Alarm(time) {
+		this.time = time; // la date à laquelle on veut que ça sonne
+		this.status = "new";
+	}
+
+	//=============== Les variables globales de l'extension
+	var alarms = {};
+	var alarmMargin = 5*60*1000; // décalage entre l'alarme réelle et la date de l'alarm.
+	var minimalTimeBetweenAlarms = 5*60*1000; // pour diverses raisons algorithmiques, ne pas descendre ça trop bas et pas en dessous de alarmMargin
+	var lastAlarmTime = 0; // on stocke ça pour éviter de jouer trop souvent les alarmes
+	var sendCdm = true;
+
+	function playSound() {
+		document.getElementById('alarm').play();
+	}
+
+	function scheduleAlarms() {
+		// Remarque : en compliquant un peu on pourrait éviter de reprogrammer
+		// les alarmes à chaque chargement de page (ce qui n'a sans doute pas d'autre effet que d'ajouter un ou deux setTimeout sans conséquence
+		// à chaque affichage du profil).
+		var timeNow = (new Date()).getTime();
+		for (var key in alarms) {			
+			var alarm = alarms[key];
+			if (alarm.time>timeNow) {
+				setTimeout(checkAlarms, alarm.time-timeNow+2);
+				alarm.status = "scheduled";
+			} else {
+				alarm.status = "skipped";
+			}
+		}
+	}
+
+	// regarde s'il y a des alarmes à jouer et, le cas échéant, les joue
+	function checkAlarms() {
+		var timeNow = (new Date()).getTime();
+		if (timeNow<lastAlarmTime+minimalTimeBetweenAlarms) {
+			return;
+		}
+		for (var key in alarms) {
+			var alarm = alarms[key];
+			if (alarm.time>=timeNow && alarm.status!="played") {
+				playSound();
+				alarm.status = "played";
+			}
+		}
+	}
+
+	// réponse aux requètes envoyées par les scripts "embbeded"
+	// ces requetes sont envoyées via chrome.extension.sendRequest({'key':value})
+	chrome.extension.onRequest.addListener(
+		function(request, sender, sendResponse) {
+			for (var key in request) {
+				if (key=="dla" || key=="cumul") {
+					alarms[key] = new Alarm(request[key]-alarmMargin);
+				} else if (key=="send_cdm") {
+					sendCdm = request[key]=='' ? false : true;
+				} else if (key=="get_send_cdm") {
+					sendResponse({"send_cdm":sendCdm});
+				}
+			}
+			scheduleAlarms();
+		}
+	);
+	
+</script>
+
+<audio id=alarm>
+	<source src=sound/zbluejay.wav>
+</audio>
+
+<a href="javascript:playSound();">play</a>
+</body>
+</html>

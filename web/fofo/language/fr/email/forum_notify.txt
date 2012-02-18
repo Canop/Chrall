@@ -1,0 +1,19 @@
+Subject: Avertissement d'un message du forum - "{FORUM_NAME}"
+
+Bonjour {USERNAME},
+
+Vous recevez cet avertissement car vous surveillez le forum "{FORUM_NAME}" sur "{SITENAME}". Ce forum a reçu une nouvelle réponse sur le sujet "{TOPIC_TITLE}" depuis votre dernière visite. Vous pouvez utiliser le lien suivant afin de consulter la dernière réponse non lue, aucun nouvel avertissement ne vous sera envoyé jusqu'à ce que vous visitiez le sujet.
+
+{U_NEWEST_POST}
+
+Si vous souhaitez consulter le sujet, veuillez cliquer sur le lien suivant :
+{U_TOPIC}
+
+Si vous souhaitez consulter le forum, veuillez cliquer sur le lien suivant :
+{U_FORUM}
+
+Si vous ne souhaitez plus surveiller ce forum, vous pouvez cliquer sur le lien "Se désabonner au forum" situé au-dessous du forum en question ou cliquer sur le lien suivant :
+
+{U_STOP_WATCHING_FORUM}
+
+{EMAIL_SIG}
