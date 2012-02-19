@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -77,7 +77,7 @@ func main() {
 	gogo := new(GogoServer)
 	cheminDonnées := flag.String("dir", "", "chemin du répertoire des données")
 	flag.Parse()
-	if *cheminDonnées=="" {
+	if *cheminDonnées == "" {
 		log.Fatal("Chemin répertoire des données non fourni. Utilisez -dir.")
 	}
 	tksManager := new(TksManager)

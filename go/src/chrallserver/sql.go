@@ -13,7 +13,7 @@ func namax(col string) string {
 
 // le ifnull autour contourne l'incapacité du driver go à mettre u null dans une string
 func maxtext(col string) string {
-	return "ifnull(max("+col+"),'')"
+	return "ifnull(max(" + col + "),'')"
 }
 
 // à utiliser pour élargir : quand la valeur ciblée est variable, on prend le min des min et le max des max

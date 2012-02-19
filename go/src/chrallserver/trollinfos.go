@@ -16,7 +16,6 @@ import (
 
 var mutexLectures = new(sync.Mutex)
 
-
 type raceTroll uint8
 
 const (
@@ -85,7 +84,7 @@ type KillometreExtract struct {
 // l'objet qui contient les stats
 // A priori ce sera toujours un singleton.
 type TksManager struct {
-	cheminDonnées string
+	cheminDonnées         string
 	Trolls                []*TrollInfos // les infos des trolls, indexées par id de troll (certes, avec un table de hash spécifique ce ne serait pas lent et le tableau serait deux fois plus court mais... la flemme...)
 	lastTrollFileCheck    int64         // la date, en secondes, à laquelle on a vérifié si le fichier csv source avait changé pour la dernière fois
 	lastTrollFileRead     int64         // la date, en secondes, à laquelle on a lu le fichier csv source pour la dernière fois

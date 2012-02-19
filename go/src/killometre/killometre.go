@@ -205,16 +205,16 @@ func main() {
 	cheminRacineRepertoireEvenements := flag.String("morts", "", "chemin du répertoire contenant (éventuellement dans des sous répertoires) les événements")
 	cheminFichierRésultat := flag.String("stats", "", "chemin du fichier résultat à écrire")
 	flag.Parse()
-	if *cheminFichierTrolls=="" {
+	if *cheminFichierTrolls == "" {
 		log.Fatal("Chemin du fichier des trolls non fourni. Utilisez -trolls")
-	} else if *cheminRacineRepertoireEvenements=="" {
+	} else if *cheminRacineRepertoireEvenements == "" {
 		log.Fatal("Chemin des morts non fourni. Utilisez -morts")
-	} else if *cheminFichierRésultat=="" {
+	} else if *cheminFichierRésultat == "" {
 		log.Fatal("Chemin de sortie non fourni. Utilisez -stats")
 	}
 	startTime := time.Now()
 	km := new(Killomètre)
-	
+
 	//> lecture du fichier des trolls
 	f, err := os.Open(*cheminFichierTrolls)
 	if err != nil {
