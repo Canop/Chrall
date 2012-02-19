@@ -16,7 +16,7 @@ mv log/chrallserver.log log/chrallserver.old.log
 
 echo "lancement chrallserver depuis restart-chrallserver.sh" > log/chrallserver.log
 
-nohup go/bin/chrallserver >> log/chrallserver.log 2>&1 0</dev/null &
+nohup go/bin/chrallserver -dir /home/dys/chrall/ >> log/chrallserver.log 2>&1 0</dev/null &
 
 tail -f log/chrallserver.log
 

@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"flag"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -14,14 +16,12 @@ type GogoServer struct {
 	Hitter
 }
 
-func (server *GogoServer) Start() {
+func (server *GogoServer) Start(tksManager *TksManager) {
 	rootHandler := new(RootHandler)
 	rootHandler.parent = &server.Hitter
 	http.Handle("/", rootHandler)
 
 	store := NewStore("temp_user", "temp_pwd") // TODO mettre user et mdp dans un fichier de config quelque part
-
-	tksManager := new(TksManager)
 
 	chrallHandler := new(ChrallHandler)
 	chrallHandler.parent = &rootHandler.Hitter
@@ -75,5 +75,12 @@ func (server *GogoServer) Start() {
 
 func main() {
 	gogo := new(GogoServer)
-	gogo.Start()
+	cheminDonnées := flag.String("dir", "", "chemin du répertoire des données")
+	flag.Parse()
+	if *cheminDonnées=="" {
+		log.Fatal("Chemin répertoire des données non fourni. Utilisez -dir.")
+	}
+	tksManager := new(TksManager)
+	tksManager.cheminDonnées = *cheminDonnées
+	gogo.Start(tksManager)
 }

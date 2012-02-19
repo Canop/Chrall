@@ -7,10 +7,15 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
+
+var mutexLectures = new(sync.Mutex)
+
 
 type raceTroll uint8
 
@@ -80,6 +85,7 @@ type KillometreExtract struct {
 // l'objet qui contient les stats
 // A priori ce sera toujours un singleton.
 type TksManager struct {
+	cheminDonnées string
 	Trolls                []*TrollInfos // les infos des trolls, indexées par id de troll (certes, avec un table de hash spécifique ce ne serait pas lent et le tableau serait deux fois plus court mais... la flemme...)
 	lastTrollFileCheck    int64         // la date, en secondes, à laquelle on a vérifié si le fichier csv source avait changé pour la dernière fois
 	lastTrollFileRead     int64         // la date, en secondes, à laquelle on a lu le fichier csv source pour la dernière fois
@@ -158,8 +164,8 @@ func (m *TksManager) GetKillometreExtract(typeExtract string, startIndex int, pa
 }
 
 func (m *TksManager) ReadDiploCsvFilesIfNew() error {
-	standardDiploFilename := "/home/dys/chrall/Public_Diplomatie.txt"
-	trollDiploFilename := "/home/dys/chrall/Diplodotrolls.csv"
+	standardDiploFilename := filepath.Join(m.cheminDonnées, "Public_Diplomatie.txt")
+	trollDiploFilename := filepath.Join(m.cheminDonnées, "Diplodotrolls.csv")
 	mustRead := false
 	if m.lastDiploFileRead > 0 {
 		fi, err := os.Stat(standardDiploFilename)
@@ -216,7 +222,10 @@ func (m *TksManager) ReadDiploCsvFilesIfNew() error {
 }
 
 func (m *TksManager) ReadGuildCsvFileIfNew() error {
-	filename := "/home/dys/chrall/Public_Guildes.txt"
+	mutexLectures.Lock()
+	defer mutexLectures.Unlock()
+
+	filename := filepath.Join(m.cheminDonnées, "Public_Guildes.txt")
 	if m.lastGuildFileRead > 0 {
 		fi, err := os.Stat(filename)
 		if err != nil {
@@ -271,8 +280,10 @@ func (m *TksManager) ReadGuildCsvFileIfNew() error {
 //  chaque troll connu (voir troll.go).
 // Calcule les tableaux triés en fin de chargement
 func (m *TksManager) ReadTrollCsvFileIfNew() error {
-	// TODO comment assurer en go qu'il n'y a pas plusieurs exécutions en parallèle ?
-	filename := "/home/dys/chrall/killometre/kom.csv" // oui, c'est pas bien... mais proposez de l'aide au lieu de critiquer ;)
+	mutexLectures.Lock()
+	defer mutexLectures.Unlock()
+
+	filename := filepath.Join(m.cheminDonnées, "trollstats.csv")
 	if m.lastTrollFileRead > 0 {
 		fi, err := os.Stat(filename)
 		if err != nil {
