@@ -18,4 +18,5 @@ lftp ftp://ftp.mountyhall.com/ -e "mirror -c -x test2009 -x 2003 -x 2004 -x 2005
 
 # exécution de killomètre
 go install killometre
-/home/dys/dev/Chrall/go/bin/killometre  /home/dys/chrall/Public_Trolls.txt /home/dys/chrall/morts >> /home/dys/chrall/update-kills.out
+mkdir -p /home/dys/chrall/killometre
+/home/dys/dev/Chrall/go/bin/killometre -trolls /home/dys/chrall/Public_Trolls.txt -morts /home/dys/chrall/morts -stats /home/dys/chrall/killometre/kom.csv

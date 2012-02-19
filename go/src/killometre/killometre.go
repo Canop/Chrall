@@ -8,8 +8,9 @@ package main
 import (
 	"bufio"
 	"chrall"
-	"fmt"
+	"flag"
 	"io"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -67,7 +68,7 @@ func (km *Killomètre) addKill(kill *Kill) {
 func (km *Killomètre) parseLigneTroll(line string) {
 	tokens := strings.SplitN(line, ";", 9)
 	if len(tokens) < 7 {
-		fmt.Printf("Ligne non comprise : %s\n", line)
+		log.Printf("Ligne non comprise : %s\n", line)
 		return
 	}
 	trollId, _ := strconv.Atoi(tokens[0])
@@ -79,15 +80,15 @@ func (km *Killomètre) parseLigneTroll(line string) {
 	var err error
 	troll.IdGuilde, err = strconv.Atoi(tokens[6])
 	if err != nil {
-		fmt.Println("Error in parsing :")
-		fmt.Println(err)
+		log.Println("Error in parsing :")
+		log.Println(err)
 	}
 }
 
 func (km *Killomètre) parseLigneKill(line string) {
 	tokens := strings.SplitN(line, ";", 6)
 	if len(tokens) < 5 {
-		fmt.Printf("Ligne non comprise : %s\n", line)
+		log.Printf("Ligne non comprise : %s\n", line)
 		return
 	}
 	kill := new(Kill)
@@ -108,8 +109,8 @@ func (km *Killomètre) parseFichierTrolls(file *os.File) error {
 		line, err = r.ReadString('\n')
 	}
 	if err != io.EOF {
-		fmt.Println("Error in parsing (parseFichierTrolls) :")
-		fmt.Println(err)
+		log.Println("Error in parsing (parseFichierTrolls) :")
+		log.Println(err)
 		return err
 	}
 	return nil
@@ -124,8 +125,8 @@ func (km *Killomètre) parseFichierKills(file *os.File) error {
 	}
 	km.NbReadFiles++
 	if err != io.EOF {
-		fmt.Println("Error in parsing (parseFichierKills) :")
-		fmt.Println(err)
+		log.Println("Error in parsing (parseFichierKills) :")
+		log.Println(err)
 		return err
 	}
 	return nil
@@ -135,7 +136,7 @@ func (km *Killomètre) parseFichierKills(file *os.File) error {
 func (km *Killomètre) traiteFichierKills(f *os.File) error {
 	childs, err := f.Readdir(-1)
 	if err == nil {
-		fmt.Println("Entering directory " + f.Name())
+		log.Println("Entering directory " + f.Name())
 		for _, fi := range childs {
 			//fmt.Println("Chidlname : " + fi.Name)
 			err := km.traiteNomFichierKills(f.Name() + "/" + fi.Name())
@@ -143,7 +144,7 @@ func (km *Killomètre) traiteFichierKills(f *os.File) error {
 				return err
 			}
 		}
-		fmt.Println("Leaving directory " + f.Name())
+		log.Println("Leaving directory " + f.Name())
 	} else {
 		return km.parseFichierKills(f)
 	}
@@ -200,34 +201,35 @@ func WriteTrollsToFile(filename string, trolls []*Troll) error {
  *  - chemin d'un répertoire contenant (éventuellement dans des sous répertoires) les événements que le serveur FPT de MH propose
  */
 func main() {
-	if len(os.Args) < 3 {
-		fmt.Println(os.EINVAL)
-		return
+	cheminFichierTrolls := flag.String("trolls", "", "chemin du fichier csv de définition des trolls")
+	cheminRacineRepertoireEvenements := flag.String("morts", "", "chemin du répertoire contenant (éventuellement dans des sous répertoires) les événements")
+	cheminFichierRésultat := flag.String("stats", "", "chemin du fichier résultat à écrire")
+	flag.Parse()
+	if *cheminFichierTrolls=="" {
+		log.Fatal("Chemin du fichier des trolls non fourni. Utilisez -trolls")
+	} else if *cheminRacineRepertoireEvenements=="" {
+		log.Fatal("Chemin des morts non fourni. Utilisez -morts")
+	} else if *cheminFichierRésultat=="" {
+		log.Fatal("Chemin de sortie non fourni. Utilisez -stats")
 	}
-	cheminFichierTrolls := os.Args[1]
-	cheminRacineRepertoireEvenements := os.Args[2]
 	startTime := time.Now()
-
 	km := new(Killomètre)
-
+	
 	//> lecture du fichier des trolls
-	f, err := os.Open(cheminFichierTrolls)
+	f, err := os.Open(*cheminFichierTrolls)
 	if err != nil {
-		fmt.Printf("Erreur à l'ouverture du fichier des trolls : %v", err)
-		return
+		log.Fatal("Erreur à l'ouverture du fichier des trolls : %v", err)
 	}
 	err = km.parseFichierTrolls(f)
 	if err != nil {
-		fmt.Printf("Erreur à la lecture du fichier des trolls : %v", err)
-		return
+		log.Fatal("Erreur à la lecture du fichier des trolls : %v", err)
 	}
-	fmt.Printf("Fichier des trolls lu. Nombre de trolls : %d\n", km.NbTrolls)
+	log.Printf("Fichier des trolls lu. Nombre de trolls : %d\n", km.NbTrolls)
 
 	//> lecture des événements
-	err = km.traiteNomFichierKills(cheminRacineRepertoireEvenements)
+	err = km.traiteNomFichierKills(*cheminRacineRepertoireEvenements)
 	if err != nil {
-		fmt.Printf("Erreur à la lecture des événements : %v", err)
-		return
+		log.Fatal("Erreur à la lecture des événements : %v", err)
 	}
 
 	//> construction de tableaux triés
@@ -243,9 +245,9 @@ func main() {
 	km.Analyse(trollsByTrollKills)
 
 	//> export du tableau complet
-	err = WriteTrollsToFile("/home/dys/chrall/killometre/kom.csv", trollsByTrollKills)
+	err = WriteTrollsToFile(*cheminFichierRésultat, trollsByTrollKills)
 	if err != nil {
-		fmt.Printf("Erreur while writing output file : %v\n", err)
+		log.Fatal("Erreur while writing output file : %v\n", err)
 	}
 
 	//> quelques stats
@@ -266,12 +268,12 @@ func main() {
 	}
 
 	//> affichage d'un petit bilan
-	fmt.Printf("Fini en %d secondes\n Fichiers lus : %d\n Kills lus : %d\n", time.Now().Sub(startTime), km.NbReadFiles, len(km.Kills))
-	fmt.Printf("Nombre de trolls : %d\n", km.NbTrolls)
-	fmt.Printf("\nTK : %d\nATK : %d\nMK : %d\nInconnus : %d\n", nbTK, nbATK, nbMK, nbInconnus)
-	fmt.Println("Plus grands tueurs de troll : ")
-	PrintTrolls(trollsByTrollKills, 100)
-	fmt.Println("Plus grands tueurs de monstres : ")
-	PrintTrolls(trollsByMonsterKills, 100)
-	fmt.Println()
+	log.Printf("Fini en %d secondes\n Fichiers lus : %d\n Kills lus : %d\n", time.Now().Sub(startTime), km.NbReadFiles, len(km.Kills))
+	log.Printf("Nombre de trolls : %d\n", km.NbTrolls)
+	log.Printf("\nTK : %d\nATK : %d\nMK : %d\nInconnus : %d\n", nbTK, nbATK, nbMK, nbInconnus)
+	log.Println("Plus grands tueurs de troll : ")
+	PrintTrolls(trollsByTrollKills, 10)
+	log.Println("Plus grands tueurs de monstres : ")
+	PrintTrolls(trollsByMonsterKills, 10)
+	log.Println()
 }
