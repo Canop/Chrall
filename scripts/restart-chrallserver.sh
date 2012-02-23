@@ -1,5 +1,5 @@
-# tue, recompile et relance l'application gogo
-# la sortie standard est redirigee vers log/gogo.out
+# tue, recompile et relance l'application chrallserver
+# la sortie standard est redirigee vers log/chrallserver.log
 # les anciens fichiers sont renommes en -old
 killall -q chrallserver
 
