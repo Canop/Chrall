@@ -2,6 +2,7 @@ log
 doc
 pub
 trav
+go/bin/*
 
 *.log
 .idea
