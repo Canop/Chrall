@@ -4,7 +4,7 @@ gère les destinations pour les Tps et les gowaps. Le concept de destination est
 une réduction-agrégation de plusieurs sources de données.
 */
 import (
-	//"fmt"
+	"fmt"
 	"mysql"
 	"strings"
 )
@@ -25,9 +25,10 @@ func JoinIds(ids []int, sep string) string {
 	}
 	stringIds := make([]string, len(ids))
 	for i, val := range ids {
-		stringIds[i] = string(val)
+		stringIds[i] = string(val)  // string.join ne prend pas de slice d'objets quelconques comme paramètres
 	}
 
+	fmt.Println("Joined Ids: ", strings.Join(stringIds, ","))
 	return strings.Join(stringIds, ",")
 }
 
