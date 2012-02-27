@@ -43,6 +43,7 @@ func (h *JsonGetHandler) serveNotes(w http.ResponseWriter, hr *http.Request) {
 		fmt.Printf("Erreur ouverture connexion BD dans serveAcceptCdmJsonp : %s\n", err.Error())
 		return
 	}
+	defer db.Close()
 	askerId := GetFormValueAsId(hr, "asker")
 	mdpr := GetFormValue(hr, "mdpr") // mot de passe restreint
 	compteOk := false
@@ -129,6 +130,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		log.Printf("Erreur ouverture connexion BD dans makeBestiaryExtractHtml : %s\n", err.Error())
 		return err.Error()
 	}
+	defer db.Close()
 	html := ""
 	var amis []int
 	if askerId > 0 && mdpr != "" && monsterId > 0 {
@@ -197,6 +199,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 				fmt.Printf("Erreur ouverture connexion BD dans serveAcceptCdmJsonp : %s\n", err.Error())
 				return
 			}
+			defer db.Close()
 			cdm := bd.Cdm[0]
 			authorId := GetFormValueAsId(hr, "author")
 			seconds := GetFormValueAsInt64(hr, "seconds")
@@ -239,6 +242,7 @@ func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr
 		log.Println(" Erreur : " + err.Error())
 		return
 	}
+	defer db.Close()
 	limit, _ := strconv.ParseInt(GetFormValue(hr, "limit"), 10, 0)
 	if limit < 1 {
 		limit = 10

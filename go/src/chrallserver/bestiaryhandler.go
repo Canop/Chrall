@@ -59,6 +59,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	`))
 
 	db, err := h.store.DB()
+	defer db.Close()
 	var be *BestiaryExtract
 	if err == nil {
 		be, err = h.store.ReadTotalStats(db)

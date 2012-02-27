@@ -50,6 +50,7 @@ func (h *SearchPanelHandler) getSearchPanelHtml(hr *http.Request) string {
 		fmt.Printf("Erreur ouverture connexion BD dans makeBestiaryExtractHtml : %s\n", err.Error())
 		return err.Error()
 	}
+	defer db.Close()
 
 	if askerId > 0 && mdpr != "" {
 		compteOk, compte, err = h.store.CheckCompte(db, askerId, mdpr)

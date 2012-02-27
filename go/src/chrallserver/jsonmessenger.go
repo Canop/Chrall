@@ -79,6 +79,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		log.Printf("Erreur ouverture connexion BD sur action %s : %s\n", action, err.Error())
 		return
 	}
+	defer db.Close()
 
 	mdpok, c, err := h.store.CheckCompte(db, in.TrollId, in.MDP)
 	if err != nil {

@@ -44,6 +44,7 @@ func (h *JsonPostHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 		sendError(w, "connexion bd", err)
 		return
 	}
+	defer db.Close()
 	inserted := 0
 	if len(bd.Cdm) > 0 {
 		inserted, err = h.store.WriteCdms(db, bd.Cdm, jr.Author, 0)
