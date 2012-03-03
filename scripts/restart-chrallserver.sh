@@ -18,5 +18,5 @@ echo "lancement chrallserver depuis restart-chrallserver.sh" > log/chrallserver.
 
 nohup go/bin/chrallserver -dir /home/dys/chrall/ >> log/chrallserver.log 2>&1 0</dev/null &
 
-tail -f log/chrallserver.log
+echo tail -f log/chrallserver.log
 
