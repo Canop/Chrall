@@ -3,7 +3,7 @@ doc
 pub
 trav
 go/bin/*
-
+datafiles
 *.log
 .idea
 *.iml

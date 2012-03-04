@@ -135,6 +135,7 @@ case "FO_Ordres.php":
 	break;
 case "FO_NewOrder.php":
 	Chrall_fillFollowerNewOrderForm();
+	Chrall_askDestinations();
 	break;
 }
 localStorage['todo']='';

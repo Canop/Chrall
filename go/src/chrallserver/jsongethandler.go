@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -158,7 +159,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		return "Erreur : " + err.Error()
 	}
 
-	html += be.Html(monsterId, askerId, h.tksManager, 0 /* pourcentage blessure */ )
+	html += be.Html(monsterId, askerId, h.tksManager, 0 /* pourcentage blessure */)
 	return html
 }
 
@@ -252,6 +253,55 @@ func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr
 	w.Write(blist)
 }
 
+func (h *JsonGetHandler) checkUserAuthentication(w http.ResponseWriter, hr *http.Request) (int, error) {
+	// TODO : utiliser cette méthode dans les autres pour simplifier le code
+	db, err := h.store.DB()
+	if err != nil {
+		log.Printf("Erreur ouverture connexion BD dans serveDestinationsJsonp : %s\n", err.Error())
+		return 0, err
+	}
+
+	askerId := GetFormValueAsId(hr, "asker")
+	mdpr := GetFormValue(hr, "mdpr") // mot de passe restreint, optionnel, permet d'authentifier la requête en cas d'existence de compte Chrall
+	if askerId <= 0 || mdpr == "" {
+		log.Printf("Impossible d'authentifier le troll: %s\n", askerId)
+		return 0, errors.New("Impossible d'authentifier le troll")
+	}
+
+	compteOk := false
+	compteOk, _, err = h.store.CheckCompte(db, askerId, mdpr)
+	if !compteOk {
+		log.Printf("Authentification invalide: %s\n", err.Error())
+		return 0, err
+	}
+
+	return askerId, nil
+}
+
+func (h *JsonGetHandler) serveDestinationsJsonp(w http.ResponseWriter, hr *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	askerId, err := h.checkUserAuthentication(w, hr)
+	if nil != err {
+		return
+	}
+
+	db, _ := h.store.DB()
+	var amis []int
+	amis, err = h.store.GetPartageurs(db, askerId)
+	if err != nil {
+		log.Printf("Erreur récupération amis dans serveDestinationsJsonp : %s\n", err.Error())
+		return
+	}
+
+	destinations := h.store.GetDestinations(amis, h.tksManager)
+
+	unmarshalled, _ := json.Marshal(destinations)
+	fmt.Fprint(w, "Chrall_suggestDestinations(")
+	w.Write(unmarshalled)
+	fmt.Fprint(w, ")")
+}
+
 func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -281,6 +331,8 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 		h.serveAcceptCdmJsonp(w, hr)
 	} else if action == "check_messages" {
 		h.serveMessageJsonp(w, hr)
+	} else if action == "get_destinations_jsonp" {
+		h.serveDestinationsJsonp(w, hr)
 	} else {
 		h.serveAuthenticatedMessage(w, action, GetFormValue(hr, "message")) // par défaut on considère qu'il s'agit d'un message authentifié
 	}
