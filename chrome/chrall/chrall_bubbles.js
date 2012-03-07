@@ -70,25 +70,6 @@ function letBubbleClose() {
 	hideBubble();
 }
 
-function initBubble() {
-	if (!bubbleInitDone) {
-		var html = "<input type=hidden id=bubbleRequestId value=''>";
-		html += "<script>";
-		html += "function grid_receive(answer) {"; // ce nom n'est pas générique parce que je n'ai  pas eu envie de couper la compatibilité client-serveur le temps que les testeurs changent de version...
-		html += " if (document.getElementById('bubbleRequestId').value!=answer.RequestId) {"; // on vérifie que la réponse correspond à la bulle actuelle (et pas à une bulle fermée)
-		//html += "  console.log('answer received to old request : ' + answer.RequestId);";
-		html += "  return;";
-		html += " }";
-		html += " var div = document.getElementById('bubbleContent');";
-		html += " if (div) {"; // il n'y a plus de div si la bulle est close
-		html += "  div.innerHTML=answer.Html;"; 
-		html += " }";
-		html += "}";
-		html += "</script>";
-		$(html).appendTo("body");
-		bubbleInitDone = true;
-	}
-}
 
 function bubble(
 	target,  // un objet jquery, par exemple  $("a.ch_monster")
@@ -97,7 +78,6 @@ function bubble(
 	ajaxUrl, // une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
 	ajaxRequestId
 ) {
-	initBubble();
 	target.mouseenter(function(event) {
 		if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
 		onBubbleTarget = true;
@@ -127,7 +107,6 @@ function bubbleLive(
 	cssClass,
 	getArgs // fonction prenant en argument un objet jquery résultat de $(selector) et renvoyant une map avec text, ajaxUrl, ajaxRequestId (plus en optionnel leftCol)
 ) {
-	initBubble();
 	$(selector).live(
 		'mouseenter', function(event) {
 			var target = $(this);

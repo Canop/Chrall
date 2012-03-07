@@ -17,16 +17,16 @@ if (TEST_LOCAL) {
 	if (serveur_prive_in_prefs) SERVEUR_CHRALL_PRIVE = serveur_prive_in_prefs;
 }
 
-var viewIsEmpty=true; // correspond à un état d'analyse de la vue
+var viewIsEmpty = true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
 var player = new Troll(); // le troll du joueur. Sera éventuellement récupéré de la page de fond dans getBackgroundInfosThenExecute
 var playerAmAbstract = new Array(); // strings. utilisées dans le profil à la fois pour le tableau de l'am et pour la bulle de la compétence en bas
 var viewedTrollId;
-var sessionActive = false; 
+var sessionActive = false;
 
 // note : pour l'instant il faut que ces valeurs de départ soient cohérentes avec le css (display='block' ou display='none');
 // Par ailleurs attention à un détail : les clés suivantes sont à la fois des clés dans le code et les labels dans l'ihm
-var viewFilters = { 
+var viewFilters = {
 	"trolls" : true,
 	"monstres" : true,
 	"gowaps" : true,
@@ -40,105 +40,107 @@ var viewFilters = {
 
 var splitedPathname = document.location.pathname.split('/');
 var hallIsAccro = document.location.host == "accro.mountyhall.com"; // est-ce qu'on est dans le PH spécial des accros ?
-var pageName = splitedPathname[splitedPathname.length-1];
-console.log("pageName=\""+pageName+"\"");
+var pageName = splitedPathname[splitedPathname.length - 1];
+console.log("pageName=\"" + pageName + "\"");
 
-var resetTroll = pageName=="PlayStart.php";
+var resetTroll = pageName == "PlayStart.php";
 if (!resetTroll) {
 	player.restore(); // on récupère les infos qui ont pu être obtenues dans d'autres frames ou pages
 }
 
+Chrall_inject("jquery.js"); // est-ce que ça fait vraiment du mal?
 Chrall_inject('injected_com.js');
 Chrall_inject('injected_notes.js');
 
 switch (pageName) {
-case "PlayStart.php":
-	Chrall_analyseAndReformatStartPage();
-	break;
-case "Play_profil.php":
-	initCommunications();
-	Chrall_analyseAndReformatProfile();	
-	break;
-case "Play_vue.php":
-	initCommunications('get_partages');
-	Chrall_analyseAndReformatView();	
-	break;
-case "Play_mouche.php":
-	//Chrall_analyseAndReformatFlies();
-	break;
-case "Play_BM.php":
-	Chrall_analyseAndReformatBM();	
-	break;
-case "Play_equipement.php":
-	var section = getUrlParameter('as_CurSect', 'equip');
-	if (section=='equip') Chrall_analyseAndReformatEquipment();	
-	break;
-case "Play_evenement.php":
-	Chrall_addBubblesToLinks();
-	break;
-case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
-	Chrall_handleActionPage();
-	break;
-case "Play_option.php":
-	initCommunications('check_account');
-	Chrall_reformatOptionsView();	
-	break;
-case "Play_a_Competence16.php": // préparation de CDM (le formulaire de choix du monstre)
-	Chrall_handleBeforeCdmPage();	
-	break;
-case "Play_a_Competence16b.php": // résultat de cdm
-	Chrall_handleCdmPage();	
-	break;
-case "Play_a_Competence18b.php": // résultat d'insulte
-	Chrall_analyseResultatInsulte();	
-	break;
-case "Play_a_Competence18.php": // préparation d'insulte
-	Chrall_prepareInsulte();	
-	break;
-case "Play_a_Competence29.php": // préparation de minage (le formulaire dans la frame d'action)
-	Chrall_handleBeforeMinage();	
-	break;
-case "Play_a_Competence29b.php": // résultat de minage
-	Chrall_handleMinagePage();
-	break;
-case "Play.php": // c'est le frameset qui engloble tout
-	Chrall_preparePlayInputs();	
-	break;
-case "Play_menu.php": // c'est la frame de gauche
-	Chrall_handleMenuPage();	
-	break;
-case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la colonne menu de gauche
-	Chrall_preparePlay2Inputs();	
-	break;
-case "Play_a_Move.php":
-	Chrall_inject('injected_move.js');	
-	break;
-case "PJView.php":
-	Chrall_analyseAndReformatPJView(); 
-	break;
-case "PJView_Events.php":
-	Chrall_analysePJEventsView();
-	Chrall_addBubblesToLinks();
-	break;
-case "Play_news.php":
-	Chrall_addBubblesToLinks();
-	break;
-case "MonsterView.php":
-	Chrall_analyseAndReformatMonsterView();
-	Chrall_addInfosToMonsterEvents();
-	Chrall_addBubblesToLinks();
-	break;
-case "Play_a_Combat.php": //  résultat de combat
-	Chrall_analyseResultatCombat();
-case "FO_Ordres.php":
-	Chrall_handleFollowerOrders();
-	break;
-case "FO_NewOrder.php":
-	Chrall_fillFollowerNewOrderForm();
+	case "PlayStart.php":
+		Chrall_analyseAndReformatStartPage();
+		break;
+	case "Play_profil.php":
+		initCommunications();
+		Chrall_analyseAndReformatProfile();
+		break;
+	case "Play_vue.php":
+		Chrall_inject("injected_view_bubble.js");
+		initCommunications('get_partages');
+		Chrall_analyseAndReformatView();
+		break;
+	case "Play_mouche.php":
+		//Chrall_analyseAndReformatFlies();
+		break;
+	case "Play_BM.php":
+		Chrall_analyseAndReformatBM();
+		break;
+	case "Play_equipement.php":
+		var section = getUrlParameter('as_CurSect', 'equip');
+		if (section == 'equip') Chrall_analyseAndReformatEquipment();
+		break;
+	case "Play_evenement.php":
+		Chrall_addBubblesToLinks();
+		break;
+	case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
+		Chrall_handleActionPage();
+		break;
+	case "Play_option.php":
+		initCommunications('check_account');
+		Chrall_reformatOptionsView();
+		break;
+	case "Play_a_Competence16.php": // préparation de CDM (le formulaire de choix du monstre)
+		Chrall_handleBeforeCdmPage();
+		break;
+	case "Play_a_Competence16b.php": // résultat de cdm
+		Chrall_handleCdmPage();
+		break;
+	case "Play_a_Competence18b.php": // résultat d'insulte
+		Chrall_analyseResultatInsulte();
+		break;
+	case "Play_a_Competence18.php": // préparation d'insulte
+		Chrall_prepareInsulte();
+		break;
+	case "Play_a_Competence29.php": // préparation de minage (le formulaire dans la frame d'action)
+		Chrall_handleBeforeMinage();
+		break;
+	case "Play_a_Competence29b.php": // résultat de minage
+		Chrall_handleMinagePage();
+		break;
+	case "Play.php": // c'est le frameset qui engloble tout
+		Chrall_preparePlayInputs();
+		break;
+	case "Play_menu.php": // c'est la frame de gauche
+		Chrall_handleMenuPage();
+		break;
+	case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la colonne menu de gauche
+		Chrall_preparePlay2Inputs();
+		break;
+	case "Play_a_Move.php":
+		Chrall_inject('injected_move.js');
+		break;
+	case "PJView.php":
+		Chrall_analyseAndReformatPJView();
+		break;
+	case "PJView_Events.php":
+		Chrall_analysePJEventsView();
+		Chrall_addBubblesToLinks();
+		break;
+	case "Play_news.php":
+		Chrall_addBubblesToLinks();
+		break;
+	case "MonsterView.php":
+		Chrall_analyseAndReformatMonsterView();
+		Chrall_addInfosToMonsterEvents();
+		Chrall_addBubblesToLinks();
+		break;
+	case "Play_a_Combat.php": //  résultat de combat
+		Chrall_analyseResultatCombat();
+	case "FO_Ordres.php":
+		Chrall_handleFollowerOrders();
+		break;
+	case "FO_NewOrder.php":
+		Chrall_fillFollowerNewOrderForm();
 	Chrall_askDestinations();
-	break;
+		break;
 }
-localStorage['todo']='';
+localStorage['todo'] = '';
 
 player.save(); // on sauvegarde localement les infos du troll (par exemple sa position), afin que les frames qui ne l'ont pas directement en disposent
 

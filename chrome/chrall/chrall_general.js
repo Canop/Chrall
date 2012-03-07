@@ -22,7 +22,13 @@ function getUrlParameter(name, defaultValue) {
  * 
  */
 function Chrall_inject(fileName) {
-	$.getScript(chrome.extension.getURL(fileName));
+	var script;
+	script = document.createElement('script');
+	script.setAttribute("type", "application/javascript");
+	script.setAttribute("src", chrome.extension.getURL(fileName));
+	document.body.appendChild(script);
+
+//	$.getScript(chrome.extension.getURL(fileName));
 }
 
 /**
@@ -94,7 +100,8 @@ function atoi(s) {
 function updateTroll() {
 	if (player.x) {
 		var s = 'X='+player.x + ' | Y='+player.y + ' | N='+player.z;
-		$('<script>parent.parent.Sommaire.document.getElementById("ch_menu_position").innerHTML="'+s+'";</script>').appendTo($('body'));
+		// TODO: trouver comment faire ça, le frame principal ne semble pas être "atteignable"; mais ceci est-il vraiment nécessaire?
+		//$('<script>parent.parent.Sommaire.document.getElementById("ch_menu_position").innerHTML="'+s+'";</script>').appendTo($('body'));
 		sendPlayerInfosToChrallServer();
 	}
 }
