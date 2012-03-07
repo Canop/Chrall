@@ -25,10 +25,11 @@ const (
 	kastar        = raceTroll(iota)
 	skrim         = raceTroll(iota)
 	tomawak       = raceTroll(iota)
+	nkrwapu       = raceTroll(iota)
 )
 
-var RACE_NAMES = [6]string{"inconnu", "darkling", "durakuir", "kastar", "skrim", "tomawak"}
-var RACE_SHORT_NAMES = [6]string{"?", "Da", "D", "K", "S", "T"}
+var RACE_NAMES = []string{"inconnu", "darkling", "durakuir", "kastar", "skrim", "tomawak", "nkrwapu"}
+var RACE_SHORT_NAMES = []string{"?", "Da", "D", "K", "S", "T", "N"}
 
 func (r raceTroll) string() string {
 	return RACE_NAMES[int(r)]
@@ -310,7 +311,7 @@ func (m *TksManager) ReadTrollCsvFileIfNew() error {
 	for err == nil {
 		tokens := strings.SplitN(line, ";", 13)
 		if len(tokens) < 13 {
-			fmt.Println("Ligne invalide")
+			fmt.Println("Ligne 	invalide")
 		} else {
 			tks := new(TrollInfos)
 			trollId, _ := strconv.Atoi(tokens[0])
