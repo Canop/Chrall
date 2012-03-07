@@ -48,9 +48,18 @@ if (!resetTroll) {
 	player.restore(); // on récupère les infos qui ont pu être obtenues dans d'autres frames ou pages
 }
 
-Chrall_inject("jquery.js"); // est-ce que ça fait vraiment du mal?
+$.getScript(chrome.extension.getURL("jquery.js"), function() {
+	// Il y a quelque chose de pas hyper compréhensible ici, quelle que soit la manière dont les scripts sont
+	// injectés dans la page (s'ils ne le sont pas par l'ajout d'un noeud de jscript pur et dur mais par l'ajout
+	// d'un noeud avec attribut "src" ou par l'invocation de $.getScript), ça semble être fait de façon
+	// asynchrone et parallele. Du coup, si les scripts injectés font appel à JQuery (c'est quand même plus pratique)
+	// ce dernier n'a pas forcément été parsé complètement avant. C'est un peu gênant, il faudrait trouver comment
+	// forcer le chargement des scripts de façon synchrone.
+	Chrall_inject("injected_util_bubble.js");
+});
 Chrall_inject('injected_com.js');
 Chrall_inject('injected_notes.js');
+
 
 switch (pageName) {
 	case "PlayStart.php":
@@ -61,7 +70,6 @@ switch (pageName) {
 		Chrall_analyseAndReformatProfile();
 		break;
 	case "Play_vue.php":
-		Chrall_inject("injected_view_bubble.js");
 		initCommunications('get_partages');
 		Chrall_analyseAndReformatView();
 		break;

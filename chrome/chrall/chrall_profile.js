@@ -352,17 +352,10 @@ function Chrall_analyseAndReformatProfile() {
 	
 	//> on signale à l'extension la date de la fin de DLA, pour qu'elle programme éventuellement une alarme
 	Chrall_sendDlaToExtension(player.getDla(0).getTime(), player.getDla(1).getTime());
-	
+
+	Chrall_inject("injected_util_message.js");
 	//> on ajoute de quoi afficher les messages de gogochrall
-	var html = "<script>";
-	html += "function chrall_receiveMessage(answer) {";
-	html += " if (answer.Nature=='empty') return;";
-	html += " document.getElementById('mbox').style.display='inline-block';";
-	html += " document.getElementById('ch_messageTitle').innerHTML=answer.Title;";
-	html += " document.getElementById('ch_messageContent').innerHTML='<br><br>'+answer.Content;";
-	html += "}";
-	html += "</script>";
-	html += "<span id=mbox class=ch_box><a id=ch_messageTitle>en attente...</a>";
+	var html = "<span id=mbox class=ch_box><a id=ch_messageTitle>en attente...</a>";
 	html += "<span id=ch_messageContent><br><br>...de g0g0chrall...</span></span><br><br>";
 	$($("table table table")[0]).append(html);
 	$.ajax(
