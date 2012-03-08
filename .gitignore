@@ -3,6 +3,7 @@ doc
 pub
 trav
 go/bin/*
+go/pkg/linux_386/*
 datafiles
 *.log
 .idea
