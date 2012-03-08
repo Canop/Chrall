@@ -264,6 +264,7 @@ func (h *JsonGetHandler) checkUserAuthentication(w http.ResponseWriter, hr *http
 		log.Printf("Erreur ouverture connexion BD dans serveDestinationsJsonp : %s\n", err.Error())
 		return 0, err
 	}
+	defer db.Close()
 
 	askerId := GetFormValueAsId(hr, "asker")
 	mdpr := GetFormValue(hr, "mdpr") // mot de passe restreint, optionnel, permet d'authentifier la requête en cas d'existence de compte Chrall
@@ -291,15 +292,18 @@ func (h *JsonGetHandler) serveDestinationsJsonp(w http.ResponseWriter, hr *http.
 	}
 
 	db, _ := h.store.DB()
+	defer db.Close()
+
 	var amis []int
 	amis, err = h.store.GetPartageurs(db, askerId)
+	fmt.Println(amis)
 	if err != nil {
 		log.Printf("Erreur récupération amis dans serveDestinationsJsonp : %s\n", err.Error())
 		return
 	}
 
-	destinations := h.store.GetDestinations(amis, h.tksManager)
-
+	destinations := h.store.GetDestinations(amis, h.tksManager, db)
+	fmt.Println(amis)
 	unmarshalled, _ := json.Marshal(destinations)
 	fmt.Fprint(w, "Chrall_suggestDestinations(")
 	w.Write(unmarshalled)
@@ -320,25 +324,25 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 		action = ""
 	}
 	switch action {
-	case "get_monster_names" :
+	case "get_monster_names":
 		h.serveAutocompleteMonsterNames(w, hr)
-	case "get_page_killometre" :
+	case "get_page_killometre":
 		h.servePageKillometre(w, hr)
-	case "get_notes" :
+	case "get_notes":
 		h.serveNotes(w, hr)
-	case "get_extract" :
+	case "get_extract":
 		h.serveBestiaryExtractHtml(w, hr)
-	case "get_troll_info" :
+	case "get_troll_info":
 		h.serveTrollStatsHtmlJsonp(w, hr)
-	case "get_extract_jsonp" :
+	case "get_extract_jsonp":
 		h.serveBestiaryExtractHtmlJsonp(w, hr)
-	case "accept_cdm_jsonp" :
+	case "accept_cdm_jsonp":
 		h.serveAcceptCdmJsonp(w, hr)
-	case "check_messages" :
+	case "check_messages":
 		h.serveMessageJsonp(w, hr)
-	case "get_destinations_jsonp" :
+	case "get_destinations_jsonp":
 		h.serveDestinationsJsonp(w, hr)
-	default :
+	default:
 		h.serveAuthenticatedMessage(w, action, GetFormValue(hr, "message")) // par défaut on considère qu'il s'agit d'un message authentifié
 	}
 }
