@@ -1,8 +1,6 @@
 package main
 
-/*
-Gère les communications json-json authentifiées avec l'extension Chrall
-*/
+// Gère les communications json-json authentifiées avec l'extension Chrall
 
 import (
 	"encoding/json"

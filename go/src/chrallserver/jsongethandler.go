@@ -319,25 +319,26 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	} else {
 		action = ""
 	}
-	if action == "get_monster_names" {
+	switch action {
+	case "get_monster_names" :
 		h.serveAutocompleteMonsterNames(w, hr)
-	} else if action == "get_page_killometre" {
+	case "get_page_killometre" :
 		h.servePageKillometre(w, hr)
-	} else if action == "get_notes" {
+	case "get_notes" :
 		h.serveNotes(w, hr)
-	} else if action == "get_extract" {
+	case "get_extract" :
 		h.serveBestiaryExtractHtml(w, hr)
-	} else if action == "get_troll_info" {
+	case "get_troll_info" :
 		h.serveTrollStatsHtmlJsonp(w, hr)
-	} else if action == "get_extract_jsonp" {
+	case "get_extract_jsonp" :
 		h.serveBestiaryExtractHtmlJsonp(w, hr)
-	} else if action == "accept_cdm_jsonp" {
+	case "accept_cdm_jsonp" :
 		h.serveAcceptCdmJsonp(w, hr)
-	} else if action == "check_messages" {
+	case "check_messages" :
 		h.serveMessageJsonp(w, hr)
-	} else if action == "get_destinations_jsonp" {
+	case "get_destinations_jsonp" :
 		h.serveDestinationsJsonp(w, hr)
-	} else {
+	default :
 		h.serveAuthenticatedMessage(w, action, GetFormValue(hr, "message")) // par défaut on considère qu'il s'agit d'un message authentifié
 	}
 }

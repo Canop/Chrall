@@ -104,9 +104,6 @@ func (store *MysqlStore) UpdateTroll(db *sql.DB, c *Compte) (err error) {
 // vérifie que le compte existe et que le mot de passe restreint est validé par MH
 func (store *MysqlStore) CheckCompte(db *sql.DB, trollId int, mdpr string) (ok bool, c *Compte, err error) {
 	c, err = store.GetCompte(db, trollId)
-	if err != nil {
-		return
-	}
 	if c == nil {
 		// nouveau compte
 		c = new(Compte)
