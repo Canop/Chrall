@@ -5,6 +5,7 @@ package main
  * une réduction-agrégation de plusieurs sources de données.
  */
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"strings"
@@ -27,24 +28,24 @@ var noDestination = []*Destination{}
 
 //---------------------------------------------------------------------------
 
-func (store *MysqlStore) GetDestinations(amis []int, tksManager *TksManager) []*Destination {
+func (store *MysqlStore) GetDestinations(amis []int, tksManager *TksManager, db *sql.DB) []*Destination {
 	result := make([]*Destination, 0, 100)
 
 	// :-(( On dirait qu'il n'y pas moyen de faire fonctionner un prepared statement avec une valeur qui serait un
 	// slice de valeurs
 	idList := JoinIds(amis, ",")
 	if 0 < len(amis) {
-		result = store.getFriendPositionsAsDestinations(idList, tksManager, result)
+		result = store.getFriendPositionsAsDestinations(idList, tksManager, db, result)
 	}
 
 	return result[0:len(result)]
 }
 
-func (store *MysqlStore) getFriendPositionsAsDestinations(friendIds string, tksManager *TksManager, result []*Destination) []*Destination {
+func (store *MysqlStore) getFriendPositionsAsDestinations(friendIds string, tksManager *TksManager, db *sql.DB, result []*Destination) []*Destination {
 	sqlText := "select id, x, y, z  from compte where id in (" + friendIds + ") "
-	statement, _ := store.db.Prepare(sqlText)
+	statement, _ := db.Prepare(sqlText)
 	rows, err := statement.Query()
-	// TODO: ignore when list is empty	
+
 	if nil != err {
 		log.Println("Impossible de récuperer positions des amis: %s", err.Error())
 		return result
