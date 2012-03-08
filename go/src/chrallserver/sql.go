@@ -25,3 +25,12 @@ func naminmax(colp string) string {
 func namaxmin(colp string) string {
 	return namax(colp+"_min") + ", " + namin(colp+"_max")
 }
+
+
+func JoinIds(ids []int, sep string) string {
+	stringIds := make([]string, len(ids))
+	for i, val := range ids {
+		stringIds[i] = strconv.Itoa(val) // string.join ne prend pas de slice d'objets quelconques comme paramètres
+	}
+	return strings.Join(stringIds, ",")
+}

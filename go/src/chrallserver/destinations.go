@@ -1,14 +1,14 @@
 package main
 
-/*
- * gère les destinations pour les Tps et les gowaps. Le concept de destination est juste une vue de l'esprit,
- * une réduction-agrégation de plusieurs sources de données.
- */
+// gère les destinations pour les Tps et les gowaps. Le concept de destination est juste une vue de l'esprit,
+//  une réduction-agrégation de plusieurs sources de données.
+
 import (
 	"database/sql"
 	"fmt"
 	"log"
 	"strings"
+	"strconv"
 )
 
 // une destination
@@ -60,17 +60,4 @@ func (store *MysqlStore) getFriendPositionsAsDestinations(friendIds string, tksM
 		result = append(result, destination)
 	}
 	return result
-}
-
-//-----------------------------------------------------------------------------
-
-func JoinIds(ids []int, sep string) string {
-	if 0 == len(ids) {
-		return ""
-	}
-	stringIds := make([]string, len(ids))
-	for i, val := range ids {
-		stringIds[i] = string(fmt.Sprint(val)) // string.join ne prend pas de slice d'objets quelconques comme paramètres
-	}
-	return strings.Join(stringIds, ",")
 }
