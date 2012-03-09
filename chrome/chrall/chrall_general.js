@@ -1,7 +1,5 @@
-/*
- contient des fonctions liées à l'interface générale
- et des utilitaires. Contient aussi la constante donnant la version courante de Chrall
-*/
+// contient des fonctions liées à l'interface générale
+// et des utilitaires. Contient aussi la constante donnant la version courante de Chrall
 
 var chrallVersion = "2.21";
 
@@ -16,19 +14,30 @@ function getUrlParameter(name, defaultValue) {
     return results[1];
 }
 
-/**
- * injecte un fichier javascript présent dans l'extension, de telle sorte
- *  qu'il soit exécuté dans le contexte de la page et non celui de l'extension
- * 
- */
+// injecte un fichier javascript présent dans l'extension, de telle sorte
+//  qu'il soit exécuté dans le contexte de la page et non celui de l'extension
 function Chrall_inject(fileName) {
 	var script;
 	script = document.createElement('script');
 	script.setAttribute("type", "application/javascript");
 	script.setAttribute("src", chrome.extension.getURL(fileName));
 	document.body.appendChild(script);
+}
 
-//	$.getScript(chrome.extension.getURL(fileName));
+function Chrall_changeLocationOtherFrame(frameKey, href) {
+	localStorage['frame_new_location_'+frameKey] = href;
+}
+
+function Chrall_listenForChangeLocation(frameKey) {
+	var localStorageKey = 'frame_new_location_'+frameKey;
+	var interval = setInterval(function() {
+		var new_href = localStorage[localStorageKey];
+		if (new_href) {
+			localStorage.removeItem(localStorageKey);
+			document.location.href = new_href;
+			clearInterval(interval);
+		}
+	}, 300);
 }
 
 /**

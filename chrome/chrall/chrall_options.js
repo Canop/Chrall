@@ -74,7 +74,6 @@ function Chrall_reformatOptionsView() {
 	$("div#tabStandard").append($(standardOptionTables[0]));
 	$("div#tabStandard").append($(standardOptionTables[1]));
 	$("div#tabStandard").append($(standardOptionTables[2]));
-	
 
 	$(".tab_content").hide();
 	if (localStorage['tab_options']) {

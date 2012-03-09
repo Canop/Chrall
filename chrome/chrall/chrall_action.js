@@ -11,6 +11,7 @@ function Chrall_displayDiggingIsPossible() {
 
 
 function Chrall_handleActionPage() {
+	
 	//> on va essayer de lire les PA disponibles
 	var sentence = $('b:contains("Il me reste ")');
 	if (sentence.length>0) {
@@ -21,7 +22,7 @@ function Chrall_handleActionPage() {
 			player.pa = rpa;
 			player.sessionActive = true;
 		} catch(error) {
-			console.log(error);
+			//console.log(error);
 		}
 	} else {
 		// a priori si on n'a pas cette phrase c'est qu'on n'a pas activé

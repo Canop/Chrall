@@ -6,7 +6,7 @@ var isInLaby = false;
 function makeDeLink(x, y, z) {
 	var cost = (player.cellIsFree ? 1 : 2) + (z===player.z ? 0 : 1);
 	if (cost>player.pa) return '';
-	return '<a href="javascript:playDE('+(x-player.x)+','+(y-player.y)+','+(z-player.z)+');">DE '+x+' '+y+' '+z+'</a>';
+	return '<a class=chrall_de x='+(x-player.x)+' y='+(y-player.y)+' z='+(z-player.z)+'>DE '+x+' '+y+' '+z+'</a>';
 }
 
 /**
@@ -68,17 +68,7 @@ function Chrall_makeGridHtml(noteRequest) {
 	var grey_closed_png_url = chrome.extension.getURL("grey_closed.png");
 	var grey_open_png_url = chrome.extension.getURL("grey_open.png");
 	var h=0;
-	var html = [];
-	html[h++] = "<script>";
-	html[h++] = "function playDE(dx, dy, dz){";
-	html[h++] = " parent.chrall_de_dx.value=dx;";
-	html[h++] = " parent.chrall_de_dy.value=dy;";
-	html[h++] = " parent.chrall_de_dz.value=dz;";
-	html[h++] = " parent.frames['Action'].location.href='Play_action.php?ai_ToDo=112&amp;as_Action=ACTION!';";
-	html[h++] = "";
-	html[h++] = "}";
-	html[h++] = "</script>";
-	
+	var html = [];	
 	html[h++] = "<table id=grid class=grid><tbody>";
 	html[h++] = "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax-xmin+3) + " align=center>Nordhikan (Y+)</td><td bgcolor=#BABABA></td></tr>";
 	html[h++] = "<tr>";

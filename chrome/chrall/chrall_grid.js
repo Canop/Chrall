@@ -171,6 +171,14 @@ function Chrall_gridLive() {
 		}
 	});
 
+	//> outillage des liens DE (du menu de la grille)
+	$('a.chrall_de').live('click', function() {
+		var $this = $(this);
+		localStorage['todo'] = 'de';
+		localStorage['todo_args'] = $this.attr('x')+' '+$this.attr('y')+' '+$this.attr('z');
+		Chrall_changeLocationOtherFrame('action', '/mountyhall/MH_Play/Play_action.php?ai_ToDo=112&amp;as_Action=ACTION!');
+	});
+
 	//> le défilement à la molette perturbe objectMenu
 	document.onmousewheel = function(e) {
 		hideOm();

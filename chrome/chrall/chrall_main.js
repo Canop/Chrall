@@ -5,7 +5,7 @@
 
 
 var GOGOCHRALL = "http://canop.org:8000/chrall/";
-var TEST_LOCAL = true; // passer à true pour tester localement, ce qui suppose évidemment de disposer d'un serveur chrall localement
+var TEST_LOCAL = false; // passer à true pour tester localement, ce qui suppose évidemment de disposer d'un serveur chrall localement
 
 var SERVEUR_CHRALL_PUBLIC = GOGOCHRALL; // l'adresse du serveur principal (celui qui hébèrge le bestaire et les infos publiques)
 var SERVEUR_CHRALL_PRIVE = SERVEUR_CHRALL_PUBLIC; // l'adresse du serveur privé (par défaut le public mais peut être modifié)
@@ -87,6 +87,7 @@ switch (pageName) {
 		Chrall_addBubblesToLinks();
 		break;
 	case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
+		Chrall_listenForChangeLocation('action');
 		Chrall_handleActionPage();
 		break;
 	case "Play_option.php":
@@ -121,6 +122,7 @@ switch (pageName) {
 		Chrall_preparePlay2Inputs();
 		break;
 	case "Play_a_Move.php":
+		Chrall_listenForChangeLocation('action');
 		Chrall_inject('injected_move.js');
 		break;
 	case "PJView.php":
@@ -148,7 +150,6 @@ switch (pageName) {
 	Chrall_askDestinations();
 		break;
 }
-localStorage['todo'] = '';
 
 player.save(); // on sauvegarde localement les infos du troll (par exemple sa position), afin que les frames qui ne l'ont pas directement en disposent
 

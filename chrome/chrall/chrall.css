@@ -177,6 +177,7 @@ div.hiddenDiv {
     color: #900;
     padding-left: 8px;
     padding-right: 8px;
+    cursor: pointer;
 }
 #tabChrall a:hover, #tabLinks a:hover {
     background-color: #900;
@@ -360,7 +361,7 @@ a.gogo:hover {
     text-align: center;
     z-index: 8;
 }
-#objectMenu_top a:link, #objectMenu_bottom a:link {
+#objectMenu_top a:link, #objectMenu_bottom a:link, #objectMenu_bottom a.chrall_de {
     display: block;
     background-color: green;
     margin: 2px;
@@ -369,8 +370,9 @@ a.gogo:hover {
     border-radius: 8px;
     text-decoration: none;
     color: white !important;
+    cursor: pointer;
 }
-#objectMenu_top a:hover, #objectMenu_bottom a:hover {
+#objectMenu_top a:hover, #objectMenu_bottom a:hover, #objectMenu_bottom a.chrall_de:hover {
     background-color: darkGreen;
 }
 
