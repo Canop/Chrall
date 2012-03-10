@@ -18,7 +18,6 @@ function Chrall_handleActionPage() {
 		var tokens = Chrall_tokenize(sentence.text());
 		try {
 			rpa = parseInt(tokens[3]);
-			$('<script>parent.chrall_pa_restant.value='+tokens[3]+';</script>').appendTo($('body'));
 			player.pa = rpa;
 			player.sessionActive = true;
 		} catch(error) {
@@ -26,7 +25,6 @@ function Chrall_handleActionPage() {
 		}
 	} else {
 		// a priori si on n'a pas cette phrase c'est qu'on n'a pas activé
-		$('<script>parent.chrall_pa_restant.value=0;</script>').appendTo($('body'));
 		player.sessionActive = false;
 		player.pa = 0;
 	}

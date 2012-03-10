@@ -119,7 +119,6 @@ switch (pageName) {
 		Chrall_handleMenuPage();
 		break;
 	case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la colonne menu de gauche
-		Chrall_preparePlay2Inputs();
 		break;
 	case "Play_a_Move.php":
 		Chrall_listenForChangeLocation('action');
