@@ -8,7 +8,7 @@ import (
 
 func testJoinIds(t *testing.T, ids []int, attendu string) {
 	res := JoinIds(ids, ",")
-	if  res != attendu {
+	if res != attendu {
 		t.Errorf("Unexpected value for JoinIds : \"%s\" instead of \"%s\"", res, attendu)
 	}
 }

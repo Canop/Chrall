@@ -7,8 +7,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"strings"
-	"strconv"
 )
 
 // une destination
