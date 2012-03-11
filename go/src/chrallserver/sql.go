@@ -1,5 +1,10 @@
 package main
 
+import (
+	"strconv"
+	"strings"
+)
+
 //  petites fonctions utilitaires pour le requétage fait par Chrall 
 
 // renvoie une expression de calcul d'un minimum de colonne tel que les 0 ne soient pas pris en compte.
@@ -25,7 +30,6 @@ func naminmax(colp string) string {
 func namaxmin(colp string) string {
 	return namax(colp+"_min") + ", " + namin(colp+"_max")
 }
-
 
 func JoinIds(ids []int, sep string) string {
 	stringIds := make([]string, len(ids))
