@@ -104,18 +104,6 @@ function Chrall_fillFollowerNewOrderForm() {
 	}
 }
 
-function Chrall_askDestinations() {
-	$.getScript(chrome.extension.getURL("jquery.js"))
-	$.getScript(chrome.extension.getURL("injected_answer_gowap_destination.js"))
-	var ajaxUrl = SERVEUR_CHRALL_PRIVE + "json?action=get_destinations_jsonp&asker=" + player.id + "&mdpr=" + mdpCompteChrall();
-	$.ajax(
-			{
-				url: ajaxUrl,
-				crossDomain: true,
-				dataType: "jsonp"
-			}
-	);
-}
 
 // Fonction pour initialiser en masse une série de valeurs dans le local storage, liées à un troll particulier
 function Chrall_setTrollStorage(valueMap) {

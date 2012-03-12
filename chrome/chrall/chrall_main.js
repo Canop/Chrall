@@ -146,7 +146,10 @@ switch (pageName) {
 		break;
 	case "FO_NewOrder.php":
 		Chrall_fillFollowerNewOrderForm();
-	Chrall_askDestinations();
+		Chrall_askDestinations("injected_answer_gowap_destination.js");
+		break;
+	case "Play_a_Sort13.php":
+		Chrall_askDestinations("injected_answer_teleport_destination.js");
 		break;
 }
 
