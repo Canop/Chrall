@@ -1,4 +1,3 @@
-
 // classe dont les instances représentent des liens externes
 function ExternalLink(name, displayedByDefault, href, description) {
 	this.display = displayedByDefault;
@@ -9,7 +8,7 @@ function ExternalLink(name, displayedByDefault, href, description) {
 
 // renvoie une map category->[]link
 // FIXME  : le lien vers mappyTroll n'a pas la position
-function Chrall_getExternalLinks(){
+function Chrall_getExternalLinks() {
 	var links = {
 		"Chrall": [
 			new ExternalLink("Forum Chrall", true, "http://canop.org/chrall/fofo", "Un forum pour discuter des bugs, des fonctionnalités et du développement de votre extension favorite."),
@@ -26,19 +25,19 @@ function Chrall_getExternalLinks(){
 			new ExternalLink("MountyPedia", true, "http://mountypedia.mountyhall.com", "L'encyclopédie contributive. Elle est complète ou alors il faut que vous la complétiez."),
 			new ExternalLink("Champis", false, "http://deudam.nathas.net/env.php?id=0", "Tout pour le mycologue éclairé, par Deudam."),
 			new ExternalLink("Carte", false, "http://trolls.ratibus.net/mountyhall/vue_lieux.php", "La cartographie du Hall par les Bricol'Trolls."),
-			new ExternalLink("MappyTrolls", false, 'http://trolls.ratibus.net/mountyhall/itineraireBis.php?x1='+player.x+'&y1='+player.y+'&n1='+player.z, "Calculateur d'itinéraire, automatiquement initialisé avec votre position actuelle."),
+			new ExternalLink("MappyTrolls", false, 'http://trolls.ratibus.net/mountyhall/itineraireBis.php?x1=' + player.x + '&y1=' + player.y + '&n1=' + player.z, "Calculateur d'itinéraire, automatiquement initialisé avec votre position actuelle."),
 			new ExternalLink("Anatrolliseur", false, "http://mountyhall.dispas.net/dynamic/outils_anatrolliseur.php", "Le simulateur de croissance de troll des Psyko'Chasseurs."),
 			new ExternalLink("Cachette", false, "http://mountyhall.dispas.net/dynamic/outils_capitan.php?", "Aide à la recherche de cachette de Capitan par les Psyko'Chasseurs."),
 			new ExternalLink("Troc", false, "http://troc.mountyhall.com/index.php", "Le Troc de l'Hydre, pour l'échange de composants."),
 			new ExternalLink("Le Matos", false, "http://lematos.free.fr/MH/matos/index.php", "Les caractéristiques de base de toutes les équipements.")
-		],
+		]
 	};
 	for (var cat in links) {
 		var catLinks = links[cat];
-		for (var i=0; i<catLinks.length; i++) {
-			var stored = localStorage['dysplayLink_'+catLinks[i].name];
+		for (var i = 0; i < catLinks.length; i++) {
+			var stored = localStorage['dysplayLink_' + catLinks[i].name];
 			if (stored) {
-				catLinks[i].display = stored=='yes';
+				catLinks[i].display = stored == 'yes';
 			}
 		}
 	}
@@ -48,26 +47,29 @@ function Chrall_getExternalLinks(){
 // construit le html de sélection des liens à afficher
 function Chrall_makeLinkOptionPage() {
 	var links = Chrall_getExternalLinks();
-	html = '<p>Cochez les liens que vous voulez avoir toujours présents sur votre écran.</p>';
+	var html = $('<p/>', {text :"Cochez les liens que vous voulez avoir toujours présents sur votre écran"});
+
 	for (var cat in links) {
-		html += '<h2>'+cat+'</h2>';
+		html = html.after($('<h2/>', {text: cat}));
 		var catLinks = links[cat];
-		for (var i=0; i<catLinks.length; i++) {
+		for (var i = 0; i < catLinks.length; i++) {
 			var link = catLinks[i];
-			html += '<p><input name="'+link.name+'" class=externalLinkActivator type=checkbox';
-			if (link.display) html += ' checked';
-			html += '>';
-			html += '<a target=extern href="'+link.href+'">'+link.name+'</a> : ';
-			html += link.description;
-		html += '</p>';
+			var checkbox = $('<input/>', { name : link.name, class: "externalLinkActivator", type: "checkbox", checked: link.display});
+			checkbox.change(function() {
+				var name = $(this).attr('name');
+				var checked = $(this).attr('checked');
+				localStorage['dysplayLink_' + name] = checked ? 'yes' : 'no';
+				var actionFrame = $('frame[name="Action"]', window.frames.frameElement.parentElement)[0];
+				var outilsDiv = $('#menuOutilsChrall', actionFrame.contentDocument);
+				outilsDiv.replaceWith(Chrall_makeLinksDiv());
+			});
+			checkbox = checkbox.after($('<a/>', {target: 'extern', href: link.href, text: link.name}));
+			checkbox = checkbox.after(link.description);
+			var p = $("<p/>");
+			p.append(checkbox);
+			html = html.after(p);
 		}
 	}
-	html += '<p><input type=button onClick="top.document.location.href=\'http://games.mountyhall.com/mountyhall/MH_Play/Play.php\';" value="Appliquer les modifications"></p>';
-	$('input.externalLinkActivator').live('change', function() {
-		var name = $(this).attr('name');
-		var checked = $(this).attr('checked');
-		localStorage['dysplayLink_'+name]=checked?'yes':'no';
-	});
 	return html;
 }
 
@@ -78,23 +80,23 @@ function Chrall_makeLinksDiv() {
 	var links = Chrall_getExternalLinks();
 	for (var cat in links) {
 		var catLinks = links[cat];
-		for (var i=0; i<catLinks.length; i++) {
+		for (var i = 0; i < catLinks.length; i++) {
 			var link = catLinks[i];
 			if (link.display) linkArray.push(link);
 		}
 	}
-	var nbCols = Math.ceil(linkArray.length/NB_LINES_MAX);
-	var nbItemsPerCol = Math.ceil(linkArray.length/nbCols);
-	var i=0;
+	var nbCols = Math.ceil(linkArray.length / NB_LINES_MAX);
+	var nbItemsPerCol = Math.ceil(linkArray.length / nbCols);
+	var i = 0;
 	var html = '<div id=menuOutilsChrall>';
 	html += '<table cellspacing=2 cellpadding=2>';
-	for (var r=0; r<nbItemsPerCol; r++) {
+	for (var r = 0; r < nbItemsPerCol; r++) {
 		html += '<tr>';
-		for (var c=0; c<nbCols; c++) {
+		for (var c = 0; c < nbCols; c++) {
 			html += '<td nowrap>';
-			if (i<linkArray.length) {
+			if (i < linkArray.length) {
 				var link = linkArray[i++];
-				html += '<a target=extern href="'+link.href+'">'+link.name+'</a>';
+				html += '<a target=extern href="' + link.href + '">' + link.name + '</a>';
 			}
 			html += '</td>';
 		}
@@ -102,5 +104,5 @@ function Chrall_makeLinksDiv() {
 	}
 	html += '</table>';
 	html += '</div>';
-	$('body').append(html);
+	return html;
 }

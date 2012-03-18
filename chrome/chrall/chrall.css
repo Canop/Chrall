@@ -14,6 +14,30 @@
 	text-align: justify;
 }
 
+#chrall_notify_wrapper {
+	position: fixed;
+	top: 1em;
+	right: 1em;
+	width: 15em;
+	z-index: 9999;
+	font-family: Arial, sans-serif;
+	font-size: 85%;
+}
+
+.chrall_notify {
+	display: block;
+	background: black;
+	color: #EEE;
+	border: 0.2ex solid #a9a9a9;
+	padding: 1ex;
+	border-radius: 0.6ex;
+}
+
+.chrall_notify img {
+	padding-right: 0.5ex;
+	padding-left: 0.5ex;
+}
+
 div.floatTopRight {
 	position: fixed;
 	right: 2;
