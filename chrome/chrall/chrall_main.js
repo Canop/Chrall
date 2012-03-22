@@ -70,6 +70,7 @@ switch (pageName) {
 		Chrall_analyseAndReformatProfile();
 		break;
 	case "Play_vue.php":
+		Chrall_inject('injected_view_partage.js');
 		initCommunications('get_partages');
 		Chrall_analyseAndReformatView();
 		break;

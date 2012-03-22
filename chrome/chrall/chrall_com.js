@@ -66,17 +66,7 @@ function sendToChrallServer(action, message) {
 function initCommunications(action) {
 	localStorage['com.status.message'] = 'Compte inexistant ou non connecté'; // on réinitialise à chaque page car on peut être sur un autre troll
 	if (action && compteChrallActif()) {
-		var pendingChange = localStorage['troll.' + player.id + '.actionPartage'];
-		if (pendingChange) {
-			try {
-				var otn = parseInt(localStorage['troll.' + player.id + '.objetPartage']);
-				sendToChrallServer(action, {"ChangePartage":localStorage['troll.' + player.id + '.actionPartage'], "IdCible": otn});
-			} catch (e) {
-			}
-			localStorage.removeItem('troll.' + player.id + '.actionPartage');
-		} else {
-			sendToChrallServer(action, {});
-		}
+		sendToChrallServer(action, {});
 		// on lance en parallèle séparément la maj de la vue car gogochrall devra attendre la réponse du serveur soap de MH
 		var demandeMajVue = localStorage['troll.' + player.id + '.majVue'];
 		if (demandeMajVue) {
