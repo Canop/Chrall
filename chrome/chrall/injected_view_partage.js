@@ -1,18 +1,18 @@
-Chrall_notify({text :"injected view partage"});
-
-
 function isPartageActif(partage) {
 	return partage.Statut == 'on' && partage.StatutAutreTroll == 'on';
 }
 
-function distance(partage) {
+function distance(partage, player) {
 	var autreTroll = partage.AutreTroll;
 	return Math.max(Math.max(Math.abs(player.x - autreTroll.X), Math.abs(player.y - autreTroll.Y)), Math.abs(player.z - autreTroll.Z));
 }
 
 function updateTablesPartage(partages) {
-	var partagesActifs = document.getElementById('partagesActifs');
-	var propositionPartage = document.getElementById('propositionsPartage');
+	var trollId = localStorage['last_saved_troll_id'];
+	var player = localStorage['troll.' + trollId];
+
+	var partagesActifs = $('#partagesActifs');
+	var propositionPartage = $('#propositionsPartage');
 	if (!propositionPartage) return;
 	var row, trollCell, actionCell;
 	for (var i = 0; i < partages.length; i++) {
@@ -20,7 +20,7 @@ function updateTablesPartage(partages) {
 		if (isPartageActif(partage)) {// ajout dans la table des partages actifs
 			row = $("<tr/>");
 			var distCell = $("<td/>", { class: 'mh_tdpage'});
-			distCell.text(distance(partage));
+			distCell.text(distance(partage, player));
 			trollCell = $("<td/>", { class: 'mh_tdpage'});
 			trollCell.append($("<a/>", {text: partage.NomAutreTroll}));
 			var raceCell = $("<td/>", { class: 'mh_tdpage', text: partage.RaceAutreTroll});
@@ -46,8 +46,8 @@ function updateTablesPartage(partages) {
 			row = $("<tr/>");
 			trollCell = $("<td/>", { class: 'mh_tdpage'});
 			trollCell.append($("<a/>", {text: partage.NomAutreTroll}));
-			var partageCell = ("<td/>", { class: 'mh_tdpage'});
-			partageCell.text(partage.StatutAutreTroll == 'on' ? 'Ce partage est accepté par ' + partage.NomAutreTroll + '. Acceptez le pour activer.' : 'Pour être actif, ce partage doit être accepté par ' + partage.NomAutreTroll + '.');
+			var partageCell = ("<td/>", { class: 'mh_tdpage',
+				text: partage.StatutAutreTroll == 'on' ? 'Ce partage est accepté par ' + partage.NomAutreTroll + '. Acceptez le pour activer.' : 'Pour être actif, ce partage doit être accepté par ' + partage.NomAutreTroll + '.'});
 			var actionCell = $("<td/>", { class: 'mh_tdpage'});
 			actionCell.append($("<a/>", {text: "Rompre"}));
 			actionCell.append($("<a/>", {text: "Accepter"}));
