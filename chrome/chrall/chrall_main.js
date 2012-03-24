@@ -48,109 +48,178 @@ if (!resetTroll) {
 	player.restore(); // on récupère les infos qui ont pu être obtenues dans d'autres frames ou pages
 }
 
-$.getScript(chrome.extension.getURL("jquery.js"), function() {
-	// Il y a quelque chose de pas hyper compréhensible ici, quelle que soit la manière dont les scripts sont
-	// injectés dans la page (s'ils ne le sont pas par l'ajout d'un noeud de jscript pur et dur mais par l'ajout
-	// d'un noeud avec attribut "src" ou par l'invocation de $.getScript), ça semble être fait de façon
-	// asynchrone et parallele. Du coup, si les scripts injectés font appel à JQuery (c'est quand même plus pratique)
-	// ce dernier n'a pas forcément été parsé complètement avant. C'est un peu gênant, il faudrait trouver comment
-	// forcer le chargement des scripts de façon synchrone.
-	Chrall_inject("injected_util_bubble.js");
-});
-Chrall_inject('injected_com.js');
-Chrall_inject('injected_notes.js');
+function createInjectNode(fileName) {
+	var scriptNode;
+	scriptNode = document.createElement('script');
+	scriptNode.setAttribute("type", "application/javascript");
+	scriptNode.setAttribute("src", chrome.extension.getURL(fileName));
+	return scriptNode;
+}
 
+// Injecte une série de scripts à exécuter dans le contexte de la page.
+// La fonction callback est exécutée lorsque tous les scripts ont été chargés.
+function inject(scriptList, callback) {
+	var firstNode = createInjectNode(scriptList[0]);
+	var previousNode = firstNode;
+	for (var i = 1; i < scriptList.length; i++) {
+		var nextNode = createInjectNode(scriptList[i]);
+		previousNode.onload = (function(name, node) {
+			return function() {
+				console.log("Injecting ", name);
+				document.body.appendChild(node);
+			}
+		})(scriptList[i], nextNode);
+		previousNode = nextNode;
+	}
+	console.log("Injecting " + scriptList[0]);
+	if (typeof callback != "undefined") {
+		previousNode.onload = function() {
+			console.log("calling callback");
+			callback();
+		}
+	}
+	document.body.appendChild(firstNode);
+}
 
 switch (pageName) {
 	case "PlayStart.php":
-		Chrall_analyseAndReformatStartPage();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js", ], function() {
+			Chrall_analyseAndReformatStartPage()
+		});
 		break;
 	case "Play_profil.php":
-		initCommunications();
-		Chrall_analyseAndReformatProfile();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js", "injected_util_message.js"], function() {
+			initCommunications();
+			Chrall_analyseAndReformatProfile();
+		});
 		break;
 	case "Play_vue.php":
-		Chrall_inject('injected_view_partage.js');
-		initCommunications('get_partages');
-		Chrall_analyseAndReformatView();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js", "shared_notify.js", 'injected_view_partage.js'], function() {
+			initCommunications('get_partages');
+			Chrall_analyseAndReformatView();
+		});
 		break;
 	case "Play_mouche.php":
 		//Chrall_analyseAndReformatFlies();
 		break;
 	case "Play_BM.php":
-		Chrall_analyseAndReformatBM();
+		inject(["jquery.js", "injected_util_bubble.js","injected_com.js", "injected_notes.js", ], function() {
+			Chrall_analyseAndReformatBM();
+		});
 		break;
 	case "Play_equipement.php":
-		var section = getUrlParameter('as_CurSect', 'equip');
-		if (section == 'equip') Chrall_analyseAndReformatEquipment();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			var section = getUrlParameter('as_CurSect', 'equip');
+			if (section == 'equip') Chrall_analyseAndReformatEquipment();
+		});
 		break;
 	case "Play_evenement.php":
-		Chrall_addBubblesToLinks();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_addBubblesToLinks();
+		});
 		break;
 	case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
-		Chrall_listenForChangeLocation('action');
-		Chrall_handleActionPage();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_listenForChangeLocation('action');
+			Chrall_handleActionPage();
+		});
 		break;
 	case "Play_option.php":
-		initCommunications('check_account');
-		Chrall_reformatOptionsView();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			initCommunications('check_account');
+			Chrall_reformatOptionsView();
+		});
 		break;
 	case "Play_a_Competence16.php": // préparation de CDM (le formulaire de choix du monstre)
-		Chrall_handleBeforeCdmPage();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_handleBeforeCdmPage();
+		});
 		break;
 	case "Play_a_Competence16b.php": // résultat de cdm
-		Chrall_handleCdmPage();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_handleCdmPage();
+		});
 		break;
 	case "Play_a_Competence18b.php": // résultat d'insulte
-		Chrall_analyseResultatInsulte();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_analyseResultatInsulte();
+		});
 		break;
 	case "Play_a_Competence18.php": // préparation d'insulte
-		Chrall_prepareInsulte();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_prepareInsulte();
+		});
 		break;
 	case "Play_a_Competence29.php": // préparation de minage (le formulaire dans la frame d'action)
-		Chrall_handleBeforeMinage();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_handleBeforeMinage();
+		});
 		break;
 	case "Play_a_Competence29b.php": // résultat de minage
-		Chrall_handleMinagePage();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_handleMinagePage();
+		});
 		break;
 	case "Play.php": // c'est le frameset qui engloble tout
-		Chrall_preparePlayInputs();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_preparePlayInputs();
+		});
 		break;
 	case "Play_menu.php": // c'est la frame de gauche
-		Chrall_handleMenuPage();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_handleMenuPage();
+		});
 		break;
 	case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la colonne menu de gauche
 		break;
 	case "Play_a_Move.php":
-		Chrall_listenForChangeLocation('action');
-		Chrall_inject('injected_move.js');
+		inject(["jquery.js", "injected_util_bubble.js", "injected_move.js"], function() {
+			Chrall_listenForChangeLocation('action');
+		});
 		break;
 	case "PJView.php":
-		Chrall_analyseAndReformatPJView();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_analyseAndReformatPJView();
+		});
 		break;
 	case "PJView_Events.php":
-		Chrall_analysePJEventsView();
-		Chrall_addBubblesToLinks();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_analysePJEventsView();
+			Chrall_addBubblesToLinks();
+		});
 		break;
 	case "Play_news.php":
-		Chrall_addBubblesToLinks();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_addBubblesToLinks();
+		});
 		break;
 	case "MonsterView.php":
-		Chrall_analyseAndReformatMonsterView();
-		Chrall_addInfosToMonsterEvents();
-		Chrall_addBubblesToLinks();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_analyseAndReformatMonsterView();
+			Chrall_addInfosToMonsterEvents();
+			Chrall_addBubblesToLinks();
+		});
 		break;
 	case "Play_a_Combat.php": //  résultat de combat
-		Chrall_analyseResultatCombat();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_analyseResultatCombat();
+		});
+		break;
 	case "FO_Ordres.php":
-		Chrall_handleFollowerOrders();
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_handleFollowerOrders();
+		});
 		break;
 	case "FO_NewOrder.php":
-		Chrall_fillFollowerNewOrderForm();
-		Chrall_askDestinations("injected_answer_gowap_destination.js");
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_fillFollowerNewOrderForm();
+			Chrall_askDestinations("injected_answer_gowap_destination.js");
+		});
 		break;
 	case "Play_a_Sort13.php":
-		Chrall_askDestinations("injected_answer_teleport_destination.js");
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js"], function() {
+			Chrall_askDestinations("injected_answer_teleport_destination.js");
+		});
 		break;
 }
 

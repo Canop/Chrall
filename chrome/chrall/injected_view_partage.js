@@ -1,3 +1,6 @@
+Chrall_notify({text :"injected view partage"});
+
+
 function isPartageActif(partage) {
 	return partage.Statut == 'on' && partage.StatutAutreTroll == 'on';
 }

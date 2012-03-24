@@ -55,8 +55,8 @@
 				"chrall_suivants.js",
 				"chrall_externalLinks.js",
 				"chrall_pogo.js",
-				"chrall_notify.js",
 				"chrall_destinations.js",
+				"shared_notify.js",
 				"chrall_main.js"
 			]
 		},

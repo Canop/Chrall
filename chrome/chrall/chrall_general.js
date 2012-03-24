@@ -14,16 +14,6 @@ function getUrlParameter(name, defaultValue) {
     return results[1];
 }
 
-// injecte un fichier javascript présent dans l'extension, de telle sorte
-//  qu'il soit exécuté dans le contexte de la page et non celui de l'extension
-function Chrall_inject(fileName) {
-	var script;
-	script = document.createElement('script');
-	script.setAttribute("type", "application/javascript");
-	script.setAttribute("src", chrome.extension.getURL(fileName));
-	document.body.appendChild(script);
-}
-
 function Chrall_changeLocationOtherFrame(frameKey, href) {
 	localStorage['frame_new_location_'+frameKey] = href;
 }

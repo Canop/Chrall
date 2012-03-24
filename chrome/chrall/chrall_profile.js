@@ -353,7 +353,6 @@ function Chrall_analyseAndReformatProfile() {
 	//> on signale à l'extension la date de la fin de DLA, pour qu'elle programme éventuellement une alarme
 	Chrall_sendDlaToExtension(player.getDla(0).getTime(), player.getDla(1).getTime());
 
-	Chrall_inject("injected_util_message.js");
 	//> on ajoute de quoi afficher les messages de gogochrall
 	var html = "<span id=mbox class=ch_box><a id=ch_messageTitle>en attente...</a>";
 	html += "<span id=ch_messageContent><br><br>...de g0g0chrall...</span></span><br><br>";
