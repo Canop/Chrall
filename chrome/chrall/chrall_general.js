@@ -98,6 +98,7 @@ function atoi(s) {
 // la position affichée dans le menu et signale la position au serveur Chrall
 function updateTroll() {
 	if (player.x) {
+		player.save();
 		var s = 'X='+player.x + ' | Y='+player.y + ' | N='+player.z;
 		// TODO: trouver comment faire ça, le frame principal ne semble pas être "atteignable"; mais ceci est-il vraiment nécessaire?
 		//$('<script>parent.parent.Sommaire.document.getElementById("ch_menu_position").innerHTML="'+s+'";</script>').appendTo($('body'));

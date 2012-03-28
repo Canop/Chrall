@@ -27,6 +27,7 @@ function Chrall_handleActionPage() {
 		player.sessionActive = false;
 		player.pa = 0;
 	}
+	player.save();
 
 	$('body').append(Chrall_makeLinksDiv());
 	Chrall_displayDiggingIsPossible();

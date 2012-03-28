@@ -7,22 +7,29 @@ function distance(partage, player) {
 	return Math.max(Math.max(Math.abs(player.x - autreTroll.X), Math.abs(player.y - autreTroll.Y)), Math.abs(player.z - autreTroll.Z));
 }
 
+function createTrollCell(partage) {
+	var trollCell = $("<td/>", { class: 'mh_tdpage'});
+	trollCell.append($("<a/>", {text: partage.NomAutreTroll + " (" + partage.IdAutreTroll + ")"}));
+	return trollCell;
+}
 function updateTablesPartage(partages) {
-	var trollId = localStorage['last_saved_troll_id'];
-	var player = localStorage['troll.' + trollId];
 
 	var partagesActifs = $('#partagesActifs');
 	var propositionPartage = $('#propositionsPartage');
 	if (!propositionPartage) return;
+
+	var playerInfo = currentPlayerInfo();
+	partagesActifs.find("tr").remove();
+	propositionPartage.find("tr").remove();
+
 	var row, trollCell, actionCell;
 	for (var i = 0; i < partages.length; i++) {
 		var partage = partages[i];
 		if (isPartageActif(partage)) {// ajout dans la table des partages actifs
 			row = $("<tr/>");
 			var distCell = $("<td/>", { class: 'mh_tdpage'});
-			distCell.text(distance(partage, player));
-			trollCell = $("<td/>", { class: 'mh_tdpage'});
-			trollCell.append($("<a/>", {text: partage.NomAutreTroll}));
+			distCell.text(distance(partage, playerInfo));
+			trollCell = createTrollCell(partage);
 			var raceCell = $("<td/>", { class: 'mh_tdpage', text: partage.RaceAutreTroll});
 			var levelCell = $("<td/>", { class: 'mh_tdpage', text: partage.NiveauAutreTroll});
 			var hitPointsCell = $("<td/>", { class: 'mh_tdpage', text: partage.AutreTroll.PV_max > 0 ? partage.AutreTroll.PV_actuels + ' / ' + partage.AutreTroll.PV_max : ""});
@@ -33,29 +40,21 @@ function updateTablesPartage(partages) {
 			positionCell.append($("<a/>", {name: 'zoom', class: 'gogo',  x: partage.AutreTroll.X, y: partage.AutreTroll.Y, z: partage.AutreTroll.Z, text: partage.AutreTroll.X + ' ' + partage.AutreTroll.Y + ' ' + partage.AutreTroll.Z}))
 			var lastUpdateCell = $("<td/>", { class: 'mh_tdpage', text: formatDate(partage.AutreTroll.MiseAJour)});
 			actionCell = $("<td/>", { class: 'mh_tdpage'});
-			actionCell.append($("<a/>", {text: "Rompre"}));
-			actionCell.append($("<a/>", {text: "Mettre à jour la vue"}));
-			// TODO contenuActif += '<a href=\"javascript:EPV(' + partage.IdAutreTroll + ')\" class=mh_trolls_1 id=' + partage.IdAutreTroll + '>' +  + '</a>';
-			// TODO contenuActif += '<a class=gogo href=\"javascript:changePartage(' + scra + ', ' + partage.IdAutreTroll + ');\">' + a + '</a>';
-			// TODO a = 'TestVue';
-			// TODO contenuActif += '<a class=gogo href=\"javascript:majVue(' + partage.IdAutreTroll + ');\">Met à jour la vue</a>';
+			actionCell.append($("<a/>", {text: "Rompre", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Rompre"}).click(updatePartage));
+			actionCell.append($("<a/>", {text: "Actualiser la vue", class: 'gogo', idAutreTroll: partage.IdAutreTroll}).click(majVue));
 			row.append(distCell).append(trollCell).append(raceCell).append(levelCell).append(hitPointsCell).append(actionPointsCell).append(nextTurnCell)
 					.append(durationCell).append(positionCell).append(lastUpdateCell).append(actionCell);
 			partagesActifs.append(row);
 		} else {// ajout dans la table des partages inactifs
 			row = $("<tr/>");
-			trollCell = $("<td/>", { class: 'mh_tdpage'});
-			trollCell.append($("<a/>", {text: partage.NomAutreTroll}));
-			var partageCell = ("<td/>", { class: 'mh_tdpage',
-				text: partage.StatutAutreTroll == 'on' ? 'Ce partage est accepté par ' + partage.NomAutreTroll + '. Acceptez le pour activer.' : 'Pour être actif, ce partage doit être accepté par ' + partage.NomAutreTroll + '.'});
-			var actionCell = $("<td/>", { class: 'mh_tdpage'});
-			actionCell.append($("<a/>", {text: "Rompre"}));
-			actionCell.append($("<a/>", {text: "Accepter"}));
-			// TODO var a = partage.Statut ==  'on' ? 'Rompre' : 'Accepter';
-			// TODO contenuPropositions += '<a class=gogo href=\"javascript:changePartage(' + scra + ', ' + partage.IdAutreTroll + ');\">' + a + '</a>';
+			trollCell = createTrollCell(partage);
+			var partageText = partage.StatutAutreTroll == 'on' ? partage.NomAutreTroll + ' accepte ce partage. Acceptez-le pour activer.' : partage.NomAutreTroll + " doit accepter ce partage pour qu'il soit actif.";
+			var partageCell = $("<td/>", { class: 'mh_tdpage', text: partageText});
+			actionCell = $("<td/>", { class: 'mh_tdpage'});
+			actionCell.append($("<a/>", {text: "Rompre", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Rompre"}).click(updatePartage));
+			actionCell.append($("<a/>", {text: "Accepter", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Accepter"}).click(updatePartage));
 			if (partage.Statut == 'off') {
-				actionCell.append($("<a/>", {text: "Supprimer"}));
-				// TODO contenuPropositions += '<a class=gogo href=\"javascript:changePartage(' + scra + ', ' + partage.IdAutreTroll + ');\">' + a + '</a>';
+				actionCell.append($("<a/>", {text: "Supprimer", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Supprimer"}).click(updatePartage));
 			}
 			row.append(trollCell).append(partageCell).append(actionCell);
 			propositionPartage.append(row);
@@ -63,21 +62,25 @@ function updateTablesPartage(partages) {
 	}
 }
 
-function majVue(autreTroll) {
-	// TODO: remove insane function
-	localStorage['troll."+player.id+".majVue'] = autreTroll;
-	if (autreTroll == 0) {
-		localStorage['tab_view'] = 'tabRecherche';
-	} else {
-		localStorage['tab_view'] = 'tabPartages';
-	}
-	document.location.href = '"+pageName+"';
+
+function updatePartage() {
+	var action = $(this).attr("actionPartage");
+	var autreTroll = parseIng($(this).attr("idAutreTroll"));
+	sendToChrallServer(action, {"ChangePartage": action, "IdCible": autreTroll});
+	Chrall_notify({ text: action + " partage " + autreTroll});
 }
 
-function changePartage(action, autreTroll) {
-	// TODO: remove insane function
-	localStorage['troll.' + player.id + '.actionPartage'] = action;
-	localStorage['troll.' + player.id + '.objetPartage'] = autreTroll;
-	localStorage['tab_view'] = 'tabPartages';
-	document.location.href = pageName;
+
+function majVue(idAutreTroll) {
+	var autreTroll = $(this).attr("idAutreTroll");
+	autreTroll = ("undefined" == typeof autreTroll || "" == autreTroll) ? idAutreTroll : autreTroll;
+	autreTroll = parseInt(autreTroll);
+	// Operation asynchrone, gogochrall devra attendre la réponse du serveur soap de MH
+	sendToChrallServer("maj_vue", {"IdCible": autreTroll});
+
+	var notificationText = 'GogoChrall attend la r\u00e9ponse du serveur Mounty Hall' + (0 == autreTroll ? " pour tous vos amis" : "") + '. Cela peut prendre quelques minutes. Vous pouvez faire des recherches avant le r\u00e9sultat mais elles ne seront pas forc\u00e9	ment correctes.';
+	$("#resultat_maj_vue").text(notificationText);
+	Chrall_notify({text : notificationText});
+	localStorage['troll.' + currentPlayerId() + '.messageMaj'] = notificationText;
 }
+

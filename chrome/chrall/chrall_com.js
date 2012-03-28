@@ -67,17 +67,6 @@ function initCommunications(action) {
 	localStorage['com.status.message'] = 'Compte inexistant ou non connecté'; // on réinitialise à chaque page car on peut être sur un autre troll
 	if (action && compteChrallActif()) {
 		sendToChrallServer(action, {});
-		// on lance en parallèle séparément la maj de la vue car gogochrall devra attendre la réponse du serveur soap de MH
-		var demandeMajVue = localStorage['troll.' + player.id + '.majVue'];
-		if (demandeMajVue) {
-			try {
-				var numMajVue = parseInt(localStorage['troll.' + player.id + '.majVue']);
-				sendToChrallServer("maj_vue", {"IdCible": numMajVue});
-			} catch (e) {
-			}
-			localStorage.removeItem('troll.' + player.id + '.majVue');
-			localStorage['troll.' + player.id + '.messageMaj'] = 'GogoChrall attend les vues du serveur Mounty Hall pour tous vos amis. Cela peut prendre quelques minutes. Vous pouvez faire des recherches avant le résultat mais elles ne seront pas forcément correctes.';
-		}
 	}
 }
 

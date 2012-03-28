@@ -112,7 +112,7 @@ function Chrall_gridLive() {
 			}
 			args.ajaxUrl = GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId;
 			if (compteChrallActif()) {
-				args.ajaxUrl += '&mdpr='+mdpCompteChrall();
+				args.ajaxUrl += '&mdpr='+mdpCompteChrall(player);
 			}
 			args.ajaxRequestId = linkText;
 			return args;
@@ -191,7 +191,7 @@ function Chrall_gridLive() {
 			var x=$link.attr('x');
 			var y=$link.attr('y');
 			var z=$link.attr('z');
-			var url = SERVEUR_CHRALL_PRIVE+"vue?asker="+player.id+"&mdpr="+mdpCompteChrall()+"&x="+x+"&y="+y+"&z="+z+"&tresors=1";
+			var url = SERVEUR_CHRALL_PRIVE+"vue?asker="+player.id+"&mdpr="+mdpCompteChrall(player)+"&x="+x+"&y="+y+"&z="+z+"&tresors=1";
 			$('#zoom').show();
 			$('#zoom_content').load(url, function(){
 				setTimeout(function() {

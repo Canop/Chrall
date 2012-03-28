@@ -3,7 +3,6 @@
  * Il contient aussi les variables globales.
  */
 
-
 var GOGOCHRALL = "http://canop.org:8000/chrall/";
 var TEST_LOCAL = false; // passer à true pour tester localement, ce qui suppose évidemment de disposer d'un serveur chrall localement
 
@@ -41,12 +40,15 @@ var viewFilters = {
 var splitedPathname = document.location.pathname.split('/');
 var hallIsAccro = document.location.host == "accro.mountyhall.com"; // est-ce qu'on est dans le PH spécial des accros ?
 var pageName = splitedPathname[splitedPathname.length - 1];
-console.log("pageName=\"" + pageName + "\"");
 
 var resetTroll = pageName == "PlayStart.php";
-if (!resetTroll) {
+if (resetTroll) {
+	localStorage.removeItem('last_saved_troll_id');
+} else {
 	player.restore(); // on récupère les infos qui ont pu être obtenues dans d'autres frames ou pages
 }
+console.log("pageName=\"" + pageName + "\"");
+
 
 function createInjectNode(fileName) {
 	var scriptNode;
@@ -94,7 +96,8 @@ switch (pageName) {
 		});
 		break;
 	case "Play_vue.php":
-		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js", "shared_notify.js", 'injected_view_partage.js'], function() {
+		inject(["jquery.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js", "shared_notify.js",
+			"injected_view_partage.js"], function() {
 			initCommunications('get_partages');
 			Chrall_analyseAndReformatView();
 		});

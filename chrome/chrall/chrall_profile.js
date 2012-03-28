@@ -63,9 +63,16 @@ function Chrall_makeXpComments() {
 
 function Chrall_extractPositionAndSight(text) {
 	var lines = text.split('\n');
-	//> extraction de la position
+	// extraction de la position
+	var i = lines[0].lastIndexOf('X =');
+	var positionText = lines[0].substring(i);
+	var posToken = positionText.split('| ');
+	player.x = parseInt(posToken[0].substring(3).trim());
+	player.y = parseInt(posToken[1].substring(3).trim());
+	player.z = parseInt(posToken[2].substring(3).trim());
+
 	// todo
-	//> extraction de la vue
+	// extraction de la vue
 	for (var l=0; l<lines.length; l++) {
 		if (lines[l].indexOf("Case")>=0) { // ce test est nécessaire car des lignes peuvent s'intercaler avec la mention du camou ou de l'invi
 			var tokens = Chrall_tokenize(lines[l]);
@@ -386,7 +393,6 @@ function Chrall_analyseAndReformatProfile() {
 		}
 	);
 	
-	console.log(player);
 
 	updateTroll();
 }
