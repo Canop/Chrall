@@ -8,7 +8,8 @@ function Chrall_reformatOptionsView() {
 	var html = "\
 	<ul class=tabs>\
 		<li><a href=#tabStandard>Options Standard</a></li>\
-		<li><a href=#tabChrall>Options Chrall</a></li>\
+		<li><a href=#tabChrall>Compte Chrall</a></li>\
+		<li><a href=#tabOptionsChrall>Options Chrall</a></li>\
 		<li><a href=#tabLinks>Liens</a></li>\
 	</ul>\
 	<div class=tab_container><br><br>\
@@ -33,6 +34,9 @@ function Chrall_reformatOptionsView() {
 		<p>Serveur Chrall alternatif pour les données partagées : <input size=30 id=input_private_chrall_server></p>\
 		<a href='#' class=gogo id=save_private_chrall_server>sauver</a> (laisser vide pour exploiter le serveur par défaut, n'utilisez un serveur alternatif que si vous lui faites pleine confiance)</p>\
 	</div>\
+	<div id=tabOptionsChrall class=tab_content>\
+	<h3>Options</h3>\
+		<p class='informational-text'>Modifiez ici le comportement de l'extension</p>\
 	<div id=tabLinks class=tab_content>\
 	</div>\
 	</div>";
