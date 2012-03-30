@@ -89,11 +89,11 @@ function changeMdpRestreint() {
 		return;
 	}
 	localStorage[mdpkey] = nm;
-	Chrall_notify({text:"Mot de passe modifié"});
+	chrall.notifyUser({text:"Mot de passe modifié"});
 }
 
 function isPasswordValid() {
-	var mdpkey = 'troll.' + player.id + '.mdp';
+	var mdpkey = 'troll.' + chrall.player().id + '.mdp';
 	var mdp = localStorage[mdpkey];
 	var mdpIsValid = mdp && (mdp.length == 32);
 	return mdpIsValid;
@@ -116,13 +116,13 @@ function refreshActivation() {
 function toggleActivation() {
 	var compteActif = compteChrallActif();
 	if (compteActif) {
-		Chrall_notify({ text: "Connexion au Compte désactivée"});
-		localStorage["troll." + player.id + ".compteActif"] = "no";
+		chrall.notifyUser({ text: "Connexion au Compte désactivée"});
+		localStorage["troll." + chrall.player().id + ".compteActif"] = "no";
 		localStorage['com.status.message'] = 'Compte inexistant ou non connecté';
 		$('#com_status_message').text(localStorage['com.status.message']);
 	} else {
-		Chrall_notify({ text: "Connexion au Compte activée"});
-		localStorage["troll." + player.id + ".compteActif"] = "yes";
+		chrall.notifyUser({ text: "Connexion au Compte activée"});
+		localStorage["troll." + chrall.player().id + ".compteActif"] = "yes";
 		initCommunications('check_account');
 	}
 	refreshActivation();

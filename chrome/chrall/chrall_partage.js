@@ -43,7 +43,7 @@ function makePartageTables() {
 		}
 		$('#partage_proposal_troll_id').val("");
 		sendToChrallServer("get_partages", {"ChangePartage":'Proposer', "IdCible": target});
-		Chrall_notify({text :"proposition de partage envoyée"});
+		chrall.notifyUser({text :"proposition de partage envoyée"});
 	});
 
 	return html;

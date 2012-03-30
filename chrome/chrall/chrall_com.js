@@ -51,7 +51,7 @@ function sendToChrallServer(action, message) {
 	message['TrollId'] = player.id;
 	message['MDP'] = mdpRestreint;
 	message['MessageNum'] = ++sentMessagesCount;
-	console.log('Message sortant de ' + pageName + ' (action=' + action + ') vers ' + SERVEUR_CHRALL_PRIVE + ' : ');
+	console.log('Message sortant de ' + chrall.pageName() + ' (action=' + action + ') vers ' + SERVEUR_CHRALL_PRIVE + ' : ');
 	console.log(message);
 	$.ajax(
 			{

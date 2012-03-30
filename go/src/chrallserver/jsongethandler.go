@@ -298,7 +298,7 @@ func (h *JsonGetHandler) serveDestinationsJsonp(w http.ResponseWriter, hr *http.
 	destinations := h.store.GetDestinations(amis, h.tksManager, db)
 	fmt.Println(amis)
 	unmarshalled, _ := json.Marshal(destinations)
-	fmt.Fprint(w, "Chrall_suggestDestinations(")
+	fmt.Fprint(w, "chrall.suggestDestinations(")
 	w.Write(unmarshalled)
 	fmt.Fprint(w, ")")
 }

@@ -52,7 +52,7 @@ function Chrall_analyseTrollTable(table) {
 	html += ' document.location.href=\'../Messagerie/MH_Messagerie.php?cat=\'+cat+\'&dest=\'+dests.join("%2C");';
 	html += '}</script><b>TROLLS</b> <a class=gogo href="javascript:mhmp(3);">Envoyer un message</a>';
 	if (player.sessionActive) html += ' <a class=gogo href="javascript:mhmp(8);">Partager des px</a>';
-	html += ' <a class=gogo href="javascript:localStorage[\'tab_view\']=\'tabTrolls\';document.location.href=\''+pageName+'\';">Rafraichir</a>';
+	html += ' <a class=gogo href="javascript:localStorage[\'tab_view\']=\'tabTrolls\';document.location.href=\''+ chrall.pageName() +'\';">Rafraichir</a>';
 	html += '</td>';
 	$(rows[0]).html(html);
 }

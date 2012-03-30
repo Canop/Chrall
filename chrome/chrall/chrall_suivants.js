@@ -59,7 +59,7 @@ function Chrall_handleFollowerOrders() {
 	ch.add(chGowap);
 
 	ch.onClick = function(x, y, z) {
-		Chrall_setTrollStorage({'.gowap-order': 'move', '.gowap-x': x, '.gowap-y': y, '.gowap-z' : gowap_z});
+		chrall.setTrollStorage({'.gowap-order': 'move', '.gowap-x': x, '.gowap-y': y, '.gowap-z' : gowap_z});
 	}
 	ch.redraw();
 
@@ -87,8 +87,8 @@ function Chrall_handleFollowerOrders() {
 
 function Chrall_triggerGowapAction(x, y, z, order, numGowap, numMaxOrdre) {
 	return (function () {
-		Chrall_setTrollStorage({'.gowap-x': x, '.gowap-y': y, '.gowap-z' : z, '.gowap-order': order, '.gowap-numGowap' : numGowap , '.gowap-numMaxOrdre' : numMaxOrdre});
-		$.getScript(chrome.extension.getURL("injected_trigger_gowap_action.js"));
+		chrall.setTrollStorage({'.gowap-x': x, '.gowap-y': y, '.gowap-z' : z, '.gowap-order': order, '.gowap-numGowap' : numGowap , '.gowap-numMaxOrdre' : numMaxOrdre});
+		chrall.inject(chrome.extension.getURL("injected_trigger_gowap_action.js"));
 	});
 }
 
@@ -100,21 +100,8 @@ function Chrall_fillFollowerNewOrderForm() {
 			$('input[name="ai_Y"]').val(localStorage['troll.' + player.id + '.gowap-y']);
 			$('input[name="ai_N"]').val(localStorage['troll.' + player.id + '.gowap-z']);
 		}
-		Chrall_clearTrollStorage('.gowap-order', '.gowap-x', '.gowap-y', '.gowap-z', '.gowap-numGowap', '.gowap-numMaxOrdre');
+		chrall.clearTrollStorage('.gowap-order', '.gowap-x', '.gowap-y', '.gowap-z', '.gowap-numGowap', '.gowap-numMaxOrdre');
 	}
 }
 
 
-// Fonction pour initialiser en masse une série de valeurs dans le local storage, liées à un troll particulier
-function Chrall_setTrollStorage(valueMap) {
-	for (key in valueMap) {
-		localStorage['troll.' + player.id + key] = valueMap[key];
-	}
-}
-
-// Pendant de Chrall_setTrollStorage, pour nettoyer après usage
-function Chrall_clearTrollStorage() {
-	for (var i = 0; i < arguments.length; i++) {
-		localStorage.removeItem('troll.' + player.id + arguments[i]);
-	}
-}

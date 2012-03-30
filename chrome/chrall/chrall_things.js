@@ -174,6 +174,7 @@ function Troll(x, y, z) {
 	Thing.call(this, x, y, z); 
 	this.isIntangible = false;
 }
+
 Troll.prototype = new Thing();
 /**
  * getDla(0) est la DLA en cours (getDla() est pareil)
@@ -181,21 +182,26 @@ Troll.prototype = new Thing();
  * getDla(2) est le cumul suivant
  * je vous laisse deviner pour la suite
  */
+
 Troll.prototype.getDla = function(nbTurnsToAdd) {
 	if (!nbTurnsToAdd) return new Date(this.dlaTime);
 	return new Date(this.dlaTime).add({seconds: nbTurnsToAdd*this.turnDuration}); // surcharge de Date définie dans date-fr-FR.js
 }
+
 Troll.prototype.addFly = function(fly) {
 	if (!this.flies) this.flies = new Array();
 	this.flies.push(fly);
 }
+
 Troll.prototype.cleanFlies = function() {
 	this.flies = new Array();
 }
+
 Troll.prototype.addTalent = function(t) {
 	if (!this.talents) this.talents = new Object();
 	this.talents[t.name]=t;
 }
+
 // permet de construire un troll à partir d'un autre dont le prototype est incomplet (reçu en json depuis le script de fond, pas les méthodes)
 Troll.prototype.fillFrom = function(src) {
 	// d'abord les champs de base
@@ -203,6 +209,7 @@ Troll.prototype.fillFrom = function(src) {
 		this[key]=src[key];
 	}
 }
+
 // sauvegarde localement les infos du troll. Utilisé en particulier pour le passage entre frames
 Troll.prototype.save = function() {
 	if (!this.id) {
@@ -212,16 +219,19 @@ Troll.prototype.save = function() {
 	localStorage['last_saved_troll_id'] = this.id;
 	localStorage['troll.'+this.id] = JSON.stringify(this);
 }
+
 Troll.prototype.restore = function() {
 	if (!this.id) {
-		this.id = parseInt(localStorage['last_saved_troll_id']);
+		var storedId = localStorage['last_saved_troll_id'];
+		if (!storedId || "" == storedId) return;
+		this.id = parseInt(storedId);
 	}
 	var json = localStorage['troll.'+this.id];
 	if (!json) {
 		console.log('troll ' + this.id + ' non trouvé');
 		return;
 	}
-	this.fillFrom(eval('('+json+')'));
+	this.fillFrom($.parseJSON(json));
 }
 
 //////////////////////////////////////////////////////////////////////// Place (lieu)

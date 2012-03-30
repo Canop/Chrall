@@ -18,7 +18,7 @@ function updateTablesPartage(partages) {
 	var propositionPartage = $('#propositionsPartage');
 	if (!propositionPartage) return;
 
-	var playerInfo = currentPlayerInfo();
+	var playerInfo = chrall.player();
 	partagesActifs.find("tr").remove();
 	propositionPartage.find("tr").remove();
 
@@ -65,9 +65,9 @@ function updateTablesPartage(partages) {
 
 function updatePartage() {
 	var action = $(this).attr("actionPartage");
-	var autreTroll = parseIng($(this).attr("idAutreTroll"));
+	var autreTroll = parseInt($(this).attr("idAutreTroll"));
 	sendToChrallServer(action, {"ChangePartage": action, "IdCible": autreTroll});
-	Chrall_notify({ text: action + " partage " + autreTroll});
+	chrall.notifyUser({ text: action + " partage " + autreTroll});
 }
 
 
@@ -80,7 +80,7 @@ function majVue(idAutreTroll) {
 
 	var notificationText = 'GogoChrall attend la r\u00e9ponse du serveur Mounty Hall' + (0 == autreTroll ? " pour tous vos amis" : "") + '. Cela peut prendre quelques minutes. Vous pouvez faire des recherches avant le r\u00e9sultat mais elles ne seront pas forc\u00e9	ment correctes.';
 	$("#resultat_maj_vue").text(notificationText);
-	Chrall_notify({text : notificationText});
-	localStorage['troll.' + currentPlayerId() + '.messageMaj'] = notificationText;
+	chrall.notifyUser({text : notificationText});
+	localStorage['troll.' + chrall.player().id + '.messageMaj'] = notificationText;
 }
 

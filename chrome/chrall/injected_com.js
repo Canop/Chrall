@@ -14,20 +14,6 @@ function formatDate(timestamp) {
 }
 
 
-function currentPlayerId() {
-	return localStorage['last_saved_troll_id'];
-}
-
-
-function currentPlayerInfo() {
-	var json = localStorage['troll.' + currentPlayerId()];
-	// TODO optimize
-	json = $.parseJSON(json); // TODO: there is surely a safer way
-	console.log(json);
-	return json;
-}
-
-
 function compteChrallActif(player) {
 	if ((!player.id) || (player.id == 0)) return false;
 	var key = 'troll.' + player.id + '.compteActif';
@@ -55,7 +41,7 @@ function chrallServer() {
 
 // envoie au serveur un message authentifié par le mdp restreint
 function sendToChrallServer(action, message) {
-	var player = currentPlayerInfo();
+	var player = chrall.player();
 	if (!compteChrallActif(player)) {
 		return false
 	}
@@ -91,8 +77,8 @@ function receiveFromChrallServer(message) {
 		updateTablesPartage(message.MiPartages);
 	}
 	if (message.TextMajVue) {
-		Chrall_notify({text: message.TextMajVue});
-		localStorage['troll.' + currentPlayerId() + '.messageMaj']
+		chrall.notifyUser({text: message.TextMajVue});
+		localStorage['troll.' + chrall.player().id + '.messageMaj']
 		$("#resultat_maj_vue").text(message.TextMajVue);
 	}
 	if (message.Actions && message.Actions.length > 0 && typeof(addActionsToMonsterEvents) == "function") {

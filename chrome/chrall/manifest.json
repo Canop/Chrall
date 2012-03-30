@@ -17,6 +17,8 @@
 				"jquery.js",
 				"dragscrollable.js",
 				"date-fr-FR.js",
+				"chrall_things.js",
+				"shared_chrall.js",
 				"gogol_point.js",
 				"gogol_rect.js",
 				"gogol_col.js",
@@ -25,7 +27,6 @@
 				"gogol_chemins.js",
 				"chrall_bubbles.js",
 				"chrall_objectMenu.js",
-				"chrall_things.js",
 				"chrall_grid.js",
 				"chrall_general.js",
 				"chrall_partage.js",
@@ -56,7 +57,6 @@
 				"chrall_externalLinks.js",
 				"chrall_pogo.js",
 				"chrall_destinations.js",
-				"shared_notify.js",
 				"chrall_main.js"
 			]
 		},
