@@ -111,8 +111,8 @@ function Chrall_gridLive() {
 				args.leftCol = "<img class=illus src=\""+imgUrl+"\">";
 			}
 			args.ajaxUrl = GOGOCHRALL+"json?action=get_extract_jsonp&asker="+player.id+"&name=" + nomMonstre + "&monsterId="+monsterId;
-			if (compteChrallActif()) {
-				args.ajaxUrl += '&mdpr='+mdpCompteChrall(player);
+			if (chrall.compteChrallActif()) {
+				args.ajaxUrl += '&mdpr='+chrall.mdpCompteChrall();
 			}
 			args.ajaxRequestId = linkText;
 			return args;
@@ -186,12 +186,12 @@ function Chrall_gridLive() {
 
 	// outillage des liens d'ouvertures de vue "zoom"
 	$('a[name="zoom"]').live('click', function() {
-		if (compteChrallActif()) {
+		if (chrall.compteChrallActif()) {
 			var $link = $(this);
 			var x=$link.attr('x');
 			var y=$link.attr('y');
 			var z=$link.attr('z');
-			var url = SERVEUR_CHRALL_PRIVE+"vue?asker="+player.id+"&mdpr="+mdpCompteChrall(player)+"&x="+x+"&y="+y+"&z="+z+"&tresors=1";
+			var url = SERVEUR_CHRALL_PRIVE+"vue?asker="+player.id+"&mdpr="+chrall.mdpCompteChrall()+"&x="+x+"&y="+y+"&z="+z+"&tresors=1";
 			$('#zoom').show();
 			$('#zoom_content').load(url, function(){
 				setTimeout(function() {

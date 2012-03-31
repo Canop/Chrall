@@ -1,7 +1,7 @@
 // construit les tables permettant d'exploiter et visualiser les partages (actuellement
 //  dans l'onglet 'Partages' de la vue)
 function makePartageTables() {
-	if (!compteChrallActif()) {
+	if (!chrall.compteChrallActif()) {
 		return "Pour partager des informations privées vous devez activer votre compte Chrall dans les options.";
 	}
 	var html = $("<div style='text-align: center;'> \
@@ -42,7 +42,7 @@ function makePartageTables() {
 			return;
 		}
 		$('#partage_proposal_troll_id').val("");
-		sendToChrallServer("get_partages", {"ChangePartage":'Proposer', "IdCible": target});
+		chrall.sendToChrallServer("get_partages", {"ChangePartage":'Proposer', "IdCible": target});
 		chrall.notifyUser({text :"proposition de partage envoyée"});
 	});
 

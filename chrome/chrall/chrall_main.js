@@ -51,13 +51,13 @@ switch (chrall.pageName()) {
 		break;
 	case "Play_profil.php":
 		chrall.doWithInjection("injected_util_message.js", function() {
-			initCommunications();
+			chrall.initCommunications();
 			Chrall_analyseAndReformatProfile();
 		});
 		break;
 	case "Play_vue.php":
 		chrall.doWithInjection("injected_view_partage.js", function() {
-			initCommunications('get_partages');
+			chrall.initCommunications('get_partages');
 			Chrall_analyseAndReformatView();
 		});
 		break;
@@ -88,7 +88,7 @@ switch (chrall.pageName()) {
 		break;
 	case "Play_option.php":
 		chrall.doWithInjection(function() {
-			initCommunications('check_account');
+			chrall.initCommunications('check_account');
 			Chrall_reformatOptionsView();
 		});
 		break;

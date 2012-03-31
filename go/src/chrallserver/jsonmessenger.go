@@ -33,7 +33,7 @@ type JsonMessageOut struct {
 }
 
 func (h *JsonGetHandler) writeJsonAnswer(w http.ResponseWriter, out *JsonMessageOut) {
-	fmt.Fprint(w, "receiveFromChrallServer(")
+	fmt.Fprint(w, "chrall.receiveFromChrallServer(")
 	bout, _ := json.Marshal(out)
 	w.Write(bout)
 	fmt.Fprint(w, ")")

@@ -38,7 +38,7 @@
 				"chrall_cdm.js",
 				"chrall_bm.js",
 				"chrall_equipment.js",
-				"chrall_com.js",
+				"shared_communication.js",
 				"chrall_profile.js",
 				"chrall_options.js",
 				"chrall_events.js",

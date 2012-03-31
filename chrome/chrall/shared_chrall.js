@@ -10,7 +10,7 @@
 		return pageName;
 	}
 
-	var STANDARD_INJECTED_SCRIPT = ["jquery.js", "chrall_things.js", "shared_chrall.js", "injected_util_bubble.js", "injected_com.js", "injected_notes.js", ];
+	var STANDARD_INJECTED_SCRIPT = ["jquery.js", "chrall_things.js", "shared_chrall.js", "injected_util_bubble.js", "shared_communication.js", "injected_notes.js", ];
 
 	// Private
 	function createInjectNode(fileName) {
@@ -21,6 +21,21 @@
 		return scriptNode;
 	}
 
+	chrall.formatDuration = function (seconds) {
+		if (seconds == 0) return "";
+		var h = Math.floor(seconds / (3600));
+		seconds -= h * (3600);
+		var m = Math.floor(seconds / (60));
+		return h + (m < 10 ? "h0" : "h") + m;
+	}
+
+
+	chrall.formatDate = function (timestamp) {
+		// TODO: y a surement plus propre
+		if (timestamp == 0) return "";
+		var d = new Date(timestamp);
+		return d.getDate() + "/" + (d.getMonth() < 9 ? ("0" + (d.getMonth() + 1)) : (d.getMonth() + 1)) + " " + d.getHours() + "h" + (d.getMinutes() < 10 ? ("0" + d.getMinutes()) : d.getMinutes());
+	}
 
 	// Injecte une série de scripts à exécuter dans le contexte de la page.
 	// La fonction callback est exécutée lorsque tous les scripts ont été chargés.
@@ -97,12 +112,19 @@
 	}
 
 
-
 	// le troll du joueur. Sera éventuellement récupéré de la page de fond dans getBackgroundInfosThenExecute
 	var currentPlayer = new Troll();
 
 	chrall.player = function() {
 		return currentPlayer;
+	}
+
+	chrall.playerId = function() {
+		return currentPlayer.id;
+	}
+
+	chrall.playerInvalid = function() {
+		return (!chrall.playerId()) || (chrall.playerId() == 0);
 	}
 
 	if ("PlayStart.php" == chrall.pageName()) {

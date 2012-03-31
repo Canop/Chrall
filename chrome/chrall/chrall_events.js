@@ -25,7 +25,7 @@ function Chrall_addBubblesToLinks() {
 }
 
 function Chrall_addInfosToMonsterEvents() {
-	if (!compteChrallActif()) return;
+	if (!chrall.compteChrallActif()) return;
 	var eventTable = $('body > table.mh_tdborder')[1];
 	$(eventTable).attr('id', 'monster_events');
 	if (!eventTable) return; // arrive s'il n'y a pas encore d'événements je crois
@@ -69,5 +69,5 @@ function Chrall_addInfosToMonsterEvents() {
 		}\
 	}\
 	</script>');
-	sendToChrallServer('getMonsterEvents', {"IdCible": parseInt($('input[name="ai_IDPJ"]').val())});
+	chrall.sendToChrallServer('getMonsterEvents', {"IdCible": parseInt($('input[name="ai_IDPJ"]').val())});
 }

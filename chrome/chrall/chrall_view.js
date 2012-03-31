@@ -458,7 +458,7 @@ function Chrall_analyseAndReformatView() {
 			);
 
 			//> demande de notes
-			sendToChrallServer('get_notes', {'NoteRequest':noteRequest});
+			chrall.sendToChrallServer('get_notes', {'NoteRequest':noteRequest});
 
 
 		}, 1000

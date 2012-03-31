@@ -34,11 +34,11 @@ function updateTablesPartage(partages) {
 			var levelCell = $("<td/>", { class: 'mh_tdpage', text: partage.NiveauAutreTroll});
 			var hitPointsCell = $("<td/>", { class: 'mh_tdpage', text: partage.AutreTroll.PV_max > 0 ? partage.AutreTroll.PV_actuels + ' / ' + partage.AutreTroll.PV_max : ""});
 			var actionPointsCell = $("<td/>", { class: 'mh_tdpage', text: partage.AutreTroll.PA});
-			var nextTurnCell = $("<td/>", { class: 'mh_tdpage', text: formatDate(partage.AutreTroll.ProchainTour)});
-			var durationCell = $("<td/>", { class: 'mh_tdpage', text: formatDuration(partage.AutreTroll.DureeTour)});
+			var nextTurnCell = $("<td/>", { class: 'mh_tdpage', text: chrall.formatDate(partage.AutreTroll.ProchainTour)});
+			var durationCell = $("<td/>", { class: 'mh_tdpage', text: chrall.formatDuration(partage.AutreTroll.DureeTour)});
 			var positionCell = $("<td/>", { class: 'mh_tdpage'});
 			positionCell.append($("<a/>", {name: 'zoom', class: 'gogo',  x: partage.AutreTroll.X, y: partage.AutreTroll.Y, z: partage.AutreTroll.Z, text: partage.AutreTroll.X + ' ' + partage.AutreTroll.Y + ' ' + partage.AutreTroll.Z}))
-			var lastUpdateCell = $("<td/>", { class: 'mh_tdpage', text: formatDate(partage.AutreTroll.MiseAJour)});
+			var lastUpdateCell = $("<td/>", { class: 'mh_tdpage', text: chrall.formatDate(partage.AutreTroll.MiseAJour)});
 			actionCell = $("<td/>", { class: 'mh_tdpage'});
 			actionCell.append($("<a/>", {text: "Rompre", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Rompre"}).click(updatePartage));
 			actionCell.append($("<a/>", {text: "Actualiser la vue", class: 'gogo', idAutreTroll: partage.IdAutreTroll}).click(majVue));
@@ -66,7 +66,7 @@ function updateTablesPartage(partages) {
 function updatePartage() {
 	var action = $(this).attr("actionPartage");
 	var autreTroll = parseInt($(this).attr("idAutreTroll"));
-	sendToChrallServer(action, {"ChangePartage": action, "IdCible": autreTroll});
+	chrall.sendToChrallServer(action, {"ChangePartage": action, "IdCible": autreTroll});
 	chrall.notifyUser({ text: action + " partage " + autreTroll});
 }
 
@@ -76,9 +76,9 @@ function majVue(idAutreTroll) {
 	autreTroll = ("undefined" == typeof autreTroll || "" == autreTroll) ? idAutreTroll : autreTroll;
 	autreTroll = parseInt(autreTroll);
 	// Operation asynchrone, gogochrall devra attendre la réponse du serveur soap de MH
-	sendToChrallServer("maj_vue", {"IdCible": autreTroll});
+	chrall.sendToChrallServer("maj_vue", {"IdCible": autreTroll});
 
-	var notificationText = 'GogoChrall attend la r\u00e9ponse du serveur Mounty Hall' + (0 == autreTroll ? " pour tous vos amis" : "") + '. Cela peut prendre quelques minutes. Vous pouvez faire des recherches avant le r\u00e9sultat mais elles ne seront pas forc\u00e9	ment correctes.';
+	var notificationText = 'GogoChrall attend la r\u00e9ponse du serveur Mounty Hall' + (0 == autreTroll ? " pour tous vos amis" : "") + '. Cela peut prendre quelques minutes. Vous pouvez faire des recherches avant le r\u00e9sultat mais elles ne seront pas forc\u00e9ment correctes.';
 	$("#resultat_maj_vue").text(notificationText);
 	chrall.notifyUser({text : notificationText});
 	localStorage['troll.' + chrall.player().id + '.messageMaj'] = notificationText;

@@ -106,7 +106,7 @@ function refreshActivation() {
 		$('#activationButton').addClass("invisible");
 	}
 
-	if (compteChrallActif()) {
+	if (chrall.compteChrallActif()) {
 		$('#activationButton').text("Désactiver le compte");
 	} else {
 		$('#activationButton').text("Activer le compte");
@@ -114,7 +114,7 @@ function refreshActivation() {
 }
 
 function toggleActivation() {
-	var compteActif = compteChrallActif();
+	var compteActif = chrall.compteChrallActif();
 	if (compteActif) {
 		chrall.notifyUser({ text: "Connexion au Compte désactivée"});
 		localStorage["troll." + chrall.player().id + ".compteActif"] = "no";
@@ -123,7 +123,7 @@ function toggleActivation() {
 	} else {
 		chrall.notifyUser({ text: "Connexion au Compte activée"});
 		localStorage["troll." + chrall.player().id + ".compteActif"] = "yes";
-		initCommunications('check_account');
+		chrall.initCommunications('check_account');
 	}
 	refreshActivation();
 }

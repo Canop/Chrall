@@ -1,7 +1,7 @@
 
 // 
 function makeSearchPanel($panel) {
-	if (!compteChrallActif()) {
+	if (!chrall.compteChrallActif()) {
 		return "La recherche nécessite un compte chrall actif. Vous pouvez activer votre compte Chrall dans la page Option.";
 	}
 	var html = [];
