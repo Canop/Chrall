@@ -89,7 +89,7 @@ switch (chrall.pageName()) {
 	case "Play_option.php":
 		chrall.doWithInjection(function() {
 			chrall.initCommunications('check_account');
-			Chrall_reformatOptionsView();
+			chrall.reformatOptionsView();
 		});
 		break;
 	case "Play_a_Competence16.php": // préparation de CDM (le formulaire de choix du monstre)

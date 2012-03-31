@@ -1,11 +1,13 @@
+(function (chrall) {
+
 // enrichit la page d'actions
-function Chrall_reformatOptionsView() {
+	chrall.reformatOptionsView = function () {
 
 
-	var standardOptionContainer = $($("table table td")[1]);
-	var standardOptionTables = standardOptionContainer.find("table");
+		var standardOptionContainer = $($("table table td")[1]);
+		var standardOptionTables = standardOptionContainer.find("table");
 
-	var html = "\
+		var html = "\
 	<ul class=tabs>\
 		<li><a href=#tabStandard>Options Standard</a></li>\
 		<li><a href=#tabChrall>Compte Chrall</a></li>\
@@ -41,89 +43,96 @@ function Chrall_reformatOptionsView() {
 	</div>\
 	</div>";
 
-	standardOptionContainer.html(html);
+		standardOptionContainer.html(html);
 
-	$("div#tabStandard").append($(standardOptionTables[0]));
-	$("div#tabStandard").append($(standardOptionTables[1]));
-	$("div#tabStandard").append($(standardOptionTables[2]));
-	$("#tabLinks").append(Chrall_makeLinkOptionPage());
+		$("div#tabStandard").append($(standardOptionTables[0]));
+		$("div#tabStandard").append($(standardOptionTables[1]));
+		$("div#tabStandard").append($(standardOptionTables[2]));
+		$("#tabLinks").append(Chrall_makeLinkOptionPage());
 
-	$("#changeMdp").click(changeMdpRestreint);
-	$("#activationButton").click(toggleActivation);
-	refreshActivation();
-	$("#input_private_chrall_server").val(localStorage['private_chrall_server']);
-	$("#com_status_message").text(localStorage['com.status.message']);
+		$("#changeMdp").click(changeMdpRestreint);
+		$("#activationButton").click(toggleActivation);
+		refreshActivation();
+		$("#input_private_chrall_server").val(localStorage['private_chrall_server']);
+		$("#com_status_message").text(localStorage['com.status.message']);
 
-	$(".tab_content").hide();
-	if (localStorage['tab_options']) {
-		$('ul.tabs li:has(a[href="#' + localStorage['tab_options'] + '"])').addClass("active").show();
-		$('#' + localStorage['tab_options']).show();
-		localStorage.removeItem('tab_options');
-	} else {
-		$("ul.tabs li:first").addClass("active").show();
-		$(".tab_content:first").show();
-	}
-	$("ul.tabs li").click(function() {
-		$("ul.tabs li").removeClass("active");
-		$(this).addClass("active");
 		$(".tab_content").hide();
-		var activeTab = $(this).find("a").attr("href");
-		window.scroll(0, 0);
-		$(activeTab).fadeIn("fast");
-		return false;
-	});
-	$('#save_private_chrall_server').click(function() {
-		var s = $('#input_private_chrall_server').val();
-		if (s.length > 3) {
-			localStorage['private_chrall_server'] = s;
+		if (localStorage['tab_options']) {
+			$('ul.tabs li:has(a[href="#' + localStorage['tab_options'] + '"])').addClass("active").show();
+			$('#' + localStorage['tab_options']).show();
+			localStorage.removeItem('tab_options');
 		} else {
-			localStorage.removeItem('private_chrall_server');
+			$("ul.tabs li:first").addClass("active").show();
+			$(".tab_content:first").show();
 		}
-	});
-}
-
-function changeMdpRestreint() {
-	var nm = document.getElementById('ch_mdp_restreint').value;
-	if (nm.length != 32) {
-		alert('Votre mot de passe restreint doit faire exactement 32 caractères.');
-		return;
-	}
-	localStorage[mdpkey] = nm;
-	chrall.notifyUser({text:"Mot de passe modifié"});
-}
-
-function isPasswordValid() {
-	var mdpkey = 'troll.' + chrall.player().id + '.mdp';
-	var mdp = localStorage[mdpkey];
-	var mdpIsValid = mdp && (mdp.length == 32);
-	return mdpIsValid;
-}
-
-function refreshActivation() {
-	if (isPasswordValid()) {
-		$('#activationButton').removeClass("invisible");
-	} else {
-		$('#activationButton').addClass("invisible");
+		$("ul.tabs li").click(function() {
+			$("ul.tabs li").removeClass("active");
+			$(this).addClass("active");
+			$(".tab_content").hide();
+			var activeTab = $(this).find("a").attr("href");
+			window.scroll(0, 0);
+			$(activeTab).fadeIn("fast");
+			return false;
+		});
+		$('#save_private_chrall_server').click(function() {
+			var s = $('#input_private_chrall_server').val();
+			if (s.length > 3) {
+				localStorage['private_chrall_server'] = s;
+			} else {
+				localStorage.removeItem('private_chrall_server');
+			}
+		});
 	}
 
-	if (chrall.compteChrallActif()) {
-		$('#activationButton').text("Désactiver le compte");
-	} else {
-		$('#activationButton').text("Activer le compte");
+	// Private -- not linked to the chrall instance
+	 function changeMdpRestreint() {
+		var nm = document.getElementById('ch_mdp_restreint').value;
+		if (nm.length != 32) {
+			alert('Votre mot de passe restreint doit faire exactement 32 caractères.');
+			return;
+		}
+		localStorage[mdpkey] = nm;
+		chrall.notifyUser({text:"Mot de passe modifié"});
 	}
-}
 
-function toggleActivation() {
-	var compteActif = chrall.compteChrallActif();
-	if (compteActif) {
-		chrall.notifyUser({ text: "Connexion au Compte désactivée"});
-		localStorage["troll." + chrall.player().id + ".compteActif"] = "no";
-		localStorage['com.status.message'] = 'Compte inexistant ou non connecté';
-		$('#com_status_message').text(localStorage['com.status.message']);
-	} else {
-		chrall.notifyUser({ text: "Connexion au Compte activée"});
-		localStorage["troll." + chrall.player().id + ".compteActif"] = "yes";
-		chrall.initCommunications('check_account');
+	// Private -- not linked to the chrall instance
+	function isPasswordValid () {
+		var mdpkey = 'troll.' + chrall.playerId() + '.mdp';
+		var mdp = localStorage[mdpkey];
+		var mdpIsValid = mdp && (mdp.length == 32);
+		return mdpIsValid;
 	}
-	refreshActivation();
-}
+
+	// Private -- not linked to the chrall instance
+	 function refreshActivation() {
+		if (isPasswordValid()) {
+			$('#activationButton').removeClass("invisible");
+		} else {
+			$('#activationButton').addClass("invisible");
+		}
+
+		if (chrall.compteChrallActif()) {
+			$('#activationButton').text("Désactiver le compte");
+		} else {
+			$('#activationButton').text("Activer le compte");
+		}
+	}
+
+	// Private -- not linked to the chrall instance
+	function toggleActivation() {
+		var compteActif = chrall.compteChrallActif();
+		if (compteActif) {
+			chrall.notifyUser({ text: "Connexion au Compte désactivée"});
+			localStorage["troll." + chrall.playerId() + ".compteActif"] = "no";
+			localStorage['com.status.message'] = 'Compte inexistant ou non connecté';
+			$('#com_status_message').text(localStorage['com.status.message']);
+		} else {
+			chrall.notifyUser({ text: "Connexion au Compte activée"});
+			localStorage["troll." + chrall.playerId() + ".compteActif"] = "yes";
+			chrall.initCommunications('check_account');
+		}
+		refreshActivation();
+	}
+
+})(window.chrall = window.chrall || {});
+	
