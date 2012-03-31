@@ -173,14 +173,14 @@ switch (chrall.pageName()) {
 		});
 		break;
 	case "FO_NewOrder.php":
-		chrall.doWithInjection(function() {
+		chrall.doWithInjection("injected_answer_destination.js", function() {
 			Chrall_fillFollowerNewOrderForm();
-			Chrall_askDestinations();
+			chrall.askDestinations();
 		});
 		break;
 	case "Play_a_Sort13.php":
-		chrall.doWithInjection(function() {
-			Chrall_askDestinations();
+		chrall.doWithInjection("injected_answer_destination.js", function() {
+			chrall.askDestinations();
 		});
 		break;
 }

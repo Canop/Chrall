@@ -88,7 +88,7 @@ function Chrall_handleFollowerOrders() {
 function Chrall_triggerGowapAction(x, y, z, order, numGowap, numMaxOrdre) {
 	return (function () {
 		chrall.setTrollStorage({'.gowap-x': x, '.gowap-y': y, '.gowap-z' : z, '.gowap-order': order, '.gowap-numGowap' : numGowap , '.gowap-numMaxOrdre' : numMaxOrdre});
-		chrall.inject(chrome.extension.getURL("injected_trigger_gowap_action.js"));
+		chrall.inject(["injected_trigger_gowap_action.js"]);
 	});
 }
 
