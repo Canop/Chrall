@@ -3,18 +3,6 @@
  * Il contient aussi les variables globales.
  */
 
-var GOGOCHRALL = "http://canop.org:8000/chrall/";
-var TEST_LOCAL = false; // passer à true pour tester localement, ce qui suppose évidemment de disposer d'un serveur chrall localement
-
-var SERVEUR_CHRALL_PUBLIC = GOGOCHRALL; // l'adresse du serveur principal (celui qui hébèrge le bestaire et les infos publiques)
-var SERVEUR_CHRALL_PRIVE = SERVEUR_CHRALL_PUBLIC; // l'adresse du serveur privé (par défaut le public mais peut être modifié)
-if (TEST_LOCAL) {
-	SERVEUR_CHRALL_PUBLIC = "http://localhost:8000/chrall/";
-	SERVEUR_CHRALL_PRIVE = SERVEUR_CHRALL_PUBLIC;
-} else {
-	var serveur_prive_in_prefs = localStorage['private_chrall_server'];
-	if (serveur_prive_in_prefs) SERVEUR_CHRALL_PRIVE = serveur_prive_in_prefs;
-}
 
 var viewIsEmpty = true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
@@ -36,11 +24,10 @@ var viewFilters = {
 	"3D" : true
 };
 
-var hallIsAccro = document.location.host == "accro.mountyhall.com"; // est-ce qu'on est dans le PH spécial des accros ?
 
 console.log("pageName=\"" + chrall.pageName() + "\"");
 
-var player = chrall.player();
+var player = chrall.player(); // for temporary compatibility purposes only
 
 
 switch (chrall.pageName()) {
@@ -135,7 +122,7 @@ switch (chrall.pageName()) {
 	case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la colonne menu de gauche
 		break;
 	case "Play_a_Move.php":
-		chrall.doWithInjection( "injected_move.js", function() {
+		chrall.doWithInjection("injected_move.js", function() {
 			Chrall_listenForChangeLocation('action');
 		});
 		break;
@@ -185,6 +172,6 @@ switch (chrall.pageName()) {
 		break;
 }
 
-player.save(); // on sauvegarde localement les infos du troll (par exemple sa position), afin que les frames qui ne l'ont pas directement en disposent
+//player.save(); // on sauvegarde localement les infos du troll (par exemple sa position), afin que les frames qui ne l'ont pas directement en disposent
 
 

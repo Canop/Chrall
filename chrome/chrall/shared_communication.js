@@ -31,7 +31,7 @@
 	// met à jour sur le serveur (si le compte chrall est actif) les infos du troll du joueur
 	chrall.sendPlayerInfosToChrallServer = function () {
 		if (!chrall.compteChrallActif()) return;
-		
+
 		var troll = {};
 		var player = chrall.player();
 		if (player.totalSight) troll.Vue = player.totalSight;
@@ -58,24 +58,13 @@
 	}
 
 
-	chrall.chrallServer = function () {
-		var serveur_prive_in_prefs = localStorage['private_chrall_server'];
-		if (serveur_prive_in_prefs) {
-			return serveur_prive_in_prefs;
-		}
-		else {
-			return "http://canop.org:8000/chrall/"
-		}
-	}
-
-
 	// envoie au serveur un message authentifié par le mdp restreint
 	chrall.sendToChrallServer = function (action, message) {
 		var player = chrall.player();
 		if (!chrall.compteChrallActif()) {
 			return false
 		}
-		//		if (hallIsAccro) {
+		//		if (chrall.hallIsAccro()) {
 		//			console.log("l'envoi de messages est désactivé dans le hall des accros");
 		//			return false;
 		//		}
@@ -87,11 +76,11 @@
 		message['TrollId'] = parseInt(chrall.playerId());
 		message['MDP'] = mdpRestreint;
 		message['MessageNum'] = ++sentMessagesCount;
-		console.log('Message sortant de ' + chrall.pageName() + ' (action=' + action + ') vers ' + chrall.chrallServer() + ' : ');
+		console.log('Message sortant de ' + chrall.pageName() + ' (action=' + action + ') vers ' + chrall.serveurPrive() + ' : ');
 		console.log(message);
 		$.ajax(
 				{
-					url: chrall.chrallServer() + 'json?v=2&action=' + action + '&message=' + JSON.stringify(message),
+					url: chrall.serveurPrive() + 'json?v=2&action=' + action + '&message=' + JSON.stringify(message),
 					crossDomain: true,
 					dataType: "jsonp"
 				}
@@ -99,7 +88,7 @@
 		return true;
 	}
 
-	
+
 	chrall.receiveFromChrallServer = function (message) {
 		console.log("Message entrant :");
 		console.log(message);

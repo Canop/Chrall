@@ -50,7 +50,7 @@ function Chrall_handleCdmPage() {
 					//> envoi au serveur de la CDM
 					$.ajax(
 						{
-							url: SERVEUR_CHRALL_PUBLIC+"json?action=accept_cdm_jsonp&author="+player.id+"&cdm="+encodeURIComponent(cdm)+"&seconds="+findMHSeconds(), // <- attention, ne marche que si le text est court...
+							url: chrall.serveurPublic()+"json?action=accept_cdm_jsonp&author="+player.id+"&cdm="+encodeURIComponent(cdm)+"&seconds="+findMHSeconds(), // <- attention, ne marche que si le text est court...
 							crossDomain: true,
 							dataType: "jsonp"
 						}
