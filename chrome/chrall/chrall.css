@@ -3,6 +3,10 @@
 	font-size: 90%;
 }
 
+.tab_content {
+	padding-left: 1em;
+}
+
 .tab_container {
 	font-family: Arial, sans-serif;
 }
@@ -12,6 +16,27 @@
 	margin: 0.5ex;
 	width: 80ex;
 	text-align: justify;
+}
+
+.toggle-option[type='checkbox'] {
+}
+
+.option-section {
+	display: table-cell;
+}
+
+h3.option-section {
+	width: 10em;
+}
+
+div.option-section {
+	border-bottom: #EEE 1px solid;
+	padding-bottom: 2ex;
+	padding-left: 1ex;
+}
+
+.option-description {
+	color: #444;
 }
 
 #chrall_notify_wrapper {
@@ -210,11 +235,6 @@ div.profileInfos table.infos td {
 
 div.hiddenDiv {
 	display: none;
-}
-
-#tabChrall, #tabLinks {
-	text-align: left;
-	padding: 8px;
 }
 
 #tabChrall a, #tabLinks a {
