@@ -43,7 +43,7 @@ switch (chrall.pageName()) {
 		});
 		break;
 	case "Play_vue.php":
-		chrall.doWithInjection("injected_view_partage.js", function() {
+		chrall.doWithInjection("injected_view_grid.js", "injected_view_partage.js", function() {
 			chrall.initCommunications('get_partages');
 			Chrall_analyseAndReformatView();
 		});

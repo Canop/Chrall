@@ -68,23 +68,7 @@ Grid.prototype.getCellNotNull = function(x, y) {
 function Chrall_gridLive() {
 
 	// ajout de la fenêtre de zoom et de quelques fonctions
-	var html = "<script>";
-	html += "function grid_changeDisplayByName(key, display, transiant){";
-	html += " var os = document.getElementsByName(key);";
-	html += " if (!display) {"; // mode d'inversion d'un objet unique, non persistent
-	html += "  for (var i=0; i<os.length; i++) {";
-	html += "   if (os[i].style.display=='inline') os[i].style.display='none';";
-	html += "   else os[i].style.display='inline';";
-	html += "  }";
-	html += " } else {"; // mode d'inversion de filtre global, persistent
-	html += "  for (var i=0; i<os.length; i++) {";
-	html += "   os[i].style.display=display;";
-	html += "  }";
-	html += "  if (!transiant) localStorage['grid_filter_'+key]=display";
-	html += " }";
-	html += "}";
-	html += "</script>";
-	html += "<div id=zoom>";
+	var html = "<div id=zoom>";
 	html += "<a class=gogo style='position:fixed;right:24px;top:24px;' id=btn_close_zoom>Fermer</a>";
 	html += "<form class=gridFiltersForm>";
 	var key = '3D';
