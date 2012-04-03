@@ -143,7 +143,7 @@ switch (chrall.pageName()) {
 		});
 		break;
 	case "MonsterView.php":
-		chrall.doWithInjection(function() {
+		chrall.doWithInjection("injected_events.js", function() {
 			Chrall_analyseAndReformatMonsterView();
 			Chrall_addInfosToMonsterEvents();
 			Chrall_addBubblesToLinks();
