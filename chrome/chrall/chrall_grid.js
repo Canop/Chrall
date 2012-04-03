@@ -144,9 +144,9 @@ function Chrall_gridLive() {
 			var deRange = player.z === 0 ? 2 : 1;
 			var cellIsAccessibleByDe = x >= player.x - deRange && x <= player.x + deRange && y >= player.y - deRange && y <= player.y + deRange;
 			if (cellIsAccessibleByDe) {
-				if (player.z < 0) links += (makeDeLink(x, y, player.z + 1));
-				if (x != player.x || y != player.y) links += (makeDeLink(x, y, player.z));
-				links += (makeDeLink(x, y, player.z - 1));
+				if (player.z < 0) links += (chrall.makeDeLink(x, y, player.z + 1));
+				if (x != player.x || y != player.y) links += (chrall.makeDeLink(x, y, player.z));
+				links += (chrall.makeDeLink(x, y, player.z - 1));
 			}
 		}
 		return {

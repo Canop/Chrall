@@ -3,6 +3,62 @@
  */
 
 
+(function (chrall) {
+
+	chrall.distanceFromPlayer = function(targetX, targetY, targetN) {
+		// TODO: compute the cost of movement through surface, to know when it's cheaper
+		var playerX = chrall.player().x;
+		var playerY = chrall.player().y;
+		var playerN = chrall.player().z;
+
+
+		var deltaX, deltaY, deltaN, fromSurface, toSurface, cost, save_on_x, save_on_y, save_surface;
+		deltaX = Math.abs(playerX - targetX);
+		deltaY = Math.abs(playerY - targetY);
+		deltaN = Math.abs(playerN - targetN);
+
+		fromSurface = playerN == 0;
+		toSurface = targetN == 0;
+
+		// Lateral move + level change cost
+		cost = Math.max(Math.max(deltaX, deltaY), deltaN) + deltaN;
+		// If through surface
+		save_on_x = Math.max(0, Math.floor((deltaX - deltaN) / 2.0));
+		save_on_y = Math.max(0, Math.floor((deltaY - deltaN) / 2.0));
+		save_surface = (fromSurface || toSurface) ? Math.max(save_on_x, save_on_y) : 0;
+
+		cost -= save_surface;
+
+		// Moving down from the surface costs an extra AP
+		cost += (fromSurface && !toSurface) ? 1 : 0;
+
+		// If the cave is busy, one extra AP, unless from the surface
+		cost += (!chrall.player().cellIsFree && !fromSurface && cost > 0) ? 1 : 0;
+
+		return cost;
+	}
+
+
+	chrall.addActionPointDistance = function($table, distColumn, xColumn) {
+		var table = $table.get(0);
+		if ('yes' != localStorage['view-show-distance-in-view'] || "undefined" == typeof table) {
+			return;
+		}
+		var lines = table.children[0].children
+		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
+			var cells = lines[lineIndex].children;
+			var x = parseInt(cells[xColumn].textContent);
+			var y = parseInt(cells[xColumn + 1].textContent);
+			var z = parseInt(cells[xColumn + 2].textContent);
+			var dist = cells[distColumn].textContent + " (" + chrall.distanceFromPlayer(x, y, z) + " PA)";
+			$(cells[distColumn]).text(dist);
+		}
+	}
+
+
+})(window.chrall = window.chrall || {});
+
+
 function Chrall_analyseMonsterTable(table) {
 	table = table.get(0);
 	if ("undefined" == typeof table) {
@@ -252,6 +308,12 @@ function Chrall_analyseView() {
 	Chrall_analyseCenotaphTable($tables['cadavre']);
 	if (horizontalViewLimit > 0) Chrall_analyseWallTable($tables['murs']); // Si on est aveugle, on sait que les infos des murs et couloirs sont incorrectes
 
+	chrall.addActionPointDistance($tables['monstres'], 0, 3);
+	chrall.addActionPointDistance($tables['trolls'], 1, 7);
+	chrall.addActionPointDistance($tables['tresors'], 0, 3);
+	chrall.addActionPointDistance($tables['champignons'], 0, 2);
+	chrall.addActionPointDistance($tables['lieux'], 0, 3);
+	chrall.addActionPointDistance($tables['cadavre'], 0, 3);
 
 	//> on regarde si la case du joueur est encombrée
 	// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case

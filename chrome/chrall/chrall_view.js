@@ -3,11 +3,16 @@ var grid; // la grille. Tout ce qui est visible est stocké là dedans
 var objectsOnPlayerCell;
 var isInLaby = false;
 
-function makeDeLink(x, y, z) {
-	var cost = (player.cellIsFree ? 1 : 2) + (z === player.z ? 0 : 1);
-	if (cost > player.pa) return '';
-	return '<a class=chrall_de x=' + (x - player.x) + ' y=' + (y - player.y) + ' z=' + (z - player.z) + '>DE ' + x + ' ' + y + ' ' + z + '</a>';
+(function (chrall) {
+
+	chrall.makeDeLink = function (x, y, z) {
+	var cost = (chrall.player().cellIsFree ? 1 : 2) + (z === chrall.player().z ? 0 : 1);
+	if (cost > chrall.player().pa) return '';
+	return '<a class=chrall_de x=' + (x - chrall.player().x) + ' y=' + (y - chrall.player().y) + ' z=' + (z - chrall.player().z) + '>DE ' + x + ' ' + y + ' ' + z + '</a>';
 }
+
+})(window.chrall = window.chrall || {});
+
 
 /**
  * construit la ligne de boites à cocher permettant de filtrer la grille
@@ -226,7 +231,7 @@ function Chrall_makeGridHtml(noteRequest) {
 				// S'il y a un mur, c'est probablement qu'on est dans un labyrinthe et que la vue est limitée à 1.
 				// On va donc se permettre d'afficher toutes les cases de la même taille pour que ce soit plus joli.
 				// Pour bien faire, il faudrait fixer initialement la taille des cases à une certaine taille si on est dans un labyrinthe.
-				// Ainsi, tout se centrarait bien sans souci. (Là c'est une peu tard pour le faire, y a un peu de bidouille...)
+				// Ainsi, tout se centrerait bien sans souci. (Là c'est un peu tard pour le faire, y a un peu de bidouille...)
 				// On va aussi mettre une image de mur en arrière fond pour les cases qui en sont
 				// A noter qu'on se limite au minimum, mais je pense que ça suffit pour Chrall.
 				// (Dans la version normale toujours accessible dans l'onglet murs et couloirs d'ailleurs, il y a des images de trolls, de lieux, ...)
@@ -516,39 +521,3 @@ function Chrall_analyseAndReformatView() {
 }
 
 
-(function (chrall) {
-
-	chrall.distanceFromPlayer = function(targetX, targetY, targetN) {
-		// TODO: compute the cost of movement through surface, to know when it's cheaper
-		var playerX = chrall.player().x;
-		var playerY = chrall.player().y;
-		var playerN = chrall.player().z;
-
-
-		var deltaX, deltaY, deltaN, fromSurface, toSurface, cost, save_on_x, save_on_y, save_surface;
-		deltaX = Math.abs(playerX - targetX);
-		deltaY = Math.abs(playerY - targetY);
-		deltaN = Math.abs(playerN - targetN);
-
-		fromSurface = playerN == 0;
-		toSurface = targetN == 0;
-
-		// Lateral move + level change cost
-		cost = Math.max(Math.max(deltaX, deltaY), deltaN) + deltaN;
-		// If through surface
-		save_on_x = Math.max(0, Math.floor((deltaX - deltaN) / 2.0));
-		save_on_y = Math.max(0, Math.floor((deltaY - deltaN) / 2.0));
-		save_surface = (fromSurface || toSurface) ? Math.max(save_on_x, save_on_y) : 0;
-
-		cost -= save_surface;
-
-		// Moving down from the surface costs an extra AP
-		cost += (fromSurface && !toSurface) ? 1 : 0;
-
-		// If the cave is busy, one extra AP, unless from the surface
-		cost += (!chrall.player().cellIsFree && !fromSurface && cost > 0) ? 1 : 0;
-
-		return cost;
-	}
-
-})(window.chrall = window.chrall || {});

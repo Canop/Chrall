@@ -3,8 +3,7 @@
 function Chrall_handleBeforeCdmPage() {
 	var html = '<span>';	
 	html += '<br><input type=checkbox checked id=sendCdmAuto><label for="sendCdmAuto">Envoyer la CDM au serveur Chrall</label>';	
-	// html += '<script>functiparent.chrall_send_cdm.value='+tokens[3]+';</script></script>';	
-	html += '</span>';	
+	html += '</span>';
 	$(html).appendTo('div.Action');
 	$('#sendCdmAuto').change(function(){
 		chrome.extension.sendRequest({"send_cdm": this.value})
