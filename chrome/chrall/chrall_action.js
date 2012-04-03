@@ -20,7 +20,7 @@ function Chrall_handleActionPage() {
 			player.pa = rpa;
 			player.sessionActive = true;
 		} catch(error) {
-			//console.log(error);
+			console.log(error);
 		}
 	} else {
 		// a priori si on n'a pas cette phrase c'est qu'on n'a pas activé

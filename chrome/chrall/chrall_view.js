@@ -514,3 +514,41 @@ function Chrall_analyseAndReformatView() {
 	updateTroll();
 
 }
+
+
+(function (chrall) {
+
+	chrall.distanceFromPlayer = function(targetX, targetY, targetN) {
+		// TODO: compute the cost of movement through surface, to know when it's cheaper
+		var playerX = chrall.player().x;
+		var playerY = chrall.player().y;
+		var playerN = chrall.player().z;
+
+
+		var deltaX, deltaY, deltaN, fromSurface, toSurface, cost, save_on_x, save_on_y, save_surface;
+		deltaX = Math.abs(playerX - targetX);
+		deltaY = Math.abs(playerY - targetY);
+		deltaN = Math.abs(playerN - targetN);
+
+		fromSurface = playerN == 0;
+		toSurface = targetN == 0;
+
+		// Lateral move + level change cost
+		cost = Math.max(Math.max(deltaX, deltaY), deltaN) + deltaN;
+		// If through surface
+		save_on_x = Math.max(0, Math.floor((deltaX - deltaN) / 2.0));
+		save_on_y = Math.max(0, Math.floor((deltaY - deltaN) / 2.0));
+		save_surface = (fromSurface || toSurface) ? Math.max(save_on_x, save_on_y) : 0;
+
+		cost -= save_surface;
+
+		// Moving down from the surface costs an extra AP
+		cost += (fromSurface && !toSurface) ? 1 : 0;
+
+		// If the cave is busy, one extra AP, unless from the surface
+		cost += (!chrall.player().cellIsFree && !fromSurface && cost > 0) ? 1 : 0;
+
+		return cost;
+	}
+
+})(window.chrall = window.chrall || {});
