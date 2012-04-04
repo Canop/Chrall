@@ -31,11 +31,6 @@ function Chrall_handleCdmPage() {
 		
 	//> écriture du script de récupération de la réponse (mécanisme JSONP)
 	html = "<div id=gogochrall></div>";
-	html += "<script>";
-	html += "function cdm_receive(answer) {";
-	html += " document.getElementById('gogochrall').innerHTML = answer;";
-	html += "}";
-	html += "</script>";
 	$("table table table form").append(html);
 	
 	if (cdm.substring("Monstre Ciblé fait partie")<0) {

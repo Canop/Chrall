@@ -85,7 +85,7 @@ switch (chrall.pageName()) {
 		});
 		break;
 	case "Play_a_Competence16b.php": // résultat de cdm
-		chrall.doWithInjection(function() {
+		chrall.doWithInjection("injected_cdm.js", function() {
 			Chrall_handleCdmPage();
 		});
 		break;
