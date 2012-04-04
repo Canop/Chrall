@@ -6,7 +6,7 @@ function makeSearchPanel($panel) {
 	var html = [];
 	var mdpRestreint = localStorage['troll.' + player.id + '.mdp'];
 	var h = 0;
-	html[h++] = " &nbsp; <a id=btn_maj href='javascript:majVue(0);' class=gogo>Mettre à jour les vues</a> <span id=resultat_maj_vue>";
+	html[h++] = " &nbsp; <a id=btn_maj href='javascript:chrall.majVue(0);' class=gogo>Mettre à jour les vues</a> <span id=resultat_maj_vue>";
 	html[h++] = localStorage['troll.' + player.id + '.messageMaj'];
 	localStorage.removeItem('troll.' + player.id + '.messageMaj');
 	html[h++] = "</span>";

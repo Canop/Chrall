@@ -19,6 +19,7 @@
 				"date-fr-FR.js",
 				"chrall_things.js",
 				"shared_chrall.js",
+				"shared_communication.js",
 				"gogol_point.js",
 				"gogol_rect.js",
 				"gogol_col.js",
@@ -38,7 +39,6 @@
 				"chrall_cdm.js",
 				"chrall_bm.js",
 				"chrall_equipment.js",
-				"shared_communication.js",
 				"chrall_profile.js",
 				"chrall_options.js",
 				"chrall_events.js",
@@ -57,6 +57,7 @@
 				"chrall_externalLinks.js",
 				"chrall_pogo.js",
 				"chrall_destinations.js",
+				"chrall_guilde_internal.js",
 				"chrall_main.js"
 			]
 		},

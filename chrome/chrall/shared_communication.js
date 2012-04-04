@@ -98,7 +98,10 @@
 			localStorage["com.status.message"] = message.Text;
 		}
 		if (message.MiPartages && message.MiPartages.length > 0) {
-			updateTablesPartage(message.MiPartages);
+			// TODO: ceci ne devrait pas être géré comme ça, il ne devrait pas y avoir de handler générique qui doit connaître tous les cas particuliers
+			if (chrall.updateTablesPartage) {
+				chrall.updateTablesPartage(message.MiPartages);
+			}
 		}
 		if (message.TextMajVue) {
 			chrall.notifyUser({text: message.TextMajVue});

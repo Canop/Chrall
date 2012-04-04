@@ -385,7 +385,7 @@ function Chrall_analyseAndReformatView() {
 	$("#tabPlaces").append($tables['lieux']);
 	$("#tabCenotaphs").append($tables['cadavre']);
 	if (!chrall.hallIsAccro()) {
-		$("#tabPartages").append(makePartageTables());
+		$("#tabPartages").append(chrall.makePartageTables());
 		makeSearchPanel($("#tabRecherche"));
 	}
 	$(".tab_content").hide();

@@ -170,6 +170,11 @@ switch (chrall.pageName()) {
 			chrall.askDestinations();
 		});
 		break;
+	case "Guilde_Membres.php":
+		chrall.doWithInjection(function() {
+			chrall.addPartageLinkToAll();
+		});
+		break;
 }
 
 //player.save(); // on sauvegarde localement les infos du troll (par exemple sa position), afin que les frames qui ne l'ont pas directement en disposent
