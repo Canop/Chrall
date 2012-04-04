@@ -146,15 +146,19 @@
 	// Fonction pour initialiser en masse une série de valeurs dans le local storage, liées à un troll particulier
 	chrall.setTrollStorage = function (valueMap) {
 		for (key in valueMap) {
-			localStorage['troll.' + player.id + key] = valueMap[key];
+			localStorage['troll.' + chrall.playerId() + key] = valueMap[key];
 		}
+	}
+
+	chrall.getTrollStorage = function (key) {
+		return localStorage['troll.' + chrall.playerId() + key];
 	}
 
 
 	// Pendant de setTrollStorage, pour nettoyer après usage
 	chrall.clearTrollStorage = function () {
 		for (var i = 0; i < arguments.length; i++) {
-			localStorage.removeItem('troll.' + player.id + arguments[i]);
+			localStorage.removeItem('troll.' + chrall.playerId() + arguments[i]);
 		}
 	}
 

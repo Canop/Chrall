@@ -37,17 +37,18 @@ function Chrall_handleFollowerOrders() {
 			$('<td></td>').appendTo($(lignes[i]));
 		}
 	}
-	var html = '';
-	html += "<script>";
-	html += "function lanceMouvementGowap(){";
-	html += " parent.frames['Action'].location.href='FO_NewOrder.php?ai_IdOrdre=1&ai_IdFollower=" + numGowap + "&ai_NbOrdres=" + numMaxOrdre + "&as_Action=Enregistrer+un+nouvel+Ordre';";
-	html += "}";
-	html += "</script>";
-	html += '<center><br>';
-	html += '<canvas id=cartehall onClick="lanceMouvementGowap();" style="width:400px;height:400px;"></canvas>';
-	html += '<div id=tdbCarte>Carte du Hall <span id=messageCarte>Cliquez sur la carte pour donner un ordre de mouvement.</span></div>';
-	html += '</center>';
-	$(html).appendTo($('form[name="form1"]'));
+
+	var canvas = $("<canvas/>", {id: "cartehall", style: "width:400px;height:400px;"});
+	canvas.click(function() {
+		window.frameElement.parentNode.children[1].location = '/mountyhall/MH_Follower/FO_NewOrder.php?ai_IdOrdre=1&ai_IdFollower=' + numGowap + '&ai_NbOrdres=' + numMaxOrdre + '&as_Action=Enregistrer+un+nouvel+Ordre';
+	});
+	var carteDiv = $("<div/>", {id: "tdbCarte", style: "text-align: center;"}).text("Carte du Hall");
+	carteDiv.append($("<span/>", {id: "messageCarte"}).text("Cliquez sur la carte pour donner un ordre de mouvement."));
+
+
+	var form = $('form[name="form1"]');
+	canvas.appendTo(form);
+	carteDiv.appendTo(form);
 
 	var ch = new CarteHall("cartehall", "messageCarte");
 	ajouteTrous(ch);
@@ -87,20 +88,21 @@ function Chrall_handleFollowerOrders() {
 
 function Chrall_triggerGowapAction(x, y, z, order, numGowap, numMaxOrdre) {
 	return (function () {
-		chrall.setTrollStorage({'.gowap-x': x, '.gowap-y': y, '.gowap-z' : z, '.gowap-order': order, '.gowap-numGowap' : numGowap , '.gowap-numMaxOrdre' : numMaxOrdre});
-		chrall.inject(["injected_trigger_gowap_action.js"]);
+		var movementType = 'move' == order ? '1' : '7'; // move or snort
+		window.frameElement.parentNode.children[1].location = '/mountyhall/MH_Follower/FO_NewOrder.php?ai_IdOrdre=' + movementType + "&ai_IdFollower=" + numGowap + "&ai_NbOrdres=" + numMaxOrdre + "&as_Action=Enregistrer+un+nouvel+Ordre;";
+		chrall.setTrollStorage({'.gowap-x': x, '.gowap-y': y, '.gowap-z' : z, '.gowap-order': order});
 	});
 }
 
 function Chrall_fillFollowerNewOrderForm() {
-	if (localStorage['troll.' + player.id + '.gowap-order']) {
-		var order = localStorage['troll.' + player.id + '.gowap-order'];
+	var order = chrall.getTrollStorage('.gowap-order');
+	if (order) {
 		if ('move' == order || 'snort' == order) {
-			$('input[name="ai_X"]').val(localStorage['troll.' + player.id + '.gowap-x']);
-			$('input[name="ai_Y"]').val(localStorage['troll.' + player.id + '.gowap-y']);
-			$('input[name="ai_N"]').val(localStorage['troll.' + player.id + '.gowap-z']);
+			$('input[name="ai_X"]').val(chrall.getTrollStorage('.gowap-x'));
+			$('input[name="ai_Y"]').val(chrall.getTrollStorage('.gowap-y'));
+			$('input[name="ai_N"]').val(chrall.getTrollStorage('.gowap-z'));
 		}
-		chrall.clearTrollStorage('.gowap-order', '.gowap-x', '.gowap-y', '.gowap-z', '.gowap-numGowap', '.gowap-numMaxOrdre');
+		chrall.clearTrollStorage('.gowap-order', '.gowap-x', '.gowap-y', '.gowap-z');
 	}
 }
 
