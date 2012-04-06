@@ -59,8 +59,10 @@
 				var partageCell = $("<td/>", { class: 'mh_tdpage', text: partageText});
 				actionCell = $("<td/>", { class: 'mh_tdpage'});
 				actionCell.append($("<a/>", {text: "Rompre", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Rompre"}).click(chrall.updatePartage));
-				actionCell.append($("<a/>", {text: "Accepter", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Accepter"}).click(chrall.updatePartage));
-				if (partage.Statut == 'off') {
+				if ("on" == partage.StatutAutreTroll) {
+					actionCell.append($("<a/>", {text: "Accepter", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Accepter"}).click(chrall.updatePartage));
+				}
+				if ('off' == partage.Statut) {
 					actionCell.append($("<a/>", {text: "Supprimer", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Supprimer"}).click(chrall.updatePartage));
 				}
 				row.append(trollCell).append(partageCell).append(actionCell);
@@ -73,7 +75,7 @@
 		var action = $(this).attr("actionPartage");
 		var autreTroll = parseInt($(this).attr("idAutreTroll"));
 		chrall.sendToChrallServer(action, {"ChangePartage": action, "IdCible": autreTroll});
-		chrall.notifyUser({ text: action + " partage " + autreTroll});
+		chrall.notifyUser({ text: "Action: " + action + " partage " + autreTroll});
 	}
 
 	chrall.majVue = function (idAutreTroll) {

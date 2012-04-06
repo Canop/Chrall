@@ -109,6 +109,7 @@ function bubbleLive(
 ) {
 	$(selector).live(
 		'mouseenter', function(event) {
+			// TODO: cacher le résultat d'une requête Ajax
 			var target = $(this);
 			var args = getArgs(target);
 			if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
