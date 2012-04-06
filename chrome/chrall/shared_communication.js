@@ -64,10 +64,10 @@
 		if (!chrall.compteChrallActif()) {
 			return false
 		}
-		//		if (chrall.hallIsAccro()) {
-		//			console.log("l'envoi de messages est désactivé dans le hall des accros");
-		//			return false;
-		//		}
+		if (chrall.hallIsAccro()) {
+			console.log("l'envoi de messages est désactivé dans le hall des accros");
+			return false;
+		}
 
 		var mdpRestreint = chrall.mdpCompteChrall();
 		if ((!mdpRestreint) || (mdpRestreint == '')) {
@@ -101,6 +101,9 @@
 			// TODO: ceci ne devrait pas être géré comme ça, il ne devrait pas y avoir de handler générique qui doit connaître tous les cas particuliers
 			if (chrall.updateTablesPartage) {
 				chrall.updateTablesPartage(message.MiPartages);
+			}
+			if (chrall.updateTrollInfoInTable) {
+				chrall.updateTrollInfoInTable(message.MiPartages);
 			}
 		}
 		if (message.TextMajVue) {

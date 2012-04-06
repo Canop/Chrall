@@ -213,7 +213,7 @@ Troll.prototype.fillFrom = function(src) {
 // sauvegarde localement les infos du troll. Utilisé en particulier pour le passage entre frames
 Troll.prototype.save = function() {
 	if (!this.id) {
-		console.log('no id -> troll non sauvable');
+		console.log('no id -> troll non sauvable : from ' + chrall.pageName());
 		return;
 	}
 	localStorage['last_saved_troll_id'] = this.id;

@@ -47,7 +47,7 @@ function Chrall_makeFiltersHtml() {
 	for (var key in viewFilters) {
 		html += "<span><input type=checkbox id='" + key + "'";
 		if (viewFilters[key]) html += " checked";
-		html += " onClick=\"grid_changeDisplayByName('" + key + "', this.checked?'inline':'none');\"";
+		html += " onClick=\"chrall.gridChangeDisplayByName('" + key + "', this.checked?'inline':'none');\"";
 		html += "><label for='" + key + "'>" + key + "</label></span>";
 	}
 	html += "</form>";
@@ -184,7 +184,7 @@ function Chrall_makeGridHtml(noteRequest) {
 							var an = player.z != level;
 							if (an) cellContent[c++] = "<span name=3D>";
 							cellContent[c++] = "<span name='trésors' class=ch_object>" + level + " : ";
-							cellContent[c++] = "<a class=ch_objects_toggler href=\"javascript:grid_changeDisplayByName('" + divName + "');\">";
+							cellContent[c++] = "<a class=ch_objects_toggler href=\"javascript:chrall.gridChangeDisplayByName('" + divName + "');\">";
 							cellContent[c++] = "<b>" + list.length + " trésors</b>";
 							cellContent[c++] = "</a>";
 							cellContent[c++] = "<div name=" + divName + " class=hiddenDiv>";

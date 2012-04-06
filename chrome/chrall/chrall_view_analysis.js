@@ -48,6 +48,7 @@
 		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
 			var cells = lines[lineIndex].children;
 			var x = parseInt(cells[xColumn].textContent);
+			if (isNaN(x)) { continue;}
 			var y = parseInt(cells[xColumn + 1].textContent);
 			var z = parseInt(cells[xColumn + 2].textContent);
 			var dist = cells[distColumn].textContent + " (" + chrall.distanceFromPlayer(x, y, z) + " PA)";
@@ -276,21 +277,12 @@ function Chrall_analyseView() {
 
 	//> chargement des trucs en vue (monstres, trolls, etc.).
 	var $tables = {};
-	/*
-	 var $allTables = $("table.mh_tdborder");
-	 for (var i=0; i<$allTables.length; i++) {
-	 var $table = $($allTables[i]);
-	 var tableName = $table.find("a[name]").first().attr("name");
-	 if (tableName) {
-	 $tables[tableName]=$table;
-	 $table.detach(); // grosse accélération. Mais effet de bord : si ça plante on n'a plus rien. Il faudra sans doute que je fasse un gros try/catch et que je m'arrange pour remettre les tables en cas d'exception
-	 }
-	 }*/
 
 	var findTable = function(key) {
 		var $t = $('#mh_vue_hidden_' + key + ' table');
 		$t.detach();
 		$tables[key] = $t;
+		$t.attr("id", "table_" + key); // plus facile pour les récupérer ailleurs plus tard
 	}
 	findTable('monstres');
 	findTable('trolls');

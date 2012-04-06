@@ -101,7 +101,6 @@
 	// -- Helpers génériques
 	// --------------------------------------------------------
 
-
 	chrall.formatDuration = function (seconds) {
 		if (seconds == 0) return "";
 		var h = Math.floor(seconds / (3600));
@@ -123,6 +122,7 @@
 	//	delay: int, default: 5000, durée d'affichage en ms
 	//	text: string, texte à afficher
 	//	icon: string, chemin d'une icone (au sein du filesystem de l'extension, le getUrl est fait en interne)
+	//	style: des infos de style supplémentaires (genre: background red pour un pbm)
 	chrall.notifyUser = function (options) {
 		var delay = options['delay'] ? options['delay'] : 5000;
 
@@ -136,7 +136,8 @@
 
 		// Injection de la notif (au dessus des autres éventuelles)
 		var wrapper = $("#chrall_notify_wrapper");
-		wrapper.prepend('<div class="chrall_notify" id="' + notificationId + '" style="display:none">' + icon_html + options["text"] + '</div>');
+		var style = options['style'] ? "display:none;" + options['style'] :"display:none" ;
+		wrapper.prepend('<div class="chrall_notify" id="' + notificationId + '" style="'+ style + '">' + icon_html + options["text"] + '</div>');
 
 		// Affichage
 		$("div#" + notificationId).slideDown("fast").delay(delay).slideUp("fast", function() {$(this).remove()});
