@@ -108,7 +108,7 @@ function Chrall_gridLive() {
 			'#grid a.ch_troll, div#tabTrolls a.mh_trolls_1, #tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll',
 			'bub_troll',
 			function(link) {
-				var trollId = link.attr('id');
+				var trollId = link.attr('trollId');
 				var message = link.attr("message");
 				if (!message) message = '';
 				var team = getPogoTeam(parseInt(trollId));

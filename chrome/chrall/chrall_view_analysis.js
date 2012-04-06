@@ -99,6 +99,7 @@ function Chrall_analyseTrollTable(table) {
 		item.id = parseInt(cells[i++].textContent);
 		var nameCell = cells[i++];
 		item.name = nameCell.textContent;
+		$(nameCell.children[0]).attr("trollId", item.id);
 		item.level = cells[i++].textContent;
 		item.race = cells[i++].textContent;
 		item.guilde = cells[i++].textContent;

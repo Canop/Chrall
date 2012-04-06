@@ -443,6 +443,7 @@ function Chrall_analyseAndReformatView() {
 				//> bulle popup sur le lien du joueur
 				var link = $("#grid a.ch_player");
 				var trollId = link.attr('id');
+				console.log(trollId);
 				if (trollId == 0) {
 					bubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
 				} else {
