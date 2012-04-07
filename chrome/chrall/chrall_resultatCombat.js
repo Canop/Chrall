@@ -1,7 +1,7 @@
 
 // notons que le code qui suit est super sensible, il pêtera à la moindre modif (genre nettoyage) du html généré par MH
 function Chrall_analyseResultatCombat() {
-	if (!compteChrallActif()) return;
+	if (!chrall.compteChrallActif()) return;
 	var text = $('body').text();
 	var lines = text.split('\n');
 	
@@ -34,7 +34,7 @@ function Chrall_analyseResultatCombat() {
 		}
 	}	
 	result.Succes = text.indexOf("TOUCHÉ")>0;
-	sendToChrallServer(
+	chrall.sendToChrallServer(
 		"combat",
 		{"Action":result}
 	);
@@ -50,7 +50,7 @@ function testeFauxResultatCombat() {
 	result.Degats=100;
 	result.PV=89;
 	result.Succes = true;
-	sendToChrallServer(
+	chrall.sendToChrallServer(
 		"combat", {"Action":result}
 	);
 }

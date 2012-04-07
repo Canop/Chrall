@@ -26,4 +26,5 @@ function Chrall_handleMenuPage() {
 	player.x = parseInt(px);
 	player.y = parseInt(py);
 	player.z = parseInt(pz);
+	player.save();
 }
