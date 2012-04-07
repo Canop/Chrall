@@ -3,8 +3,7 @@
 function Chrall_handleBeforeCdmPage() {
 	var html = '<span>';	
 	html += '<br><input type=checkbox checked id=sendCdmAuto><label for="sendCdmAuto">Envoyer la CDM au serveur Chrall</label>';	
-	// html += '<script>functiparent.chrall_send_cdm.value='+tokens[3]+';</script></script>';	
-	html += '</span>';	
+	html += '</span>';
 	$(html).appendTo('div.Action');
 	$('#sendCdmAuto').change(function(){
 		chrome.extension.sendRequest({"send_cdm": this.value})
@@ -32,11 +31,6 @@ function Chrall_handleCdmPage() {
 		
 	//> écriture du script de récupération de la réponse (mécanisme JSONP)
 	html = "<div id=gogochrall></div>";
-	html += "<script>";
-	html += "function cdm_receive(answer) {";
-	html += " document.getElementById('gogochrall').innerHTML = answer;";
-	html += "}";
-	html += "</script>";
 	$("table table table form").append(html);
 	
 	if (cdm.substring("Monstre Ciblé fait partie")<0) {
@@ -50,7 +44,7 @@ function Chrall_handleCdmPage() {
 					//> envoi au serveur de la CDM
 					$.ajax(
 						{
-							url: SERVEUR_CHRALL_PUBLIC+"json?action=accept_cdm_jsonp&author="+player.id+"&cdm="+encodeURIComponent(cdm)+"&seconds="+findMHSeconds(), // <- attention, ne marche que si le text est court...
+							url: chrall.serveurPublic()+"json?action=accept_cdm_jsonp&author="+player.id+"&cdm="+encodeURIComponent(cdm)+"&seconds="+findMHSeconds(), // <- attention, ne marche que si le text est court...
 							crossDomain: true,
 							dataType: "jsonp"
 						}
