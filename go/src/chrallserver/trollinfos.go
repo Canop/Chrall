@@ -94,8 +94,8 @@ type TksManager struct {
 	lastGuildFileRead     int64
 	Diplo                 *DiploGraph
 	NbTrolls              int
-	lastDiploFileCheck    int64 // timestamp unix (en attendant de lire la doc du nouveau package time)
-	lastDiploFileRead     int64 // timestamp unix
+	lastDiploFileCheck    int64 // secondes
+	lastDiploFileRead     int64 // secondes
 	TrollsByKills         []*TrollInfos
 	TrollsByKillsMonstres []*TrollInfos
 	TrollsByKillsTrolls   []*TrollInfos
@@ -175,7 +175,7 @@ func (m *TksManager) ReadDiploCsvFilesIfNew() error {
 		if !!fi.IsDir() {
 			return errors.New("TksManager : Fichier " + standardDiploFilename + " introuvable ou anormal")
 		}
-		mustRead = fi.ModTime().Unix() > m.lastDiploFileRead*1000000000
+		mustRead = fi.ModTime().Unix() > m.lastDiploFileRead
 	}
 	if !mustRead {
 		fi, err := os.Stat(trollDiploFilename)
@@ -185,7 +185,7 @@ func (m *TksManager) ReadDiploCsvFilesIfNew() error {
 		if !!fi.IsDir() {
 			return errors.New("TksManager : Fichier " + trollDiploFilename + " introuvable ou anormal")
 		}
-		mustRead = fi.ModTime().Unix() > m.lastDiploFileRead*1000000000
+		mustRead = fi.ModTime().Unix() > m.lastDiploFileRead
 		fmt.Printf("mustRead trollDiploFile = %v \n", mustRead)
 	}
 	if !mustRead {
@@ -234,7 +234,7 @@ func (m *TksManager) ReadGuildCsvFileIfNew() error {
 		if !!fi.IsDir() {
 			return errors.New("TksManager : Fichier " + filename + " introuvable ou anormal")
 		}
-		if fi.ModTime().Unix() < m.lastGuildFileRead*1000000000 {
+		if fi.ModTime().Unix() < m.lastGuildFileRead {
 			return nil
 		}
 	}
@@ -292,7 +292,7 @@ func (m *TksManager) ReadTrollCsvFileIfNew() error {
 		if !!fi.IsDir() {
 			return errors.New("TksManager : Fichier de stats " + filename + " introuvable ou anormal")
 		}
-		if fi.ModTime().Unix() < m.lastTrollFileRead*1000000000 { // conversion secondes - nanosecondes...
+		if fi.ModTime().Unix() < m.lastTrollFileRead {
 			//fmt.Println("TksManager : le fichier n'a pas changé")
 			return nil
 		}
