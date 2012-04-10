@@ -117,6 +117,15 @@
 		return d.getDate() + "/" + (d.getMonth() < 9 ? ("0" + (d.getMonth() + 1)) : (d.getMonth() + 1)) + " " + d.getHours() + "h" + (d.getMinutes() < 10 ? ("0" + d.getMinutes()) : d.getMinutes());
 	}
 
+	chrall.isOptionDisabled = function (key) {
+		return "yes" != localStorage[key];
+	}
+
+	chrall.isOptionEnabled = function (key) {
+		return "yes" == localStorage[key];
+	}
+
+
 	// Affiche une notification à l'utilisateur pendant quelques secondes
 	// Les options sont un hash dont les clés possibles sont:
 	//	delay: int, default: 5000, durée d'affichage en ms
@@ -136,8 +145,8 @@
 
 		// Injection de la notif (au dessus des autres éventuelles)
 		var wrapper = $("#chrall_notify_wrapper");
-		var style = options['style'] ? "display:none;" + options['style'] :"display:none" ;
-		wrapper.prepend('<div class="chrall_notify" id="' + notificationId + '" style="'+ style + '">' + icon_html + options["text"] + '</div>');
+		var style = options['style'] ? "display:none;" + options['style'] : "display:none";
+		wrapper.prepend('<div class="chrall_notify" id="' + notificationId + '" style="' + style + '">' + icon_html + options["text"] + '</div>');
 
 		// Affichage
 		$("div#" + notificationId).slideDown("fast").delay(delay).slideUp("fast", function() {$(this).remove()});
