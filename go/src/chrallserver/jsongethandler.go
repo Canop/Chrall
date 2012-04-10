@@ -39,40 +39,33 @@ func (h *JsonGetHandler) servePageKillometre(w http.ResponseWriter, hr *http.Req
 
 func (h *JsonGetHandler) serveNotes(w http.ResponseWriter, hr *http.Request) {
 	w.Header().Set("Content-Type", "text/javascript;charset=utf-8")
-	db, err := h.store.DB()
-	if err != nil {
-		fmt.Printf("Erreur ouverture connexion BD dans serveAcceptCdmJsonp : %s\n", err.Error())
+
+	askerId, err := h.checkUserAuthentication(w, hr, "serveNotes")
+	if nil != err {
 		return
 	}
+
+	db, _ := h.store.DB()
 	defer db.Close()
-	askerId := GetFormValueAsId(hr, "asker")
-	mdpr := GetFormValue(hr, "mdpr") // mot de passe restreint
-	compteOk := false
-	if askerId > 0 && mdpr != "" { // <-- vérif authentification
-		//fmt.Println("askerId présent")
-		compteOk, _, err = h.store.CheckCompte(db, int(askerId), mdpr)
-		//fmt.Printf("compteOk : %+v\n", compteOk)
-		if compteOk {
-			amis, err := h.store.GetPartageurs(db, askerId)
-			if err != nil {
-				log.Printf("Erreur récupération amis dans serveNotes : %s\n", err.Error())
-			}
-			out, err := h.store.GetNotes(db, GetFormValue(hr, "cat"), GetFormValueAsId(hr, "idSujet"), askerId, amis, true)
-			if err != nil {
-				log.Println("Erreur dans GetNotes :", err)
-			} else {
-				for i, n := range out {
-					log.Printf("Note %d : %+v\n", i, n)
-				}
-			}
-			bout, _ := json.Marshal(out)
-			fmt.Fprint(w, "receiveNotes(")
-			w.Write(bout)
-			fmt.Fprint(w, ")")
-			return
-		}
+
+	amis, err := h.store.GetPartageurs(db, askerId)
+	if err != nil {
+		log.Printf("Erreur récupération amis dans serveNotes : %s\n", err.Error())
+		return
 	}
-	fmt.Fprint(w, "receiveNotes({Error:'mauvaise authentification'})")
+	notes, err := h.store.GetNotes(db, GetFormValue(hr, "cat"), GetFormValueAsId(hr, "idSujet"), askerId, amis, true)
+	if err != nil {
+		log.Println("Erreur dans GetNotes :", err)
+		return
+	}
+	for i, n := range notes {
+		log.Printf("Note %d : %+v\n", i, n)
+	}
+
+	bout, _ := json.Marshal(notes)
+	fmt.Fprint(w, "receiveNotes(")
+	w.Write(bout)
+	fmt.Fprint(w, ")")
 }
 
 func (h *JsonGetHandler) serveMessageJsonp(w http.ResponseWriter, hr *http.Request) {
@@ -257,11 +250,11 @@ func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr
 	w.Write(blist)
 }
 
-func (h *JsonGetHandler) checkUserAuthentication(w http.ResponseWriter, hr *http.Request) (int, error) {
+func (h *JsonGetHandler) checkUserAuthentication(w http.ResponseWriter, hr *http.Request, from string) (int, error) {
 	// TODO : utiliser cette méthode dans les autres pour simplifier le code
 	db, err := h.store.DB()
 	if err != nil {
-		log.Printf("Erreur ouverture connexion BD dans serveDestinationsJsonp : %s\n", err.Error())
+		log.Printf("Erreur ouverture connexion BD dans %s: %s\n", from, err.Error())
 		return 0, err
 	}
 	defer db.Close()
@@ -269,7 +262,7 @@ func (h *JsonGetHandler) checkUserAuthentication(w http.ResponseWriter, hr *http
 	askerId := GetFormValueAsId(hr, "asker")
 	mdpr := GetFormValue(hr, "mdpr") // mot de passe restreint, optionnel, permet d'authentifier la requête en cas d'existence de compte Chrall
 	if askerId <= 0 || mdpr == "" {
-		log.Printf("Impossible d'authentifier le troll: %s\n", askerId)
+		log.Printf("Impossible d'authentifier le troll: %v (in %s) \n", askerId, from)
 		return 0, errors.New("Impossible d'authentifier le troll")
 	}
 
@@ -286,7 +279,7 @@ func (h *JsonGetHandler) checkUserAuthentication(w http.ResponseWriter, hr *http
 func (h *JsonGetHandler) serveDestinationsJsonp(w http.ResponseWriter, hr *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	askerId, err := h.checkUserAuthentication(w, hr)
+	askerId, err := h.checkUserAuthentication(w, hr, "serveDestinationsJsonp")
 	if nil != err {
 		return
 	}
@@ -305,7 +298,7 @@ func (h *JsonGetHandler) serveDestinationsJsonp(w http.ResponseWriter, hr *http.
 	destinations := h.store.GetDestinations(amis, h.tksManager, db)
 	fmt.Println(amis)
 	unmarshalled, _ := json.Marshal(destinations)
-	fmt.Fprint(w, "Chrall_suggestDestinations(")
+	fmt.Fprint(w, "chrall.suggestDestinations(")
 	w.Write(unmarshalled)
 	fmt.Fprint(w, ")")
 }

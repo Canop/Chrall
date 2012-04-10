@@ -1,481 +1,546 @@
+.tabs {
+	font-family: Arial, sans-serif;
+	font-size: 90%;
+}
+
+.tab_content {
+	padding-left: 1em;
+}
+
+.tab_container {
+	font-family: Arial, sans-serif;
+}
+
+.informational-text {
+	color: grey;
+	margin: 0.5ex;
+	width: 80ex;
+	text-align: justify;
+}
+
+.toggle-option[type='checkbox'] {
+}
+
+.option-section {
+	display: table-cell;
+}
+
+h3.option-section {
+	width: 10em;
+	padding-left: 1ex;
+}
+
+div.option-section {
+	border-bottom: #EEE 1px solid;
+	padding-bottom: 2ex;
+	padding-left: 1ex;
+}
+
+.option-description {
+	color: #444;
+}
+
+#chrall_notify_wrapper {
+	position: fixed;
+	top: 1em;
+	right: 1em;
+	width: 15em;
+	z-index: 9999;
+	font-family: Arial, sans-serif;
+	font-size: 85%;
+}
+
+.chrall_notify {
+	display: block;
+	background: black;
+	color: #EEE;
+	border: 0.2ex solid #a9a9a9;
+	padding: 1ex;
+	border-radius: 0.6ex;
+}
+
+.chrall_notify img {
+	padding-right: 0.5ex;
+	padding-left: 0.5ex;
+}
 
 div.floatTopRight {
-    position: fixed;
-    right: 2;
-    top: 4;
-    z-index: 10;
+	position: fixed;
+	right: 2;
+	top: 4;
+	z-index: 10;
 }
+
 #grid_holder {
-    padding: 0px;
-    margin: 0px;
-    position: fixed;
-    left: 0;
-    top: 32px;
-    right: 0;
-    bottom: 0;
-    overflow: auto;
-    border-left: 1px solid #999;
+	padding: 0px;
+	margin: 0px;
+	position: fixed;
+	left: 0;
+	top: 32px;
+	right: 0;
+	bottom: 0;
+	overflow: auto;
+	border-left: 1px solid #999;
 }
+
 #zoom {
-    overflow: auto;
+	overflow: auto;
 }
 
 table.grid {
-    background: white;
-    border-collapse: collapse;
-    border: thin solid #333333;
-    font-size: 14px;
-    text-align: center;
-    cursor: move;
-    -moz-user-select: none;
-    user-select: none;
-    -webkit-user-select: none;
+	background: white;
+	border-collapse: collapse;
+	border: thin solid #333333;
+	font-size: 14px;
+	text-align: center;
+	cursor: move;
+	-moz-user-select: none;
+	user-select: none;
+	-webkit-user-select: none;
 }
 
 table.grid td[uncharted] {
-    background-image: url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/null.gif);
-    background-repeat: no-repeat;
-    background-position: center center;
-    height: 160;
-    width: 160;
+	background-image: url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/null.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 160;
+	width: 160;
 }
 
 table.grid th {
-    border: thin solid #333333;
+	border: thin solid #333333;
 }
 
 table.grid td {
-    border: thin solid #333333;
+	border: thin solid #333333;
 }
 
 .ch_monster, .ch_monster:hover {
-    color: brown !important;
+	color: brown !important;
 }
 
 .ch_gowap, .ch_gowap:hover {
-    color: #c99b1f !important;
+	color: #c99b1f !important;
 }
 
 .ch_troll, .ch_troll:hover {
-    color: blue  !important;
+	color: blue !important;
 }
 
 .ch_troll[intangible] {
-    font-style: italic;
-    color: #8686ec !important;
+	font-style: italic;
+	color: #8686ec !important;
 }
 
 .ch_troll[team=H], .mh_trolls_1[team=H], .ch_player[team=H] {
-	background-color:#acf9ac;
+	background-color: #acf9ac;
 }
+
 .ch_troll[team=P], .mh_trolls_1[team=P], .ch_player[team=P] {
-	background-color:#d2bc8c;
+	background-color: #d2bc8c;
 }
 
 .ch_place, .ch_place:hover {
-    color: black  !important;
+	color: black !important;
 }
 
 .ch_object, .ch_object:hover {
-    color: grey  !important;
-    display: none;
+	color: grey !important;
+	display: none;
 }
 
 .ch_visible_object, .ch_visible_object:hover {
-    color: grey  !important;
+	color: grey !important;
 }
 
 .ch_pl_object, .ch_pl_object:hover {
-    color: grey  !important;
+	color: grey !important;
 }
 
 a.ch_objects_toggler {
-    color: grey  !important;
+	color: grey !important;
 }
 
 .ch_mushroom, .ch_mushroom:hover {
-    color: #6d7e44  !important;
-    display: none;
+	color: #6d7e44 !important;
+	display: none;
 }
 
 .ch_cenotaph, .ch_cenotaph:hover {
-    color: #3fbbbc  !important;
-    display: none;
+	color: #3fbbbc !important;
+	display: none;
 }
 
 span.ch_tag {
-    color: black !important;
+	color: black !important;
 }
 
 .ch_player {
-    color: green !important;
-    font-weight: bold;
+	color: green !important;
+	font-weight: bold;
 }
 
 table.grid td.grad {
-    text-align: center;
-    min-width: 25px;
-    min-height: 25px;
+	text-align: center;
+	min-width: 25px;
+	min-height: 25px;
 }
 
 table.grid td.d0 {
-    background-color: white;
+	background-color: white;
 }
 
 table.grid td.d1 {
-    background-color: #e5decb;
+	background-color: #e5decb;
 }
 
 table.grid td[hasContent] {
-    min-width: 100px;
+	min-width: 100px;
 }
 
 form.gridFiltersForm {
-    position: fixed;
-    font-size: 12px;
-    left: 15px;
-    top: 32px;
-    background-color: #EBEBEB;
-    border: 1px solid grey;
-    margin: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-    border-radius: 10px;
-    z-index: 3;
+	position: fixed;
+	font-size: 12px;
+	left: 15px;
+	top: 32px;
+	background-color: #EBEBEB;
+	border: 1px solid grey;
+	margin: 4px;
+	padding-left: 8px;
+	padding-right: 8px;
+	border-radius: 10px;
+	z-index: 3;
 }
 
 form.gridFiltersForm img.butt {
-    margin-right: 6px;
-    vertical-align: text-top;
+	margin-right: 6px;
+	vertical-align: text-top;
 }
 
 form.gridFiltersForm img.butt:hover {
-    border-radius: 8px;
-    box-shadow: 0px 0px 3px green;
-    cursor: pointer;
+	border-radius: 8px;
+	box-shadow: 0px 0px 3px green;
+	cursor: pointer;
 }
 
 div.profileInfos table.infos {
-    border-collapse: collapse;
-    border: thin solid #333333;
-    font-size: 12px;
-    text-align: center;
+	border-collapse: collapse;
+	border: thin solid #333333;
+	font-size: 12px;
+	text-align: center;
 }
 
 div.profileInfos table.infos td {
-    border: thin solid #333333;
+	border: thin solid #333333;
 }
 
 div.hiddenDiv {
-    display: none;
-}
-#tabChrall, #tabLinks {
-    text-align: left;
-    padding: 8px;
-}
-#tabChrall a, #tabLinks a {
-    color: #900;
-    padding-left: 8px;
-    padding-right: 8px;
-    cursor: pointer;
-}
-#tabChrall a:hover, #tabLinks a:hover {
-    background-color: #900;
-    padding-left: 8px;
-    padding-right: 8px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: white;
+	display: none;
 }
 
+#tabChrall a, #tabLinks a {
+	color: #900;
+	padding-left: 8px;
+	padding-right: 8px;
+	cursor: pointer;
+}
+
+#tabChrall a:hover, #tabLinks a:hover {
+	background-color: #900;
+	padding-left: 8px;
+	padding-right: 8px;
+	border-radius: 8px;
+	text-decoration: none;
+	color: white;
+}
 
 table.cdm, table.tks {
-    border-collapse: collapse;
-    border: thin solid #A0A0FF;
-    font-size: 12px;
-    color: white;
+	border-collapse: collapse;
+	border: thin solid #A0A0FF;
+	font-size: 12px;
+	color: white;
 }
 
 table.cdm th, table.tks th {
-    border: thin solid #A0A0FF;
-    text-align: right;
-    font-weight: normal;
-    padding: 0 2px;
+	border: thin solid #A0A0FF;
+	text-align: right;
+	font-weight: normal;
+	padding: 0 2px;
 }
 
 table.cdm td {
-    border: thin solid #A0A0FF;
-    text-align: left;
-    padding: 0 2px;
+	border: thin solid #A0A0FF;
+	text-align: left;
+	padding: 0 2px;
 }
 
 table.tks td {
-    border: thin solid #A0A0FF;
-    text-align: center;
-    padding: 0 2px;
+	border: thin solid #A0A0FF;
+	text-align: center;
+	padding: 0 2px;
 }
 
 table.cdm th.title {
-    text-align: center;
+	text-align: center;
 }
 
 .ch_box {
-    display: none;
-    position: absolute;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px #666;
-    font-size: 14px;
-    margin-bottom: 20px;
-    padding: 10px;
-    color: white;
-    background-size: 100% 100%;
-    background: -webkit-gradient(
-		linear,
-		left top, left bottom,
-		from(dodgerblue),
-		to(indigo)
-	);
+	display: none;
+	position: absolute;
+	border-radius: 15px;
+	box-shadow: 0px 4px 10px #666;
+	font-size: 14px;
+	margin-bottom: 20px;
+	padding: 10px;
+	color: white;
+	background-size: 100% 100%;
+	background: -webkit-gradient(linear, left top, left bottom, from(dodgerblue), to(indigo));
 }
+
 #ch_messageTitle {
-    color: orange;
-    font-weight: bold;
-    text-shadow: 0 0 0.2em black;
-    cursor: pointer;
+	color: orange;
+	font-weight: bold;
+	text-shadow: 0 0 0.2em black;
+	cursor: pointer;
 }
+
 #ch_messageContent {
-    display: none;
+	display: none;
 }
 
 .emphase {
-    color: orange;
-    font-weight: bold;
-    text-shadow: 0 0 0.2em black;
+	color: orange;
+	font-weight: bold;
+	text-shadow: 0 0 0.2em black;
 }
 
 a.gogo:focus {
-    oultine: none;
+	oultine: none;
 }
 
-a.gogo,  a.gogo:link {
-    background-color: mediumblue;
-    border-top: 1px solid mediumblue;
-    border-bottom: 1px solid darkblue;
-    margin: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-    border-radius: 10px;
-    text-decoration: none;
-    cursor: pointer;
-    color: white !important;
+a.gogo, a.gogo:link {
+	background-color: mediumblue;
+	border-top: 1px solid mediumblue;
+	border-bottom: 1px solid darkblue;
+	margin: 4px;
+	padding-left: 8px;
+	padding-right: 8px;
+	border-radius: 10px;
+	text-decoration: none;
+	cursor: pointer;
+	color: white !important;
 }
 
 a.gogo:hover {
-    color: yellow !important;
+	color: yellow !important;
 }
+
 [invisible] {
-    display: none;
+	display: none;
 }
+
 #bubble {
-    position: fixed;
-    display: inline;
-    border: 2px;
-    box-shadow: 0px 4px 10px #666;
-    border-radius: 6px;
-    font-style: normal;
-    font-family: Arial;
-    font-size: 12px !important;
-    line-height: 18px;
-    color: white;
-    padding: 4px;
-    z-index: 20;
+	position: fixed;
+	display: inline;
+	border: 2px;
+	box-shadow: 0px 4px 10px #666;
+	border-radius: 6px;
+	font-style: normal;
+	font-family: Arial, sans-serif;
+	font-size: 12px !important;
+	line-height: 18px;
+	color: white;
+	padding: 4px;
+	z-index: 20;
 }
+
 #bubble td {
-    color: white;
-    font-family: Arial;
-    font-size: 12px !important;
+	color: white;
+	font-family: Arial, sans-serif;
+	font-size: 12px !important;
 }
 
 .bub_monster {
-    background-color: brown;
+	background-color: brown;
 }
 
 .bub_gowap {
-    background-color: #c99b1f;
+	background-color: #c99b1f;
 }
 
 .bub_troll {
-    background-color: blue;
+	background-color: blue;
 }
 
 .bub_player {
-    background-color: green;
+	background-color: green;
 }
 
 .bub_object {
-    background-color: grey;
+	background-color: grey;
 }
 
 .bub_competence {
-    background-color: #080;
+	background-color: #080;
 }
 
 .bub_sort {
-    background-color: #A00;
+	background-color: #A00;
 }
 
 .bubbleTitle {
-    text-align: center;
+	text-align: center;
 }
 
 .bub_monster img.illus {
-    border-radius: 6px;
-    margin-right: 5px;
-    max-height: 200px;
-    max-width: 200px;
+	border-radius: 6px;
+	margin-right: 5px;
+	max-height: 200px;
+	max-width: 200px;
 }
 
 #objectMenu_top {
-    position: absolute;
-    border: 2px;
-    border-radius: 10px 10px 0 0;
-    border-left: thin solid #333333;
-    border-top: thin solid #333333;
-    border-right: thin solid #333333;
-    font-size: 12px;
-    color: #666;
-    padding: 2px;
-    text-align: center;
-    z-index: 8;
+	position: absolute;
+	border: 2px;
+	border-radius: 10px 10px 0 0;
+	border-left: thin solid #333333;
+	border-top: thin solid #333333;
+	border-right: thin solid #333333;
+	font-size: 12px;
+	color: #666;
+	padding: 2px;
+	text-align: center;
+	z-index: 8;
 }
+
 #objectMenu_bottom {
-    position: absolute;
-    border: 2px;
-    box-shadow: 0px 6px 10px #666;
-    border-radius: 0 0 10px 10px;
-    border-left: thin solid #333333;
-    border-bottom: thin solid #333333;
-    border-right: thin solid #333333;
-    font-size: 12px;
-    color: #666;
-    padding: 2px;
-    text-align: center;
-    z-index: 8;
+	position: absolute;
+	border: 2px;
+	box-shadow: 0px 6px 10px #666;
+	border-radius: 0 0 10px 10px;
+	border-left: thin solid #333333;
+	border-bottom: thin solid #333333;
+	border-right: thin solid #333333;
+	font-size: 12px;
+	color: #666;
+	padding: 2px;
+	text-align: center;
+	z-index: 8;
 }
+
 #objectMenu_top a:link, #objectMenu_bottom a:link, #objectMenu_bottom a.chrall_de {
-    display: block;
-    background-color: green;
-    margin: 2px;
-    padding-left: 4px;
-    padding-right: 4px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: white !important;
-    cursor: pointer;
+	display: block;
+	background-color: green;
+	margin: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+	border-radius: 8px;
+	text-decoration: none;
+	color: white !important;
+	cursor: pointer;
 }
+
 #objectMenu_top a:hover, #objectMenu_bottom a:hover, #objectMenu_bottom a.chrall_de:hover {
-    background-color: darkGreen;
+	background-color: darkGreen;
 }
 
 #ch_popm {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 20;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px #666;
-    font-size: 14px;
-    margin-bottom: 20px;
-    padding: 10px;
-    color: white;
-    background-size: 100% 100%;
-    background: -webkit-gradient(
-		linear,
-		left top, left bottom,
-		from(dodgerblue),
-		to(indigo)
-	);
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	z-index: 20;
+	border-radius: 10px;
+	box-shadow: 0px 4px 10px #666;
+	font-size: 14px;
+	margin-bottom: 20px;
+	padding: 10px;
+	color: white;
+	background-size: 100% 100%;
+	background: -webkit-gradient(linear, left top, left bottom, from(dodgerblue), to(indigo));
 }
+
 #ch_popm_trigger {
-    color: orange;
-    cursor: pointer;
+	color: orange;
+	cursor: pointer;
 }
 
 #ch_pjpop_trigger {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    z-index: 9903;
-    width: 30px;
-    height: 30px;
-    border-radius: 0 0 10px 0;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 9903;
+	width: 30px;
+	height: 30px;
+	border-radius: 0 0 10px 0;
 }
+
 #ch_pjpop {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    z-index: 9920;
-    width: 8px;
-    height: 8px;
-    border-radius: 0 0 10px 0;
-    background: -webkit-gradient(
-		linear,
-		left top, left bottom,
-		from(dodgerblue),
-		to(indigo)
-	);
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 9920;
+	width: 8px;
+	height: 8px;
+	border-radius: 0 0 10px 0;
+	background: -webkit-gradient(linear, left top, left bottom, from(dodgerblue), to(indigo));
 }
 
 #gogochrall table.cdm td {
-    color: black !important;
+	color: black !important;
 }
+
 #gogochrall table.cdm th {
-    color: black !important;
+	color: black !important;
 }
 
 #zoom {
-    z-index: 6;
-    position: fixed;
-    display: none;
-    top: 20px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    background: url(/MH_Packs/packMH_parchemin/fond/fond2.jpg);
-    box-shadow: 0px 4px 14px #666;
-    padding: 4px;
-    overflow: auto;
-    border: solid black 1px;
+	z-index: 6;
+	position: fixed;
+	display: none;
+	top: 20px;
+	left: 10px;
+	right: 10px;
+	bottom: 10px;
+	background: url(/MH_Packs/packMH_parchemin/fond/fond2.jpg);
+	box-shadow: 0px 4px 14px #666;
+	padding: 4px;
+	overflow: auto;
+	border: solid black 1px;
 }
+
 #tdbCarte {
-    position: fixed;
-    font-size: 12px;
-    left: 40px;
-    bottom: 10px;
-    background-color: #EBEBEB;
-    border: 1px solid grey;
-    margin: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
-    border-radius: 10px;
-    z-index: 3;
+	position: fixed;
+	font-size: 12px;
+	left: 40px;
+	bottom: 10px;
+	background-color: #EBEBEB;
+	border: 1px solid grey;
+	margin: 4px;
+	padding-left: 8px;
+	padding-right: 8px;
+	border-radius: 10px;
+	z-index: 3;
 }
+
 #messageCarte {
-    border-left: 1px solid grey;
-    padding-left: 8px;
+	border-left: 1px solid grey;
+	padding-left: 8px;
 }
+
 #menuOutilsChrall {
-    background-image: url(http://canop.org/chrall/fondDante3.jpg);
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    padding-left: 5px;
-    padding-top: 5px;
-    overflow: hidden;
+	background-image: url(http://canop.org/chrall/fondDante3.jpg);
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	padding-left: 5px;
+	padding-top: 5px;
+	overflow: hidden;
 }
+
 #menuOutilsChrall span.titre {
-    margin-top: 9px;
-    margin-left: 40px;
-    display: block;
-    font-weight: bold;
-    font-size: 12px;
+	margin-top: 9px;
+	margin-left: 40px;
+	display: block;
+	font-weight: bold;
+	font-size: 12px;
 }

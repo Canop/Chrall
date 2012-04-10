@@ -10,7 +10,7 @@ function Chrall_prepareInsulte() {
 }
 
 function Chrall_analyseResultatInsulte() {
-	if (!compteChrallActif()) return;
+	if (!chrall.compteChrallActif()) return;
 	var text = $('body').text();
 	var lines = text.split('\n');
 	//~ console.log('Texte résultat insulte :');
@@ -36,7 +36,7 @@ function Chrall_analyseResultatInsulte() {
 	result.Type='Insulte';
 	result.NumCible=parseInt(localStorage['cible_insulte']);
 
-	sendToChrallServer(
+	chrall.sendToChrallServer(
 		"insulte",
 		{"Action":result}
 	);

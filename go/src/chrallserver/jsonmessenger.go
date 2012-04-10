@@ -3,6 +3,7 @@ package main
 // Gère les communications json-json authentifiées avec l'extension Chrall
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -32,7 +33,7 @@ type JsonMessageOut struct {
 }
 
 func (h *JsonGetHandler) writeJsonAnswer(w http.ResponseWriter, out *JsonMessageOut) {
-	fmt.Fprint(w, "receiveFromChrallServer(")
+	fmt.Fprint(w, "chrall.receiveFromChrallServer(")
 	bout, _ := json.Marshal(out)
 	w.Write(bout)
 	fmt.Fprint(w, ")")
@@ -123,6 +124,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				log.Printf("Erreur sauvegarde proposition partage sur action %s : %s\n", action, err.Error())
 				return
 			}
+			h.computePartages(db, in, action, out)
 		case "Accepter":
 			log.Printf("Demande accept partage %d -> %d\n", in.TrollId, in.IdCible)
 			err = h.store.UpdatePartage(db, in.TrollId, in.IdCible, "on")
@@ -131,6 +133,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				log.Printf("Erreur update partage sur action %s : %s\n", action, err.Error())
 				return
 			}
+			h.computePartages(db, in, action, out)
 		case "Rompre":
 			log.Printf("Demande fin partage %d -> %d\n", in.TrollId, in.IdCible)
 			err = h.store.UpdatePartage(db, in.TrollId, in.IdCible, "off")
@@ -139,6 +142,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				fmt.Printf("Erreur update partage sur action %s : %s\n", action, err.Error())
 				return
 			}
+			h.computePartages(db, in, action, out)
 		case "Supprimer":
 			log.Printf("Demande suppression partage %d -> %d\n", in.TrollId, in.IdCible)
 			err = h.store.DeletePartage(db, in.TrollId, in.IdCible)
@@ -147,6 +151,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				log.Printf("Erreur update partage sur action %s : %s\n", action, err.Error())
 				return
 			}
+			h.computePartages(db, in, action, out)
 		}
 		if action == "get_partages" {
 			partages, err := h.store.GetAllPartages(db, in.TrollId)
@@ -195,4 +200,14 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			out.Error = "bug"
 		}
 	}
+}
+
+func (h *JsonGetHandler) computePartages(db *sql.DB, in *JsonMessageIn, action string, out *JsonMessageOut) {
+	partages, err := h.store.GetAllPartages(db, in.TrollId)
+	if err != nil {
+		out.Error = err.Error()
+		log.Printf("Erreur lecture partages sur action %s : %s\n", action, err.Error())
+		return
+	}
+	out.MiPartages = h.store.PartagesToMiPartages(db, in.TrollId, partages, h.tksManager)
 }
