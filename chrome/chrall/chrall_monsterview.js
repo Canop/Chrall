@@ -9,7 +9,7 @@
 		var div = $('<div/>', {id: 'ch_pjpop_trigger'}).append($('<div/>', {id: 'ch_pjpop'}))
 		div.appendTo($('body'));
 
-		bubble($("#ch_pjpop_trigger"), '', "bub_monster", chrall.serveurPublic() + "json?action=get_extract_jsonp&asker=" + player.id + "&name=" + encodeURIComponent(nomMonstre) + "&monsterId=" + monsterId, nomMonstre);
+		chrall.triggerBubble($("#ch_pjpop_trigger"), '', "bub_monster", chrall.serveurPublic() + "json?action=get_extract_jsonp&asker=" + player.id + "&name=" + encodeURIComponent(nomMonstre) + "&monsterId=" + monsterId, nomMonstre);
 	}
 
 })(window.chrall = window.chrall || {});

@@ -452,10 +452,10 @@ function Chrall_analyseAndReformatView() {
 				var link = $("#grid a.ch_player");
 				var trollId = link.attr('id');
 				if (trollId == 0) {
-					bubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
+					chrall.triggerBubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
 				} else {
 					// TODO: memoriser un resultat d'appel au serveur public
-					bubble(link, '', "bub_player", chrall.serveurPublic() + "json?action=get_troll_info&trollId=" + trollId, trollId);
+					chrall.triggerBubble(link, '', "bub_player", chrall.serveurPublic() + "json?action=get_troll_info&trollId=" + trollId, trollId);
 				}
 
 				//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
@@ -464,9 +464,9 @@ function Chrall_analyseAndReformatView() {
 							var o = $(this);
 							var text = o.attr("bub");
 							if (text) {
-								bubble(o, text, "bub_object");
+								chrall.triggerBubble(o, text, "bub_object");
 							} else {
-								bubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
+								chrall.triggerBubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
 							}
 						}
 				);
