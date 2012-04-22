@@ -174,6 +174,10 @@ switch (chrall.pageName()) {
 		chrall.doWithInjection(function() {
 			chrall.addPartageLinkToAll();
 		});
+	case "MH_Messagerie.php":
+		chrall.doWithInjection(function() {
+			chrall.compactMessageTitle();
+		});
 		break;
 }
 
