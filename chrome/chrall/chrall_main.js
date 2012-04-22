@@ -25,7 +25,7 @@ var viewFilters = {
 };
 
 
-console.log("pageName=\"" + chrall.pageName() + "\"");
+console.info("pageName=[" + chrall.pageName() + "]");
 
 var player = chrall.player(); // for temporary compatibility purposes only
 
