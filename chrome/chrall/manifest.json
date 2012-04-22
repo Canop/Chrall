@@ -58,6 +58,7 @@
 				"chrall_pogo.js",
 				"chrall_destinations.js",
 				"chrall_guilde_internal.js",
+				"chrall_messagerie.js",
 				"chrall_main.js"
 			]
 		},

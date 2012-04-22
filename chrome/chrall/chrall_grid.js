@@ -80,7 +80,7 @@ function Chrall_gridLive() {
 	$(html).appendTo($('body'));
 
 	//> on ajoute le popup sur les monstres
-	bubbleLive(
+	chrall.bubbleLive(
 			'a[href*="EMV"]',
 			'bub_monster',
 			function(link) {
@@ -89,7 +89,6 @@ function Chrall_gridLive() {
 				var tokens = link.text().split(':');
 				var linkText = tokens[tokens.length - 1].trim();
 				var nomMonstre = encodeURIComponent(linkText);
-				args.text = link.attr("message"); // peut être undefined
 				var imgUrl = getMonsterMhImageUrl(linkText);
 				if (imgUrl != null) {
 					args.leftCol = "<img class=illus src=\"" + imgUrl + "\">";
@@ -104,17 +103,12 @@ function Chrall_gridLive() {
 	);
 
 	//> popup sur les trolls
-	bubbleLive(
+	chrall.bubbleLive(
 			'#grid a.ch_troll, div#tabTrolls a.mh_trolls_1, #tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll',
 			'bub_troll',
 			function(link) {
-				var trollId = link.attr('trollId');
-				var message = link.attr("message");
-				if (!message) message = '';
-				var team = getPogoTeam(parseInt(trollId));
-				if (team) message += '<br>Pogo : ' + pogoTeamLabels[team] + '<br>';
+				var trollId = link.attr('id');
 				return {
-					'text':message,
 					'ajaxUrl':chrall.serveurPublic() + 'json?action=get_troll_info&asker=' + player.id + '&trollId=' + trollId,
 					'ajaxRequestId':trollId
 				};

@@ -6,10 +6,10 @@ var isInLaby = false;
 (function (chrall) {
 
 	chrall.makeDeLink = function (x, y, z) {
-	var cost = (chrall.player().cellIsFree ? 1 : 2) + (z === chrall.player().z ? 0 : 1);
-	if (cost > chrall.player().pa) return '';
-	return '<a class=chrall_de x=' + (x - chrall.player().x) + ' y=' + (y - chrall.player().y) + ' z=' + (z - chrall.player().z) + '>DE ' + x + ' ' + y + ' ' + z + '</a>';
-}
+		var cost = (chrall.player().cellIsFree ? 1 : 2) + (z === chrall.player().z ? 0 : 1);
+		if (cost > chrall.player().pa) return '';
+		return '<a class=chrall_de x=' + (x - chrall.player().x) + ' y=' + (y - chrall.player().y) + ' z=' + (z - chrall.player().z) + '>DE ' + x + ' ' + y + ' ' + z + '</a>';
+	}
 
 })(window.chrall = window.chrall || {});
 
@@ -298,6 +298,17 @@ function Chrall_makeGridHtml(noteRequest) {
 	return html.join('');
 }
 
+function Chrall_addTab($tabs, href, text, count) {
+	text = count ? text + " (" + count + ")" : text;
+	$tabs.append($("<li/>").append($("<a/>", { href : href}).text(text)));
+}
+
+function Chrall_makeTabDiv(id) {
+	var $div = $("<div scroll></div>");
+	$div.attr("id", id);
+	$div.attr("class", "tab_content");
+	return $div;
+}
 
 // OPTM : le plus long, dans cette opération, est le append de la grille, c'est-à-dire la construction par le browser de la
 //         page. Il me semble difficile d'optimiser ça.
@@ -327,54 +338,56 @@ function Chrall_analyseAndReformatView() {
 	var time_before_grid = (new Date()).getTime(); // <= prof
 
 	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
-	//var tables = $("table.mh_tdborder");
-	var html = []
-	var h = 0;
-	html[h++] = "<ul id=tabs_view class=tabs view>";
-	html[h++] = "<li><a href=#tabGrid>Grille</a></li>";
+
+	var $tabs = $("<ul/>", {id: "tabs_view", 'class': "tabs", view: "yes"});
+	if (chrall.isOptionDisabled('view-disable-grid-view')) {
+		Chrall_addTab($tabs, "#tabGrid", "Grille");
+	}
 	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
 	if (isInLaby) {
-		html[h++] = "<li><a href=#tabWalls>Murs et couloirs</a></li>";
+		Chrall_addTab($tabs, "#tabWalls", "Murs et couloirs");
 	}
-	html[h++] = "<li><a href=#tabTrolls>Trolls (" + grid.nbTrollsInView + ")</a></li>";
-	html[h++] = "<li><a href=#tabMonsters>Monstres (" + grid.nbMonstersInView + ")</a></li>";
-	html[h++] = "<li><a href=#tabPlaces>Lieux (" + grid.nbPlacesInView + ")</a></li>";
-	html[h++] = "<li><a href=#tabObjects>Trésors (" + grid.nbObjectsInView + ")</a></li>";
-	html[h++] = "<li><a href=#tabMushrooms>Champignons (" + grid.nbMushroomsInView + ")</a></li>";
-	html[h++] = "<li><a href=#tabCenotaphs>Cénotaphes (" + grid.nbCenotaphsInView + ")</a></li>";
-	html[h++] = "<li><a href=#tabSettings>Réglages</a></li>";
+	Chrall_addTab($tabs, "#tabTrolls", "Trolls", grid.nbTrollsInView);
+	Chrall_addTab($tabs, "#tabMonsters", "Monstres", grid.nbMonstersInView);
+	Chrall_addTab($tabs, "#tabPlaces", "Lieux", grid.nbPlacesInView);
+	Chrall_addTab($tabs, "#tabObjects", "Trésors", grid.nbObjectsInView);
+	Chrall_addTab($tabs, "#tabMushrooms", "Champignons", grid.nbMushroomsInView);
+	Chrall_addTab($tabs, "#tabCenotaphs", "Cénotaphes", grid.nbCenotaphsInView);
+	Chrall_addTab($tabs, "#tabSettings", "Réglages");
+
 	if (!chrall.hallIsAccro()) {
-		html[h++] = "<li><a href=#tabPartages>Partages</a></li>";
-		html[h++] = "<li><a href=#tabRecherche>Recherche</a></li>";
+		Chrall_addTab($tabs, "#tabPartages", "Partages");
+		Chrall_addTab($tabs, "#tabRecherche", "Recherche");
 	}
-	html[h++] = "</ul>";
-	html[h++] = "<div class=tab_container view>";
-	html[h++] = "<div id=tabGrid class=tab_content>";
-	html[h++] = Chrall_makeFiltersHtml();
-	html[h++] = "<div id=grid_holder>";
-	html[h++] = Chrall_makeGridHtml(noteRequest);
-	html[h++] = "</div>";
-	html[h++] = "</div>";
-	if (isInLaby) html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
-	html[h++] = "<div id=tabTrolls class=tab_content scroll></div>";
-	html[h++] = "<div id=tabMonsters class=tab_content scroll></div>";
-	html[h++] = "<div id=tabPlaces class=tab_content scroll></div>";
-	html[h++] = "<div id=tabObjects class=tab_content scroll></div>";
-	html[h++] = "<div id=tabMushrooms class=tab_content scroll></div>";
-	html[h++] = "<div id=tabCenotaphs class=tab_content scroll></div>";
-	html[h++] = "<div id=tabSettings class=tab_content scroll></div>";
+	var $tabContainer = $("<div/>", { 'class': "tab_container", view: "yes"});
+	$tabs = $tabs.after($tabContainer);
+
+	if (chrall.isOptionDisabled('view-disable-grid-view')) {
+		var $tabGrid = $("<div/>", { id: "tabGrid", 'class': "tab_content"}).html(Chrall_makeFiltersHtml());
+		var $holder = $("<div/>", { id: "grid_holder"}).html(Chrall_makeGridHtml(noteRequest));
+		$tabGrid.append($holder);
+		$tabContainer.append($tabGrid);
+	}
+
+	if (isInLaby) $tabContainer.append(Chrall_makeTabDiv("tabWalls"));
+	$tabContainer.append(Chrall_makeTabDiv("tabTrolls"));
+	$tabContainer.append(Chrall_makeTabDiv("tabMonsters"));
+	$tabContainer.append(Chrall_makeTabDiv("tabPlaces"));
+	$tabContainer.append(Chrall_makeTabDiv("tabObjects"));
+	$tabContainer.append(Chrall_makeTabDiv("tabMushrooms"));
+	$tabContainer.append(Chrall_makeTabDiv("tabCenotaphs"));
+	$tabContainer.append(Chrall_makeTabDiv("tabSettings"));
 	if (!chrall.hallIsAccro()) {
-		html[h++] = "<div id=tabPartages class=tab_content scroll></div>";
-		html[h++] = "<div id=tabRecherche class=tab_content scroll></div>";
+		$tabContainer.append(Chrall_makeTabDiv("tabPartages"));
+		$tabContainer.append(Chrall_makeTabDiv("tabRecherche"));
 		if (isInLaby) {
-			html[h++] = "<div id=tabWalls class=tab_content scroll></div>";
+			$tabContainer.append(Chrall_makeTabDiv("tabWalls"));
 		}
 	}
-	html[h++] = "</div>";
 
 	var time_after_grid_building = (new Date()).getTime(); // <= prof
 
-	$("table.mh_tdborder").first().parent().parent().prepend(html.join(''));
+	$("table.mh_tdborder").first().parent().parent().prepend($tabs);
 	$("#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 	//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
 	if (isInLaby) $("#tabWalls").append($tables['murs']);
@@ -390,14 +403,9 @@ function Chrall_analyseAndReformatView() {
 	}
 	$(".tab_content").hide();
 
-	if (localStorage['tab_view']) {
-		$('#tabs_view li:has(a[href="#' + localStorage['tab_view'] + '"])').addClass("active").show();
-		$('#' + localStorage['tab_view']).show();
-		localStorage.removeItem('tab_view');
-	} else {
-		$("#tabs_view li:first").addClass("active").show();
-		$(".tab_content:first").show();
-	}
+
+	$("#tabs_view li:first").addClass("active").show();
+	$(".tab_content:first").show();
 	var changeTab = function($tab) {
 		hideOm(); // fermeture des éventuels objectMenus de la grille
 		$("#tabs_view li").removeClass("active");
@@ -444,9 +452,10 @@ function Chrall_analyseAndReformatView() {
 				var link = $("#grid a.ch_player");
 				var trollId = link.attr('id');
 				if (trollId == 0) {
-					bubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
+					chrall.triggerBubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
 				} else {
-					bubble(link, '', "bub_player", chrall.serveurPublic() + "json?action=get_troll_info&trollId=" + trollId, trollId);
+					// TODO: memoriser un resultat d'appel au serveur public
+					chrall.triggerBubble(link, '', "bub_player", chrall.serveurPublic() + "json?action=get_troll_info&trollId=" + trollId, trollId);
 				}
 
 				//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
@@ -455,17 +464,15 @@ function Chrall_analyseAndReformatView() {
 							var o = $(this);
 							var text = o.attr("bub");
 							if (text) {
-								bubble(o, text, "bub_object");
+								chrall.triggerBubble(o, text, "bub_object");
 							} else {
-								bubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
+								chrall.triggerBubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
 							}
 						}
 				);
 
 				//> demande de notes
 				chrall.sendToChrallServer('get_notes', {'NoteRequest':noteRequest});
-
-
 			}, 1000
 	);
 
@@ -492,12 +499,12 @@ function Chrall_analyseAndReformatView() {
 					scrollInProgress = false;
 				}
 		);
+
 	}
 	//> on centre la vue sur la cellule du joueur
-	setTimeout(
-			gotoPlayer,
-			100
-	);
+	if (chrall.isOptionDisabled('view-disable-grid-view')) {
+		setTimeout(gotoPlayer, 100);
+	}
 	//> bouton de centrage
 	$('#goto_player').click(gotoPlayer);
 	//> hook pour le centrage au double-clic

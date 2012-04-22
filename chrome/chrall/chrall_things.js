@@ -213,9 +213,10 @@ Troll.prototype.fillFrom = function(src) {
 // sauvegarde localement les infos du troll. Utilisé en particulier pour le passage entre frames
 Troll.prototype.save = function() {
 	if (!this.id) {
-		console.log('no id -> troll non sauvable : from ' + chrall.pageName());
+		console.info('no id -> troll non sauvable : from ' + chrall.pageName());
 		return;
 	}
+	console.log_debug("Save troll " + this.id);
 	localStorage['last_saved_troll_id'] = this.id;
 	localStorage['troll.'+this.id] = JSON.stringify(this);
 }
@@ -223,12 +224,15 @@ Troll.prototype.save = function() {
 Troll.prototype.restore = function() {
 	if (!this.id) {
 		var storedId = localStorage['last_saved_troll_id'];
-		if (!storedId || "" == storedId) return;
+		if (!storedId || "" == storedId) {
+			console.log_debug("No troll to restore");
+			return;
+		}
 		this.id = parseInt(storedId);
 	}
 	var json = localStorage['troll.'+this.id];
 	if (!json) {
-		console.log('troll ' + this.id + ' non trouvé');
+		chrall.log_warn('troll ' + this.id + ' non trouvé');
 		return;
 	}
 	this.fillFrom($.parseJSON(json));
