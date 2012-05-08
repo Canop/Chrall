@@ -25,7 +25,7 @@ var viewFilters = {
 };
 
 
-console.log("pageName=\"" + chrall.pageName() + "\"");
+console.info("pageName=[" + chrall.pageName() + "]");
 
 var player = chrall.player(); // for temporary compatibility purposes only
 
@@ -144,7 +144,7 @@ switch (chrall.pageName()) {
 		break;
 	case "MonsterView.php":
 		chrall.doWithInjection("injected_events.js", function() {
-			Chrall_analyseAndReformatMonsterView();
+			chrall.analyseAndReformatMonsterView();
 			Chrall_addInfosToMonsterEvents();
 			Chrall_addBubblesToLinks();
 		});
@@ -173,6 +173,10 @@ switch (chrall.pageName()) {
 	case "Guilde_Membres.php":
 		chrall.doWithInjection(function() {
 			chrall.addPartageLinkToAll();
+		});
+	case "MH_Messagerie.php":
+		chrall.doWithInjection(function() {
+			chrall.compactMessageTitle();
 		});
 		break;
 }

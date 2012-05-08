@@ -22,7 +22,7 @@
 	}
 
 	chrall.updateTrollInfoInTable = function(partages) {
-		if ("yes" != localStorage['view-display-hit-points-ratio']) {return;}
+		if (chrall.isOptionDisabled('view-display-hit-points-ratio')) {return;}
 		
 		var partageInfo = {};
 		for (var i = 0; i < partages.length; i++) {

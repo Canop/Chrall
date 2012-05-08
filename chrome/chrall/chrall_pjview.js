@@ -14,7 +14,7 @@ function Chrall_analyseAndReformatPJView() {
 	html[h++] = '</div>';
 	$(html.join('')).appendTo($('body'));
 
-	bubble($("#ch_pjpop_trigger"), '', "bub_troll", chrall.serveurPublic() + "json?action=get_troll_info&asker=" + player.id + "&trollId=" + viewedTrollId, viewedTrollId);
+	chrall.triggerBubble($("#ch_pjpop_trigger"), '', "bub_troll", chrall.serveurPublic() + "json?action=get_troll_info&asker=" + player.id + "&trollId=" + viewedTrollId, viewedTrollId);
 
 
 }

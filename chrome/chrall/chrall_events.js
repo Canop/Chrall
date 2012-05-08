@@ -8,7 +8,7 @@ function Chrall_addBubblesToLinks() {
 			var href = link.attr('href');
 			var trollId = href.split('\'')[1];
 			if (trollId!=player.id && trollId!=viewedTrollId) {
-				bubble(link, '', "bub_troll", chrall.serveurPublic()+"json?action=get_troll_info&trollId="+trollId, trollId);
+				chrall.triggerBubble(link, '', "bub_troll", chrall.serveurPublic()+"json?action=get_troll_info&trollId="+trollId, trollId);
 			}
 		}
 	);	
@@ -19,7 +19,7 @@ function Chrall_addBubblesToLinks() {
 			var href = link.attr('href');
 			var numMonstre = href.split('\'')[1];
 			var nomMonstre = link.text().substr(3).trim();
-			bubble(link, '', "bub_monster", chrall.serveurPublic()+"json?action=get_extract_jsonp&name=" + encodeURIComponent(nomMonstre) + "&monsterId="+numMonstre, nomMonstre);
+			chrall.triggerBubble(link, '', "bub_monster", chrall.serveurPublic()+"json?action=get_extract_jsonp&name=" + encodeURIComponent(nomMonstre) + "&monsterId="+numMonstre, nomMonstre);
 		}
 	);
 }

@@ -383,7 +383,7 @@ function Chrall_analyseAndReformatProfile() {
 			function() {
 				var link = $(this);
 				var text = getBubbleContentForCompetence(link.text().trim());
-				bubble(link, text, "bub_competence");
+				chrall.triggerBubble(link, text, "bub_competence");
 			}
 	);
 
@@ -392,7 +392,7 @@ function Chrall_analyseAndReformatProfile() {
 			function() {
 				var link = $(this);
 				var text = getBubbleContentForSort(link.text().trim());
-				bubble(link, text, "bub_sort");
+				chrall.triggerBubble(link, text, "bub_sort");
 			}
 	);
 
