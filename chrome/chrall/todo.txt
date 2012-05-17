@@ -1,0 +1,25 @@
+eye-candy : les images dans la vue
+vue 2D: rendre optionnel
+vue 2D: version alternative: résumé d'icones
+vue 2D: dangerosité de la case
+vue 2D: historique des frappes façon TZ
+liste des messages: priorités, groupes de chasse?
+
+
+gestion des "notes":
+	inventaire types
+	pièges
+	affichage diplo
+	affichage des notes
+	
+
+? diplomatie inverse
+
+TZ
+composants recherchés
+régime alimentaire
+massacreurs
+caracs gowaps
+inventaire gowaps
+affichage items IDT dans la vue
+

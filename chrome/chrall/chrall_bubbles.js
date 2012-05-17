@@ -35,9 +35,9 @@
 			bubbleExists = false;
 		}
 	}
-	function surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv) {
+	function surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv, cssClass) {
 		if (leftCol) {
-			var $table = $('<table/>');
+			var $table = $('<table/>', {'class' : cssClass});
 			var $tr = $('<tr/>');
 			$table.append($tr);
 			var $rightCol = $('<td/>');
@@ -51,8 +51,9 @@
 	}
 
 	chrall.showBubble = function (target, event, text, cssClass, ajaxRequestId, leftCol) {
-		cssClass = 'mh_tdtitre';
+		cssClass = chrall.isOptionEnabled('bubble-use-mountyhall-styles') ? 'mh_tdtitre' : cssClass;
 		if (bubbleExists) chrall.hideBubble();
+		var $bubbleContent;
 		var tPosX = event.pageX - pageXOffset;
 		var w = document.body.clientWidth;
 		var style = "";
@@ -84,12 +85,12 @@
 			if (text) {
 				$bubbleDiv.append($('<div/>', {class:'bubbleTitle'}).html(text));
 			}
-			var $bubbleContent = $('<div/>', {id: 'bubbleContent'}).text('en attente de gogochrall...');
-			surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv);
+			$bubbleContent = $('<div/>', {id: 'bubbleContent'}).text('en attente de gogochrall...');
+			surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv, cssClass);
 		} else {
-			var $bubbleContent = $('<div/>', {id: 'bubbleContent'});
+			$bubbleContent = $('<div/>', {id: 'bubbleContent'});
 			$bubbleContent.html(text);
-			surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv);
+			surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv, cssClass);
 		}
 		bubbleTarget = target;
 		$bubbleDiv.mouseover(chrall.keepBubbleOpen).mouseout(chrall.letBubbleClose).prependTo('body');

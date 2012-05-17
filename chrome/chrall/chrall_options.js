@@ -52,6 +52,12 @@
 			<div style='display:block'><input id='view-show-distance-in-view' type='checkbox' class='toggle-option'><span class='option-description'>Afficher la distance en PA (via DE) dans les tables</span></div>\
 			<div style='display:block'><input id='view-display-hit-points-ratio' type='checkbox' class='toggle-option'><span class='option-description'>Afficher la barre de points de vie dans les tables (uniquement pour les partages actifs).</span></div>\
 		</div>\
+		<br/>\
+		<h3 class='option-section'>Divers</h3>\
+		<div class='option-section'>\
+			<p class='informational-text'>Options sans catégorie propre.</p>\
+			<div style='display:block'><input id='bubble-use-mountyhall-styles' type='checkbox' class='toggle-option'><span class='option-description'>Utiliser les styles MountyHall pour les info-bulles</span></div>\
+		</div>\
 		</p>\
 	</div>\
 	<div id=tabLinks class=tab_content>\
