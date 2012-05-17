@@ -80,40 +80,36 @@ function Chrall_gridLive() {
 	$(html).appendTo($('body'));
 
 	//> on ajoute le popup sur les monstres
-	chrall.bubbleLive(
-			'a[href*="EMV"]',
-			'bub_monster',
-			function(link) {
-				var args = {};
-				var monsterId = link.attr('id');
-				var tokens = link.text().split(':');
-				var linkText = tokens[tokens.length - 1].trim();
-				var nomMonstre = encodeURIComponent(linkText);
-				var imgUrl = getMonsterMhImageUrl(linkText);
-				if (imgUrl != null) {
-					args.leftCol = "<img class=illus src=\"" + imgUrl + "\">";
-				}
-				args.ajaxUrl = chrall.serveurPublic() + "json?action=get_extract_jsonp&asker=" + player.id + "&name=" + nomMonstre + "&monsterId=" + monsterId;
-				if (chrall.compteChrallActif()) {
-					args.ajaxUrl += '&mdpr=' + chrall.mdpCompteChrall();
-				}
-				args.ajaxRequestId = linkText;
-				return args;
-			}
-	);
+	function getMonsterArgs(link) {
+		var args = {};
+		var monsterId = parseInt(link.attr('id'));
+		var tokens = link.text().split(':');
+		var linkText = tokens[tokens.length - 1].trim();
+		var nomMonstre = encodeURIComponent(linkText);
+		var imgUrl = getMonsterMhImageUrl(linkText);
+		if (imgUrl != null) {
+			args.leftCol = "<img class=illus src=\"" + imgUrl + "\">";
+		}
+		args.ajaxUrl = chrall.serveurPublic() + "json?action=get_extract_jsonp&asker=" + player.id + "&name=" + nomMonstre + "&monsterId=" + monsterId;
+		if (chrall.compteChrallActif()) {
+			args.ajaxUrl += '&mdpr=' + chrall.mdpCompteChrall();
+		}
+		args.ajaxRequestId = linkText;
+		return args;
+	}
+	chrall.bubbleLive('a[href*="EMV"]', 'bub_monster', getMonsterArgs);
 
 	//> popup sur les trolls
-	chrall.bubbleLive(
-			'#grid a.ch_troll, div#tabTrolls a.mh_trolls_1, #tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll',
-			'bub_troll',
-			function(link) {
-				var trollId = link.attr('id');
+	function getTrollArgs(link) {
+				var trollId = parseInt(link.attr('id'));
 				return {
 					'ajaxUrl':chrall.serveurPublic() + 'json?action=get_troll_info&asker=' + player.id + '&trollId=' + trollId,
 					'ajaxRequestId':trollId
 				};
 			}
-	);
+	chrall.bubbleLive(
+			'#grid a.ch_troll, div#tabTrolls a.mh_trolls_1, #tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll',
+			'bub_troll', getTrollArgs);
 
 	//> on ajoute le menu des DE, le titre de chaque cellule
 	objectMenuLive('table.grid td[grid_x]', function(o) {
