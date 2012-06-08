@@ -35,6 +35,13 @@ function getBubbleContentForCompetence(name) {
 			
 		case "Balluchonnage" :
 			return "<table><tr><td>Balluchonner</td><td> : 1 PA</td></tr><tr><td>Déballuchonner</td><td> : 2 PA</td></tr></table>";
+			
+		case "Bidouille" :
+			var html = "<table><tr><td>Permet de Bidouiller</td></tr>";
+			html += "<tr><td><b>Un trésor</b> : complète le nom d'un objet de votre inventaire avec le texte de son choix.</td></tr>";
+			html += "<tr><td><b>Une bidouille</b> : crée un objet de toutes pièces, en lui donnant un nom et une description (poids en fonction du nombre de PA utilisé).</td></tr>";
+			html += "</table>";
+			return html;
 		
 		case "Botte Secrète" :
 			var des_att = Math.floor(player.attac.diceNumber/2);
@@ -99,6 +106,15 @@ function getBubbleContentForCompetence(name) {
 			var html = "<table><tr><td>Niveau</td><td> : "+compLevel+"</td></tr>";
 			html += "<tr><td>Attaque moyenne</td><td> : " + player.attac.getMean() + "</td></tr>";
 			html += "<tr><td>Dégâts moyens</td><td> : " + (player.damage.getMean()+damageBonus) + " / " + (player.damage.getCriticalMean()+damageBonus) + "</td></tr>";
+			html += "</table>";
+			return html;
+
+		case "Course" :
+			var html = "Permet d'activer le mode [Course] et d'avoir une chance de se déplacer pour 0PA par la suite";
+			html += "<table><tr><td>Un jet caché sous course/2 doit être réussi, sinon coût normal du déplacement</td></tr>";
+			html += "<tr><td>Le troll doit être seul sur la caverne pour activer le mode</td></tr>";			
+			html += "<tr><td>Le troll sort du mode [Course] s'il s'arrete (1PA) ou s'il subit une perte de PV</td></tr>";
+			html += "<tr><td>Actions possibles en mode [Course] : se déplacer / DE / arrêter de courir</td></tr>";
 			html += "</table>";
 			return html;
 			
