@@ -132,12 +132,14 @@ table.grid td {
 	color: #8686ec !important;
 }
 
-.ch_troll[team=H], .mh_trolls_1[team=H], .ch_player[team=H] {
-	background-color: #acf9ac;
+.ch_troll[team=R], .mh_trolls_1[team=R], .ch_player[team=R] {
+	background-color: #FF6666;
 }
-
-.ch_troll[team=P], .mh_trolls_1[team=P], .ch_player[team=P] {
-	background-color: #d2bc8c;
+.ch_troll[team=G], .mh_trolls_1[team=G], .ch_player[team=G] {
+	background-color: #66FF66;
+}
+.ch_troll[team=B], .mh_trolls_1[team=B], .ch_player[team=B] {
+	background-color: #6666FF;
 }
 
 .ch_place, .ch_place:hover {
