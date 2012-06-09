@@ -57,10 +57,6 @@ switch (chrall.pageName()) {
 		});
 		break;
 	case "Play_equipement.php":
-		chrall.doWithInjection(function() {
-			var section = getUrlParameter('as_CurSect', 'equip');
-			if (section == 'equip') Chrall_analyseAndReformatEquipment();
-		});
 		break;
 	case "Play_evenement.php":
 		chrall.doWithInjection(function() {

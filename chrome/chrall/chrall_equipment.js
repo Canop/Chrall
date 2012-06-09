@@ -96,7 +96,8 @@ function constructTotalEquipmentBm(map) {
 }
  
  
-//Dans la page d'équipement, ajoute le total des Bonus Malus de l'équipement porté
+// Dans la page d'équipement, ajoute le total des Bonus Malus de l'équipement porté
+// *** Obsolète depuis la modification de MH qui inclut ces totaux ***
 function Chrall_analyseAndReformatEquipment() {
 	var eqCells = $('table.TableEq td:contains("Etat")');
 	var ids = {}; // clé : id matos
