@@ -25,7 +25,7 @@ var viewFilters = {
 };
 
 
-console.log("pageName=\"" + chrall.pageName() + "\"");
+console.info("pageName=[" + chrall.pageName() + "]");
 
 var player = chrall.player(); // for temporary compatibility purposes only
 
@@ -169,6 +169,10 @@ switch (chrall.pageName()) {
 	case "Guilde_Membres.php":
 		chrall.doWithInjection(function() {
 			chrall.addPartageLinkToAll();
+		});
+	case "MH_Messagerie.php":
+		chrall.doWithInjection(function() {
+			chrall.compactMessageTitle();
 		});
 		break;
 }

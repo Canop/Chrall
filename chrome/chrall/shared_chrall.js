@@ -6,8 +6,8 @@
 
 	var TEST_LOCAL = false; // passer à true pour tester localement, ce qui suppose évidemment de disposer d'un serveur chrall localement
 
-	var SERVEUR_CHRALL_PUBLIC = "http://canop.org:8000/chrall/"; // l'adresse du serveur principal (celui qui hébèrge le bestaire et les infos publiques)
-	//var SERVEUR_CHRALL_PUBLIC = "http://localhost:8000/chrall/"; // l'adresse du serveur principal (celui qui hébèrge le bestaire et les infos publiques)
+	//var SERVEUR_CHRALL_PUBLIC = "http://canop.org:8000/chrall/"; // l'adresse du serveur principal (celui qui hébèrge le bestaire et les infos publiques)
+	var SERVEUR_CHRALL_PUBLIC = "http://localhost:8000/chrall/"; // l'adresse du serveur principal (celui qui hébèrge le bestaire et les infos publiques)
 	var SERVEUR_CHRALL_PRIVE = SERVEUR_CHRALL_PUBLIC; // l'adresse du serveur privé (par défaut le public mais peut être modifié)
 
 	if (!TEST_LOCAL) {
@@ -22,6 +22,34 @@
 	chrall.serveurPrive = function() {
 		return SERVEUR_CHRALL_PRIVE;
 	}
+
+	// --------------------------------------------------------
+	// -- mini logging framework
+	// --------------------------------------------------------
+
+	var TRACE = 0, DEBUG = 1, INFO = 2, WARN = 3, ERROR = 4;
+	var log_level = INFO;
+
+	console.log_trace = function(item) {
+		if (TRACE < log_level ) { return; }
+		console.log(item);
+	}
+	console.log_debug= function(item) {
+		if (DEBUG < log_level ) { return; }
+		console.log(item);
+	}
+	console.log_info= function(item) {
+		if (INFO < log_level ) { return; }
+		console.log(item);
+	}
+	console.log_warn = function(item) {
+		if (WARN < log_level ) { return; }
+		console.warn(item);
+	}
+	console.log_error = function(item) {
+		console.error(item);
+	}
+
 
 	// --------------------------------------------------------
 	// -- Gestion du "domaine"
@@ -67,16 +95,16 @@
 			var nextNode = createInjectNode(scriptList[i]);
 			previousNode.onload = (function(name, node) {
 				return function() {
-					console.log("Injecting ", name);
+					console.log_debug("Injecting ", name);
 					document.body.appendChild(node);
 				}
 			})(scriptList[i], nextNode);
 			previousNode = nextNode;
 		}
-		console.log("Injecting " + scriptList[0]);
+		console.log_debug("Injecting " + scriptList[0]);
 		if (typeof callback != "undefined") {
 			previousNode.onload = function() {
-				console.log("calling callback");
+				console.log_debug("calling callback");
 				callback();
 			}
 		}
@@ -200,5 +228,3 @@
 
 
 })(window.chrall = window.chrall || {});
-
-
