@@ -93,7 +93,7 @@ func (h *JsonGetHandler) makeTrollStats(hr *http.Request) *TrollBubbleJson {
 			ti := h.tksManager.getTrollInfos(askerId)
 			if ti != nil {
 				h.tksManager.CheckDiploLoaded()
-				html += fmt.Sprintf("<br>Tuer ce troll vous rapporterait %d px", pxkill(ti.Niveau, tks.Niveau))
+				html += fmt.Sprintf("<br/>Tuer ce troll vous rapporterait %d px<br/>", pxkill(ti.Niveau, tks.Niveau))
 				html += h.tksManager.Diplo.DescribeYourRelationsWith(askerId, ti.IdGuilde, trollId, tks.IdGuilde)
 			}
 		}

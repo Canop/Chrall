@@ -359,37 +359,44 @@ a.gogo:hover {
 
 .bub_monster {
 	background-color: brown;
+	color: white;
 }
 
 .bub_gowap {
 	background-color: #c99b1f;
+	color: white;
 }
 
 .bub_troll {
 	background-color: blue;
+	color: white;
 }
 
 .bub_player {
 	background-color: green;
+	color: white;
 }
 
 .bub_object {
 	background-color: grey;
+	color: white;
 }
 
 .bub_competence {
 	background-color: #080;
+	color: white;
 }
 
 .bub_sort {
 	background-color: #A00;
+	color: white;
 }
 
 .bubbleTitle {
 	text-align: center;
 }
 
-.bub_monster img.illus {
+img.illus {
 	border-radius: 6px;
 	margin-right: 5px;
 	max-height: 200px;

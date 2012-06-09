@@ -92,7 +92,7 @@
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
-			$(nameCell.children[0]).attr("id", item.id); // !! Analyze AND modify : inject monster id
+			$(nameCell.children[0]).attr("id", item.id + "_monster"); // !! Analyze AND modify : inject monster id
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
@@ -118,7 +118,7 @@
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.name = nameCell.textContent;
-			$(nameCell.children[0]).attr('id', item.id);
+			$(nameCell.children[0]).attr('id', item.id + "_troll");
 			item.level = cells[i++].textContent;
 			item.race = cells[i++].textContent;
 			item.guilde = cells[i++].textContent;
