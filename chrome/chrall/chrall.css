@@ -351,9 +351,12 @@ a.gogo:hover {
 	padding: 1ex;
 	z-index: 20;
 }
-
+#bubble th {
+	color: white;
+}
 #bubble td {
 	font-family: Arial, sans-serif;
+	color: white;
 	font-size: 12px !important;
 }
 
