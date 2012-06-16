@@ -112,26 +112,32 @@
 	}
 
 	// Private -- not linked to the chrall instance
-	 function changeMdpRestreint() {
+	function changeMdpRestreint() {
 		var nm = document.getElementById('ch_mdp_restreint').value;
 		if (nm.length != 32) {
 			alert('Votre mot de passe restreint doit faire exactement 32 caractères.');
 			return;
 		}
+		var mdpkey = passwordKey();
 		localStorage[mdpkey] = nm;
 		chrall.notifyUser({text:"Mot de passe modifié"});
 	}
 
 	// Private -- not linked to the chrall instance
-	function isPasswordValid () {
-		var mdpkey = 'troll.' + chrall.playerId() + '.mdp';
+	function isPasswordValid() {
+		var mdpkey = passwordKey();
 		var mdp = localStorage[mdpkey];
 		var mdpIsValid = mdp && (mdp.length == 32);
 		return mdpIsValid;
 	}
 
+	function passwordKey() {
+		var mdpkey = 'troll.' + chrall.playerId() + '.mdp';
+		return mdpkey;
+	}
+
 	// Private -- not linked to the chrall instance
-	 function refreshActivation() {
+	function refreshActivation() {
 		if (isPasswordValid()) {
 			$('#activationButton').removeClass("invisible");
 		} else {
@@ -163,7 +169,7 @@
 
 	function toggleOption() {
 		var id = $(this).attr('id');
-		localStorage[id] = this.checked ? "yes": "no";
+		localStorage[id] = this.checked ? "yes" : "no";
 	}
 
 })(window.chrall = window.chrall || {});
