@@ -4,7 +4,6 @@ var objectsOnPlayerCell;
 var isInLaby = false;
 
 (function (chrall) {
-
 	chrall.makeDeLink = function (x, y, z) {
 		var cost = (chrall.player().cellIsFree ? 1 : 2) + (z === chrall.player().z ? 0 : 1);
 		if (cost > chrall.player().pa) return '';
@@ -141,7 +140,7 @@ function Chrall_makeGridHtml(noteRequest) {
 							var an = player.z != m.z;
 							if (an) cellContent[c++] = "<span name=3D>";
 							cellContent[c++] = "<a name='monstres' class=ch_monster href=\"javascript:EMV(" + m.id + ",750,550);\"";
-							cellContent[c++] = ' message="' + m.fullName + ' ( ' + m.id + ' )<br>en X=' + x + ' Y=' + y + ' Z=' + m.z + '<br>Distance horizontale : ' + hdist + '"';
+							cellContent[c++] = ' message="' + m.fullName + ' ( ' + m.id + ' ) en X=' + x + ' Y=' + y + ' Z=' + m.z + '<br>Distance horizontale : ' + hdist + '"';
 							cellContent[c++] = " id=" + m.id;
 							cellContent[c++] = " nom_complet_monstre=\"" + encodeURIComponent(m.fullName) + "\"";
 							cellContent[c++] = ">" + m.z + ": " + m.fullName + "</a>";
@@ -329,13 +328,13 @@ function Chrall_analyseAndReformatView() {
 	$("table table center").first().remove();
 	$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
 
-	var time_after_cleaning = (new Date()).getTime(); // <= prof	
+	//var time_after_cleaning = (new Date()).getTime(); // <= prof	
 
 	//> on colle en haut à droite les liens [Refresh] et [Logout]
 	var refreshLogout = $("table table div");
 	refreshLogout.addClass("floatTopRight");
 
-	var time_before_grid = (new Date()).getTime(); // <= prof
+	//var time_before_grid = (new Date()).getTime(); // <= prof
 
 	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 
@@ -385,7 +384,7 @@ function Chrall_analyseAndReformatView() {
 		}
 	}
 
-	var time_after_grid_building = (new Date()).getTime(); // <= prof
+	//var time_after_grid_building = (new Date()).getTime(); // <= prof
 
 	$("table.mh_tdborder").first().parent().parent().prepend($tabs);
 	$("#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
@@ -402,7 +401,6 @@ function Chrall_analyseAndReformatView() {
 		makeSearchPanel($("#tabRecherche"));
 	}
 	$(".tab_content").hide();
-
 
 	$("#tabs_view li:first").addClass("active").show();
 	$(".tab_content:first").show();
@@ -424,7 +422,7 @@ function Chrall_analyseAndReformatView() {
 	$('a[href$="#lieux"]').click(function() { changeTab($('#tabs_view a[href="#tabPlaces"]').parent()); });
 	$('a[href$="#cadavre"]').click(function() { changeTab($('#tabs_view a[href="#tabCenotaphs"]').parent()); });
 
-	var time_after_grid_append = (new Date()).getTime(); // <= prof
+	// var time_after_grid_append = (new Date()).getTime(); // <= prof
 
 	$('#grid_holder').dragscrollable({dragSelector: '#grid'});
 
@@ -441,39 +439,40 @@ function Chrall_analyseAndReformatView() {
 		}
 	}
 
+	/*
 	console.log('noteRequest:');
 	console.log(noteRequest);
+	*/
 
 	setTimeout(// afin d'accélérer l'affichage initial, on repousse un peu l'ajout des bulles et menus
-			function() {
-				Chrall_gridLive();
+		function() {
+			Chrall_gridLive();
 
-				//> bulle popup sur le lien du joueur
-				var link = $("#grid a.ch_player");
-				var trollId = link.attr('id');
-				if (trollId == 0) {
-					chrall.triggerBubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
-				} else {
-					// TODO: memoriser un resultat d'appel au serveur public
-					chrall.triggerBubble(link, '', "bub_player", chrall.serveurPublic() + "json?action=get_troll_info&trollId=" + trollId, trollId);
+			//> bulle popup sur le lien du joueur
+			var link = $("#grid a.ch_player");
+			var trollId = link.attr('id');
+			if (trollId == 0) {
+				chrall.triggerBubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
+			} else {
+				chrall.triggerBubble(link, '', "bub_player", chrall.serveurPublic() + "json?action=get_troll_info&trollId=" + trollId, trollId);
+			}
+
+			//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
+			$("#grid a.ch_object").each(
+				function() {
+					var o = $(this);
+					var text = o.attr("bub");
+					if (text) {
+						chrall.triggerBubble(o, text, "bub_object");
+					} else {
+						chrall.triggerBubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
+					}
 				}
+			);
 
-				//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
-				$("#grid a.ch_object").each(
-						function() {
-							var o = $(this);
-							var text = o.attr("bub");
-							if (text) {
-								chrall.triggerBubble(o, text, "bub_object");
-							} else {
-								chrall.triggerBubble(o, "Cliquez pour voir tous ces trésors", "bub_object");
-							}
-						}
-				);
-
-				//> demande de notes
-				chrall.sendToChrallServer('get_notes', {'NoteRequest':noteRequest});
-			}, 1000
+			//> demande de notes
+			chrall.sendToChrallServer('get_notes', {'NoteRequest':noteRequest});
+		}, 1000
 	);
 
 	//> on outille le select de réduction de vue
@@ -490,17 +489,16 @@ function Chrall_analyseAndReformatView() {
 		hideOm();
 		scrollInProgress = true;
 		$gridHolder.animate(
-				{
-					scrollLeft: ($gridHolder.scrollLeft() + $playerCell.offset().left + ($playerCell.innerWidth() - window.innerWidth) / 2),
-					scrollTop: ($gridHolder.scrollTop() + $playerCell.offset().top + ($playerCell.innerHeight() - window.innerHeight) / 2)
-				},
-				'slow',
-				function() {
-					scrollInProgress = false;
-				}
+			{
+				scrollLeft: ($gridHolder.scrollLeft() + $playerCell.offset().left + ($playerCell.innerWidth() - window.innerWidth) / 2),
+				scrollTop: ($gridHolder.scrollTop() + $playerCell.offset().top + ($playerCell.innerHeight() - window.innerHeight) / 2)
+			},
+			'slow',
+			function() {
+				scrollInProgress = false;
+			}
 		);
-
-	}
+	};
 	//> on centre la vue sur la cellule du joueur
 	if (chrall.isOptionDisabled('view-disable-grid-view')) {
 		setTimeout(gotoPlayer, 100);
@@ -524,7 +522,6 @@ function Chrall_analyseAndReformatView() {
 	// On corrige si nécessaire la position affichée dans le menu de gauche et on signale
 	// cette position au serveur Chrall
 	updateTroll();
-
 }
 
 

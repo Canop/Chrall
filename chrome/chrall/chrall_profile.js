@@ -332,7 +332,6 @@ function Chrall_extractMagic(text) {
 
 function Chrall_analyseAndReformatProfile() {
 	var cells = $("table table table.mh_tdborder tr.mh_tdpage td");
-	//alert(cells.length);
 
 	Chrall_extractBasicInfos($(cells[1]).text()); // la cellule qui contient l'id, le nom, la race
 	Chrall_extractDlaInfos($(cells[4]).text()); // cells[4] est la cellule en face de "Echeance du tour"
@@ -368,11 +367,11 @@ function Chrall_analyseAndReformatProfile() {
 	html += "<span id=ch_messageContent><br><br>...de g0g0chrall...</span></span><br><br>";
 	$($("table table table")[0]).append(html);
 	$.ajax(
-			{
-				url: chrall.serveurPublic() + "json?action=check_messages&TrollId=" + player.id + "&ChrallVersion=" + chrallVersion,
-				crossDomain: true,
-				dataType: "jsonp"
-			}
+		{
+			url: chrall.serveurPublic() + "json?action=check_messages&TrollId=" + player.id + "&ChrallVersion=" + chrallVersion,
+			crossDomain: true,
+			dataType: "jsonp"
+		}
 	);
 	$("#ch_messageTitle").click(function() {
 		$("#ch_messageContent").toggle();
@@ -380,22 +379,21 @@ function Chrall_analyseAndReformatProfile() {
 
 	//> ajout des bulles sur les compétences
 	$('a[href*="EnterComp"]').each(
-			function() {
-				var link = $(this);
-				var text = getBubbleContentForCompetence(link.text().trim());
-				chrall.triggerBubble(link, text, "bub_competence");
-			}
+		function() {
+			var link = $(this);
+			var text = getBubbleContentForCompetence(link.text().trim());
+			chrall.triggerBubble(link, text, "bub_competence");
+		}
 	);
 
 	//> ajout des bulles sur les sorts
 	$('a[href*="EnterSort"]').each(
-			function() {
-				var link = $(this);
-				var text = getBubbleContentForSort(link.text().trim());
-				chrall.triggerBubble(link, text, "bub_sort");
-			}
+		function() {
+			var link = $(this);
+			var text = getBubbleContentForSort(link.text().trim());
+			chrall.triggerBubble(link, text, "bub_sort");
+		}
 	);
-
 
 	updateTroll();
 }

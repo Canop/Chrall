@@ -86,6 +86,7 @@ function Chrall_gridLive() {
 		var tokens = link.text().split(':');
 		var linkText = tokens[tokens.length - 1].trim();
 		var nomMonstre = encodeURIComponent(linkText);
+		args.text = link.attr('message');
 		var imgUrl = getMonsterMhImageUrl(linkText);
 		if (imgUrl != null) {
 			args.leftCol = "<img class=illus src=\"" + imgUrl + "\">";
@@ -101,15 +102,17 @@ function Chrall_gridLive() {
 
 	//> popup sur les trolls
 	function getTrollArgs(link) {
-				var trollId = parseInt(link.attr('id'));
-				return {
-					'ajaxUrl':chrall.serveurPublic() + 'json?action=get_troll_info&asker=' + player.id + '&trollId=' + trollId,
-					'ajaxRequestId':trollId
-				};
-			}
+		var trollId = parseInt(link.attr('id'));
+		return {
+			ajaxUrl: chrall.serveurPublic() + 'json?action=get_troll_info&asker=' + player.id + '&trollId=' + trollId,
+			text: link.attr('message'),
+			ajaxRequestId: trollId
+		};
+	}
 	chrall.bubbleLive(
-			'#grid a.ch_troll, div#tabTrolls a.mh_trolls_1, #tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll',
-			'bub_troll', getTrollArgs);
+		'#grid a.ch_troll, div#tabTrolls a.mh_trolls_1, #tabPartages a.mh_trolls_1, #tabRecherche a.mh_trolls_1, #zoom_content a.ch_troll',
+		'bub_troll', getTrollArgs
+	);
 
 	//> on ajoute le menu des DE, le titre de chaque cellule
 	objectMenuLive('table.grid td[grid_x]', function(o) {
@@ -156,7 +159,7 @@ function Chrall_gridLive() {
 	//> le défilement à la molette perturbe objectMenu
 	document.onmousewheel = function(e) {
 		hideOm();
-	}
+	};
 
 	// outillage des liens d'ouvertures de vue "zoom"
 	$('a[name="zoom"]').live('click', function() {

@@ -27,14 +27,13 @@
 	var bubbleCloseTimeoutID;
 	var bubbleTarget;
 
-
 	chrall.hideBubble = function () {
 		clearTimeout(bubbleCloseTimeoutID);
 		if (bubbleExists && !onBubbleDiv) {
 			$("#bubble").remove();
 			bubbleExists = false;
 		}
-	}
+	};
 	function surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv, cssClass) {
 		if (leftCol) {
 			var $table = $('<table/>', {'class' : cssClass});
@@ -48,7 +47,7 @@
 		} else {
 			$bubbleDiv.append($bubbleContent);
 		}
-	}
+	};
 
 	chrall.showBubble = function (target, event, text, cssClass, ajaxRequestId, leftCol) {
 		cssClass = chrall.isOptionEnabled('bubble-use-mountyhall-styles') ? 'mh_tdtitre' : cssClass;
@@ -95,22 +94,22 @@
 		bubbleTarget = target;
 		$bubbleDiv.mouseover(chrall.keepBubbleOpen).mouseout(chrall.letBubbleClose).prependTo('body');
 		bubbleExists = true;
-	}
+	};
 
 	chrall.keepBubbleOpen = function () {
 		onBubbleDiv = true;
-	}
+	};
 	chrall.letBubbleClose = function () {
 		onBubbleDiv = false;
 		chrall.hideBubble();
-	}
-
+	};
 
 	chrall.triggerBubble = function (target, // un objet jquery, par exemple  $("a.ch_monster")
 									 text, // le contenu de la bulle
 									 cssClass, // une classe css ajoutée à la bulle
 									 ajaxUrl, // une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
-									 ajaxRequestId) {
+									 ajaxRequestId
+	) {
 		target.mouseenter(function(event) {
 			if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
 			onBubbleTarget = true;
@@ -132,42 +131,40 @@
 			chrall.hideBubble();
 			//bubbleCloseTimeoutID = setTimeout(chrall.hideBubble, 150);  <= remettre cette ligne si on veut permettre le passage de la souris dans la bulle sans qu'elle se ferme
 		});
-	}
+	};
 
-// pour un ajout dynamique similaire au live de jquery.
-	chrall.bubbleLive = function (selector, cssClass, getArgs // fonction prenant en argument un objet jquery résultat de $(selector) et renvoyant une map avec text, ajaxUrl, ajaxRequestId (plus en optionnel leftCol)
-			) {
+	// pour un ajout dynamique similaire au live de jquery.
+	// fonction prenant en argument un objet jquery résultat de $(selector) et renvoyant une map avec text, ajaxUrl, ajaxRequestId (plus en optionnel leftCol)
+	chrall.bubbleLive = function (selector, cssClass, getArgs ) {
 		$(selector).live(
-				'mouseenter',
-				function(event) {
-					var target = $(this);
-					if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
-					onBubbleTarget = true;
-					var args = getArgs(target);
-					if (args.ajaxUrl) {
-						if (target.attr('cached_bubble_value')) {
-							var cached_bubble_value = target.attr('cached_bubble_value');
-							chrall.showBubble.call(this, target, event, cached_bubble_value, cssClass, null, args.leftCol);
-						} else {
-							$.ajax(
-									{
-										url: args.ajaxUrl,
-										crossDomain: true,
-										dataType: "jsonp"
-									}
-							);
-							chrall.showBubble.call(this, target, event, args.text, cssClass, args.ajaxRequestId, args.leftCol);
-						}
-					} else {
-						chrall.showBubble.call(this, target, event, args.text, cssClass, null, args.leftCol);
-					}
-
+			'mouseenter',
+			function(event) {
+				var target = $(this);
+				if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
+				onBubbleTarget = true;
+				var args = getArgs(target);
+				if (args.ajaxUrl) {
+					/* désactivation canop (car buggé et pas utile actuellement)
+					if (target.attr('cached_bubble_value')) {
+						var cached_bubble_value = target.attr('cached_bubble_value');
+						chrall.showBubble.call(this, target, event, cached_bubble_value, cssClass, null, args.leftCol);
+					} else {*/
+						$.ajax({
+							url: args.ajaxUrl,
+							crossDomain: true,
+							dataType: "jsonp"
+						});
+						chrall.showBubble.call(this, target, event, args.text, cssClass, args.ajaxRequestId, args.leftCol);
+					//}
+				} else {
+					chrall.showBubble.call(this, target, event, args.text, cssClass, null, args.leftCol);
 				}
+			}
 		).live(
-				'mouseout', function(event) {
-					onBubbleTarget = false;
-					chrall.hideBubble();
-				}
+			'mouseout', function(event) {
+				onBubbleTarget = false;
+				chrall.hideBubble();
+			}
 		);
 	}
 

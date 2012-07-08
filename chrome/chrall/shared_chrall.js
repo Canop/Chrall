@@ -135,24 +135,21 @@
 		seconds -= h * (3600);
 		var m = Math.floor(seconds / (60));
 		return h + (m < 10 ? "h0" : "h") + m;
-	}
-
+	};
 
 	chrall.formatDate = function (timestamp) {
-		// TODO: y a surement plus propre
 		if (timestamp == 0) return "";
 		var d = new Date(timestamp);
 		return d.getDate() + "/" + (d.getMonth() < 9 ? ("0" + (d.getMonth() + 1)) : (d.getMonth() + 1)) + " " + d.getHours() + "h" + (d.getMinutes() < 10 ? ("0" + d.getMinutes()) : d.getMinutes());
-	}
+	};
 
 	chrall.isOptionDisabled = function (key) {
 		return "yes" != localStorage[key];
-	}
+	};
 
 	chrall.isOptionEnabled = function (key) {
 		return "yes" == localStorage[key];
-	}
-
+	};
 
 	// Affiche une notification à l'utilisateur pendant quelques secondes
 	// Les options sont un hash dont les clés possibles sont:
@@ -186,19 +183,18 @@
 		for (key in valueMap) {
 			localStorage['troll.' + chrall.playerId() + key] = valueMap[key];
 		}
-	}
+	};
 
 	chrall.getTrollStorage = function (key) {
 		return localStorage['troll.' + chrall.playerId() + key];
-	}
-
+	};
 
 	// Pendant de setTrollStorage, pour nettoyer après usage
 	chrall.clearTrollStorage = function () {
 		for (var i = 0; i < arguments.length; i++) {
 			localStorage.removeItem('troll.' + chrall.playerId() + arguments[i]);
 		}
-	}
+	};
 
 
 	// --------------------------------------------------------
@@ -210,15 +206,15 @@
 
 	chrall.player = function() {
 		return currentPlayer;
-	}
+	};
 
 	chrall.playerId = function() {
 		return currentPlayer.id;
-	}
+	};
 
 	chrall.playerInvalid = function() {
 		return (!chrall.playerId()) || (chrall.playerId() == 0);
-	}
+	};
 
 	if ("PlayStart.php" == chrall.pageName()) {
 		localStorage.removeItem('last_saved_troll_id');

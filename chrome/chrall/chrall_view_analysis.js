@@ -2,9 +2,7 @@
  * ce fichier contient les fonctions d'analyse de la vue reçue de MH.
  */
 
-
 (function (chrall) {
-
 
 	// --- Utilitaires --------------------------------------------
 
@@ -20,15 +18,13 @@
 		});
 		var cat = this.attributes["cat"].value;
 		document.location.href = "../Messagerie/MH_Messagerie.php?cat=" + cat + "&dest=" + dests.join(',');
-	}
-
+	};
 
 	chrall.distanceFromPlayer = function(targetX, targetY, targetN) {
 		// TODO: compute the cost of movement through surface, to know when it's cheaper
 		var playerX = chrall.player().x;
 		var playerY = chrall.player().y;
 		var playerN = chrall.player().z;
-
 
 		var deltaX, deltaY, deltaN, fromSurface, toSurface, cost, save_on_x, save_on_y, save_surface;
 		deltaX = Math.abs(playerX - targetX);
@@ -54,8 +50,7 @@
 		cost += (!chrall.player().cellIsFree && !fromSurface && cost > 0) ? 1 : 0;
 
 		return cost;
-	}
-
+	};
 
 	chrall.addActionPointDistance = function($table, distColumn, xColumn) {
 		var table = $table.get(0);
@@ -74,7 +69,7 @@
 			var dist = cells[distColumn].textContent + " (" + chrall.distanceFromPlayer(x, y, z) + " PA)";
 			$(cells[distColumn]).text(dist).attr("style", "width:10ex");
 		}
-	}
+	};
 
 	// ------------------ Analyse des composants de la vue --------------------
 
@@ -99,7 +94,7 @@
 			item.hasLink = nameCell.children[0].href ? true : false;
 			grid.getCellNotNull(item.x, item.y).addMonster(item);
 		}
-	}
+	};
 
 	chrall.analyseTrollTable = function (table) {
 		// en même temps qu'on analyse la table, on ajoute les cases à cocher
@@ -143,7 +138,7 @@
 
 		$(lines[0]).prepend($('<td/>')); // une cellule vide pour décaler la mise en page
 		$(table.children[0]).prepend(actions);
-	}
+	};
 
 	chrall.analyseMushroomTable = function (table) {
 		table = table.get(0);
@@ -163,7 +158,7 @@
 			item.z = parseInt(cells[i++].textContent);
 			grid.getCellNotNull(item.x, item.y).addMushroom(item);
 		}
-	}
+	};
 
 	chrall.analysePlaceTable = function (table) {
 		table = table.get(0);
@@ -185,7 +180,7 @@
 			item.hasLink = nameCell.children[0].href ? true : false;
 			grid.getCellNotNull(item.x, item.y).addPlace(item);
 		}
-	}
+	};
 
 
 	chrall.analyseObjectTable = function (table) {
@@ -209,8 +204,7 @@
 			item.hasLink = nameCell.children[0].href ? true : false;
 			grid.getCellNotNull(item.x, item.y).addObject(item);
 		}
-	}
-
+	};
 
 	chrall.analyseCenotaphTable = function (table) {
 		table = table.get(0);
@@ -232,8 +226,7 @@
 			item.z = parseInt(cells[i++].textContent);
 			grid.getCellNotNull(item.x, item.y).addCenotaph(item);
 		}
-	}
-
+	};
 
 	chrall.analyseWallTable = function (table) {
 		if ("undefined" == typeof table) {
@@ -256,7 +249,7 @@
 			item.z = parseInt(cells[i++].textContent);
 			grid.getCellNotNull(item.x, item.y).addWall(item);
 		}
-	}
+	};
 
 	//> chargement des trucs en vue (monstres, trolls, etc.).
 	var jq_tables = {};
@@ -266,11 +259,11 @@
 		jq_tables[key] = $t;
 		$t.attr("id", "table_" + key); // plus facile pour les récupérer ailleurs plus tard
 		$t.detach();
-	}
+	};
 
 	chrall.$tables = function() {
 		return jq_tables;
-	}
+	};
 
 
 })(window.chrall = window.chrall || {});

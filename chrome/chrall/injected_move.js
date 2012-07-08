@@ -1,4 +1,3 @@
-
 // code injecté et exécuté lorsque l'on affiche le formulaire de mouvement dans la frame d'action
 
 var todoArgs = localStorage['todo_args'];
