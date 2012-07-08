@@ -1,7 +1,7 @@
 // contient des fonctions liées à l'interface générale
 // et des utilitaires. Contient aussi la constante donnant la version courante de Chrall
 
-var chrallVersion = "2.23";
+var chrallVersion = "2.24";
 
 function getUrlParameter(name, defaultValue) {
 	name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
@@ -100,8 +100,6 @@ function updateTroll() {
 	if (player.x) {
 		player.save();
 		var s = 'X=' + player.x + ' | Y=' + player.y + ' | N=' + player.z;
-		// TODO: trouver comment faire ça, le frame principal ne semble pas être "atteignable"; mais ceci est-il vraiment nécessaire?
-		//$('<script>parent.parent.Sommaire.document.getElementById("ch_menu_position").innerHTML="'+s+'";</script>').appendTo($('body'));
 		chrall.sendPlayerInfosToChrallServer();
 	}
 }
