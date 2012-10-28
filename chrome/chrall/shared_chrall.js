@@ -50,7 +50,6 @@
 		console.error(item);
 	}
 
-
 	// --------------------------------------------------------
 	// -- Gestion du "domaine"
 	// --------------------------------------------------------
@@ -69,61 +68,6 @@
 	chrall.hallIsAccro = function() {
 		return hallIsAccro;
 	}
-
-
-	// --------------------------------------------------------
-	// -- Intégration des scripts
-	// --------------------------------------------------------
-
-	var STANDARD_INJECTED_SCRIPT = ["jquery.js", "chrall_things.js", "shared_chrall.js", "injected_util_bubble.js", "shared_communication.js", "injected_notes.js", ];
-
-	// Private
-	function createInjectNode(fileName) {
-		var scriptNode;
-		scriptNode = document.createElement('script');
-		scriptNode.setAttribute("type", "application/javascript");
-		scriptNode.setAttribute("src", chrome.extension.getURL(fileName));
-		return scriptNode;
-	}
-
-	// Injecte une série de scripts à exécuter dans le contexte de la page.
-	// La fonction callback est exécutée lorsque tous les scripts ont été chargés.
-	chrall.inject = function (scriptList, callback) {
-		var firstNode = createInjectNode(scriptList[0]);
-		var previousNode = firstNode;
-		for (var i = 1; i < scriptList.length; i++) {
-			var nextNode = createInjectNode(scriptList[i]);
-			previousNode.onload = (function(name, node) {
-				return function() {
-					console.log_debug("Injecting ", name);
-					document.body.appendChild(node);
-				}
-			})(scriptList[i], nextNode);
-			previousNode = nextNode;
-		}
-		console.log_debug("Injecting " + scriptList[0]);
-		if (typeof callback != "undefined") {
-			previousNode.onload = function() {
-				console.log_debug("calling callback");
-				callback();
-			}
-		}
-		document.body.appendChild(firstNode);
-	};
-
-	chrall.doWithInjection = function () {
-		var length = arguments.length;
-		var callback = Array.prototype.slice.call(arguments, length - 1)[0];
-		var scriptList = length > 1 ? Array.prototype.slice.call(arguments, 0, length - 1) : new Array();
-		var allScripts = STANDARD_INJECTED_SCRIPT.concat(scriptList);
-		chrall.inject(allScripts, callback);
-	}
-
-	// Just a placeholder to easily switch from injected to non-injected
-	chrall.doWithoutInjection = function(callback) {
-		callback();
-	}
-
 
 	// --------------------------------------------------------
 	// -- Helpers génériques

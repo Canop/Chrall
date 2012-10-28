@@ -105,6 +105,9 @@ func (store *MysqlStore) UpdateTroll(db *sql.DB, c *Compte) (err error) {
 func (store *MysqlStore) CheckCompte(db *sql.DB, trollId int, mdpr string) (ok bool, c *Compte, err error) {
 	c, err = store.GetCompte(db, trollId)
 	if c == nil {
+		if !ALLOW_SP {
+			return false, nil, errors.New("Impossible de créer le compte car ALLOW_SP==false")
+		}
 		// nouveau compte
 		c = new(Compte)
 		c.trollId = trollId
@@ -120,6 +123,9 @@ func (store *MysqlStore) CheckCompte(db *sql.DB, trollId int, mdpr string) (ok b
 		// on sauvegarde
 		err = store.InsertCompte(db, c)
 	} else if c.mdpRestreint != mdpr {
+		if !ALLOW_SP {
+			return false, nil, errors.New("Impossible de vérifier le nouveau mot de passe car ALLOW_SP==false")
+		}
 		// nouveau mot de passe, il faut le vérifier aussi
 		// mais on ne fait pas de remplacement en bd si le compte était ok et
 		// que le nouveau mot de passe est invalide, pour ne pas pénaliser un joueur

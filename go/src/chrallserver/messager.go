@@ -76,7 +76,7 @@ func GetMessage(TrollId string, ChrallVersion string) (out *G2cMessage) {
 	out.Nature = "empty"
 
 	//> on va regarder si l'utilisateur n'a pas une version ancienne de Chrall
-	currentChralVersion := &Version{[]int{2, 24}}
+	currentChralVersion := &Version{[]int{2, 25}}
 	if userVersion, err := ParseVersion(ChrallVersion); err != nil {
 		fmt.Println("user's Chrall Version not understood : " + ChrallVersion)
 	} else {
@@ -87,7 +87,7 @@ func GetMessage(TrollId string, ChrallVersion string) (out *G2cMessage) {
 			out.Title = "L'extension Chrall n'est pas à jour"
 			out.Content += "Votre version : " + ChrallVersion
 			out.Content += "<br>La version actuelle : " + currentChralVersion.String()
-			out.Content += "<br>Cette version rétablit l'affichage de la distance horizontale dans les bulles sur la carte."
+			out.Content += "<br>Cette version rétablit l'affichage de la distance horizontale dans les bulles sur la carte et l'affichage différent des trolls intangibles."
 			out.Content += "<br><br>Vous pouvez mettre à jour l'extension sur <a target=newwin class=gogo href=http://canop.org/chrall>le site officiel de Chrall</a>."
 		case 1:
 			out.Nature = "normal"

@@ -10,6 +10,7 @@ import (
 
 const (
 	port = 8000
+	ALLOW_SP = false // cette constante permet de désactiver tout accès aux scripts publics de MH
 )
 
 type GogoServer struct {
@@ -82,5 +83,8 @@ func main() {
 	}
 	tksManager := new(TksManager)
 	tksManager.cheminDonnées = *cheminDonnées
+	if !ALLOW_SP {
+		log.Println("ALLOW_SP=false ===> Accès aux scripts publics MH désactivé")
+	}
 	gogo.Start(tksManager)
 }

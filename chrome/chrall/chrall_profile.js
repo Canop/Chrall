@@ -366,13 +366,7 @@ function Chrall_analyseAndReformatProfile() {
 	var html = "<span id=mbox class=ch_box><a id=ch_messageTitle>en attente...</a>";
 	html += "<span id=ch_messageContent><br><br>...de g0g0chrall...</span></span><br><br>";
 	$($("table table table")[0]).append(html);
-	$.ajax(
-		{
-			url: chrall.serveurPublic() + "json?action=check_messages&TrollId=" + player.id + "&ChrallVersion=" + chrallVersion,
-			crossDomain: true,
-			dataType: "jsonp"
-		}
-	);
+	chrall.jsonp(chrall.serveurPublic() + "json?action=check_messages&TrollId=" + player.id + "&ChrallVersion=" + chrallVersion);
 	$("#ch_messageTitle").click(function() {
 		$("#ch_messageContent").toggle();
 	});

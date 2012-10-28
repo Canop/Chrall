@@ -1,7 +1,7 @@
 // contient des fonctions liées à l'interface générale
 // et des utilitaires. Contient aussi la constante donnant la version courante de Chrall
 
-var chrallVersion = "2.24";
+var chrallVersion = "2.25";
 
 function getUrlParameter(name, defaultValue) {
 	name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
@@ -45,7 +45,7 @@ function Chrall_tokenize(text) {
  *  dans l'extension (la page en background).
  */
 function Chrall_sendDlaToExtension(dlaTime, cumulTime) {
-	chrome.extension.sendRequest({
+	chrome.extension.sendMessage({
 		"dla": dlaTime,
 		"cumul": cumulTime
 	});

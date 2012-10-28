@@ -78,8 +78,8 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 	}
 
 	// réponse aux requètes envoyées par les scripts "embbeded"
-	// ces requetes sont envoyées via chrome.extension.sendRequest({'key':value})
-	chrome.extension.onRequest.addListener(
+	// ces requetes sont envoyées via chrome.extension.sendMessage({'key':value})
+/*	chrome.extension.onMessage.addListener(
 		function(request, sender, sendResponse) {
 			for (var key in request) {
 				if (key=="dla" || key=="cumul") {
@@ -92,7 +92,7 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 			}
 			scheduleAlarms();
 		}
-	);
+	);*/
 	
 </script>
 

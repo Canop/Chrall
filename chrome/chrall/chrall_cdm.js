@@ -6,7 +6,7 @@ function Chrall_handleBeforeCdmPage() {
 	html += '</span>';
 	$(html).appendTo('div.Action');
 	$('#sendCdmAuto').change(function(){
-		chrome.extension.sendRequest({"send_cdm": this.value})
+		chrome.extension.sendMessage({"send_cdm": this.value})
 	});
 }
 
@@ -37,18 +37,12 @@ function Chrall_handleCdmPage() {
 		document.getElementById('gogochrall').innerHTML = "cdm ratée ? Pas d'envoi à gogochrall.";
 	} else {
 		//> on regarde d'abord si l'utilisateur a refusé qu'on envoie sa CDM
-		chrome.extension.sendRequest(
+		chrome.extension.sendMessage(
 			{"get_send_cdm": "Ou je te pête la gueule!"},
 			function(answer) {
 				if (answer.send_cdm) {
 					//> envoi au serveur de la CDM
-					$.ajax(
-						{
-							url: chrall.serveurPublic()+"json?action=accept_cdm_jsonp&author="+player.id+"&cdm="+encodeURIComponent(cdm)+"&seconds="+findMHSeconds(), // <- attention, ne marche que si le text est court...
-							crossDomain: true,
-							dataType: "jsonp"
-						}
-					);					
+					chrall.jsonp(chrall.serveurPublic()+"json?action=accept_cdm_jsonp&author="+player.id+"&cdm="+encodeURIComponent(cdm)+"&seconds="+findMHSeconds());
 				} else {
 					document.getElementById('gogochrall').innerHTML = "Conformément à votre souhait, la CDM n'a pas été envoyée au serveur Chrall. Sniff...";
 				}

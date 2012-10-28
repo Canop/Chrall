@@ -216,7 +216,6 @@ Troll.prototype.save = function() {
 		console.info('no id -> troll non sauvable : from ' + chrall.pageName());
 		return;
 	}
-	console.log_debug("Save troll " + this.id);
 	localStorage['last_saved_troll_id'] = this.id;
 	localStorage['troll.'+this.id] = JSON.stringify(this);
 }

@@ -144,6 +144,9 @@ func (store *MysqlStore) ObservationsAutour(db *sql.DB, x int, y int, z int, dis
 
 func (store *MysqlStore) majVue(db *sql.DB, cible int, pour int, tksManager *TksManager) string {
 	log.Printf("MAJ Vue %d\n", cible)
+	if !ALLOW_SP {
+		return "Impossible de mettre à jour la vue car ALLOW_SP==false"
+	}
 	compteCible, err := store.GetCompte(db, cible)
 	if err != nil {
 		return fmt.Sprintf("Erreur récupération compte de %d : %s", cible, err.Error())

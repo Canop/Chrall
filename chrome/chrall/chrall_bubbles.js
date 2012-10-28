@@ -75,11 +75,6 @@
 
 		if (ajaxRequestId && ajaxRequestId != null) {
 			var bubbleRequestId = document.getElementById('bubbleRequestId');
-			if (target.attr('id')) {
-				// Store the target id in the bubble request div, so that it can be retrieved later and used to find
-				// where to cache the ajax response
-				$(bubbleRequestId).attr('cacheId', target.attr('id'));
-			}
 			bubbleRequestId.value = ajaxRequestId; // je ne sais pas pourquoi mais utiliser $('#bubbleRequestId').val ne marche pas bien
 			if (text) {
 				$bubbleDiv.append($('<div/>', {class:'bubbleTitle'}).html(text));
@@ -114,13 +109,7 @@
 			if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
 			onBubbleTarget = true;
 			if (ajaxUrl) {
-				$.ajax(
-						{
-							url: ajaxUrl,
-							crossDomain: true,
-							dataType: "jsonp"
-						}
-				);
+				chrall.jsonp(ajaxUrl);
 				chrall.showBubble.call(this, $(this), event, text, cssClass, ajaxRequestId);
 			} else {
 				chrall.showBubble.call(this, $(this), event, text, cssClass);
@@ -144,18 +133,8 @@
 				onBubbleTarget = true;
 				var args = getArgs(target);
 				if (args.ajaxUrl) {
-					/* désactivation canop (car buggé et pas utile actuellement)
-					if (target.attr('cached_bubble_value')) {
-						var cached_bubble_value = target.attr('cached_bubble_value');
-						chrall.showBubble.call(this, target, event, cached_bubble_value, cssClass, null, args.leftCol);
-					} else {*/
-						$.ajax({
-							url: args.ajaxUrl,
-							crossDomain: true,
-							dataType: "jsonp"
-						});
-						chrall.showBubble.call(this, target, event, args.text, cssClass, args.ajaxRequestId, args.leftCol);
-					//}
+					chrall.jsonp(args.ajaxUrl);
+					chrall.showBubble.call(this, target, event, args.text, cssClass, args.ajaxRequestId, args.leftCol);
 				} else {
 					chrall.showBubble.call(this, target, event, args.text, cssClass, null, args.leftCol);
 				}

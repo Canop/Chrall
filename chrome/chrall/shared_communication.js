@@ -46,6 +46,19 @@
 			chrall.sendToChrallServer(action, {});
 		}
 	};
+	
+	// en attendant d'avoir viré le jsonp de Chrall (inutile maintenant que les headers CORS gèrent le problème du cross-domain)
+	//  il faut utiliser ça plutôt que jQUery.ajax pour être compatible avec les manifests 2 des extensions
+	chrall.jsonp = function(url) {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", url, true);
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4) {
+			   eval(xhr.responseText);
+		  }
+		}
+		xhr.send();
+	};
 
 // envoie au serveur un message authentifié par le mdp restreint
 	chrall.sendToChrallServer = function (action, message) {
@@ -64,14 +77,8 @@
 		message['TrollId'] = parseInt(chrall.playerId());
 		message['MDP'] = mdpRestreint;
 		console.log('Message sortant de ' + chrall.pageName() + ' (action=' + action + ') vers ' + chrall.serveurPrive() + ' : ');
-		console.log(message);
-		$.ajax(
-				{
-					url: chrall.serveurPrive() + 'json?v=2&action=' + action + '&message=' + JSON.stringify(message),
-					crossDomain: true,
-					dataType: "jsonp"
-				}
-		);
+		console.log(message);	
+		chrall.jsonp(chrall.serveurPrive() + 'json?v=2&action=' + action + '&message=' + JSON.stringify(message));
 		return true;
 	};
 
