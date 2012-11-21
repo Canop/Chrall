@@ -47,7 +47,6 @@
 
 	}
 
-
 	// Private -- not linked to the chrall instance
 	function createPvBlock(pvActuels, pvMax) {
 		// To show long bars for trolls with many hit points

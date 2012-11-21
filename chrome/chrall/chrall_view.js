@@ -46,8 +46,13 @@ function Chrall_makeFiltersHtml() {
 	for (var key in viewFilters) {
 		html += "<span><input type=checkbox id='" + key + "'";
 		if (viewFilters[key]) html += " checked";
-		html += " onClick=\"chrall.gridChangeDisplayByName('" + key + "', this.checked?'inline':'none');\"";
 		html += "><label for='" + key + "'>" + key + "</label></span>";
+		(function(key) {
+			$(document).on('change', '#'+key,function(e){
+				localStorage['grid_filter_' + key] = this.checked?'inline':'none';
+				chrall.gridChangeDisplayByName(key, this.checked?'inline':'none', true);
+			});
+		})(key);
 	}
 	html += "</form>";
 	return html;
@@ -183,7 +188,7 @@ function Chrall_makeGridHtml(noteRequest) {
 							var an = player.z != level;
 							if (an) cellContent[c++] = "<span name=3D>";
 							cellContent[c++] = "<span name='trésors' class=ch_object>" + level + " : ";
-							cellContent[c++] = "<a class=ch_objects_toggler href=\"javascript:chrall.gridChangeDisplayByName('" + divName + "');\">";
+							cellContent[c++] = "<a class=ch_objects_toggler toggleName='" + divName + "'>";
 							cellContent[c++] = "<b>" + list.length + " trésors</b>";
 							cellContent[c++] = "</a>";
 							cellContent[c++] = "<div name=" + divName + " class=hiddenDiv>";
@@ -315,6 +320,8 @@ function Chrall_makeTabDiv(id) {
 function Chrall_analyseAndReformatView() {
 	//var time_enter = (new Date()).getTime(); // <= prof
 
+	$(document.body).css('overflow', 'hidden'); // pour éviter 
+	
 	//> on analyse la vue
 	var $tables = Chrall_analyseView();
 	var noteRequest = {};
@@ -438,11 +445,10 @@ function Chrall_analyseAndReformatView() {
 			else $('#' + key).removeAttr("checked");
 		}
 	}
-
-	/*
-	console.log('noteRequest:');
-	console.log(noteRequest);
-	*/
+	
+	$(document.body).on('click', '[toggleName]', function(){
+		chrall.gridChangeDisplayByName($(this).attr('toggleName'));
+	});
 
 	setTimeout(// afin d'accélérer l'affichage initial, on repousse un peu l'ajout des bulles et menus
 		function() {

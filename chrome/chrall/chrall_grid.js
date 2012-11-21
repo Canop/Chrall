@@ -73,9 +73,11 @@ function Chrall_gridLive() {
 	html += "<form class=gridFiltersForm>";
 	var key = '3D';
 	html += "<span><input type=checkbox id='" + key + "'"; // on va la checker automatiquement à chaque ouverture (voir plus loin)
-	html += " onClick=\"chrall.gridChangeDisplayByName('" + key + "', this.checked?'inline':'none', true);\"";
 	html += "><label for='" + key + "'>" + key + "</label></span>";
 	html += "</form>";
+	$('#'+key).change(function(e){
+		chrall.gridChangeDisplayByName(key, this.checked?'inline':'none', true);
+	});
 	html += "<div id=zoom_content>En attente de gogochrall...</div></div>";
 	$(html).appendTo($('body'));
 

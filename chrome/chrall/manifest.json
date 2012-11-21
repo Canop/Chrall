@@ -5,6 +5,7 @@
 	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"homepage_url": "http://canop.org/chrall",
 	"background_page": "chrome-extension.html",
+	"web_accessible_resources": ["player_target.png"],
 	"content_scripts": [
 		{
 			"matches": ["*://accro.mountyhall.com/*", "*://games.mountyhall.com/*", "*://mh.fr.nf/*", "*://109.69.220.90/*"],
