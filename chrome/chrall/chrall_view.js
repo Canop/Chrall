@@ -66,6 +66,7 @@ function Chrall_makeFiltersHtml() {
  * Remplit au passage un objet contenant des infos sur ce qui est visible (pour les notes)
  */
 function Chrall_makeGridHtml(noteRequest) {
+	var orderItemsByType = chrall.isOptionEnabled("view-sort-items-per-type");
 	noteRequest.NumTrolls = [];
 	noteRequest.NumMonstres = [];
 	noteRequest.XMin = xmin;
@@ -175,7 +176,7 @@ function Chrall_makeGridHtml(noteRequest) {
 					for (var i = 0; i < cell.objects.length; i++) {
 						var t = cell.objects[i];
 						if (!objectsByLevel[t.z]) {
-							objectsByLevel[t.z] = new Array();
+							objectsByLevel[t.z] = [];
 						}
 						objectsByLevel[t.z].push(t);
 					}
@@ -193,6 +194,9 @@ function Chrall_makeGridHtml(noteRequest) {
 							cellContent[c++] = "</a>";
 							cellContent[c++] = "<div name=" + divName + " class=hiddenDiv>";
 							if (an) cellContent[c++] = "</span>";
+						}
+						if (orderItemsByType) {
+							list.sort(Chrall_cellNameComparator);
 						}
 						for (var i = 0; i < list.length; i++) {
 							var t = list[i];
@@ -300,6 +304,10 @@ function Chrall_makeGridHtml(noteRequest) {
 	html[h++] = "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax - xmin + 3) + " align=center>Mydikan (Y-)</td><td bgcolor=#BABABA></td></tr>";
 	html[h++] = "</tbody></table>";
 	return html.join('');
+}
+
+function Chrall_cellNameComparator(a, b) {
+	return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
 }
 
 function Chrall_addTab($tabs, href, text, count) {

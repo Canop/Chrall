@@ -51,6 +51,7 @@
 			<div style='display:block'><input id='view-disable-grid-view' type='checkbox' class='toggle-option'><span class='option-description'>Désactiver la grille 2D</span></div>\
 			<div style='display:block'><input id='view-show-distance-in-view' type='checkbox' class='toggle-option'><span class='option-description'>Afficher la distance en PA (via DE) dans les tables</span></div>\
 			<div style='display:block'><input id='view-display-hit-points-ratio' type='checkbox' class='toggle-option'><span class='option-description'>Afficher la barre de points de vie dans les tables (uniquement pour les partages actifs).</span></div>\
+			<div style='display:block'><input id='view-sort-items-per-type' type='checkbox' class='toggle-option'><span class='option-description'>Trier les items par type dans la vue (caverne par caverne).</span></div>\
 		</div>\
 		<br/>\
 		<h3 class='option-section'>Divers</h3>\

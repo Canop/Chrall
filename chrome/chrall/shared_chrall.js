@@ -93,7 +93,7 @@
 
 	chrall.isOptionEnabled = function (key, defaultChoice) {
 		var enabled = localStorage[key];
-		if (undefined === enabled) {
+		if (undefined === enabled && undefined !== defaultChoice) {
 			localStorage[key] = defaultChoice;
 			enabled = defaultChoice;
 		}
