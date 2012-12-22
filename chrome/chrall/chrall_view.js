@@ -320,8 +320,8 @@ function Chrall_makeTabDiv(id) {
 function Chrall_analyseAndReformatView() {
 	//var time_enter = (new Date()).getTime(); // <= prof
 
-	$(document.body).css('overflow', 'hidden'); // pour éviter 
-	
+	$(document.body).css('overflow', 'hidden'); // pour éviter
+
 	//> on analyse la vue
 	var $tables = Chrall_analyseView();
 	var noteRequest = {};
@@ -335,7 +335,7 @@ function Chrall_analyseAndReformatView() {
 	$("table table center").first().remove();
 	$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
 
-	//var time_after_cleaning = (new Date()).getTime(); // <= prof	
+	//var time_after_cleaning = (new Date()).getTime(); // <= prof
 
 	//> on colle en haut à droite les liens [Refresh] et [Logout]
 	var refreshLogout = $("table table div");
@@ -344,7 +344,6 @@ function Chrall_analyseAndReformatView() {
 	//var time_before_grid = (new Date()).getTime(); // <= prof
 
 	//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
-
 	var $tabs = $("<ul/>", {id: "tabs_view", 'class': "tabs", view: "yes"});
 	if (chrall.isOptionDisabled('view-disable-grid-view')) {
 		Chrall_addTab($tabs, "#tabGrid", "Grille");
@@ -409,29 +408,31 @@ function Chrall_analyseAndReformatView() {
 	}
 	$(".tab_content").hide();
 
-	$("#tabs_view li:first").addClass("active").show();
+	var $tabs_view = $("#tabs_view");
+	$tabs_view.find("li:first").addClass("active").show();
 	$(".tab_content:first").show();
 	var changeTab = function($tab) {
 		hideOm(); // fermeture des éventuels objectMenus de la grille
-		$("#tabs_view li").removeClass("active");
+		$("#tabs_view").find("li").removeClass("active");
 		$tab.addClass("active");
 		$(".tab_content").hide();
 		var activeTab = $tab.find("a").attr("href");
 		window.scroll(0, 0);
 		$(activeTab).fadeIn("fast");
 	}
-	$("#tabs_view li").click(function() { changeTab($(this)); });
+	$tabs_view.find("li").click(function() { changeTab($(this)); });
 	// on corrige les liens internes, pour qu'ils agissent sur les onglets
-	$('a[href$="#monstres"]').click(function() { changeTab($('#tabs_view a[href="#tabMonsters"]').parent()); });
-	$('a[href$="#trolls"]').click(function() { changeTab($('#tabs_view a[href="#tabTrolls"]').parent()); });
-	$('a[href$="#tresors"]').click(function() { changeTab($('#tabs_view a[href="#tabObjects"]').parent()); });
-	$('a[href$="#champignons"]').click(function() { changeTab($('#tabs_view a[href="#tabMushrooms"]').parent()); });
-	$('a[href$="#lieux"]').click(function() { changeTab($('#tabs_view a[href="#tabPlaces"]').parent()); });
-	$('a[href$="#cadavre"]').click(function() { changeTab($('#tabs_view a[href="#tabCenotaphs"]').parent()); });
+	$('a[href$="#monstres"]').click(function() { changeTab($('#tabs_view').find('a[href="#tabMonsters"]').parent()); });
+	$('a[href$="#trolls"]').click(function() { changeTab($('#tabs_view').find('a[href="#tabTrolls"]').parent()); });
+	$('a[href$="#tresors"]').click(function() { changeTab($('#tabs_view').find('a[href="#tabObjects"]').parent()); });
+	$('a[href$="#champignons"]').click(function() { changeTab($('#tabs_view').find('a[href="#tabMushrooms"]').parent()); });
+	$('a[href$="#lieux"]').click(function() { changeTab($('#tabs_view').find('a[href="#tabPlaces"]').parent()); });
+	$('a[href$="#cadavre"]').click(function() { changeTab($('#tabs_view').find('a[href="#tabCenotaphs"]').parent()); });
 
 	// var time_after_grid_append = (new Date()).getTime(); // <= prof
 
-	$('#grid_holder').dragscrollable({dragSelector: '#grid'});
+	var $grid_holder = $('#grid_holder');
+	$grid_holder.dragscrollable({dragSelector: '#grid'});
 
 	//> on applique les réglages de filtrages de la fois précédente
 	for (var key in viewFilters) {
@@ -441,11 +442,12 @@ function Chrall_analyseAndReformatView() {
 			for (var i = 0; i < os.length; i++) {
 				os[i].style.display = display;
 			}
-			if (display != 'none') $('#' + key).attr("checked", "checked");
-			else $('#' + key).removeAttr("checked");
+			var $viewFilter = $('#' + key);
+			if (display != 'none') $viewFilter.attr("checked", "checked");
+			else $viewFilter.removeAttr("checked");
 		}
 	}
-	
+
 	$(document.body).on('click', '[toggleName]', function(){
 		chrall.gridChangeDisplayByName($(this).attr('toggleName'));
 	});
@@ -455,7 +457,8 @@ function Chrall_analyseAndReformatView() {
 			Chrall_gridLive();
 
 			//> bulle popup sur le lien du joueur
-			var link = $("#grid a.ch_player");
+			var $grid = $("#grid");
+			var link = $grid.find("a.ch_player");
 			var trollId = link.attr('id');
 			if (trollId == 0) {
 				chrall.triggerBubble(link, "Problème. Peut-être avez vous mis à jour Chrall sans rouvrir la session MH. Utilisez le bouton 'Refresh' de MH.", "bub_player");
@@ -464,7 +467,7 @@ function Chrall_analyseAndReformatView() {
 			}
 
 			//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
-			$("#grid a.ch_object").each(
+			$grid.find("a.ch_object").each(
 				function() {
 					var o = $(this);
 					var text = o.attr("bub");
@@ -489,7 +492,7 @@ function Chrall_analyseAndReformatView() {
 		$('form[name="LimitViewForm"]').submit();
 	});
 
-	var $gridHolder = $('#grid_holder');
+	var $gridHolder = $grid_holder;
 	var $playerCell = $('#cellp0p0');
 	var gotoPlayer = function() {
 		hideOm();
