@@ -62,10 +62,9 @@ switch (chrall.pageName()) {
 		chrall.reformatOptionsView();
 		break;
 	case "Play_a_Competence16.php": // préparation de CDM (le formulaire de choix du monstre)
-		Chrall_handleBeforeCdmPage();
 		break;
 	case "Play_a_Competence16b.php": // résultat de cdm
-		Chrall_handleCdmPage();
+		chrall.handleCdmPage();
 		break;
 	case "Play_a_Competence18b.php": // résultat d'insulte
 		Chrall_analyseResultatInsulte();

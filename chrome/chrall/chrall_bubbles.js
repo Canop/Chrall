@@ -34,9 +34,10 @@
 			bubbleExists = false;
 		}
 	};
+
 	function surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv, cssClass) {
 		if (leftCol) {
-			var $table = $('<table/>', {'class' : cssClass});
+			var $table = $('<table/>', {'class': cssClass});
 			var $tr = $('<tr/>');
 			$table.append($tr);
 			var $rightCol = $('<td/>');
@@ -47,11 +48,13 @@
 		} else {
 			$bubbleDiv.append($bubbleContent);
 		}
-	};
+	}
 
 	chrall.showBubble = function (target, event, text, cssClass, ajaxRequestId, leftCol) {
 		cssClass = chrall.isOptionEnabled('bubble-use-mountyhall-styles') ? 'mh_tdtitre' : cssClass;
-		if (bubbleExists) chrall.hideBubble();
+		if (bubbleExists) {
+			chrall.hideBubble();
+		}
 		var $bubbleContent;
 		var tPosX = event.pageX - pageXOffset;
 		var w = document.body.clientWidth;
@@ -71,13 +74,13 @@
 		else {
 			style += "bottom:" + (h - tPosY + 20);
 		}
-		var $bubbleDiv = $("<div/>", {id : 'bubble', class: cssClass, style: style});
+		var $bubbleDiv = $("<div/>", {id: 'bubble', class: cssClass, style: style});
 
 		if (ajaxRequestId && ajaxRequestId != null) {
 			var bubbleRequestId = document.getElementById('bubbleRequestId');
 			bubbleRequestId.value = ajaxRequestId; // je ne sais pas pourquoi mais utiliser $('#bubbleRequestId').val ne marche pas bien
 			if (text) {
-				$bubbleDiv.append($('<div/>', {class:'bubbleTitle'}).html(text));
+				$bubbleDiv.append($('<div/>', {class: 'bubbleTitle'}).html(text));
 			}
 			$bubbleContent = $('<div/>', {id: 'bubbleContent'}).text('en attente de gogochrall...');
 			surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv, cssClass);
@@ -100,13 +103,14 @@
 	};
 
 	chrall.triggerBubble = function (target, // un objet jquery, par exemple  $("a.ch_monster")
-									 text, // le contenu de la bulle
-									 cssClass, // une classe css ajoutée à la bulle
-									 ajaxUrl, // une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
-									 ajaxRequestId
-	) {
-		target.mouseenter(function(event) {
-			if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
+			text, // le contenu de la bulle
+			cssClass, // une classe css ajoutée à la bulle
+			ajaxUrl, // une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
+			ajaxRequestId) {
+		target.mouseenter(function (event) {
+			if (scrollInProgress || onBubbleDiv || onBubbleTarget) {
+				return false;
+			}
 			onBubbleTarget = true;
 			if (ajaxUrl) {
 				chrall.jsonp(ajaxUrl);
@@ -115,7 +119,7 @@
 				chrall.showBubble.call(this, $(this), event, text, cssClass);
 			}
 		});
-		target.mouseout(function(event) {
+		target.mouseout(function (event) {
 			onBubbleTarget = false;
 			chrall.hideBubble();
 			//bubbleCloseTimeoutID = setTimeout(chrall.hideBubble, 150);  <= remettre cette ligne si on veut permettre le passage de la souris dans la bulle sans qu'elle se ferme
@@ -124,26 +128,29 @@
 
 	// pour un ajout dynamique similaire au live de jquery.
 	// fonction prenant en argument un objet jquery résultat de $(selector) et renvoyant une map avec text, ajaxUrl, ajaxRequestId (plus en optionnel leftCol)
-	chrall.bubbleLive = function (selector, cssClass, getArgs ) {
+	chrall.bubbleLive = function (selector, cssClass, getArgs) {
 		$(selector).live(
-			'mouseenter',
-			function(event) {
-				var target = $(this);
-				if (scrollInProgress || onBubbleDiv || onBubbleTarget) return false;
-				onBubbleTarget = true;
-				var args = getArgs(target);
-				if (args.ajaxUrl) {
-					chrall.jsonp(args.ajaxUrl);
-					chrall.showBubble.call(this, target, event, args.text, cssClass, args.ajaxRequestId, args.leftCol);
-				} else {
-					chrall.showBubble.call(this, target, event, args.text, cssClass, null, args.leftCol);
+				'mouseenter',
+				function (event) {
+					var target = $(this);
+					if (scrollInProgress || onBubbleDiv || onBubbleTarget) {
+						return false;
+					}
+					onBubbleTarget = true;
+					var args = getArgs(target);
+					if (args.ajaxUrl) {
+						chrall.jsonp(args.ajaxUrl);
+						chrall.showBubble.call(this, target, event, args.text, cssClass, args.ajaxRequestId,
+								args.leftCol);
+					} else {
+						chrall.showBubble.call(this, target, event, args.text, cssClass, null, args.leftCol);
+					}
 				}
-			}
 		).live(
-			'mouseout', function(event) {
-				onBubbleTarget = false;
-				chrall.hideBubble();
-			}
+				'mouseout', function (event) {
+					onBubbleTarget = false;
+					chrall.hideBubble();
+				}
 		);
 	}
 

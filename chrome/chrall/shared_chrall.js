@@ -91,8 +91,13 @@
 		return "yes" != localStorage[key];
 	};
 
-	chrall.isOptionEnabled = function (key) {
-		return "yes" == localStorage[key];
+	chrall.isOptionEnabled = function (key, defaultChoice) {
+		var enabled = localStorage[key];
+		if (undefined === enabled) {
+			localStorage[key] = defaultChoice;
+			enabled = defaultChoice;
+		}
+		return "yes" == enabled;
 	};
 
 	// Affiche une notification à l'utilisateur pendant quelques secondes

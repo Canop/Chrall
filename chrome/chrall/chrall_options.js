@@ -57,6 +57,7 @@
 		<div class='option-section'>\
 			<p class='informational-text'>Options sans catégorie propre.</p>\
 			<div style='display:block'><input id='bubble-use-mountyhall-styles' type='checkbox' class='toggle-option'><span class='option-description'>Utiliser les styles MountyHall pour les info-bulles</span></div>\
+			<div style='display:block'><input id='cdm-send-to-chrall' type='checkbox' class='toggle-option-default-active'><span class='option-description'>Envoyer les résultats de CdM au serveur Chrall</span></div>\
 		</div>\
 		</p>\
 	</div>\
@@ -106,6 +107,12 @@
 		$(".toggle-option").each(function() {
 			var id = $(this).attr("id");
 			var checked = chrall.isOptionEnabled(id);
+			this.checked = checked;
+			$(this).change(toggleOption);
+		});
+		$(".toggle-option-default-active").each(function() {
+			var id = $(this).attr("id");
+			var checked = chrall.isOptionEnabled(id, "yes");
 			this.checked = checked;
 			$(this).change(toggleOption);
 		});
@@ -173,4 +180,3 @@
 	}
 
 })(window.chrall = window.chrall || {});
-	
