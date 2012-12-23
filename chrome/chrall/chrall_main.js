@@ -32,7 +32,7 @@ var player = chrall.player(); // for temporary compatibility purposes only
 
 switch (chrall.pageName()) {
 	case "PlayStart.php":
-		Chrall_analyseAndReformatStartPage()
+		chrall.analyseAndReformatStartPage();
 		break;
 	case "Play_profil.php":
 		chrall.initCommunications();
