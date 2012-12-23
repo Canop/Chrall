@@ -12,14 +12,16 @@
 
 	if (!TEST_LOCAL) {
 		var serveur_prive_in_prefs = localStorage['private_chrall_server'];
-		if (serveur_prive_in_prefs) SERVEUR_CHRALL_PRIVE = serveur_prive_in_prefs;
+		if (serveur_prive_in_prefs) {
+			SERVEUR_CHRALL_PRIVE = serveur_prive_in_prefs;
+		}
 	}
 
-	chrall.serveurPublic = function() {
+	chrall.serveurPublic = function () {
 		return SERVEUR_CHRALL_PUBLIC;
 	}
 
-	chrall.serveurPrive = function() {
+	chrall.serveurPrive = function () {
 		return SERVEUR_CHRALL_PRIVE;
 	}
 
@@ -30,23 +32,31 @@
 	var TRACE = 0, DEBUG = 1, INFO = 2, WARN = 3, ERROR = 4;
 	var log_level = INFO;
 
-	console.log_trace = function(item) {
-		if (TRACE < log_level ) { return; }
+	console.log_trace = function (item) {
+		if (TRACE < log_level) {
+			return;
+		}
 		console.log(item);
 	}
-	console.log_debug= function(item) {
-		if (DEBUG < log_level ) { return; }
+	console.log_debug = function (item) {
+		if (DEBUG < log_level) {
+			return;
+		}
 		console.log(item);
 	}
-	console.log_info= function(item) {
-		if (INFO < log_level ) { return; }
+	console.log_info = function (item) {
+		if (INFO < log_level) {
+			return;
+		}
 		console.log(item);
 	}
-	console.log_warn = function(item) {
-		if (WARN < log_level ) { return; }
+	console.log_warn = function (item) {
+		if (WARN < log_level) {
+			return;
+		}
 		console.warn(item);
 	}
-	console.log_error = function(item) {
+	console.log_error = function (item) {
 		console.error(item);
 	}
 
@@ -57,7 +67,7 @@
 	var pageName;
 	var hallIsAccro = document.location.host == "accro.mountyhall.com"; // est-ce qu'on est dans le PH spécial des accros ?
 
-	chrall.pageName = function() {
+	chrall.pageName = function () {
 		if (!pageName) {
 			var pathTokens = document.location.pathname.split('/');
 			pageName = pathTokens[pathTokens.length - 1];
@@ -65,7 +75,7 @@
 		return pageName;
 	}
 
-	chrall.hallIsAccro = function() {
+	chrall.hallIsAccro = function () {
 		return hallIsAccro;
 	}
 
@@ -74,7 +84,9 @@
 	// --------------------------------------------------------
 
 	chrall.formatDuration = function (seconds) {
-		if (seconds == 0) return "";
+		if (seconds == 0) {
+			return "";
+		}
 		var h = Math.floor(seconds / (3600));
 		seconds -= h * (3600);
 		var m = Math.floor(seconds / (60));
@@ -82,9 +94,12 @@
 	};
 
 	chrall.formatDate = function (timestamp) {
-		if (timestamp == 0) return "";
+		if (timestamp == 0) {
+			return "";
+		}
 		var d = new Date(timestamp);
-		return d.getDate() + "/" + (d.getMonth() < 9 ? ("0" + (d.getMonth() + 1)) : (d.getMonth() + 1)) + " " + d.getHours() + "h" + (d.getMinutes() < 10 ? ("0" + d.getMinutes()) : d.getMinutes());
+		return d.getDate() + "/" + (d.getMonth() < 9 ? ("0" + (d.getMonth() + 1)) : (d.getMonth() + 1)) + " " +
+				d.getHours() + "h" + (d.getMinutes() < 10 ? ("0" + d.getMinutes()) : d.getMinutes());
 	};
 
 	chrall.isOptionDisabled = function (key) {
@@ -100,12 +115,17 @@
 		return "yes" == enabled;
 	};
 
-	// Affiche une notification à l'utilisateur pendant quelques secondes
-	// Les options sont un hash dont les clés possibles sont:
-	//	delay: int, default: 5000, durée d'affichage en ms
-	//	text: string, texte à afficher
-	//	icon: string, chemin d'une icone (au sein du filesystem de l'extension, le getUrl est fait en interne)
-	//	style: des infos de style supplémentaires (genre: background red pour un pbm)
+	/**
+	 * Affiche une notification à l'utilisateur pendant quelques secondes
+	 * Les options sont un hash dont les clés possibles sont:
+	 * <ul>
+	 * <li>delay: int, default: 5000, durée d'affichage en ms</li>
+	 * <li>text: string, texte à afficher</li>
+	 * <li>icon: string, chemin d'une icone (au sein du filesystem de l'extension, le getUrl est fait en interne)</li>
+	 * <li>style: des infos de style supplémentaires (genre: background red pour un pbm)</li>
+	 * </ul>
+	 * @param options
+	 */
 	chrall.notifyUser = function (options) {
 		var delay = options['delay'] ? options['delay'] : 5000;
 
@@ -115,15 +135,19 @@
 		}
 
 		var notificationId = "notification_" + new Date().getTime();
-		var icon_html = options['icon'] ? '<span class="icon"><img src="' + chrome.extension.getURL(options['icon']) + '" /></span>' : '';
+		var icon_html = options['icon'] ? '<span class="icon"><img src="' + chrome.extension.getURL(options['icon']) +
+				'" /></span>' : '';
 
 		// Injection de la notif (au dessus des autres éventuelles)
 		var wrapper = $("#chrall_notify_wrapper");
 		var style = options['style'] ? "display:none;" + options['style'] : "display:none";
-		wrapper.prepend('<div class="chrall_notify" id="' + notificationId + '" style="' + style + '">' + icon_html + options["text"] + '</div>');
+		wrapper.prepend('<div class="chrall_notify" id="' + notificationId + '" style="' + style + '">' + icon_html +
+				options["text"] + '</div>');
 
 		// Affichage
-		$("div#" + notificationId).slideDown("fast").delay(delay).slideUp("fast", function() {$(this).remove()});
+		$("div#" + notificationId).slideDown("fast").delay(delay).slideUp("fast", function () {
+			$(this).remove()
+		});
 	};
 
 
@@ -153,15 +177,15 @@
 	// le troll du joueur. Sera éventuellement récupéré de la page de fond dans getBackgroundInfosThenExecute
 	var currentPlayer = new Troll();
 
-	chrall.player = function() {
+	chrall.player = function () {
 		return currentPlayer;
 	};
 
-	chrall.playerId = function() {
+	chrall.playerId = function () {
 		return currentPlayer.id;
 	};
 
-	chrall.playerInvalid = function() {
+	chrall.playerInvalid = function () {
 		return (!chrall.playerId()) || (chrall.playerId() == 0);
 	};
 

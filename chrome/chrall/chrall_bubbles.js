@@ -33,6 +33,8 @@
 			$("#bubble").remove();
 			bubbleExists = false;
 		}
+		$(window).off("copy", chrall.clipboardOverride);
+		console.log_trace("clipboard override disabled");
 	};
 
 	function surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv, cssClass) {
@@ -77,8 +79,8 @@
 		var $bubbleDiv = $("<div/>", {id: 'bubble', class: cssClass, style: style});
 
 		if (ajaxRequestId && ajaxRequestId != null) {
-			var bubbleRequestId = document.getElementById('bubbleRequestId');
-			bubbleRequestId.value = ajaxRequestId; // je ne sais pas pourquoi mais utiliser $('#bubbleRequestId').val ne marche pas bien
+			var $bubbleRequestId = $('#bubbleRequestId');
+			$bubbleRequestId.val(ajaxRequestId);
 			if (text) {
 				$bubbleDiv.append($('<div/>', {class: 'bubbleTitle'}).html(text));
 			}
@@ -92,21 +94,32 @@
 		bubbleTarget = target;
 		$bubbleDiv.mouseover(chrall.keepBubbleOpen).mouseout(chrall.letBubbleClose).prependTo('body');
 		bubbleExists = true;
+
+		$bubbleDiv.append($("<div/>", { id: "bubbleCopyMessage", style: "font-size: 75%; max-width:30em"})
+				.text("Pour copier l'info via CTRL-C, le focus doit être mis dans la frame (e.x. clic sur la barre d'options, ...	)"));
+		chrall.copiableContent = $("#bubble");
+		$(window).on("copy", chrall.clipboardOverride);
+
 	};
 
 	chrall.keepBubbleOpen = function () {
 		onBubbleDiv = true;
 	};
+
 	chrall.letBubbleClose = function () {
 		onBubbleDiv = false;
 		chrall.hideBubble();
 	};
 
-	chrall.triggerBubble = function (target, // un objet jquery, par exemple  $("a.ch_monster")
-			text, // le contenu de la bulle
-			cssClass, // une classe css ajoutée à la bulle
-			ajaxUrl, // une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
-			ajaxRequestId) {
+	/**
+	 *
+	 * @param target un objet jquery, par exemple  $("a.ch_monster")
+	 * @param text le contenu de la bulle
+	 * @param cssClass une classe css ajoutée à la bulle
+	 * @param ajaxUrl une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
+	 * @param ajaxRequestId
+	 */
+	chrall.triggerBubble = function (target, text, cssClass, ajaxUrl, ajaxRequestId) {
 		target.mouseenter(function (event) {
 			if (scrollInProgress || onBubbleDiv || onBubbleTarget) {
 				return false;
@@ -126,8 +139,13 @@
 		});
 	};
 
-	// pour un ajout dynamique similaire au live de jquery.
-	// fonction prenant en argument un objet jquery résultat de $(selector) et renvoyant une map avec text, ajaxUrl, ajaxRequestId (plus en optionnel leftCol)
+	/**
+	 * pour un ajout dynamique similaire au live de jquery
+	 * @param selector objet jquery résultat de $(selector)
+	 * @param cssClass
+	 * @param getArgs
+	 * @return map avec text, ajaxUrl, ajaxRequestId (plus en optionnel leftCol)
+	 */
 	chrall.bubbleLive = function (selector, cssClass, getArgs) {
 		$(selector).live(
 				'mouseenter',
@@ -152,6 +170,41 @@
 					chrall.hideBubble();
 				}
 		);
-	}
+	};
+
+	chrall.clipboardOverride = function (e) {
+		console.log_trace("clipboard override called");
+		if (null === chrall.copiableContent || undefined === chrall.copiableContent) {
+			return true;
+		}
+		var $div = $("<div/>", { style: "opacity: 0;position: absolute;top: -10000px;right: 0;"});
+		var $clone = chrall.copiableContent.clone();
+		$clone.find("#bubbleCopyMessage").remove();
+		$div.append($clone);
+		$(document.body).append($div);
+		var rng = document.createRange();
+		rng.selectNodeContents($div.get(0));
+		window.getSelection().removeAllRanges();
+		window.getSelection().addRange(rng);
+		setTimeout(function () {
+			$div.remove()
+		}, 100);
+		chrall.notifyUser({text: "Contenu de l'info-bulle copié dans le clipboard"});
+		chrall.copiableContent = null;
+		return true;
+	};
+
+	chrall.receiveBubbleContent = function (answer) {
+		console.log_debug(answer);
+		// on vérifie que la réponse correspond à la bulle actuelle (et pas à une bulle fermée)
+		if ($('#bubbleRequestId').val() != answer.RequestId) {
+			console.log_trace('answer received to old request : ' + answer.RequestId);
+			return;
+		}
+		var $div = $('#bubbleContent');
+		if ($div) { // il n'y a plus de div si la bulle est close
+			$div.html(answer.Html);
+		}
+	};
 
 })(window.chrall = window.chrall || {});
