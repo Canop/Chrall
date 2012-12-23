@@ -375,7 +375,7 @@ function Chrall_analyseAndReformatProfile() {
 	$('a[href*="EnterComp"]').each(
 		function() {
 			var link = $(this);
-			var text = getBubbleContentForCompetence(link.text().trim());
+			var text = chrall.getBubbleContentForCompetence(link.text().trim());
 			chrall.triggerBubble(link, text, "bub_competence");
 		}
 	);
@@ -384,7 +384,7 @@ function Chrall_analyseAndReformatProfile() {
 	$('a[href*="EnterSort"]').each(
 		function() {
 			var link = $(this);
-			var text = getBubbleContentForSort(link.text().trim());
+			var text = chrall.getBubbleContentForSort(link.text().trim());
 			chrall.triggerBubble(link, text, "bub_sort");
 		}
 	);
