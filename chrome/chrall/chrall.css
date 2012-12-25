@@ -354,6 +354,7 @@ a.gogo:hover {
 	padding: 1ex;
 	z-index: 20;
 }
+
 #bubble th {
 	color: white;
 }
@@ -361,6 +362,14 @@ a.gogo:hover {
 	font-family: Arial, sans-serif;
 	color: white;
 	font-size: 12px !important;
+}
+
+#bubble.mh_tdtitre th {
+	color: black ;
+}
+
+#bubble.mh_tdtitre td  {
+	color: black;
 }
 
 .bub_monster {

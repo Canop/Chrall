@@ -9,3 +9,4 @@ datafiles
 .idea
 *.iml
 *.csv
+**/src/github.com/*
