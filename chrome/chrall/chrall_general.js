@@ -34,7 +34,7 @@ function Chrall_listenForChangeLocation(frameKey) {
  * découpe en mots (un nombre peut être un mot).
  *
  * Note : comme je ne suis pas fort en expressions régulières, si un "-" est isolé, il sort comme un mot...
- * Attention : si vous corrigez le comportement de la ligne ci-dessus il faudra modifier Chrall_extractBasicInfos et pas mal d'autres méthodes
+ * Attention : si vous corrigez le comportement de la ligne ci-dessus il faudra modifier chrall.extractBasicInfos et pas mal d'autres méthodes
  */
 function Chrall_tokenize(text) {
 	return text.trim().split(new RegExp("[ /|\t\n\r\f,.:=()]+", "g"));

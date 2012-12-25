@@ -36,7 +36,7 @@ switch (chrall.pageName()) {
 		break;
 	case "Play_profil.php":
 		chrall.initCommunications();
-		Chrall_analyseAndReformatProfile();
+		chrall.analyseAndReformatProfile();
 		break;
 	case "Play_vue.php":
 		Chrall_analyseAndReformatView();
