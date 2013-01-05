@@ -59,8 +59,7 @@
 
 	chrall.pageName = function() {
 		if (!pageName) {
-			var pathTokens = document.location.pathname.split('/');
-			pageName = pathTokens[pathTokens.length - 1];
+			pageName = document.location.pathname.split('/').pop();
 		}
 		return pageName;
 	}
