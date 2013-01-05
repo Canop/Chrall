@@ -51,12 +51,14 @@
 			<div style='display:block'><input id='view-disable-grid-view' type='checkbox' class='toggle-option'><span class='option-description'>Désactiver la grille 2D</span></div>\
 			<div style='display:block'><input id='view-show-distance-in-view' type='checkbox' class='toggle-option'><span class='option-description'>Afficher la distance en PA (via DE) dans les tables</span></div>\
 			<div style='display:block'><input id='view-display-hit-points-ratio' type='checkbox' class='toggle-option'><span class='option-description'>Afficher la barre de points de vie dans les tables (uniquement pour les partages actifs).</span></div>\
+			<div style='display:block'><input id='view-sort-items-per-type' type='checkbox' class='toggle-option'><span class='option-description'>Trier les items par type dans la vue (caverne par caverne).</span></div>\
 		</div>\
 		<br/>\
 		<h3 class='option-section'>Divers</h3>\
 		<div class='option-section'>\
 			<p class='informational-text'>Options sans catégorie propre.</p>\
 			<div style='display:block'><input id='bubble-use-mountyhall-styles' type='checkbox' class='toggle-option'><span class='option-description'>Utiliser les styles MountyHall pour les info-bulles</span></div>\
+			<div style='display:block'><input id='cdm-send-to-chrall' type='checkbox' class='toggle-option-default-active'><span class='option-description'>Envoyer les résultats de CdM au serveur Chrall</span></div>\
 		</div>\
 		</p>\
 	</div>\
@@ -106,6 +108,12 @@
 		$(".toggle-option").each(function() {
 			var id = $(this).attr("id");
 			var checked = chrall.isOptionEnabled(id);
+			this.checked = checked;
+			$(this).change(toggleOption);
+		});
+		$(".toggle-option-default-active").each(function() {
+			var id = $(this).attr("id");
+			var checked = chrall.isOptionEnabled(id, "yes");
 			this.checked = checked;
 			$(this).change(toggleOption);
 		});
@@ -173,4 +181,3 @@
 	}
 
 })(window.chrall = window.chrall || {});
-	

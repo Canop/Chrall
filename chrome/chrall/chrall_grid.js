@@ -1,34 +1,34 @@
 // cellule dans la grille (correspond à une colonne du jeu : x et y fixés mais z variable)
 function Cell() {
 }
-Cell.prototype.addPlace = function(o) {
-	if (!this.places) this.places = new Array();
+Cell.prototype.addPlace = function (o) {
+	if (!this.places) this.places = [];
 	this.places.push(o);
-}
-Cell.prototype.addWall = function(o) {
-	if (!this.walls) this.walls = new Array();
+};
+Cell.prototype.addWall = function (o) {
+	if (!this.walls) this.walls = [];
 	this.walls.push(o);
-}
-Cell.prototype.addTroll = function(o) {
-	if (!this.trolls) this.trolls = new Array();
+};
+Cell.prototype.addTroll = function (o) {
+	if (!this.trolls) this.trolls = [];
 	this.trolls.push(o);
-}
-Cell.prototype.addMonster = function(o) {
-	if (!this.monsters) this.monsters = new Array();
+};
+Cell.prototype.addMonster = function (o) {
+	if (!this.monsters) this.monsters = [];
 	this.monsters.push(o);
-}
-Cell.prototype.addObject = function(o) {
-	if (!this.objects) this.objects = new Array();
+};
+Cell.prototype.addObject = function (o) {
+	if (!this.objects) this.objects = [];
 	this.objects.push(o);
-}
-Cell.prototype.addMushroom = function(o) {
-	if (!this.mushrooms) this.mushrooms = new Array();
+};
+Cell.prototype.addMushroom = function (o) {
+	if (!this.mushrooms) this.mushrooms = [];
 	this.mushrooms.push(o);
-}
-Cell.prototype.addCenotaph = function(o) {
-	if (!this.cenotaphs) this.cenotaphs = new Array();
+};
+Cell.prototype.addCenotaph = function (o) {
+	if (!this.cenotaphs) this.cenotaphs = [];
 	this.cenotaphs.push(o);
-}
+};
 
 
 // une grille correspond à la vue passée (et donc de taille (2*vue+1)²)
@@ -51,18 +51,18 @@ function Grid(xp, yp, sight) {
 // Renvoie undefined s'il n'y a rien
 Grid.prototype.getCellOrNull = function(x, y) {
 	return this.cells[x - this.dx][y - this.dy];
-}
+};
 
 // renvoie la cellule de coordonnées passées.
 // La crée si elle n'existe pas
-Grid.prototype.getCellNotNull = function(x, y) {
+Grid.prototype.getCellNotNull = function (x, y) {
 	var c = this.cells[x - this.dx][y - this.dy];
 	if (!c) {
 		c = new Cell();
 		this.cells[x - this.dx][y - this.dy] = c;
 	}
 	return c;
-}
+};
 
 // enregistre les modifications 'live' (au sens jquery)
 function Chrall_gridLive() {
@@ -171,7 +171,8 @@ function Chrall_gridLive() {
 			var y = $link.attr('y');
 			var z = $link.attr('z');
 			var url = chrall.serveurPrive() + "vue?asker=" + player.id + "&mdpr=" + chrall.mdpCompteChrall() + "&x=" + x + "&y=" + y + "&z=" + z + "&tresors=1";
-			$('#zoom').show();
+			var $zoom = $('#zoom');
+			$zoom.show();
 			$('#zoom_content').load(url, function() {
 				setTimeout(function() {
 					// centrage de la vue
@@ -192,7 +193,7 @@ function Chrall_gridLive() {
 				}, 200);
 			});
 			$('#3D').attr("checked", "checked"); // à chaque ouverture on est en 3D initialement
-			$('#zoom').dragscrollable({dragSelector: '#zoom_content'});
+			$zoom.dragscrollable({dragSelector: '#zoom_content'});
 		} else {
 			alert("Un compte Chrall actif est nécessaire pour utiliser cette fonction.");
 		}
