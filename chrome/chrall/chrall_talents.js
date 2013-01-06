@@ -69,39 +69,13 @@
 			case "Charger" :
 				var computeRange = function (pv) {
 					var s = Math.ceil(pv / 10) + chrall.player().regeneration.diceNumber;
-					if (s > 49) {
-						return 8;
-					}
-					else {
-						if (s > 39) {
-							return 7;
-						}
-						else {
-							if (s > 30) {
-								return 6;
-							}
-							else {
-								if (s > 22) {
-									return 5;
-								}
-								else {
-									if (s > 15) {
-										return 4;
-									}
-									else {
-										if (s > 9) {
-											return 3;
-										}
-										else {
-											if (s > 4) {
-												return 2;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
+					if (s>49) return 8;
+					else if (s>39) return 7;
+					else if (s>30) return 6;	  	
+					else if (s>22) return 5;	  	
+					else if (s>15) return 4;	  	
+					else if (s>9) return 3;
+					else if (s>4) return 2;
 					return 1;
 				}
 				var maxRange = computeRange(chrall.player().pvMax);
@@ -264,10 +238,8 @@
 
 			case "Analyse Anatomique" :
 				var html = "<table>";
-				html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(chrall.player().totalSight / 2) +
-						"</td></tr>";
-				html += "<tr><td>Portée verticale</td><td> : " + Math.floor(chrall.player().totalSight / 4) +
-						"</td></tr>"; // c'est sûr ça ?
+				html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(chrall.player().totalSight / 2) + "</td></tr>";
+				html += "<tr><td>Portée verticale</td><td> : " + Math.floor(chrall.player().totalSight / 4) + "</td></tr>";
 				html += "</table>";
 				return html
 
@@ -402,10 +374,8 @@
 				return "Avec 3 PA vous pouvez gagner une invisibilité qui durera tant<br>que vous ne perdrez pas de PV et que vous ne bougerez pas.<br>... surtout ne pas pêter !";
 
 			case "Lévitation" :
-				var h = 1.4 +
-						Math.min(Math.floor((chrall.player().sight.diceNumber + chrall.player().damage.magicalBonus) /
-								5) +
-								Math.floor(chrall.player().mm / 600), 0);
+				var h = 1.4 + Math.min(Math.floor((chrall.player().sight.diceNumber + chrall.player().damage.magicalBonus) / 5)
+					+ Math.floor(chrall.player().mm / 600), 0);
 				return "Altitude de lévitation : " + h + " cm du sol";
 
 			case "Précision Magique" :
@@ -452,15 +422,11 @@
 				for (d = 0; d <= range; d++) {
 					var projectileDamageDiceNumber = Math.floor(chrall.player().sight.diceNumber * chrall.player().magicalDamageMultiplier);
 					var deg = 2 * (Math.floor(projectileDamageDiceNumber / 2) + range - d) +
-							chrall.player().damage.magicalBonus;
+						chrall.player().damage.magicalBonus;
 					var degCrit = 2 * (Math.floor(projectileDamageDiceNumber * 0.75) + range - d) +
-							chrall.player().damage.magicalBonus;
-					if (d == 0) {
-						html += "<tr><td>Dégâts moyens sur votre case";
-					}
-					else {
-						html += "<tr><td>Dégâts moyens à " + d + (d > 1 ? " cases" : " case");
-					}
+						chrall.player().damage.magicalBonus;
+					if (d == 0) html += "<tr><td>Dégâts moyens sur votre case";
+					else html += "<tr><td>Dégâts moyens à " + d + (d > 1 ? " cases" : " case");
 					html += "</td><td> : " + deg + " / " + degCrit + "</td></tr>";
 				}
 
@@ -518,16 +484,10 @@
 			case "Télékinésie" :
 				var p = Math.floor(chrall.player().totalSight / 2);
 				var f = function (p) {
-					if (p < 0) {
-						return " sont trop lourds pour votre vue.";
-					}
+					if (p < 0) return " sont trop lourds pour votre vue.";
 					var h = " sont ciblables ";
-					if (p == 0) {
-						return h + "sur votre case.";
-					}
-					if (p == 1) {
-						return h + "à une case.";
-					}
+					if (p == 0) return h + "sur votre case.";
+					if (p == 1) return h + "à une case.";
 					return h + "à " + p + " cases.";
 				}
 				html = "Les trésors d'une Plum' et Très Léger" + f(p + 2);
@@ -614,32 +574,12 @@
 				var s = chrall.player().totalSight;
 				// flemme de chercher une formule, j'implémente tous les tests de la doc...
 				var range;
-				if (s > 34) {
-					range = 5;
-				}
-				else {
-					if (s > 21) {
-						range = 4;
-					}
-					else {
-						if (s > 11) {
-							range = 3;
-						}
-						else {
-							if (s > 5) {
-								range = 2;
-							}
-							else {
-								if (s > 2) {
-									range = 1;
-								}
-								else {
-									range = 0;
-								}
-							}
-						}
-					}
-				}
+				if (s>34) range=5;
+				else if (s>21) range=4;
+				else if (s>11) range=3;
+				else if (s>5) range=2;
+				else if (s>2) range=1;
+				else range=0;
 				html = "Permet de voir et cibler les trolls et monstres ";
 				if (range == 0) {
 					html += "sur votre case<br>(ce serait mieux si vous voyiez un peu mieux le visible pour commencer)."

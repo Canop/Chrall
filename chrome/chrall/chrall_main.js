@@ -24,7 +24,6 @@ var viewFilters = {
 	"3D" : true
 };
 
-
 console.info("pageName=[" + chrall.pageName() + "]");
 
 var player = chrall.player(); // for temporary compatibility purposes only

@@ -1,7 +1,7 @@
 // contient des fonctions liées à l'interface générale
 // et des utilitaires. Contient aussi la constante donnant la version courante de Chrall
 
-var chrallVersion = "3.1";
+var chrallVersion = "3.2";
 
 function getUrlParameter(name, defaultValue) {
 	name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");

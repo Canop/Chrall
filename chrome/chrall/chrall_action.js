@@ -8,9 +8,7 @@ function Chrall_displayDiggingIsPossible() {
 	}
 }
 
-
 function Chrall_handleActionPage() {
-
 	//> on va essayer de lire les PA disponibles
 	var sentence = $('b:contains("Il me reste ")');
 	if (sentence.length > 0) {

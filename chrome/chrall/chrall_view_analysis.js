@@ -266,7 +266,6 @@
 		return jq_tables;
 	};
 
-
 })(window.chrall = window.chrall || {});
 
 
@@ -350,7 +349,6 @@ function Chrall_analyseView() {
 			}
 		}
 	}
-	;
 
 	//> on détermine la zone visible 
 	xmin = chrall.player().x - horizontalGridLimit;
