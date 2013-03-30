@@ -38,6 +38,7 @@ function Chrall_handleFollowerOrders() {
 		}
 	}
 
+	var $mapDiv = $("<div/>", {style: "text-align: center;"});
 	var canvas = $("<canvas/>", {id: "cartehall", style: "width:400px;height:400px;"});
 	canvas.click(function() {
 		window.frameElement.parentNode.children[1].location = '/mountyhall/MH_Follower/FO_NewOrder.php?ai_IdOrdre=1&ai_IdFollower=' + numGowap + '&ai_NbOrdres=' + numMaxOrdre + '&as_Action=Enregistrer+un+nouvel+Ordre';
@@ -47,8 +48,9 @@ function Chrall_handleFollowerOrders() {
 
 
 	var form = $('form[name="form1"]');
-	canvas.appendTo(form);
-	carteDiv.appendTo(form);
+	canvas.appendTo($mapDiv);
+	carteDiv.appendTo($mapDiv);
+	$mapDiv.appendTo(form);
 
 	var ch = new CarteHall("cartehall", "messageCarte");
 	ajouteTrous(ch);
