@@ -26,9 +26,9 @@ ChCol.prototype.computeScreenRect = function(carte) {
 function ChLabel(x, y, z,  color, label) {
 	this.x = x;
 	this.y = y;
-	this.z = z;	
+	this.z = z;
 	this.color = color;
-	this.label = label;	
+	this.label = label;
 }
 ChLabel.prototype = new ChCol();
 ChLabel.prototype.draw = function(carte) {
@@ -42,9 +42,9 @@ ChLabel.prototype.draw = function(carte) {
 function ChTroll(x, y, z, color, nom, vue) {
 	this.x = x;
 	this.y = y;
-	this.z = z;	
+	this.z = z;
 	this.color = color;
-	this.nom = nom;	
+	this.nom = nom;
 	this.vue = vue; // la vue peut être à 0 si on ne la connait pas
 	this.minZoomForLabel = 7;
 }
@@ -74,7 +74,7 @@ ChTroll.prototype.draw = function(carte) {
 			this.screenRect.w*(2*this.vue+1), this.screenRect.h*(2*this.vue+1)
 		);
 		r.drawThin(carte.context);
-	}	
+	}
 }
 
 function ChTrou(x, y) {
@@ -87,7 +87,7 @@ ChTrou.prototype = new ChCol();
 function ChGrotte(x, y, z) {
 	this.x = x;
 	this.y = y;
-	this.z = z;	
+	this.z = z;
 }
 ChGrotte.prototype = new ChCol();
 
@@ -95,14 +95,14 @@ ChGrotte.prototype = new ChCol();
 function ChGowap(x, y, z, nom) {
 	this.x = x;
 	this.y = y;
-	this.z = z;	
+	this.z = z;
 	this.minZoomForLabel = 8;
 	this.color = "#c99b1f";
 	this.nom = nom;
-	if (!gowapIcon) {
-		gowapIcon = new Image();
-		gowapIcon.src = chrome.extension.getURL("cow_icon.png");
-	}
+//	if (!gowapIcon) {
+//		gowapIcon = new Image();
+//		gowapIcon.src = chrome.extension.getURL("cow_icon.png");
+//	}
 }
 ChGowap.prototype = new ChCol();
 ChGowap.prototype.draw = function(carte) {
