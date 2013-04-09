@@ -4,7 +4,9 @@
 	"version": "3.3",
 	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"homepage_url": "http://canop.org/chrall",
-	"background_page": "chrome-extension.html",
+	"background": {
+		"page": "chrome-extension.html"
+	},
 	"web_accessible_resources": ["player_target.png"],
 	"content_scripts": [
 		{
