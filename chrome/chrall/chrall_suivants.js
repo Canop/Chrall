@@ -19,25 +19,25 @@ function Chrall_handleFollowerOrders() {
 	var numMaxOrdre = 0;
 
 	$('<td width=150px><a name=zoom class=gogo x=' + gowap_x + ' y=' + gowap_y + ' z=' + gowap_z + '>Montrer les alentours</a></td>').appendTo($(lignes[0]));
+	var movementRegexp = /([0-9\-]+) \| Y=([0-9\-]+) \| N=([0-9\-]+)/;
 	for (var i = 2; i < lignes.length; i++) {
 		var cells = $(lignes[i]).find('td');
 		var numOrdre = parseInt($(cells[0]).text());
 		if (numOrdre > numMaxOrdre) numMaxOrdre = numOrdre;
 		var str = $(cells[2]).text();
-		var index = str.indexOf("vers");
-		if (index > 0) {
-			var posText = str.substring(index + 5, str.length);
-			var posToken = posText.split('|');
-			gowap_x = parseInt(posToken[0].trim().split('=')[1]);
-			gowap_y = parseInt(posToken[1].trim().split('=')[1]);
-			gowap_z = parseInt(posToken[2].trim().split('=')[1]);
+		var match;
+		if (match = movementRegexp.exec(str)) {
+			gowap_x = parseInt(match[1]);
+			gowap_y = parseInt(match[2]);
+			gowap_z = parseInt(match[3]);
 			chemin.add(new Point(gowap_x, gowap_y));
 			$('<td><a name=zoom class=gogo x=' + gowap_x + ' y=' + gowap_y + ' z=' + gowap_z + '>Montrer les alentours</a></td>').appendTo($(lignes[i]));
 		} else {
-			$('<td></td>').appendTo($(lignes[i]));
+			$('<td/>').appendTo($(lignes[i]));
 		}
 	}
 
+	var $mapDiv = $("<div/>", {style: "text-align: center;"});
 	var canvas = $("<canvas/>", {id: "cartehall", style: "width:400px;height:400px;"});
 	canvas.click(function() {
 		window.frameElement.parentNode.children[1].location = '/mountyhall/MH_Follower/FO_NewOrder.php?ai_IdOrdre=1&ai_IdFollower=' + numGowap + '&ai_NbOrdres=' + numMaxOrdre + '&as_Action=Enregistrer+un+nouvel+Ordre';
@@ -47,8 +47,9 @@ function Chrall_handleFollowerOrders() {
 
 
 	var form = $('form[name="form1"]');
-	canvas.appendTo(form);
-	carteDiv.appendTo(form);
+	canvas.appendTo($mapDiv);
+	carteDiv.appendTo($mapDiv);
+	$mapDiv.appendTo(form);
 
 	var ch = new CarteHall("cartehall", "messageCarte");
 	ajouteTrous(ch);

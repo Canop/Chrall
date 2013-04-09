@@ -67,9 +67,10 @@
 
 		standardOptionContainer.html(html);
 
-		$("div#tabStandard").append($(standardOptionTables[0]));
-		$("div#tabStandard").append($(standardOptionTables[1]));
-		$("div#tabStandard").append($(standardOptionTables[2]));
+		var $tabStandard = $("div#tabStandard");
+		$tabStandard.append($(standardOptionTables[0]));
+		$tabStandard.append($(standardOptionTables[1]));
+		$tabStandard.append($(standardOptionTables[2]));
 		$("#tabLinks").append(Chrall_makeLinkOptionPage());
 
 		$("#changeMdp").click(changeMdpRestreint);
@@ -113,8 +114,7 @@
 		});
 		$(".toggle-option-default-active").each(function() {
 			var id = $(this).attr("id");
-			var checked = chrall.isOptionEnabled(id, "yes");
-			this.checked = checked;
+			this.checked = chrall.isOptionEnabled(id, "yes");
 			$(this).change(toggleOption);
 		});
 	}
