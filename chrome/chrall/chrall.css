@@ -563,3 +563,10 @@ img.illus {
 	font-weight: bold;
 	font-size: 12px;
 }
+
+.ch_troll[team=H], .mh_trolls_1[team=H], .ch_player[team=H] {
+	background-color:#acf9ac;
+}
+.ch_troll[team=C], .mh_trolls_1[team=C], .ch_player[team=C] {
+	background-color:#d2bc8c;
+}

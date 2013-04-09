@@ -117,7 +117,7 @@ function Chrall_makeGridHtml(noteRequest) {
 						var an = player.z != t.z;
 						if (an) cellContent[c++] = "<span name=3D>";
 						if (t.isIntangible) cellContent[c++] = "<span name=intangibles>";
-						cellContent[c++] = "<a name='trolls' class=ch_troll href=\"javascript:EPV(" + t.id + ");\"";
+						cellContent[c++] = "<a name=trolls class=ch_troll href=\"javascript:EPV(" + t.id + ");\"";
 						if (t.team) cellContent[c++] = ' team="' + t.team + '"';
 						if (t.isIntangible) cellContent[c++] = " intangible";
 						cellContent[c++] = ' message="en X=' + x + ' Y=' + y + ' Z=' + t.z + '<br>Distance horizontale : ' + hdist + '"';

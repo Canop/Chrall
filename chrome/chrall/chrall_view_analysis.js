@@ -114,6 +114,7 @@
 			var nameCell = cells[i++];
 			item.name = nameCell.textContent;
 			$(nameCell.children[0]).attr('id', item.id + "_troll");
+			$('a', nameCell).attr('id', item.id).attr('team', item.team = getPogoTeam(item.id));
 			item.isIntangible = $(nameCell).html().indexOf("mh_trolls_0")>=0; // les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
 			item.level = cells[i++].textContent;
 			item.race = cells[i++].textContent;
