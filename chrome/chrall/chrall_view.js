@@ -328,7 +328,9 @@ function Chrall_makeTabDiv(id) {
 function Chrall_analyseAndReformatView() {
 	//var time_enter = (new Date()).getTime(); // <= prof
 
-	$(document.body).css('overflow', 'hidden'); // pour éviter
+	$(document.body).css('overflow', 'hidden');
+
+	$('#footer2').remove(); // ce truc là se retrouve maintenant par dessus, je le vire carrément
 
 	//> on analyse la vue
 	var $tables = Chrall_analyseView();
