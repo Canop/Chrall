@@ -326,7 +326,9 @@ var isInLaby = false;
 	chrall.analyseAndReformatView = function() {
 		//var time_enter = (new Date()).getTime(); // <= prof
 
-		$(document.body).css('overflow', 'hidden'); // pour éviter
+	$(document.body).css('overflow', 'hidden');
+
+	$('#footer2').remove(); // ce truc là se retrouve maintenant par dessus, je le vire carrément
 
 		//> on analyse la vue
 		var $tables = Chrall_analyseView();

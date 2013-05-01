@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -58,11 +59,13 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		<p>Vous faites face au <span class=emphase>Bestiaire</span> de <a class=gogo href=/chrall>gOgOchrall</a></p>
 	`))
 
-	db, err := h.store.DB()
-	defer db.Close()
 	var be *BestiaryExtract
+	db, err := h.store.DB()
 	if err == nil {
+		defer db.Close()		
 		be, err = h.store.ReadTotalStats(db)
+	} else {
+		log.Println("Erreur connexion BD :", err)
 	}
 	if err != nil {
 		fmt.Fprint(w, "<p>La base de données du bestiaire semble innacessible :   <span class=emphase>"+err.Error()+"</span></p>")
