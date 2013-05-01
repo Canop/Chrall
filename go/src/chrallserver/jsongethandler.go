@@ -153,7 +153,6 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 		log.Println(" Erreur ComputeMonsterStats :", err.Error())
 		return "Erreur : " + err.Error()
 	}
-
 	html += be.Html(monsterId, askerId, h.tksManager, 0 /* pourcentage blessure */)
 	return html
 }
