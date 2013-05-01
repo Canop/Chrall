@@ -32,9 +32,12 @@
 			index = monsterName.indexOf(templateText);
 			if (0 <= index) {
 				level += template[1];
-				monsterName = monsterName.replace(templateText, "");
-				monsterName = monsterName.trim();
-				break;
+				var newMonsterName = monsterName.replace(templateText + " ", "").trim();
+				newMonsterName = newMonsterName.replace(" " + templateText, "").trim();
+				if ("" != newMonsterName) {
+					monsterName = newMonsterName;
+					break;
+				}
 			}
 		}
 		var monsterFound = false;
@@ -49,7 +52,9 @@
 			}
 		}
 		if (0 <= monsterName.indexOf("Gowap")
-				|| 0 <= monsterName.indexOf("Familier")) {
+				|| 0 <= monsterName.indexOf("Gnu")
+				|| 0 <= monsterName.indexOf("Familier")
+				) {
 			return level;
 		}
 		if (!monsterFound) {
