@@ -456,9 +456,13 @@
 		Chrall_sendDlaToExtension(chrall.player().getDla(0).getTime(), chrall.player().getDla(1).getTime());
 
 		//> on ajoute de quoi afficher les messages de gogochrall
-		var html = "<span id=mbox class=ch_box><a id=ch_messageTitle>en attente...</a>";
-		html += "<span id=ch_messageContent><br><br>...de g0g0chrall...</span></span><br><br>";
-		$($("table table table")[0]).append(html);
+		var html = "<span id=mbox class=ch_box>\
+					<a id='ch_messageTitle'>en attente...</a>\
+					<span id='ch_messageContent'>\
+					<br><br>...de g0g0chrall...\
+					</span>\
+				</span><br><br>";
+		$("#titre2").after(html);
 		chrall.jsonp(chrall.serveurPublic() + "json?action=check_messages&TrollId=" + chrall.player().id + "&ChrallVersion=" +
 				chrallVersion);
 		$("#ch_messageTitle").click(function () {

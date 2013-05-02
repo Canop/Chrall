@@ -38,7 +38,8 @@ switch (chrall.pageName()) {
 		chrall.analyseAndReformatProfile();
 		break;
 	case "Play_vue.php":
-		Chrall_analyseAndReformatView();
+		chrall.analyseAndReformatView();
+		chrall.addMonsterInfo();
 		chrall.initCommunications('get_partages');
 		break;
 	case "Play_mouche.php":

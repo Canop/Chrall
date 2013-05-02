@@ -57,6 +57,7 @@
 				"chrall_start.js",
 				"chrall_view_analysis.js",
 				"chrall_view.js",
+				"chrall_view_monster.js",
 				"chrall_flies.js",
 				"chrall_play.js",
 				"chrall_menu.js",
