@@ -179,22 +179,19 @@ var isInLaby = false;
 							objectsByLevel[t.z].push(t);
 						}
 						for (var level in objectsByLevel) {
+							var an = player.z != level;
+							if (an) cellContent[c++] = "<span name=3D>";
 							var list = objectsByLevel[level];
+							if (orderItemsByType) list.sort(chrall.cellNameComparator);
 							var merge = list.length > 3;
 							if (merge) {
 								if (c > 0) cellContent[c++] = "<br name='trésors' class=ch_object>";
 								var divName = "objects_" + (x < 0 ? "_" + (-x) : x) + "_" + (y < 0 ? "_" + (-y) : y) + "_" + (-level);
-								var an = player.z != level;
-								if (an) cellContent[c++] = "<span name=3D>";
 								cellContent[c++] = "<span name='trésors' class=ch_object>" + level + " : ";
 								cellContent[c++] = "<a class=ch_objects_toggler toggleName='" + divName + "'>";
 								cellContent[c++] = "<b>" + list.length + " trésors</b>";
 								cellContent[c++] = "</a>";
 								cellContent[c++] = "<div name=" + divName + " class=hiddenDiv>";
-								if (an) cellContent[c++] = "</span>";
-							}
-							if (orderItemsByType) {
-								list.sort(chrall.cellNameComparator);
 							}
 							for (var i = 0; i < list.length; i++) {
 								var t = list[i];
@@ -206,11 +203,11 @@ var isInLaby = false;
 									cellContent[c++] = " href=\"javascript:Enter('/mountyhall/View/TresorHistory2.php?ai_IDTresor=" + t.id + "',750,500);\"";
 								}
 								cellContent[c++] = ">" + t.z + ": " + t.name + "</a>";
-								if (an) cellContent[c++] = "</span>";
 							}
 							if (merge) {
 								cellContent[c++] = "</div></span>";
 							}
+							if (an) cellContent[c++] = "</span>";
 						}
 					}
 					if (cell.mushrooms) {

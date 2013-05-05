@@ -177,7 +177,7 @@
 		["Petite", -1 ],
 		["Planqué", 1 ],
 		["Planquée", 1 ],
-		["Prince", 8                                                           ],
+		["Prince", 8 ],
 		["Psychophage", 2 ],
 		["Reine", 1 ],
 		["Roi", 1 ],
