@@ -177,7 +177,7 @@ func rowToBestiaryExtract(completeName string, row *sql.Row) (*BestiaryExtract, 
 
 /**
  * estime les caractéristiques du monstre.
- * Si l'id est fourni (i.e. pas 0) et si on a des cdm concernant ce monstre précis, on n'utilise que celles là [EN COURS]
+ * Si l'id est fourni (i.e. pas 0) et si on a des cdm concernant ce monstre précis, on n'utilise que celles là
  */
 func (store *MysqlStore) ComputeMonsterStats(db *sql.DB, completeName string, monsterId int) (*BestiaryExtract, error) {
 

@@ -198,7 +198,6 @@
 	};
 
 	chrall.receiveBubbleContent = function (answer) {
-		console.log_debug(answer);
 		// on vérifie que la réponse correspond à la bulle actuelle (et pas à une bulle fermée)
 		if ($('#bubbleRequestId').val() != answer.RequestId) {
 			console.log_trace('answer received to old request : ' + answer.RequestId);

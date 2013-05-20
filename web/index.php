@@ -32,14 +32,23 @@ Chrall est une extension Chrome pour le jeu <a href=http://www.mountyhall.com>Mo
 
 
 <h2>Installation</h2>
-<p><a href=chrall_v003_004.crx class=install>Télécharger Chrall</a> Version actuelle : <span id=version>3.4</span></p>
+<p><a href=chrall_v003_006.crx class=install>Extension Chrall</a> Version actuelle : <span id=version>3.6</span></p>
 <p id=browserInfos></p>
 
 <p>
 Google empêche maintenant l'installation d'extensions non officielles.
 <br>Une extension officielle c'est une extension faite par un développeur qui a payé 5$ à Google.
-<br>Du coup, Chrall n'est pas, et ne sera peut-être jamais, officielle.
-<br>Mais KraakBoomHu a décrit <a href=http://www.mountyhall.com/Forum/display_topic_threads.php?ForumID=21&TopicID=144172&PagePosition=11>comment faire l'installation</a>.
+<br><br>Du coup, Chrall n'est pas, et ne sera peut-être jamais, officielle.
+<a href=screens/installChrall3.jpg target=nouvelOnglet><img border=0 align=right src=screens/installChrall3.jpg width=320></a>
+<br><br>Voici comment installer Chrall maintenant :<ol>
+	<li>Faire un clic droit sur le gros bouton bleu <i>"Extension Chrall"</i> et choisir <i>"Enregistrer Sous"</i></li>
+	<li>Enregistrer n'importe où, ça n'a pas d'importance</li>
+	<li>Le fichier apparaît dans la barre de téléchargement en bas de la fenêtre Chrome, Surtout ne pas masquer cette barre</li>
+	<li>Aller dans le menu <i>"Outils"</i> et choisissez <i>"Extensions"</i></li>
+	<li>Glisser le fichier depuis la barre de téléchargement jusqu'à la page Extensions. voir illustration ci contre --> </li>
+	<li>Confirmer, et voilà</li>
+</ol>
+	
 </p>
 
 

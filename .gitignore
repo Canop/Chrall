@@ -10,3 +10,4 @@ datafiles
 *.iml
 *.csv
 **/src/github.com/*
+chrome/chrall/*.ods
