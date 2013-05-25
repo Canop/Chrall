@@ -19,6 +19,7 @@
 			],
 			"js": [
 				"jquery.js",
+				"jquery.sortElements.js",
 				"injected_util_bubble.js",
 				"injected_cdm.js",
 				"injected_events.js",
@@ -53,6 +54,7 @@
 				"chrall_bm.js",
 				"chrall_profile.js",
 				"chrall_options.js",
+				"chrall_equipment.js",
 				"chrall_events.js",
 				"chrall_start.js",
 				"chrall_view_analysis.js",
