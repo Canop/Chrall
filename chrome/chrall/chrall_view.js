@@ -3,8 +3,8 @@ var grid; // la grille. Tout ce qui est visible est stocké là dedans
 var objectsOnPlayerCell;
 var isInLaby = false;
 
-(function (chrall) {
-	chrall.makeDeLink = function (x, y, z) {
+(function (chrall){
+	chrall.makeDeLink = function (x, y, z){
 		var cost = (chrall.player().cellIsFree ? 1 : 2) + (z === chrall.player().z ? 0 : 1);
 		if (cost > chrall.player().pa) return '';
 		return '<a class=chrall_de x=' + (x - chrall.player().x) + ' y=' + (y - chrall.player().y) + ' z=' + (z - chrall.player().z) + '>DE ' + x + ' ' + y + ' ' + z + '</a>';
@@ -14,7 +14,7 @@ var isInLaby = false;
 	/**
 	 * construit la ligne de boites à cocher permettant de filtrer la grille
 	 */
-	chrall.makeFiltersHtml = function () {
+	chrall.makeFiltersHtml = function (){
 		html = '';
 		html += "<form class=gridFiltersForm>";
 		if (player.totalSight > 5) {
@@ -45,8 +45,8 @@ var isInLaby = false;
 			html += "<span><input type=checkbox id='" + key + "'";
 			if (viewFilters[key]) html += " checked";
 			html += "><label for='" + key + "'>" + key + "</label></span>";
-			(function (key) {
-				$(document).on('change', '#' + key, function (e) {
+			(function (key){
+				$(document).on('change', '#' + key, function (e){
 					localStorage['grid_filter_' + key] = this.checked ? 'inline' : 'none';
 					chrall.gridChangeDisplayByName(key, this.checked ? 'inline' : 'none', true);
 				});
@@ -57,7 +57,9 @@ var isInLaby = false;
 	};
 
 	function monsterName(compactNames, monsterCell){
-		if (!compactNames) { return monsterCell.fullName;}
+		if (!compactNames) {
+			return monsterCell.fullName;
+		}
 
 		var name = monsterCell.name;
 		name = null == name ? "" : name;
@@ -67,6 +69,16 @@ var isInLaby = false;
 		return  name;
 	}
 
+	function distanceStyle(verticalDistanceHint, z){
+		if (!verticalDistanceHint) {
+			return "";
+		}
+		var distance = Math.abs(chrall.player().z - z);
+		distance = Math.min(15, distance);
+		var fontSize = 110 - 3 * distance;
+		return "style='font-size:" + fontSize + "%;'";
+	}
+
 	/**
 	 * construit le HTML de la grille. Ce HTML est construit une fois pour toute, le filtrage opérant via des modifications de style.
 	 *
@@ -74,7 +86,7 @@ var isInLaby = false;
 	 *
 	 * Remplit au passage un objet contenant des infos sur ce qui est visible (pour les notes)
 	 */
-	chrall.makeGridHtml = function (noteRequest) {
+	chrall.makeGridHtml = function (noteRequest){
 		var orderItemsByType = chrall.isOptionEnabled("view-sort-items-per-type");
 		noteRequest.NumTrolls = [];
 		noteRequest.NumMonstres = [];
@@ -99,6 +111,10 @@ var isInLaby = false;
 		html[h++] = "<td align=center height=30 width=30>x/y</td>";
 		html[h++] = "<td rowspan=" + (ymax - ymin + 3) + " ><span style='display:block;transform:rotate(90deg);-webkit-transform:rotate(90deg);-moz-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;'>Orhykan&nbsp;(X+)</span></td>";
 		html[h++] = "</tr>\n";
+
+		var compactNames = chrall.isOptionEnabled('view-grid-compact-names');
+		var verticalDistanceHint = chrall.isOptionEnabled('view-grid-vertical-distance-hint');
+
 		for (var y = ymax; y >= ymin; y--) {
 			html[h++] = "<tr><td class=grad height=30>" + y + "</td>\n";
 			for (var x = xmin; x <= xmax; x++) {
@@ -130,14 +146,14 @@ var isInLaby = false;
 							if (t.team) cellContent[c++] = ' team="' + t.team + '"';
 							if (t.isIntangible) cellContent[c++] = " intangible";
 							cellContent[c++] = ' message="en X=' + x + ' Y=' + y + ' Z=' + t.z + '<br>Distance horizontale : ' + hdist + '"';
-							cellContent[c++] = " id=" + t.id;
+							cellContent[c++] = " id=" + t.id + " ";
+							cellContent[c++] = distanceStyle(verticalDistanceHint, t.z);
 							cellContent[c++] = ">" + t.z + ": " + t.name + "&nbsp;" + t.race[0] + t.level + "</a>";
 							if (t.isIntangible) cellContent[c++] = "</span>";
 							if (an) cellContent[c++] = "</span>";
 						}
 					}
 					if (cell.monsters) {
-						var compactNames = chrall.isOptionEnabled('view-grid-compact-names');
 						for (var i = 0; i < cell.monsters.length; i++) {
 							var m = cell.monsters[i];
 							noteRequest.NumMonstres.push(m.id);
@@ -147,6 +163,7 @@ var isInLaby = false;
 								if (an) cellContent[c++] = "<span name=3D>";
 								cellContent[c++] = "<a name='gowaps' class=ch_gowap href=\"javascript:EMV(" + m.id + ",750,550);\"";
 								cellContent[c++] = ' message="' + m.fullName + ' ( ' + m.id + ' )<br>en X=' + x + ' Y=' + y + ' Z=' + m.z + '<br>Distance horizontale : ' + hdist + '"';
+								cellContent[c++] = distanceStyle(verticalDistanceHint, m.z);
 								cellContent[c++] = ">" + m.z + ": " + m.name + "";
 								if (m.isSick) cellContent[c++] = "<span class=ch_tag>[M]</span>";
 								cellContent[c++] = "</a>";
@@ -159,6 +176,7 @@ var isInLaby = false;
 								cellContent[c++] = ' message="' + m.fullName + ' ( ' + m.id + ' ) en X=' + x + ' Y=' + y + ' Z=' + m.z + '<br>Distance horizontale : ' + hdist + '"';
 								cellContent[c++] = " id=" + m.id;
 								cellContent[c++] = " nom_complet_monstre=\"" + encodeURIComponent(m.fullName) + "\"";
+								cellContent[c++] = distanceStyle(verticalDistanceHint, m.z);
 								cellContent[c++] = ">" + m.z + ": " + monsterName(compactNames, m) + "</a>";
 								if (an) cellContent[c++] = "</span>";
 							}
@@ -175,6 +193,7 @@ var isInLaby = false;
 								if (an) cellContent[c++] = "<span name=3D>";
 								cellContent[c++] = "<a name='lieux' class=ch_place";
 								if (t.hasLink) cellContent[c++] = ' href="javascript:Enter(\'/mountyhall/View/TaniereDescription.php?ai_IDLieu=' + t.id + '\',750,500)"';
+								cellContent[c++] = distanceStyle(verticalDistanceHint, t.z);
 								cellContent[c++] = ">" + t.z + ": " + t.name + "</a>";
 								if (an) cellContent[c++] = "</span>";
 							}
@@ -200,7 +219,9 @@ var isInLaby = false;
 								if (c > 0) cellContent[c++] = "<br name='trésors' class=ch_object>";
 								var divName = "objects_" + (x < 0 ? "_" + (-x) : x) + "_" + (y < 0 ? "_" + (-y) : y) + "_" + (-level);
 								cellContent[c++] = "<span name='trésors' class=ch_object>" + level + " : ";
-								cellContent[c++] = "<a class=ch_objects_toggler toggleName='" + divName + "'>";
+								cellContent[c++] = "<a class=ch_objects_toggler toggleName='" + divName + "'";
+								cellContent[c++] = distanceStyle(verticalDistanceHint, level);
+								cellContent[c++] = ">";
 								cellContent[c++] = "<b>" + list.length + " trésors</b>";
 								cellContent[c++] = "</a>";
 								cellContent[c++] = "<div name=" + divName + " class=hiddenDiv>";
@@ -214,6 +235,7 @@ var isInLaby = false;
 								if (t.hasLink) {
 									cellContent[c++] = " href=\"javascript:Enter('/mountyhall/View/TresorHistory2.php?ai_IDTresor=" + t.id + "',750,500);\"";
 								}
+								cellContent[c++] = distanceStyle(verticalDistanceHint, t.z);
 								cellContent[c++] = ">" + t.z + ": " + t.name + "</a>";
 							}
 							if (merge) {
@@ -228,7 +250,9 @@ var isInLaby = false;
 							if (c > 0) cellContent[c++] = "<br name='champignons' class=ch_mushroom>";
 							var an = player.z != t.z;
 							if (an) cellContent[c++] = "<span name=3D>";
-							cellContent[c++] = "<a name='champignons' class=ch_mushroom>" + t.z + ": " + t.name + "</a>";
+							cellContent[c++] = "<a name='champignons' class=ch_mushroom";
+							cellContent[c++] = distanceStyle(verticalDistanceHint, m.z);
+							cellContent[c++] = ">" + t.z + ": " + t.name + "</a>";
 							if (an) cellContent[c++] = "</span>";
 						}
 					}
@@ -238,7 +262,9 @@ var isInLaby = false;
 							if (c > 0) cellContent[c++] = "<br name='cénotaphes' class=ch_cenotaph>";
 							var an = player.z != t.z;
 							if (an) cellContent[c++] = "<span name=3D>";
-							cellContent[c++] = '<a name="cénotaphes" class=ch_cenotaph href="javascript:EPV(' + t.trollId + ');">' + t.z + ': ' + t.name + '</a>';
+							cellContent[c++] = '<a name="cénotaphes" class=ch_cenotaph href="javascript:EPV(' + t.trollId + ');"';
+							cellContent[c++] = distanceStyle(verticalDistanceHint, t.z);
+							cellContent[c++] = '>' + t.z + ': ' + t.name + '</a>';
 							if (an) cellContent[c++] = "</span>";
 						}
 					}
@@ -313,16 +339,16 @@ var isInLaby = false;
 		return html.join('');
 	};
 
-	chrall.cellNameComparator = function (a, b) {
+	chrall.cellNameComparator = function (a, b){
 		return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
 	};
 
-	chrall.addTab = function ($tabs, href, text, count) {
+	chrall.addTab = function ($tabs, href, text, count){
 		text = count ? text + " (" + count + ")" : text;
 		$tabs.append($("<li/>").append($("<a/>", { href: href}).text(text)));
 	};
 
-	chrall.makeTabDiv = function (id) {
+	chrall.makeTabDiv = function (id){
 		var $div = $("<div scroll></div>");
 		$div.attr("id", id);
 		$div.attr("class", "tab_content");
@@ -332,12 +358,12 @@ var isInLaby = false;
 	// OPTM : le plus long, dans cette opération, est le append de la grille, c'est-à-dire la construction par le browser de la
 	//         page. Il me semble difficile d'optimiser ça.
 	//         "table-layout: fixed;" ne change rien
-	chrall.analyseAndReformatView = function() {
+	chrall.analyseAndReformatView = function (){
 		//var time_enter = (new Date()).getTime(); // <= prof
 
-	$(document.body).css('overflow', 'hidden');
+		$(document.body).css('overflow', 'hidden');
 
-	$('#footer2').remove(); // ce truc là se retrouve maintenant par dessus, je le vire carrément
+		$('#footer2').remove(); // ce truc là se retrouve maintenant par dessus, je le vire carrément
 
 		//> on analyse la vue
 		var $tables = Chrall_analyseView();
@@ -428,7 +454,7 @@ var isInLaby = false;
 		var $tabs_view = $("#tabs_view");
 		$tabs_view.find("li:first").addClass("active").show();
 		$(".tab_content:first").show();
-		var changeTab = function ($tab) {
+		var changeTab = function ($tab){
 			hideOm(); // fermeture des éventuels objectMenus de la grille
 			$("#tabs_view").find("li").removeClass("active");
 			$tab.addClass("active");
@@ -437,26 +463,26 @@ var isInLaby = false;
 			window.scroll(0, 0);
 			$(activeTab).fadeIn("fast");
 		};
-		$tabs_view.find("li").click(function () {
+		$tabs_view.find("li").click(function (){
 			changeTab($(this));
 		});
 		// on corrige les liens internes, pour qu'ils agissent sur les onglets
-		$('a[href$="#monstres"]').click(function () {
+		$('a[href$="#monstres"]').click(function (){
 			changeTab($('#tabs_view').find('a[href="#tabMonsters"]').parent());
 		});
-		$('a[href$="#trolls"]').click(function () {
+		$('a[href$="#trolls"]').click(function (){
 			changeTab($('#tabs_view').find('a[href="#tabTrolls"]').parent());
 		});
-		$('a[href$="#tresors"]').click(function () {
+		$('a[href$="#tresors"]').click(function (){
 			changeTab($('#tabs_view').find('a[href="#tabObjects"]').parent());
 		});
-		$('a[href$="#champignons"]').click(function () {
+		$('a[href$="#champignons"]').click(function (){
 			changeTab($('#tabs_view').find('a[href="#tabMushrooms"]').parent());
 		});
-		$('a[href$="#lieux"]').click(function () {
+		$('a[href$="#lieux"]').click(function (){
 			changeTab($('#tabs_view').find('a[href="#tabPlaces"]').parent());
 		});
-		$('a[href$="#cadavre"]').click(function () {
+		$('a[href$="#cadavre"]').click(function (){
 			changeTab($('#tabs_view').find('a[href="#tabCenotaphs"]').parent());
 		});
 
@@ -479,12 +505,12 @@ var isInLaby = false;
 			}
 		}
 
-		$(document.body).on('click', '[toggleName]', function () {
+		$(document.body).on('click', '[toggleName]', function (){
 			chrall.gridChangeDisplayByName($(this).attr('toggleName'));
 		});
 
 		setTimeout(// afin d'accélérer l'affichage initial, on repousse un peu l'ajout des bulles et menus
-				function () {
+				function (){
 					Chrall_gridLive();
 
 					//> bulle popup sur le lien du joueur
@@ -499,7 +525,7 @@ var isInLaby = false;
 
 					//> on met un popup sur les trésors pour afficher leur numéro (utile pour le pilotage de gowap)
 					$grid.find("a.ch_object").each(
-							function () {
+							function (){
 								var o = $(this);
 								var text = o.attr("bub");
 								if (text) {
@@ -516,7 +542,7 @@ var isInLaby = false;
 		);
 
 		//> on outille le select de réduction de vue
-		$('#viewRedux').change(function () {
+		$('#viewRedux').change(function (){
 			var limit = $(this).val();
 			document.getElementsByName("ai_MaxVue")[0].value = limit;
 			document.getElementsByName("ai_MaxVueVert")[0].value = Math.ceil(limit / 2);
@@ -525,7 +551,7 @@ var isInLaby = false;
 
 		var $gridHolder = $grid_holder;
 		var $playerCell = $('#cellp0p0');
-		var gotoPlayer = function () {
+		var gotoPlayer = function (){
 			hideOm();
 			scrollInProgress = true;
 			$gridHolder.animate(
@@ -534,7 +560,7 @@ var isInLaby = false;
 						scrollTop:  ($gridHolder.scrollTop() + $playerCell.offset().top + ($playerCell.innerHeight() - window.innerHeight) / 2)
 					},
 					'slow',
-					function () {
+					function (){
 						scrollInProgress = false;
 					}
 			);
