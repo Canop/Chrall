@@ -361,6 +361,7 @@ var isInLaby = false;
 	chrall.analyseAndReformatView = function (){
 		//var time_enter = (new Date()).getTime(); // <= prof
 
+
 		$(document.body).css('overflow', 'hidden');
 
 		$('#footer2').remove(); // ce truc là se retrouve maintenant par dessus, je le vire carrément
@@ -374,7 +375,6 @@ var isInLaby = false;
 		//> on vire la bannière "Mounty Hall la terre des trolls" qu'on a vu pendant 5 ans déjà...
 		$("tr").first().remove();
 		//> on vire le titre "Ma Vue" et les liens vers les tableaux
-		$("table table table").first().remove();
 		$("table table center").first().remove();
 		$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
 
@@ -436,8 +436,8 @@ var isInLaby = false;
 		//var time_after_grid_building = (new Date()).getTime(); // <= prof
 
 		$("table.mh_tdborder").first().parent().parent().prepend($tabs);
-		$("#tabSettings").append($(document.getElementsByName("LimitViewForm")[0])); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
-		//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
+		$("#tabSettings").append(document.getElementsByName("LimitViewForm")[0]); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
+		// onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
 		if (isInLaby) $("#tabWalls").append($tables['murs']);
 		$("#tabMonsters").append($tables['monstres']);
 		$("#tabTrolls").append($tables['trolls']);
