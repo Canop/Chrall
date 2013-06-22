@@ -76,7 +76,225 @@ var isInLaby = false;
 		var distance = Math.abs(chrall.player().z - z);
 		distance = Math.min(15, distance);
 		var fontSize = 110 - 3 * distance;
-		return "style='font-size:" + fontSize + "%;'";
+		return "font-size:" + fontSize + "%;";
+	}
+
+	function addCurrentPlayer($cell){
+		var attributes = {
+			id:      player.id,
+			text:    player.z + ':Vous êtes ici',
+			'class': 'ch_player',
+			href:    'javascript:EPV(' + player.id + ');'};
+		player.team = getTribastonTeam(player.id);
+		if (player.team) attributes.team = player.team;
+		if (player.isIntangible) attributes.intangible = 1;
+		$cell.append($("<div/>").append($("<a/>", attributes)));
+		$cell.attr("id", 'cellp0p0');
+	}
+
+	function addTrolls(cell, $cell, noteRequest, horizontalDist, verticalDistanceHint){
+		for (var i = 0; i < cell.trolls.length; i++) {
+			var troll = cell.trolls[i];
+			noteRequest.NumTrolls.push(troll.id);
+			var differentLevel = player.z != troll.z;
+			//							if (troll.isIntangible) cellContent[c++] = "<span name=intangibles>"; // TODO
+
+			var attributes = {
+				id:      troll.id,
+				text:    troll.z + ": " + troll.name + " " + troll.race[0] + troll.level, // TODO: better race display
+				'class': 'ch_troll',
+				href:    'javascript:EPV(' + troll.id + ');',
+				style:   distanceStyle(verticalDistanceHint, troll.z),
+				message: "en X=" + troll.x + " Y=" + troll.y + " Z=" + troll.z + "<br>Distance horizontale : " + horizontalDist
+			};
+			if (troll.team) attributes.team = troll.team;
+			if (troll.isIntangible) attributes.intangible = 1;
+			if (differentLevel) {
+				$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
+			} else {
+				$cell.append($("<div/>").append($("<a/>", attributes)));
+			}
+		}
+	}
+
+	function addMonsters(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames){
+		for (var i = 0; i < cell.monsters.length; i++) {
+			var monster = cell.monsters[i];
+			var differentLevel = player.z != monster.z;
+			noteRequest.NumMonstres.push(monster.id);
+			var attributes = {
+				id:      monster.id,
+				name: monster.isGowap ? 'gowaps' : 'monstres',
+				'class': monster.isGowap ? 'ch_gowap' : 'ch_monster',
+				text:    monster.z + ": " + monsterName(compactNames, monster),
+				href:    'javascript:EMV(' + monster.id + ',750,550);',
+				style:   distanceStyle(verticalDistanceHint, monster.z),
+				message: monster.fullName + ' ( ' + monster.id + ' ) en X=' + monster.x + ' Y=' + monster.y + ' Z=' + monster.z + '<br>Distance horizontale : ' + horizontalDistance
+			};
+			if (!monster.isGowap) attributes.nom_complet_monstre = encodeURIComponent(monster.fullName);
+			if (differentLevel) {
+				$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
+			} else {
+				$cell.append($("<div/>").append($("<a/>", attributes)));
+			}
+		}
+	}
+
+	function addPlaces(cell, $cell, verticalDistanceHint){
+		var hasHole = false;
+		for (var i = 0; i < cell.places.length; i++) {
+			var place = cell.places[i];
+			if (place.isHole) {
+				hasHole = true;
+			} else {
+				var differentLevel = player.z != place.z;
+				var attributes = {
+					id:      place.id,
+					name:    'lieux',
+					'class': 'ch_place',
+					text:    place.z + ": " + place.name,
+					style:   distanceStyle(verticalDistanceHint, place.z)
+				};
+				if (place.hasLink) attributes.href = 'javascript:Enter(\'/mountyhall/View/TaniereDescription.php?ai_IDLieu=' + place.id + ',750,550);';
+				if (differentLevel) {
+					$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
+				} else {
+					$cell.append($("<div/>").append($("<a/>", attributes)));
+				}
+			}
+		}
+		return hasHole;
+	}
+
+	function addMushrooms(cell, $cell, verticalDistanceHint){
+		for (var i = 0; i < cell.mushrooms.length; i++) {
+			var mushRoom = cell.mushrooms[i];
+			var differentLevel = player.z != mushRoom.z;
+			var attributes = {
+				name:    'champignons',
+				'class': 'ch_mushroom',
+				text:    mushRoom.z + ": " + mushRoom.name,
+				style:   distanceStyle(verticalDistanceHint, mushRoom.z)
+			};
+			if (differentLevel) {
+				$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
+			} else {
+				$cell.append($("<div/>").append($("<a/>", attributes)));
+			}
+		}
+	}
+
+	function addCenotaphs(cell, verticalDistanceHint, $cell){
+		for (var i = 0; i < cell.cenotaphs.length; i++) {
+			var cenotaph = cell.cenotaphs[i];
+			var differentLevel = player.z != cenotaph.z;
+			var attributes = {
+				name:    'cénotaphes',
+				'class': 'ch_cenotaph',
+				text:    cenotaph.z + ": " + cenotaph.name,
+				style:   distanceStyle(verticalDistanceHint, place.z),
+				href:    'javascript:EPV(' + cenotaph.trollId + ');'
+			};
+			if (differentLevel) {
+				$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
+			} else {
+				$cell.append($("<div/>").append($("<a/>", attributes)));
+			}
+		}
+	}
+
+	function addWalls(cell, $cell){
+		// S'il y a un mur, c'est probablement qu'on est dans un labyrinthe et que la vue est limitée à 1.
+		// On va donc se permettre d'afficher toutes les cases de la même taille pour que ce soit plus joli.
+		// Pour bien faire, il faudrait fixer initialement la taille des cases à une certaine taille si on est dans un labyrinthe.
+		// Ainsi, tout se centrerait bien sans souci. (Là c'est un peu tard pour le faire, y a un peu de bidouille...)
+		// On va aussi mettre une image de mur en arrière fond pour les cases qui en sont
+		// A noter qu'on se limite au minimum, mais je pense que ça suffit pour Chrall.
+		// (Dans la version normale toujours accessible dans l'onglet murs et couloirs d'ailleurs, il y a des images de trolls, de lieux, ...)
+		for (var i = 0; i < cell.walls.length; i++) {
+			var wall = cell.walls[i];
+			if (wall.name == "Mur") {
+				//On met une image de mur en background et on n'affiche rien dans la case, chrall suffit pour obtenir les coordonnées.
+				$cell.append($("<div/>", {style: "background-image:url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/mur.gif);background-repeat:repeat;min-height:160;min-width:160"}));
+			} else {
+				// Compte le nombre d'éléments dans la case. L'utilité sera d'estimer plus ou moins la hauteur de la case en fonction de ce qu'elle contient.
+				// On aurait pu le faire avec un compteur tout au long du parcours global des éléments, mais comme l'utilité sera très spécifique au labyrinthe, autant le faire ici.
+				var elementsNumber = 0;
+				if (cell.trolls) elementsNumber += cell.trolls.length;
+				if (cell.monsters) elementsNumber += cell.monsters.length;
+				if (cell.places) elementsNumber += cell.places.length;
+				if (cell.objects) elementsNumber += cell.objects.length;
+				if (cell.mushrooms) elementsNumber += cell.mushrooms.length;
+				if (cell.cenotaphs) elementsNumber += cell.cenotaphs.length;
+
+				// On affiche le couloir dans un div dont la hauteur est relative au nombre d'éléments dans cette case.
+				// C'est très approximatif, clairement pas au pixel prêt, mais ça permet plus ou moins de garder des cases carrées tant qu'il n'y a pas trop déléments dedans.
+				// (Par exemple, ça ne prend pas en compte qu'un élément est affiché ou non pour définir la hauteur de base.)
+				// A noter qu'avec ce fonctionnement, les éléments d'un couloir sont listés en haut de la case, et en sont donc plus centrés.
+				// Je n'affiche pas le z de profondeur avant le mot couloir. Un labyrinthe est plat, et de toute façon on a encore l'info pour tous les autres trucs de la vue, notamment soi-même dans la case centrale.
+				var minHeight = Math.max(0, 160 - elementsNumber * 20);
+				var $div = $("<div/>", {style: 'align:center;min-width:160;min-height:' + minHeight});
+				$div.append($("<a/>", {style: 'align:center;color:#969696', name: 'murs', 'class': 'ch_wall', text: wall.name}));
+				$cell.append($div);
+			}
+		}
+	}
+
+	function addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint){
+		// on regroupe les objets par étage et pour chaque étage on les compte afin de ne pas afficher des milliers de lignes quand une tanière est écroulée
+		var objectsByLevel = {};
+		for (var i = 0; i < cell.objects.length; i++) {
+			var object = cell.objects[i];
+			objectsByLevel[object.z] = objectsByLevel[object.z] ? objectsByLevel[object.z] : [];
+			objectsByLevel[object.z].push(object);
+		}
+		for (var level in objectsByLevel) {
+			var differentLevel = player.z != level; // TODO : span name = 3D // TODO plus tard name > class
+			var list = objectsByLevel[level];
+			if (orderItemsByType) list.sort(chrall.cellNameComparator);
+			var merge = list.length > 3;
+			var $treasureContainer = $cell;
+			if (merge) {
+				var divName = "objects_" + (x < 0 ? "_" + (-x) : x) + "_" + (y < 0 ? "_" + (-y) : y) + "_" + (-level);
+				var mergeAttributes = {
+					name:       'trésors',
+					'class':    'ch_object ch_objects_toggler',
+					text:       level + ':' + list.length + " trésors",
+					style:      distanceStyle(verticalDistanceHint, level),
+					toggleName: divName
+				};
+				var extendedList = $("<div/>", {name: divName, 'class': 'hiddenDiv'});
+				$treasureContainer = extendedList;
+				if (differentLevel) {
+					$cell.append($("<span/>", {name: "3D"}).append($("<a/>", mergeAttributes)));
+					$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
+					$cell.append(extendedList);
+				} else {
+					$cell.append($("<a/>", mergeAttributes));
+					$cell.append($("<div/>").append($("<a/>", attributes)));
+					$cell.append(extendedList);
+				}
+			}
+			for (var j = 0; j < list.length; j++) {
+				var treasure = list[j];
+				var attributes = {
+					name:       'trésors',
+					'class':    'ch_object',
+					bub:        treasure.id + " : " + treasure.name,
+					text:       treasure.z + ": " + treasure.name,
+					display:    'block',
+					toggleName: divName,
+					style:      distanceStyle(verticalDistanceHint, level)
+				};
+				if (treasure.hasLink) attributes.href = "javascript:Enter('/mountyhall/View/TresorHistory2.php?ai_IDTresor=" + treasure.id + "',750,500);";
+				if (differentLevel) {
+					$treasureContainer.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
+				} else {
+					$treasureContainer.append($("<div/>").append($("<a/>", attributes)));
+				}
+
+			}
+		}
 	}
 
 	/**
@@ -86,7 +304,7 @@ var isInLaby = false;
 	 *
 	 * Remplit au passage un objet contenant des infos sur ce qui est visible (pour les notes)
 	 */
-	chrall.makeGridHtml = function (noteRequest){
+	chrall.makeGrid = function (noteRequest){
 		var orderItemsByType = chrall.isOptionEnabled("view-sort-items-per-type");
 		noteRequest.NumTrolls = [];
 		noteRequest.NumMonstres = [];
@@ -96,247 +314,103 @@ var isInLaby = false;
 		noteRequest.YMax = ymax;
 		noteRequest.ZMin = zmin;
 		noteRequest.ZMax = zmax;
-		var grey_closed_png_url = chrome.extension.getURL("grey_closed.png");
-		var grey_open_png_url = chrome.extension.getURL("grey_open.png");
-		var h = 0;
-		var html = [];
-		html[h++] = "<table id=grid class=grid><tbody>";
-		html[h++] = "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax - xmin + 3) + " align=center>Nordhikan (Y+)</td><td bgcolor=#BABABA></td></tr>";
-		html[h++] = "<tr>";
-		html[h++] = "<td nowrap rowspan=" + (ymax - ymin + 3) + "\"><span style='display:block;-webkit-transform:rotate(-90deg);transform:rotate(-90deg);-moz-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;'>Oxhykan&nbsp;(X-)</span></td>";
-		html[h++] = "<td align=center height=30 width=30>y\\x</td>";
-		for (var x = xmin; x <= xmax; x++) {
-			html[h++] = "<td class=grad>" + x + "</td>";
+
+
+		var $gridTable = $("<table/>", {id: 'grid', 'class': 'grid'});
+		var $tr = $("<tr/>");
+		$gridTable.append($tr);
+		$tr.append($("<td/>", {bgcolor: "#BABABA"}));
+		$tr.append($("<td/>", {colspan: xmax - xmin + 3, align: 'center', text: 'Nordhikan (Y+)'}));
+		$tr.append($("<td/>", {bgcolor: "#BABABA"}));
+
+		$tr = $("<tr/>");
+		$gridTable.append($tr);
+		$tr.append($("<td/>", {rowspan: ymax - ymin + 3, style : 'min-width:1em'}).append($("<span/>", {style: 'display:block;-webkit-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;', text: 'Oxhykan (X-)'}))); // TODO span needed?
+		$tr.append($("<td/>", {align: 'center', height: 30, width: 30, text: 'y\\x'}));
+
+		var x, y, i;
+		for (x = xmin; x <= xmax; x++) {
+			$tr.append($("<td/>", {class: 'grad', text: x}));
 		}
-		html[h++] = "<td align=center height=30 width=30>x/y</td>";
-		html[h++] = "<td rowspan=" + (ymax - ymin + 3) + " ><span style='display:block;transform:rotate(90deg);-webkit-transform:rotate(90deg);-moz-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;'>Orhykan&nbsp;(X+)</span></td>";
-		html[h++] = "</tr>\n";
+		$tr.append($("<td/>", {align: 'center', height: 30, width: 30, text: 'x/y'}));
+		$tr.append($("<td/>", {rowspan: ymax - ymin + 3, style : 'min-width:1em'}).append($("<span/>", {style: 'display:block;-webkit-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;', text: 'Orhykan (X+)'}))); // TODO span needed?
 
 		var compactNames = chrall.isOptionEnabled('view-grid-compact-names');
 		var verticalDistanceHint = chrall.isOptionEnabled('view-grid-vertical-distance-hint');
 
-		for (var y = ymax; y >= ymin; y--) {
-			html[h++] = "<tr><td class=grad height=30>" + y + "</td>\n";
-			for (var x = xmin; x <= xmax; x++) {
-				var hdist = player.hdist(x, y);
-				var cell = grid.getCellOrNull(x, y);
-				var hasHole = false;
-				var cellContent = [];
-				var c = 0;
-				var cellId = null;
-				if (x === player.x && y === player.y) {
-					cellContent[c++] = "<a class=ch_player href=\"javascript:EPV(" + player.id + ");\"";
-					player.team = getTribastonTeam(player.id);
-					if (player.team) cellContent[c++] = ' team="' + player.team + '"';
-					cellContent[c++] = " id=" + player.id;
-					if (player.isIntangible) cellContent[c++] = " intangible";
-					cellContent[c++] = ">" + player.z + ":Vous êtes ici</a>";
-					cellId = 'cellp0p0';
-				}
-				if (cell) {
-					if (cell.trolls) {
-						for (var i = 0; i < cell.trolls.length; i++) {
-							var t = cell.trolls[i];
-							noteRequest.NumTrolls.push(t.id);
-							if (c > 0) cellContent[c++] = "<br name='trolls' class=ch_troll>";
-							var an = player.z != t.z;
-							if (an) cellContent[c++] = "<span name=3D>";
-							if (t.isIntangible) cellContent[c++] = "<span name=intangibles>";
-							cellContent[c++] = "<a name=trolls class=ch_troll href=\"javascript:EPV(" + t.id + ");\"";
-							if (t.team) cellContent[c++] = ' team="' + t.team + '"';
-							if (t.isIntangible) cellContent[c++] = " intangible";
-							cellContent[c++] = ' message="en X=' + x + ' Y=' + y + ' Z=' + t.z + '<br>Distance horizontale : ' + hdist + '"';
-							cellContent[c++] = " id=" + t.id + " ";
-							cellContent[c++] = distanceStyle(verticalDistanceHint, t.z);
-							cellContent[c++] = ">" + t.z + ": " + t.name + "&nbsp;" + t.race[0] + t.level + "</a>";
-							if (t.isIntangible) cellContent[c++] = "</span>";
-							if (an) cellContent[c++] = "</span>";
-						}
-					}
-					if (cell.monsters) {
-						for (var i = 0; i < cell.monsters.length; i++) {
-							var m = cell.monsters[i];
-							noteRequest.NumMonstres.push(m.id);
-							if (m.isGowap) {
-								if (c > 0) cellContent[c++] = "<br name='gowaps' class=ch_gowap>";
-								var an = player.z != m.z;
-								if (an) cellContent[c++] = "<span name=3D>";
-								cellContent[c++] = "<a name='gowaps' class=ch_gowap href=\"javascript:EMV(" + m.id + ",750,550);\"";
-								cellContent[c++] = ' message="' + m.fullName + ' ( ' + m.id + ' )<br>en X=' + x + ' Y=' + y + ' Z=' + m.z + '<br>Distance horizontale : ' + hdist + '"';
-								cellContent[c++] = distanceStyle(verticalDistanceHint, m.z);
-								cellContent[c++] = ">" + m.z + ": " + m.name + "";
-								if (m.isSick) cellContent[c++] = "<span class=ch_tag>[M]</span>";
-								cellContent[c++] = "</a>";
-								if (an) cellContent[c++] = "</span>";
-							} else {
-								if (c > 0) cellContent[c++] = "<br name='monstres' class=ch_monster>";
-								var an = player.z != m.z;
-								if (an) cellContent[c++] = "<span name=3D>";
-								cellContent[c++] = "<a name='monstres' class=ch_monster href=\"javascript:EMV(" + m.id + ",750,550);\"";
-								cellContent[c++] = ' message="' + m.fullName + ' ( ' + m.id + ' ) en X=' + x + ' Y=' + y + ' Z=' + m.z + '<br>Distance horizontale : ' + hdist + '"';
-								cellContent[c++] = " id=" + m.id;
-								cellContent[c++] = " nom_complet_monstre=\"" + encodeURIComponent(m.fullName) + "\"";
-								cellContent[c++] = distanceStyle(verticalDistanceHint, m.z);
-								cellContent[c++] = ">" + m.z + ": " + monsterName(compactNames, m) + "</a>";
-								if (an) cellContent[c++] = "</span>";
-							}
-						}
-					}
-					if (cell.places) {
-						for (var i = 0; i < cell.places.length; i++) {
-							var t = cell.places[i];
-							if (t.isHole) {
-								hasHole = true;
-							} else {
-								if (c > 0) cellContent[c++] = "<br name='lieux' class=ch_place>";
-								var an = player.z != t.z;
-								if (an) cellContent[c++] = "<span name=3D>";
-								cellContent[c++] = "<a name='lieux' class=ch_place";
-								if (t.hasLink) cellContent[c++] = ' href="javascript:Enter(\'/mountyhall/View/TaniereDescription.php?ai_IDLieu=' + t.id + '\',750,500)"';
-								cellContent[c++] = distanceStyle(verticalDistanceHint, t.z);
-								cellContent[c++] = ">" + t.z + ": " + t.name + "</a>";
-								if (an) cellContent[c++] = "</span>";
-							}
-						}
-					}
-					if (cell.objects) {
-						//> on regroupe les objets par étage et pour chaque étage on les compte afin de ne pas afficher des milliers de lignes quand une tanière est écroulée
-						var objectsByLevel = {};
-						for (var i = 0; i < cell.objects.length; i++) {
-							var t = cell.objects[i];
-							if (!objectsByLevel[t.z]) {
-								objectsByLevel[t.z] = [];
-							}
-							objectsByLevel[t.z].push(t);
-						}
-						for (var level in objectsByLevel) {
-							var an = player.z != level;
-							if (an) cellContent[c++] = "<span name=3D>";
-							var list = objectsByLevel[level];
-							if (orderItemsByType) list.sort(chrall.cellNameComparator);
-							var merge = list.length > 3;
-							if (merge) {
-								if (c > 0) cellContent[c++] = "<br name='trésors' class=ch_object>";
-								var divName = "objects_" + (x < 0 ? "_" + (-x) : x) + "_" + (y < 0 ? "_" + (-y) : y) + "_" + (-level);
-								cellContent[c++] = "<span name='trésors' class=ch_object>" + level + " : ";
-								cellContent[c++] = "<a class=ch_objects_toggler toggleName='" + divName + "'";
-								cellContent[c++] = distanceStyle(verticalDistanceHint, level);
-								cellContent[c++] = ">";
-								cellContent[c++] = "<b>" + list.length + " trésors</b>";
-								cellContent[c++] = "</a>";
-								cellContent[c++] = "<div name=" + divName + " class=hiddenDiv>";
-							}
-							for (var i = 0; i < list.length; i++) {
-								var t = list[i];
-								if (c > 0) cellContent[c++] = "<br name='trésors' class=ch_object>";
-								var an = player.z != t.z;
-								if (an) cellContent[c++] = "<span name=3D>";
-								cellContent[c++] = "<a name='trésors' bub=\"" + t.id + " : " + t.name + "\" class=ch_object";
-								if (t.hasLink) {
-									cellContent[c++] = " href=\"javascript:Enter('/mountyhall/View/TresorHistory2.php?ai_IDTresor=" + t.id + "',750,500);\"";
-								}
-								cellContent[c++] = distanceStyle(verticalDistanceHint, t.z);
-								cellContent[c++] = ">" + t.z + ": " + t.name + "</a>";
-							}
-							if (merge) {
-								cellContent[c++] = "</div></span>";
-							}
-							if (an) cellContent[c++] = "</span>";
-						}
-					}
-					if (cell.mushrooms) {
-						for (var i = 0; i < cell.mushrooms.length; i++) {
-							var t = cell.mushrooms[i];
-							if (c > 0) cellContent[c++] = "<br name='champignons' class=ch_mushroom>";
-							var an = player.z != t.z;
-							if (an) cellContent[c++] = "<span name=3D>";
-							cellContent[c++] = "<a name='champignons' class=ch_mushroom";
-							cellContent[c++] = distanceStyle(verticalDistanceHint, m.z);
-							cellContent[c++] = ">" + t.z + ": " + t.name + "</a>";
-							if (an) cellContent[c++] = "</span>";
-						}
-					}
-					if (cell.cenotaphs) {
-						for (var i = 0; i < cell.cenotaphs.length; i++) {
-							var t = cell.cenotaphs[i];
-							if (c > 0) cellContent[c++] = "<br name='cénotaphes' class=ch_cenotaph>";
-							var an = player.z != t.z;
-							if (an) cellContent[c++] = "<span name=3D>";
-							cellContent[c++] = '<a name="cénotaphes" class=ch_cenotaph href="javascript:EPV(' + t.trollId + ');"';
-							cellContent[c++] = distanceStyle(verticalDistanceHint, t.z);
-							cellContent[c++] = '>' + t.z + ': ' + t.name + '</a>';
-							if (an) cellContent[c++] = "</span>";
-						}
-					}
+		for (y = ymax; y >= ymin; y--) {
+			$tr = $("<tr/>");
+			$gridTable.append($tr);
+			$tr.append($("<td/>", { 'class': 'grad', text: y}));
 
-					// S'il y a un mur, c'est probablement qu'on est dans un labyrinthe et que la vue est limitée à 1.
-					// On va donc se permettre d'afficher toutes les cases de la même taille pour que ce soit plus joli.
-					// Pour bien faire, il faudrait fixer initialement la taille des cases à une certaine taille si on est dans un labyrinthe.
-					// Ainsi, tout se centrerait bien sans souci. (Là c'est un peu tard pour le faire, y a un peu de bidouille...)
-					// On va aussi mettre une image de mur en arrière fond pour les cases qui en sont
-					// A noter qu'on se limite au minimum, mais je pense que ça suffit pour Chrall.
-					// (Dans la version normale toujours accessible dans l'onglet murs et couloirs d'ailleurs, il y a des images de trolls, de lieux, ...)
-					if (cell.walls) {
-						for (var i = 0; i < cell.walls.length; i++) {
-							var t = cell.walls[i];
-							if (c > 0) cellContent[c++] = "<br name='murs' class=ch_wall>";
-							if (t.name == "Mur") {
-								//On met une image de mur en background et on n'affiche rien dans la case, chrall suffit pour obtenir les coordonnées.
-								cellContent[c++] = '<div style="background-image:url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/mur.gif);background-repeat:repeat;min-height:160;min-width:160"/>';
-							} else {
-								// Compte le nombre d'éléments dans la case. L'utilité sera d'estimer plus ou moins la hauteur de la case en fonction de ce qu'elle contient.
-								// On aurait pu le faire avec un compteur tout au long du parcours global des éléments, mais comme l'utilité sera très spécifique au labyrinthe, autant le faire ici.
-								var elementsNumber = 0;
-								if (cell.trolls) elementsNumber += cell.trolls.length;
-								if (cell.monsters) elementsNumber += cell.monsters.length;
-								if (cell.places) elementsNumber += cell.places.length;
-								if (cell.objects) elementsNumber += cell.objects.length;
-								if (cell.mushrooms) elementsNumber += cell.mushrooms.length;
-								if (cell.cenotaphs) elementsNumber += cell.cenotaphs.length;
-
-								// On affiche le couloir dans un div dont la hauteur est relative au nombre d'éléments dans cette case.
-								// C'est très approcimatif, clairement pas au pixel prêt, mais ça permet plus ou moins de garder des cases carrées tant qu'il n'y a pas trop déléments dedans.
-								// (Par exemple, ça ne prend pas en compte qu'un élément est affiché ou non pour définir la hauteur de base.)
-								// A noter qu'avec ce fonctionnement, les éléments d'un couloir sont listés en haut de la case, et en sont donc plus centrés.
-								// Je n'affiche pas le z de profondeur avant le mot couloir. Un labyrinthe est plat, et de toute façon on a encore l'info pour tous les autres trucs de la vue, notamment soi-même dans la case centrale.
-								var minHeight = Math.max(0, 160 - elementsNumber * 20);
-								cellContent[c++] = '<div style="min-height:' + minHeight + ';min-width:160;align:center"><a  style="align:center;color:#969696" name="murs" class=ch_wall >(' + t.name + ')</a></div>';
-							}
-						}
-					}
-				}
-
-				html[h++] = "<td class=d" + ((hdist - horizontalViewLimit + 20001) % 2);
-				html[h++] = " grid_x=" + x;
-				html[h++] = " grid_y=" + y;
+			for (x = xmin; x <= xmax; x++) {
+				var horizontalDistance = player.horizontalDistance(x, y);
+				var cellAttributes = {
+					'class': "d" + ((horizontalDistance - horizontalViewLimit + 20001) % 2),
+					grid_x:  x,
+					grid_y:  y
+				};
+				var $cell = $("<td/>", cellAttributes);
+				$tr.append($cell);
 				if ((horizontalViewLimit == 0) && ( (player.x != x) || (player.y != y) )) {
 					// Si on est aveugle, on indique que les cases autour sont inconnues avec un point d'interrogation.
 					// La vue étant minimaliste dans ce cas-là, on peut fixer une taille par défaut pour les cases.
-					html[h++] = " uncharted";
+					$cell.uncharted = 1;
 				}
-				if (cellId != null) html[h++] = ' id=' + cellId;
+
+				var cell = grid.getCellOrNull(x, y);
+				var hasHole = false;
+				if (x === player.x && y === player.y) {
+					addCurrentPlayer($cell);
+				}
+				if (cell) {
+					if (cell.trolls) {
+						addTrolls(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint);
+					}
+					if (cell.monsters) {
+						addMonsters(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames);
+					}
+					if (cell.places) {
+						hasHole = hasHole || addPlaces(cell, $cell, verticalDistanceHint);
+					}
+					if (cell.objects) {
+						addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint);
+					}
+					if (cell.mushrooms) {
+						addMushrooms(cell, $cell, verticalDistanceHint);
+					}
+					if (cell.cenotaphs) {
+						addCenotaphs(cell, verticalDistanceHint, $cell);
+					}
+					if (cell.walls) {
+						addWalls(cell, $cell);
+					}
+				}
+
 				var deRange = player.z === 0 ? 2 : 1;
 				var cellIsAccessibleByDe = x >= player.x - deRange && x <= player.x + deRange && y >= player.y - deRange && y <= player.y + deRange;
-				if (c > 0 || cellIsAccessibleByDe) html[h++] = " hasContent";
-				html[h++] = ">";
-				if (hasHole === true) {
-					html[h++] = "<span class=ch_place>Trou de Météorite</span>";
-				}
-				html[h++] = cellContent.join('');
-				html[h++] = "</td>\n";
+
+				if (0 < $cell.size() || cellIsAccessibleByDe) $cell.attr('hasContent', 1);
+				if (hasHole) $cell.prepend($("<span/>", {'class': 'ch_place', text: 'Trou de Météorite'}));
 			}
-			html[h++] = "<td class=grad height=30>" + y + "</td></tr>";
+			$tr.append($("<td/>", { 'class': 'grad', text: y}));
 		}
-		html[h++] = "<tr>";
-		html[h++] = "<td align=center height=30 width=30>y/x</td>";
-		for (var x = xmin; x <= xmax; x++) {
-			html[h++] = "<td class=grad>" + x + "</td>";
+
+		$tr = $("<tr/>");
+		$gridTable.append($tr);
+		$tr.append($("<td/>", {align: 'center', height: 30, width: 30, text: 'y/x'}));
+		for (x = xmin; x <= xmax; x++) {
+			$tr.append($("<td/>", {class: 'grad', text: x}));
 		}
-		html[h++] = "<td align=center height=30 width=30>x\\y</td>";
-		html[h++] = "</tr>";
-		html[h++] = "<tr><td bgcolor=#BABABA></td><td colspan=" + (xmax - xmin + 3) + " align=center>Mydikan (Y-)</td><td bgcolor=#BABABA></td></tr>";
-		html[h++] = "</tbody></table>";
-		return html.join('');
+		$tr.append($("<td/>", {align: 'center', height: 30, width: 30, text: 'x\\y'}));
+
+		$tr = $("<tr/>");
+		$gridTable.append($tr);
+		$tr.append($("<td/>", {bgcolor: "#BABABA"}));
+		$tr.append($("<td/>", {colspan: xmax - xmin + 3, align: 'center', text: 'Mydikan (Y-)'}));
+		$tr.append($("<td/>", {bgcolor: "#BABABA"}));
+
+		return $gridTable;
 	};
 
 	chrall.cellNameComparator = function (a, b){
@@ -384,7 +458,7 @@ var isInLaby = false;
 		var refreshLogout = $("table table div");
 		refreshLogout.addClass("floatTopRight");
 
-		//var time_before_grid = (new Date()).getTime(); // <= prof
+//		var time_before_grid = (new Date()).getTime(); // <= prof
 
 		//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 		var $tabs = $("<ul/>", {id: "tabs_view", 'class': "tabs", view: "yes"});
@@ -412,7 +486,8 @@ var isInLaby = false;
 
 		if (chrall.isOptionDisabled('view-disable-grid-view')) {
 			var $tabGrid = $("<div/>", { id: "tabGrid", 'class': "tab_content"}).html(chrall.makeFiltersHtml());
-			var $holder = $("<div/>", { id: "grid_holder"}).html(chrall.makeGridHtml(noteRequest));
+			var $holder = $("<div/>", { id: "grid_holder"});
+			$holder.append(chrall.makeGrid(noteRequest));
 			$tabGrid.append($holder);
 			$tabContainer.append($tabGrid);
 		}
@@ -433,7 +508,7 @@ var isInLaby = false;
 			}
 		}
 
-		//var time_after_grid_building = (new Date()).getTime(); // <= prof
+//		var time_after_grid_building = (new Date()).getTime(); // <= prof
 
 		$("table.mh_tdborder").first().parent().parent().prepend($tabs);
 		$("#tabSettings").append(document.getElementsByName("LimitViewForm")[0]); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
@@ -486,7 +561,7 @@ var isInLaby = false;
 			changeTab($('#tabs_view').find('a[href="#tabCenotaphs"]').parent());
 		});
 
-		// var time_after_grid_append = (new Date()).getTime(); // <= prof
+//		var time_after_grid_append = (new Date()).getTime(); // <= prof
 
 		var $grid_holder = $('#grid_holder');
 		$grid_holder.dragscrollable({dragSelector: '#grid'});
@@ -574,16 +649,16 @@ var isInLaby = false;
 		//> hook pour le centrage au double-clic
 		$('#grid').dblclick(gotoPlayer);
 
-		/*
-		 var time_end = (new Date()).getTime(); // <= prof
-		 console.log("Profiling - Vue de " + horizontalViewLimit);
-		 console.log("Duration Cleaning : " + (time_after_cleaning-time_enter));
-		 console.log("Duration Analysis : " + (time_before_grid-time_after_cleaning));
-		 console.log("Duration Grid Building: " + (time_after_grid_building-time_before_grid));
-		 console.log("Duration Grid Append : " + (time_after_grid_append-time_after_grid_building));
-		 console.log("Duration Bubbles : " + (time_end-time_after_grid_append));
-		 console.log("Total Duration : " + (time_end-time_enter));
-		 */
+
+		//		 var time_end = (new Date()).getTime(); // <= prof
+		//		 console.log("Profiling - Vue de " + horizontalViewLimit);
+		//		 console.log("Duration Cleaning : " + (time_after_cleaning-time_enter));
+		//		 console.log("Duration Analysis : " + (time_before_grid-time_after_cleaning));
+//		console.log("Duration Grid Building: " + (time_after_grid_building - time_before_grid));
+//		console.log("Duration Grid Append : " + (time_after_grid_append - time_after_grid_building));
+		//		 console.log("Duration Bubbles : " + (time_end-time_after_grid_append));
+		//		 console.log("Total Duration : " + (time_end-time_enter));
+
 
 		// On corrige si nécessaire la position affichée dans le menu de gauche et on signale
 		// cette position au serveur Chrall

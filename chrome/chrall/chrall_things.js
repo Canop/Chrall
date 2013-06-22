@@ -83,7 +83,7 @@ function Thing(x, y, z) {
 	this.y = y;
 	this.z = z;
 }
-Thing.prototype.hdist = function (x, y) { // distance horizontale
+Thing.prototype.horizontalDistance = function (x, y) { // distance horizontale
 	return Math.max(Math.abs(this.x - x), Math.abs(this.y - y));
 };
 Thing.prototype.setName = function (name) { // méthode surchargée pour les monstres et les lieux

@@ -162,6 +162,7 @@ table.grid td {
 a.ch_objects_toggler {
 	color: grey !important;
 	cursor: pointer;
+	font-weight: bolder;
 }
 
 .ch_mushroom, .ch_mushroom:hover {
@@ -446,6 +447,7 @@ img.illus {
 	padding: 2px;
 	text-align: center;
 	z-index: 8;
+    min-width: 10em;
 }
 
 #objectMenu_top a:link, #objectMenu_bottom a:link, #objectMenu_bottom a.chrall_de {
