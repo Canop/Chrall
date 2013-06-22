@@ -198,7 +198,8 @@ table.grid td.d1 {
 }
 
 table.grid td[hasContent] {
-	min-width: 100px;
+	/*min-width: 10em;*/
+    white-space: nowrap;
 }
 
 form.gridFiltersForm {

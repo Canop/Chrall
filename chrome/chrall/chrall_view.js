@@ -56,6 +56,17 @@ var isInLaby = false;
 		return html;
 	};
 
+	function monsterName(compactNames, monsterCell){
+		if (!compactNames) { return monsterCell.fullName;}
+
+		var name = monsterCell.name;
+		name = null == name ? "" : name;
+		if (20 < name.length) {
+			name = name.substr(0, 20) + "..";
+		}
+		return  name;
+	}
+
 	/**
 	 * construit le HTML de la grille. Ce HTML est construit une fois pour toute, le filtrage opérant via des modifications de style.
 	 *
@@ -126,6 +137,7 @@ var isInLaby = false;
 						}
 					}
 					if (cell.monsters) {
+						var compactNames = chrall.isOptionEnabled('view-grid-compact-names');
 						for (var i = 0; i < cell.monsters.length; i++) {
 							var m = cell.monsters[i];
 							noteRequest.NumMonstres.push(m.id);
@@ -147,7 +159,7 @@ var isInLaby = false;
 								cellContent[c++] = ' message="' + m.fullName + ' ( ' + m.id + ' ) en X=' + x + ' Y=' + y + ' Z=' + m.z + '<br>Distance horizontale : ' + hdist + '"';
 								cellContent[c++] = " id=" + m.id;
 								cellContent[c++] = " nom_complet_monstre=\"" + encodeURIComponent(m.fullName) + "\"";
-								cellContent[c++] = ">" + m.z + ": " + m.fullName + "</a>";
+								cellContent[c++] = ">" + m.z + ": " + monsterName(compactNames, m) + "</a>";
 								if (an) cellContent[c++] = "</span>";
 							}
 						}

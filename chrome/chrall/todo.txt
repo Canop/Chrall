@@ -1,8 +1,12 @@
-eye-candy : les images dans la vue
+vue 2D: injecter nivals aussi
+Colonnes: icones
+Vue 2D: icones
 vue 2D: rendre optionnel
 vue 2D: version alternative: résumé d'icones
 vue 2D: dangerosité de la case
 vue 2D: historique des frappes façon TZ
+vue 2D: diminuer fonte en fonction de la distance verticale
+
 liste des messages: priorités, groupes de chasse?
 
 
@@ -11,7 +15,7 @@ gestion des "notes":
 	pièges
 	affichage diplo
 	affichage des notes
-	
+
 
 ? diplomatie inverse
 
