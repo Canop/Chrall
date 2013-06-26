@@ -56,17 +56,22 @@ var isInLaby = false;
 		return html;
 	};
 
+	function compactText(name){
+		name = null == name ? "" : name;
+		var maxLength = 20;
+		if (maxLength < name.length) {
+			name = name.substr(0, maxLength) + "..";
+		}
+		return  name;
+	}
+
 	function monsterName(compactNames, monsterCell){
 		if (!compactNames) {
 			return monsterCell.fullName;
 		}
 
 		var name = monsterCell.name;
-		name = null == name ? "" : name;
-		if (20 < name.length) {
-			name = name.substr(0, 20) + "..";
-		}
-		return  name;
+		return compactText(name);
 	}
 
 	function distanceStyle(verticalDistanceHint, z){
@@ -92,7 +97,7 @@ var isInLaby = false;
 		$cell.attr("id", 'cellp0p0');
 	}
 
-	function addTrolls(cell, $cell, noteRequest, horizontalDist, verticalDistanceHint){
+	function addTrolls(cell, $cell, noteRequest, horizontalDist, verticalDistanceHint, compactNames){
 		for (var i = 0; i < cell.trolls.length; i++) {
 			var troll = cell.trolls[i];
 			noteRequest.NumTrolls.push(troll.id);
@@ -101,7 +106,7 @@ var isInLaby = false;
 
 			var attributes = {
 				id:      troll.id,
-				text:    troll.z + ": " + troll.name + " " + troll.race[0] + troll.level, // TODO: better race display
+				text:    troll.z + ": " + (compactNames ? compactText(troll.name) : troll.name) + " " + troll.race[0] + troll.level, // TODO: better race display
 				'class': 'ch_troll',
 				href:    'javascript:EPV(' + troll.id + ');',
 				style:   distanceStyle(verticalDistanceHint, troll.z),
@@ -140,7 +145,7 @@ var isInLaby = false;
 		}
 	}
 
-	function addPlaces(cell, $cell, verticalDistanceHint){
+	function addPlaces(cell, $cell, verticalDistanceHint, compactNames){
 		var hasHole = false;
 		for (var i = 0; i < cell.places.length; i++) {
 			var place = cell.places[i];
@@ -152,7 +157,7 @@ var isInLaby = false;
 					id:      place.id,
 					name:    'lieux',
 					'class': 'ch_place',
-					text:    place.z + ": " + place.name,
+					text:    place.z + ": " + (compactNames ? compactText(place.name) :place.name),
 					style:   distanceStyle(verticalDistanceHint, place.z)
 				};
 				if (place.hasLink) attributes.href = 'javascript:Enter(\'/mountyhall/View/TaniereDescription.php?ai_IDLieu=' + place.id + ',750,550);';
@@ -240,7 +245,7 @@ var isInLaby = false;
 		}
 	}
 
-	function addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint){
+	function addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint, compactNames){
 		// on regroupe les objets par étage et pour chaque étage on les compte afin de ne pas afficher des milliers de lignes quand une tanière est écroulée
 		var objectsByLevel = {};
 		for (var i = 0; i < cell.objects.length; i++) {
@@ -281,9 +286,8 @@ var isInLaby = false;
 					name:       'trésors',
 					'class':    'ch_object',
 					bub:        treasure.id + " : " + treasure.name,
-					text:       treasure.z + ": " + treasure.name,
+					text:       treasure.z + ": " + (compactNames ? compactText(treasure.name) : treasure.name),
 					display:    'block',
-					toggleName: divName,
 					style:      distanceStyle(verticalDistanceHint, level)
 				};
 				if (treasure.hasLink) attributes.href = "javascript:Enter('/mountyhall/View/TresorHistory2.php?ai_IDTresor=" + treasure.id + "',750,500);";
@@ -365,16 +369,16 @@ var isInLaby = false;
 				}
 				if (cell) {
 					if (cell.trolls) {
-						addTrolls(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint);
+						addTrolls(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames);
 					}
 					if (cell.monsters) {
 						addMonsters(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames);
 					}
 					if (cell.places) {
-						hasHole = hasHole || addPlaces(cell, $cell, verticalDistanceHint);
+						hasHole = hasHole || addPlaces(cell, $cell, verticalDistanceHint, compactNames);
 					}
 					if (cell.objects) {
-						addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint);
+						addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint, compactNames);
 					}
 					if (cell.mushrooms) {
 						addMushrooms(cell, $cell, verticalDistanceHint);
