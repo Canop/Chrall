@@ -161,8 +161,7 @@
 					var args = getArgs(target);
 					if (args.ajaxUrl) {
 						chrall.jsonp(args.ajaxUrl);
-						chrall.showBubble.call(this, target, event, args.text, cssClass, args.ajaxRequestId,
-								args.leftCol);
+						chrall.showBubble.call(this, target, event, args.text, cssClass, args.ajaxRequestId, args.leftCol);
 					} else {
 						chrall.showBubble.call(this, target, event, args.text, cssClass, null, args.leftCol);
 					}
@@ -199,8 +198,9 @@
 
 	chrall.receiveBubbleContent = function (answer) {
 		// on vérifie que la réponse correspond à la bulle actuelle (et pas à une bulle fermée)
-		if ($('#bubbleRequestId').val() != answer.RequestId) {
-			console.log_trace('answer received to old request : ' + answer.RequestId);
+        var $bubbleRequestId = $('#bubbleRequestId');
+        if ($bubbleRequestId.val() != answer.RequestId) {
+			console.log_trace('answer received to old request : ' + answer.RequestId + " current: " + $bubbleRequestId.val());
 			return;
 		}
 		var $div = $('#bubbleContent');

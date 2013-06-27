@@ -86,7 +86,7 @@ function Chrall_gridLive() {
 		var args = {};
 		var monsterId = parseInt(link.attr('id'));
 		var tokens = link.text().split(':');
-		var linkText = tokens[tokens.length - 1].trim();
+		var linkText = null == link.attr("nom_complet_monstre") ? tokens[tokens.length - 1].trim() : link.attr("nom_complet_monstre").trim();
 		var nomMonstre = encodeURIComponent(linkText);
 		args.text = link.attr('message');
 		var imgUrl = getMonsterMhImageUrl(linkText);
@@ -98,6 +98,7 @@ function Chrall_gridLive() {
 			args.ajaxUrl += '&mdpr=' + chrall.mdpCompteChrall();
 		}
 		args.ajaxRequestId = linkText;
+        console.log_trace(args);
 		return args;
 	}
 	chrall.bubbleLive('a[href*="EMV"]', 'bub_monster', getMonsterArgs);

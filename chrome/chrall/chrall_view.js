@@ -136,7 +136,7 @@ var isInLaby = false;
 				style:   distanceStyle(verticalDistanceHint, monster.z),
 				message: monster.fullName + ' ( ' + monster.id + ' ) en X=' + monster.x + ' Y=' + monster.y + ' Z=' + monster.z + '<br>Distance horizontale : ' + horizontalDistance
 			};
-			if (!monster.isGowap) attributes.nom_complet_monstre = encodeURIComponent(monster.fullName);
+			if (!monster.isGowap) attributes.nom_complet_monstre = monster.fullName;
 			if (differentLevel) {
 				$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
 			} else {
