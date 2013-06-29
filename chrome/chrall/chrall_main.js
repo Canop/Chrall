@@ -109,10 +109,10 @@ switch (chrall.pageName()) {
 		Chrall_analyseResultatCombat();
 		break;
 	case "FO_Ordres.php":
-		Chrall_handleFollowerOrders();
+		chrall.handleFollowerOrders();
 		break;
 	case "FO_NewOrder.php":
-		Chrall_fillFollowerNewOrderForm();
+		chrall.fillFollowerNewOrderForm();
 		chrall.askDestinations();
 		break;
 	case "Play_a_Sort13.php":

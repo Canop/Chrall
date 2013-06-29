@@ -1,4 +1,4 @@
-(function (chrall) {
+(function (chrall){
 
 	/*
 	 * Après avoir testé une foultitude de librairies de bulles (jquery ou non), je me suis résolu à en écrire une qui
@@ -27,7 +27,7 @@
 	var bubbleCloseTimeoutID;
 	var bubbleTarget;
 
-	chrall.hideBubble = function () {
+	chrall.hideBubble = function (){
 		clearTimeout(bubbleCloseTimeoutID);
 		if (bubbleExists && !onBubbleDiv) {
 			$("#bubble").remove();
@@ -37,7 +37,7 @@
 		console.log_trace("clipboard override disabled");
 	};
 
-	function surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv, cssClass) {
+	function surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv, cssClass){
 		if (leftCol) {
 			var $table = $('<table/>', {'class': cssClass});
 			var $tr = $('<tr/>');
@@ -52,7 +52,7 @@
 		}
 	}
 
-	chrall.showBubble = function (target, event, text, cssClass, ajaxRequestId, leftCol) {
+	chrall.showBubble = function (target, event, text, cssClass, ajaxRequestId, leftCol){
 		cssClass = chrall.isOptionEnabled('bubble-use-mountyhall-styles') ? 'mh_tdtitre' : cssClass;
 		if (bubbleExists) {
 			chrall.hideBubble();
@@ -96,20 +96,29 @@
 		bubbleExists = true;
 
 		chrall.nbBubbles = chrall.nbBubbles || 0;
-		if (chrall.nbBubbles++<6) {
+		if (chrall.nbBubbles++ < 6) {
 			$bubbleDiv.append($("<div/>", { id: "bubbleCopyMessage", style: "font-size: 75%; max-width:30em"})
-				.text("Pour copier l'info via CTRL-C, le focus doit être mis dans la frame (e.x. clic sur la barre d'options, ...	)"));
+					.text("Pour copier l'info via CTRL-C, le focus doit être mis dans la frame (e.x. clic sur la barre d'options, ...	)"));
 		}
 		chrall.copiableContent = $("#bubble");
 		$(window).on("copy", chrall.clipboardOverride);
-
+		if (target.attr("x")) {
+			// C'est une destination possible, on va la mémoriser et on fera qq chose avec si clipboardOverride
+			chrall.possibleDestination = {
+				x:    target.attr("x"),
+				y:    target.attr("y"),
+				z:    target.attr("z"),
+				id:   target.attr("id"),
+				text: target.text()
+			};
+		}
 	};
 
-	chrall.keepBubbleOpen = function () {
+	chrall.keepBubbleOpen = function (){
 		onBubbleDiv = true;
 	};
 
-	chrall.letBubbleClose = function () {
+	chrall.letBubbleClose = function (){
 		onBubbleDiv = false;
 		chrall.hideBubble();
 	};
@@ -122,8 +131,8 @@
 	 * @param ajaxUrl une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
 	 * @param ajaxRequestId
 	 */
-	chrall.triggerBubble = function (target, text, cssClass, ajaxUrl, ajaxRequestId) {
-		target.mouseenter(function (event) {
+	chrall.triggerBubble = function (target, text, cssClass, ajaxUrl, ajaxRequestId){
+		target.mouseenter(function (event){
 			if (scrollInProgress || onBubbleDiv || onBubbleTarget) {
 				return false;
 			}
@@ -135,7 +144,7 @@
 				chrall.showBubble.call(this, $(this), event, text, cssClass);
 			}
 		});
-		target.mouseout(function (event) {
+		target.mouseout(function (event){
 			onBubbleTarget = false;
 			chrall.hideBubble();
 			//bubbleCloseTimeoutID = setTimeout(chrall.hideBubble, 150);  <= remettre cette ligne si on veut permettre le passage de la souris dans la bulle sans qu'elle se ferme
@@ -149,10 +158,10 @@
 	 * @param getArgs
 	 * @return map avec text, ajaxUrl, ajaxRequestId (plus en optionnel leftCol)
 	 */
-	chrall.bubbleLive = function (selector, cssClass, getArgs) {
+	chrall.bubbleLive = function (selector, cssClass, getArgs){
 		$(selector).live(
 				'mouseenter',
-				function (event) {
+				function (event){
 					var target = $(this);
 					if (scrollInProgress || onBubbleDiv || onBubbleTarget) {
 						return false;
@@ -167,14 +176,14 @@
 					}
 				}
 		).live(
-				'mouseout', function (event) {
+				'mouseout', function (event){
 					onBubbleTarget = false;
 					chrall.hideBubble();
 				}
 		);
 	};
 
-	chrall.clipboardOverride = function (e) {
+	chrall.clipboardOverride = function (e){
 		console.log_trace("clipboard override called");
 		if (null === chrall.copiableContent || undefined === chrall.copiableContent) {
 			return true;
@@ -188,18 +197,21 @@
 		rng.selectNodeContents($div.get(0));
 		window.getSelection().removeAllRanges();
 		window.getSelection().addRange(rng);
-		setTimeout(function () {
+		setTimeout(function (){
 			$div.remove()
 		}, 100);
 		chrall.notifyUser({text: "Contenu de l'info-bulle copié dans le clipboard"});
 		chrall.copiableContent = null;
+		if (chrall.possibleDestination) {
+			localStorage["possibleDestination"] = JSON.stringify(chrall.possibleDestination);
+		}
 		return true;
 	};
 
-	chrall.receiveBubbleContent = function (answer) {
+	chrall.receiveBubbleContent = function (answer){
 		// on vérifie que la réponse correspond à la bulle actuelle (et pas à une bulle fermée)
-        var $bubbleRequestId = $('#bubbleRequestId');
-        if ($bubbleRequestId.val() != answer.RequestId) {
+		var $bubbleRequestId = $('#bubbleRequestId');
+		if ($bubbleRequestId.val() != answer.RequestId) {
 			console.log_trace('answer received to old request : ' + answer.RequestId + " current: " + $bubbleRequestId.val());
 			return;
 		}
