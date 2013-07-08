@@ -62,44 +62,47 @@
 
 		ch.onClick = function (x, y, z) {
 			chrall.setTrollStorage({'.gowap-order': 'move', '.gowap-x': x, '.gowap-y': y, '.gowap-z': gowap_z});
-		}
+		};
 		ch.redraw();
 
 
 		// Boutons pour destination hard-codées: case du troll, case du gowap
 		var actionButton = $("[name='as_Action']");
-		var orderLine = actionButton.parent();
-		var node = $("'<a class=gogo>Aller sur ma case</a>'");
-		node.appendTo(orderLine);
+		var orderLine = actionButton.parent().parent();
+		var node = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'Aller sur ma case'});
 		node.bind("click", chrall.triggerGowapAction(player.x, player.y, player.z, 'move', numGowap, numMaxOrdre));
-		node = $("'<a class=gogo>Retourner sur sa case</a>'");
-		node.appendTo(orderLine);
+		var toOwner = $("<td/>", { style: 'width:15em'});
+		orderLine.append(toOwner.append(node));
+		node = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'Retourner sur sa case'});
+		var toSelf = $("<td/>", { style: 'width:15em'});
+		orderLine.append(toSelf.append(node));
 		node.bind("click", chrall.triggerGowapAction(chGowap.x, chGowap.y, chGowap.z, 'move', numGowap, numMaxOrdre));
 		var possibleDestination = localStorage["possibleDestination"];
 		var text;
 		if (possibleDestination) {
 			possibleDestination = JSON.parse(possibleDestination);
 			text = possibleDestination.text.split(":")[1];
-			node = $("'<a class=gogo>Aller vers : " + text + " </a>'");
-			node.appendTo(orderLine);
+			node = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'Aller vers : ' + text});
+			var toDestination = $("<td/>", { style: 'width:15em'});
+			orderLine.append(toDestination.append(node));
 			node.bind("click", chrall.triggerGowapAction(possibleDestination.x, possibleDestination.y, possibleDestination.z, 'move', numGowap, numMaxOrdre));
 		}
 
 		// Ordres supplémentaires si le gowap peut s'ébrouer
 		if (0 < $("[name='ai_IdOrdre'] > [value='7']").length) {
-			var ebroueNode = $("'<a class=gogo >S\'ébrouer sur ma case</a>'");
-			ebroueNode.appendTo(orderLine);
+			var ebroueNode = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'S\'ébrouer sur ma case'});
+			toOwner.append(ebroueNode);
 			ebroueNode.bind("click", chrall.triggerGowapAction(player.x, player.y, player.z, 'snort', numGowap, numMaxOrdre));
-			ebroueNode = $("'<a class=gogo>S\'ébrouer à ses pieds</a>'");
+			ebroueNode = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'S\'ébrouer a ses pieds'});
 			ebroueNode.bind("click", chrall.triggerGowapAction(chGowap.x, chGowap.y, chGowap.z, 'snort', numGowap, numMaxOrdre));
-			ebroueNode.appendTo(orderLine);
+			toSelf.append(ebroueNode);
 			if (possibleDestination) {
-				ebroueNode = $("'<a class=gogo>S\'ébrouer aux pieds de : " + text + " </a>'");
-				ebroueNode.appendTo(orderLine);
+				ebroueNode = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'S\'ébrouer aux pieds de : ' + text});
+				toDestination.append(ebroueNode);
 				ebroueNode.bind("click", chrall.triggerGowapAction(possibleDestination.x, possibleDestination.y, possibleDestination.z, 'snort', numGowap, numMaxOrdre));
 			}
 		}
-	}
+	};
 
 	chrall.triggerGowapAction = function (x, y, z, order, numGowap, numMaxOrdre) {
 		return (function () {
