@@ -69,36 +69,45 @@
 		// Boutons pour destination hard-codées: case du troll, case du gowap
 		var actionButton = $("[name='as_Action']");
 		var orderLine = actionButton.parent().parent();
-		var node = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'Aller sur ma case'});
+		var node = $("<a/>", { 'class': 'gogo', text: 'Aller sur ma case'});
 		node.bind("click", chrall.triggerGowapAction(player.x, player.y, player.z, 'move', numGowap, numMaxOrdre));
-		var toOwner = $("<td/>", { style: 'width:15em'});
-		orderLine.append(toOwner.append(node));
-		node = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'Retourner sur sa case'});
-		var toSelf = $("<td/>", { style: 'width:15em'});
-		orderLine.append(toSelf.append(node));
+		var toOwner = $("<td/>", { style: 'width:20em'});
+		orderLine.append(toOwner);
+		addButtonNode(toOwner, node);
+		node = $("<a/>", { 'class': 'gogo', text: 'Retourner sur sa case'});
+		var toSelf = $("<td/>", { style: 'width:20em'});
+		orderLine.append(toSelf);
+		addButtonNode(toSelf, node);
 		node.bind("click", chrall.triggerGowapAction(chGowap.x, chGowap.y, chGowap.z, 'move', numGowap, numMaxOrdre));
 		var possibleDestination = localStorage["possibleDestination"];
 		var text;
 		if (possibleDestination) {
 			possibleDestination = JSON.parse(possibleDestination);
 			text = possibleDestination.text.split(":")[1];
-			node = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'Aller vers : ' + text});
-			var toDestination = $("<td/>", { style: 'width:15em'});
-			orderLine.append(toDestination.append(node));
+			node = $("<a/>", { 'class': 'gogo', text: 'Aller vers : ' + text});
+			var toDestination = $("<td/>", { style: 'width:20em'});
+			orderLine.append(toDestination);
+			addButtonNode(toDestination, node);
 			node.bind("click", chrall.triggerGowapAction(possibleDestination.x, possibleDestination.y, possibleDestination.z, 'move', numGowap, numMaxOrdre));
 		}
 
 		// Ordres supplémentaires si le gowap peut s'ébrouer
+		function addButtonNode(parent, node) {
+			var div = $("<div style='padding-top:1ex; padding-bottom:1ex; white-space: nowrap'/>");
+			parent.append(div);
+			div.append(node);
+		}
+
 		if (0 < $("[name='ai_IdOrdre'] > [value='7']").length) {
-			var ebroueNode = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'S\'ébrouer sur ma case'});
-			toOwner.append(ebroueNode);
+			var ebroueNode = $("<a/>", { 'class': 'gogo', text: 'S\'ébrouer sur ma case'});
+			addButtonNode(toOwner, ebroueNode);
 			ebroueNode.bind("click", chrall.triggerGowapAction(player.x, player.y, player.z, 'snort', numGowap, numMaxOrdre));
-			ebroueNode = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'S\'ébrouer a ses pieds'});
+			ebroueNode = $("<a/>", { 'class': 'gogo', text: 'S\'ébrouer a ses pieds'});
 			ebroueNode.bind("click", chrall.triggerGowapAction(chGowap.x, chGowap.y, chGowap.z, 'snort', numGowap, numMaxOrdre));
-			toSelf.append(ebroueNode);
+			addButtonNode(toSelf, ebroueNode);
 			if (possibleDestination) {
-				ebroueNode = $("<a/>", { 'class': 'gogo' , style: 'display:inline-block', text : 'S\'ébrouer aux pieds de : ' + text});
-				toDestination.append(ebroueNode);
+				ebroueNode = $("<a/>", { 'class': 'gogo', text: 'S\'ébrouer aux pieds de : ' + text});
+				addButtonNode(toDestination, ebroueNode);
 				ebroueNode.bind("click", chrall.triggerGowapAction(possibleDestination.x, possibleDestination.y, possibleDestination.z, 'snort', numGowap, numMaxOrdre));
 			}
 		}
