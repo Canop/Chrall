@@ -47,9 +47,12 @@
 	<div id=tabOptionsChrall class=tab_content>\
 		<h3 class='option-section'>Vue</h3>\
 		<div class='option-section'>\
-			<p class='informational-text'>Modifiez ici le comportement de l'extension en ce qui concerne l'affichage de la vue (grille 2D et tables).</p>\
+			<p class='informational-text'>Modifiez ici le comportement de l'extension en ce qui concerne l'affichage de la vue (grille 2D et tables). Chaque option est susceptible de ralentir la vitesse d'affichage de la grille. Choisissez les plus pertinentes.</p>\
 			<div style='display:block'><input id='view-disable-grid-view' type='checkbox' class='toggle-option'><span class='option-description'>Désactiver la grille 2D</span></div>\
 			<div style='display:block'><input id='view-grid-compact-names' type='checkbox' class='toggle-option'><span class='option-description'>Compacter les noms dans la grille 2D</span></div>\
+			<div style='display:block'><input id='view-grid-compact-monster-stacks' type='checkbox' class='toggle-option-default-active'><span class='option-description'>Compacter les piles de monstres dans la grille 2D</span>\
+				<p class='informational-text' style='padding-left:3em'>Compacte les piles de monstres dont le nom est identique. Ceci permet d'avoir une vue plus dégagée lorsqu'on est à proximité d'un tas de gowaps ou d'essaims cratériens. Le nom\
+				utilisé est le nom de monstre compacté si l'option a été sélectionnée.</p></div>\
 			<div style='display:block'><input id='view-grid-vertical-distance-hint' type='checkbox' class='toggle-option'><span class='option-description'>Ajuster la taille des noms en fonction de la distance verticale</span></div>\
 			<div style='display:block'><input id='view-show-distance-in-view' type='checkbox' class='toggle-option'><span class='option-description'>Afficher la distance en PA (via DE) dans les tables</span></div>\
 			<div style='display:block'><input id='view-display-hit-points-ratio' type='checkbox' class='toggle-option'><span class='option-description'>Afficher la barre de points de vie dans les tables (uniquement pour les partages actifs).</span></div>\

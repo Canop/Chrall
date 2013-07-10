@@ -104,6 +104,15 @@ var isInLaby = false;
 		$cell.attr("id", 'cellp0p0');
 	}
 
+	function append3D($cell, attributes, differentLevel) {
+		// TODO : span name = 3D // TODO plus tard name ==> class
+		if (differentLevel) {
+			$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
+		} else {
+			$cell.append($("<div/>").append($("<a/>", attributes)));
+		}
+	}
+
 	function addTrolls(cell, $cell, noteRequest, horizontalDist, verticalDistanceHint, compactNames) {
 		for (var i = 0; i < cell.trolls.length; i++) {
 			var troll = cell.trolls[i];
@@ -122,36 +131,103 @@ var isInLaby = false;
 			addPosition(troll, attributes);
 			if (troll.team) attributes.team = troll.team;
 			if (troll.isIntangible) attributes.intangible = 1;
-			if (differentLevel) {
-				$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
-			} else {
-				$cell.append($("<div/>").append($("<a/>", attributes)));
+			append3D($cell, attributes, differentLevel);
+		}
+	}
+
+	function computeMonsterStacks(cell, monstersByLevel, compactNames) {
+		for (var i = 0; i < cell.monsters.length; i++) {
+			var monster = cell.monsters[i];
+			var z = monster.z;
+			monstersByLevel[z] = monstersByLevel[z] || [];
+			monstersByLevel[z].push(monster);
+		}
+		// Group each pack of monsters on a level into sub-packs
+		for (var level in monstersByLevel) {
+			var monstersOnLevel = monstersByLevel[level];
+			monstersOnLevel.sort(chrall.cellNameComparator);
+			monstersByLevel[level] = [];
+			var previousName = "";
+			var pack = [];
+			for (i = 0; i < monstersOnLevel.length; i++) {
+				monster = monstersOnLevel[i];
+				var name = monsterName(compactNames, monster);
+				if (0 < pack.length && name != previousName) {
+					monstersByLevel[level].push(pack);
+					pack = [];
+					previousName = name;
+				}
+				pack.push(monster);
+			}
+			if (0 < pack.length) {
+				monstersByLevel[level].push(pack);
 			}
 		}
 	}
 
+	function monsterAttributes(monster, compactNames, verticalDistanceHint, horizontalDistance) {
+		var attributes = {
+			id:      monster.id,
+			name: monster.isGowap ? 'gowaps' : 'monstres',
+			'class': monster.isGowap ? 'ch_gowap' : 'ch_monster',
+			text:    monster.z + ": " + monsterName(compactNames, monster),
+			href:    'javascript:EMV(' + monster.id + ',750,550);',
+			style:   distanceStyle(verticalDistanceHint, monster.z),
+			message: monster.fullName + ' ( ' + monster.id + ' ) en X=' + monster.x + ' Y=' + monster.y + ' Z=' + monster.z + '<br>Distance horizontale : ' + horizontalDistance
+		};
+		return attributes;
+	}
+
 	function addMonsters(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames) {
-		for (var i = 0; i < cell.monsters.length; i++) {
-			var monster = cell.monsters[i];
-			var differentLevel = player.z != monster.z;
-			noteRequest.NumMonstres.push(monster.id);
-			var attributes = {
-				id:      monster.id,
-				name: monster.isGowap ? 'gowaps' : 'monstres',
-				'class': monster.isGowap ? 'ch_gowap' : 'ch_monster',
-				text:    monster.z + ": " + monsterName(compactNames, monster),
-				href:    'javascript:EMV(' + monster.id + ',750,550);',
-				style:   distanceStyle(verticalDistanceHint, monster.z),
-				message: monster.fullName + ' ( ' + monster.id + ' ) en X=' + monster.x + ' Y=' + monster.y + ' Z=' + monster.z + '<br>Distance horizontale : ' + horizontalDistance
-			};
-			addPosition(monster, attributes);
-			if (!monster.isGowap) attributes.nom_complet_monstre = monster.fullName;
-			if (differentLevel) {
-				$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
-			} else {
-				$cell.append($("<div/>").append($("<a/>", attributes)));
+		var compactMonsterStacks = chrall.isOptionEnabled('view-grid-compact-monster-stacks', true);
+		var monstersByLevel = {};
+		if (compactMonsterStacks) {
+			computeMonsterStacks(cell, monstersByLevel, compactNames);
+			for (var level in monstersByLevel) {
+				var differentLevel = player.z != level;
+				var packs = monstersByLevel[level];
+				for (var i = 0; i < packs.length; i++) {
+					var list = packs[i];
+					var merge = list.length >= 2;
+					var $monsterContainer = $cell;
+					if (merge) {
+						var monsterFromPack = list[0];
+						var divName = "monsters_" + Math.random();
+						var mergeAttributes = {
+							name: monsterFromPack.isGowap ? 'gowaps' : 'monstres',
+							'class': monsterFromPack.isGowap ? 'ch_gowap ch_objects_toggler' : 'ch_monster ch_objects_toggler',
+							text:       level + ':' + list.length + " * " + monsterName(compactNames, monsterFromPack),
+							style:      distanceStyle(verticalDistanceHint, level),
+							toggleName: divName
+						};
+						var extendedList = $("<div/>", {name: divName, 'class': 'hiddenDiv'});
+						$monsterContainer = extendedList;
+						append3D($cell, mergeAttributes, differentLevel);
+						$cell.append(extendedList);
+					}
+					for (var j = 0; j < list.length; j++) {
+						var monster = list[j];
+						differentLevel = player.z != monster.z;
+						noteRequest.NumMonstres.push(monster.id);
+						var attributes = monsterAttributes(monster, compactNames, verticalDistanceHint, horizontalDistance);
+						addPosition(monster, attributes);
+						if (!monster.isGowap) attributes.nom_complet_monstre = monster.fullName;
+						append3D($monsterContainer, attributes, differentLevel);
+					}
+				}
+			}
+		} else {
+			for (i = 0; i < cell.monsters.length; i++) {
+				monster = cell.monsters[i];
+				differentLevel = player.z != monster.z;
+				noteRequest.NumMonstres.push(monster.id);
+				attributes = monsterAttributes(monster, compactNames, verticalDistanceHint, horizontalDistance);
+				addPosition(monster, attributes);
+				if (!monster.isGowap) attributes.nom_complet_monstre = monster.fullName;
+				append3D($cell, attributes, differentLevel);
 			}
 		}
+
 	}
 
 	function addPlaces(cell, $cell, verticalDistanceHint, compactNames) {
@@ -172,11 +248,7 @@ var isInLaby = false;
 				};
 				addPosition(place, attributes);
 				if (place.hasLink) attributes.href = 'javascript:Enter(\'/mountyhall/View/TaniereDescription.php?ai_IDLieu=' + place.id + ',750,550);';
-				if (differentLevel) {
-					$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
-				} else {
-					$cell.append($("<div/>").append($("<a/>", attributes)));
-				}
+				append3D($cell, attributes, differentLevel);
 			}
 		}
 		return hasHole;
@@ -193,11 +265,7 @@ var isInLaby = false;
 				style:   distanceStyle(verticalDistanceHint, mushRoom.z)
 			};
 			addPosition(mushRoom, attributes);
-			if (differentLevel) {
-				$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
-			} else {
-				$cell.append($("<div/>").append($("<a/>", attributes)));
-			}
+			append3D($cell, attributes, differentLevel);
 		}
 	}
 
@@ -213,11 +281,7 @@ var isInLaby = false;
 				href:    'javascript:EPV(' + cenotaph.trollId + ');'
 			};
 			addPosition(cenotaph, attributes);
-			if (differentLevel) {
-				$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
-			} else {
-				$cell.append($("<div/>").append($("<a/>", attributes)));
-			}
+			append3D($cell, attributes, differentLevel);
 		}
 	}
 
@@ -267,7 +331,7 @@ var isInLaby = false;
 			objectsByLevel[object.z].push(object);
 		}
 		for (var level in objectsByLevel) {
-			var differentLevel = player.z != level; // TODO : span name = 3D // TODO plus tard name > class
+			var differentLevel = player.z != level;
 			var list = objectsByLevel[level];
 			if (orderItemsByType) list.sort(chrall.cellNameComparator);
 			var merge = list.length > 3;
@@ -283,15 +347,8 @@ var isInLaby = false;
 				};
 				var extendedList = $("<div/>", {name: divName, 'class': 'hiddenDiv'});
 				$treasureContainer = extendedList;
-				if (differentLevel) {
-					$cell.append($("<span/>", {name: "3D"}).append($("<a/>", mergeAttributes)));
-					$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
-					$cell.append(extendedList);
-				} else {
-					$cell.append($("<a/>", mergeAttributes));
-					$cell.append($("<div/>").append($("<a/>", attributes)));
-					$cell.append(extendedList);
-				}
+				append3D($cell, mergeAttributes, differentLevel);
+				$cell.append(extendedList);
 			}
 			for (var j = 0; j < list.length; j++) {
 				var treasure = list[j];
@@ -306,12 +363,7 @@ var isInLaby = false;
 				};
 				addPosition(treasure, attributes);
 				if (treasure.hasLink) attributes.href = "javascript:Enter('/mountyhall/View/TresorHistory2.php?ai_IDTresor=" + treasure.id + "',750,500);";
-				if (differentLevel) {
-					$treasureContainer.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
-				} else {
-					$treasureContainer.append($("<div/>").append($("<a/>", attributes)));
-				}
-
+				append3D($treasureContainer, attributes, differentLevel);
 			}
 		}
 	}
