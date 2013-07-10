@@ -18,6 +18,10 @@
 	text-align: justify;
 }
 
+.sub-informational-text {
+    margin-left: 3em;
+}
+
 .toggle-option[type='checkbox'] {
 }
 

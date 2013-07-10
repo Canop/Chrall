@@ -1,6 +1,6 @@
 (function (chrall) {
 
-// enrichit la page d'actions
+	// enrichit la page d'actions
 	chrall.reformatOptionsView = function () {
 
 
@@ -49,9 +49,11 @@
 		<div class='option-section'>\
 			<p class='informational-text'>Modifiez ici le comportement de l'extension en ce qui concerne l'affichage de la vue (grille 2D et tables). Chaque option est susceptible de ralentir la vitesse d'affichage de la grille. Choisissez les plus pertinentes.</p>\
 			<div style='display:block'><input id='view-disable-grid-view' type='checkbox' class='toggle-option'><span class='option-description'>Désactiver la grille 2D</span></div>\
-			<div style='display:block'><input id='view-grid-compact-names' type='checkbox' class='toggle-option'><span class='option-description'>Compacter les noms dans la grille 2D</span></div>\
+			<div style='display:block'><input id='view-grid-compact-names' type='checkbox' class='toggle-option'><span class='option-description'>Compacter les noms dans la grille 2D</span>\
+				<p class='informational-text sub-informational-text'>Longueur maximale: <input id='view-grid-compact-names-length' type='text' class='integer-option' min='5' max='20' default='20'/></p>\
+			</div>\
 			<div style='display:block'><input id='view-grid-compact-monster-stacks' type='checkbox' class='toggle-option-default-active'><span class='option-description'>Compacter les piles de monstres dans la grille 2D</span>\
-				<p class='informational-text' style='padding-left:3em'>Compacte les piles de monstres dont le nom est identique. Ceci permet d'avoir une vue plus dégagée lorsqu'on est à proximité d'un tas de gowaps ou d'essaims cratériens. Le nom\
+				<p class='informational-text sub-informational-text'>Compacte les piles de monstres dont le nom est identique. Ceci permet d'avoir une vue plus dégagée lorsqu'on est à proximité d'un tas de gowaps ou d'essaims cratériens. Le nom\
 				utilisé est le nom de monstre compacté si l'option a été sélectionnée.</p></div>\
 			<div style='display:block'><input id='view-grid-vertical-distance-hint' type='checkbox' class='toggle-option'><span class='option-description'>Ajuster la taille des noms en fonction de la distance verticale</span></div>\
 			<div style='display:block'><input id='view-show-distance-in-view' type='checkbox' class='toggle-option'><span class='option-description'>Afficher la distance en PA (via DE) dans les tables</span></div>\
@@ -82,7 +84,7 @@
 		var $tabStandard = $("div#tabStandard");
 		$tabStandard.append($(standardOptionTables[0]));
 		$tabStandard.append($(standardOptionTables[1]));
-//		$tabStandard.append($(standardOptionTables[2]));
+		//		$tabStandard.append($(standardOptionTables[2]));
 		$("#tabLinks").append(Chrall_makeLinkOptionPage());
 
 		$("#changeMdp").click(changeMdpRestreint);
@@ -100,7 +102,7 @@
 			$("ul.tabs li:first").addClass("active").show();
 			$(".tab_content:first").show();
 		}
-		$("ul.tabs li").click(function() {
+		$("ul.tabs li").click(function () {
 			$("ul.tabs li").removeClass("active");
 			$(this).addClass("active");
 			$(".tab_content").hide();
@@ -109,7 +111,7 @@
 			$(activeTab).fadeIn("fast");
 			return false;
 		});
-		$('#save_private_chrall_server').click(function() {
+		$('#save_private_chrall_server').click(function () {
 			var s = $('#input_private_chrall_server').val();
 			if (s.length > 3) {
 				localStorage['private_chrall_server'] = s;
@@ -118,16 +120,37 @@
 			}
 		});
 
-		$(".toggle-option").each(function() {
+		$(".toggle-option").each(function () {
 			var id = $(this).attr("id");
 			var checked = chrall.isOptionEnabled(id);
 			this.checked = checked;
 			$(this).change(toggleOption);
 		});
-		$(".toggle-option-default-active").each(function() {
+		$(".toggle-option-default-active").each(function () {
 			var id = $(this).attr("id");
 			this.checked = chrall.isOptionEnabled(id, "yes");
 			$(this).change(toggleOption);
+		});
+		$(".integer-option").each(function () {
+			var $this = $(this);
+			var id = $this.attr("id");
+			var defaultValue = parseInt($this.attr("default"));
+			var value = chrall.integerOption(id, defaultValue);
+			$this.val(value);
+			$this.bind("propertychange keyup input paste",
+					function () {
+						var $this = $(this);
+						var id = $this.attr("id");
+
+						var value = parseInt($this.val());
+						var min = parseInt($this.attr("min"));
+						var max = parseInt($this.attr("max"));
+						var defaultValue = parseInt($this.attr("default"));
+						value = isNaN(value) ? defaultValue : value;
+						value = value < min ? min : value;
+						value = value > max ? max : value;
+						localStorage[id] = value;
+					});
 		});
 	};
 
@@ -136,7 +159,7 @@
 		var nm = document.getElementById('ch_mdp_restreint').value;
 		var mdpkey = passwordKey();
 		localStorage[mdpkey] = nm;
-		chrall.notifyUser({text:"Mot de passe modifié"});
+		chrall.notifyUser({text: "Mot de passe modifié"});
 	}
 
 	// Private -- not linked to the chrall instance

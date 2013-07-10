@@ -56,22 +56,22 @@ var isInLaby = false;
 		return html;
 	};
 
-	function compactText(name) {
+	function compactText(name, maxLength) {
 		name = null == name ? "" : name.trim();
-		var maxLength = 20;
+
 		if (maxLength < name.length) {
-			name = name.substr(0, maxLength - 1) + "..";
+			name = name.substr(0, maxLength) + "..";
 		}
 		return  name;
 	}
 
-	function monsterName(compactNames, monsterCell) {
+	function monsterName(compactNames, maxLength, monsterCell) {
 		if (!compactNames) {
 			return monsterCell.fullName;
 		}
 
 		var name = monsterCell.name;
-		return compactText(name);
+		return compactText(name, maxLength);
 	}
 
 	function distanceStyle(verticalDistanceHint, z) {
@@ -113,7 +113,7 @@ var isInLaby = false;
 		}
 	}
 
-	function addTrolls(cell, $cell, noteRequest, horizontalDist, verticalDistanceHint, compactNames) {
+	function addTrolls(cell, $cell, noteRequest, horizontalDist, verticalDistanceHint, compactNames, maxLength) {
 		for (var i = 0; i < cell.trolls.length; i++) {
 			var troll = cell.trolls[i];
 			noteRequest.NumTrolls.push(troll.id);
@@ -122,7 +122,7 @@ var isInLaby = false;
 
 			var attributes = {
 				id:      troll.id,
-				text:    troll.z + ": " + (compactNames ? compactText(troll.name) : troll.name) + " " + troll.race[0] + troll.level, // TODO: better race display
+				text:    troll.z + ": " + (compactNames ? compactText(troll.name, maxLength) : troll.name) + " " + troll.race[0] + troll.level, // TODO: better race display
 				'class': 'ch_troll',
 				href:    'javascript:EPV(' + troll.id + ');',
 				style:   distanceStyle(verticalDistanceHint, troll.z),
@@ -135,7 +135,7 @@ var isInLaby = false;
 		}
 	}
 
-	function computeMonsterStacks(cell, monstersByLevel, compactNames) {
+	function computeMonsterStacks(cell, monstersByLevel, compactNames, maxLength) {
 		for (var i = 0; i < cell.monsters.length; i++) {
 			var monster = cell.monsters[i];
 			var z = monster.z;
@@ -151,7 +151,7 @@ var isInLaby = false;
 			var pack = [];
 			for (i = 0; i < monstersOnLevel.length; i++) {
 				monster = monstersOnLevel[i];
-				var name = monsterName(compactNames, monster);
+				var name = monsterName(compactNames, maxLength, monster);
 				if (0 < pack.length && name != previousName) {
 					monstersByLevel[level].push(pack);
 					pack = [];
@@ -165,12 +165,12 @@ var isInLaby = false;
 		}
 	}
 
-	function monsterAttributes(monster, compactNames, verticalDistanceHint, horizontalDistance) {
+	function monsterAttributes(monster, compactNames, maxLength, verticalDistanceHint, horizontalDistance) {
 		var attributes = {
 			id:      monster.id,
 			name: monster.isGowap ? 'gowaps' : 'monstres',
 			'class': monster.isGowap ? 'ch_gowap' : 'ch_monster',
-			text:    monster.z + ": " + monsterName(compactNames, monster),
+			text:    monster.z + ": " + monsterName(compactNames, maxLength, monster),
 			href:    'javascript:EMV(' + monster.id + ',750,550);',
 			style:   distanceStyle(verticalDistanceHint, monster.z),
 			message: monster.fullName + ' ( ' + monster.id + ' ) en X=' + monster.x + ' Y=' + monster.y + ' Z=' + monster.z + '<br>Distance horizontale : ' + horizontalDistance
@@ -178,11 +178,11 @@ var isInLaby = false;
 		return attributes;
 	}
 
-	function addMonsters(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames) {
+	function addMonsters(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames, maxLength) {
 		var compactMonsterStacks = chrall.isOptionEnabled('view-grid-compact-monster-stacks', true);
 		var monstersByLevel = {};
 		if (compactMonsterStacks) {
-			computeMonsterStacks(cell, monstersByLevel, compactNames);
+			computeMonsterStacks(cell, monstersByLevel, compactNames, maxLength);
 			for (var level in monstersByLevel) {
 				var differentLevel = player.z != level;
 				var packs = monstersByLevel[level];
@@ -196,7 +196,7 @@ var isInLaby = false;
 						var mergeAttributes = {
 							name: monsterFromPack.isGowap ? 'gowaps' : 'monstres',
 							'class': monsterFromPack.isGowap ? 'ch_gowap ch_objects_toggler' : 'ch_monster ch_objects_toggler',
-							text:       level + ':' + list.length + " * " + monsterName(compactNames, monsterFromPack),
+							text:       level + ':' + list.length + " * " + monsterName(compactNames, maxLength, monsterFromPack),
 							style:      distanceStyle(verticalDistanceHint, level),
 							toggleName: divName
 						};
@@ -209,7 +209,7 @@ var isInLaby = false;
 						var monster = list[j];
 						differentLevel = player.z != monster.z;
 						noteRequest.NumMonstres.push(monster.id);
-						var attributes = monsterAttributes(monster, compactNames, verticalDistanceHint, horizontalDistance);
+						var attributes = monsterAttributes(monster, compactNames, maxLength, verticalDistanceHint, horizontalDistance);
 						addPosition(monster, attributes);
 						if (!monster.isGowap) attributes.nom_complet_monstre = monster.fullName;
 						append3D($monsterContainer, attributes, differentLevel);
@@ -221,7 +221,7 @@ var isInLaby = false;
 				monster = cell.monsters[i];
 				differentLevel = player.z != monster.z;
 				noteRequest.NumMonstres.push(monster.id);
-				attributes = monsterAttributes(monster, compactNames, verticalDistanceHint, horizontalDistance);
+				attributes = monsterAttributes(monster, compactNames, maxLength, verticalDistanceHint, horizontalDistance);
 				addPosition(monster, attributes);
 				if (!monster.isGowap) attributes.nom_complet_monstre = monster.fullName;
 				append3D($cell, attributes, differentLevel);
@@ -230,7 +230,7 @@ var isInLaby = false;
 
 	}
 
-	function addPlaces(cell, $cell, verticalDistanceHint, compactNames) {
+	function addPlaces(cell, $cell, verticalDistanceHint, compactNames, maxLength) {
 		var hasHole = false;
 		for (var i = 0; i < cell.places.length; i++) {
 			var place = cell.places[i];
@@ -242,7 +242,7 @@ var isInLaby = false;
 					id:      place.id,
 					name:    'lieux',
 					'class': 'ch_place',
-					text:    place.z + ": " + (compactNames ? compactText(place.name) : place.name),
+					text:    place.z + ": " + (compactNames ? compactText(place.name, maxLength) : place.name),
 					bub:     place.id + ":" + place.name,
 					style:   distanceStyle(verticalDistanceHint, place.z)
 				};
@@ -322,7 +322,7 @@ var isInLaby = false;
 		}
 	}
 
-	function addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint, compactNames) {
+	function addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint, compactNames, maxLength) {
 		// on regroupe les objets par étage et pour chaque étage on les compte afin de ne pas afficher des milliers de lignes quand une tanière est écroulée
 		var objectsByLevel = {};
 		for (var i = 0; i < cell.objects.length; i++) {
@@ -357,7 +357,7 @@ var isInLaby = false;
 					name:    'trésors',
 					'class': 'ch_object',
 					bub:     treasure.id + " : " + treasure.name,
-					text:    treasure.z + ": " + (compactNames ? compactText(treasure.name) : treasure.name),
+					text:    treasure.z + ": " + (compactNames ? compactText(treasure.name, maxLength) : treasure.name),
 					display: 'block',
 					style:   distanceStyle(verticalDistanceHint, level)
 				};
@@ -407,6 +407,7 @@ var isInLaby = false;
 		$tr.append($("<td/>", {rowspan: ymax - ymin + 3, style: 'min-width:1em'}).append($("<span/>", {style: 'display:block;-webkit-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;', text: 'Orhykan (X+)'}))); // TODO span needed?
 
 		var compactNames = chrall.isOptionEnabled('view-grid-compact-names');
+		var maxLength = chrall.integerOption('view-grid-compact-names-length', 20);
 		var verticalDistanceHint = chrall.isOptionEnabled('view-grid-vertical-distance-hint');
 
 		for (y = ymax; y >= ymin; y--) {
@@ -436,16 +437,16 @@ var isInLaby = false;
 				}
 				if (cell) {
 					if (cell.trolls) {
-						addTrolls(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames);
+						addTrolls(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames, maxLength);
 					}
 					if (cell.monsters) {
-						addMonsters(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames);
+						addMonsters(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames, maxLength);
 					}
 					if (cell.places) {
-						hasHole = hasHole || addPlaces(cell, $cell, verticalDistanceHint, compactNames);
+						hasHole = hasHole || addPlaces(cell, $cell, verticalDistanceHint, compactNames, maxLength);
 					}
 					if (cell.objects) {
-						addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint, compactNames);
+						addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint, compactNames, maxLength);
 					}
 					if (cell.mushrooms) {
 						addMushrooms(cell, $cell, verticalDistanceHint);
