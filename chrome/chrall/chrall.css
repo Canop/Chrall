@@ -127,6 +127,11 @@ table.grid td {
 	color: #c99b1f !important;
 }
 
+a.ch_monster_toggler {
+	cursor: pointer;
+	font-weight: bolder;
+}
+
 .ch_troll, .ch_troll:hover {
 	color: blue !important;
 }

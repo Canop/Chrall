@@ -152,8 +152,8 @@ var isInLaby = false;
 			for (i = 0; i < monstersOnLevel.length; i++) {
 				monster = monstersOnLevel[i];
 				var name = monsterName(compactNames, maxLength, monster);
-				if (0 < pack.length && name != previousName) {
-					monstersByLevel[level].push(pack);
+				if (name != previousName) {
+				if (0 < pack.length) { monstersByLevel[level].push(pack); }
 					pack = [];
 					previousName = name;
 				}
@@ -195,8 +195,8 @@ var isInLaby = false;
 						var divName = "monsters_" + Math.random();
 						var mergeAttributes = {
 							name: monsterFromPack.isGowap ? 'gowaps' : 'monstres',
-							'class': monsterFromPack.isGowap ? 'ch_gowap ch_objects_toggler' : 'ch_monster ch_objects_toggler',
-							text:       level + ':' + list.length + " * " + monsterName(compactNames, maxLength, monsterFromPack),
+							'class': monsterFromPack.isGowap ? 'ch_gowap ch_monster_toggler' : 'ch_monster ch_monster_toggler',
+							text:       level + ': ' + list.length + " * " + monsterName(compactNames, maxLength, monsterFromPack),
 							style:      distanceStyle(verticalDistanceHint, level),
 							toggleName: divName
 						};
