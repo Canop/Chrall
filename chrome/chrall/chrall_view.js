@@ -193,10 +193,12 @@ var isInLaby = false;
 					if (merge) {
 						var monsterFromPack = list[0];
 						var divName = "monsters_" + Math.random();
+						var isGowap = monsterFromPack.isGowap;
+						var isTameGowap = isGowap && 0 < monsterFromPack.fullName.indexOf("Apprivoi");
 						var mergeAttributes = {
-							name: monsterFromPack.isGowap ? 'gowaps' : 'monstres',
-							'class': monsterFromPack.isGowap ? 'ch_gowap ch_monster_toggler' : 'ch_monster ch_monster_toggler',
-							text:       level + ': ' + list.length + " * " + monsterName(compactNames, maxLength, monsterFromPack),
+							name: isGowap ? 'gowaps' : 'monstres',
+							'class': isGowap ? 'ch_gowap ch_monster_toggler' : 'ch_monster ch_monster_toggler',
+							text:       level + ': ' + list.length + (isTameGowap ? " Gowaps" : " * " + monsterName(compactNames, maxLength, monsterFromPack)),
 							style:      distanceStyle(verticalDistanceHint, level),
 							toggleName: divName
 						};
