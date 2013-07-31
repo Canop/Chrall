@@ -114,6 +114,16 @@
 		return "yes" == enabled;
 	};
 
+	chrall.integerOption = function (key, defaultChoice) {
+		var value = localStorage[key];
+		value = parseInt(value);
+		if ((undefined === value || isNaN(value)) && undefined !== defaultChoice) {
+			localStorage[key] = defaultChoice;
+			value = defaultChoice;
+		}
+		return value;
+	};
+
 	/**
 	 * Affiche une notification à l'utilisateur pendant quelques secondes
 	 * Les options sont un hash dont les clés possibles sont:

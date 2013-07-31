@@ -13,15 +13,15 @@ var sessionActive = false;
 // note : pour l'instant il faut que ces valeurs de départ soient cohérentes avec le css (display='block' ou display='none');
 // Par ailleurs attention à un détail : les clés suivantes sont à la fois des clés dans le code et les labels dans l'ihm
 var viewFilters = {
-	"trolls" : true,
-	"monstres" : true,
-	"gowaps" : true,
-	"lieux" : true,
-	"trésors" : false,
-	"champignons" : false,
-	"cénotaphes" : false,
-	"intangibles" : true,
-	"3D" : true
+	"trolls":      true,
+	"monstres":    true,
+	"gowaps":      true,
+	"lieux":       true,
+	"trésors":     false,
+	"champignons": false,
+	"cénotaphes":  false,
+	"intangibles": true,
+	"3D":          true
 };
 
 console.info("pageName=[" + chrall.pageName() + "]");
@@ -49,6 +49,7 @@ switch (chrall.pageName()) {
 		Chrall_analyseAndReformatBM();
 		break;
 	case "Play_equipement.php":
+		chrall.sortEquipment();
 		break;
 	case "Play_evenement.php":
 		Chrall_addBubblesToLinks();
@@ -108,10 +109,10 @@ switch (chrall.pageName()) {
 		Chrall_analyseResultatCombat();
 		break;
 	case "FO_Ordres.php":
-		Chrall_handleFollowerOrders();
+		chrall.handleFollowerOrders();
 		break;
 	case "FO_NewOrder.php":
-		Chrall_fillFollowerNewOrderForm();
+		chrall.fillFollowerNewOrderForm();
 		chrall.askDestinations();
 		break;
 	case "Play_a_Sort13.php":
