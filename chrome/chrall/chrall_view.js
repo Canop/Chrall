@@ -198,7 +198,7 @@ var isInLaby = false;
 						var mergeAttributes = {
 							name: isGowap ? 'gowaps' : 'monstres',
 							'class': isGowap ? 'ch_gowap ch_monster_toggler' : 'ch_monster ch_monster_toggler',
-							text:       level + ': ' + list.length + (isTameGowap ? " Gowaps" : " * " + monsterName(compactNames, maxLength, monsterFromPack)),
+							text:       level + ': ' + (isTameGowap ? " Gowaps" : monsterName(compactNames, maxLength, monsterFromPack)) + ' [' + list.length + ']',
 							style:      distanceStyle(verticalDistanceHint, level),
 							toggleName: divName
 						};
@@ -343,7 +343,7 @@ var isInLaby = false;
 				var mergeAttributes = {
 					name:       'trésors',
 					'class':    'ch_object ch_objects_toggler',
-					text:       level + ':' + list.length + " trésors",
+					text:       level + ': ' + list.length + " trésors",
 					style:      distanceStyle(verticalDistanceHint, level),
 					toggleName: divName
 				};
