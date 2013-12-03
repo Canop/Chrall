@@ -20,6 +20,7 @@
 			"js": [
 				"jquery.js",
 				"jquery.sortElements.js",
+				"chrall_form.js",
 				"injected_util_bubble.js",
 				"injected_cdm.js",
 				"injected_events.js",
@@ -45,7 +46,6 @@
 				"chrall_grid.js",
 				"chrall_general.js",
 				"chrall_partage.js",
-				"chrall_em.js",
 				"chrall_monstres.js",
 				"chrall_minage.js",
 				"chrall_talents.js",
@@ -60,7 +60,6 @@
 				"chrall_view_analysis.js",
 				"chrall_view.js",
 				"chrall_view_monster.js",
-				"chrall_flies.js",
 				"chrall_play.js",
 				"chrall_menu.js",
 				"chrall_pjview.js",
