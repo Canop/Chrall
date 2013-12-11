@@ -6,7 +6,7 @@
     };
 
 
-    chrall.memorizeForm = function () {
+    chrall.memorizeForm = function() {
         var memo = chrall.getTrollStorage(".form-memoized");
         memo = null == memo ? {} : JSON.parse(memo);
 
@@ -66,7 +66,17 @@
 
 
         $("select").each(function() {
-            restoreValue(this, pageMemo);
+            var value = pageMemo[this.name];
+            if (null == value || "" == value) {
+                return;
+            }
+            var $options = $(this).find("option");
+            for (var i = 0; i < $options.length; i++) {
+                if (value == $options[i].value) {
+                    $(this).val(value);
+                    return;
+                }
+            }
         });
         $("input[type=text]").each(function() {
             restoreValue(this, pageMemo);
