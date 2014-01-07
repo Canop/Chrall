@@ -73,6 +73,9 @@
 			<p class='informational-text'>Options sans catégorie propre.</p>\
 			<div style='display:block'><input id='bubble-use-mountyhall-styles' type='checkbox' class='toggle-option'><span class='option-description'>Utiliser les styles MountyHall pour les info-bulles</span></div>\
 			<div style='display:block'><input id='cdm-send-to-chrall' type='checkbox' class='toggle-option-default-active'><span class='option-description'>Envoyer les résultats de CdM au serveur Chrall</span></div>\
+			<div style='display:block'><input id='form-memoize' type='checkbox' class='toggle-option-default-active'><span class='option-description'>Mémoriser et restaurer automatiquement les dernières options choisies pour les sorts/compétences</span>\
+				<p class='informational-text sub-informational-text'>Lors du traitement d'une action, pré-sélectionne automatiquement les menus déroulants, remplit automatiquement les champs de texte et les cases à cocher\
+                sur base de la dernière action du même type efffectuée. Retenter une même action est dès lors plus facile (ex: pour une bidouille, description, etc... seront pré-remplies)</p></div>\
 		</div>\
 		</p>\
 	</div>\
