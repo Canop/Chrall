@@ -66,17 +66,7 @@
 
 
         $("select").each(function() {
-            var value = pageMemo[this.name];
-            if (null == value || "" == value) {
-                return;
-            }
-            var $options = $(this).find("option");
-            for (var i = 0; i < $options.length; i++) {
-                if (value == $options[i].value) {
-                    $(this).val(value);
-                    return;
-                }
-            }
+            restoreSelectValue(this, pageMemo);
         });
         $("input[type=text]").each(function() {
             restoreValue(this, pageMemo);
@@ -116,6 +106,24 @@
         }
         if (value == $(element).val()) {
             $(element).prop("checked", true);
+        }
+    }
+
+    function restoreSelectValue(element, memo) {
+        var value = memo[element.name];
+        if (null == value || "" == value) {
+            return;
+        }
+        var $selected = $(element).find("option[selected]");
+        if (0 < $selected.size()) {
+            return; // évite de restaurer une option pré-sélectionnée si l'utilisateur fait une sélection manuelle, ex: utiliser potion depuis inventaire
+        }
+        var $options = $(element).find("option");
+        for (var i = 0; i < $options.length; i++) {
+            if (value == $options[i].value) {
+                $(element).val(value);
+                return;
+            }
         }
     }
 
