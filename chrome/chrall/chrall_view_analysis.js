@@ -302,7 +302,7 @@ function Chrall_analyseView() {
 	chrall.findTable('tresors');
 	chrall.findTable('champignons');
 	chrall.findTable('lieux');
-	chrall.findTable('cadavre');
+	chrall.findTable('cadavres');
 	chrall.findTable('murs');
 
 	chrall.analyseMonsterTable(chrall.$tables()['monstres']);
@@ -310,7 +310,7 @@ function Chrall_analyseView() {
 	chrall.analyseObjectTable(chrall.$tables()['tresors']);
 	chrall.analyseMushroomTable(chrall.$tables()['champignons']);
 	chrall.analysePlaceTable(chrall.$tables()['lieux']);
-	chrall.analyseCenotaphTable(chrall.$tables()['cadavre']);
+	chrall.analyseCenotaphTable(chrall.$tables()['cadavres']);
 	if (horizontalViewLimit > 0) chrall.analyseWallTable(chrall.$tables()['murs']); // Si on est aveugle, on sait que les infos des murs et couloirs sont incorrectes
 
 	chrall.addActionPointDistance(chrall.$tables()['monstres'], 0, 3);
@@ -318,7 +318,7 @@ function Chrall_analyseView() {
 	chrall.addActionPointDistance(chrall.$tables()['tresors'], 0, 3);
 	chrall.addActionPointDistance(chrall.$tables()['champignons'], 0, 2);
 	chrall.addActionPointDistance(chrall.$tables()['lieux'], 0, 3);
-	chrall.addActionPointDistance(chrall.$tables()['cadavre'], 0, 3);
+	chrall.addActionPointDistance(chrall.$tables()['cadavres'], 0, 3);
 
 	//> on regarde si la case du joueur est encombrée
 	// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case
@@ -351,7 +351,7 @@ function Chrall_analyseView() {
 		}
 	}
 
-	//> on détermine la zone visible 
+	//> on détermine la zone visible
 	xmin = chrall.player().x - horizontalGridLimit;
 	xmax = chrall.player().x + horizontalGridLimit;
 	ymin = chrall.player().y - horizontalGridLimit;
