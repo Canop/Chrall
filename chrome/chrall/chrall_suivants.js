@@ -105,13 +105,28 @@
         }
 
         function addMovementNode(nodeText, order, parent, dest) {
-            var div = $("<div style='padding-top:1ex; padding-bottom:1ex; white-space: nowrap'/>");
-            parent.append(div);
-            div.append(createMovementNode(nodeText, order, dest.x, dest.y, dest.z));
-            div.append(createMovementNode("&#x25B4;", order, dest.x, dest.y + 1, dest.z));
-            div.append(createMovementNode("&#x25B8;", order, dest.x - 1, dest.y, dest.z));
-            div.append(createMovementNode("&#x25C2;", order, dest.x + 1, dest.y, dest.z));
-            div.append(createMovementNode("&#x25BE;", order, dest.x, dest.y - 1, dest.z));
+            var $div = $("<div style='padding-top:1ex; padding-bottom:1ex; white-space: nowrap; text-align: center'/>");
+            parent.append($div);
+            var $table = $("<table style='text-align: center; margin: auto'/>");
+            $div.append($table);
+
+            var $tr = $("<tr/>");
+            $table.append($tr);
+            $tr.append($("<td/>"));
+            $tr.append($("<td/>").append(createMovementNode("&#x25B4;", order, dest.x, dest.y + 1, dest.z)));
+            $tr.append($("<td/>"));
+
+            $tr = $("<tr/>");
+            $table.append($tr);
+            $tr.append($("<td/>").append(createMovementNode("&#x25C2;", order, dest.x - 1, dest.y, dest.z)));
+            $tr.append($("<td/>").append(createMovementNode(nodeText, order, dest.x, dest.y, dest.z)));
+            $tr.append($("<td/>").append(createMovementNode("&#x25B8;", order, dest.x + 1, dest.y, dest.z)));
+
+            $tr = $("<tr/>");
+            $table.append($tr);
+            $tr.append($("<td/>"));
+            $tr.append($("<td/>").append(createMovementNode("&#x25BE;", order, dest.x, dest.y - 1, dest.z)));
+            $tr.append($("<td/>"));
         }
 
         function createMovementNode(nodeText, order, toX, toY, toZ) {
