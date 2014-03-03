@@ -279,7 +279,7 @@ var isInLaby = false;
 				name:    'cénotaphes',
 				'class': 'ch_cenotaph',
 				text:    cenotaph.z + ": " + cenotaph.name,
-				style:   distanceStyle(verticalDistanceHint, place.z),
+				style:   distanceStyle(verticalDistanceHint, cenotaph.z),
 				href:    'javascript:EPV(' + cenotaph.trollId + ');'
 			};
 			addPosition(cenotaph, attributes);
@@ -593,7 +593,7 @@ var isInLaby = false;
 		$("#tabObjects").append($tables['tresors']);
 		$("#tabMushrooms").append($tables['champignons']);
 		$("#tabPlaces").append($tables['lieux']);
-		$("#tabCenotaphs").append($tables['cadavre']);
+		$("#tabCenotaphs").append($tables['cadavres']);
 		if (!chrall.hallIsAccro()) {
 			$("#tabPartages").append(chrall.makePartageTables());
 			makeSearchPanel($("#tabRecherche"));

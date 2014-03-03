@@ -11,3 +11,4 @@ datafiles
 *.csv
 **/src/github.com/*
 chrome/chrall/*.ods
+/.project
