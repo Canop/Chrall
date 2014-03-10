@@ -1,8 +1,9 @@
 (function(chrall) {
 
     chrall.shouldSkipFormHandling = function() {
-        return 0 > chrall.pageName().indexOf("Play_a_")
-                && 0 > chrall.pageName().indexOf(("FO_")) || 0 <= chrall.pageName().indexOf("FO_Description");
+        return (0 > chrall.pageName().indexOf("Play_a_") && 0 > chrall.pageName().indexOf(("FO_")))
+                || 0 <= chrall.pageName().indexOf("FO_Description")
+                || 0 <= chrall.pageName().indexOf("Play_a_Don");
     };
 
 
@@ -33,7 +34,7 @@
         });
 
         chrall.setTrollStorage({ ".form-memoized": JSON.stringify(memo)});
-    }
+    };
 
 
     chrall.listenOnFormElements = function() {
