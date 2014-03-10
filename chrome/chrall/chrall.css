@@ -328,14 +328,15 @@ table.cdm th.title {
 }
 
 a.gogo:focus {
-	oultine: none;
+    outline: none;
 }
 
 a.gogo, a.gogo:link {
+    white-space: pre;
 	background-color: mediumblue;
 	border-top: 1px solid mediumblue;
 	border-bottom: 1px solid darkblue;
-	margin: 4px;
+    margin: 0px;
 	padding-left: 8px;
 	padding-right: 8px;
 	border-radius: 10px;
