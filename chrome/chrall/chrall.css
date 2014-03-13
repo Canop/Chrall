@@ -19,7 +19,7 @@
 }
 
 .sub-informational-text {
-    margin-left: 3em;
+	margin-left: 3em;
 }
 
 .toggle-option[type='checkbox'] {
@@ -144,9 +144,11 @@ a.ch_monster_toggler {
 .ch_troll[team=R], .mh_trolls_1[team=R], .ch_player[team=R] {
 	background-color: #FF6666;
 }
+
 .ch_troll[team=G], .mh_trolls_1[team=G], .ch_player[team=G] {
 	background-color: #66FF66;
 }
+
 .ch_troll[team=B], .mh_trolls_1[team=B], .ch_player[team=B] {
 	background-color: #6666FF;
 }
@@ -209,7 +211,7 @@ table.grid td.d1 {
 
 table.grid td[hasContent] {
 	/*min-width: 10em;*/
-    white-space: nowrap;
+	white-space: nowrap;
 }
 
 form.gridFiltersForm {
@@ -328,14 +330,15 @@ table.cdm th.title {
 }
 
 a.gogo:focus {
-	oultine: none;
+	outline: none;
 }
 
 a.gogo, a.gogo:link {
+	white-space: pre;
 	background-color: mediumblue;
 	border-top: 1px solid mediumblue;
 	border-bottom: 1px solid darkblue;
-	margin: 4px;
+	margin: 0px;
 	padding-left: 8px;
 	padding-right: 8px;
 	border-radius: 10px;
@@ -369,6 +372,7 @@ a.gogo:hover {
 #bubble th {
 	color: white;
 }
+
 #bubble td {
 	font-family: Arial, sans-serif;
 	color: white;
@@ -376,10 +380,10 @@ a.gogo:hover {
 }
 
 #bubble.mh_tdtitre th {
-	color: black ;
+	color: black;
 }
 
-#bubble.mh_tdtitre td  {
+#bubble.mh_tdtitre td {
 	color: black;
 }
 
@@ -456,7 +460,7 @@ img.illus {
 	padding: 2px;
 	text-align: center;
 	z-index: 8;
-    min-width: 10em;
+	min-width: 10em;
 }
 
 #objectMenu_top a:link, #objectMenu_bottom a:link, #objectMenu_bottom a.chrall_de {
@@ -577,8 +581,9 @@ img.illus {
 }
 
 .ch_troll[team=H], .mh_trolls_1[team=H], .ch_player[team=H] {
-	background-color:#acf9ac;
+	background-color: #acf9ac;
 }
+
 .ch_troll[team=C], .mh_trolls_1[team=C], .ch_player[team=C] {
-	background-color:#d2bc8c;
+	background-color: #d2bc8c;
 }
