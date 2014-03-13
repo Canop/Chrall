@@ -14,7 +14,7 @@ type VueHandler struct {
 }
 
 func (h *VueHandler) getVueHtml(hr *http.Request) string {
-	log.Println("URL :", hr.URL)
+	//~ log.Println("URL :", hr.URL)
 	hr.ParseForm()
 
 	askerId := GetFormValueAsId(hr, "asker")

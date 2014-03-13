@@ -92,7 +92,7 @@ func (h *JsonGetHandler) makeTrollStats(hr *http.Request) *TrollBubbleJson {
 		if askerId > 0 {
 			ti := h.tksManager.getTrollInfos(askerId)
 			if ti != nil {
-				h.tksManager.CheckDiploLoaded()
+				h.tksManager.CheckDiploLoaded() 20140303 : désactivation de ce truc pas utilisé
 				html += fmt.Sprintf("<br/>Tuer ce troll vous rapporterait %d px<br/>", pxkill(ti.Niveau, tks.Niveau))
 				html += h.tksManager.Diplo.DescribeYourRelationsWith(askerId, ti.IdGuilde, trollId, tks.IdGuilde)
 			}
@@ -306,7 +306,7 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 	h.hit()
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Request-Method", "GET")
-	log.Printf("URL %v\n", hr.URL)
+	//~ log.Printf("URL %v\n", hr.URL)
 	hr.ParseForm()
 	actions := hr.Form["action"]
 	var action string
