@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"log"
+	//~ "log"
 	"net/http"
 	"strings"
 	"time"

@@ -92,7 +92,7 @@ func (h *JsonGetHandler) makeTrollStats(hr *http.Request) *TrollBubbleJson {
 		if askerId > 0 {
 			ti := h.tksManager.getTrollInfos(askerId)
 			if ti != nil {
-				h.tksManager.CheckDiploLoaded() 20140303 : désactivation de ce truc pas utilisé
+				h.tksManager.CheckDiploLoaded()
 				html += fmt.Sprintf("<br/>Tuer ce troll vous rapporterait %d px<br/>", pxkill(ti.Niveau, tks.Niveau))
 				html += h.tksManager.Diplo.DescribeYourRelationsWith(askerId, ti.IdGuilde, trollId, tks.IdGuilde)
 			}

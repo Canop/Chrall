@@ -3,7 +3,6 @@
  * Il contient aussi les variables globales.
  */
 
-
 var viewIsEmpty = true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
 var playerAmAbstract = new Array(); // strings. utilisées dans le profil à la fois pour le tableau de l'am et pour la bulle de la compétence en bas

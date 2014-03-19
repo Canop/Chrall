@@ -54,7 +54,7 @@
 				var att = 2 * Math.floor(chrall.player().attac.diceNumber / 3) * 3.5 +
 						Math.floor((chrall.player().attac.physicalBonus + chrall.player().attac.magicalBonus) / 2);
 				var des_deg = Math.floor(chrall.player().attac.diceNumber /  2) 
-				var deg = des_deg * 3.5 + Math.floor((chrall.player().damage.physicalBonus + chrall.player().damage.magicalBonus) / 2);
+				var deg = des_deg * 2 + Math.floor((chrall.player().damage.physicalBonus + chrall.player().damage.magicalBonus) / 2);
 				var degCrit = deg + Math.floor(des_deg / 2) * 2;
 				return "<table><tr><td>Attaque moyenne</td><td> : " + att +
 						"</td></tr><tr><td>Dégâts moyens</td><td>  : " + deg + " / " + degCrit +

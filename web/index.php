@@ -32,7 +32,7 @@ Chrall est une extension Chrome pour le jeu <a href=http://www.mountyhall.com>Mo
 
 
 <h2>Installation</h2>
-<p><a href=chrall_v003_008.crx class=install>Extension Chrall</a> Version actuelle : <span id=version>3.8</span></p>
+<p><a href=chrall_v003_010.crx class=install>Extension Chrall</a> Version actuelle : <span id=version>3.10</span></p>
 <p id=browserInfos></p>
 
 <p>
