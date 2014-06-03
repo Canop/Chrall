@@ -10,7 +10,6 @@ var isInLaby = false;
 		return '<a class=chrall_de x=' + (x - chrall.player().x) + ' y=' + (y - chrall.player().y) + ' z=' + (z - chrall.player().z) + '>DE ' + x + ' ' + y + ' ' + z + '</a>';
 	};
 
-
 	/**
 	 * construit la ligne de boites à cocher permettant de filtrer la grille
 	 */
@@ -58,7 +57,6 @@ var isInLaby = false;
 
 	function compactText(name, maxLength) {
 		name = null == name ? "" : name.trim();
-
 		if (maxLength < name.length) {
 			name = name.substr(0, maxLength) + "..";
 		}
@@ -69,7 +67,6 @@ var isInLaby = false;
 		if (!compactNames) {
 			return monsterCell.fullName;
 		}
-
 		var name = monsterCell.name;
 		return compactText(name, maxLength);
 	}

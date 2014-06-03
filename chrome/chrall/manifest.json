@@ -1,9 +1,12 @@
 {
 	"manifest_version": 2,
 	"name": "Chrall",
-	"version": "3.10",
+	"version": "3.11",
 	"description": "Une extension Chrome open-source pour Mounty Hall",
-	"homepage_url": "http://canop.org/chrall",
+	"icons": {
+          "128": "icone_naze.png"
+    },
+   	"homepage_url": "http://canop.org/chrall",
 	"background": {
 		"page": "chrome-extension.html"
 	},
