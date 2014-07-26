@@ -43,10 +43,6 @@
 
         var $mapDiv = $("<div/>", {style: "text-align: center;"});
         var canvas = $("<canvas/>", {id: "cartehall", style: "width:400px;height:400px;"});
-        canvas.click(function() {
-            window.frameElement.parentNode.children[1].location = '/mountyhall/MH_Follower/FO_NewOrder.php?ai_IdOrdre=1&ai_IdFollower=' +
-                    numGowap + '&ai_NbOrdres=' + numMaxOrdre + '&as_Action=Enregistrer+un+nouvel+Ordre';
-        });
         var carteDiv = $("<div/>", {id: "tdbCarte", style: "text-align: center;"}).text("Carte du Hall");
         carteDiv.append($("<span/>",
                 {id: "messageCarte"}).text("Cliquez sur la carte pour donner un ordre de mouvement."));
@@ -68,10 +64,10 @@
         ch.add(chGowap);
 
         ch.onClick = function(x, y, z) {
-            chrall.setTrollStorage({'.gowap-order': 'move', '.gowap-x': x, '.gowap-y': y, '.gowap-z': gowap_z});
+            var toInvoke = chrall.triggerGowapAction(x, y, gowap_z, "move", numGowap, numMaxOrdre);
+            toInvoke();
         };
         ch.redraw();
-
 
         // Boutons pour destination hard-codées: case du troll, case du gowap
         var actionButton = $("[name='as_Action']");
@@ -140,12 +136,12 @@
     chrall.triggerGowapAction = function(x, y, z, order, numGowap, numMaxOrdre) {
         return (function() {
             var movementType = 'move' == order ? '1' : '7'; // move or snort
-            window.frameElement.parentNode.children[1].location = '/mountyhall/MH_Follower/FO_NewOrder.php?ai_IdOrdre=' +
+            window.frameElement.parentNode.children[1].src = '/mountyhall/MH_Follower/FO_NewOrder.php?ai_IdOrdre=' +
                     movementType + "&ai_IdFollower=" + numGowap + "&ai_NbOrdres=" + numMaxOrdre +
                     "&as_Action=Enregistrer+un+nouvel+Ordre;";
             chrall.setTrollStorage({'.gowap-x': x, '.gowap-y': y, '.gowap-z': z, '.gowap-order': order});
         });
-    }
+    };
 
     chrall.fillFollowerNewOrderForm = function() {
         var order = chrall.getTrollStorage('.gowap-order');
