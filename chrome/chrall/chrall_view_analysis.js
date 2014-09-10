@@ -203,7 +203,7 @@
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
-			item.hasLink = nameCell.children[0].href ? true : false;
+			item.hasLink = nameCell.children.length && nameCell.children[0].href ? true : false;
 			grid.getCellNotNull(item.x, item.y).addObject(item);
 		}
 	};

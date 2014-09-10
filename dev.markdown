@@ -1,6 +1,15 @@
 
 
 
+
+MISE A JOUR SUR
+
+		https://chrome.google.com/webstore/developer/dashboard
+
+
+
+
+
 Ce document liste :
 
 * DONE : ce qui a été fait et les versions par ordre chronologique

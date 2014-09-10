@@ -244,7 +244,7 @@
 			return url;
 		},
 		apply: function() {
-			var url = 'http://canop.org:8000/chrall/json?action=get_page_killometre&cat='+this.cat+'&startIndex='+((this.indexStartPage-1)*pageSize)+'&pageSize='+pageSize;
+			var url = 'http://canop.org/8000/chrall/json?action=get_page_killometre&cat='+this.cat+'&startIndex='+((this.indexStartPage-1)*pageSize)+'&pageSize='+pageSize;
 			if (this.searched) {
 				url += '&searched='+encodeURIComponent(this.searched);
 				this.searched=null;
