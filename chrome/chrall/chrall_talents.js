@@ -241,7 +241,7 @@
 				html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(chrall.player().totalSight / 2) + "</td></tr>";
 				html += "<tr><td>Portée verticale</td><td> : " + Math.floor(chrall.player().totalSight / 4) + "</td></tr>";
 				html += "</table>";
-				return html
+				return html;
 
 			case "Armure Ethérée" :
 				var a = chrall.player().regeneration.diceNumber;
