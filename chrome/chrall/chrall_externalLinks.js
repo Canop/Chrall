@@ -11,7 +11,7 @@ function ExternalLink(name, displayedByDefault, href, description) {
 function Chrall_getExternalLinks() {
 	var links = {
 		"Chrall": [
-			new ExternalLink("Forum Chrall", true, "http://canop.org/chrall/fofo", "Un forum pour discuter des bugs, des fonctionnalités et du développement de votre extension favorite."),
+			new ExternalLink("Miaou", true, "http://dystroy.org/miaou/167?Chrall", "Miaou est sans doute le meilleur endroit pour obtenir du support sur Chrall"),
 			new ExternalLink("Bestiaire", true, "http://canop.org:8000/chrall/bestiaire", "Ce bestiaire permet de rechercher les monstres apparentés à votre cible, au cas où la bulle ne vous renseignerait pas."),
 			new ExternalLink("Kill-O-Mètre", false, "http://canop.org/chrall/killometre.html", "Le Kill-O-Mètre classe les trolls en fonctions de leur kills, qualitativement et quantitativement. Il vous permet de connaitre les orientations d'un troll qui n'est pas dans votre vue."),
 			new ExternalLink("Chrall", false, "http://canop.org/chrall/", "La page d'accueil de Chrall, avec ses divers liens, en particulier pour le développement ou pour enrichir le bestiaire.")

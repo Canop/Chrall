@@ -76,23 +76,22 @@ func GetMessage(TrollId string, ChrallVersion string) (out *G2cMessage) {
 	out.Nature = "empty"
 
 	//> on va regarder si l'utilisateur n'a pas une version ancienne de Chrall
-	currentChralVersion := &Version{[]int{3, 14}}
+	currentChrallVersion := &Version{[]int{3, 16}}
 	if userVersion, err := ParseVersion(ChrallVersion); err != nil {
 		fmt.Println("user's Chrall Version not understood : " + ChrallVersion)
 	} else {
-		switch CompareVersions(userVersion, currentChralVersion) {
+		switch CompareVersions(userVersion, currentChrallVersion) {
 		case -1:
-			out.Nature = "update"
+			//~ out.Nature = "update"
 			fmt.Println("User version is old : " + ChrallVersion)
-			out.Title = "L'extension Chrall n'est pas à jour"
-			out.Content += "Votre version : " + ChrallVersion
-			out.Content += "<br>La version actuelle : " + currentChralVersion.String()
-			out.Content += "<br>La version PI corrige un problème lié à un changement de la vue dans MH."
+			//~ out.Title = "L'extension Chrall n'est pas à jour"
+			//~ out.Content += "Votre version : " + ChrallVersion
+			//~ out.Content += "<br>La version actuelle : " + currentChrallVersion.String()
 		case 1:
-			out.Nature = "normal"
+			//~ out.Nature = "normal"
 			fmt.Println("User version is younger than current (???) : " + ChrallVersion)
-			out.Title = "Votre version de Chrall est plus récente que la version officielle"
-			out.Content = "Vous disposez probablement d'une version spéciale de développement. Sinon, il faudrait prévenir Canop."
+			//~ out.Title = "Votre version de Chrall est plus récente que la version officielle"
+			//~ out.Content = "Vous disposez probablement d'une version spéciale de développement. Sinon, il faudrait prévenir Canop."
 		}
 	}
 

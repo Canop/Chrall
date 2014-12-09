@@ -241,7 +241,7 @@
 				html += "<tr><td>Portée horizontale</td><td> : " + Math.floor(chrall.player().totalSight / 2) + "</td></tr>";
 				html += "<tr><td>Portée verticale</td><td> : " + Math.floor(chrall.player().totalSight / 4) + "</td></tr>";
 				html += "</table>";
-				return html
+				return html;
 
 			case "Armure Ethérée" :
 				var a = chrall.player().regeneration.diceNumber;
@@ -470,7 +470,7 @@
 			case "Siphon des âmes" :
 				var siphonDiceNumber = Math.floor(chrall.player().attac.diceNumber * chrall.player().magicalAttackMultiplier);
 				var att = 3.5 * siphonDiceNumber + chrall.player().attac.magicalBonus;
-				var siphonDamageDiceNumber = Math.Floor(chrall.player().regeneration.diceNumber * chrall.player().magicalDamageMultiplier);
+				var siphonDamageDiceNumber = Math.floor(chrall.player().regeneration.diceNumber * chrall.player().magicalDamageMultiplier);
 				var deg = 2 * siphonDamageDiceNumber + chrall.player().damage.magicalBonus;
 				var nec = chrall.player().regeneration.diceNumber;
 				var html = "<table>";

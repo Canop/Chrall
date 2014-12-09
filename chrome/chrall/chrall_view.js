@@ -94,7 +94,7 @@ var isInLaby = false;
 			'class': 'ch_player',
 			href:    'javascript:EPV(' + player.id + ');'};
 		addPosition(player, attributes);
-		player.team = getTribastonTeam(player.id);
+		player.team = getPogoTeam(player.id);
 		if (player.team) attributes.team = player.team;
 		if (player.isIntangible) attributes.intangible = 1;
 		$cell.append($("<div/>").append($("<a/>", attributes)));

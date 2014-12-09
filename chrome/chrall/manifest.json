@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Chrall",
-	"version": "3.14",
+	"version": "3.16",
 	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"icons": {
           "128": "icone_naze.png"
@@ -72,7 +72,6 @@
 				"chrall_insulte.js",
 				"chrall_suivants.js",
 				"chrall_externalLinks.js",
-				"chrall_tribaston.js",
 				"chrall_destinations.js",
 				"chrall_guilde_internal.js",
 				"chrall_messagerie.js",

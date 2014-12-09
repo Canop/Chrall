@@ -190,7 +190,7 @@ func (be *BestiaryExtract) Html(monsterId int, askerId int, m *TksManager, pourc
 				if be.Ante4M {
 					html += fmt.Sprintf("<br>Seules les cdm de monstres de numéro inférieur à 4000000 sont prises en compte")
 				} else {
-					html += fmt.Sprintf("<br>Seules les cdm de monstres de numéro supérieur à 4000000 sont prises en compte")
+					html += fmt.Sprintf("<br>Seules les cdm de monstres de numéro supérieur à 4320000 sont prises en compte")
 				}
 			}
 		}
