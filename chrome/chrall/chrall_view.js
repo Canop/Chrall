@@ -92,35 +92,39 @@ var isInLaby = false;
 			id:      player.id,
 			text:    player.z + ':Vous êtes ici',
 			'class': 'ch_player',
-			href:    'javascript:EPV(' + player.id + ');'};
+			href:    'javascript:EPV(' + player.id + ');'
+		};
 		addPosition(player, attributes);
-		player.team = getPogoTeam(player.id);
-		if (player.team) attributes.team = player.team;
 		if (player.isIntangible) attributes.intangible = 1;
-		$cell.append($("<div/>").append($("<a/>", attributes)));
+		var $a = $("<a/>", attributes);
+		$("<div/>").append($a).appendTo($cell);
 		$cell.attr("id", 'cellp0p0');
+		chrall.cdb.getTroll(player.id, function(t){
+			if (t && t.team) {
+				$a.attr('team', player.team = t.team);
+			}
+		});
 	}
 
 	function append3D($cell, attributes, differentLevel) {
 		// TODO : span name = 3D // TODO plus tard name ==> class
+		var $a = $("<a/>", attributes);
 		if (differentLevel) {
-			$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($("<a/>", attributes))));
+			$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($a)));
 		} else {
-			$cell.append($("<div/>").append($("<a/>", attributes)));
+			$cell.append($("<div/>").append($a));
 		}
+		return $a;
 	}
 
 	function addTrolls(cell, $cell, noteRequest, horizontalDist, verticalDistanceHint, compactNames, maxLength) {
-		for (var i = 0; i < cell.trolls.length; i++) {
-			var troll = cell.trolls[i];
+		cell.trolls.forEach(function(troll){
 			noteRequest.NumTrolls.push(troll.id);
 			var differentLevel = player.z != troll.z;
-			//							if (troll.isIntangible) cellContent[c++] = "<span name=intangibles>"; // TODO
-
 			var attributes = {
 				id:      troll.id,
 				text:    troll.z + ": " + (compactNames ? compactText(troll.name, maxLength) : troll.name) + " " + troll.race[0] + troll.level, // TODO: better race display
-				'class': 'ch_troll',
+				class: 'ch_troll',
 				href:    'javascript:EPV(' + troll.id + ');',
 				style:   distanceStyle(verticalDistanceHint, troll.z),
 				message: "en X=" + troll.x + " Y=" + troll.y + " Z=" + troll.z + "<br>Distance horizontale : " + horizontalDist
@@ -128,8 +132,11 @@ var isInLaby = false;
 			addPosition(troll, attributes);
 			if (troll.team) attributes.team = troll.team;
 			if (troll.isIntangible) attributes.intangible = 1;
-			append3D($cell, attributes, differentLevel);
-		}
+			var $a = append3D($cell, attributes, differentLevel);
+			chrall.cdb.getTroll(troll.id, function(t){
+				if (t && t.team) $a.attr('team', t.team);
+			});
+		});
 	}
 
 	function computeMonsterStacks(cell, monstersByLevel, compactNames, maxLength) {

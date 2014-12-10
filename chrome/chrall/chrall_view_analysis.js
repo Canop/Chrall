@@ -100,21 +100,21 @@
 		// en même temps qu'on analyse la table, on ajoute les cases à cocher
 		// de sélection des trolls pour l'envoi de MP.
 		table = table.get(0);
-		if ("undefined" == typeof table) {
-			return;
-		}
+		if (!table) return;
 		var lines = table.children[0].children
 		grid.nbTrollsInView = lines.length - 1;
-		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
+		[].slice.call(lines, 1).forEach(function(line){
 			var item = new Troll();
-			var line = lines[lineIndex];
 			var cells = line.children;
 			var i = 1;
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.name = nameCell.textContent;
 			$(nameCell.children[0]).attr('id', item.id + "_troll");
-			$('a', nameCell).attr('id', item.id).attr('team', item.team = getPogoTeam(item.id));
+			var $a = $('a', nameCell).attr('id', item.id);
+			chrall.cdb.getTroll(item.id, function(t){
+				if (t && t.team) $a.attr('team', item.team = t.team);
+			});
 			item.isIntangible = $(nameCell).html().indexOf("mh_trolls_0")>=0; // les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
 			item.level = cells[i++].textContent;
 			item.race = cells[i++].textContent;
@@ -125,7 +125,7 @@
 			var selectBox = $('<td/>', { align: 'center'}).append($('<input/>', {type: 'checkbox', name: 'cb_troll', value: item.id}));
 			$(line).prepend(selectBox);
 			grid.getCellNotNull(item.x, item.y).addTroll(item);
-		}
+		});
 
 		var actionCell = $('<td/>', { colspan: 11, height: 25});
 		var actions = $('<tr/>', { class: 'mh_tdtitre'}).append(actionCell);

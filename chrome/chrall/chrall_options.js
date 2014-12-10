@@ -4,7 +4,7 @@
 	chrall.reformatOptionsView = function () {
 
 
-		var standardOptionContainer = $($("table table td")[1]);
+		var standardOptionContainer = $("table table td").eq(1);
 		var standardOptionTables = standardOptionContainer.find("table");
 
 		var html = "\

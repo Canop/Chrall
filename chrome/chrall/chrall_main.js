@@ -126,4 +126,7 @@ switch (chrall.pageName()) {
         break;
 }
 
-
+//~ console.log("querying trolls");
+//~ chrall.cdb.getTrolls(function(trolls){
+	//~ console.log("all trolls:", trolls);
+//~ });

@@ -142,15 +142,17 @@ a.ch_monster_toggler {
 }
 
 .ch_troll[team=R], .mh_trolls_1[team=R], .ch_player[team=R] {
-	background-color: #FF6666;
+	background-color: rgba(255,0,0,0.3);
 }
 
-.ch_troll[team=G], .mh_trolls_1[team=G], .ch_player[team=G] {
-	background-color: #66FF66;
+.ch_troll[team=G], .mh_trolls_1[team=G], .ch_player[team=G],
+.ch_troll[team=V], .mh_trolls_1[team=V], .ch_player[team=V]
+{
+	background-color: rgba(0,255,0,0.3);
 }
 
 .ch_troll[team=B], .mh_trolls_1[team=B], .ch_player[team=B] {
-	background-color: #6666FF;
+	background-color: rgba(0,0,255,0.3);
 }
 
 .ch_place, .ch_place:hover {
