@@ -69,21 +69,22 @@
 			case "Charger" :
 				var computeRange = function (pv) {
 					var s = Math.ceil(pv / 10) + chrall.player().regeneration.diceNumber;
-					if (s>49) return 8;
-					else if (s>39) return 7;
-					else if (s>30) return 6;	  	
-					else if (s>22) return 5;	  	
-					else if (s>15) return 4;	  	
-					else if (s>9) return 3;
-					else if (s>4) return 2;
-					return 1;
+					var result = 1;
+					if (s>49) result = 8;
+					else if (s>39) result = 7;
+					else if (s>30) result = 6;	  	
+					else if (s>22) result = 5;	  	
+					else if (s>15) result = 4;	  	
+					else if (s>9) result = 3;
+					else if (s>4) result = 2;
+					result = Math.min(result, chrall.player().sight.diceNumber); // La charge ne peut pas dépasser la VUE
+					return result;
 				}
 				var maxRange = computeRange(chrall.player().pvMax);
+				var minRange = Math.min(maxRange, 1); // Il est toujours possible de charger à 1 cav (quelle que soit la fatigue) à moins que le maxRange soit de 0
 				var range = computeRange(chrall.player().pv);
 				range -= Math.floor((chrall.player().strainBase + chrall.player().strainMalus) / 5); // malus de fatigue
-				if (range < 0) {
-					range = 0;
-				}
+				range = Math.max(range, minRange);
 				var html = "<table><tr><td>Portée maximale</td><td> : " + maxRange +
 						(maxRange > 1 ? " cases" : " case") + "</td></tr>";
 				html += "<tr><td>Portée actuelle</td><td> : " + range + (range > 1 ? " cases" : " case") + "</td></tr>";
