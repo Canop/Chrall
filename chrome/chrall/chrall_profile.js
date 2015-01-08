@@ -233,7 +233,7 @@
 					switch (i) {
 						case 0 :
 							if (chrall.player().pa >= 2) {
-								if (m0 > 0) {
+								if (m0 > 0 && normalPvGain > 0) {
 									var pv0 = Math.ceil(m0 / normalPvGain);
 									playerAmAbstract.push("" + normalPvGain +
 											" minutes gagnées par PV dépensé.");
@@ -273,6 +273,8 @@
 										}
 									}
 									playerAmAbstract.push(mpai);
+								} else if (normalPvGain ==0) {
+									playerAmAbstract.push("Vous êtes trop fatigué pour accélérer ...");
 								} else {
 									playerAmAbstract.push("Vous n'auriez pas loupé votre DLA ?");
 								}
