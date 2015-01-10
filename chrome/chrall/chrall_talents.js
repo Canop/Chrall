@@ -77,7 +77,8 @@
 					else if (s>15) result = 4;	  	
 					else if (s>9) result = 3;
 					else if (s>4) result = 2;
-					result = Math.min(result, chrall.player().totalSight); // La charge ne peut pas dépasser la VUE
+					var totalSight = Math.max(0, chrall.player().totalSight); // La portée de la vue, ou 0 si négative
+					result = Math.min(result, totalSight); // La charge ne peut pas dépasser la VUE
 					return result;
 				}
 				var maxRange = computeRange(chrall.player().pvMax);
