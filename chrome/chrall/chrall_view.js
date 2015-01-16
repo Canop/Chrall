@@ -373,6 +373,30 @@ var isInLaby = false;
 			}
 		}
 	}
+	
+	// Dans le cas où des erreurs d'analyse indiqueraient que la grille n'est pas bonne, on affiche un div de warning,
+	//  construit par cette fonction
+	chrall.makeGridErrorDiv = function($holder){
+		if (!grid.outOfGrid.length) return;
+		var m = {};
+		grid.outOfGrid.forEach(function(o){
+			if (o instanceof Troll) m.troll=(m.troll||0)+1;
+			else if (o instanceof Monster) m.monstre=(m.monstre||0)+1;
+			else throw "Hein ? Y a aut'chose ? Faut mettre à jour makeGridErrorDiv.";
+		});
+		var txt = "Erreur d'affichage pour "+
+			Object.keys(m)
+			.filter(function(k){ return m[k] })
+			.map(function(k){ return m[k]+' '+k+(m[k]>1?'s':'') })
+			.join(' et ')
+			+ ".\nRéférez-vous aux tables plutôt qu'à la grille.";
+		$('<div>').text(txt).prependTo($holder).css({
+			background: 'red', color: 'white', opacity: 0.55,
+			padding: '10px', borderRadius: '10px',
+			pointerEvents: 'none',
+			position: 'fixed', top: 100, left: 20, zIndex: 42
+		});
+	}
 
 	/**
 	 * construit le HTML de la grille. Ce HTML est construit une fois pour toute, le filtrage opérant via des modifications de style.
@@ -391,7 +415,6 @@ var isInLaby = false;
 		noteRequest.YMax = ymax;
 		noteRequest.ZMin = zmin;
 		noteRequest.ZMax = zmax;
-
 
 		var $gridTable = $("<table/>", {id: 'grid', 'class': 'grid'});
 		var $tr = $("<tr/>");
@@ -566,6 +589,7 @@ var isInLaby = false;
 			var $tabGrid = $("<div/>", { id: "tabGrid", 'class': "tab_content"}).html(chrall.makeFiltersHtml());
 			var $holder = $("<div/>", { id: "grid_holder"});
 			$holder.append(chrall.makeGrid(noteRequest));
+			chrall.makeGridErrorDiv($holder);
 			$tabGrid.append($holder);
 			$tabContainer.append($tabGrid);
 		}

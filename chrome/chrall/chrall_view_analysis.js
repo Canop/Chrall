@@ -92,11 +92,9 @@
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
 			item.hasLink = nameCell.children[0].href ? true : false;
-			try {
-				grid.getCellNotNull(item.x, item.y).addMonster(item);
-			} catch (error) {
-				console.error("Impossible de trouver la cellule, probablement à cause d'un champignon : " + error);
-			}
+			var cell = grid.getCellNotNull(item.x, item.y);
+			if (cell) cell.addMonster(item);
+			else grid.outOfGrid.push(item);
 		}
 	};
 
@@ -128,11 +126,9 @@
 			item.z = parseInt(cells[i++].textContent);
 			var selectBox = $('<td/>', { align: 'center'}).append($('<input/>', {type: 'checkbox', name: 'cb_troll', value: item.id}));
 			$(line).prepend(selectBox);
-			try {
-				grid.getCellNotNull(item.x, item.y).addTroll(item);
-			} catch (error) {
-				console.error("Impossible de trouver la cellule, probablement à cause d'un champignon : " + error);
-			}
+			var cell = grid.getCellNotNull(item.x, item.y);
+			if (cell) cell.addTroll(item);
+			else grid.outOfGrid.push(item);
 		});
 
 		var actionCell = $('<td/>', { colspan: 11, height: 25});
