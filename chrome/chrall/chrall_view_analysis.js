@@ -78,7 +78,7 @@
 		if ("undefined" == typeof table) {
 			return;
 		}
-		var lines = table.children[0].children
+		var lines = table.children[0].children;
 		grid.nbMonstersInView = lines.length - 1;
 		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
 			var item = new Monster();
@@ -92,7 +92,11 @@
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
 			item.hasLink = nameCell.children[0].href ? true : false;
-			grid.getCellNotNull(item.x, item.y).addMonster(item);
+			try {
+				grid.getCellNotNull(item.x, item.y).addMonster(item);
+			} catch (error) {
+				console.error("Impossible de trouver la cellule, probablement à cause d'un champignon : " + error);
+			}
 		}
 	};
 
@@ -124,7 +128,11 @@
 			item.z = parseInt(cells[i++].textContent);
 			var selectBox = $('<td/>', { align: 'center'}).append($('<input/>', {type: 'checkbox', name: 'cb_troll', value: item.id}));
 			$(line).prepend(selectBox);
-			grid.getCellNotNull(item.x, item.y).addTroll(item);
+			try {
+				grid.getCellNotNull(item.x, item.y).addTroll(item);
+			} catch (error) {
+				console.error("Impossible de trouver la cellule, probablement à cause d'un champignon : " + error);
+			}
 		});
 
 		var actionCell = $('<td/>', { colspan: 11, height: 25});
