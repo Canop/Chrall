@@ -121,9 +121,11 @@ var isInLaby = false;
 		cell.trolls.forEach(function(troll){
 			noteRequest.NumTrolls.push(troll.id);
 			var differentLevel = player.z != troll.z;
+			var race = troll.race[0];
+			if (troll.race == "Darkling") race = "G";
 			var attributes = {
 				id:      troll.id,
-				text:    troll.z + ": " + (compactNames ? compactText(troll.name, maxLength) : troll.name) + " " + troll.race[0] + troll.level, // TODO: better race display
+				text:    troll.z + ": " + (compactNames ? compactText(troll.name, maxLength) : troll.name) + " " + race + troll.level, // TODO: better race display
 				class: 'ch_troll',
 				href:    'javascript:EPV(' + troll.id + ');',
 				style:   distanceStyle(verticalDistanceHint, troll.z),
