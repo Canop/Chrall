@@ -22,7 +22,6 @@ var bgchrall = bgchrall || {};
 		// clear all troll infos then add the trolls and their teams
 		// trolls is an array of {num:1234,team:'R'}
 		cdb.setTrolls = function(trolls, cb){
-			console.log("WRITE");
 			var	trans = db.transaction(["troll"], "readwrite"),
 				s = trans.objectStore("troll");
 			trans.oncomplete = cb;
@@ -49,10 +48,27 @@ var bgchrall = bgchrall || {};
 				}
 			}
 		}
+		// clear all cell infos then add the cells and their teams
+		// cells is an array of {pos:"-54,22",team:'R'} ou {pos:"-8,-3,-33",team:'R'} 
+		cdb.setCells = function(cells, cb){
+			console.log("WRITE CELLS");
+			var	trans = db.transaction(["cell"], "readwrite"),
+				s = trans.objectStore("cell");
+			trans.oncomplete = cb;
+			s.clear();
+			cells.forEach(function(cell){
+				s.add({pos:cell.pos, team:cell.team});
+			});
+		}
+		cdb.getCell = function(pos, cb){
+			db.transaction(["cell"]).objectStore("cell").get(pos).onsuccess = function(e){
+				cb(e.target.result);
+			}
+		}
 	}
 
 	function init(){
-		var request = indexedDB.open("chrall", 2);
+		var request = indexedDB.open("chrall", 4);
 		request.onsuccess = function(e){
 			db = e.target.result;
 			db.onerror = function(e){
@@ -64,11 +80,20 @@ var bgchrall = bgchrall || {};
 		request.onupgradeneeded = function(e){
 			var db = e.target.result;
 			e.target.transaction.onerror = onerror;
-			if (db.objectStoreNames.contains("troll")) {
-				db.deleteObjectStore("troll");
+			if (e.oldVersion < 2) {
+				if (db.objectStoreNames.contains("troll")) {
+					db.deleteObjectStore("troll");
+				}
+				var trollstore = db.createObjectStore("troll", { keyPath:"num" });
+				trollstore.createIndex("team", "team", { unique:false });
 			}
-			var trollstore = db.createObjectStore("troll", { keyPath:"num" });
-			trollstore.createIndex("team", "team", { unique:false });
+			if (e.oldVersion < 4) {
+				if (db.objectStoreNames.contains("cell")) {
+					db.deleteObjectStore("cell");
+				}
+				var cellstore = db.createObjectStore("cell", { keyPath:"pos" });
+				cellstore.createIndex("team", "team", { unique:false });
+			}
 		}
 		request.onerror = onerror;		
 	}

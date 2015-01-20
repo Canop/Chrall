@@ -415,7 +415,7 @@ var isInLaby = false;
 		noteRequest.YMax = ymax;
 		noteRequest.ZMin = zmin;
 		noteRequest.ZMax = zmax;
-
+		
 		var $gridTable = $("<table/>", {id: 'grid', 'class': 'grid'});
 		var $tr = $("<tr/>");
 		$gridTable.append($tr);
@@ -452,6 +452,16 @@ var isInLaby = false;
 					grid_y:  y
 				};
 				var $cell = $("<td/>", cellAttributes);
+				
+				(function($cell){
+					// on va éventuellement colorier la case si un message #chrall set cells dans miaou nous l'a demandé
+					chrall.cdb.getCell(x+','+y, function(cell){
+						if (cell && cell.team) {
+							$cell.attr('team', cell.team);
+						}
+					});
+				})($cell);
+				
 				$tr.append($cell);
 				if ((horizontalViewLimit == 0) && ( (player.x != x) || (player.y != y) )) {
 					// Si on est aveugle, on indique que les cases autour sont inconnues avec un point d'interrogation.

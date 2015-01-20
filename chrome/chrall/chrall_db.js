@@ -15,9 +15,19 @@ window.chrall = window.chrall || {};
 		chrome.runtime.sendMessage({cmd:"set trolls", trolls:trolls}, cb);
 	}
 
+	// clear all cell infos then add the cells and their teams
+	cdb.setCells = function(cells, cb){
+		chrome.runtime.sendMessage({cmd:"set cells", cells:cells}, cb);
+	}
+
 	// renvoie un troll trouvé par son numéro
 	cdb.getTroll = function(num, cb){
 		chrome.runtime.sendMessage({cmd:"get troll", num:num}, cb);
+	}
+
+	// renvoie une cellule trouvé par sa position x,y ou x,y,z
+	cdb.getCell = function(pos, cb){
+		chrome.runtime.sendMessage({cmd:"get cell", pos:pos}, cb);
 	}
 
 	// renvoie un tableau de tous les trolls

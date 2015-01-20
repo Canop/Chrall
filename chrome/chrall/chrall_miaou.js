@@ -16,7 +16,7 @@
 					if (!/\bcontent\b/.test(child.className)) continue;
 					var text = child.innerText; // innerText préserve les \n contrairement à textContent...
 					if (/^.?\s?#chrall ./.test(text)) {
-						var lines = text.split('\n');
+						var lines = text.split('\n').filter(Boolean);
 						handleChrallCommand(
 							lines[0].match(/^.?\s?#chrall (.*)/)[1].trim(), // la commande
 							lines.slice(1), // les lignes du message après la commande
@@ -37,6 +37,8 @@
 		switch (command) {
 		case "set teams":
 			return handleSetTeams(lines, ùm, ùc);
+		case "set cells":
+			return handleSetCells(lines, ùm, ùc);
 		default:
 			console.log("Commande Chrall incomprise");
 		}
@@ -59,6 +61,26 @@
 			console.log("Trolls to set :", trolls);
 			chrall.cdb.setTrolls(trolls, function(){
 				console.log("Trolls ajoutés");
+				$ok.show();
+			});
+		});
+	}
+
+	function handleSetCells(lines, ùm, ùc){
+		$('<button>').text("Définir les couleurs des cases dans Chrall").prependTo(ùc).click(function(){
+			var $ok = $('<div><i>Cases ajoutées</i></div>').hide();
+			$(this).replaceWith($ok);
+			var cells = [];
+			lines.forEach(function(line){
+				var match = line.match(/^\s*(-?\d+)[\s,;_](-?\d+)[\s,;_]?(-?\d+)?\s*(\w?)/);
+				if (match) cells.push({
+					pos: match.slice(1,4).filter(Boolean).join(','), // exemples : "-8,-3,-30" ou "-8,-3"
+					team: /^[rvb]/i.test(match[4]) ? match[4][0].toUpperCase() : 'R'
+				});
+			});
+			console.log("Cells to set :", cells);
+			chrall.cdb.setCells(cells, function(){
+				console.log("Cases ajoutées");
 				$ok.show();
 			});
 		});

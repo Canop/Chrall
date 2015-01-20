@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Chrall",
-	"version": "4.0.3",
+	"version": "4.0.4",
 	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"icons": {
           "128": "icone_naze.png"
@@ -79,7 +79,6 @@
 				"chrall_guilde_internal.js",
 				"chrall_messagerie.js",
 				"chrall_db.js",
-				"chrall_teams.js",
 				"chrall_miaou.js",
 				"chrall_main.js"
 			]
@@ -89,7 +88,6 @@
 			"js": [
 				"jquery.js",
 				"chrall_db.js",
-				"chrall_teams.js",
 				"chrall_miaou.js"
 			]
 		},
