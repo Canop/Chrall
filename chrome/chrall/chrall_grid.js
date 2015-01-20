@@ -45,6 +45,7 @@ function Grid(xp, yp, sight) {
 	this.nbObjectsInView = 0;
 	this.nbMushroomsInView = 0;
 	this.nbCenotaphsInView = 0;
+	this.outOfGrid = []; // les trucs qui ne tenaient pas dans la grille (hallucinations)
 }
 
 // renvoie la cellule de coordonnées passées.
@@ -54,14 +55,15 @@ Grid.prototype.getCellOrNull = function(x, y) {
 };
 
 // renvoie la cellule de coordonnées passées.
-// La crée si elle n'existe pas
+// La crée si elle n'existe pas (et qu'elle est dans la grille)
 Grid.prototype.getCellNotNull = function (x, y) {
-	var c = this.cells[x - this.dx][y - this.dy];
-	if (!c) {
-		c = new Cell();
-		this.cells[x - this.dx][y - this.dy] = c;
-	}
-	return c;
+	x -= this.dx;
+	y -= this.dy;
+	if (x<0||x>=this.cells.length||y<0||y>=this.cells.length) {
+		console.log("bad coordinates:", x+this.dx, y+this.dy);
+		return null; // out of grid
+	} 
+	return this.cells[x][y] || (this.cells[x][y] = new Cell());
 };
 
 // enregistre les modifications 'live' (au sens jquery)
@@ -79,7 +81,7 @@ function Chrall_gridLive() {
 		chrall.gridChangeDisplayByName(key, this.checked?'inline':'none', true);
 	});
 	html += "<div id=zoom_content>En attente de gogochrall...</div></div>";
-	$(html).appendTo($('body'));
+	$(html).appendTo('body');
 
 	//> on ajoute le popup sur les monstres
 	function getMonsterArgs(link) {
