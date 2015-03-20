@@ -157,9 +157,9 @@ func (store *MysqlStore) majVue(db *sql.DB, cible int, pour int, tksManager *Tks
 	if compteCible.statut != "ok" {
 		return fmt.Sprintf("Compte de %d invalide", cible)
 	}
-	ok, err := store.CheckBeforeSoapCall(db, pour, cible, "Dynamiques", 15)
+	ok, err := store.CheckBeforeSoapCall(db, pour, cible, "Dynamiques")
 	if err != nil {
-		return fmt.Sprintf("Erreur appel soap : %s", err.Error())
+		return fmt.Sprintf("Erreur vérification nombres appels soap : %s", err.Error())
 	}
 	if !ok {
 		return "Trop d'appels en 24h, appel soap refusé"

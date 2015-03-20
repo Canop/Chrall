@@ -5,6 +5,7 @@ package main
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"strconv"
 	"time"
 )
@@ -73,11 +74,12 @@ func (store *MysqlStore) InsertCompte(db *sql.DB, c *Compte) error {
 
 // met à jour les champs de gestion d'un compte en BD
 func (store *MysqlStore) UpdateInfosGestionCompte(db *sql.DB, c *Compte) error {
+	fmt.Printf("UpdateInfosGestionCompte %+v\n", c)
 	sql := "update compte set"
 	sql += " statut=?,"
 	sql += " mdp_restreint=?"
 	sql += " where id=?"
-	_, err := db.Exec(sql, c.trollId, c.statut, c.mdpRestreint)
+	_, err := db.Exec(sql, c.statut, c.mdpRestreint, c.trollId)
 	return err
 }
 
@@ -103,8 +105,13 @@ func (store *MysqlStore) UpdateTroll(db *sql.DB, c *Compte) (err error) {
 
 // vérifie que le compte existe et que le mot de passe restreint est validé par MH
 func (store *MysqlStore) CheckCompte(db *sql.DB, trollId int, mdpr string) (ok bool, c *Compte, err error) {
+	fmt.Printf("CheckCompte %d / %s\n", trollId, mdpr) // FIXME virer l'affichage du mdpr dans le log
+	if len(mdpr) != 8 {
+		return false, nil, errors.New("Un mdp restreint doit faire 8 charactères")
+	}
 	c, err = store.GetCompte(db, trollId)
 	if c == nil {
+		fmt.Println("Création de compte")
 		if !ALLOW_SP {
 			return false, nil, errors.New("Impossible de créer le compte car ALLOW_SP==false")
 		}
@@ -113,13 +120,22 @@ func (store *MysqlStore) CheckCompte(db *sql.DB, trollId int, mdpr string) (ok b
 		c.trollId = trollId
 		c.mdpRestreint = mdpr
 		// on va regarder si le mdp restreint est correct
-		ok = true
-		ok, _, _ := CheckPassword(trollId, mdpr)
+		if COUNT_MDP_CHECKS {
+			ok, err := store.CheckBeforeSoapCall(db, trollId, trollId, "Dynamiques")
+			if err != nil {
+				return false, nil, err
+			}
+			if !ok {
+				return false, nil, errors.New("Trop d'appels en 24h, appel soap refusé")
+			}
+		}
+		ok, _ := CheckPasswordSp(trollId, mdpr)
 		if ok {
 			c.statut = "ok"
 		} else {
 			c.statut = "soap_error" // TODO
 		}
+		fmt.Printf("Check Result : %s\n", c.statut)
 		// on sauvegarde
 		err = store.InsertCompte(db, c)
 	} else if c.mdpRestreint != mdpr {
@@ -132,11 +148,23 @@ func (store *MysqlStore) CheckCompte(db *sql.DB, trollId int, mdpr string) (ok b
 		// si quelqu'un d'autre essaye de se connecter sur son compte (par contre
 		// on renvoie ok=false).
 		// ---> il faut une fonction explicite de désactivation de compte...
-		ok, _, _ := CheckPassword(trollId, mdpr)
+		if COUNT_MDP_CHECKS {
+			ok, err := store.CheckBeforeSoapCall(db, trollId, trollId, "Dynamiques")
+			if err != nil {
+				return false, nil, err
+			}
+			if !ok {
+				return false, nil, errors.New("Trop d'appels en 24h, appel soap refusé")
+			}
+		}
+		ok, details := CheckPasswordSp(trollId, mdpr)
+		fmt.Printf("Password Check Result : %v | %s\n", ok, details)
 		if c.statut == "ok" {
 			if ok {
 				c.mdpRestreint = mdpr
-				store.UpdateInfosGestionCompte(db, c)
+				if err := store.UpdateInfosGestionCompte(db, c); err != nil {
+					fmt.Println("Error while updating compte :", err)
+				}
 			}
 		} else {
 			if ok {
@@ -145,7 +173,9 @@ func (store *MysqlStore) CheckCompte(db *sql.DB, trollId int, mdpr string) (ok b
 				c.statut = "soap_error" // TODO
 			}
 			c.mdpRestreint = mdpr
-			store.UpdateInfosGestionCompte(db, c)
+			if err := store.UpdateInfosGestionCompte(db, c); err != nil {
+				fmt.Println("Error while updating compte :", err)
+			}
 		}
 	} else {
 		ok = (c.statut == "ok")

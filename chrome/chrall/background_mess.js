@@ -3,7 +3,7 @@
 
 // les requetes sont de la forme {cmd:"someword", other data}
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
-	console.log("received request from content script:", request);
+	//~ console.log("received request from content script:", request);
 		
 	var cdb = bgchrall.cdb, cmd = request.cmd || request;
 	switch (cmd) {

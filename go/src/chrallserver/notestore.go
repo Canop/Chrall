@@ -35,7 +35,7 @@ type NoteRequest struct {
 	NumTrolls []int
 }
 
-// stocke une note en BD 
+// stocke une note en BD
 func (store *MysqlStore) SaveNote(db *sql.DB, note *Note) error {
 	if note.Id > 0 {
 		// update

@@ -26,7 +26,7 @@
 		<p/>\
 		<h3 class='option-section'>Que fait Chrall exactement?</h3>\
 		<div class='option-section'>\
-			<p class='informational-text'>Chrall modifie les pages que vous recevez depuis *.mountyhall.com et quelques adresses alternatives du jeu (Chrall ne voit ni ne change les autres pages).</p>\
+			<p class='informational-text'>Chrall modifie les pages que vous recevez depuis *.mountyhall.com et quelques adresses alternatives du jeu. Chrall enrichit également <a href=http://dystroy.org/miaou>le chat Miaou</a> pour y ajouter des fonctions de modification de Chrall. Chrall ne voit ni ne change les autres pages.</p>\
 			<p class='informational-text'>Chrall affiche, sur la vue, des estimations des caractéristiques des monstres, en exploitant son bestiaire (lien plus bas). De même pour les trolls en exploitant des informations publiques (par exemple la liste des kills).</p>\
 			<p class='informational-text'>Chrall transmet les CDM que vous effectuez à ce bestiaire, afin de l'enrichir (si vous l'acceptez).</p>\
 		</div>\
@@ -35,7 +35,7 @@
 		<div class='option-section'>\
 			<p>Etat du compte Chrall : <b><span id=com_status_message></span></b></p>\
 			<p class='informational-text'>Un compte Chrall vous permet de partager des informations avec d'autres joueurs. Il n'est nullement nécessaire d'avoir un compte sur Chrall pour exploiter l'extension. Ce compte n'a d'intérêt que si vous chassez avec d'autres.</p>\
-			<p>Afin d'authentifier les requêtes provenant au serveur Chrall, votre <a href='http://sp.mountyhall.com/md5.php' target=newTab>mot de passe restreint</a> est nécessaire :</p>\
+			<p>Afin d'authentifier les requêtes provenant au serveur Chrall, un code d'accès est nécessaire (voir &quot;Options Troll&quot;) :</p>\
 			<p><input type=password id=ch_mdp_restreint value=''></p>\
 			<a class=gogo id=changeMdp>Modifier le mot de passe</a> &nbsp; <a id=activationButton class=gogo />\
 			<p class='informational-text'>Notez que vous ne transmettez pas d'informations confidentielles tant que vous n'activez pas le compte.</p>\
@@ -169,8 +169,7 @@
 	function isPasswordValid() {
 		var mdpkey = passwordKey();
 		var mdp = localStorage[mdpkey];
-		var mdpIsValid = mdp && (mdp.length == 32);
-		return mdpIsValid;
+		return !!mdp;
 	}
 
 	function passwordKey() {

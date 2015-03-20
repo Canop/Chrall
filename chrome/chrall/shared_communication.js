@@ -86,6 +86,7 @@
 	chrall.receiveFromChrallServer = function (message) {
 		console.log("Message entrant :");
 		console.log(message);
+		//~ chrall.notifyUser({text: JSON.stringify(message)});
 		if (message.Error.length > 0) {
 			localStorage["com.status.message"] = "Compte en erreur ou problème authentification";
 		} else {

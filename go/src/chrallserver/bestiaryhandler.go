@@ -62,7 +62,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	var be *BestiaryExtract
 	db, err := h.store.DB()
 	if err == nil {
-		defer db.Close()		
+		defer db.Close()
 		be, err = h.store.ReadTotalStats(db)
 	} else {
 		log.Println("Erreur connexion BD :", err)

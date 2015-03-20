@@ -151,7 +151,8 @@ func FetchVueSoap(numero int, mdp_restreint string) (items []SoapItem, errorCode
 
 // vérifie, par une connexion SOAP, que le couple (numero, mdp_restreint) est authentifié par MH.
 // Ceci consomme l'une des connexions autorisées pour ce troll, il ne faut donc le faire que si le mot de passe a changé
-func CheckPassword(numero int, mdp_restreint string) (ok bool, errorCode string, errorDetails string) {
+func CheckPasswordSoap(numero int, mdp_restreint string) (ok bool, errorCode string, errorDetails string) {
+	fmt.Printf("CheckPasswordSoap %d / %s\n", numero, mdp_restreint)
 	env := GetSoapEnvelope(SOAP_PROFIL_QUERY_FORMAT, numero, mdp_restreint)
 	if env == nil {
 		errorCode = "soap_error"

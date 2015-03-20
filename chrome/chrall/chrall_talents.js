@@ -58,7 +58,7 @@
 				var degCrit = deg + Math.floor(des_deg / 2) * 2;
 				return "<table><tr><td>Attaque moyenne</td><td> : " + att +
 						"</td></tr><tr><td>Dégâts moyens</td><td>  : " + deg + " / " + degCrit +
-						"</td></tr></table>50 % de l'armure physique de la cible est ignorée.";
+						"</td></tr></table>50 % de l'armure totale de la cible est ignorée.";
 
 			case "Camouflage" :
 				var html = "Déplacement : un jet de compétence (à 75% du niveau du sortilège) est nécessaire pour conserver le Camouflage (Ce jet ne coûte aucun PA et ne rapporte pas de PX).";

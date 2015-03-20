@@ -12,3 +12,4 @@ datafiles
 **/src/github.com/*
 chrome/chrall/*.ods
 /.project
+dev.markdown

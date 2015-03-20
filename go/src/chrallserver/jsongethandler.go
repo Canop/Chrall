@@ -140,6 +140,8 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 				t := time.Unix(dateCDM, 0)
 				html += fmt.Sprintf("Blessure: <b>%d %%</b> (CDM de %s le %s)<br>", blessure, nomAuteur, t.Format("02/01 à 15h04")) // oui les gars de Google ont fumé lorsqu'ils ont fait leur bibliothèque de formatage de date
 			}
+		} else {
+			fmt.Println("Compte non authentifié (makeBestiaryExtractHtml)")
 		}
 	}
 
@@ -320,8 +322,10 @@ func (h *JsonGetHandler) ServeHTTP(w http.ResponseWriter, hr *http.Request) {
 		h.serveAutocompleteMonsterNames(w, hr)
 	case "get_page_killometre":
 		h.servePageKillometre(w, hr)
-	case "get_notes":
-		h.serveNotes(w, hr)
+	case "get_notes": // désactivée (fonction mal fichue trop appelée et même pas utilisée)
+		//h.serveNotes(w, hr)
+		log.Println("serveNotes ignoré") // pourtant plus dans l'extension...
+		return
 	case "get_extract":
 		h.serveBestiaryExtractHtml(w, hr)
 	case "get_troll_info":

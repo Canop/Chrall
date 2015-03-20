@@ -39,6 +39,7 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 		compteOk, compte, err = h.store.CheckCompte(db, int(askerId), mdpr)
 	}
 	if !compteOk {
+		fmt.Println("Compte non authentifié (getVueHtml)")
 		return "Compte non authentifié"
 	}
 	amis, err := h.store.GetPartageurs(db, askerId)

@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -71,33 +70,13 @@ type G2cMessage struct { // on définira peut-être plus tard une structure hié
 	Content string
 }
 
+// permet éventuellement d'envoyer un message à l'utilisateur
 func GetMessage(TrollId string, ChrallVersion string) (out *G2cMessage) {
 	out = new(G2cMessage)
 	out.Nature = "empty"
 
-	//> on va regarder si l'utilisateur n'a pas une version ancienne de Chrall
-	currentChrallVersion := &Version{[]int{3, 16}}
-	if userVersion, err := ParseVersion(ChrallVersion); err != nil {
-		fmt.Println("user's Chrall Version not understood : " + ChrallVersion)
-	} else {
-		switch CompareVersions(userVersion, currentChrallVersion) {
-		case -1:
-			//~ out.Nature = "update"
-			fmt.Println("User version is old : " + ChrallVersion)
-			//~ out.Title = "L'extension Chrall n'est pas à jour"
-			//~ out.Content += "Votre version : " + ChrallVersion
-			//~ out.Content += "<br>La version actuelle : " + currentChrallVersion.String()
-		case 1:
-			//~ out.Nature = "normal"
-			fmt.Println("User version is younger than current (???) : " + ChrallVersion)
-			//~ out.Title = "Votre version de Chrall est plus récente que la version officielle"
-			//~ out.Content = "Vous disposez probablement d'une version spéciale de développement. Sinon, il faudrait prévenir Canop."
-		}
-	}
+	// out.Title = "quelque chose qu'on veut dire"
+	// out.Content = "bla bla"
 
-	//> en deuxième partie, si la version est à jour, on peut se préoccuper éventuellement d'envoyer d'autres messages
-	if out.Nature == "empty" {
-		// en fait dans ce cas précis je n'ai rien à dire
-	}
 	return out
 }

@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `cdm` (
 CREATE TABLE IF NOT EXISTS `compte` (
   `id` int(11) NOT NULL,
   `statut` enum('ok','off','soap_error','bad_pwd') COLLATE utf8_unicode_ci NOT NULL,
-  `mdp_restreint` char(32) COLLATE utf8_unicode_ci NOT NULL,
+  `mdp_restreint` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `pv_max` int(11) NOT NULL,
   `pv_actuels` int(11) NOT NULL,
   `prochain_tour` int(16) NOT NULL,

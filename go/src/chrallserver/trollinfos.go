@@ -29,7 +29,7 @@ const (
 )
 
 var RACE_NAMES = []string{"inconnu", "darkling", "durakuir", "kastar", "skrim", "tomawak", "nkrwapu"}
-var RACE_SHORT_NAMES = []string{"?", "Da", "D", "K", "S", "T", "N"}
+var RACE_SHORT_NAMES = []string{"?", "G", "D", "K", "S", "T", "N"}
 
 func (r raceTroll) string() string {
 	return RACE_NAMES[int(r)]
@@ -165,7 +165,7 @@ func (m *TksManager) GetKillometreExtract(typeExtract string, startIndex int, pa
 
 func (m *TksManager) ReadDiploCsvFilesIfNew() error {
 	standardDiploFilename := filepath.Join(m.cheminDonnées, "Public_Diplomatie.txt")
-	trollDiploFilename := filepath.Join(m.cheminDonnées, "Diplodotrolls.csv")
+	//~ trollDiploFilename := filepath.Join(m.cheminDonnées, "Diplodotrolls.csv")
 	mustRead := false
 	if m.lastDiploFileRead > 0 {
 		fi, err := os.Stat(standardDiploFilename)
@@ -177,17 +177,17 @@ func (m *TksManager) ReadDiploCsvFilesIfNew() error {
 		}
 		mustRead = fi.ModTime().Unix() > m.lastDiploFileRead
 	}
-	if !mustRead {
-		fi, err := os.Stat(trollDiploFilename)
-		if err != nil {
-			return err
-		}
-		if !!fi.IsDir() {
-			return errors.New("TksManager : Fichier " + trollDiploFilename + " introuvable ou anormal")
-		}
-		mustRead = fi.ModTime().Unix() > m.lastDiploFileRead
-		fmt.Printf("mustRead trollDiploFile = %v \n", mustRead)
-	}
+	//~ if !mustRead {
+	//~ fi, err := os.Stat(trollDiploFilename)
+	//~ if err != nil {
+	//~ return err
+	//~ }
+	//~ if !!fi.IsDir() {
+	//~ return errors.New("TksManager : Fichier " + trollDiploFilename + " introuvable ou anormal")
+	//~ }
+	//~ mustRead = fi.ModTime().Unix() > m.lastDiploFileRead
+	//~ fmt.Printf("mustRead trollDiploFile = %v \n", mustRead)
+	//~ }
 	if !mustRead {
 		return nil
 	}
@@ -204,16 +204,16 @@ func (m *TksManager) ReadDiploCsvFilesIfNew() error {
 		return err
 	}
 
-	f, err = os.Open(trollDiploFilename)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	r = bufio.NewReader(f)
-	err = g.ReadDiploGraph(r, false, true)
-	if err != nil {
-		return err
-	}
+	//~ f, err = os.Open(trollDiploFilename)
+	//~ if err != nil {
+	//~ return err
+	//~ }
+	//~ defer f.Close()
+	//~ r = bufio.NewReader(f)
+	//~ err = g.ReadDiploGraph(r, false, true)
+	//~ if err != nil {
+	//~ return err
+	//~ }
 
 	m.lastDiploFileRead = time.Now().Unix()
 	fmt.Println("TksManager : Fichiers de diplo lus")
@@ -271,8 +271,8 @@ func (m *TksManager) ReadGuildCsvFileIfNew() error {
 		fmt.Println(err)
 		return err
 	}
-	m.lastTrollFileRead = time.Now().Unix()
 	fmt.Println("TksManager : Fichier des guildes lu")
+	m.lastGuildFileRead = time.Now().Unix()
 	return nil
 }
 

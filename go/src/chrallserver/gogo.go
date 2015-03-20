@@ -9,8 +9,11 @@ import (
 )
 
 const (
-	port = 8000
-	ALLOW_SP = false // cette constante permet de désactiver tout accès aux scripts publics de MH
+	port             = 8000
+	ALLOW_SP         = true // cette constante permet de désactiver tout accès aux scripts publics de MH
+	COUNT_MDP_CHECKS = true // le problème de compter ces appels est qu'on impacte le nombre d'appels
+	//  d'un trolls sans avoir pu vérifier qu'il était réellement à l'origine
+	//  de l'appel
 )
 
 type GogoServer struct {

@@ -11,6 +11,27 @@ import (
 	"strings"
 )
 
+func CheckPasswordSp(numero int, mdp_restreint string) (ok bool, errorDetails string) {
+	fmt.Printf("CheckPasswordSp %d / %s\n", numero, mdp_restreint)
+	httpClient := new(http.Client)
+	request := fmt.Sprintf("http://sp.mountyhall.com/SP_Profil2.php?Numero=%d&Motdepasse=%s", numero, mdp_restreint)
+	fmt.Println("Fetching", request)
+	resp, err := httpClient.Get(request)
+	if err != nil {
+		return false, err.Error()
+	}
+	defer resp.Body.Close()
+	r := bufio.NewReader(resp.Body)
+	bline, _, _ := r.ReadLine()
+	line := string(bline)
+	fmt.Println("Answer:", line)
+	if strings.HasPrefix(line, fmt.Sprintf("%d;", numero)) {
+		return true, ""
+	} else {
+		return false, "Unexpected answer, probably a wrong password"
+	}
+}
+
 /*
 récupère la vue d'un troll.
 Renvoie des SoapItem pour la compatibilité avec la fonction FetchVueSoap.

@@ -10,7 +10,7 @@ import (
 )
 
 type BucketDecoder struct {
-	Cdm       []*CDM // les CDM trouvées dans l'input	
+	Cdm       []*CDM // les CDM trouvées dans l'input
 	nbResults int
 	Message   string
 }

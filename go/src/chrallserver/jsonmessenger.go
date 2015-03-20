@@ -62,15 +62,15 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 	//~ fmt.Printf(" in.Action : \n%+v\n", in.Action)
 	//~ }
 
-	//~ fmt.Printf("Message entrant du troll %d avec l'action %s\n", in.TrollId, action)
+	fmt.Printf("Message entrant du troll %d avec l'action %s\n", in.TrollId, action)
 	if in.TrollId == 0 {
 		out.Error = "Troll Absent"
 		return
 	}
-	if len(in.MDP) != 32 { // théoriquement ça devrait être géré côté client aussi
-		out.Error = "Mot de passe restreint invalide"
-		return
-	}
+	//~ if len(in.MDP) != 32 { // théoriquement ça devrait être géré côté client aussi
+	//~ out.Error = "Mot de passe restreint invalide"
+	//~ return
+	//~ }
 
 	db, err := h.store.DB()
 	if err != nil {
@@ -83,7 +83,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 	mdpok, c, err := h.store.CheckCompte(db, in.TrollId, in.MDP)
 	if err != nil {
 		out.Error = err.Error()
-		log.Printf("Erreur validation compte sur action %s : %s\n", action, err.Error())
+		log.Printf("Erreur validation compte %d sur action %s : %s\n", in.TrollId, action, err.Error())
 		return
 	}
 	if mdpok {
@@ -178,7 +178,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 				for _, ami := range amis {
 					out.TextMajVue += ". " + h.store.majVue(db, int(ami), in.TrollId, h.tksManager)
 				}
-			} else { // demande de mise à jour spécifique			
+			} else { // demande de mise à jour spécifique
 				log.Printf("MAJ Vue %d\n", in.IdCible)
 				out.TextMajVue = h.store.majVue(db, in.IdCible, in.TrollId, h.tksManager)
 			}

@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-//  petites fonctions utilitaires pour le requétage fait par Chrall 
+//  petites fonctions utilitaires pour le requétage fait par Chrall
 
 // renvoie une expression de calcul d'un minimum de colonne tel que les 0 ne soient pas pris en compte.
 // le ifnull autour contourne l'incapacité du driver go à mettre u null dans un int

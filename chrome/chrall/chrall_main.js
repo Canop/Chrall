@@ -117,7 +117,8 @@ switch (chrall.pageName()) {
         chrall.askDestinations();
         break;
     case "Play_a_Sort13.php":
-        chrall.askDestinations();
+        // chrall.askDestinations(); supprimé car bug
+        chrall.warnOnTp();
         break;
     case "Guilde_Membres.php":
         chrall.addPartageLinkToAll();
@@ -126,7 +127,3 @@ switch (chrall.pageName()) {
         break;
 }
 
-//~ console.log("querying trolls");
-//~ chrall.cdb.getTrolls(function(trolls){
-	//~ console.log("all trolls:", trolls);
-//~ });

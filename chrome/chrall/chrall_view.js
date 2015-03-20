@@ -121,11 +121,10 @@ var isInLaby = false;
 		cell.trolls.forEach(function(troll){
 			noteRequest.NumTrolls.push(troll.id);
 			var differentLevel = player.z != troll.z;
-			var race = troll.race[0];
-			if (troll.race == "Darkling") race = "G";
+			var raceLetter = /Darkling/i.test(troll.race) ? "G" : troll.race[0];
 			var attributes = {
 				id:      troll.id,
-				text:    troll.z + ": " + (compactNames ? compactText(troll.name, maxLength) : troll.name) + " " + race + troll.level, // TODO: better race display
+				text:    troll.z + ": " + (compactNames ? compactText(troll.name, maxLength) : troll.name) + " " + raceLetter + troll.level,
 				class: 'ch_troll',
 				href:    'javascript:EPV(' + troll.id + ');',
 				style:   distanceStyle(verticalDistanceHint, troll.z),
@@ -726,7 +725,8 @@ var isInLaby = false;
 					);
 
 					//> demande de notes
-					chrall.sendToChrallServer('get_notes', {'NoteRequest': noteRequest});
+					// dys 20150129 je désactive ce truc là pas utilisé mais lourd
+					// chrall.sendToChrallServer('get_notes', {'NoteRequest': noteRequest});
 				}, 1000
 		);
 

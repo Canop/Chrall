@@ -193,7 +193,7 @@ func (cdm *CDM) ComputeSHA1() []byte {
 
 /**
  * utilise le nom de la caractéristique pour renseigner les champs.
- *  Remarques : 
+ *  Remarques :
  *   - attention, suivant l'origine des cdm des labels différents peuvent être utilisés
  *   - J'avais fait un switch initialement mais ça ne marchait pas pour tous les labels (au runtime), il semble y avoir des bugs sur les switch en go
  */
@@ -371,7 +371,7 @@ func (cdm *CDM) SetNomComplet(nc string) {
 		cdm.NomComplet = nc
 	}
 	//fmt.Println("Nom : *" + cdm.Nom + "*")
-	//fmt.Println("Age : *" + cdm.TagAge + "*")	
+	//fmt.Println("Age : *" + cdm.TagAge + "*")
 }
 
 func (cdm *CDM) Print() {
