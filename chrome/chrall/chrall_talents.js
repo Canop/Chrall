@@ -324,7 +324,7 @@
 				return html;
 
 			case "Flash Aveuglant" :
-				var a = 1 + Math.floor(chrall.player().totalSight / 5);
+				var a = 1 + Math.floor(chrall.player().sight.diceNumber / 5);
 				var html = "Affecte les monstres et trolls sur la case d'un malus à l'attaque, à l'esquive et à la vue :<table>";
 				html += "<tr><td>Premier FA</td><td> : -" + a + "</td></tr>";
 				html += "<tr><td>Deuxième FA</td><td> : -" + decumul(1, a) + "</td></tr>";
