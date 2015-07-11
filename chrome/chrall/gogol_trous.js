@@ -347,8 +347,13 @@ function teleportHoleMessage(x, y, z){
 			nearestHole = h;
 		}
 	}
-	
-	return "Trou le plus proche à "+
+	var str = "";
+	if (smallestSquaredDist===0) {
+		return "Vous visez un trou de météorite !";
+	} else if (smallestSquaredDist<10) {
+		str += "Attention ! ";
+	}
+	return str + "Trou le plus proche à "+
 		Math.round(Math.sqrt(smallestSquaredDist))+
 		" cases : X="+nearestHole[0]+", Y="+nearestHole[1];
 }

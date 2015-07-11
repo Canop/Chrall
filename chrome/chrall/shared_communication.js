@@ -6,21 +6,36 @@
 		if (chrall.playerInvalid()) return false;
 		var key = 'troll.' + chrall.playerId() + '.compteActif';
 		return localStorage[key] == 'yes';
-	};
+	}
+	
+	chrall.displayComStatusMessage = function(){
+		var txt;
+		if (chrall.compteChrallActif()) {
+			if (chrall.mdpCompteChrall()) {
+				txt = localStorage["com.status.message"];
+			} else {
+				txt = "Pas de mot de passe restreint stocké localement";
+			}
+		} else {
+			txt = "Compte inexistant ou non connecté";
+		}
+		console.log("chrall.displayComStatusMessage", txt);
+		$("#com_status_message").text(txt);
+	}
 
 	chrall.setStatutCompte = function (newStatus) {
 		if (chrall.playerInvalid()) return;
 		var key = 'troll.' + chrall.playerId() + '.compteActif';
 		localStorage[key] = newStatus;
-	};
+	}
 
-// renvoie le mot de passe du compte chrall (il faut vérifier avant cet appel que le compte est actif)
+	// renvoie le mot de passe du compte chrall (il faut vérifier avant cet appel que le compte est actif)
 	chrall.mdpCompteChrall = function () {
 		var mdpkey = 'troll.' + chrall.playerId() + '.mdp';
 		return localStorage[mdpkey];
-	};
+	}
 
-// met à jour sur le serveur (si le compte chrall est actif) les infos du troll du joueur
+	// met à jour sur le serveur (si le compte chrall est actif) les infos du troll du joueur
 	chrall.sendPlayerInfosToChrallServer = function () {
 		if (!chrall.compteChrallActif()) return;
 		var troll = {};
@@ -60,7 +75,7 @@
 		xhr.send();
 	};
 
-// envoie au serveur un message authentifié par le mdp restreint
+	// envoie au serveur un message authentifié par le mdp restreint
 	chrall.sendToChrallServer = function (action, message) {
 		var player = chrall.player();
 		if (!chrall.compteChrallActif()) {
@@ -82,7 +97,7 @@
 		return true;
 	};
 
-// fonction appelée par le serveur Chrall, ne pas renommer
+	// fonction appelée par le serveur Chrall, ne pas renommer
 	chrall.receiveFromChrallServer = function (message) {
 		console.log("Message entrant :");
 		console.log(message);
@@ -100,15 +115,15 @@
 				chrall.updateTrollInfoInTable(message.MiPartages);
 			}
 		}
-		if (message.TextMajVue) {
-			chrall.notifyUser({text: message.TextMajVue});
+		if (message.TextMaj) {
+			chrall.notifyUser({text: message.TextMaj});
 			localStorage['troll.' + chrall.player().id + '.messageMaj']
-			$("#resultat_maj_vue").text(message.TextMajVue);
+			$("#resultat_maj").text(message.TextMaj);
 		}
 		if (message.Actions && message.Actions.length > 0 && typeof(addActionsToMonsterEvents) == "function") {
 			addActionsToMonsterEvents(message.Actions);
 		}
-		$("#com_status_message").text(localStorage["com.status.message"]);
+		chrall.displayComStatusMessage();
 	};
 
 })(window.chrall = window.chrall || {});

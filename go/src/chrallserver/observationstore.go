@@ -142,6 +142,35 @@ func (store *MysqlStore) ObservationsAutour(db *sql.DB, x int, y int, z int, dis
 	return observations, nil
 }
 
+func (store *MysqlStore) majProfil(db *sql.DB, compteCible *Compte, pour int) string {
+	log.Printf("MAJ Profil %d\n", compteCible.trollId)
+	if !ALLOW_SP {
+		return "Impossible de mettre à jour le profil car ALLOW_SP==false"
+	}
+	if compteCible.statut != "ok" {
+		return fmt.Sprintf("Compte de %d invalide", compteCible.trollId)
+	}
+	ok, err := store.CheckBeforeSoapCall(db, pour, compteCible.trollId, "Dynamiques")
+	if err != nil {
+		return fmt.Sprintf("Erreur vérification nombres appels soap : %s", err.Error())
+	}
+	if !ok {
+		return "Trop d'appels en 24h, appel soap refusé"
+	}
+	ok, strerr := FillTrollDataSp(compteCible.trollId, compteCible.mdpRestreint, compteCible.Troll)
+	if strerr!="" {
+		return strerr
+	}
+	if !ok {
+		return fmt.Sprintf("profil fetching failed for %d", compteCible.trollId)
+	}
+	err = store.UpdateTroll(db, compteCible)
+	if err != nil {
+		return fmt.Sprintf("Erreur sauvegarde vue de %d: %d", compteCible.trollId, err.Error())
+	}
+	return fmt.Sprintf("Vue de %d mise à jour", compteCible.trollId)
+}
+
 func (store *MysqlStore) majVue(db *sql.DB, cible int, pour int, tksManager *TksManager) string {
 	log.Printf("MAJ Vue %d\n", cible)
 	if !ALLOW_SP {

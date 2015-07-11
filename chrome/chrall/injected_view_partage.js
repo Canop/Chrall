@@ -1,26 +1,21 @@
 (function (chrall) {
 
-	// Private -- not shared in the Chrall namespace
 	function isPartageActif(partage) {
 		return partage.Statut == 'on' && partage.StatutAutreTroll == 'on';
 	}
 
-	// Private -- not shared in the Chrall namespace
 	function distance(partage, player) {
 		var autreTroll = partage.AutreTroll;
 		return Math.max(Math.max(Math.abs(player.x - autreTroll.X), Math.abs(player.y - autreTroll.Y)), Math.abs(player.z - autreTroll.Z));
 	}
 
-	// Private -- not shared in the Chrall namespace
 	function createTrollCell(partage) {
 		var trollCell = $("<td/>", { class: 'mh_tdpage'});
 		trollCell.append($("<a/>", {text: partage.NomAutreTroll + " (" + partage.IdAutreTroll + ")"}));
 		return trollCell;
 	}
 
-
 	chrall.updateTablesPartage = function (partages) {
-
 		var partagesActifs = $('#partagesActifs');
 		var propositionPartage = $('#propositionsPartage');
 		if (!propositionPartage) return;
@@ -33,6 +28,10 @@
 		for (var i = 0; i < partages.length; i++) {
 			var partage = partages[i];
 			if (isPartageActif(partage)) {// ajout dans la table des partages actifs
+				if (!partage.AutreTroll){
+					console.log("données de partage manquantes pour", partage.IdAutreTroll);
+					continue;
+				}
 				row = $("<tr/>");
 				var distCell = $("<td/>", { class: 'mh_tdpage'});
 				distCell.text(distance(partage, playerInfo));
@@ -78,17 +77,24 @@
 		chrall.notifyUser({ text: "Action: " + action + " partage " + autreTroll});
 	}
 
-	chrall.majVue = function (idAutreTroll) {
+	chrall.majTroll = function(facette, idAutreTroll){
 		var autreTroll = $(this).attr("idAutreTroll");
 		autreTroll = ("undefined" == typeof autreTroll || "" == autreTroll) ? idAutreTroll : autreTroll;
 		autreTroll = parseInt(autreTroll);
 		// Operation asynchrone, gogochrall devra attendre la réponse du serveur soap de MH
-		chrall.sendToChrallServer("maj_vue", {"IdCible": autreTroll});
-
-		var notificationText = 'GogoChrall attend la r\u00e9ponse du serveur Mounty Hall' + (0 == autreTroll ? " pour tous vos amis" : "") + '. Cela peut prendre quelques minutes. Vous pouvez faire des recherches avant le r\u00e9sultat mais elles ne seront pas forc\u00e9ment correctes.';
-		$("#resultat_maj_vue").text(notificationText);
+		chrall.sendToChrallServer("maj_"+facette, {"IdCible": autreTroll});
+		var notificationText = 'GogoChrall attend la r\u00e9ponse du serveur Mounty Hall' + (0 == autreTroll ? " pour tous vos amis" : "") + '. Cela peut prendre quelques minutes.';
+		$("#resultat_maj").text(notificationText);
 		chrall.notifyUser({text : notificationText});
-		localStorage['troll.' + chrall.playerId() + '.messageMaj'] = notificationText;
+		localStorage['troll.' + chrall.playerId() + '.messageMaj'] = notificationText;		
+	}
+
+	chrall.majVue = function (idAutreTroll) {
+		majTroll("vue", idAutreTroll);
+	}
+
+	chrall.majProfil = function (idAutreTroll) {
+		majTroll("profil", idAutreTroll);
 	}
 
 

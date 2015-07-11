@@ -47,10 +47,9 @@ function Chrall_getExternalLinks() {
 // construit le html de sélection des liens à afficher
 function Chrall_makeLinkOptionPage() {
 	var links = Chrall_getExternalLinks();
-	var html = $('<p/>', {text :"Cochez les liens que vous voulez avoir toujours présents sur votre écran"});
-
+	var $linkOptions = $('<div style="text-align:left">', {text :"Cochez les liens que vous voulez avoir toujours présents sur votre écran"});
 	for (var cat in links) {
-		html = html.after($('<h2/>', {text: cat}));
+		$linkOptions.append($('<h2/>', {text: cat}));
 		var catLinks = links[cat];
 		for (var i = 0; i < catLinks.length; i++) {
 			var link = catLinks[i];
@@ -65,12 +64,10 @@ function Chrall_makeLinkOptionPage() {
 			});
 			checkbox = checkbox.after($('<a/>', {target: 'extern', href: link.href, text: link.name}));
 			checkbox = checkbox.after(link.description);
-			var p = $("<p/>");
-			p.append(checkbox);
-			html = html.after(p);
+			$linkOptions.append($("<p/>").append(checkbox));
 		}
 	}
-	return html;
+	return $linkOptions;
 }
 
 // appelée depuis la frame "Action", construit la div des liens externes

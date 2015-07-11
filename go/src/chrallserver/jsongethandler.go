@@ -117,7 +117,6 @@ func (h *JsonGetHandler) serveTrollStatsHtmlJsonp(w http.ResponseWriter, hr *htt
 func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	askerId := GetFormValueAsId(hr, "asker")
 	mdpr := GetFormValue(hr, "mdpr") // mot de passe restreint, optionnel, permet d'authentifier la requête en cas d'existence de compte Chrall
-	compteOk := false
 	monsterId := GetFormValueAsId(hr, "monsterId")
 	db, err := h.store.DB()
 	if err != nil {
@@ -127,9 +126,9 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	defer db.Close()
 	html := ""
 	var amis []int
-	if askerId > 0 && mdpr != "" && monsterId > 0 {
-		compteOk, _, err = h.store.CheckCompte(db, askerId, mdpr)
-		if compteOk {
+	if monsterId > 0 {
+		fmt.Printf("makeBestiaryExtractHtml trollId:%d mdpr:%s\n", askerId, mdpr)
+		if h.store.IsCompteOK(db, askerId, mdpr) {
 			amis, err = h.store.GetPartageurs(db, askerId)
 			if err != nil {
 				log.Printf("Erreur récupération amis dans makeBestiaryExtractHtml : %s\n", err.Error())

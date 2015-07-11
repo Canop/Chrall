@@ -62,7 +62,7 @@ function showOm(target, text_top, text_bottom) {
 	if (text_top && text_top.length>0 && (pos.top-pageYOffset)>65) { /* remarque : le test sur la position est heuristique et surtout lié à mon cas d'usage précis */
 		var html = '<div id="objectMenu_top" style="';
 		html += "left:"+pos.left+"px;";
-		html += "bottom:"+(document.body.clientHeight-pos.top-5)+"px;";
+		html += "bottom:"+(document.body.clientHeight-pos.top-1)+"px;";
 		html += "width:"+(target.width()-1)+"px;";
 		html += "background-color:"+target.css("background-color")+";";
 		html += '">'+text_top+'</div>';

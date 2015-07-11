@@ -1,21 +1,7 @@
-.tabs {
-	font-family: Arial, sans-serif;
-	font-size: 90%;
-}
-
-.tab_content {
-	padding-left: 1em;
-}
-
-.tab_container {
-	font-family: Arial, sans-serif;
-}
 
 .informational-text {
-	color: grey;
 	margin: 0.5ex;
 	width: 80ex;
-	text-align: justify;
 }
 
 .sub-informational-text {
@@ -34,14 +20,15 @@ h3.option-section {
 	padding-left: 1ex;
 }
 
-div.option-section {
+.option-section {
 	border-bottom: #EEE 1px solid;
 	padding-bottom: 2ex;
 	padding-left: 1ex;
+	text-align: left;
 }
 
 .option-description {
-	color: #444;
+	//color: #444;
 }
 
 #chrall_notify_wrapper {
@@ -153,6 +140,10 @@ a.ch_monster_toggler {
 
 .ch_troll[team=B], .mh_trolls_1[team=B], .ch_player[team=B], .grid td[team=B], .grid td.d0[team=B], .grid td.d1[team=B] {
 	background-color: rgba(0,0,255,0.3);
+}
+
+.ch_troll[team=J], .mh_trolls_1[team=J], .ch_player[team=J], .grid td[team=J], .grid td.d0[team=J], .grid td.d1[team=J] {
+	background-color: rgba(247, 234, 0, 0.48);
 }
 
 .ch_place, .ch_place:hover {
@@ -582,3 +573,8 @@ img.illus {
 	font-size: 12px;
 }
 
+#grid a img {
+	max-height: 12px;
+	max-width: 12px;
+	margin-right: 1px;
+}

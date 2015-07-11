@@ -106,9 +106,12 @@ var isInLaby = false;
 		});
 	}
 
-	function append3D($cell, attributes, differentLevel) {
+	function append3D($cell, attributes, differentLevel, actions) {
 		// TODO : span name = 3D // TODO plus tard name ==> class
 		var $a = $("<a/>", attributes);
+		if (actions) {
+			$a.prepend(actions);
+		}
 		if (differentLevel) {
 			$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($a)));
 		} else {
@@ -133,7 +136,7 @@ var isInLaby = false;
 			addPosition(troll, attributes);
 			if (troll.team) attributes.team = troll.team;
 			if (troll.isIntangible) attributes.intangible = 1;
-			var $a = append3D($cell, attributes, differentLevel);
+			var $a = append3D($cell, attributes, differentLevel, troll.actions);
 			chrall.cdb.getTroll(troll.id, function(t){
 				if (t && t.team) $a.attr('team', t.team);
 			});
@@ -219,7 +222,7 @@ var isInLaby = false;
 						var attributes = monsterAttributes(monster, compactNames, maxLength, verticalDistanceHint, horizontalDistance);
 						addPosition(monster, attributes);
 						if (!monster.isGowap) attributes.nom_complet_monstre = monster.fullName;
-						append3D($monsterContainer, attributes, differentLevel);
+						append3D($monsterContainer, attributes, differentLevel, monster.actions);
 					}
 				}
 			}
@@ -231,7 +234,7 @@ var isInLaby = false;
 				attributes = monsterAttributes(monster, compactNames, maxLength, verticalDistanceHint, horizontalDistance);
 				addPosition(monster, attributes);
 				if (!monster.isGowap) attributes.nom_complet_monstre = monster.fullName;
-				append3D($cell, attributes, differentLevel);
+				append3D($cell, attributes, differentLevel, monster.actions);
 			}
 		}
 
@@ -255,7 +258,7 @@ var isInLaby = false;
 				};
 				addPosition(place, attributes);
 				if (place.hasLink) attributes.href = 'javascript:Enter(\'/mountyhall/View/TaniereDescription.php?ai_IDLieu=' + place.id + ',750,550);';
-				append3D($cell, attributes, differentLevel);
+				append3D($cell, attributes, differentLevel, place.actions);
 			}
 		}
 		return hasHole;
@@ -370,7 +373,7 @@ var isInLaby = false;
 				};
 				addPosition(treasure, attributes);
 				if (treasure.hasLink) attributes.href = "javascript:Enter('/mountyhall/View/TresorHistory2.php?ai_IDTresor=" + treasure.id + "',750,500);";
-				append3D($treasureContainer, attributes, differentLevel);
+				append3D($treasureContainer, attributes, differentLevel, treasure.actions);
 			}
 		}
 	}
@@ -548,6 +551,9 @@ var isInLaby = false;
 		//var time_enter = (new Date()).getTime(); // <= prof
 
 
+			console.log(" 1 LimitViewForm:", $(document.getElementsByName("LimitViewForm")).html());
+		
+		
 		$(document.body).css('overflow', 'hidden');
 
 		$('#footer2').remove(); // ce truc là se retrouve maintenant par dessus, je le vire carrément
@@ -556,10 +562,12 @@ var isInLaby = false;
 		var $tables = Chrall_analyseView();
 		var noteRequest = {};
 
+			console.log(" 2 BIS LimitViewForm:", $(document.getElementsByName("LimitViewForm")).html());
+
 		//> on vire la frise latérale
 		$("td[width='55']").remove();
 		//> on vire la bannière "Mounty Hall la terre des trolls" qu'on a vu pendant 5 ans déjà...
-		$("tr").first().remove();
+		$("#mhBanner").first().remove();
 		//> on vire le titre "Ma Vue" et les liens vers les tableaux
 		$("table table center").first().remove();
 		$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
@@ -571,6 +579,8 @@ var isInLaby = false;
 		refreshLogout.addClass("floatTopRight");
 
 		//		var time_before_grid = (new Date()).getTime(); // <= prof
+
+			console.log(" 2 LimitViewForm:", $(document.getElementsByName("LimitViewForm")).html());
 
 		//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 		var $tabs = $("<ul/>", {id: "tabs_view", 'class': "tabs", view: "yes"});
@@ -589,6 +599,10 @@ var isInLaby = false;
 		chrall.addTab($tabs, "#tabCenotaphs", "Cénotaphes", grid.nbCenotaphsInView);
 		chrall.addTab($tabs, "#tabSettings", "Réglages");
 
+
+			console.log(" 3 LimitViewForm:", $(document.getElementsByName("LimitViewForm")).html());
+
+
 		if (!chrall.hallIsAccro()) {
 			chrall.addTab($tabs, "#tabPartages", "Partages");
 			chrall.addTab($tabs, "#tabRecherche", "Recherche");
@@ -604,6 +618,8 @@ var isInLaby = false;
 			$tabGrid.append($holder);
 			$tabContainer.append($tabGrid);
 		}
+
+			console.log(" 4 LimitViewForm:", $(document.getElementsByName("LimitViewForm")).html());
 
 		if (isInLaby) $tabContainer.append(chrall.makeTabDiv("tabWalls"));
 		$tabContainer.append(chrall.makeTabDiv("tabTrolls"));
@@ -624,6 +640,9 @@ var isInLaby = false;
 		//		var time_after_grid_building = (new Date()).getTime(); // <= prof
 
 		$("table.mh_tdborder").first().parent().parent().prepend($tabs);
+
+
+
 		$("#tabSettings").append(document.getElementsByName("LimitViewForm")[0]); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 		// onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
 		if (isInLaby) $("#tabWalls").append($tables['murs']);

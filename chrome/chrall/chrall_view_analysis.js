@@ -75,15 +75,14 @@
 
 	chrall.analyseMonsterTable = function (table) {
 		table = table.get(0);
-		if ("undefined" == typeof table) {
-			return;
-		}
-		var lines = table.children[0].children;
-		grid.nbMonstersInView = lines.length - 1;
-		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
+		if (table === undefined) return;
+		var lines = table.querySelectorAll("tbody tr");
+		grid.nbMonstersInView = lines.length;
+		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			var item = new Monster();
 			var cells = lines[lineIndex].children;
 			var i = 1;
+			item.actions = cells[i++].innerHTML;
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
@@ -103,12 +102,13 @@
 		// de sélection des trolls pour l'envoi de MP.
 		table = table.get(0);
 		if (!table) return;
-		var lines = table.children[0].children
-		grid.nbTrollsInView = lines.length - 1;
-		[].slice.call(lines, 1).forEach(function(line){
+		var lines = table.querySelectorAll("tbody tr");
+		grid.nbTrollsInView = lines.length;
+		[].forEach.call(lines, function(line){
 			var item = new Troll();
 			var cells = line.children;
 			var i = 1;
+			item.actions = cells[i++].innerHTML;
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.name = nameCell.textContent;
@@ -148,15 +148,14 @@
 
 	chrall.analyseMushroomTable = function (table) {
 		table = table.get(0);
-		if ("undefined" == typeof table) {
-			return;
-		}
-		var lines = table.children[0].children
-		grid.nbMushroomsInView = lines.length - 1;
-		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
+		if (table===undefined) return;
+		var lines = table.querySelectorAll("tbody tr");
+		grid.nbMushroomsInView = lines.length;
+		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			var item = new Thing();
 			var cells = lines[lineIndex].children;
 			var i = 1;
+			item.actions = cells[i++].innerHTML;
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
 			item.x = parseInt(cells[i++].textContent);
@@ -168,15 +167,14 @@
 
 	chrall.analysePlaceTable = function (table) {
 		table = table.get(0);
-		if ("undefined" == typeof table) {
-			return;
-		}
-		var lines = table.children[0].children
-		grid.nbPlacesInView = lines.length - 1;
-		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
+		if (table===undefined) return;
+		var lines = table.querySelectorAll("tbody tr");
+		grid.nbPlacesInView = lines.length;
+		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			var item = new Place();
 			var cells = lines[lineIndex].children;
 			var i = 1;
+			item.actions = cells[i++].innerHTML;
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
@@ -191,16 +189,14 @@
 
 	chrall.analyseObjectTable = function (table) {
 		table = table.get(0);
-		if ("undefined" == typeof table) {
-			return;
-		}
-
-		var lines = table.children[0].children
-		grid.nbObjectsInView = lines.length - 1;
-		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
+		if (table===undefined) return;
+		var lines = table.querySelectorAll("tbody tr");
+		grid.nbObjectsInView = lines.length;
+		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			var item = new Thing();
 			var cells = lines[lineIndex].children;
 			var i = 1;
+			item.actions = cells[i++].innerHTML;
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
@@ -214,16 +210,14 @@
 
 	chrall.analyseCenotaphTable = function (table) {
 		table = table.get(0);
-		if ("undefined" == typeof table) {
-			return;
-		}
-
-		var lines = table.children[0].children
-		grid.nbCenotaphsInView = lines.length - 1;
-		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
+		if (table===undefined) return;
+		var lines = table.querySelectorAll("tbody tr");
+		grid.nbCenotaphsInView = lines.length;
+		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			var item = new Cenotaphe();
 			var cells = lines[lineIndex].children;
 			var i = 1;
+			item.actions = cells[i++].innerHTML;
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
@@ -279,11 +273,10 @@ function Chrall_analyseView() {
 	isInLaby = false;
 
 	//> recherche de la position du joueur
-	var positionSentenceText = $("table.mh_tdborder").first().find("li").first().text();
-	var positionSentenceTokens = positionSentenceText.split(new RegExp("[ ,:=]+", "g"));
-	chrall.player().x = parseInt(positionSentenceTokens[5]);
-	chrall.player().y = parseInt(positionSentenceTokens[8]);
-	chrall.player().z = parseInt(positionSentenceTokens[10]);
+	var positionMatch = $("table.mh_tdborder")[0].textContent.match(/Ma Position Actuelle est : X =\s*(-?\d+)\s*,\s*Y =\s*(-?\d+),\s*N =\s*(-?\d+)/);
+	chrall.player().x = parseInt(positionMatch[1]);
+	chrall.player().y = parseInt(positionMatch[2]);
+	chrall.player().z = parseInt(positionMatch[3]);
 
 	//> recherche de la vue max
 	var sightLine = $('form li:contains(" porte actuellement à")'); //
@@ -355,7 +348,7 @@ function Chrall_analyseView() {
 		}
 	}
 
-	//> on détermine la zone visible
+	//> on détermine la zone visible	
 	xmin = chrall.player().x - horizontalGridLimit;
 	xmax = chrall.player().x + horizontalGridLimit;
 	ymin = chrall.player().y - horizontalGridLimit;

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var MAX_SP_CALLS_PER_DAY = map[string]int { "Dynamiques":3 }
+var MAX_SP_CALLS_PER_DAY = map[string]int{"Dynamiques": 12} // max d'après http://sp.mountyhall.com/ : 24
 
 // Vérifie qu'on n'a pas fait trop d'appels aux scripts publics
 // pour : le troll qui demande
@@ -18,7 +18,7 @@ var MAX_SP_CALLS_PER_DAY = map[string]int { "Dynamiques":3 }
 func (store *MysqlStore) CheckBeforeSoapCall(db *sql.DB, pour int, troll int, cat string) (bool, error) {
 	limite, ok := MAX_SP_CALLS_PER_DAY[cat]
 	if !ok {
-		return false, errors.New("unknown SP category : "+cat)
+		return false, errors.New("unknown SP category : " + cat)
 	}
 	seconds := time.Now().Unix()
 	// on commence par compter

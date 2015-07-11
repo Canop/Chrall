@@ -51,6 +51,9 @@ func rowToCompte(trollId int, row *sql.Row) (*Compte, error) {
 		&c.Troll.MiseAJour)
 	c.Troll.ProchainTour *= 1000
 	c.Troll.MiseAJour *= 1000
+	if err != nil {
+		return nil, err
+	}
 	return c, err
 }
 
@@ -61,6 +64,33 @@ func (store *MysqlStore) GetCompte(db *sql.DB, trollId int) (*Compte, error) {
 	row := db.QueryRow(sql)
 	c, err := rowToCompte(trollId, row)
 	return c, err
+}
+
+// lit un compte en base. Renvoie nil si le compte n'existe pas en base ou si le mdpr ne correspond pas.
+func (store *MysqlStore) GetCompteIfOK(db *sql.DB, trollId int, mdpr string) (*Compte, error) {
+	fmt.Println("GetCompteIfOK")
+	if trollId <= 0 || mdpr == "" {
+		return nil, nil
+	}
+	sql := "select statut, mdp_restreint, pv_max, pv_actuels, x, y, z, fatigue, pa, vue, prochain_tour, duree_tour, mise_a_jour"
+	sql += " from compte where id=? and mdp_restreint=?"
+	row := db.QueryRow(sql, trollId, mdpr)
+	return rowToCompte(trollId, row)
+}
+
+// vérifie que le compte a un statut ok sans faire d'appel au serveur MH
+func (store *MysqlStore) IsCompteOK(db *sql.DB, trollId int, mdpr string) bool {
+	fmt.Printf("IsCompteOK troll:%d, mdpr:%s\n", trollId, mdpr)
+	if trollId <= 0 || mdpr == "" {
+		return false
+	}
+	sql := "select statut"
+	sql += " from compte where id=? and mdp_restreint=?"
+	row := db.QueryRow(sql, trollId, mdpr)
+	var statut string
+	row.Scan(&statut)
+	fmt.Printf("  IsCompteOK result -> statut=%s\n", statut)
+	return statut == "ok"
 }
 
 // sauvegarde un nouveau compte.
@@ -105,13 +135,14 @@ func (store *MysqlStore) UpdateTroll(db *sql.DB, c *Compte) (err error) {
 
 // vérifie que le compte existe et que le mot de passe restreint est validé par MH
 func (store *MysqlStore) CheckCompte(db *sql.DB, trollId int, mdpr string) (ok bool, c *Compte, err error) {
-	fmt.Printf("CheckCompte %d / %s\n", trollId, mdpr) // FIXME virer l'affichage du mdpr dans le log
+	fmt.Printf("CheckCompte %d / %s\n", trollId, mdpr)
 	if len(mdpr) != 8 {
 		return false, nil, errors.New("Un mdp restreint doit faire 8 charactères")
 	}
 	c, err = store.GetCompte(db, trollId)
+	fmt.Printf("-> Compte: %+v\n", c)
 	if c == nil {
-		fmt.Println("Création de compte")
+		fmt.Println("Tentative Création de compte")
 		if !ALLOW_SP {
 			return false, nil, errors.New("Impossible de créer le compte car ALLOW_SP==false")
 		}
@@ -139,6 +170,7 @@ func (store *MysqlStore) CheckCompte(db *sql.DB, trollId int, mdpr string) (ok b
 		// on sauvegarde
 		err = store.InsertCompte(db, c)
 	} else if c.mdpRestreint != mdpr {
+		fmt.Println("Tentative Validation de compte sur mot de passe changé")
 		if !ALLOW_SP {
 			return false, nil, errors.New("Impossible de vérifier le nouveau mot de passe car ALLOW_SP==false")
 		}

@@ -1,23 +1,54 @@
 (function (chrall) {
 
-	// enrichit la page d'actions
+	function doBindings(){
+		$('#save_private_chrall_server').click(function () {
+			var s = $('#input_private_chrall_server').val();
+			if (s.length > 3) {
+				localStorage['private_chrall_server'] = s;
+			} else {
+				localStorage.removeItem('private_chrall_server');
+			}
+		});
+
+		$(".toggle-option").each(function () {
+			var id = $(this).attr("id");
+			var checked = chrall.isOptionEnabled(id);
+			this.checked = checked;
+			$(this).change(toggleOption);
+		});
+		$(".toggle-option-default-active").each(function () {
+			var id = $(this).attr("id");
+			this.checked = chrall.isOptionEnabled(id, "yes");
+			$(this).change(toggleOption);
+		});
+		$(".integer-option").each(function () {
+			var $this = $(this);
+			var id = $this.attr("id");
+			var defaultValue = parseInt($this.attr("default"));
+			var value = chrall.integerOption(id, defaultValue);
+			$this.val(value);
+			$this.bind("propertychange keyup input paste", function () {
+				var $this = $(this);
+				var id = $this.attr("id");
+
+				var value = parseInt($this.val());
+				var min = parseInt($this.attr("min"));
+				var max = parseInt($this.attr("max"));
+				var defaultValue = parseInt($this.attr("default"));
+				value = isNaN(value) ? defaultValue : value;
+				value = value < min ? min : value;
+				value = value > max ? max : value;
+				localStorage[id] = value;
+			});
+		});		
+	}
+
+	// ajoute quelques pages aux options
 	chrall.reformatOptionsView = function () {
-
-
-		var standardOptionContainer = $("table table td").eq(1);
-		var standardOptionTables = standardOptionContainer.find("table");
-
-		var html = "\
-	<ul class=tabs>\
-		<li><a href=#tabStandard>Options Standard</a></li>\
-		<li><a href=#tabChrall>Compte Chrall</a></li>\
-		<li><a href=#tabOptionsChrall>Options Chrall</a></li>\
-		<li><a href=#tabLinks>Liens</a></li>\
-	</ul>\
-	<div class=tab_container><br><br>\
-	<div id=tabStandard class=tab_content></div>\
-	<div id=tabChrall class=tab_content>\
-		<h3 class='option-section'>Qu'est-ce que Chrall?</h3>\
+		
+		var addedPages = {
+		"Compte Chrall":"\
+				<h3 class='option-section'>Qu'est-ce que Chrall?</h3>\
 		<div class='option-section'>\
 			<p class='informational-text'>Chrall est une extension pour Chrome visant à enrichir l'interface du jeu.</p>\
 			<p class='informational-text'>Si vous souhaitez retrouver l'interface standard de Mounty Hall, vous pouvez la désactiver via le menu <i>Outils/Extensions</i> de Chrome.</p>\
@@ -42,9 +73,9 @@
 			<p class='informational-text'>Si votre compte est actif, l'extension communique par défaut les données partagées avec le serveur canop.org mais vous pouvez spécifier un autre serveur si vous lui accordez confiance : </p>\
 			<p>Serveur Chrall alternatif pour les données partagées : <input size=30 id=input_private_chrall_server></p>\
 		<a href='#' class=gogo id=save_private_chrall_server>sauver</a> (laisser vide pour exploiter le serveur par défaut, n'utilisez un serveur alternatif que si vous lui faites pleine confiance)</p>\
-		</div>\
-	</div>\
-	<div id=tabOptionsChrall class=tab_content>\
+		</div>",
+		
+		"Options Chrall": "\
 		<h3 class='option-section'>Vue</h3>\
 		<div class='option-section'>\
 			<p class='informational-text'>Modifiez ici le comportement de l'extension en ce qui concerne l'affichage de la vue (grille 2D et tables). Chaque option est susceptible de ralentir la vitesse d'affichage de la grille. Choisissez les plus pertinentes.</p>\
@@ -76,85 +107,24 @@
 			<div style='display:block'><input id='form-memoize' type='checkbox' class='toggle-option-default-active'><span class='option-description'>Mémoriser et restaurer automatiquement les dernières options choisies pour les sorts/compétences</span>\
 				<p class='informational-text sub-informational-text'>Lors du traitement d'une action, pré-sélectionne automatiquement les menus déroulants, remplit automatiquement les champs de texte et les cases à cocher\
                 sur base de la dernière action du même type efffectuée. Retenter une même action est dès lors plus facile (ex: pour une bidouille, description, etc... seront pré-remplies)</p></div>\
-		</div>\
-		</p>\
-	</div>\
-	<div id=tabLinks class=tab_content>\
-	</div>";
+		</div>",
 
-		standardOptionContainer.html(html);
+		"Liens": Chrall_makeLinkOptionPage()
 
-		var $tabStandard = $("div#tabStandard");
-		$tabStandard.append($(standardOptionTables[0]));
-		$tabStandard.append($(standardOptionTables[1]));
-		//		$tabStandard.append($(standardOptionTables[2]));
-		$("#tabLinks").append(Chrall_makeLinkOptionPage());
-
-		$("#changeMdp").click(changeMdpRestreint);
-		$("#activationButton").click(toggleActivation);
-		refreshActivation();
-		$("#input_private_chrall_server").val(localStorage['private_chrall_server']);
-		$("#com_status_message").text(localStorage['com.status.message']);
-
-		$(".tab_content").hide();
-		if (localStorage['tab_options']) {
-			$('ul.tabs li:has(a[href="#' + localStorage['tab_options'] + '"])').addClass("active").show();
-			$('#' + localStorage['tab_options']).show();
-			localStorage.removeItem('tab_options');
-		} else {
-			$("ul.tabs li:first").addClass("active").show();
-			$(".tab_content:first").show();
-		}
-		$("ul.tabs li").click(function () {
-			$("ul.tabs li").removeClass("active");
-			$(this).addClass("active");
-			$(".tab_content").hide();
-			var activeTab = $(this).find("a").attr("href");
-			window.scroll(0, 0);
-			$(activeTab).fadeIn("fast");
-			return false;
-		});
-		$('#save_private_chrall_server').click(function () {
-			var s = $('#input_private_chrall_server').val();
-			if (s.length > 3) {
-				localStorage['private_chrall_server'] = s;
-			} else {
-				localStorage.removeItem('private_chrall_server');
-			}
+		};
+		
+		$.each(addedPages, function(key, page){
+			$("#menu-evt ul").append(
+				$("<li data-wrapperels=span data-shadow=true>").append(
+					$("<a href=#>").text(key).click(function(){
+						$("#titre2").text(key).nextAll().remove();
+						$("#titre2").after(page);
+						doBindings();
+					})
+				)
+			);
 		});
 
-		$(".toggle-option").each(function () {
-			var id = $(this).attr("id");
-			var checked = chrall.isOptionEnabled(id);
-			this.checked = checked;
-			$(this).change(toggleOption);
-		});
-		$(".toggle-option-default-active").each(function () {
-			var id = $(this).attr("id");
-			this.checked = chrall.isOptionEnabled(id, "yes");
-			$(this).change(toggleOption);
-		});
-		$(".integer-option").each(function () {
-			var $this = $(this);
-			var id = $this.attr("id");
-			var defaultValue = parseInt($this.attr("default"));
-			var value = chrall.integerOption(id, defaultValue);
-			$this.val(value);
-			$this.bind("propertychange keyup input paste",
-					function () {
-						var $this = $(this);
-						var id = $this.attr("id");
-
-						var value = parseInt($this.val());
-						var min = parseInt($this.attr("min"));
-						var max = parseInt($this.attr("max"));
-						var defaultValue = parseInt($this.attr("default"));
-						value = isNaN(value) ? defaultValue : value;
-						value = value < min ? min : value;
-						value = value > max ? max : value;
-						localStorage[id] = value;
-					});
-		});
 	};
 
 	// Private -- not linked to the chrall instance
@@ -163,6 +133,7 @@
 		var mdpkey = passwordKey();
 		localStorage[mdpkey] = nm;
 		chrall.notifyUser({text: "Mot de passe modifié"});
+		location.reload();
 	}
 
 	// Private -- not linked to the chrall instance
@@ -184,7 +155,6 @@
 		} else {
 			$('#activationButton').addClass("invisible");
 		}
-
 		if (chrall.compteChrallActif()) {
 			$('#activationButton').text("Désactiver le compte");
 		} else {
@@ -199,15 +169,16 @@
 			chrall.notifyUser({ text: "Connexion au Compte désactivée"});
 			localStorage["troll." + chrall.playerId() + ".compteActif"] = "no";
 			localStorage['com.status.message'] = 'Compte inexistant ou non connecté';
-			$('#com_status_message').text(localStorage['com.status.message']);
+			chrall.displayComStatusMessage();
 		} else {
 			chrall.notifyUser({ text: "Connexion au Compte activée"});
 			localStorage["troll." + chrall.playerId() + ".compteActif"] = "yes";
 			chrall.initCommunications('check_account');
 		}
-		refreshActivation();
+		//~ refreshActivation();
+		location.reload();
 	}
-
+	
 	function toggleOption() {
 		var id = $(this).attr('id');
 		localStorage[id] = this.checked ? "yes" : "no";

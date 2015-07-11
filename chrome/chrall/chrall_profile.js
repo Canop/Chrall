@@ -5,8 +5,7 @@
 	 * renvoie une durée en secondes à partir d'une expression MH de type "3 jours 25 minutes 1 seconde"
 	 */
 	chrall.parseDuration = function (text) {
-		var tokens = text.split(new RegExp("[ ,:=\\.]+", "g"));
-		//alert("text="+text);
+		var tokens = text.split(/\W+/g);
 		var seconds = 0;
 		var unit = null;
 		for (var i = tokens.length; i-- > 0;) {
@@ -99,30 +98,29 @@
 		}
 	};
 
-	chrall.extractDlaInfos = function (text) {
-		// pour comprendre le code qui suit il faut savoir que la page générée est segmentée en bien plus de lignes que ce qui est visible
-		var lines = text.split('\n');
-		var dlaString = lines[1].substring(8, lines[1].length).trim();
+	chrall.extractDlaInfos = function ($e) {		
+		var dlaString = $e.find('b').first().text().trim();
 		chrall.player().dlaTime = (Date.parse(dlaString)).getTime(); // remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js (le javascript est un truc de sadiques)
-		var turnDurationLine = lines[lines.length - 1].trim();
-		var turnDurationString = turnDurationLine.split(':')[1];
-		chrall.player().turnDuration = chrall.parseDuration(turnDurationString);
-		var actionPointsLine = lines[2];
-		chrall.player().pa = parseInt(Chrall_tokenize(actionPointsLine)[3]); // théoriquement doublon (on lit ça dans le menu de gauche). On supprimera peut-être.
+		var turnDurationString = $e.text().match(/mon prochain Tour\.+:\s*([^.]+)\.\s*$/);
+		console.log("turnDurationString:", turnDurationString);
+		chrall.player().turnDuration = chrall.parseDuration(turnDurationString[1]);
+		console.log("chrall.player().turnDuration:", chrall.player().turnDuration);
+		var actionPointsText = $e.find('b').eq(1).text();
+		chrall.player().pa = parseInt(actionPointsText); // théoriquement doublon (on lit ça dans le menu de gauche). On supprimera peut-être.
 	};
 
 	chrall.extractPvAndFatigue = function (text) {
-		var lines = text.split('\n');
-		var pvTokens = Chrall_tokenize(lines[2]);
+		var lines = text.split('\n').filter(function(l){ return l.trim() });		
+		var pvTokens = Chrall_tokenize(lines[0]);
 		chrall.player().pv = parseInt(pvTokens[1].trim());
-		pvTokens = Chrall_tokenize(lines[10]);
+		pvTokens = Chrall_tokenize(lines[1]);
 		chrall.player().pvMaxSansBMM = parseInt(pvTokens[1].trim());
 		chrall.player().pvMax = chrall.player().pvMaxSansBMM;
 		try {
 			chrall.player().pvMax += parseInt(pvTokens[2].trim());
 		} catch (error) {
 		}
-		var strainLine = lines[16]; // c'est la ligne qui contient "Fatigue............:"
+		var strainLine = lines[2]; // c'est la ligne qui contient "Fatigue............:"
 		var tokens = strainLine.split(new RegExp("[\)\( ,:=\.\+]+", "g"));
 		var strainBaseFound = false;
 		chrall.player().strainMalus = 0; // il n'est pas toujours mentionné. Si on trouve deux nombres c'est que le deuxième est le malus
@@ -381,12 +379,18 @@
 
 	// renvoie une version améliorée du texte, pouvant le remplacer
 	chrall.extractMagic = function (text) {
-		var tokens = Chrall_tokenize(text);
-		chrall.player().baseRm = parseInt(tokens[4]);
-		chrall.player().rm = chrall.player().baseRm + parseInt(tokens[6]);
-		chrall.player().baseMm = parseInt(tokens[11]);
-		chrall.player().mm = chrall.player().baseMm + parseInt(tokens[13]);
-		chrall.player().concentration = parseInt(tokens[17]);
+				
+		var matchRM = text.match(/Résistance à la Magie\.+:\s*(-?\d+)\s*points\s*([+-]\s*\d+)\s*/i);
+		chrall.player().baseRm = parseInt(matchRM[1]);
+		chrall.player().rm = chrall.player().baseRm + parseInt(matchRM[2]);
+		
+		var matchMM = text.match(/Maîtrise de la Magie\.+:\s*(-?\d+)\s*points\s*([+-]\s*\d+)\s*/i);
+		chrall.player().baseMm = parseInt(matchMM[1]);
+		chrall.player().mm = chrall.player().baseMm + parseInt(matchMM[2]);
+		
+		var matchBC = text.match(/Bonus de Concentration\s*:\s*(-?\d+)/i);
+		chrall.player().concentration = parseInt(matchBC[1]);
+				
 		var r = "<table border=0>"; // je n'ai pas trouvé d'autre moyens d'insérer les totaux que de reconstruire toute la cellule :\
 		r += "<tr><td>Résistance à la Magie</td><td> : " + chrall.player().baseRm + "</td><td> + " +
 				(chrall.player().rm - chrall.player().baseRm) + "</td><td> = " + chrall.player().rm + " points</td></tr>";
@@ -411,48 +415,50 @@
 
 	chrall.analyseAndReformatProfile = function () {
 		// TODO simplifier la décomposition
-		var cells = $("table table table.mh_tdborder tr.mh_tdpage td");
+		var cells = $("#mhPlay  table.mh_tdborder tbody tr.mh_tdpage td:nth-child(2)");
 
 		var mainProfileTable = $("table.mh_tdborder[align=center]").get(0);
 		var profileRows = mainProfileTable.firstElementChild.children;
-		var basicInfos = profileRows[0].children[1];
-		var dlaInfos = profileRows[1].children[1];
-		var positionInfos = profileRows[2].children[1];
-		var experienceInfos = profileRows[3].children[1];
-		var lifeInfos = profileRows[4].children[1];
-		var characteristicsInfos = profileRows[5].children[1];
+		//var basicInfos = profileRows[0].children[1];
+		//var dlaInfos = profileRows[1].children[1];
+		//var positionInfos = profileRows[2].children[1];
+		//var experienceInfos = profileRows[3].children[1];
+		//var lifeInfos = profileRows[4].children[1];
+		//var characteristicsInfos = profileRows[5].children[1];
 		var combatInfos = profileRows[6].children[1];
 		var resurrectionInfos = profileRows[7].children[1];
 		var programmedInfos = profileRows[8].children[1];
 		var magicInfos = profileRows[9].children[1];
+		
+		console.log("cells:", cells.map(function(){ return $(this).text() }).get());
 
-		chrall.extractBasicInfos($(cells[1]).text()); // la cellule qui contient l'id, le nom, la race
-		chrall.extractDlaInfos($(cells[4]).text()); // cells[4] est la cellule en face de "Echeance du tour"
-		chrall.extractPositionAndSight($(cells[6]).text());
-		chrall.extractXpInfos($(cells[8]).text());
-		chrall.extractPvAndFatigue($(cells[10]).text());
-		chrall.analyseAndReformatMainCharacteristicsTable($($("table table table.mh_tdborder table")[2])); // TODO trouver plus fiable !
-		chrall.extractMagicalAttackBonuses(combatInfos.textContent);
+		chrall.extractBasicInfos(cells.eq(0).text()); // la cellule qui contient l'id, le nom, la race
+		chrall.extractDlaInfos(cells.eq(1));
+		chrall.extractPositionAndSight(cells.eq(2).text());
+		chrall.extractXpInfos(cells.eq(3).text());
+		chrall.extractPvAndFatigue(cells.eq(4).text());
+		chrall.analyseAndReformatMainCharacteristicsTable(cells.eq(6).find("table").eq(0)); 
+		chrall.extractMagicalAttackBonuses(combatInfos.textContent); // FIXME à vérifier
 
 		var mmrmcell = $("table table table.mh_tdborder tr.mh_tdpage").find('td:contains("Résistance à la Magie")');
-		var mmrmtext = chrall.extractMagic(mmrmcell.text());
+		var mmrmtext = chrall.extractMagic(cells.eq(15).text());
 		mmrmcell.html(mmrmtext);
 
 		//> on affiche la date du prochain cumul
-		$(cells[4]).append("<b>---&gt;&nbsp;DLA suivante : " + chrall.player().getDla(1).toString("dd/MM/yyyy HH:mm:ss") +
-				"</b>");
-		$(cells[4]).append("<br>(et encore après : " + chrall.player().getDla(2).toString("dd/MM/yyyy HH:mm:ss") + ")");
+		cells.eq(1).append(
+			"<b>---&gt;&nbsp;DLA suivante : " + chrall.player().getDla(1).toString("dd/MM/yyyy HH:mm:ss") + "</b>"
+		);
+		cells.eq(1).append("<br>(et encore après : " + chrall.player().getDla(2).toString("dd/MM/yyyy HH:mm:ss") + ")");
 
 		//> on affiche quelques calculs sur les px et les pi
-		$(cells[8]).append("<br>" + chrall.makeXpComments());
+		cells.eq(3).append("<br>" + chrall.makeXpComments());
 
 		//> on affiche les infos liées à la fatigue
-		$(cells[10]).append(chrall.makeStrainInfos());
+		cells.eq(4).append(chrall.makeStrainInfos());
 
-		var compAndSortTables = $("table table table.mh_tdpage");
-		var compTable = $(compAndSortTables[2]);
-		chrall.readTalentTable($(compAndSortTables[2]));
-		chrall.readTalentTable($(compAndSortTables[3]));
+		var compAndSortTables = $("#mhPlay p table.mh_tdborder tbody tr.mh_tdpage table.mh_tdpage tbody");
+		chrall.readTalentTable(compAndSortTables.eq(0));
+		chrall.readTalentTable(compAndSortTables.eq(1));
 
 		//> on signale à l'extension la date de la fin de DLA, pour qu'elle programme éventuellement une alarme
 		Chrall_sendDlaToExtension(chrall.player().getDla(0).getTime(), chrall.player().getDla(1).getTime());
@@ -465,11 +471,15 @@
 					</span>\
 				</span><br><br>";
 		$("#titre2").after(html);
-		chrall.jsonp(chrall.serveurPublic() + "json?action=check_messages&TrollId=" + chrall.player().id + "&ChrallVersion=" +
-				chrallVersion);
+		chrall.jsonp(
+			chrall.serveurPublic() + "json?action=check_messages&TrollId="
+			+ chrall.player().id + "&ChrallVersion=" + chrallVersion
+		);
 		$("#ch_messageTitle").click(function () {
 			$("#ch_messageContent").toggle();
 		});
+		
+		console.log("PLAYER:", chrall.player());
 
 		//> ajout des bulles sur les compétences
 		$('a[href*="EnterComp"]').each(

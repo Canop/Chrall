@@ -25,7 +25,6 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 	withTresors := GetFormValueAsId(hr, "tresors") == 1
 
 	portée := 8
-	compteOk := false
 	var compte *Compte
 
 	db, err := h.store.DB()
@@ -35,13 +34,16 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 	}
 	defer db.Close()
 
-	if askerId > 0 && mdpr != "" {
-		compteOk, compte, err = h.store.CheckCompte(db, int(askerId), mdpr)
-	}
-	if !compteOk {
+	if !h.store.IsCompteOK(db, askerId, mdpr) {
 		fmt.Println("Compte non authentifié (getVueHtml)")
 		return "Compte non authentifié"
 	}
+	
+	compte, err = h.store.GetCompte(db, askerId)
+	if err != nil {
+		return fmt.Sprintf("Erreur récupération compte : %s\n", err.Error())
+	}
+	
 	amis, err := h.store.GetPartageurs(db, askerId)
 	if err != nil {
 		return fmt.Sprintf("Erreur récupération amis : %s\n", err.Error())

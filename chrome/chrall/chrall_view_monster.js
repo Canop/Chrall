@@ -18,9 +18,8 @@
 		$nivalTitle.append($("<b/>", {text: "Nival"}));
 		$($monsterTitle[0].children[1]).after($nivalTitle);
 
-
 		$monsterRows.each(function (index, row){
-			var tokens = row.children[2].textContent.split(/\[|\]/);
+			var tokens = row.children[3].textContent.split(/\[|\]/);
 			var monsterName = tokens[0].trim();
 			var monsterAge = tokens[1].trim();
 			var addedText = computeLevel(monsterName, monsterAge);

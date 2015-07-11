@@ -9,12 +9,23 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
+
+const (
+	SP_VUE = "http://sp.mountyhall.com/SP_Vue2.php?Numero=%d&Motdepasse=%s&Tresors=%d&Lieux=%d"
+	SP_PROFIL = "http://sp.mountyhall.com/SP_Profil2.php?Numero=%d&Motdepasse=%s"
+)
+
+func Atoi32(s string) int32 {
+	i64, _ := strconv.ParseInt(s, 10, 32)
+	return int32(i64)
+}
 
 func CheckPasswordSp(numero int, mdp_restreint string) (ok bool, errorDetails string) {
 	fmt.Printf("CheckPasswordSp %d / %s\n", numero, mdp_restreint)
 	httpClient := new(http.Client)
-	request := fmt.Sprintf("http://sp.mountyhall.com/SP_Profil2.php?Numero=%d&Motdepasse=%s", numero, mdp_restreint)
+	request := fmt.Sprintf(SP_PROFIL, numero, mdp_restreint)
 	fmt.Println("Fetching", request)
 	resp, err := httpClient.Get(request)
 	if err != nil {
@@ -32,6 +43,43 @@ func CheckPasswordSp(numero int, mdp_restreint string) (ok bool, errorDetails st
 	}
 }
 
+// interroge le serveur pour récupérer le profil
+// td est optionnel. Passer nil permet de vérifier que le mdp est correct
+func FillTrollDataSp(numero int, mdp_restreint string, td *TrollData)  (ok bool, errorDetails string) {
+	fmt.Printf("FillTrollDataSp %d / %s\n", numero, mdp_restreint)
+	httpClient := new(http.Client)
+	request := fmt.Sprintf(SP_PROFIL, numero, mdp_restreint)
+	fmt.Println("Fetching", request)
+	resp, err := httpClient.Get(request)
+	if err != nil {
+		return false, err.Error()
+	}
+	defer resp.Body.Close()
+	r := bufio.NewReader(resp.Body)
+	bline, _, _ := r.ReadLine()
+	line := string(bline)
+	fmt.Println("Answer:", line)
+	if strings.HasPrefix(line, fmt.Sprintf("%d;", numero)) {
+		if td != nil {
+			tokens := strings.SplitN(line, ";", 20)
+			td.PV_max, _ = strconv.Atoi(tokens[5])
+			td.PV_actuels, _ = strconv.Atoi(tokens[4])
+			td.X = Atoi32(tokens[1])
+			td.Y = Atoi32(tokens[2])
+			td.Z = Atoi32(tokens[3])
+			td.Fatigue, _ = strconv.Atoi(tokens[17])
+			td.PA, _ = strconv.Atoi(tokens[6])
+			td.Vue, _ = strconv.Atoi(tokens[12])
+			timeProchainTour, _ := time.Parse("2006-01-02 15:04:05", tokens[8])
+			td.ProchainTour = timeProchainTour.Unix()
+			dureeTourMin, _ := strconv.ParseInt(tokens[23], 10, 64)
+			td.DureeTour = dureeTourMin*60
+		}
+		return true, ""
+	} else {
+		return false, "Unexpected answer, probably a wrong password"
+	}
+}
 /*
 récupère la vue d'un troll.
 Renvoie des SoapItem pour la compatibilité avec la fonction FetchVueSoap.
@@ -40,7 +88,7 @@ Paramètres avecTresors, avecLieux : 0 ou 1
 */
 func FetchVueSp(numero int, mdp_restreint string, avecTresors int, avecLieux int, tksManager *TksManager) (items []*SoapItem, errorDetails string) {
 	httpClient := new(http.Client)
-	request := fmt.Sprintf("http://sp.mountyhall.com/SP_Vue2.php?Numero=%d&Motdepasse=%s&Tresors=%d&Lieux=%d", numero, mdp_restreint, avecTresors, avecLieux)
+	request := fmt.Sprintf(SP_VUE, numero, mdp_restreint, avecTresors, avecLieux)
 	resp, err := httpClient.Get(request)
 	if err != nil {
 		errorDetails = err.Error()

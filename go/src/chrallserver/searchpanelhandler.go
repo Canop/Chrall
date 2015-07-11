@@ -42,7 +42,6 @@ func (h *SearchPanelHandler) getSearchPanelHtml(hr *http.Request) string {
 	askerId := GetFormValueAsId(hr, "asker")
 	mdpr := GetFormValue(hr, "mdpr") // mot de passe restreint
 	tok := GetFormValue(hr, "tok")
-	compteOk := false
 	var compte *Compte
 
 	db, err := h.store.DB()
@@ -52,10 +51,7 @@ func (h *SearchPanelHandler) getSearchPanelHtml(hr *http.Request) string {
 	}
 	defer db.Close()
 
-	if askerId > 0 && mdpr != "" {
-		compteOk, compte, err = h.store.CheckCompte(db, askerId, mdpr)
-	}
-	if !compteOk {
+	if !h.store.IsCompteOK(db, askerId, mdpr) {
 		return "Compte non authentifié"
 	}
 	if tok == "" {
