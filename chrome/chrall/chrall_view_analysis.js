@@ -102,6 +102,10 @@
 		// de sélection des trolls pour l'envoi de MP.
 		table = table.get(0);
 		if (!table) return;
+		var	$headRow = $(table).find("thead tr").eq(0);
+		$headRow.prepend("<td>");
+		var	nbCols = $headRow.find("td,th").length;
+
 		var lines = table.querySelectorAll("tbody tr");
 		grid.nbTrollsInView = lines.length;
 		[].forEach.call(lines, function(line){
@@ -117,21 +121,23 @@
 			chrall.cdb.getTroll(item.id, function(t){
 				if (t && t.team) $a.attr('team', item.team = t.team);
 			});
-			item.isIntangible = $(nameCell).html().indexOf("mh_trolls_0")>=0; // les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
+			// les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
+			item.isIntangible = $(nameCell).html().indexOf("mh_trolls_0")>=0; 
 			item.level = cells[i++].textContent;
 			item.race = cells[i++].textContent;
 			item.guilde = cells[i++].textContent;
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
-			var selectBox = $('<td/>', { align: 'center'}).append($('<input/>', {type: 'checkbox', name: 'cb_troll', value: item.id}));
+			var selectBox = $('<td>', { align: 'center'})
+			.append($('<input/>', {type: 'checkbox', name: 'cb_troll', value: item.id}));
 			$(line).prepend(selectBox);
 			var cell = grid.getCellNotNull(item.x, item.y);
 			if (cell) cell.addTroll(item);
 			else grid.outOfGrid.push(item);
 		});
 
-		var actionCell = $('<td/>', { colspan: 11, height: 25});
+		var actionCell = $('<td/>', { colspan: nbCols, height: 25});
 		var actions = $('<tr/>', { class: 'mh_tdtitre'}).append(actionCell);
 		var sendMessage = $('<a/>', {class: 'gogo', cat: 3}).text("Envoyer un message");
 		sendMessage.click(chrall.redirectToMailbox);
@@ -142,7 +148,6 @@
 			actionCell.append(sharePx);
 		}
 
-		$(lines[0]).prepend($('<td/>')); // une cellule vide pour décaler la mise en page
 		$(table.children[0]).prepend(actions);
 	};
 
