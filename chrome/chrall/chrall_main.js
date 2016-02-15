@@ -36,7 +36,7 @@ switch (chrall.pageName()) {
     case "PlayStart.php":
         chrall.analyseAndReformatStartPage();
         break;
-    case "Play_profil.php":
+    case "Play_profil2.php":
         chrall.initCommunications();
         chrall.analyseAndReformatProfile();
         break;
