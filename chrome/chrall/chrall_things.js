@@ -49,13 +49,10 @@ function Talent() {
 }
 Talent.prototype.readRow = function (row) {
 	var cells = $(row).find("td");
-	if (cells.len < 3) {
-		return;
-	} // c'est pas forcément le moyen le plus propre de gérer les exceptions...
-	this.name = ($(cells[1])).find("a").text().trim();
-	var tokens = Chrall_tokenize(($(cells[2])).text().trim());
-	this.level = parseInt(tokens[2]);
-	this.mastering = parseInt(tokens[3]);
+	this.name = cells.find("a").text().trim();
+	this.level = parseInt(cells.eq(-6).text());
+	this.level = isNaN(this.level) ? 1 : this.level;
+	this.mastering = parseInt(cells.eq(-5).text());
 };
 
 //////////////////////////////////////////////////////////////////////// Mouche

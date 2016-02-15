@@ -53,29 +53,31 @@
 
 	chrall.makeXpComments = function () {
 		var nextLevelPi = Chrall_getTotalPiForLevel(chrall.player().level + 1);
-		var trainingPx = chrall.player().level * 2;
+		var trainingPx = chrall.player().level > 2 ? chrall.player().level * 2 : 5;
 		var html = "";
 		var diff = chrall.player().px + chrall.player().pxPerso - trainingPx;
+		var $msgentrainer = $("#msgentrainer");
 		if (diff >= 0) {
 			html += "Vous pouvez vous entrainer : il vous restera " + diff + " px.";
 		} else {
 			html += "Il vous manque " + (-diff) + " px pour vous entrainer.";
 		}
-		html += "<br>Chaque entrainement coûte " + trainingPx + " PX. Vous devez vous entrainer " +
+		$msgentrainer.html(html);
+		html = "Chaque entrainement coûte " + trainingPx + " PX. Vous devez vous entrainer " +
 				Math.ceil((nextLevelPi - chrall.player().pi) / trainingPx) + " fois pour passer au niveau " +
 				(chrall.player().level + 1) + ".";
-		html += "<br>Tuer un monstre ou un troll ne vous rapporte des px que s'il est de niveau supérieur à " +
+		html += "\nTuer un monstre ou un troll ne vous rapporte des px que s'il est de niveau supérieur à " +
 				Math.floor((2 * chrall.player().level - 10) / 3) +
 				" (chaque niveau supplémentaire de la cible vous rapporte 3 px de plus).";
-		return html;
+		$msgentrainer.attr("title", html);
 	};
 
 	chrall.extractPositionAndSight = function () {
 		chrall.player().x = parseInt($("#x").text());
 		chrall.player().y = parseInt($("#y").text());
 		chrall.player().z = parseInt($("#n").text());
-		chrall.player().sight = parseInt($("#vue").text());;
-		chrall.player().totalSight = parseInt($("#vue_tot").text());;
+		chrall.player().sight = new Characteristic(parseInt($("#vue").text()), 1, parseInt($("#vue_p").text()), parseInt($("#vue_m").text()));
+		chrall.player().totalSight = parseInt($("#vue_tot").text());
 	};
 
 	chrall.extractDlaInfos = function () { 
@@ -381,25 +383,15 @@
 		// FIXME commenté pour l'instant car je n'ai jamais eu de bonus en %
 		//chrall.extractMagicalAttackBonuses(combatInfos.textContent);
 
-		var mmrmcell = $("table table table.mh_tdborder tr.mh_tdpage").find('td:contains("Résistance à la Magie")');
-		var mmrmtext = chrall.extractMagic(cells.eq(15).text());
-		mmrmcell.html(mmrmtext);
-
-		//> on affiche la date du prochain cumul
-		cells.eq(1).append(
-			"<b>---&gt;&nbsp;DLA suivante : " + chrall.player().getDla(1).toString("dd/MM/yyyy HH:mm:ss") + "</b>"
-		);
-		cells.eq(1).append("<br>(et encore après : " + chrall.player().getDla(2).toString("dd/MM/yyyy HH:mm:ss") + ")");
-
 		//> on affiche quelques calculs sur les px et les pi
-		cells.eq(3).append("<br>" + chrall.makeXpComments());
+		chrall.makeXpComments();
 
 		//> on affiche les infos liées à la fatigue
-		cells.eq(4).append(chrall.makeStrainInfos());
+		// TODO trouver une idée d'affichage
+		//cells.eq(4).append(chrall.makeStrainInfos());
 
-		var compAndSortTables = $("#mhPlay p table.mh_tdborder tbody tr.mh_tdpage table.mh_tdpage tbody");
-		chrall.readTalentTable(compAndSortTables.eq(0));
-		chrall.readTalentTable(compAndSortTables.eq(1));
+		chrall.readTalentTable($("#competences tbody"));
+		chrall.readTalentTable($("#sortileges tbody"));
 
 		//> on signale à l'extension la date de la fin de DLA, pour qu'elle programme éventuellement une alarme
 		Chrall_sendDlaToExtension(chrall.player().getDla(0).getTime(), chrall.player().getDla(1).getTime());
@@ -423,7 +415,7 @@
 		console.log("PLAYER:", chrall.player());
 
 		//> ajout des bulles sur les compétences
-		$('a[href*="EnterComp"]').each(
+		$('a[href*="DetailComp"]').each(
 				function () {
 					var link = $(this);
 					var text = chrall.getBubbleContentForCompetence(link.text().trim());
@@ -432,7 +424,7 @@
 		);
 
 		//> ajout des bulles sur les sorts
-		$('a[href*="EnterSort"]').each(
+		$('a[href*="DetailSort"]').each(
 				function () {
 					var link = $(this);
 					var text = chrall.getBubbleContentForSort(link.text().trim());
