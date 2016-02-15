@@ -2,7 +2,7 @@
 
 (function (chrall) {
 	/**
-	 * renvoie une durée en secondes à partir d'une expression MH de type "3 jours 25 minutes 1 seconde"
+	 * renvoie une durée en secondes à partir d'une expression MH de type "3 j 10 h 5 m 1 s"
 	 */
 	chrall.parseDuration = function (text) {
 		var tokens = text.split(/\W+/g);
@@ -12,16 +12,16 @@
 			try {
 				var num = parseInt(tokens[i]);
 				if (!isNaN(num)) {
-					if (unit.indexOf("second") === 0) {
+					if (unit.indexOf("s") === 0) {
 						seconds += num;
 					} else {
-						if (unit.indexOf("minut") === 0) {
+						if (unit.indexOf("m") === 0) {
 							seconds += 60 * num;
 						} else {
-							if (unit.indexOf("heure") === 0) {
+							if (unit.indexOf("h") === 0) {
 								seconds += 60 * 60 * num;
 							} else {
-								if (unit.indexOf("jour") === 0) {
+								if (unit.indexOf("j") === 0) {
 									seconds += 24 * 60 * 60 * num;
 								}
 							}
@@ -37,20 +37,18 @@
 		return seconds;
 	};
 
-	chrall.extractBasicInfos = function (text) {
-		var tokens = Chrall_tokenize(text);
-		chrall.player().id = parseInt(tokens[1]);
-		chrall.player().name = tokens[3];
-		chrall.player().race = tokens[5];
+	chrall.extractBasicInfos = function () {
+		chrall.player().id = parseInt($("#id").text());
+		chrall.player().name = $("#nom").text();
+		chrall.player().race = $("#race").text();
 	};
 
-	chrall.extractXpInfos = function (text) {
-		var tokens = Chrall_tokenize(text);
-		chrall.player().level = parseInt(tokens[1]);
-		chrall.player().pi = parseInt(tokens[2]);
-		chrall.player().px = parseInt(tokens[5]);
-		chrall.player().pxPerso = parseInt(tokens[9]);
-		chrall.player().availablePi = parseInt(tokens[11]);
+	chrall.extractXpInfos = function () {
+		chrall.player().level = parseInt($("#niv").text());
+		chrall.player().pi = parseInt($("#pitot").text());
+		chrall.player().px = parseInt($("#px").text());
+		chrall.player().pxPerso = parseInt($("#px_perso").text());
+		chrall.player().availablePi = parseInt($("#pi").text());
 	};
 
 	chrall.makeXpComments = function () {
@@ -72,73 +70,32 @@
 		return html;
 	};
 
-	chrall.extractPositionAndSight = function (text) {
-		var lines = text.split('\n');
-		// extraction de la position
-		var i = lines[0].lastIndexOf('X =');
-		var positionText = lines[0].substring(i);
-		var posToken = positionText.split('| ');
-		chrall.player().x = parseInt(posToken[0].substring(3).trim());
-		chrall.player().y = parseInt(posToken[1].substring(3).trim());
-		chrall.player().z = parseInt(posToken[2].substring(3).trim());
-
-		// todo
-		// extraction de la vue
-		for (var l = 0; l < lines.length; l++) {
-			if (lines[l].indexOf("Case") >= 0) { // ce test est nécessaire car des lignes peuvent s'intercaler avec la mention du camou ou de l'invi
-				var tokens = Chrall_tokenize(lines[l]);
-				var sight = new Characteristic();
-				sight.diceNumber = parseInt(tokens[0]);
-				sight.diceSize = 1;
-				sight.physicalBonus = parseInt(tokens[2]);
-				chrall.player().sight = sight;
-				chrall.player().totalSight = sight.diceNumber + sight.physicalBonus;
-				return;
-			}
-		}
+	chrall.extractPositionAndSight = function () {
+		chrall.player().x = parseInt($("#x").text());
+		chrall.player().y = parseInt($("#y").text());
+		chrall.player().z = parseInt($("#n").text());
+		chrall.player().sight = parseInt($("#vue").text());;
+		chrall.player().totalSight = parseInt($("#vue_tot").text());;
 	};
 
-	chrall.extractDlaInfos = function ($e) {		
-		var dlaString = $e.find('b').first().text().trim();
+	chrall.extractDlaInfos = function () { 
+		// Utilisation du selecteur par attribut car deux elements on l'id "dla"
+		var dlaString = $("td[id='dla']").text();
 		chrall.player().dlaTime = (Date.parse(dlaString)).getTime(); // remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js (le javascript est un truc de sadiques)
-		var turnDurationString = $e.text().match(/mon prochain Tour\.+:\s*([^.]+)\.\s*$/);
+		var turnDurationString = $("#duree").text();
 		console.log("turnDurationString:", turnDurationString);
-		chrall.player().turnDuration = chrall.parseDuration(turnDurationString[1]);
+		chrall.player().turnDuration = chrall.parseDuration(turnDurationString);
 		console.log("chrall.player().turnDuration:", chrall.player().turnDuration);
-		var actionPointsText = $e.find('b').eq(1).text();
-		chrall.player().pa = parseInt(actionPointsText); // théoriquement doublon (on lit ça dans le menu de gauche). On supprimera peut-être.
+		chrall.player().pa = parseInt($("#pa").text()); // théoriquement doublon (on lit ça dans le menu de gauche). On supprimera peut-être.
 	};
 
-	chrall.extractPvAndFatigue = function (text) {
-		var lines = text.split('\n').filter(function(l){ return l.trim() });		
-		var pvTokens = Chrall_tokenize(lines[0]);
-		chrall.player().pv = parseInt(pvTokens[1].trim());
-		pvTokens = Chrall_tokenize(lines[1]);
-		chrall.player().pvMaxSansBMM = parseInt(pvTokens[1].trim());
+	chrall.extractPvAndFatigue = function () {
+		chrall.player().pv = parseInt($("#pv_courant").text());
+		chrall.player().pvMaxSansBMM = parseInt($("#pv").text());
 		chrall.player().pvMax = chrall.player().pvMaxSansBMM;
-		try {
-			chrall.player().pvMax += parseInt(pvTokens[2].trim());
-		} catch (error) {
-		}
-		var strainLine = lines[2]; // c'est la ligne qui contient "Fatigue............:"
-		var tokens = strainLine.split(new RegExp("[\)\( ,:=\.\+]+", "g"));
-		var strainBaseFound = false;
-		chrall.player().strainMalus = 0; // il n'est pas toujours mentionné. Si on trouve deux nombres c'est que le deuxième est le malus
-		for (var i = 2; i < tokens.length; i++) {
-			try {
-				var v = parseInt(tokens[i]);
-				if (!isNaN(v)) {
-					if (strainBaseFound) {
-						chrall.player().strainMalus = v;
-						break;
-					} else {
-						chrall.player().strainBase = v;
-						strainBaseFound = true;
-					}
-				}
-			} catch (error) {
-			}
-		}
+		// FIXME je n'ai pas compris la difference entre strainBase et strainMalus
+		chrall.player().strainBase = parseInt($("#fatigue").text());
+		chrall.player().strainMalus = chrall.player().strainBase;
 	};
 
 	/**
@@ -343,27 +300,28 @@
 		return html;
 	};
 
-	chrall.analyseAndReformatMainCharacteristicsTable = function (table) {
-		var rows = table.find("tr");
-		chrall.player().regeneration = new Characteristic().readRow(rows[0]);
-		$(rows[0]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne : " + chrall.player().regeneration.getMean() +
-				"</td>");
-		chrall.player().attac = new Characteristic().readRow(rows[1]);
-		$(rows[1]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne AN : " + chrall.player().attac.getMean() +
-				"</td>");
-		chrall.player().dodge = new Characteristic().readRow(rows[2]);
-		$(rows[2]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne : " + chrall.player().dodge.getMean() + "</td>");
-		chrall.player().damage = new Characteristic().readRow(rows[3]);
-		$(rows[3]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne AN : " + chrall.player().damage.getMean() + "/" +
-				chrall.player().damage.getCriticalMean() + "</td>");
-		chrall.player().armor = new Characteristic().readRow(rows[4]);
-		$(rows[4]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne : " + chrall.player().armor.getMean() + "</td>");
-		var agility = chrall.player().dodge.diceNumber + chrall.player().regeneration.diceNumber;
-		var stabDices = (Math.floor(agility / 3) * 2);
-		var stabBM = (chrall.player().dodge.physicalBonus + chrall.player().dodge.magicalBonus);
-		var html = ' => Stabilité contre le balayage : ' + stabDices + 'D6 + ' + stabBM + '  &nbsp; Moyenne : ' +
-				(3.5 * stabDices + stabBM);
-		$('p:contains("Agilité")').append(html);
+	chrall.analyseAndReformatMainCharacteristicsTable = function () {
+		// TODO faire les modifications d'affichage
+		// var rows = table.find("tr");
+		chrall.player().regeneration = new Characteristic(parseInt($("#reg").text()), 3, parseInt($("#reg_p").text()), parseInt($("#reg_m").text()));
+		// $(rows[0]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne : " + chrall.player().regeneration.getMean() +
+				// "</td>");
+		chrall.player().attac = new Characteristic(parseInt($("#att").text()), 6, parseInt($("#att_p").text()), parseInt($("#att_m").text()));
+		// $(rows[1]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne AN : " + chrall.player().attac.getMean() +
+				// "</td>");
+		chrall.player().dodge = new Characteristic(parseInt($("#esq").text()), 6, parseInt($("#esq_p").text()), parseInt($("#esq_m").text()));
+		// $(rows[2]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne : " + chrall.player().dodge.getMean() + "</td>");
+		chrall.player().damage = new Characteristic(parseInt($("#deg").text()), 3, parseInt($("#deg_p").text()), parseInt($("#deg_m").text()));
+		// $(rows[3]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne AN : " + chrall.player().damage.getMean() + "/" +
+		// 		chrall.player().damage.getCriticalMean() + "</td>");
+		chrall.player().armor = new Characteristic(parseInt($("#arm").text()), 3, parseInt($("#arm_p").text()), parseInt($("#arm_m").text()));
+		// $(rows[4]).append("<td class=ch_car_mean> &nbsp; &nbsp; &nbsp; Moyenne : " + chrall.player().armor.getMean() + "</td>");
+		// var agility = chrall.player().dodge.diceNumber + chrall.player().regeneration.diceNumber;
+		// var stabDices = (Math.floor(agility / 3) * 2);
+		// var stabBM = (chrall.player().dodge.physicalBonus + chrall.player().dodge.magicalBonus);
+		// var html = ' => Stabilité contre le balayage : ' + stabDices + 'D6 + ' + stabBM + '  &nbsp; Moyenne : ' +
+		// 		(3.5 * stabDices + stabBM);
+		// $('p:contains("Agilité")').append(html);
 	};
 
 	chrall.readTalentTable = function (table) {
@@ -414,31 +372,14 @@
 	};
 
 	chrall.analyseAndReformatProfile = function () {
-		// TODO simplifier la décomposition
-		var cells = $("#mhPlay  table.mh_tdborder tbody tr.mh_tdpage td:nth-child(2)");
-
-		var mainProfileTable = $("table.mh_tdborder[align=center]").get(0);
-		var profileRows = mainProfileTable.firstElementChild.children;
-		//var basicInfos = profileRows[0].children[1];
-		//var dlaInfos = profileRows[1].children[1];
-		//var positionInfos = profileRows[2].children[1];
-		//var experienceInfos = profileRows[3].children[1];
-		//var lifeInfos = profileRows[4].children[1];
-		//var characteristicsInfos = profileRows[5].children[1];
-		var combatInfos = profileRows[6].children[1];
-		var resurrectionInfos = profileRows[7].children[1];
-		var programmedInfos = profileRows[8].children[1];
-		var magicInfos = profileRows[9].children[1];
-		
-		console.log("cells:", cells.map(function(){ return $(this).text() }).get());
-
-		chrall.extractBasicInfos(cells.eq(0).text()); // la cellule qui contient l'id, le nom, la race
-		chrall.extractDlaInfos(cells.eq(1));
-		chrall.extractPositionAndSight(cells.eq(2).text());
-		chrall.extractXpInfos(cells.eq(3).text());
-		chrall.extractPvAndFatigue(cells.eq(4).text());
-		chrall.analyseAndReformatMainCharacteristicsTable(cells.eq(6).find("table").eq(0)); 
-		chrall.extractMagicalAttackBonuses(combatInfos.textContent); // FIXME à vérifier
+		chrall.extractBasicInfos();
+		chrall.extractDlaInfos();
+		chrall.extractPositionAndSight();
+		chrall.extractXpInfos();
+		chrall.extractPvAndFatigue();
+		chrall.analyseAndReformatMainCharacteristicsTable(); 
+		// FIXME commenté pour l'instant car je n'ai jamais eu de bonus en %
+		//chrall.extractMagicalAttackBonuses(combatInfos.textContent);
 
 		var mmrmcell = $("table table table.mh_tdborder tr.mh_tdpage").find('td:contains("Résistance à la Magie")');
 		var mmrmtext = chrall.extractMagic(cells.eq(15).text());
