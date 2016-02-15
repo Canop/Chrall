@@ -8,7 +8,11 @@
  *
  * Le cas des caractéristiques sans dés (par exemple la vue) est simplement couvert par un nombre de dés à 0
  */
-function Characteristic() {
+function Characteristic(diceNumber, diceSize, physicalBonus, magicalBonus) {
+	this.diceNumber = isNaN(diceNumber) ? 0 : diceNumber;
+	this.diceSize = diceSize;
+	this.physicalBonus = isNaN(physicalBonus) ? 0 : physicalBonus;;
+	this.magicalBonus = isNaN(magicalBonus) ? 0 : magicalBonus;;
 }
 Characteristic.prototype.readRow = function (row) {
 	var cells = $(row).find("td");
