@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var MAX_SP_CALLS_PER_DAY = map[string]int{"Dynamiques": 12} // max d'après http://sp.mountyhall.com/ : 24
+var MAX_SP_CALLS_PER_DAY = map[string]int{"Dynamiques": 20} // max d'après http://sp.mountyhall.com/ : 24
 
 // Vérifie qu'on n'a pas fait trop d'appels aux scripts publics
 // pour : le troll qui demande

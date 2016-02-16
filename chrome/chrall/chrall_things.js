@@ -43,15 +43,11 @@ Characteristic.prototype.getCriticalMean = function () {
  */
 function Talent() {
 }
-Talent.prototype.readRow = function (row) {
-	var cells = $(row).find("td");
-	if (cells.len < 3) {
-		return;
-	} // c'est pas forcément le moyen le plus propre de gérer les exceptions...
-	this.name = ($(cells[1])).find("a").text().trim();
-	var tokens = Chrall_tokenize(($(cells[2])).text().trim());
-	this.level = parseInt(tokens[2]);
-	this.mastering = parseInt(tokens[3]);
+Talent.prototype.readRow = function ($row) {
+	var $cells = $row.find("td");
+	this.name = $cells.eq(1).find("a").text().trim();
+	this.level = parseInt($cells.eq(2).text());
+	this.mastering = parseInt($cells.eq(3).text());
 };
 
 //////////////////////////////////////////////////////////////////////// Mouche
@@ -152,7 +148,7 @@ Monster.prototype.setName = function (fullName) {
  *  - level
  *  - race
  *     - guildeName
- *  - dlaTime (millisecondes depuis 1970)
+ *  - dlaTime (msecondes depuis 1970)
  *  - pv
  *  - pvMax
  *  - turnDuration (en secondes)
@@ -189,9 +185,9 @@ Troll.prototype = new Thing();
 
 Troll.prototype.getDla = function (nbTurnsToAdd) {
 	if (!nbTurnsToAdd) {
-		return new Date(this.dlaTime);
+		return new Date(this.dlaTime*1000);
 	}
-	return new Date(this.dlaTime).add({seconds: nbTurnsToAdd * this.turnDuration}); // surcharge de Date définie dans date-fr-FR.js
+	return new Date(this.dlaTime*1000).add({seconds: nbTurnsToAdd * this.turnDuration}); // surcharge de Date définie dans date-fr-FR.js
 };
 
 Troll.prototype.addFly = function (fly) {

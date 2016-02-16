@@ -53,6 +53,14 @@ func (store *MysqlStore) PartagesToMiPartages(db *sql.DB, observer int, partages
 	return
 }
 
+func (store *MysqlStore) CompteAsMiPartage(c *Compte,  m *TksManager) *MiPartage {
+	mp := new(MiPartage)
+	mp.IdAutreTroll = c.trollId
+	mp.NomAutreTroll, mp.RaceAutreTroll, mp.NiveauAutreTroll = m.GetNomRaceNiveauTroll(int(c.trollId))
+	mp.AutreTroll = c.Troll
+	return mp
+}
+
 // sauvegarde un nouveau partage (à l'état de proposition de a pour b)
 func (store *MysqlStore) InsertPartage(db *sql.DB, trollA int, trollB int) error {
 	sql := "insert ignore into"

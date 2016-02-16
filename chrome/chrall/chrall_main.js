@@ -44,6 +44,7 @@ switch (chrall.pageName()) {
         chrall.analyseAndReformatView();
         chrall.addMonsterInfo();
         chrall.initCommunications('get_partages');
+        chrall.bindCopy_tablePartages();
         break;
     case "Play_BM.php":
         Chrall_analyseAndReformatBM();

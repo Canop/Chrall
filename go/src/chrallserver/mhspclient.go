@@ -6,6 +6,7 @@ import (
 	"bufio"
 	"chrall"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -58,10 +59,17 @@ func FillTrollDataSp(numero int, mdp_restreint string, td *TrollData)  (ok bool,
 	r := bufio.NewReader(resp.Body)
 	bline, _, _ := r.ReadLine()
 	line := string(bline)
-	fmt.Println("Answer:", line)
+	log.Println("Answer:", line)
 	if strings.HasPrefix(line, fmt.Sprintf("%d;", numero)) {
 		if td != nil {
-			tokens := strings.SplitN(line, ";", 20)
+			// SP_Profil2.php?Numero=XXX&Motdepasse=YYY : 
+			// Ordre des champs --> ID, Position X ; Position Y ; Position N ; PV Actuels; PV Max ; PA Restant;
+			//  					DLA ; Nb Dés d'Attaque ; Nb Dés d'Esquive ; Nb Dés de Dégat ; Nb Dés de Régénération ;
+			//                       Vue ; Armure ; MM ; RM ; attaques subies ; fatigue ; camouflage ? ; invisible ? ; intangible ? ;
+			//						 Nb parades programmées ; Nb contre-attaques programmées ; durée du tour ; bonus de durée (hors équipement) ;
+			//						Armure naturelle ; Nombre de dés d'armure en moins
+
+			tokens := strings.SplitN(line, ";", 25)
 			td.PV_max, _ = strconv.Atoi(tokens[5])
 			td.PV_actuels, _ = strconv.Atoi(tokens[4])
 			td.X = Atoi32(tokens[1])
@@ -70,11 +78,15 @@ func FillTrollDataSp(numero int, mdp_restreint string, td *TrollData)  (ok bool,
 			td.Fatigue, _ = strconv.Atoi(tokens[17])
 			td.PA, _ = strconv.Atoi(tokens[6])
 			td.Vue, _ = strconv.Atoi(tokens[12])
-			timeProchainTour, _ := time.Parse("2006-01-02 15:04:05", tokens[8])
+			fmt.Printf("tokens[7]: %s\n", tokens[7])
+			loc, _ := time.LoadLocation("Europe/Paris")
+			timeProchainTour, _ := time.ParseInLocation("2006-01-02 15:04:05", tokens[7], loc) // exemple: 2015-09-17 00:35:35
 			td.ProchainTour = timeProchainTour.Unix()
-			dureeTourMin, _ := strconv.ParseInt(tokens[23], 10, 64)
+			fmt.Printf("td.ProchainTour (secondes): %d\n", timeProchainTour.Unix())
+			dureeTourMin, _ := strconv.ParseInt(tokens[23], 10, 64) // reçu en minutes
 			td.DureeTour = dureeTourMin*60
 		}
+		log.Printf("filled TrollData: %+v\n", td)
 		return true, ""
 	} else {
 		return false, "Unexpected answer, probably a wrong password"

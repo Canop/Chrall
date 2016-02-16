@@ -127,7 +127,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 	html := ""
 	var amis []int
 	if monsterId > 0 {
-		fmt.Printf("makeBestiaryExtractHtml trollId:%d mdpr:%s\n", askerId, mdpr)
+		//~ fmt.Printf("makeBestiaryExtractHtml trollId:%d mdpr:%s\n", askerId, mdpr)
 		if h.store.IsCompteOK(db, askerId, mdpr) {
 			amis, err = h.store.GetPartageurs(db, askerId)
 			if err != nil {
@@ -140,7 +140,7 @@ func (h *JsonGetHandler) makeBestiaryExtractHtml(hr *http.Request) string {
 				html += fmt.Sprintf("Blessure: <b>%d %%</b> (CDM de %s le %s)<br>", blessure, nomAuteur, t.Format("02/01 à 15h04")) // oui les gars de Google ont fumé lorsqu'ils ont fait leur bibliothèque de formatage de date
 			}
 		} else {
-			fmt.Println("Compte non authentifié (makeBestiaryExtractHtml)")
+			// fmt.Println("Compte non authentifié (makeBestiaryExtractHtml)")
 		}
 	}
 

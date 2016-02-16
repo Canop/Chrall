@@ -24,6 +24,7 @@
 			</tr></thead>\
 			<tbody id=partagesActifs></tbody>\
 		</table>\
+		<div id=boutonsMajPartages></div>\
 		<h2>Propositions</h2>\
 		<table border='0' cellspacing='1' cellpadding='2' class='mh_tdborder' align='center'>\
 			<thead><tr class='mh_tdtitre'>\
@@ -35,6 +36,7 @@
 		</table>\
 		<p>Nouveau partage avec le troll <input id=partage_proposal_troll_id value=''>\
 		<a class=gogo id=partage_proposal>Proposer</a></p>\
+		<p class=small-note>Faire ctrl-C sur cette page, quand rien n'est sélectionné, copie la table du haut dans un format compatible Miaou</p>\
 		</div>");
 
 		$("#partage_proposal", html).click(function() {

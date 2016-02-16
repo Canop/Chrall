@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 )
@@ -19,9 +20,9 @@ type TrollData struct {
 	Fatigue      int
 	PA           int
 	Vue          int
-	ProchainTour int64 // timestamp (stocké en secondes dans la BD)
+	ProchainTour int64 // timestamp en secondes
 	DureeTour    int64 // durée du tour en secondes
-	MiseAJour    int64 // timestamp (stocké en secondes dans la BD)
+	MiseAJour    int64 // timestamp en secondes
 }
 
 type Compte struct { // les infos privées sont celles qui ne sont pas décodables telles quelles depuis les structures json
@@ -49,8 +50,6 @@ func rowToCompte(trollId int, row *sql.Row) (*Compte, error) {
 		&c.Troll.ProchainTour,
 		&c.Troll.DureeTour,
 		&c.Troll.MiseAJour)
-	c.Troll.ProchainTour *= 1000
-	c.Troll.MiseAJour *= 1000
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +79,7 @@ func (store *MysqlStore) GetCompteIfOK(db *sql.DB, trollId int, mdpr string) (*C
 
 // vérifie que le compte a un statut ok sans faire d'appel au serveur MH
 func (store *MysqlStore) IsCompteOK(db *sql.DB, trollId int, mdpr string) bool {
-	fmt.Printf("IsCompteOK troll:%d, mdpr:%s\n", trollId, mdpr)
+	//~ fmt.Printf("IsCompteOK troll:%d, mdpr:%s\n", trollId, mdpr)
 	if trollId <= 0 || mdpr == "" {
 		return false
 	}
@@ -115,18 +114,21 @@ func (store *MysqlStore) UpdateInfosGestionCompte(db *sql.DB, c *Compte) error {
 
 // met à jour un compte en BD, sans les infos de gestion (comme le mdp)
 func (store *MysqlStore) UpdateTroll(db *sql.DB, c *Compte) (err error) {
+	log.Printf("UpdateTroll: %+v\n", c)
 	t := c.Troll
 	if t == nil {
 		return errors.New("Compte sans données de troll")
 	}
+	log.Printf("UpdateTroll troll: %+v\n", t)
 	updateProfil := t.ProchainTour > 0
 	sql := "update compte set x=?, y=?, z=?"
 	if updateProfil {
 		sql += ", pv_max=?, pv_actuels=?, fatigue=?, pa=?, vue=?, prochain_tour=?, duree_tour=?, mise_a_jour=?"
+		log.Printf("updateProfil aussi. mise_a_jour:%d\n", time.Now().Unix())
 	}
 	sql += " where id=?"
 	if updateProfil {
-		_, err = db.Exec(sql, t.X, t.Y, t.Z, t.PV_max, t.PV_actuels, t.Fatigue, t.PA, t.Vue, (t.ProchainTour / 1000), t.DureeTour, time.Now(), c.trollId)
+		_, err = db.Exec(sql, t.X, t.Y, t.Z, t.PV_max, t.PV_actuels, t.Fatigue, t.PA, t.Vue, t.ProchainTour, t.DureeTour, time.Now().Unix(), c.trollId)
 	} else {
 		_, err = db.Exec(sql, t.X, t.Y, t.Z, c.trollId)
 	}

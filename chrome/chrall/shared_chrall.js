@@ -92,10 +92,12 @@
 		return h + (m < 10 ? "h0" : "h") + m;
 	};
 
+	// le timestamp passé peut l'être en secondes ou en millisecondes
 	chrall.formatDate = function (timestamp) {
 		if (timestamp == 0) {
 			return "";
 		}
+		if (timestamp<12345678901) timestamp *= 1000;
 		var d = new Date(timestamp);
 		return d.getDate() + "/" + (d.getMonth() < 9 ? ("0" + (d.getMonth() + 1)) : (d.getMonth() + 1)) + " " +
 				d.getHours() + "h" + (d.getMinutes() < 10 ? ("0" + d.getMinutes()) : d.getMinutes());

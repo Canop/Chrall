@@ -100,10 +100,10 @@
 
 	chrall.extractDlaInfos = function ($e) {		
 		var dlaString = $e.find('b').first().text().trim();
-		chrall.player().dlaTime = (Date.parse(dlaString)).getTime(); // remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js (le javascript est un truc de sadiques)
-		var turnDurationString = $e.text().match(/mon prochain Tour\.+:\s*([^.]+)\.\s*$/);
-		console.log("turnDurationString:", turnDurationString);
-		chrall.player().turnDuration = chrall.parseDuration(turnDurationString[1]);
+		chrall.player().dlaTime = (Date.parse(dlaString)).getTime() / 1000; // remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js (le javascript est un truc de sadiques)
+		var turnDurationmatch = $e.text().match(/mon prochain Tour\.+:\s*([^.]+)/);
+		console.log("turnDurationmatch:", turnDurationmatch);
+		chrall.player().turnDuration = chrall.parseDuration(turnDurationmatch[1]);
 		console.log("chrall.player().turnDuration:", chrall.player().turnDuration);
 		var actionPointsText = $e.find('b').eq(1).text();
 		chrall.player().pa = parseInt(actionPointsText); // théoriquement doublon (on lit ça dans le menu de gauche). On supprimera peut-être.
@@ -370,7 +370,7 @@
 		var rows = table.find("tr");
 		for (var i = 0; i < rows.length; i++) {
 			var talent = new Talent();
-			talent.readRow(rows[i]);
+			talent.readRow(rows.eq(i));
 			if (talent.name) {
 				chrall.player().addTalent(talent);
 			}
@@ -378,8 +378,7 @@
 	};
 
 	// renvoie une version améliorée du texte, pouvant le remplacer
-	chrall.extractMagic = function (text) {
-				
+	chrall.extractMagic = function (text) {		
 		var matchRM = text.match(/Résistance à la Magie\.+:\s*(-?\d+)\s*points\s*([+-]\s*\d+)\s*/i);
 		chrall.player().baseRm = parseInt(matchRM[1]);
 		chrall.player().rm = chrall.player().baseRm + parseInt(matchRM[2]);
@@ -397,7 +396,7 @@
 		r += "<tr><td>Maîtrise de la Magie</td><td> : " + chrall.player().baseMm + "</td><td> + " + (chrall.player().mm - chrall.player().baseMm) +
 				"</td><td> = " + chrall.player().mm + " points</td></tr>";
 		r += "<tr><td>Bonus de Concentration</td><td> : " + chrall.player().concentration + " %</td></tr>";
-		r += "</table>";
+		r += "</table>";		
 		return r;
 	};
 
@@ -440,7 +439,8 @@
 		chrall.analyseAndReformatMainCharacteristicsTable(cells.eq(6).find("table").eq(0)); 
 		chrall.extractMagicalAttackBonuses(combatInfos.textContent); // FIXME à vérifier
 
-		var mmrmcell = $("table table table.mh_tdborder tr.mh_tdpage").find('td:contains("Résistance à la Magie")');
+		var mmrmcell = cells.eq(15);
+		console.log("mmrmcell:", mmrmcell.length, mmrmcell);
 		var mmrmtext = chrall.extractMagic(cells.eq(15).text());
 		mmrmcell.html(mmrmtext);
 

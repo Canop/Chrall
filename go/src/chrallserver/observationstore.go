@@ -168,7 +168,7 @@ func (store *MysqlStore) majProfil(db *sql.DB, compteCible *Compte, pour int) st
 	if err != nil {
 		return fmt.Sprintf("Erreur sauvegarde vue de %d: %d", compteCible.trollId, err.Error())
 	}
-	return fmt.Sprintf("Vue de %d mise à jour", compteCible.trollId)
+	return fmt.Sprintf("Profil de %d mis à jour", compteCible.trollId)
 }
 
 func (store *MysqlStore) majVue(db *sql.DB, cible int, pour int, tksManager *TksManager) string {

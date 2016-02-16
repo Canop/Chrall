@@ -67,10 +67,6 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		out.Error = "Troll Absent"
 		return
 	}
-	//~ if len(in.MDP) != 32 { // théoriquement ça devrait être géré côté client aussi
-	//~ out.Error = "Mot de passe restreint invalide"
-	//~ return
-	//~ }
 
 	db, err := h.store.DB()
 	if err != nil {
@@ -110,7 +106,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		log.Printf("Compte non authentifié %d / %s sur action %s : %s\n", in.TrollId, in.MDP, action)
 		return
 	}
-	log.Printf("Compte OK for %s\n", in.TrollId)
+	log.Printf("Compte OK for %d\n", in.TrollId)
 
 	var amis []int
 	out.Text = "Compte connecté et authentifié"
@@ -186,6 +182,10 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			return
 		}
 		out.MiPartages = h.store.PartagesToMiPartages(db, in.TrollId, partages, h.tksManager)
+		
+		log.Printf("Compte/Troll: %+v\n", c.Troll)
+		out.MiPartages = append(out.MiPartages, h.store.CompteAsMiPartage(c, h.tksManager))
+		
 	} else if action == "getMonsterEvents" {
 		amis, err = h.store.GetPartageurs(db, int(in.TrollId))
 		if err != nil {
@@ -193,8 +193,9 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 		}
 		out.Actions, err = h.store.Actions(db, "monstre", int(in.IdCible), int(in.TrollId), amis)
 	} else if action == "maj_profil" {
+		log.Printf("MAJ profil, cible=%d\n", in.IdCible)
 		if in.IdCible == 0 { // demande de mise à jour des profils de tous les copains
-			log.Printf("MAJ vues des amis de %d\n", in.TrollId)
+			log.Printf("MAJ profils des amis de %d\n", in.TrollId)
 			amis, err = h.store.GetPartageurs(db, int(in.TrollId))
 			if err != nil {
 				log.Printf("Erreur récupération amis sur action %s : %s\n", action, err.Error())
@@ -207,12 +208,16 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 					log.Printf("Erreur récupération compte ami %d : %s\n", int(ami), err.Error())
 					continue
 				}
-
 				out.TextMaj += ". " + h.store.majProfil(db, compteAmi, in.TrollId)
 			}
+			log.Printf("MAJ profil troll demandeur (%d)\n", in.TrollId)
+			out.TextMaj += ". " + h.store.majProfil(db, c, in.TrollId)
 		} else { // demande de mise à jour spécifique
-			log.Printf("MAJ Vue %d\n", in.IdCible)
+			log.Printf("MAJ profil %d\n", in.IdCible)
 			compteAmi, err := h.store.GetCompte(db, int(in.IdCible))
+			if err != nil {
+				log.Printf("Erreur maj profil sur cible %d : %s\n", in.IdCible, err.Error())
+			}
 			out.TextMaj = h.store.majProfil(db, compteAmi, in.TrollId)
 		}
 	} else if action == "maj_vue" {

@@ -42,7 +42,7 @@
 		var player = chrall.player();
 		if (player.totalSight) troll.Vue = player.totalSight;
 		if (player.dlaTime) { // si on n'a pas ça, le reste (hormis la position) est probablement faux
-			troll.ProchainTour = player.dlaTime; // timestamp (millisecondes)
+			troll.ProchainTour = player.dlaTime; // timestamp (secondes)
 			if (player.strainBase) troll.Fatigue = player.strainBase + player.strainMalus;
 			if (player.turnDuration) troll.DureeTour = player.turnDuration; // en secondes
 			troll.PA = player.pa;

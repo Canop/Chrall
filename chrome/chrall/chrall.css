@@ -578,3 +578,12 @@ img.illus {
 	max-width: 12px;
 	margin-right: 1px;
 }
+
+#boutonsMajPartages {
+	margin-top: 7px;
+	font-size: 12px;
+}
+
+.small-note {
+	font-size: 10px;
+}

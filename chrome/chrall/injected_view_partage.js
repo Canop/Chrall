@@ -1,5 +1,7 @@
 (function (chrall) {
 
+	var partagesAffichés = [];
+
 	function isPartageActif(partage) {
 		return partage.Statut == 'on' && partage.StatutAutreTroll == 'on';
 	}
@@ -23,18 +25,23 @@
 		var playerInfo = chrall.player();
 		partagesActifs.find("tr").remove();
 		propositionPartage.find("tr").remove();
+		
+		var nbPartagesActifs = 0;
+		partagesAffichés = [];
 
 		var row, trollCell, actionCell;
 		for (var i = 0; i < partages.length; i++) {
 			var partage = partages[i];
-			if (isPartageActif(partage)) {// ajout dans la table des partages actifs
+			var isSelf = partage.IdAutreTroll == chrall.player().id;
+			if (isSelf || isPartageActif(partage)) { // ajout dans la table des partages actifs
 				if (!partage.AutreTroll){
 					console.log("données de partage manquantes pour", partage.IdAutreTroll);
 					continue;
 				}
+				partagesAffichés.push(partage);
 				row = $("<tr/>");
 				var distCell = $("<td/>", { class: 'mh_tdpage'});
-				distCell.text(distance(partage, playerInfo));
+				if (!isSelf) distCell.text(distance(partage, playerInfo));
 				trollCell = createTrollCell(partage);
 				var raceCell = $("<td/>", { class: 'mh_tdpage', text: partage.RaceAutreTroll});
 				var levelCell = $("<td/>", { class: 'mh_tdpage', text: partage.NiveauAutreTroll});
@@ -43,14 +50,19 @@
 				var nextTurnCell = $("<td/>", { class: 'mh_tdpage', text: chrall.formatDate(partage.AutreTroll.ProchainTour)});
 				var durationCell = $("<td/>", { class: 'mh_tdpage', text: chrall.formatDuration(partage.AutreTroll.DureeTour)});
 				var positionCell = $("<td/>", { class: 'mh_tdpage'});
-				positionCell.append($("<a/>", {name: 'zoom', class: 'gogo',  x: partage.AutreTroll.X, y: partage.AutreTroll.Y, z: partage.AutreTroll.Z, text: partage.AutreTroll.X + ' ' + partage.AutreTroll.Y + ' ' + partage.AutreTroll.Z}))
+				if (!isSelf) {
+					positionCell.append($("<a/>", {name: 'zoom', class: 'gogo',  x: partage.AutreTroll.X, y: partage.AutreTroll.Y, z: partage.AutreTroll.Z, text: partage.AutreTroll.X + ' ' + partage.AutreTroll.Y + ' ' + partage.AutreTroll.Z}))
+				}
 				var lastUpdateCell = $("<td/>", { class: 'mh_tdpage', text: chrall.formatDate(partage.AutreTroll.MiseAJour)});
 				actionCell = $("<td/>", { class: 'mh_tdpage'});
-				actionCell.append($("<a/>", {text: "Rompre", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Rompre"}).click(chrall.updatePartage));
-				actionCell.append($("<a/>", {text: "Actualiser la vue", class: 'gogo', idAutreTroll: partage.IdAutreTroll}).click(chrall.majVue));
+				
+				if (!isSelf) actionCell.append($("<a/>", {text: "Rompre", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Rompre"}).click(chrall.updatePartage));
+				actionCell.append($("<a/>", {text: "Actualiser le profil", class: 'gogo', idAutreTroll: partage.IdAutreTroll}).click(chrall.majProfil));
+				if (!isSelf) actionCell.append($("<a/>", {text: "Actualiser la vue", class: 'gogo', idAutreTroll: partage.IdAutreTroll}).click(chrall.majVue));
 				row.append(distCell).append(trollCell).append(raceCell).append(levelCell).append(hitPointsCell).append(actionPointsCell).append(nextTurnCell)
 						.append(durationCell).append(positionCell).append(lastUpdateCell).append(actionCell);
-				partagesActifs.append(row);
+				partagesActifs[isSelf?'prepend':'append'](row);
+				nbPartagesActifs++;
 			} else {// ajout dans la table des partages inactifs
 				row = $("<tr/>");
 				trollCell = createTrollCell(partage);
@@ -68,6 +80,13 @@
 				propositionPartage.append(row);
 			}
 		}
+		
+		var $boutonsMajPartages = $('#boutonsMajPartages').empty();
+		if (nbPartagesActifs>1) {
+			$boutonsMajPartages.append($("<a/>", {text: "Actualiser tous les profils", class: 'gogo'}).click(chrall.majProfil));
+		}
+		$boutonsMajPartages.append($("<a/>", {text: "Rafraichir la page", class: 'gogo'}).click(function(){ location.reload() }));
+		
 	}
 
 	chrall.updatePartage = function () {
@@ -86,15 +105,53 @@
 		var notificationText = 'GogoChrall attend la r\u00e9ponse du serveur Mounty Hall' + (0 == autreTroll ? " pour tous vos amis" : "") + '. Cela peut prendre quelques minutes.';
 		$("#resultat_maj").text(notificationText);
 		chrall.notifyUser({text : notificationText});
-		localStorage['troll.' + chrall.playerId() + '.messageMaj'] = notificationText;		
+		localStorage['troll.' + chrall.playerId() + '.messageMaj'] = notificationText;	
 	}
 
 	chrall.majVue = function (idAutreTroll) {
-		majTroll("vue", idAutreTroll);
+		chrall.majTroll.call(this, "vue", idAutreTroll);
 	}
 
 	chrall.majProfil = function (idAutreTroll) {
-		majTroll("profil", idAutreTroll);
+		chrall.majTroll.call(this, "profil", idAutreTroll);
+	}
+	
+	chrall.bindCopy_tablePartages = function(){
+		$(window).on('copy', function(e){
+			console.log('copy');
+			if (!$('#partagesActifs:visible tr').length>1) {
+				console.log('table partages vide ou non visible');
+				return;
+			}
+			var selection = window.getSelection();
+			if (selection.toString().trim().length) {
+				console.log('selection non vide -> comportement standard');
+				return;
+			}
+			var copiedPreWrapper = document.createElement('div');
+			document.body.appendChild(copiedPreWrapper);
+			var copiedPre = document.createElement('pre');
+			copiedPreWrapper.appendChild(copiedPre);
+			console.log(partagesAffichés);
+			var tbl = "Troll|RN|PV|DLA|PA|PDLA\n";
+			tbl += "-|:-:|:-:|:-:|:-:|:-:\n";
+			console.log(chrall.player());
+			tbl += partagesAffichés.map(function(p){
+					var t = p.AutreTroll;
+					console.log(p.NomAutreTroll, "DLA:", t.ProchainTour, chrall.formatDate(t.ProchainTour));
+					return [
+						p.NomAutreTroll,
+						p.RaceAutreTroll[0].toUpperCase()+p.NiveauAutreTroll,
+						t.PV_actuels+'/'+t.PV_max,
+						chrall.formatDate(t.ProchainTour),
+						t.PA,
+						chrall.formatDate(t.ProchainTour+t.DureeTour)
+					].join('|')
+			}).join('\n');
+			copiedPre.innerHTML = tbl;
+			selection.selectAllChildren(copiedPreWrapper);
+			setTimeout(function(){ copiedPreWrapper.remove() }, 0);
+		});
 	}
 
 
