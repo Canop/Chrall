@@ -8,7 +8,11 @@
  *
  * Le cas des caractéristiques sans dés (par exemple la vue) est simplement couvert par un nombre de dés à 0
  */
-function Characteristic() {
+function Characteristic(diceNumber, diceSize, physicalBonus, magicalBonus) {
+	this.diceNumber = isNaN(diceNumber) ? 0 : diceNumber;
+	this.diceSize = diceSize;
+	this.physicalBonus = isNaN(physicalBonus) ? 0 : physicalBonus;;
+	this.magicalBonus = isNaN(magicalBonus) ? 0 : magicalBonus;;
 }
 Characteristic.prototype.readRow = function (row) {
 	var cells = $(row).find("td");
@@ -46,8 +50,8 @@ function Talent() {
 Talent.prototype.readRow = function ($row) {
 	var $cells = $row.find("td");
 	this.name = $cells.eq(1).find("a").text().trim();
-	this.level = parseInt($cells.eq(2).text());
-	this.mastering = parseInt($cells.eq(3).text());
+	this.level = parseInt($cells.eq(-6).text()) || 1;
+	this.mastering = parseInt($cells.eq(-5).text());
 };
 
 //////////////////////////////////////////////////////////////////////// Mouche
@@ -95,7 +99,7 @@ Thing.prototype.setName = function (name) { // méthode surchargée pour les mon
 function Cenotaphe(x, y, z) {
 	Thing.call(this, x, y, z);
 }
-Cenotaphe.prototype = new Thing(); // ça signifie que Monster est une sous-classe de Thing
+Cenotaphe.prototype = new Thing();
 Cenotaphe.prototype.setName = function (fullName) {
 	this.name = fullName;
 	var i = fullName.lastIndexOf('(');
@@ -114,9 +118,9 @@ Cenotaphe.prototype.setName = function (fullName) {
  *  - isSick (a priori pour les gowaps)
  */
 function Monster(x, y, z) {
-	Thing.call(this, x, y, z); // appel du constructeur de la super-classe (il n'y a pas de 'super' en javascript)
+	Thing.call(this, x, y, z);
 }
-Monster.prototype = new Thing(); // ça signifie que Monster est une sous-classe de Thing
+Monster.prototype = new Thing();
 Monster.prototype.setName = function (fullName) {
 	this.fullName = fullName;
 	this.isSick = false;
