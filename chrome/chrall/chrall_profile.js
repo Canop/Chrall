@@ -338,27 +338,22 @@
 	};
 
 	// renvoie une version améliorée du texte, pouvant le remplacer
-	chrall.extractMagic = function (text) {
-				
-		var matchRM = text.match(/Résistance à la Magie\.+:\s*(-?\d+)\s*points\s*([+-]\s*\d+)\s*/i);
-		chrall.player().baseRm = parseInt(matchRM[1]);
-		chrall.player().rm = chrall.player().baseRm + parseInt(matchRM[2]);
-		
-		var matchMM = text.match(/Maîtrise de la Magie\.+:\s*(-?\d+)\s*points\s*([+-]\s*\d+)\s*/i);
-		chrall.player().baseMm = parseInt(matchMM[1]);
-		chrall.player().mm = chrall.player().baseMm + parseInt(matchMM[2]);
-		
-		var matchBC = text.match(/Bonus de Concentration\s*:\s*(-?\d+)/i);
-		chrall.player().concentration = parseInt(matchBC[1]);
-				
-		var r = "<table border=0>"; // je n'ai pas trouvé d'autre moyens d'insérer les totaux que de reconstruire toute la cellule :\
-		r += "<tr><td>Résistance à la Magie</td><td> : " + chrall.player().baseRm + "</td><td> + " +
-				(chrall.player().rm - chrall.player().baseRm) + "</td><td> = " + chrall.player().rm + " points</td></tr>";
-		r += "<tr><td>Maîtrise de la Magie</td><td> : " + chrall.player().baseMm + "</td><td> + " + (chrall.player().mm - chrall.player().baseMm) +
-				"</td><td> = " + chrall.player().mm + " points</td></tr>";
-		r += "<tr><td>Bonus de Concentration</td><td> : " + chrall.player().concentration + " %</td></tr>";
-		r += "</table>";
-		return r;
+	chrall.extractMagic = function () {		
+		chrall.player().baseRm = parseInt($("#rm").text());
+		chrall.player().rm = parseInt($("#rm_tot").text());
+		chrall.player().baseMm = parseInt($("#mm").text());
+		chrall.player().mm = parseInt($("#mm_tot").text());
+		chrall.player().concentration = parseInt($("#conc").text());
+			
+		// TODO Infos vraiment utile avec la nouvelle page de profil ?	
+		// var r = "<table border=0>"; // je n'ai pas trouvé d'autre moyens d'insérer les totaux que de reconstruire toute la cellule :\
+		// r += "<tr><td>Résistance à la Magie</td><td> : " + chrall.player().baseRm + "</td><td> + " +
+		// 		(chrall.player().rm - chrall.player().baseRm) + "</td><td> = " + chrall.player().rm + " points</td></tr>";
+		// r += "<tr><td>Maîtrise de la Magie</td><td> : " + chrall.player().baseMm + "</td><td> + " + (chrall.player().mm - chrall.player().baseMm) +
+		// 		"</td><td> = " + chrall.player().mm + " points</td></tr>";
+		// r += "<tr><td>Bonus de Concentration</td><td> : " + chrall.player().concentration + " %</td></tr>";
+		// r += "</table>";		
+		// return r;
 	};
 
 	chrall.extractMagicalAttackBonuses = function (text) {
@@ -379,6 +374,7 @@
 		chrall.extractPositionAndSight();
 		chrall.extractXpInfos();
 		chrall.extractPvAndFatigue();
+		chrall.extractMagic();
 		chrall.analyseAndReformatMainCharacteristicsTable(); 
 		// FIXME commenté pour l'instant car je n'ai jamais eu de bonus en %
 		//chrall.extractMagicalAttackBonuses(combatInfos.textContent);
