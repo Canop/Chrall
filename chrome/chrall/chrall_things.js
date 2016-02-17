@@ -189,9 +189,9 @@ Troll.prototype = new Thing();
 
 Troll.prototype.getDla = function (nbTurnsToAdd) {
 	if (!nbTurnsToAdd) {
-		return new Date(this.dlaTime*1000);
+		return new Date(this.dlaTime);
 	}
-	return new Date(this.dlaTime*1000).add({seconds: nbTurnsToAdd * this.turnDuration}); // surcharge de Date définie dans date-fr-FR.js
+	return new Date(this.dlaTime).add({seconds: nbTurnsToAdd * this.turnDuration}); // surcharge de Date définie dans date-fr-FR.js
 };
 
 Troll.prototype.addFly = function (fly) {
