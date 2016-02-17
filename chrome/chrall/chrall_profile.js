@@ -94,7 +94,7 @@
 	chrall.extractPvAndFatigue = function () {
 		chrall.player().pv = parseInt($("#pv_courant").text());
 		chrall.player().pvMaxSansBMM = parseInt($("#pv").text());
-		chrall.player().pvMax = chrall.player().pvMaxSansBMM;
+		chrall.player().pvMax = parseInt($("#pv_tot").text());
 		// FIXME je n'ai pas compris la difference entre strainBase et strainMalus
 		chrall.player().strainBase = parseInt($("#fatigue").text());
 		chrall.player().strainMalus = chrall.player().strainBase;
