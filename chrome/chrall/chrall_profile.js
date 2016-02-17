@@ -94,10 +94,10 @@
 	chrall.extractPvAndFatigue = function () {
 		chrall.player().pv = parseInt($("#pv_courant").text());
 		chrall.player().pvMaxSansBMM = parseInt($("#pv").text());
-		chrall.player().pvMax = chrall.player().pvMaxSansBMM;
-		// FIXME je n'ai pas compris la difference entre strainBase et strainMalus
+		chrall.player().pvMax = parseInt($("#pv_tot").text());
 		chrall.player().strainBase = parseInt($("#fatigue").text());
-		chrall.player().strainMalus = chrall.player().strainBase;
+		chrall.player().strainMalus = parseInt($("#fatiguebm").text());
+		chrall.player().strainMalus = isNaN(chrall.player().strainMalus) ? 0 : chrall.player().strainMalus;
 	};
 
 	/**
@@ -383,8 +383,7 @@
 		chrall.makeXpComments();
 
 		//> on affiche les infos liées à la fatigue
-		// TODO trouver une idée d'affichage
-		//cells.eq(4).append(chrall.makeStrainInfos());
+		chrall.makeStrainInfos();
 
 		chrall.readTalentTable($("#competences tbody"));
 		chrall.readTalentTable($("#sortileges tbody"));
