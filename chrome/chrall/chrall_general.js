@@ -105,17 +105,8 @@ function updateTroll() {
 // récupère la date de génération de la page et renvoie ça sous forme de secondes depuis 1970
 // Renvoie 0 si pas trouvé
 function findMHSeconds() {
-	var text = $('body').text();
-	var lines = text.split('\n');
-	for (var i = lines.length; i-- > 0;) {
-		var line = lines[i];
-		if (line.indexOf("Page générée") > 0) {
-			var t = Chrall_tokenize(line);
-			var d = new Date(atoi(t[2]), atoi(t[1]) - 1, atoi(t[0]), atoi(t[3]), atoi(t[4]), atoi(t[5]));
-			return d.getTime() / 1000;
-		}
-	}
-	return 0;
+	var date = $("#hserveur");
+	return date.length > 0 ? Date.parse(date.text().replace(" GMT+0100]", "")).getTime() / 1000 : 0;
 }
 
 
