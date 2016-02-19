@@ -7,6 +7,10 @@
 		};
 	}
 
+	chrall.isSeeingHidden = function(name){
+		return seeing_hidden_regexp.test(name);
+	};
+
 	chrall.addMonsterInfo = function(){
 		if (!chrall.isOptionEnabled('view-display-monster-level', 'yes')) {
 			return;
@@ -436,6 +440,15 @@
 		"Fungus"
 	];
 
+	const seeing_hidden_regexp = new RegExp([
+		// Templates
+		"Maître", "Maîtresse", "Roi", "Reine", "Sorcier", "Sorcière", "Traqueur", "Traqueuse",
+		// Monsters
+		"Abishaii", "Ame-en-peine", "Aragnarok du Chaos", "Banshee", "Barghest", "Behemoth", "Beholder", "Bouj'Dla Placide", "Champi-Glouton",
+		"Chauve-Souris Géante", "Chevalier du Chaos", "Chimère", "Daemonite", "Diablotin", "Ectoplasme", "Effrit", "Elémentaire d'Air", "Erinyes",
+		"Essaim Cratérien", "Essaim Sanguinaire", "Fantôme", "Fumeux", "Fungus", "Gnu Sauvage", "Goule", "Gritche", "Hellrot", "Incube", "Liche",
+		"Marilith", "Molosse Satanique", "Momie", "Nécrochore", "Nécromant", "Ombre", "Palefroi Infernal", "Pititabeille", "Plante Carnivore",
+		"Shai", "Sphinx", "Squelette", "Succube", "Tertre Errant", "Tubercule Tueur", "Vampire", "Zombi"].join('|'), "i");
 
 	chrall.testLevelComputation = function(){
 		var valuesToTest = [
