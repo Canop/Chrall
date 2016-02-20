@@ -377,7 +377,7 @@ var isInLaby = false;
 			}
 		}
 	}
-	
+
 	// Dans le cas où des erreurs d'analyse indiqueraient que la grille n'est pas bonne, on affiche un div de warning,
 	//  construit par cette fonction
 	chrall.makeGridErrorDiv = function($holder){
@@ -419,7 +419,7 @@ var isInLaby = false;
 		noteRequest.YMax = ymax;
 		noteRequest.ZMin = zmin;
 		noteRequest.ZMax = zmax;
-		
+
 		var $gridTable = $("<table/>", {id: 'grid', 'class': 'grid'});
 		var $tr = $("<tr/>");
 		$gridTable.append($tr);
@@ -456,7 +456,7 @@ var isInLaby = false;
 					grid_y:  y
 				};
 				var $cell = $("<td/>", cellAttributes);
-				
+
 				(function($cell){
 					// on va éventuellement colorier la case si un message #chrall set cells dans miaou nous l'a demandé
 					chrall.cdb.getCell(x+','+y, function(cell){
@@ -465,7 +465,7 @@ var isInLaby = false;
 						}
 					});
 				})($cell);
-				
+
 				$tr.append($cell);
 				if ((horizontalViewLimit == 0) && ( (player.x != x) || (player.y != y) )) {
 					// Si on est aveugle, on indique que les cases autour sont inconnues avec un point d'interrogation.
@@ -551,9 +551,6 @@ var isInLaby = false;
 		//var time_enter = (new Date()).getTime(); // <= prof
 
 
-			console.log(" 1 LimitViewForm:", $(document.getElementsByName("LimitViewForm")).html());
-		
-		
 		$(document.body).css('overflow', 'hidden');
 
 		$('#footer2').remove(); // ce truc là se retrouve maintenant par dessus, je le vire carrément
@@ -561,8 +558,6 @@ var isInLaby = false;
 		//> on analyse la vue
 		var $tables = Chrall_analyseView();
 		var noteRequest = {};
-
-			console.log(" 2 BIS LimitViewForm:", $(document.getElementsByName("LimitViewForm")).html());
 
 		//> on vire la frise latérale
 		$("td[width='55']").remove();
@@ -579,8 +574,6 @@ var isInLaby = false;
 		refreshLogout.addClass("floatTopRight");
 
 		//		var time_before_grid = (new Date()).getTime(); // <= prof
-
-			console.log(" 2 LimitViewForm:", $(document.getElementsByName("LimitViewForm")).html());
 
 		//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 		var $tabs = $("<ul/>", {id: "tabs_view", 'class': "tabs", view: "yes"});
@@ -600,9 +593,6 @@ var isInLaby = false;
 		chrall.addTab($tabs, "#tabSettings", "Réglages");
 
 
-			console.log(" 3 LimitViewForm:", $(document.getElementsByName("LimitViewForm")).html());
-
-
 		if (!chrall.hallIsAccro()) {
 			chrall.addTab($tabs, "#tabPartages", "Partages");
 			chrall.addTab($tabs, "#tabRecherche", "Recherche");
@@ -618,8 +608,6 @@ var isInLaby = false;
 			$tabGrid.append($holder);
 			$tabContainer.append($tabGrid);
 		}
-
-			console.log(" 4 LimitViewForm:", $(document.getElementsByName("LimitViewForm")).html());
 
 		if (isInLaby) $tabContainer.append(chrall.makeTabDiv("tabWalls"));
 		$tabContainer.append(chrall.makeTabDiv("tabTrolls"));
