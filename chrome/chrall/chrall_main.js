@@ -57,7 +57,7 @@ switch (chrall.pageName()) {
         break;
     case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
         Chrall_listenForChangeLocation('action');
-        Chrall_handleActionPage();
+		chrall.handleActionPage();
         break;
     case "Play_option.php":
     case "Play_o_Interface.php":
