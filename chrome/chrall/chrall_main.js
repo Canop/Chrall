@@ -128,8 +128,12 @@ switch (chrall.pageName()) {
         break;
     case "Guilde_Membres.php":
         chrall.addPartageLinkToAll();
+		break;
     case "MH_Messagerie.php":
         chrall.compactMessageTitle();
         break;
+	case "Mission_Etape.php":
+		chrall.addTroogleLinks();
+		break;
 }
 
