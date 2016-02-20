@@ -113,7 +113,7 @@ switch (chrall.pageName()) {
 		chrall.addBubblesToLinks();
         break;
     case "Play_a_Combat.php": //  résultat de combat
-        Chrall_analyseResultatCombat();
+        chrall.analyseResultatCombat();
         break;
     case "FO_Ordres.php":
         chrall.handleFollowerOrders();
