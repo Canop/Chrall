@@ -89,7 +89,7 @@ switch (chrall.pageName()) {
         Chrall_preparePlayInputs();
         break;
     case "Play_menu.php": // c'est la frame de gauche
-        Chrall_handleMenuPage();
+        chrall.handleMenuPage();
         break;
     case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la colonne menu de gauche
         break;
