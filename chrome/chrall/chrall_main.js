@@ -74,10 +74,10 @@ switch (chrall.pageName()) {
         chrall.handleCdmPage();
         break;
     case "Play_a_Competence18b.php": // résultat d'insulte
-        Chrall_analyseResultatInsulte();
+        chrall.analyseResultatInsulte();
         break;
     case "Play_a_Competence18.php": // préparation d'insulte
-        Chrall_prepareInsulte();
+        chrall.prepareInsulte();
         break;
     case "Play_a_Competence29.php": // préparation de minage (le formulaire dans la frame d'action)
         Chrall_handleBeforeMinage();
