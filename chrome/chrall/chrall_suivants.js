@@ -3,7 +3,7 @@
 
         Chrall_gridLive(); // <- ça c'est parce qu'on va sans doute ajouter des liens d'ouverture de vues "zoom"
 
-        var tableOrdre = $('p table.mh_tdborder_fo');
+        var tableOrdre = $('.mh_tdborder_fo');
         var lignes = tableOrdre.find('tr');
         var str = $(lignes[0]).text();
         var firstDot = str.indexOf('.');

@@ -83,7 +83,7 @@
 	chrall.extractDlaInfos = function () { 
 		// Utilisation du selecteur par attribut car deux elements on l'id "dla"
 		var dlaString = $("td[id='dla']").text();
-		chrall.player().dlaTime = (Date.parse(dlaString)).getTime(); // remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js (le javascript est un truc de sadiques)
+		chrall.player().dlaTime = (Date.parse(dlaString)).getTime() / 1000; // remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js (le javascript est un truc de sadiques)
 		var turnDurationString = $("#duree").text();
 		console.log("turnDurationString:", turnDurationString);
 		chrall.player().turnDuration = chrall.parseDuration(turnDurationString);
@@ -94,10 +94,10 @@
 	chrall.extractPvAndFatigue = function () {
 		chrall.player().pv = parseInt($("#pv_courant").text());
 		chrall.player().pvMaxSansBMM = parseInt($("#pv").text());
-		chrall.player().pvMax = chrall.player().pvMaxSansBMM;
-		// FIXME je n'ai pas compris la difference entre strainBase et strainMalus
+		chrall.player().pvMax = parseInt($("#pv_tot").text());
 		chrall.player().strainBase = parseInt($("#fatigue").text());
-		chrall.player().strainMalus = chrall.player().strainBase;
+		chrall.player().strainMalus = parseInt($("#fatiguebm").text());
+		chrall.player().strainMalus = isNaN(chrall.player().strainMalus) ? 0 : chrall.player().strainMalus;
 	};
 
 	/**
@@ -383,8 +383,7 @@
 		chrall.makeXpComments();
 
 		//> on affiche les infos liées à la fatigue
-		// TODO trouver une idée d'affichage
-		//cells.eq(4).append(chrall.makeStrainInfos());
+		chrall.makeStrainInfos();
 
 		chrall.readTalentTable($("#competences tbody"));
 		chrall.readTalentTable($("#sortileges tbody"));
