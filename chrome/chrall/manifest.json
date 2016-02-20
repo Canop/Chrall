@@ -4,8 +4,8 @@
 	"version": "4.1.12",
 	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"icons": {
-          "128": "icone_naze.png"
-    },
+		"128": "icone_naze.png"
+	},
    	"homepage_url": "http://canop.org/chrall",
 	"background": {
 		"scripts": [
