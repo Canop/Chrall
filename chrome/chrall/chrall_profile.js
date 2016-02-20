@@ -83,7 +83,7 @@
 	chrall.extractDlaInfos = function () { 
 		// Utilisation du selecteur par attribut car deux elements on l'id "dla"
 		var dlaString = $("td[id='dla']").text();
-		chrall.player().dlaTime = (Date.parse(dlaString)).getTime(); // remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js (le javascript est un truc de sadiques)
+		chrall.player().dlaTime = (Date.parse(dlaString)).getTime() / 1000; // remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js (le javascript est un truc de sadiques)
 		var turnDurationString = $("#duree").text();
 		console.log("turnDurationString:", turnDurationString);
 		chrall.player().turnDuration = chrall.parseDuration(turnDurationString);
