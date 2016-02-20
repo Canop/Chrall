@@ -25,6 +25,7 @@
 			var monsterAge = tokens[1].trim();
 			var addedText = computeLevel(monsterName, monsterAge);
 			var $nivalCell = $("<td/>", { text: addedText});
+			chrall.triggerBubble($nivalCell, chrall.getPxOnKill(addedText), "bub_monster");
 			$(row.children[1]).after($nivalCell);
 		});
 	};

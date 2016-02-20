@@ -101,5 +101,14 @@ chrall.findMHSeconds = function(){
 	return date.length > 0 ? Date.parse(date.text().replace(" GMT+0100]", "")).getTime() / 1000 : 0;
 }
 
-
-
+// Retourne combien de PX seront obtenu lors du kill du niveau en parametre
+chrall.getPxOnKill = function(level){
+	level = parseInt(level);
+	if (isNaN(level) || level < 0) {
+		return "Impossible de savoir combien de PX vous donnera ce kill";
+	}
+	if (!chrall.player().level) {
+		return "Vous devez vous rendre tout d'abord dans votre profil afin que Chrall<br>connaisse votre niveau pour savoir combien de PX vous rapportera ce kill";
+	}
+	return (10 + 2 * (level - chrall.player().level) + level) + " PX lors du kill";
+}
