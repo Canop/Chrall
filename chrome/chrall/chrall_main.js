@@ -98,10 +98,10 @@ switch (chrall.pageName()) {
 		chrall.injectMove();
         break;
     case "PJView.php":
-        Chrall_analyseAndReformatPJView();
+        chrall.analyseAndReformatPJView();
         break;
     case "PJView_Events.php":
-        Chrall_analysePJEventsView();
+        chrall.analysePJEventsView();
 		chrall.addBubblesToLinks();
         break;
     case "Play_news.php":
