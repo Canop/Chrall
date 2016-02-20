@@ -152,7 +152,7 @@ Monster.prototype.setName = function (fullName) {
  *  - level
  *  - race
  *     - guildeName
- *  - dlaTime (msecondes depuis 1970)
+ *  - dlaTime (secondes depuis 1970)
  *  - pv
  *  - pvMax
  *  - turnDuration (en secondes)
