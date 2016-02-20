@@ -53,7 +53,7 @@ switch (chrall.pageName()) {
         chrall.sortEquipment();
         break;
     case "Play_evenement.php":
-        Chrall_addBubblesToLinks();
+		chrall.addBubblesToLinks();
         break;
     case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
         Chrall_listenForChangeLocation('action');
@@ -102,15 +102,15 @@ switch (chrall.pageName()) {
         break;
     case "PJView_Events.php":
         Chrall_analysePJEventsView();
-        Chrall_addBubblesToLinks();
+		chrall.addBubblesToLinks();
         break;
     case "Play_news.php":
-        Chrall_addBubblesToLinks();
+		chrall.addBubblesToLinks();
         break;
     case "MonsterView.php":
         chrall.analyseAndReformatMonsterView();
-        Chrall_addInfosToMonsterEvents();
-        Chrall_addBubblesToLinks();
+		chrall.addInfosToMonsterEvents();
+		chrall.addBubblesToLinks();
         break;
     case "Play_a_Combat.php": //  résultat de combat
         Chrall_analyseResultatCombat();
