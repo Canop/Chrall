@@ -7,6 +7,10 @@ function extensionGlobals(){
 	return [
 		// libraries
 		"$", "jQuery",
+		// globale de Chrall
+		"chrall",
+		// trucs qui seraient mieux en non global mais voyez vous ma bonne dame c'est pas le cas
+		"Troll",
 		// chrome extension environment
 		"chrome",
 	].reduce((s,v)=>{s[v]=true; return s;},{});
