@@ -80,10 +80,10 @@ switch (chrall.pageName()) {
         chrall.prepareInsulte();
         break;
     case "Play_a_Competence29.php": // préparation de minage (le formulaire dans la frame d'action)
-        Chrall_handleBeforeMinage();
+        chrall.handleBeforeMinage();
         break;
     case "Play_a_Competence29b.php": // résultat de minage
-        Chrall_handleMinagePage();
+        chrall.handleMinagePage();
         break;
     case "Play.php": // c'est le frameset qui engloble tout
         Chrall_preparePlayInputs();
