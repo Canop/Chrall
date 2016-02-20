@@ -47,7 +47,7 @@ switch (chrall.pageName()) {
         chrall.bindCopy_tablePartages();
         break;
     case "Play_BM.php":
-        Chrall_analyseAndReformatBM();
+		chrall.analyseAndReformatBM();
         break;
     case "Play_equipement.php":
         chrall.sortEquipment();
