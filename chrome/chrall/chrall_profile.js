@@ -66,10 +66,11 @@
 		html = "Chaque entrainement coûte " + trainingPx + " PX. Vous devez vous entrainer " +
 				Math.ceil((nextLevelPi - chrall.player().pi) / trainingPx) + " fois pour passer au niveau " +
 				(chrall.player().level + 1) + ".";
-		html += "\nTuer un monstre ou un troll ne vous rapporte des px que s'il est de niveau supérieur à " +
-				Math.floor((2 * chrall.player().level - 10) / 3) +
-				" (chaque niveau supplémentaire de la cible vous rapporte 3 px de plus).";
-		$msgentrainer.attr("title", html);
+		html += "<br>Tuer un monstre ou un troll ne vous rapporte des px que s'il est de niveau supérieur à " +
+				Math.max(1, Math.floor((2 * chrall.player().level - 10) / 3)) +
+				".<br>Chaque niveau supplémentaire de la cible vous rapporte 3 px de plus.";
+		chrall.triggerBubble($msgentrainer, html, "bub_troll");
+		$msgentrainer.attr("title", "");
 	};
 
 	chrall.extractPositionAndSight = function () {
