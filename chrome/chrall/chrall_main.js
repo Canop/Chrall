@@ -5,7 +5,7 @@
 
 var viewIsEmpty = true; // correspond à un état d'analyse de la vue
 var xmin, xmax, ymin, ymax, zmin, zmax; // étendue de la vue
-var playerAmAbstract = new Array(); // strings. utilisées dans le profil à la fois pour le tableau de l'am et pour la bulle de la compétence en bas
+var playerAmAbstract = []; // strings. utilisées dans le profil à la fois pour le tableau de l'am et pour la bulle de la compétence en bas
 var viewedTrollId;
 var sessionActive = false;
 
@@ -47,17 +47,17 @@ switch (chrall.pageName()) {
         chrall.bindCopy_tablePartages();
         break;
     case "Play_BM.php":
-        Chrall_analyseAndReformatBM();
+		chrall.analyseAndReformatBM();
         break;
     case "Play_equipement.php":
         chrall.sortEquipment();
         break;
     case "Play_evenement.php":
-        Chrall_addBubblesToLinks();
+		chrall.addBubblesToLinks();
         break;
     case "Play_action.php": // c'est la frame en bas qui contient le menu d'action
         Chrall_listenForChangeLocation('action');
-        Chrall_handleActionPage();
+		chrall.handleActionPage();
         break;
     case "Play_option.php":
     case "Play_o_Interface.php":
@@ -74,22 +74,22 @@ switch (chrall.pageName()) {
         chrall.handleCdmPage();
         break;
     case "Play_a_Competence18b.php": // résultat d'insulte
-        Chrall_analyseResultatInsulte();
+        chrall.analyseResultatInsulte();
         break;
     case "Play_a_Competence18.php": // préparation d'insulte
-        Chrall_prepareInsulte();
+        chrall.prepareInsulte();
         break;
     case "Play_a_Competence29.php": // préparation de minage (le formulaire dans la frame d'action)
-        Chrall_handleBeforeMinage();
+        chrall.handleBeforeMinage();
         break;
     case "Play_a_Competence29b.php": // résultat de minage
-        Chrall_handleMinagePage();
+        chrall.handleMinagePage();
         break;
     case "Play.php": // c'est le frameset qui engloble tout
-        Chrall_preparePlayInputs();
+        chrall.preparePlayInputs();
         break;
     case "Play_menu.php": // c'est la frame de gauche
-        Chrall_handleMenuPage();
+        chrall.handleMenuPage();
         break;
     case "Play2.php": // c'est le frameset qui engloble tout ce qui n'est pas la colonne menu de gauche
         break;
@@ -98,22 +98,22 @@ switch (chrall.pageName()) {
 		chrall.injectMove();
         break;
     case "PJView.php":
-        Chrall_analyseAndReformatPJView();
+        chrall.analyseAndReformatPJView();
         break;
     case "PJView_Events.php":
-        Chrall_analysePJEventsView();
-        Chrall_addBubblesToLinks();
+        chrall.analysePJEventsView();
+		chrall.addBubblesToLinks();
         break;
     case "Play_news.php":
-        Chrall_addBubblesToLinks();
+		chrall.addBubblesToLinks();
         break;
     case "MonsterView.php":
         chrall.analyseAndReformatMonsterView();
-        Chrall_addInfosToMonsterEvents();
-        Chrall_addBubblesToLinks();
+		chrall.addInfosToMonsterEvents();
+		chrall.addBubblesToLinks();
         break;
     case "Play_a_Combat.php": //  résultat de combat
-        Chrall_analyseResultatCombat();
+        chrall.analyseResultatCombat();
         break;
     case "FO_Ordres.php":
         chrall.handleFollowerOrders();
