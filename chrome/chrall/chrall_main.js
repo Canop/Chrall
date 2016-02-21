@@ -86,7 +86,7 @@ switch (chrall.pageName()) {
         chrall.handleMinagePage();
         break;
     case "Play.php": // c'est le frameset qui engloble tout
-        Chrall_preparePlayInputs();
+        chrall.preparePlayInputs();
         break;
     case "Play_menu.php": // c'est la frame de gauche
         chrall.handleMenuPage();
