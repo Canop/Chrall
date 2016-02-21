@@ -53,22 +53,13 @@
 		return cost;
 	};
 
-	chrall.addActionPointDistance = function($table, distColumn, xColumn){
-		var table = $table.get(0);
-		if (chrall.isOptionDisabled('view-show-distance-in-view') || "undefined" == typeof table) {
+	chrall.addActionPointDistance = function(cells, x, y, z){
+		if (chrall.isOptionDisabled('view-show-distance-in-view')) {
 			return;
 		}
-		var lines = table.children[0].children
-		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
-			var cells = lines[lineIndex].children;
-			var x = parseInt(cells[xColumn].textContent);
-			if (isNaN(x)) {
-				continue;
-			}
-			var y = parseInt(cells[xColumn + 1].textContent);
-			var z = parseInt(cells[xColumn + 2].textContent);
-			var dist = cells[distColumn].textContent + " (" + chrall.distanceFromPlayer(x, y, z) + " PA)";
-			$(cells[distColumn]).text(dist).attr("style", "width:10ex");
+		var dist = chrall.distanceFromPlayer(x, y, z);
+		if (dist > 0) {
+			$(cells[0]).append(" (" + dist + " PA)").width("10ex");
 		}
 	};
 
@@ -96,6 +87,7 @@
 			var cell = grid.getCellNotNull(item.x, item.y);
 			if (cell) cell.addMonster(item);
 			else grid.outOfGrid.push(item);
+			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
 		}
 	};
 
@@ -132,6 +124,7 @@
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
+			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
 			var selectBox = $('<td>', { align: 'center'})
 			.append($('<input/>', {type: 'checkbox', name: 'cb_troll', value: item.id}));
 			$(line).prepend(selectBox);
@@ -171,6 +164,7 @@
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
 			grid.getCellNotNull(item.x, item.y).addMushroom(item);
+			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
 		}
 	};
 
@@ -193,6 +187,7 @@
 			item.z = parseInt(cells[i++].textContent);
 			item.hasLink = !!nameCell.children[0].href;
 			grid.getCellNotNull(item.x, item.y).addPlace(item);
+			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
 		}
 	};
 
@@ -216,6 +211,7 @@
 			item.z = parseInt(cells[i++].textContent);
 			item.hasLink = !!nameCell.children.length && nameCell.children[0].href;
 			grid.getCellNotNull(item.x, item.y).addObject(item);
+			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
 		}
 	};
 
@@ -237,6 +233,7 @@
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
 			grid.getCellNotNull(item.x, item.y).addCenotaph(item);
+			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
 		}
 	};
 
@@ -261,6 +258,7 @@
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
 			grid.getCellNotNull(item.x, item.y).addWall(item);
+			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
 		}
 	};
 
@@ -326,13 +324,6 @@
 			chrall.analyseWallTable(chrall.$tables()['murs']);
 		}
 
-		chrall.addActionPointDistance(chrall.$tables()['monstres'], 0, 3);
-		chrall.addActionPointDistance(chrall.$tables()['trolls'], 1, 7);
-		chrall.addActionPointDistance(chrall.$tables()['tresors'], 0, 3);
-		chrall.addActionPointDistance(chrall.$tables()['champignons'], 0, 2);
-		chrall.addActionPointDistance(chrall.$tables()['lieux'], 0, 3);
-		chrall.addActionPointDistance(chrall.$tables()['cadavres'], 0, 3);
-
 		//> on regarde si la case du joueur est encombrée
 		// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case
 		chrall.player().cellIsFree = true;
@@ -348,7 +339,7 @@
 					}
 				}
 			}
-			if ((!chrall.player().cellIsFree) && (cell.monsters)) {
+			if ((chrall.player().cellIsFree) && (cell.monsters)) {
 				for (i = 0; i < cell.monsters.length; i++) {
 					if (cell.monsters[i].z === chrall.player().z) {
 						chrall.player().cellIsFree = false;
