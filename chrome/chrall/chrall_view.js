@@ -2,9 +2,10 @@
 
 (function (chrall) {
 	chrall.makeDeLink = function (x, y, z) {
-		var cost = (chrall.player().cellIsFree ? 1 : 2) + (z === chrall.player().z ? 0 : 1);
-		if (cost > chrall.player().pa) return '';
-		return '<a class=chrall_de x=' + (x - chrall.player().x) + ' y=' + (y - chrall.player().y) + ' z=' + (z - chrall.player().z) + '>DE ' + x + ' ' + y + ' ' + z + '</a>';
+		var p = chrall.player();
+		var cost = (p.cellIsFree ? 1 : 2) + (z === p.z ? 0 : 1);
+		if (cost > p.pa) return '';
+		return '<a class=chrall_de x=' + (x - p.x) + ' y=' + (y - p.y) + ' z=' + (z - p.z) + '>DE ' + x + ' ' + y + ' ' + z + '</a>';
 	};
 
 	/**

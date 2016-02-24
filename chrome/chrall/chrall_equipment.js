@@ -1,14 +1,5 @@
 "use strict";
 (function (chrall){
-	chrall.sortEquipment = function (){
-		if (!chrall.isOptionEnabled('gear-sort-items', 'yes')) {
-			return;
-		}
-		var $tablesToSort = $("[id^=mh_objet_hidden]");
-		$tablesToSort.each(function (i, table){
-			sortTable(table);
-		});
-	};
 
 	function sortTable(table){
 		var $rows = $(table).find("tr");
@@ -19,5 +10,14 @@
 		});
 	}
 
+	chrall.sortEquipment = function (){
+		if (!chrall.isOptionEnabled('gear-sort-items', 'yes')) {
+			return;
+		}
+		var $tablesToSort = $("[id^=mh_objet_hidden]");
+		$tablesToSort.each(function (i, table){
+			sortTable(table);
+		});
+	};
 
 })(window.chrall = window.chrall || {});

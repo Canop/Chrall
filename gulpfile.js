@@ -33,38 +33,18 @@ gulp.task("lint-extension-js", ()=>
 		"extends": "eslint:recommended",
 		"globals": extensionGlobals(),
 		"rules": {
-			"no-unused-vars": [
-				2,
-				{"vars": "all", "args": "none"}
-			],
-			"comma-dangle": [
-				2,
-				"only-multiline"
-			],
-			"complexity": [
-				0,
-				20
-			],
-			"dot-location": [
-				2,
-				"property"
-			],
-			"no-extra-label": [
-				2
-			],
-			"indent": [
-				2,
-				"tab"
-			],
-			"linebreak-style": [
-				2,
-				"unix"
-			],
-			"brace-style": [
-				2, // I'll activate this when switching code to ES6
-				"1tbs"
-			],
+			"no-unused-vars": [ 2, {"vars": "all", "args": "none"}],
+			"comma-dangle": [ 2, "only-multiline"],
+			"complexity": [ 0, 20],
+			"dot-location": [ 2, "property"],
+			"no-extra-label": [ 2 ],
+			"indent": [ 2, "tab" ],
+			"linebreak-style": [ 2,	"unix" ],
+			"brace-style": [ 2, "1tbs" ],
+			"dot-location": [2, "property"],
+			"no-use-before-define": 0,
 			"no-lonely-if": 0,
+			"dot-location": [2, "property"],
 			"no-eval": 0, // some day I'll remove JSONP. Not today...
 			"no-caller": 2,
 			"no-extra-bind": 2,
