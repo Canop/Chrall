@@ -396,14 +396,14 @@
 		//> ajout des bulles sur les compétences
 		$('a[href*="DetailComp"]').each(function () {
 			let link = $(this);
-			let text = chrall.getBubbleContentForCompetence(link.text().trim());
+			let text = chrall.getTalentBubbleContent(link.text().trim());
 			chrall.triggerBubble(link, text, "bub_competence");
 		});
 
 		//> ajout des bulles sur les sorts
 		$('a[href*="DetailSort"]').each(function () {
 			let link = $(this);
-			let text = chrall.getBubbleContentForSort(link.text().trim());
+			let text = chrall.getTalentBubbleContent(link.text().trim());
 			chrall.triggerBubble(link, text, "bub_sort");
 		});
 

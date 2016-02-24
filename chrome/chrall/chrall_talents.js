@@ -8,7 +8,9 @@ var chrall = chrall || {};
 chrall.getTalentBubbleContent= (name) => {
 	var bubbler = chrall.talentBubblers[name];
 	if (!bubbler) return "compétence inconnue de Chrall";
-	return bubbler(chrall.player());
+	var	player = chrall.player(),
+		level = player.talents[name] ? player.talents[name].level : undefined;
+	return bubbler(player, level);
 }
 
 chrall.talentBubblers = {
@@ -29,8 +31,7 @@ chrall.talentBubblers = {
 		return html;
 	},
 
-	"Attaque Précise": (player)=>{
-		var compLevel = player.talents[name].level;
+	"Attaque Précise": (player, compLevel)=>{
 		var attacBonus = 3.5 * Math.min(Math.floor(player.attac.diceNumber / 2), compLevel * 3);
 		var html = "<table><tr><td>Niveau</td><td> : " + compLevel + "</td></tr>";
 		html += "<tr><td>Attaque moyenne</td><td> : " + (player.attac.getMean() + attacBonus) +
@@ -140,8 +141,7 @@ chrall.talentBubblers = {
 		return html;
 	},
 
-	"Coup de Butoir": (player)=>{
-		var compLevel = player.talents[name].level;
+	"Coup de Butoir": (player, compLevel)=>{
 		var damageBonus = 2 * Math.min(Math.floor(player.damage.diceNumber / 2), compLevel * 3);
 		var html = "<table><tr><td>Niveau</td><td> : " + compLevel + "</td></tr>";
 		html += "<tr><td>Attaque moyenne</td><td> : " + player.attac.getMean() + "</td></tr>";
