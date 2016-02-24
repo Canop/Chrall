@@ -1,8 +1,9 @@
+"use strict";
 (function (chrall) {
 
 	chrall.compactMessageTitle = function() {
 		var $titleInput = $('input[name="Titre"]');
-		if (0 == $titleInput.length) { return;}
+		if (0 == $titleInput.length) return;
 		var titleText = $titleInput.val();
 		
 		// Numerify the number of 'Re : ' and 'Re(x) :'

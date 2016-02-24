@@ -1,9 +1,11 @@
+"use strict";
+var chrall = chrall || {};
 function CarteHall(canvasId, posmarkid) {
 	this.canvas = document.getElementById(canvasId);
 	this.context = this.canvas.getContext("2d");
 	this.posmarkdiv = document.getElementById(posmarkid);
-	this.screenRect = new Rect();
-	this.rect = new Rect(); // le rectangle englobant le contenu que l'on veut montrer
+	this.screenRect = new chrall.Rect();
+	this.rect = new chrall.Rect(); // le rectangle englobant le contenu que l'on veut montrer
 	this.originX = 0; // coin haut gauche de la grotte au centre de l'écran
 	this.originY = 0;
 	this.objects = new Array();
@@ -17,13 +19,13 @@ function CarteHall(canvasId, posmarkid) {
 	this.mouseIsDown = false;
 	this.zoomEnabled = false;
 	var _this = this;
-	this.canvas.addEventListener("mousedown", function(e) {_this.mouseDown(e)}, false);
-	this.canvas.addEventListener("mouseup", function(e) {_this.mouseUp(e)}, false);
-	this.canvas.addEventListener("mouseout", function(e) {_this.mouseLeave(e)}, false);
-	this.canvas.addEventListener("mousemove", function(e) {_this.mouseMove(e)}, false);
-	window.onmousewheel = document.onmousewheel = function(e) {_this.mouseWheel(e)};
-	var that = this;
+	this.canvas.addEventListener("mousedown", (e) => _this.mouseDown(e), false);
+	this.canvas.addEventListener("mouseup", (e) => _this.mouseUp(e), false);
+	this.canvas.addEventListener("mouseout", (e) => _this.mouseLeave(e), false);
+	this.canvas.addEventListener("mousemove", (e) => _this.mouseMove(e), false);
+	window.onmousewheel = document.onmousewheel = (e) => _this.mouseWheel(e);
 }
+chrall.CarteHall = CarteHall;
 
 CarteHall.prototype.add = function(o) {
 	this.objects.push(o);
@@ -35,7 +37,6 @@ CarteHall.prototype.computeOptimalZoom = function() {
 }
 
 CarteHall.prototype.recomputeCanvasPosition = function() {
-	var obj = this.canvas;
 	var pos = $(this.canvas).position();
 	this.canvas_position_x = pos.left;
 	this.canvas_position_y = pos.top;
@@ -58,15 +59,15 @@ CarteHall.prototype.drawGrid = function() {
 	if (this.zoom > 5) {
 		this.context.strokeStyle = "#CDCDCD";
 		for (var x = (x0 % this.zoom); x < w; x += this.zoom) {
-			drawThinVerticalLine(this.context, x, 0, h);
+			chrall.drawThinVerticalLine(this.context, x, 0, h);
 		}
 		for (var y = (y0 % this.zoom); y < h; y += this.zoom) {
-			drawThinHorizontalLine(this.context, 0, w, y);
+			chrall.drawThinHorizontalLine(this.context, 0, w, y);
 		}
 	}
 	this.context.strokeStyle = "#787878";
-	drawThinHorizontalLine(this.context, 0, w, y0);
-	drawThinVerticalLine(this.context, x0, 0, h);
+	chrall.drawThinHorizontalLine(this.context, 0, w, y0);
+	chrall.drawThinVerticalLine(this.context, x0, 0, h);
 }
 
 CarteHall.prototype.redraw = function() {
@@ -84,9 +85,7 @@ CarteHall.prototype.redraw = function() {
 		for (var i = 0; i < n; i++) {
 			var o = this.objects[i];
 			o.computeScreenRect(this);
-			//if (Rect_intersect(o.screenRect, this.screenRect)) {
 			o.draw(this);
-			//}
 		}
 
 	} finally {

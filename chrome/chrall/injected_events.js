@@ -1,4 +1,6 @@
-function addActionsToMonsterEvents(actions) {
+"use strict";
+var chrall = chrall || {};
+chrall.addActionsToMonsterEvents = function(actions) {
 	var et = document.getElementById("monster_events");
 	var etb = et.tBodies[0];
 	var td = document.createElement("td");
@@ -11,7 +13,6 @@ function addActionsToMonsterEvents(actions) {
 		var t2 = t[1].split(":");
 		var date = new Date(t1[2], t1[1] - 1, t1[0], t2[0], t2[1], t2[2]);
 		var seconds = date.getTime() / 1000;
-		var type = row.cells[1].innerHTML;
 		var description = row.cells[2].innerHTML;
 		var text = "";
 		for (var j = 0; j < actions.length; j++) {

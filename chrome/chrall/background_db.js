@@ -1,3 +1,4 @@
+"use strict";
 // bgchrall.cdb : base de données persistante dans le browser
 // partagée entre les domaines, accessible par messaging depuis
 // les content scripts

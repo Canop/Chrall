@@ -1,3 +1,4 @@
+"use strict";
 (function(chrall) {
 
 	chrall.shouldSkipFormHandling = function() {

@@ -1,5 +1,7 @@
+"use strict";
 //
-function makeSearchPanel($panel) {
+chrall.makeSearchPanel = function($panel) {
+	var player = chrall.player();
 	if (!chrall.compteChrallActif()) {
 		return "La recherche nécessite un compte chrall actif. Vous pouvez activer votre compte Chrall dans la page Option.";
 	}

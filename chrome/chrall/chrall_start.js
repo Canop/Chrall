@@ -1,3 +1,4 @@
+"use strict";
 (function (chrall) {
 	chrall.analyseAndReformatStartPage = function () {
 		//> afin de ne pas avoir à scroller pour accéder à la zone de login on descend le bloc de bienvenue qui ne change jamais

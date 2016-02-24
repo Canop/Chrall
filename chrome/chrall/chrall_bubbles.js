@@ -1,3 +1,4 @@
+"use strict";
 (function (chrall){
 
 	/*
@@ -25,7 +26,6 @@
 	var onBubbleDiv = false;
 	var bubbleExists = false;
 	var bubbleCloseTimeoutID;
-	var bubbleTarget;
 
 	chrall.hideBubble = function (){
 		clearTimeout(bubbleCloseTimeoutID);
@@ -63,8 +63,7 @@
 		var style = "";
 		if (tPosX < w / 2) {
 			style += "left:" + (tPosX + 30);
-		}
-		else {
+		} else {
 			style += "right:" + (w - tPosX + 30);
 		}
 		style += ";"
@@ -72,8 +71,7 @@
 		var h = document.body.clientHeight;
 		if (tPosY < h / 2) {
 			style += "top:" + (tPosY + 20);
-		}
-		else {
+		} else {
 			style += "bottom:" + (h - tPosY + 20);
 		}
 		var $bubbleDiv = $("<div/>", {id: 'bubble', class: cssClass, style: style});
@@ -91,7 +89,6 @@
 			$bubbleContent.html(text);
 			surroundContentIfNeeded(leftCol, $bubbleContent, $bubbleDiv, cssClass);
 		}
-		bubbleTarget = target;
 		$bubbleDiv.mouseover(chrall.keepBubbleOpen).mouseout(chrall.letBubbleClose).prependTo('body');
 		bubbleExists = true;
 
@@ -133,7 +130,7 @@
 	 */
 	chrall.triggerBubble = function (target, text, cssClass, ajaxUrl, ajaxRequestId){
 		target.mouseenter(function (event){
-			if (scrollInProgress || onBubbleDiv || onBubbleTarget) {
+			if (chrall.scrollInProgress || onBubbleDiv || onBubbleTarget) {
 				return false;
 			}
 			onBubbleTarget = true;
@@ -163,7 +160,7 @@
 				'mouseenter',
 				function (event){
 					var target = $(this);
-					if (scrollInProgress || onBubbleDiv || onBubbleTarget) {
+					if (chrall.scrollInProgress || onBubbleDiv || onBubbleTarget) {
 						return false;
 					}
 					onBubbleTarget = true;

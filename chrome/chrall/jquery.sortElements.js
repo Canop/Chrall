@@ -41,7 +41,7 @@ jQuery.fn.sortElements = (function (){
 			var nextSibling = parentNode.insertBefore(document.createTextNode(''), sortElement.nextSibling);
 
 			return function (){
-				if (parentNode === this) { throw new Error("You can't sort elements if any one is a descendant of another."); }
+				if (parentNode === this) throw new Error("You can't sort elements if any one is a descendant of another.");
 				// Insert before flag:
 				parentNode.insertBefore(this, nextSibling);
 				// Remove flag:

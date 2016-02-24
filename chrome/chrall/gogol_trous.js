@@ -1,3 +1,5 @@
+"use strict";
+var chrall = chrall || {};
 var trous = [
 	[-13, 73, -69], 
 	[-13, 72, -69], 
@@ -329,14 +331,14 @@ var trous = [
 	[55, 15, -99]
 ];
 
-function ajouteTrous(ch) {
+chrall.ajouteTrous = function(ch) {
 	for (var i=trous.length; i-->0;) {
-		ch.add(new ChTrou(trous[i][0], trous[i][1]));
+		ch.add(new chrall.ChTrou(trous[i][0], trous[i][1]));
 	}
 }
 
 // construit le message affiché lors du paramétrage d'un TP
-function teleportHoleMessage(x, y, z){
+chrall.teleportHoleMessage = function(x, y, z){
 	var smallestSquaredDist, nearestHole;
 	for (var i=0; i<trous.length; i++) {
 		var	h = trous[i],

@@ -1,3 +1,4 @@
+"use strict";
 (function (chrall) {
 
 	chrall.suggestDestinations = function (destinations) {
@@ -5,7 +6,7 @@
 		var select = $('<select/>');
 		div.append(select)
 		select.append($('<option>Destinations pr&eacute;d&eacute;finies</option>'))
-		for (i in destinations) {
+		for (var i in destinations) {
 			select.append($('<option/>', { value : i }).text(destinations[i].Description));
 		}
 		select.bind("change", function(event) {

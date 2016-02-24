@@ -1,3 +1,4 @@
+"use strict";
 // Communication authentifiée avec le serveur Chrall.
 
 (function (chrall) {
@@ -56,7 +57,8 @@
 	};
 
 	chrall.initCommunications = function (action) {
-		localStorage['com.status.message'] = 'Compte inexistant ou non connecté'; // on réinitialise à chaque page car on peut être sur un autre troll
+		// on réinitialise à chaque page car on peut être sur un autre troll
+		localStorage['com.status.message'] = 'Compte inexistant ou non connecté';
 		if (action && chrall.compteChrallActif()) {
 			chrall.sendToChrallServer(action, {});
 		}
@@ -69,15 +71,14 @@
 		xhr.open("GET", url, true);
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4) {
-			   eval(xhr.responseText);
-		  }
+				eval(xhr.responseText);
+			}
 		}
 		xhr.send();
 	};
 
 	// envoie au serveur un message authentifié par le mdp restreint
 	chrall.sendToChrallServer = function (action, message) {
-		var player = chrall.player();
 		if (!chrall.compteChrallActif()) {
 			return false
 		}
@@ -120,14 +121,11 @@
 			localStorage['troll.' + chrall.player().id + '.messageMaj']
 			$("#resultat_maj").text(message.TextMaj);
 		}
-		if (message.Actions && message.Actions.length > 0 && typeof(addActionsToMonsterEvents) == "function") {
-			addActionsToMonsterEvents(message.Actions);
+		if (message.Actions && message.Actions.length > 0 && chrall.addActionsToMonsterEvents) {
+			chrall.addActionsToMonsterEvents(message.Actions);
 		}
 		chrall.displayComStatusMessage();
 	};
 
 })(window.chrall = window.chrall || {});
 
-function receiveFromChrallServer(message) {
-	chrall.receiveFromChrallServer(message);
-}

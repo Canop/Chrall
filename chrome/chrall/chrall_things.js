@@ -1,4 +1,6 @@
-﻿//////////////////////////////////////////////////////////////////////// Characteristic
+"use strict";
+var chrall = chrall || {};
+//////////////////////////////////////////////////////////////////////// Characteristic
 /**
  * une caractéristique est décomposée en :
  *  - diceNumber : un nombre de dés
@@ -11,14 +13,15 @@
 function Characteristic(diceNumber, diceSize, physicalBonus, magicalBonus) {
 	this.diceNumber = isNaN(diceNumber) ? 0 : diceNumber;
 	this.diceSize = diceSize;
-	this.physicalBonus = isNaN(physicalBonus) ? 0 : physicalBonus;;
-	this.magicalBonus = isNaN(magicalBonus) ? 0 : magicalBonus;;
+	this.physicalBonus = isNaN(physicalBonus) ? 0 : physicalBonus;
+	this.magicalBonus = isNaN(magicalBonus) ? 0 : magicalBonus;
 }
+chrall.Characteristic = Characteristic;
 Characteristic.prototype.readRow = function (row) {
 	var cells = $(row).find("td");
 	var s = $(cells[1]).text().trim();
 	s = s.split('/')[0]; // pour éliminer la seconde partie dans 1 D3 / 2 D3
-	var tokens = Chrall_tokenize(s.replace('D', ' '));
+	var tokens = chrall.tokenize(s.replace('D', ' '));
 	if (tokens.length >= 2) {
 		this.diceNumber = parseInt(tokens[0]);
 		this.diceSize = parseInt(tokens[1]);
@@ -47,6 +50,7 @@ Characteristic.prototype.getCriticalMean = function () {
  */
 function Talent() {
 }
+chrall.Talent = Talent;
 Talent.prototype.readRow = function ($row) {
 	var $cells = $row.find("td");
 	this.name = $cells.eq(1).find("a").text().trim();
@@ -67,6 +71,7 @@ function Fly(type, name) {
 	this.type = type;
 	this.name = name ? name : null;
 }
+chrall.Fly = Fly;
 
 //////////////////////////////////////////////////////////////////////// Thing
 
@@ -83,6 +88,7 @@ function Thing(x, y, z) {
 	this.y = y;
 	this.z = z;
 }
+chrall.Thing = Thing;
 Thing.prototype.horizontalDistance = function (x, y) { // distance horizontale
 	return Math.max(Math.abs(this.x - x), Math.abs(this.y - y));
 };
@@ -99,12 +105,13 @@ Thing.prototype.setName = function (name) { // méthode surchargée pour les mon
 function Cenotaphe(x, y, z) {
 	Thing.call(this, x, y, z);
 }
+chrall.Cenotaphe = Cenotaphe;
 Cenotaphe.prototype = new Thing();
 Cenotaphe.prototype.setName = function (fullName) {
 	this.name = fullName;
 	var i = fullName.lastIndexOf('(');
 	var s = fullName.substring(i + 1, fullName.length - 1);
-	this.trollId = atoi(s);
+	this.trollId = chrall.atoi(s);
 };
 
 
@@ -120,6 +127,7 @@ Cenotaphe.prototype.setName = function (fullName) {
 function Monster(x, y, z) {
 	Thing.call(this, x, y, z);
 }
+chrall.Monster = Monster;
 Monster.prototype = new Thing();
 Monster.prototype.setName = function (fullName) {
 	this.fullName = fullName;
@@ -178,7 +186,7 @@ function Troll(x, y, z) {
 	this.magicalAttackMultiplier = 1;
 	this.magicalDamageMultiplier = 1;
 }
-
+chrall.Troll = Troll;
 Troll.prototype = new Thing();
 /**
  * getDla(0) est la DLA en cours (getDla() est pareil)
@@ -269,6 +277,7 @@ Troll.prototype.adjustMagicalDamageMultiplier = function (percentageDelta) {
 function Place(x, y, z) {
 	Thing.call(this, x, y, z);
 }
+chrall.Place = Place;
 Place.prototype = new Thing();
 
 Place.prototype.setName = function (fullName) {
@@ -289,6 +298,7 @@ Place.prototype.setName = function (fullName) {
 function LabySquare(x, y, z) {
 	Thing.call(this, x, y, z);
 }
+chrall.LabySquare = LabySquare;
 LabySquare.prototype = new Thing();
 
 LabySquare.prototype.setName = function (fullName) {

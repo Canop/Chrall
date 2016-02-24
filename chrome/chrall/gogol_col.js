@@ -1,13 +1,14 @@
+"use strict";
 var gowapIcon;
 
 
-function ChCol(x, y) {
+var ChCol = chrall.ChCol = function(x, y) {
 	this.x = x;
 	this.y = y;
 	this.color = "blue";
 	this.label = null;
 	this.minZoomForLabel = 10;
-	this.screenRect = new Rect();
+	this.screenRect = new chrall.Rect();
 }
 ChCol.prototype.draw = function(carte) {
 	this.screenRect.fill(carte.context, this.color);
@@ -23,7 +24,7 @@ ChCol.prototype.computeScreenRect = function(carte) {
 	this.screenRect.h = carte.zoom;
 }
 
-function ChLabel(x, y, z,  color, label) {
+var ChLabel = chrall.ChLabel = function(x, y, z,  color, label) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -39,7 +40,7 @@ ChLabel.prototype.draw = function(carte) {
 	}
 }
 
-function ChTroll(x, y, z, color, nom, vue) {
+var ChTroll = chrall.ChTroll = function(x, y, z, color, nom, vue) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -65,11 +66,11 @@ ChTroll.prototype.draw = function(carte) {
 		var d = 7;
 		var cx = this.screenRect.x+this.screenRect.w/2;
 		var cy = this.screenRect.y+this.screenRect.h/2;
-		drawThinVerticalLine(carte.context, cx, cy-d, cy+d);
-		drawThinHorizontalLine(carte.context, cx-d, cx+d, cy);
+		chrall.drawThinVerticalLine(carte.context, cx, cy-d, cy+d);
+		chrall.drawThinHorizontalLine(carte.context, cx-d, cx+d, cy);
 	}
 	if (this.vue*carte.zoom>2) {
-		var r = new Rect(
+		var r = new chrall.Rect(
 			this.screenRect.x-this.vue*carte.zoom, this.screenRect.y-this.vue*carte.zoom,
 			this.screenRect.w*(2*this.vue+1), this.screenRect.h*(2*this.vue+1)
 		);
@@ -77,14 +78,15 @@ ChTroll.prototype.draw = function(carte) {
 	}
 }
 
-function ChTrou(x, y) {
+var ChTrou = chrall.ChTrou = function(x, y) {
 	this.x = x;
 	this.y = y;
 	this.color = "black";
 }
 ChTrou.prototype = new ChCol();
+chrall.ChTrou = ChTrou;
 
-function ChGrotte(x, y, z) {
+var ChGrotte = chrall.ChGrotte = function(x, y, z) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -92,7 +94,7 @@ function ChGrotte(x, y, z) {
 ChGrotte.prototype = new ChCol();
 
 
-function ChGowap(x, y, z, nom) {
+var ChGowap = chrall.ChGowap = function(x, y, z, nom) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -106,24 +108,25 @@ function ChGowap(x, y, z, nom) {
 }
 ChGowap.prototype = new ChCol();
 ChGowap.prototype.draw = function(carte) {
+	var d, l;
 	carte.context.strokeStyle=this.color;
 	if (carte.zoom<2) {
 		this.screenRect.fill(carte.context, this.color);
 	} else if (carte.zoom<10) {
-		var d = 7;
+		d = 7;
 		var cx = this.screenRect.x+this.screenRect.w/2;
 		var cy = this.screenRect.y+this.screenRect.h/2;
-		drawThinVerticalLine(carte.context, cx, cy-d, cy+d);
-		drawThinHorizontalLine(carte.context, cx-d, cx+d, cy);
+		chrall.drawThinVerticalLine(carte.context, cx, cy-d, cy+d);
+		chrall.drawThinHorizontalLine(carte.context, cx-d, cx+d, cy);
 	} else if (carte.zoom<30) {
-		var l = 30;
-		var d = (carte.zoom-l)/2;
+		l = 30;
+		d = (carte.zoom-l)/2;
 		carte.context.drawImage(gowapIcon, this.screenRect.x+d, this.screenRect.y+d, l, l);
 	} else if (carte.zoom<150) {
 		carte.context.drawImage(gowapIcon, this.screenRect.x, this.screenRect.y, this.screenRect.w, this.screenRect.h);
 	} else {
-		var l = (carte.zoom+20)/2;
-		var d = (carte.zoom-l)/2;
+		l = (carte.zoom+20)/2;
+		d = (carte.zoom-l)/2;
 		carte.context.drawImage(gowapIcon, this.screenRect.x+d, this.screenRect.y+d, l, l);
 	}
 	if (this.nom!=null && this.minZoomForLabel<=carte.zoom) {

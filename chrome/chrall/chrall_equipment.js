@@ -1,4 +1,5 @@
-﻿(function (chrall){
+"use strict";
+(function (chrall){
 	chrall.sortEquipment = function (){
 		if (!chrall.isOptionEnabled('gear-sort-items', 'yes')) {
 			return;

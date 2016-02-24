@@ -1,7 +1,4 @@
-﻿var horizontalViewLimit; // l'horizon actuel, inférieur ou égal à la vue maximale
-var grid; // la grille. Tout ce qui est visible est stocké là dedans
-var objectsOnPlayerCell;
-var isInLaby = false;
+"use strict";
 
 (function (chrall) {
 	chrall.makeDeLink = function (x, y, z) {
@@ -14,7 +11,10 @@ var isInLaby = false;
 	 * construit la ligne de boites à cocher permettant de filtrer la grille
 	 */
 	chrall.makeFiltersHtml = function () {
-		html = '';
+		var	horizontalViewLimit = chrall.horizontalViewLimit,
+			viewFilters = chrall.viewFilters,
+			player = chrall.player();
+		var html = '';
 		html += "<form class=gridFiltersForm>";
 		if (player.totalSight > 5) {
 			html += '<img title="Centre la vue sur votre troll" id=goto_player class=butt src="' + chrome.extension.getURL("player_target.png") + '">';
@@ -88,6 +88,7 @@ var isInLaby = false;
 	}
 
 	function addCurrentPlayer($cell) {
+		var player = chrall.player();
 		var attributes = {
 			id:      player.id,
 			text:    player.z + ':Vous êtes ici',
@@ -121,6 +122,7 @@ var isInLaby = false;
 	}
 
 	function addTrolls(cell, $cell, noteRequest, horizontalDist, verticalDistanceHint, compactNames, maxLength) {
+		var player = chrall.player();
 		cell.trolls.forEach(function(troll){
 			noteRequest.NumTrolls.push(troll.id);
 			var differentLevel = player.z != troll.z;
@@ -161,7 +163,9 @@ var isInLaby = false;
 				monster = monstersOnLevel[i];
 				var name = monsterName(compactNames, maxLength, monster);
 				if (name != previousName) {
-				if (0 < pack.length) { monstersByLevel[level].push(pack); }
+					if (0 < pack.length) {
+						monstersByLevel[level].push(pack);
+					}
 					pack = [];
 					previousName = name;
 				}
@@ -187,6 +191,7 @@ var isInLaby = false;
 	}
 
 	function addMonsters(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames, maxLength) {
+		var player = chrall.player();
 		var compactMonsterStacks = chrall.isOptionEnabled('view-grid-compact-monster-stacks', true);
 		var monstersByLevel = {};
 		if (compactMonsterStacks) {
@@ -247,7 +252,7 @@ var isInLaby = false;
 			if (place.isHole) {
 				hasHole = true;
 			} else {
-				var differentLevel = player.z != place.z;
+				var differentLevel = chrall.player.z != place.z;
 				var attributes = {
 					id:      place.id,
 					name:    'lieux',
@@ -267,7 +272,7 @@ var isInLaby = false;
 	function addMushrooms(cell, $cell, verticalDistanceHint) {
 		for (var i = 0; i < cell.mushrooms.length; i++) {
 			var mushRoom = cell.mushrooms[i];
-			var differentLevel = player.z != mushRoom.z;
+			var differentLevel = chrall.player.z != mushRoom.z;
 			var attributes = {
 				name:    'champignons',
 				'class': 'ch_mushroom',
@@ -282,7 +287,7 @@ var isInLaby = false;
 	function addCenotaphs(cell, verticalDistanceHint, $cell) {
 		for (var i = 0; i < cell.cenotaphs.length; i++) {
 			var cenotaph = cell.cenotaphs[i];
-			var differentLevel = player.z != cenotaph.z;
+			var differentLevel = chrall.player.z != cenotaph.z;
 			var attributes = {
 				name:    'cénotaphes',
 				'class': 'ch_cenotaph',
@@ -335,6 +340,7 @@ var isInLaby = false;
 	function addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint, compactNames, maxLength) {
 		// on regroupe les objets par étage et pour chaque étage on les compte afin de ne pas afficher des milliers de lignes quand une tanière est écroulée
 		var objectsByLevel = {};
+		var player = chrall.player();
 		for (var i = 0; i < cell.objects.length; i++) {
 			var object = cell.objects[i];
 			objectsByLevel[object.z] = objectsByLevel[object.z] ? objectsByLevel[object.z] : [];
@@ -381,17 +387,18 @@ var isInLaby = false;
 	// Dans le cas où des erreurs d'analyse indiqueraient que la grille n'est pas bonne, on affiche un div de warning,
 	//  construit par cette fonction
 	chrall.makeGridErrorDiv = function($holder){
+		var grid = chrall.grid;
 		if (!grid.outOfGrid.length) return;
 		var m = {};
 		grid.outOfGrid.forEach(function(o){
-			if (o instanceof Troll) m.troll=(m.troll||0)+1;
-			else if (o instanceof Monster) m.monstre=(m.monstre||0)+1;
+			if (o instanceof chrall.Troll) m.troll=(m.troll||0)+1;
+			else if (o instanceof chrall.Monster) m.monstre=(m.monstre||0)+1;
 			else throw "Hein ? Y a aut'chose ? Faut mettre à jour makeGridErrorDiv.";
 		});
 		var txt = "Erreur d'affichage pour "+
 			Object.keys(m)
-			.filter(function(k){ return m[k] })
-			.map(function(k){ return m[k]+' '+k+(m[k]>1?'s':'') })
+			.filter((k) => m[k])
+			.map((k) => m[k]+' '+k+(m[k]>1?'s':''))
 			.join(' et ')
 			+ ".\nRéférez-vous aux tables plutôt qu'à la grille.";
 		$('<div>').text(txt).prependTo($holder).css({
@@ -410,48 +417,50 @@ var isInLaby = false;
 	 * Remplit au passage un objet contenant des infos sur ce qui est visible (pour les notes)
 	 */
 	chrall.makeGrid = function (noteRequest) {
+		var	player = chrall.player(),
+			grid = chrall.grid;
 		var orderItemsByType = chrall.isOptionEnabled("view-sort-items-per-type");
 		noteRequest.NumTrolls = [];
 		noteRequest.NumMonstres = [];
-		noteRequest.XMin = xmin;
-		noteRequest.XMax = xmax;
-		noteRequest.YMin = ymin;
-		noteRequest.YMax = ymax;
-		noteRequest.ZMin = zmin;
-		noteRequest.ZMax = zmax;
+		noteRequest.XMin = chrall.xmin;
+		noteRequest.XMax = chrall.xmax;
+		noteRequest.YMin = chrall.ymin;
+		noteRequest.YMax = chrall.ymax;
+		noteRequest.ZMin = chrall.zmin;
+		noteRequest.ZMax = chrall.zmax;
 
 		var $gridTable = $("<table/>", {id: 'grid', 'class': 'grid'});
 		var $tr = $("<tr/>");
 		$gridTable.append($tr);
 		$tr.append($("<td/>", {bgcolor: "#BABABA"}));
-		$tr.append($("<td/>", {colspan: xmax - xmin + 3, align: 'center', text: 'Nordhikan (Y+)'}));
+		$tr.append($("<td/>", {colspan: chrall.xmax - chrall.xmin + 3, align: 'center', text: 'Nordhikan (Y+)'}));
 		$tr.append($("<td/>", {bgcolor: "#BABABA"}));
 
 		$tr = $("<tr/>");
 		$gridTable.append($tr);
-		$tr.append($("<td/>", {rowspan: ymax - ymin + 3, style: 'min-width:1em'}).append($("<span/>", {style: 'display:block;-webkit-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;', text: 'Oxhykan (X-)'}))); // TODO span needed?
+		$tr.append($("<td/>", {rowspan: chrall.ymax - chrall.ymin + 3, style: 'min-width:1em'}).append($("<span/>", {style: 'display:block;-webkit-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;', text: 'Oxhykan (X-)'}))); // TODO span needed?
 		$tr.append($("<td/>", {align: 'center', height: 30, width: 30, text: 'y\\x'}));
 
-		var x, y, i;
-		for (x = xmin; x <= xmax; x++) {
+		var x, y;
+		for (x = chrall.xmin; x <= chrall.xmax; x++) {
 			$tr.append($("<td/>", {class: 'grad', text: x}));
 		}
 		$tr.append($("<td/>", {align: 'center', height: 30, width: 30, text: 'x/y'}));
-		$tr.append($("<td/>", {rowspan: ymax - ymin + 3, style: 'min-width:1em'}).append($("<span/>", {style: 'display:block;-webkit-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;', text: 'Orhykan (X+)'}))); // TODO span needed?
+		$tr.append($("<td/>", {rowspan: chrall.ymax - chrall.ymin + 3, style: 'min-width:1em'}).append($("<span/>", {style: 'display:block;-webkit-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;', text: 'Orhykan (X+)'}))); // TODO span needed?
 
 		var compactNames = chrall.isOptionEnabled('view-grid-compact-names');
 		var maxLength = chrall.integerOption('view-grid-compact-names-length', 20);
 		var verticalDistanceHint = chrall.isOptionEnabled('view-grid-vertical-distance-hint');
 
-		for (y = ymax; y >= ymin; y--) {
+		for (y = chrall.ymax; y >= chrall.ymin; y--) {
 			$tr = $("<tr/>");
 			$gridTable.append($tr);
 			$tr.append($("<td/>", { 'class': 'grad', text: y}));
 
-			for (x = xmin; x <= xmax; x++) {
+			for (x = chrall.xmin; x <= chrall.xmax; x++) {
 				var horizontalDistance = player.horizontalDistance(x, y);
 				var cellAttributes = {
-					'class': "d" + ((horizontalDistance - horizontalViewLimit + 20001) % 2),
+					'class': "d" + ((horizontalDistance - chrall.horizontalViewLimit + 20001) % 2),
 					grid_x:  x,
 					grid_y:  y
 				};
@@ -467,7 +476,7 @@ var isInLaby = false;
 				})($cell);
 
 				$tr.append($cell);
-				if ((horizontalViewLimit == 0) && ( (player.x != x) || (player.y != y) )) {
+				if ((chrall.horizontalViewLimit == 0) && ( (player.x != x) || (player.y != y) )) {
 					// Si on est aveugle, on indique que les cases autour sont inconnues avec un point d'interrogation.
 					// La vue étant minimaliste dans ce cas-là, on peut fixer une taille par défaut pour les cases.
 					$cell.uncharted = 1;
@@ -514,7 +523,7 @@ var isInLaby = false;
 		$tr = $("<tr/>");
 		$gridTable.append($tr);
 		$tr.append($("<td/>", {align: 'center', height: 30, width: 30, text: 'y/x'}));
-		for (x = xmin; x <= xmax; x++) {
+		for (x = chrall.xmin; x <= chrall.xmax; x++) {
 			$tr.append($("<td/>", {class: 'grad', text: x}));
 		}
 		$tr.append($("<td/>", {align: 'center', height: 30, width: 30, text: 'x\\y'}));
@@ -522,7 +531,7 @@ var isInLaby = false;
 		$tr = $("<tr/>");
 		$gridTable.append($tr);
 		$tr.append($("<td/>", {bgcolor: "#BABABA"}));
-		$tr.append($("<td/>", {colspan: xmax - xmin + 3, align: 'center', text: 'Mydikan (Y-)'}));
+		$tr.append($("<td/>", {colspan: chrall.xmax - chrall.xmin + 3, align: 'center', text: 'Mydikan (Y-)'}));
 		$tr.append($("<td/>", {bgcolor: "#BABABA"}));
 
 		return $gridTable;
@@ -548,16 +557,15 @@ var isInLaby = false;
 	//         page. Il me semble difficile d'optimiser ça.
 	//         "table-layout: fixed;" ne change rien
 	chrall.analyseAndReformatView = function () {
+		var noteRequest = {};
 		//var time_enter = (new Date()).getTime(); // <= prof
-
-
 		$(document.body).css('overflow', 'hidden');
 
 		$('#footer2').remove(); // ce truc là se retrouve maintenant par dessus, je le vire carrément
 
 		//> on analyse la vue
-		var $tables = Chrall_analyseView();
-		var noteRequest = {};
+		var	$tables = chrall.analyseView(), // this creates chrall.grid
+			grid = chrall.grid;
 
 		//> on vire la frise latérale
 		$("td[width='55']").remove();
@@ -581,7 +589,7 @@ var isInLaby = false;
 			chrall.addTab($tabs, "#tabGrid", "Grille");
 		}
 		//onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
-		if (isInLaby) {
+		if (chrall.isInLaby) {
 			chrall.addTab($tabs, "#tabWalls", "Murs et couloirs");
 		}
 		chrall.addTab($tabs, "#tabTrolls", "Trolls", grid.nbTrollsInView);
@@ -609,7 +617,7 @@ var isInLaby = false;
 			$tabContainer.append($tabGrid);
 		}
 
-		if (isInLaby) $tabContainer.append(chrall.makeTabDiv("tabWalls"));
+		if (chrall.isInLaby) $tabContainer.append(chrall.makeTabDiv("tabWalls"));
 		$tabContainer.append(chrall.makeTabDiv("tabTrolls"));
 		$tabContainer.append(chrall.makeTabDiv("tabMonsters"));
 		$tabContainer.append(chrall.makeTabDiv("tabPlaces"));
@@ -620,7 +628,7 @@ var isInLaby = false;
 		if (!chrall.hallIsAccro()) {
 			$tabContainer.append(chrall.makeTabDiv("tabPartages"));
 			$tabContainer.append(chrall.makeTabDiv("tabRecherche"));
-			if (isInLaby) {
+			if (chrall.isInLaby) {
 				$tabContainer.append(chrall.makeTabDiv("tabWalls"));
 			}
 		}
@@ -633,7 +641,7 @@ var isInLaby = false;
 
 		$("#tabSettings").append(document.getElementsByName("LimitViewForm")[0]); // on déplace le formulaire de limitation de vue, avec la table qu'il contient (c'est tables[0] mais on a besoin du formulaire pour que les boutons fonctionnent)
 		// onglet spécifique pour les murs et couloirs dans les pocket hall de type labyrinthe
-		if (isInLaby) $("#tabWalls").append($tables['murs']);
+		if (chrall.isInLaby) $("#tabWalls").append($tables['murs']);
 		$("#tabMonsters").append($tables['monstres']);
 		$("#tabTrolls").append($tables['trolls']);
 		$("#tabObjects").append($tables['tresors']);
@@ -642,7 +650,7 @@ var isInLaby = false;
 		$("#tabCenotaphs").append($tables['cadavres']);
 		if (!chrall.hallIsAccro()) {
 			$("#tabPartages").append(chrall.makePartageTables());
-			makeSearchPanel($("#tabRecherche"));
+			chrall.makeSearchPanel($("#tabRecherche"));
 		}
 		$(".tab_content").hide();
 
@@ -650,7 +658,7 @@ var isInLaby = false;
 		$tabs_view.find("li:first").addClass("active").show();
 		$(".tab_content:first").show();
 		var changeTab = function ($tab) {
-			hideOm(); // fermeture des éventuels objectMenus de la grille
+			chrall.hideOm(); // fermeture des éventuels objectMenus de la grille
 			$("#tabs_view").find("li").removeClass("active");
 			$tab.addClass("active");
 			$(".tab_content").hide();
@@ -687,7 +695,7 @@ var isInLaby = false;
 		$grid_holder.dragscrollable({dragSelector: '#grid'});
 
 		//> on applique les réglages de filtrages de la fois précédente
-		for (var key in viewFilters) {
+		for (var key in chrall.viewFilters) {
 			var display = localStorage['grid_filter_' + key];
 			if (display != null) {
 				var os = document.getElementsByName(key);
@@ -706,7 +714,7 @@ var isInLaby = false;
 
 		setTimeout(// afin d'accélérer l'affichage initial, on repousse un peu l'ajout des bulles et menus
 				function () {
-					Chrall_gridLive();
+					chrall.gridLive();
 
 					//> bulle popup sur le lien du joueur
 					var $grid = $("#grid");
@@ -748,17 +756,17 @@ var isInLaby = false;
 		var $gridHolder = $grid_holder;
 		var $playerCell = $('#cellp0p0');
 		var gotoPlayer = function () {
-			hideOm();
-			scrollInProgress = true;
+			chrall.hideOm();
+			chrall.scrollInProgress = true;
 			$gridHolder.animate(
-					{
-						scrollLeft: ($gridHolder.scrollLeft() + $playerCell.offset().left + ($playerCell.innerWidth() - window.innerWidth) / 2),
-						scrollTop:  ($gridHolder.scrollTop() + $playerCell.offset().top + ($playerCell.innerHeight() - window.innerHeight) / 2)
-					},
-					'slow',
-					function () {
-						scrollInProgress = false;
-					}
+				{
+					scrollLeft: ($gridHolder.scrollLeft() + $playerCell.offset().left + ($playerCell.innerWidth() - window.innerWidth) / 2),
+					scrollTop:  ($gridHolder.scrollTop() + $playerCell.offset().top + ($playerCell.innerHeight() - window.innerHeight) / 2)
+				},
+				'slow',
+				function () {
+					chrall.scrollInProgress = false;
+				}
 			);
 		};
 		//> on centre la vue sur la cellule du joueur
@@ -783,7 +791,7 @@ var isInLaby = false;
 
 		// On corrige si nécessaire la position affichée dans le menu de gauche et on signale
 		// cette position au serveur Chrall
-		updateTroll();
+		chrall.updateTroll();
 	}
 
 })(window.chrall = window.chrall || {});

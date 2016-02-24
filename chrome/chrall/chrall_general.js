@@ -1,22 +1,15 @@
+"use strict";
 // contient des fonctions liées à l'interface générale
 // et des utilitaires. Contient aussi la constante donnant la version courante de Chrall
 
-var chrallVersion = "3.16";
+var chrall = chrall || {};
+chrall.version = "3.16";
 
-function getUrlParameter(name, defaultValue) {
-	name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-	var regexS = "[\\?&]" + name + "=([^&#]*)";
-	var regex = new RegExp(regexS);
-	var results = regex.exec(document.location.href);
-	if (results == null) return defaultValue;
-	else return results[1];
-}
-
-function Chrall_changeLocationOtherFrame(frameKey, href) {
+chrall.changeLocationOtherFrame = function(frameKey, href) {
 	localStorage['frame_new_location_' + frameKey] = href;
 }
 
-function Chrall_listenForChangeLocation(frameKey) {
+chrall.listenForChangeLocation = function(frameKey) {
 	var localStorageKey = 'frame_new_location_' + frameKey;
 	var interval = setInterval(function() {
 		var new_href = localStorage[localStorageKey];
@@ -31,18 +24,17 @@ function Chrall_listenForChangeLocation(frameKey) {
 /**
  * découpe en mots (un nombre peut être un mot).
  *
- * Note : comme je ne suis pas fort en expressions régulières, si un "-" est isolé, il sort comme un mot...
  * Attention : si vous corrigez le comportement de la ligne ci-dessus il faudra modifier chrall.extractBasicInfos et pas mal d'autres méthodes
  */
-function Chrall_tokenize(text) {
-	return text.trim().split(new RegExp("[ /|\t\n\r\f,.:=()]+", "g"));
+chrall.tokenize = function(text) {
+	return text.trim().split(/[\s\/|,.:=()]+/g);
 }
 
 /**
  * les alarmes, dont la durée de vie peut dépasser celle de la page MH, doivent être gérées
  *  dans l'extension (la page en background).
  */
-function Chrall_sendDlaToExtension(dlaTime, cumulTime) {
+chrall.sendDlaToExtension = function(dlaTime, cumulTime) {
 	chrome.extension.sendMessage({
 		"dla": dlaTime,
 		"cumul": cumulTime
@@ -52,11 +44,11 @@ function Chrall_sendDlaToExtension(dlaTime, cumulTime) {
 /**
  * calcul du nombre de PI (totaux) nécessaires pour atteindre un niveau
  */
-function Chrall_getTotalPiForLevel(level) {
+chrall.getTotalPiForLevel = function(level) {
 	return 5 * level * (level + 1) - 10;
 }
 
-function itoa(o) {
+chrall.itoa = function(o) {
 	if (o) {
 		if (o > 0) return "+" + o;
 		else return "" + o;
@@ -65,11 +57,11 @@ function itoa(o) {
 	}
 }
 
-function decumul(i, val) {
+chrall.decumul = function(i, val) {
 	return Math.floor(val - val * ([0, .33, .6, .75, .85, .9][Math.min(i, 4)]));
 }
 
-function turnName(turn) {
+chrall.turnName = function(turn) {
 	if (turn == 0) {
 		return "en cours";
 	} else if (turn == 1) {
@@ -82,7 +74,7 @@ function turnName(turn) {
 }
 
 // Traite des cas spéciaux de Chrall.
-function atoi(s) {
+chrall.atoi = function(s) {
 	if (!s) return undefined; // à valider
 	s = s.trim();
 	while (s.charAt(0) == '0' || s.charAt(0) == ':') {
@@ -94,17 +86,17 @@ function atoi(s) {
 
 // appelée depuis l'une des sous-frame de droite (la grande, ou bien celle d'actions), cette méthode met à jour
 // la position affichée dans le menu et signale la position au serveur Chrall
-function updateTroll() {
+chrall.updateTroll = function() {
+	var player = chrall.player();
 	if (player.x) {
 		player.save();
-		var s = 'X=' + player.x + ' | Y=' + player.y + ' | N=' + player.z;
 		chrall.sendPlayerInfosToChrallServer();
 	}
 }
 
 // récupère la date de génération de la page et renvoie ça sous forme de secondes depuis 1970
 // Renvoie 0 si pas trouvé
-function findMHSeconds() {
+chrall.findMHSeconds = function() {
 	var date = $("#hserveur");
 	return date.length > 0 ? Date.parse(date.text().replace(" GMT+0100]", "")).getTime() / 1000 : 0;
 }

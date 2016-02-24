@@ -1,4 +1,5 @@
-﻿(function(chrall) {
+"use strict";
+(function(chrall) {
 
 	// Verifie simplement si l'action "Creuser" est presente, et affiche que c'est possible s'il y a lieu.
 	// Pas besoin de verifier d'abord que la DLA est activee.
@@ -12,11 +13,12 @@
 
 	chrall.handleActionPage = function() {
 		//> on va essayer de lire les PA disponibles
-		var sentence = $('b:contains("Il me reste ")');
+		var	player = chrall.player(),
+			sentence = $('b:contains("Il me reste ")');
 		if (sentence.length > 0) {
-			var tokens = Chrall_tokenize(sentence.text());
+			var tokens = chrall.tokenize(sentence.text());
 			try {
-				rpa = parseInt(tokens[3]);
+				var rpa = parseInt(tokens[3]);
 				player.pa = rpa;
 				player.sessionActive = true;
 			} catch (error) {
@@ -30,7 +32,7 @@
 		player.save();
 
 		var $body = $('body');
-		$body.append(Chrall_makeLinksDiv());
+		$body.append(chrall.makeLinksDiv());
 		chrall.displayDiggingIsPossible();
 
 		$body.css('overflow', 'hidden'); // supprime l'ascenseur tout moche de la frame Actions

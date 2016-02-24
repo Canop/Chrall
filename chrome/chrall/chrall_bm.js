@@ -1,42 +1,85 @@
+"use strict";
 (function(chrall) {
 
 	/**
-	 * convertit une chaine du genre "ATT : +3 DEG : -9 en une map
-	 */
+	 * convertit une chaine du genre "ATT : +3 DEG : -9 en une map 
+	 */ 
 	function parseEffects(s) {
-		var map = {};
-		var tokens = Chrall_tokenize(s);
-		for (var i = 0; i < tokens.length - 1;) {
+		var map = new Object();
+		var tokens = chrall.tokenize(s);
+		for (var i=0; i<tokens.length-1;) {
 			var name = tokens[i++].trim();
-			if (name == '%') {
-				name = tokens[i++].trim();
-			}
+			if (name=='%') name = tokens[i++].trim();
 			var value = parseInt(tokens[i++]);
-			if ((name.length > 0) && value) {
-				map[name] = value;
-			}
+			if ((name.length>0) && value)	map[name] = value;
 		}
 		return map;
 	}
+
+	/**
+	 * représente en gros une ligne dans le tableau standard des bonus malus
+	 */
+	function BmEffect(name, theoricalEffectsAsString, decumul, type, durationAsString) {
+		this.name = name;
+		this.thEffects = parseEffects(theoricalEffectsAsString);
+		this.decumul = decumul;
+		this.type = type;
+		this.duration = parseInt(chrall.tokenize(durationAsString)[0]);
+	}
+
+	function CharBmEffect(type, value) {
+		this.sum = {};
+		this.count = {};
+		this.sum[type] = value;
+		this.count[type] = 1;
+	}
+	CharBmEffect.prototype.add = function(type, value, hasDecumul) {
+		if (this.count[type]) {
+			if (hasDecumul) {
+				this.sum[type] += chrall.decumul(this.count[type]++, value);
+			} else {
+				this.sum[type] += value;
+				this.count[type]++
+			}
+		} else {
+			this.sum[type] = value;
+			this.count[type] = 1;
+		}
+	};
+	CharBmEffect.prototype.str = function() {
+		return chrall.itoa(this.sum['Physique']) + "/" + chrall.itoa(this.sum['Magie']);
+	};
+	CharBmEffect.prototype.strMag = function() {
+		var v = 0;
+		if (this.sum['Physique']) {
+			v += this.sum['Physique'];
+		}
+		if (this.sum['Magie']) {
+			v += this.sum['Magie'];
+		}
+		return v + " %";
+	};
 
 	chrall.analyseAndReformatBM = function() {
 		var effects = [];
 		$('table table table.mh_tdborder tr.mh_tdpage').each(function() {
 			var cells = $(this).find("td");
 			effects.push(new BmEffect(
-					$(cells[0]).text().trim(),
-					$(cells[2]).text().trim(),
-					$(cells[3]).html().indexOf('bullet_red.jpg') >= 0, // marqueur du décumul
-					$(cells[4]).text().trim(),
-					$(cells[5]).text().trim()
+				$(cells[0]).text().trim(),
+				$(cells[2]).text().trim(),
+				$(cells[3]).html().indexOf('bullet_red.jpg') >= 0, // marqueur du décumul
+				$(cells[4]).text().trim(),
+				$(cells[5]).text().trim()
 			));
 		});
 		const NB_TURNS_MAX = 20;
 		var lines = [];
 		var name, turn, i;
 		for (turn = 0; turn < NB_TURNS_MAX; turn++) {
-			var bm = {}; // contient pour chaque nom (exemple : "Armure") le compte et les valeurs d'effets séparés par type ('Physique' ou 'Magie')
-			var nb = 0;
+			// bm contient pour chaque nom (exemple : "Armure")
+			// le compte et les valeurs d'effets séparés par type ('Physique' ou 'Magie')
+			var	bm = {},
+				nb = 0;
 			for (i in effects) {
 				var e = effects[i];
 				if (turn <= e.duration) {
@@ -85,7 +128,7 @@
 						html += "Suivantes";
 					}
 				} else {
-					html += turnName(turn);
+					html += chrall.turnName(turn);
 				}
 				html += "</td><td>";
 				html += lines[turn];
@@ -99,47 +142,4 @@
 })(window.chrall = window.chrall || {});
 
 
-/**
- * représente en gros une ligne dans le tableau standard des bonus malus
- */
-function BmEffect(name, theoricalEffectsAsString, decumul, type, durationAsString) {
-	this.name = name;
-	this.thEffects = parseEffects(theoricalEffectsAsString);
-	this.decumul = decumul;
-	this.type = type;
-	this.duration = parseInt(Chrall_tokenize(durationAsString)[0]);
-}
-
-function CharBmEffect(type, value) {
-	this.sum = {};
-	this.count = {};
-	this.sum[type] = value;
-	this.count[type] = 1;
-}
-CharBmEffect.prototype.add = function(type, value, hasDecumul) {
-	if (this.count[type]) {
-		if (hasDecumul) {
-			this.sum[type] += decumul(this.count[type]++, value);
-		} else {
-			this.sum[type] += value;
-			this.count[type]++
-		}
-	} else {
-		this.sum[type] = value;
-		this.count[type] = 1;
-	}
-};
-CharBmEffect.prototype.str = function() {
-	return itoa(this.sum['Physique']) + "/" + itoa(this.sum['Magie']);
-};
-CharBmEffect.prototype.strMag = function() {
-	var v = 0;
-	if (this.sum['Physique']) {
-		v += this.sum['Physique'];
-	}
-	if (this.sum['Magie']) {
-		v += this.sum['Magie'];
-	}
-	return v + " %";
-};
 

@@ -1,3 +1,4 @@
+"use strict";
 (function (chrall) {
 
 	var ùmessages = document.getElementById("messages");

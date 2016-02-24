@@ -1,3 +1,4 @@
+"use strict";
 (function (chrall) {
 
 // construit les tables permettant d'exploiter et visualiser les partages (actuellement

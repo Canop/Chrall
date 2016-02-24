@@ -1,7 +1,8 @@
+"use strict";
 (function(chrall) {
 	chrall.handleFollowerOrders = function() {
 
-		Chrall_gridLive(); // <- ça c'est parce qu'on va sans doute ajouter des liens d'ouverture de vues "zoom"
+		chrall.gridLive(); // <- ça c'est parce qu'on va sans doute ajouter des liens d'ouverture de vues "zoom"
 
 		var tableOrdre = $('.mh_tdborder_fo');
 		var lignes = tableOrdre.find('tr');
@@ -14,12 +15,13 @@
 		var gowap_x = parseInt(posToken[0].substring(3).trim());
 		var gowap_y = parseInt(posToken[1].substring(3).trim());
 		var gowap_z = parseInt(posToken[2].substring(3).trim());
-		var chemin = new Chemin(new Point(gowap_x, gowap_y));
-		var chGowap = new ChGowap(gowap_x, gowap_y, gowap_z, numGowap);
+		var chemin = new chrall.Chemin(new chrall.Point(gowap_x, gowap_y));
+		var chGowap = new chrall.ChGowap(gowap_x, gowap_y, gowap_z, numGowap);
 		var numMaxOrdre = 0;
 
-		$('<td width=150px><a name=zoom class=gogo x=' + gowap_x + ' y=' + gowap_y + ' z=' + gowap_z +
-				'>Montrer les alentours</a></td>').appendTo($(lignes[0]));
+		$('<td width=150px></td>')
+		.append('<a name=zoom class=gogo x=' + gowap_x + ' y=' + gowap_y + ' z=' + gowap_z +'>Montrer les alentours</a>')
+		.appendTo($(lignes[0]));
 		var movementRegexp = /([0-9\-]+) \| Y=([0-9\-]+) \| N=([0-9\-]+)/;
 		for (var i = 2; i < lignes.length; i++) {
 			var cells = $(lignes[i]).find('td');
@@ -29,11 +31,11 @@
 			}
 			str = $(cells[2]).text();
 			var match;
-			if (match = movementRegexp.exec(str)) {
+			if ((match = movementRegexp.exec(str))) {
 				gowap_x = parseInt(match[1]);
 				gowap_y = parseInt(match[2]);
 				gowap_z = parseInt(match[3]);
-				chemin.add(new Point(gowap_x, gowap_y));
+				chemin.add(new chrall.Point(gowap_x, gowap_y));
 				$('<td><a name=zoom class=gogo x=' + gowap_x + ' y=' + gowap_y + ' z=' + gowap_z +
 						'>Montrer les alentours</a></td>').appendTo($(lignes[i]));
 			} else {
@@ -44,22 +46,25 @@
 		var $mapDiv = $("<div/>", {style: "text-align: center;"});
 		var canvas = $("<canvas/>", {id: "cartehall", style: "width:400px;height:400px;"});
 		var carteDiv = $("<div/>", {id: "tdbCarte", style: "text-align: center;"}).text("Carte du Hall");
-		carteDiv.append($("<span/>",
-				{id: "messageCarte"}).text("Cliquez sur la carte pour donner un ordre de mouvement."));
-
+		carteDiv.append(
+			$("<span/>", {id: "messageCarte"}).text("Cliquez sur la carte pour donner un ordre de mouvement.")
+		);
 
 		var form = $('form[name="form1"]');
 		canvas.appendTo($mapDiv);
 		carteDiv.appendTo($mapDiv);
 		$mapDiv.appendTo(form);
 
-		var ch = new CarteHall("cartehall", "messageCarte");
-		ajouteTrous(ch);
+		var ch = new chrall.CarteHall("cartehall", "messageCarte");
+		chrall.ajouteTrous(ch);
 		ch.recomputeCanvasPosition();
 		ch.add(chemin);
+		var player = chrall.player();
 		if (player) {
-			ch.add(new ChTroll(player.x, player.y, player.z, "blue", player.name,
-					player.sight ? (player.sight.diceNumber + player.sight.physicalBonus) : 0));
+			ch.add(new chrall.ChTroll(
+				player.x, player.y, player.z, "blue", player.name,
+				player.sight ? (player.sight.diceNumber + player.sight.physicalBonus) : 0
+			));
 		}
 		ch.add(chGowap);
 

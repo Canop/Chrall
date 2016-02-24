@@ -1,7 +1,9 @@
+"use strict";
 (function(chrall) {
 
 	// notons que le code qui suit est super sensible, il pêtera à la moindre modif (genre nettoyage) du html généré par MH
 	chrall.analyseResultatCombat = function() {
+		var atoi = chrall.atoi;
 		if (!chrall.compteChrallActif()) {
 			return;
 		}
@@ -37,7 +39,7 @@
 					}
 				} else {
 					if (line.indexOf("Page générée") > 0) {
-						var t = Chrall_tokenize(line);
+						var t = chrall.tokenize(line);
 						var date = new Date(atoi(t[2]), atoi(t[1]) - 1, atoi(t[0]), atoi(t[3]), atoi(t[4]), atoi(t[5]));
 						result.Date = date.getTime() / 1000;
 					}

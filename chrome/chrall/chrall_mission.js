@@ -1,3 +1,4 @@
+"use strict";
 (function(chrall) {
 
 	chrall.addTroogleLinks = function() {
@@ -42,12 +43,12 @@
 		var maxLevel = 100;
 		match = minLevelExtract.exec(text);
 		if (match) {
-			minLevel = atoi(match[1]);
+			minLevel = chrall.atoi(match[1]);
 		}
 		var levelRangeExtract = /niveau.* (\d) \+ ou \-/i;
 		match = levelRangeExtract.exec(text);
 		if (match) {
-			var center = atoi(match[1]);
+			var center = chrall.atoi(match[1]);
 			minLevel = center - 1;
 			maxLevel = center + 1;
 		}

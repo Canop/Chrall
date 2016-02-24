@@ -1,3 +1,4 @@
+"use strict";
 // classe dont les instances représentent des liens externes
 function ExternalLink(name, displayedByDefault, href, description) {
 	this.display = displayedByDefault;
@@ -7,8 +8,8 @@ function ExternalLink(name, displayedByDefault, href, description) {
 }
 
 // renvoie une map category->[]link
-// FIXME  : le lien vers mappyTroll n'a pas la position
 function Chrall_getExternalLinks() {
+	var player = chrall.player();
 	var links = {
 		"Chrall": [
 			new ExternalLink("Miaou", true, "http://dystroy.org/miaou/167?Chrall", "Miaou est sans doute le meilleur endroit pour obtenir du support sur Chrall"),
@@ -45,7 +46,7 @@ function Chrall_getExternalLinks() {
 }
 
 // construit le html de sélection des liens à afficher
-function Chrall_makeLinkOptionPage() {
+chrall.makeLinkOptionPage = function() {
 	var links = Chrall_getExternalLinks();
 	var $linkOptions = $('<div style="text-align:left">', {text :"Cochez les liens que vous voulez avoir toujours présents sur votre écran"});
 	for (var cat in links) {
@@ -60,7 +61,7 @@ function Chrall_makeLinkOptionPage() {
 				localStorage['dysplayLink_' + name] = checked ? 'yes' : 'no';
 				var actionFrame = $('frame[name="Action"]', window.frames.frameElement.parentElement)[0];
 				var outilsDiv = $('#menuOutilsChrall', actionFrame.contentDocument);
-				outilsDiv.replaceWith(Chrall_makeLinksDiv());
+				outilsDiv.replaceWith(chrall.makeLinksDiv());
 			});
 			checkbox = checkbox.after($('<a/>', {target: 'extern', href: link.href, text: link.name}));
 			checkbox = checkbox.after(link.description);
@@ -71,7 +72,7 @@ function Chrall_makeLinkOptionPage() {
 }
 
 // appelée depuis la frame "Action", construit la div des liens externes
-function Chrall_makeLinksDiv() {
+chrall.makeLinksDiv = function() {
 	var NB_LINES_MAX = 6;
 	var linkArray = [];
 	var links = Chrall_getExternalLinks();
@@ -84,7 +85,7 @@ function Chrall_makeLinksDiv() {
 	}
 	var nbCols = Math.ceil(linkArray.length / NB_LINES_MAX);
 	var nbItemsPerCol = Math.ceil(linkArray.length / nbCols);
-	var i = 0;
+	i = 0;
 	var html = '<div id=menuOutilsChrall>';
 	html += '<table cellspacing=2 cellpadding=2>';
 	for (var r = 0; r < nbItemsPerCol; r++) {
@@ -92,7 +93,7 @@ function Chrall_makeLinksDiv() {
 		for (var c = 0; c < nbCols; c++) {
 			html += '<td nowrap>';
 			if (i < linkArray.length) {
-				var link = linkArray[i++];
+				link = linkArray[i++];
 				html += '<a target=extern href="' + link.href + '">' + link.name + '</a>';
 			}
 			html += '</td>';

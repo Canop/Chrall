@@ -1,7 +1,8 @@
+"use strict";
 (function(chrall) {
 
 	chrall.askDestinations = function() {
-		chrall.jsonp(chrall.serveurPrive() + "json?action=get_destinations_jsonp&asker=" + player.id + "&mdpr=" + chrall.mdpCompteChrall());
+		chrall.jsonp(chrall.serveurPrive() + "json?action=get_destinations_jsonp&asker=" + chrall.player().id + "&mdpr=" + chrall.mdpCompteChrall());
 	};
 
 	chrall.warnOnTp = function() {
@@ -14,7 +15,7 @@
 			if (x * y * z != x * y * z) {
 				$warn.hide();
 			} else {
-				$warn.text(teleportHoleMessage(x, y, z)).show();
+				$warn.text(chrall.teleportHoleMessage(x, y, z)).show();
 			}
 		}
 

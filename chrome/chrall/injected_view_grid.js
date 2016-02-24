@@ -1,18 +1,19 @@
+"use strict";
 (function (chrall) {
 
 	chrall.gridChangeDisplayByName = function (key, display, transient) {
-		var os = document.getElementsByName(key);
+		var	i,
+			os = document.getElementsByName(key);
 		if (!display) { // mode d'inversion d'un objet unique, non persistent
-			for (var i = 0; i < os.length; i++) {
+			for (i = 0; i < os.length; i++) {
 				if (os[i].style.display == 'inline') {
 					os[i].style.display = 'none';
-				}
-				else {
+				} else {
 					os[i].style.display = 'inline';
 				}
 			}
 		} else { // mode d'inversion de filtre global, persistent
-			for (var i = 0; i < os.length; i++) {
+			for (i = 0; i < os.length; i++) {
 				os[i].style.display = display;
 			}
 			if (!transient) {
@@ -22,7 +23,7 @@
 	}
 
 	chrall.updateTrollInfoInTable = function(partages) {
-		if (chrall.isOptionDisabled('view-display-hit-points-ratio')) {return;}
+		if (chrall.isOptionDisabled('view-display-hit-points-ratio')) return;
 
 		var partageInfo = {};
 		for (var i = 0; i < partages.length; i++) {

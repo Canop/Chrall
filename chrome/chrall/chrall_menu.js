@@ -1,9 +1,11 @@
-﻿(function(chrall) {
+"use strict";
+(function(chrall) {
 
 	/*
 	 * agit sur la frame de gauche (le "menu" de MH)
 	 */
 	chrall.handleMenuPage = function() {
+		var player = chrall.player();
 		//> lecture et transmission au background du numéro du troll et de sa position
 		var trollId = $('input[name="ai_IdPJ"]').val();
 		var infoMenuDiv = $('div.infoMenu');
@@ -20,7 +22,7 @@
 		html += t3 + '</span>';
 		infoMenuDiv.html(html);
 		var locationString = t2.indexOf('X=') >= 0 ? t2 : t3;
-		var infoTokens = Chrall_tokenize(locationString);
+		var infoTokens = chrall.tokenize(locationString);
 		var px = infoTokens[1];
 		var py = infoTokens[3];
 		var pz = infoTokens[5];

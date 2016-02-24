@@ -1,6 +1,5 @@
+"use strict";
 // traite une page du forum MH
-
-var scrollInProgress = false;
 
 $('a[href^="javascript:oT("]').each(
 	function() {

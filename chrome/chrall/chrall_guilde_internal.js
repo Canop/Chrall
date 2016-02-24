@@ -1,3 +1,4 @@
+"use strict";
 (function (chrall) {
 
 	chrall.addPartageLinkToAll = function() {

@@ -1,3 +1,4 @@
+"use strict";
 (function(chrall) {
 
 	// il faut stocker le numéro du monstre sélectionné car on ne l'a pas dans les résultats de l'insulte
@@ -18,7 +19,8 @@
 		//~ console.log('Texte résultat insulte :');
 		//~ console.log(lines);
 
-		var result = {};
+		var	result = {},
+			atoi = chrall.atoi;
 		for (var i = lines.length; i-- > 0;) {
 			var line = lines[i];
 			if (line.indexOf("Compétence Insulte") == 0) {
@@ -29,7 +31,7 @@
 				}
 			} else {
 				if (line.indexOf("Page générée") > 0) {
-					var t = Chrall_tokenize(line);
+					var t = chrall.tokenize(line);
 					var d = new Date(atoi(t[2]), atoi(t[1]) - 1, atoi(t[0]), atoi(t[3]), atoi(t[4]), atoi(t[5]));
 					result.Date = d.getTime() / 1000;
 				}

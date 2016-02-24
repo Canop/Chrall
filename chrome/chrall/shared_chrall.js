@@ -1,3 +1,4 @@
+"use strict";
 (function (chrall) {
 
 	// --------------------------------------------------------
@@ -29,7 +30,7 @@
 	// -- mini logging framework
 	// --------------------------------------------------------
 
-	var TRACE = 0, DEBUG = 1, INFO = 2, WARN = 3, ERROR = 4;
+	var TRACE = 0, DEBUG = 1, INFO = 2, WARN = 3, ERROR = 4; //eslint-disable-line
 	var log_level = INFO;
 
 	console.log_trace = function (item) {
@@ -164,7 +165,7 @@
 
 	// Fonction pour initialiser en masse une série de valeurs dans le local storage, liées à un troll particulier
 	chrall.setTrollStorage = function (valueMap) {
-		for (key in valueMap) {
+		for (var key in valueMap) {
 			localStorage['troll.' + chrall.playerId() + key] = valueMap[key];
 		}
 	};

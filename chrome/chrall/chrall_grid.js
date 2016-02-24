@@ -1,3 +1,6 @@
+"use strict";
+var chrall = chrall || {};
+
 // cellule dans la grille (correspond à une colonne du jeu : x et y fixés mais z variable)
 function Cell() {
 }
@@ -32,7 +35,7 @@ Cell.prototype.addCenotaph = function (o) {
 
 
 // une grille correspond à la vue passée (et donc de taille (2*vue+1)²)
-function Grid(xp, yp, sight) {
+var Grid = chrall.Grid = function(xp, yp, sight) {
 	this.sight = sight;
 	this.dx = xp - sight;
 	this.dy = yp - sight;
@@ -67,7 +70,7 @@ Grid.prototype.getCellNotNull = function (x, y) {
 };
 
 // enregistre les modifications 'live' (au sens jquery)
-function Chrall_gridLive() {
+chrall.gridLive = function() {
 
 	// ajout de la fenêtre de zoom et de quelques fonctions
 	var html = "<div id=zoom>";
@@ -85,13 +88,14 @@ function Chrall_gridLive() {
 
 	//> on ajoute le popup sur les monstres
 	function getMonsterArgs(link) {
+		var player = chrall.player();
 		var args = {};
 		var monsterId = parseInt(link.attr('id'));
 		var tokens = link.text().split(':');
 		var linkText = null == link.attr("nom_complet_monstre") ? tokens[tokens.length - 1].trim() : link.attr("nom_complet_monstre").trim();
 		var nomMonstre = encodeURIComponent(linkText);
 		args.text = link.attr('message');
-		var imgUrl = getMonsterMhImageUrl(linkText);
+		var imgUrl = chrall.getMonsterMhImageUrl(linkText);
 		if (imgUrl != null) {
 			args.leftCol = "<img class=illus src=\"" + imgUrl + "\">";
 		}
@@ -100,13 +104,13 @@ function Chrall_gridLive() {
 			args.ajaxUrl += '&mdpr=' + chrall.mdpCompteChrall();
 		}
 		args.ajaxRequestId = linkText;
-        console.log_trace(args);
 		return args;
 	}
 	chrall.bubbleLive('a[href*="EMV"]', 'bub_monster', getMonsterArgs);
 
 	//> popup sur les trolls
 	function getTrollArgs(link) {
+		var player = chrall.player();
 		var trollId = parseInt(link.attr('id'));
 		return {
 			ajaxUrl: chrall.serveurPublic() + 'json?action=get_troll_info&asker=' + player.id + '&trollId=' + trollId,
@@ -120,11 +124,13 @@ function Chrall_gridLive() {
 	);
 
 	//> on ajoute le menu des DE, le titre de chaque cellule
-	objectMenuLive('table.grid td[grid_x]', function(o) {
+	chrall.objectMenuLive('table.grid td[grid_x]', function(o) {
 		var x = parseInt(o.attr('grid_x'));
 		var y = parseInt(o.attr('grid_y'));
 		var links = '';
 		// on ajoute au menu la liste des trésors aux pieds du joueur, pas qu'il oublie de les prendre...
+		var	objectsOnPlayerCell = chrall.objectsOnPlayerCell,
+			player = chrall.player();
 		if (objectsOnPlayerCell) {
 			if (x === player.x && y === player.y) {
 				if (objectsOnPlayerCell.length > 4) {
@@ -158,16 +164,17 @@ function Chrall_gridLive() {
 		var $this = $(this);
 		localStorage['todo'] = 'de';
 		localStorage['todo_args'] = $this.attr('x') + ' ' + $this.attr('y') + ' ' + $this.attr('z');
-		Chrall_changeLocationOtherFrame('action', '/mountyhall/MH_Play/Play_action.php?ai_ToDo=112&amp;as_Action=ACTION!');
+		chrall.changeLocationOtherFrame('action', '/mountyhall/MH_Play/Play_action.php?ai_ToDo=112&amp;as_Action=ACTION!');
 	});
 
 	//> le défilement à la molette perturbe objectMenu
 	document.onmousewheel = function(e) {
-		hideOm();
+		chrall.hideOm();
 	};
 
 	// outillage des liens d'ouvertures de vue "zoom"
-	$('a[name="zoom"]').live('click', function() {
+	$('a[name="zoom"]').live('click', function() { // FIXME live est mort! virer ça!
+		var player = chrall.player();
 		if (chrall.compteChrallActif()) {
 			var $link = $(this);
 			var x = $link.attr('x');
@@ -179,19 +186,19 @@ function Chrall_gridLive() {
 			$('#zoom_content').load(url, function() {
 				setTimeout(function() {
 					// centrage de la vue
-					hideOm();
-					scrollInProgress = true;
-					$targetCell = $('#zoom_content').find('td[grid_x="' + x + '"][grid_y="' + y + '"]');
-					$grid_holder = $('#zoom');
+					chrall.hideOm();
+					chrall.scrollInProgress = true;
+					var $targetCell = $('#zoom_content').find('td[grid_x="' + x + '"][grid_y="' + y + '"]');
+					var $grid_holder = $('#zoom');
 					$grid_holder.animate(
-							{
-								scrollLeft: ($grid_holder.scrollLeft() + $targetCell.offset().left + ($targetCell.innerWidth() - window.innerWidth) / 2),
-								scrollTop: ($grid_holder.scrollTop() + $targetCell.offset().top + ($targetCell.innerHeight() - window.innerHeight) / 2)
-							},
-							'slow',
-							function() {
-								scrollInProgress = false;
-							}
+						{
+							scrollLeft: ($grid_holder.scrollLeft() + $targetCell.offset().left + ($targetCell.innerWidth() - window.innerWidth) / 2),
+							scrollTop: ($grid_holder.scrollTop() + $targetCell.offset().top + ($targetCell.innerHeight() - window.innerHeight) / 2)
+						},
+						'slow',
+						function() {
+							chrall.scrollInProgress = false;
+						}
 					);
 				}, 200);
 			});

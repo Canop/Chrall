@@ -1,10 +1,14 @@
+"use strict";
+var chrall = chrall || {};
+
 function Chemin(p) {
 	this.points = new Array();
 	this.points.push(p);
-	this.rect = new Rect(p.x, p.y, 1, 1);
-	this.screenRect = new Rect();
+	this.rect = new chrall.Rect(p.x, p.y, 1, 1);
+	this.screenRect = new chrall.Rect();
 }
-Chemin.prototype = new ChCol();
+Chemin.prototype = new chrall.ChCol();
+chrall.Chemin = Chemin;
 
 Chemin.prototype.add = function(p) {
 	var lastPoint = this.points[this.points.length-1];
@@ -13,9 +17,9 @@ Chemin.prototype.add = function(p) {
 	var adx = Math.abs(dx);
 	var ady = Math.abs(dy);
 	if (adx>ady) {
-		this.points.push(new Point(dx>0 ? lastPoint.x+ady : lastPoint.x-ady, p.y));
+		this.points.push(new chrall.Point(dx>0 ? lastPoint.x+ady : lastPoint.x-ady, p.y));
 	} else {
-		this.points.push(new Point(p.x, dy>0 ? lastPoint.y+adx : lastPoint.y-adx));
+		this.points.push(new chrall.Point(p.x, dy>0 ? lastPoint.y+adx : lastPoint.y-adx));
 	}
 	this.points.push(p);
 	this.rect.makeContain(p);
@@ -32,12 +36,11 @@ Chemin.prototype.computeScreenRect = function(carte) {
 
 Chemin.prototype.draw = function(carte) {
 	carte.context.strokeStyle = '#e61803';//"#c99b1f";
-	//~ this.screenRect.drawThin(carte.context);
 	carte.context.lineWidth = Math.sqrt(carte.zoom);
 	carte.context.lineCap = "round";
 	carte.context.lineJoin = "round";
 	carte.context.beginPath();
-	var sp = new Point();
+	var sp = new chrall.Point();
 	carte.naturalToScreen(this.points[0], sp);
 	carte.context.moveTo(sp.x, sp.y);
 	for (var i=1; i<this.points.length; i++) {

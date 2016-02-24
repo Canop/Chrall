@@ -1,4 +1,5 @@
-//
+"use strict";
+var chrall = chrall || {};
 
 // données issues à peu près directement de ftp://ftp.mountyhall.com/Public_Monstres.txt
 // Attention à conserver l'ordre alphabétique, afin que "Ombre" soit avant "Ombre de roches" (et autres cas similaires d'inclusion)
@@ -146,7 +147,7 @@ var monster_data = [
 	["7", "Zombie", "un", "http://www.mountyhall.com/images/Monstres/Zombie.jpg"]
 ];
 
-function getMonsterMhImageUrl(monsterName) {
+chrall.getMonsterMhImageUrl = function(monsterName) {
 	var emn = " "+monsterName.replace('%20', ' ')+" ";// attention : on peut recevoir le nom urlencodé
 	for (var i=monster_data.length; i-->0;) {
 		if (~emn.indexOf(" "+monster_data[i][1]+" ")) {

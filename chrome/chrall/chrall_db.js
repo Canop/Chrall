@@ -1,3 +1,4 @@
+"use strict";
 // facade de la base de données persistante dans le browser
 //  (laquelle n'est pas en content script)
 

@@ -1,7 +1,8 @@
+"use strict";
+
 /**
  * ce fichier contient les fonctions d'analyse de la vue reçue de MH.
  */
-
 (function (chrall) {
 
 	// --- Utilitaires --------------------------------------------
@@ -74,12 +75,13 @@
 	// ------------------ Analyse des composants de la vue --------------------
 
 	chrall.analyseMonsterTable = function (table) {
+		var grid = chrall.grid;
 		table = table.get(0);
 		if (table === undefined) return;
 		var lines = table.querySelectorAll("tbody tr");
-		grid.nbMonstersInView = lines.length;
+		chrall.grid.nbMonstersInView = lines.length;
 		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-			var item = new Monster();
+			var item = new chrall.Monster();
 			var cells = lines[lineIndex].children;
 			var i = 1;
 			item.actions = cells[i++].innerHTML;
@@ -98,6 +100,7 @@
 	};
 
 	chrall.analyseTrollTable = function (table) {
+		var grid = chrall.grid;
 		// en même temps qu'on analyse la table, on ajoute les cases à cocher
 		// de sélection des trolls pour l'envoi de MP.
 		table = table.get(0);
@@ -152,12 +155,13 @@
 	};
 
 	chrall.analyseMushroomTable = function (table) {
+		var grid = chrall.grid;
 		table = table.get(0);
 		if (table===undefined) return;
 		var lines = table.querySelectorAll("tbody tr");
 		grid.nbMushroomsInView = lines.length;
 		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-			var item = new Thing();
+			var item = new chrall.Thing();
 			var cells = lines[lineIndex].children;
 			var i = 1;
 			item.actions = cells[i++].innerHTML;
@@ -171,12 +175,13 @@
 	};
 
 	chrall.analysePlaceTable = function (table) {
+		var grid = chrall.grid;
 		table = table.get(0);
 		if (table===undefined) return;
 		var lines = table.querySelectorAll("tbody tr");
 		grid.nbPlacesInView = lines.length;
 		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-			var item = new Place();
+			var item = new chrall.Place();
 			var cells = lines[lineIndex].children;
 			var i = 1;
 			item.actions = cells[i++].innerHTML;
@@ -193,12 +198,13 @@
 
 
 	chrall.analyseObjectTable = function (table) {
+		var grid = chrall.grid;
 		table = table.get(0);
 		if (table===undefined) return;
 		var lines = table.querySelectorAll("tbody tr");
 		grid.nbObjectsInView = lines.length;
 		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-			var item = new Thing();
+			var item = new chrall.Thing();
 			var cells = lines[lineIndex].children;
 			var i = 1;
 			item.actions = cells[i++].innerHTML;
@@ -214,12 +220,13 @@
 	};
 
 	chrall.analyseCenotaphTable = function (table) {
+		var grid = chrall.grid;
 		table = table.get(0);
 		if (table===undefined) return;
 		var lines = table.querySelectorAll("tbody tr");
 		grid.nbCenotaphsInView = lines.length;
 		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-			var item = new Cenotaphe();
+			var item = new chrall.Cenotaphe();
 			var cells = lines[lineIndex].children;
 			var i = 1;
 			item.actions = cells[i++].innerHTML;
@@ -234,16 +241,17 @@
 	};
 
 	chrall.analyseWallTable = function (table) {
+		var grid = chrall.grid;
 		if ("undefined" == typeof table) {
 			return;
 		}
 		if (table.length == 0) return;
-		isInLaby = true;
+		chrall.isInLaby = true;
 
 		table = table.get(0);
 		var lines = table.children[0].children
 		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
-			var item = new LabySquare();
+			var item = new chrall.LabySquare();
 			var cells = lines[lineIndex].children;
 			var i = 1;
 			item.id = parseInt(cells[i++].textContent);
@@ -270,93 +278,102 @@
 		return jq_tables;
 	};
 
+	// renvoie les tables
+	chrall.analyseView = function() {
+		chrall.isInLaby = false;
+
+		//> recherche de la position du joueur
+		var positionMatch = $("table.mh_tdborder")[0].textContent.match(/Ma Position Actuelle est : X =\s*(-?\d+)\s*,\s*Y =\s*(-?\d+),\s*N =\s*(-?\d+)/);
+		chrall.player().x = parseInt(positionMatch[1]);
+		chrall.player().y = parseInt(positionMatch[2]);
+		chrall.player().z = parseInt(positionMatch[3]);
+
+		//> recherche de la vue max
+		var sightLine = $('form li:contains(" porte actuellement à")'); //
+		var tokens = chrall.tokenize(sightLine.text());
+		chrall.player().totalSight = parseInt(tokens[5]);
+
+		//> recherche de l'horizon (pour dessiner la grille ensuite)
+		try {
+			chrall.horizontalViewLimit = parseInt(document.getElementsByName("ai_MaxVue")[0].value);
+		} catch(error) {
+			console.log("horizontal view limit not found");
+		}
+		chrall.horizontalViewLimit = Math.max(chrall.horizontalViewLimit, 0);
+		var horizontalGridLimit = Math.max(chrall.horizontalViewLimit, 1);
+		// la grille dépasse la vue pour le menu
+		// (TODO : on pourrait limiter ça au cas où la session est active ou bien est-ce que ça gauffrerait le labyrinthe ?)
+
+		//> initialisation de la grille
+		var grid = chrall.grid = new chrall.Grid(chrall.player().x, chrall.player().y, Math.max(1, horizontalGridLimit));
+		console.log("grid created:", grid);
+
+		chrall.findTable('monstres');
+		chrall.findTable('trolls');
+		chrall.findTable('tresors');
+		chrall.findTable('champignons');
+		chrall.findTable('lieux');
+		chrall.findTable('cadavres');
+		chrall.findTable('murs');
+
+		chrall.analyseMonsterTable(chrall.$tables()['monstres']);
+		chrall.analyseTrollTable(chrall.$tables()['trolls']);
+		chrall.analyseObjectTable(chrall.$tables()['tresors']);
+		chrall.analyseMushroomTable(chrall.$tables()['champignons']);
+		chrall.analysePlaceTable(chrall.$tables()['lieux']);
+		chrall.analyseCenotaphTable(chrall.$tables()['cadavres']);
+		if (chrall.horizontalViewLimit > 0) {
+			// Si on est aveugle, on sait que les infos des murs et couloirs sont incorrectes
+			chrall.analyseWallTable(chrall.$tables()['murs']); 
+		}
+
+		chrall.addActionPointDistance(chrall.$tables()['monstres'], 0, 3);
+		chrall.addActionPointDistance(chrall.$tables()['trolls'], 1, 7);
+		chrall.addActionPointDistance(chrall.$tables()['tresors'], 0, 3);
+		chrall.addActionPointDistance(chrall.$tables()['champignons'], 0, 2);
+		chrall.addActionPointDistance(chrall.$tables()['lieux'], 0, 3);
+		chrall.addActionPointDistance(chrall.$tables()['cadavres'], 0, 3);
+
+		//> on regarde si la case du joueur est encombrée
+		// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case
+		chrall.player().cellIsFree = true;
+		chrall.objectsOnPlayerCell = new Array();
+		var cell = grid.getCellOrNull(chrall.player().x, chrall.player().y);
+		if (cell) {
+			var i;
+			if (cell.trolls) {
+				for (i = 0; i < cell.trolls.length; i++) {
+					if (cell.trolls[i].z === chrall.player().z) {
+						chrall.player().cellIsFree = false;
+						break;
+					}
+				}
+			}
+			if ((!chrall.player().cellIsFree) && (cell.monsters)) {
+				for (i = 0; i < cell.monsters.length; i++) {
+					if (cell.monsters[i].z === chrall.player().z) {
+						chrall.player().cellIsFree = false;
+						break;
+					}
+				}
+			}
+			if (cell.objects) {
+				for (i = 0; i < cell.objects.length; i++) {
+					if (cell.objects[i].z === chrall.player().z) {
+						chrall.objectsOnPlayerCell.push(cell.objects[i]);
+					}
+				}
+			}
+		}
+
+		//> on détermine la zone visible	
+		chrall. xmin = chrall.player().x - horizontalGridLimit;
+		chrall. xmax = chrall.player().x + horizontalGridLimit;
+		chrall. ymin = chrall.player().y - horizontalGridLimit;
+		chrall. ymax = chrall.player().y + horizontalGridLimit;
+		return chrall.$tables();
+	}
+
 })(window.chrall = window.chrall || {});
 
 
-// renvoie les tables
-function Chrall_analyseView() {
-	isInLaby = false;
-
-	//> recherche de la position du joueur
-	var positionMatch = $("table.mh_tdborder")[0].textContent.match(/Ma Position Actuelle est : X =\s*(-?\d+)\s*,\s*Y =\s*(-?\d+),\s*N =\s*(-?\d+)/);
-	chrall.player().x = parseInt(positionMatch[1]);
-	chrall.player().y = parseInt(positionMatch[2]);
-	chrall.player().z = parseInt(positionMatch[3]);
-
-	//> recherche de la vue max
-	var sightLine = $('form li:contains(" porte actuellement à")'); //
-	var tokens = Chrall_tokenize(sightLine.text());
-	chrall.player().totalSight = parseInt(tokens[5]);
-
-	//> recherche de l'horizon (pour dessiner la grille ensuite)
-	try {
-		horizontalViewLimit = parseInt(document.getElementsByName("ai_MaxVue")[0].value);
-	} catch(error) {
-	}
-	horizontalViewLimit = Math.max(horizontalViewLimit, 0);
-	var horizontalGridLimit = Math.max(horizontalViewLimit, 1); // la grille dépasse la vue pour le menu (TODO : on pourrait limiter ça au cas où la session est active ou bien est-ce que ça gauffrerait le labyrinthe ?)
-
-	//> initialisation de la grille
-	grid = new Grid(chrall.player().x, chrall.player().y, Math.max(1, horizontalGridLimit));
-
-	chrall.findTable('monstres');
-	chrall.findTable('trolls');
-	chrall.findTable('tresors');
-	chrall.findTable('champignons');
-	chrall.findTable('lieux');
-	chrall.findTable('cadavres');
-	chrall.findTable('murs');
-
-	chrall.analyseMonsterTable(chrall.$tables()['monstres']);
-	chrall.analyseTrollTable(chrall.$tables()['trolls']);
-	chrall.analyseObjectTable(chrall.$tables()['tresors']);
-	chrall.analyseMushroomTable(chrall.$tables()['champignons']);
-	chrall.analysePlaceTable(chrall.$tables()['lieux']);
-	chrall.analyseCenotaphTable(chrall.$tables()['cadavres']);
-	if (horizontalViewLimit > 0) chrall.analyseWallTable(chrall.$tables()['murs']); // Si on est aveugle, on sait que les infos des murs et couloirs sont incorrectes
-
-	chrall.addActionPointDistance(chrall.$tables()['monstres'], 0, 3);
-	chrall.addActionPointDistance(chrall.$tables()['trolls'], 1, 7);
-	chrall.addActionPointDistance(chrall.$tables()['tresors'], 0, 3);
-	chrall.addActionPointDistance(chrall.$tables()['champignons'], 0, 2);
-	chrall.addActionPointDistance(chrall.$tables()['lieux'], 0, 3);
-	chrall.addActionPointDistance(chrall.$tables()['cadavres'], 0, 3);
-
-	//> on regarde si la case du joueur est encombrée
-	// Au passage, comme ça sert plus loin on construit la liste des trésors de cette case
-	chrall.player().cellIsFree = true;
-	objectsOnPlayerCell = new Array();
-	var cell = grid.getCellOrNull(chrall.player().x, chrall.player().y);
-	if (cell) {
-		if (cell.trolls) {
-			for (var i = 0; i < cell.trolls.length; i++) {
-				if (cell.trolls[i].z === chrall.player().z) {
-					chrall.player().cellIsFree = false;
-					break;
-				}
-			}
-		}
-		if ((!chrall.player().cellIsFree) && (cell.monsters)) {
-			for (var i = 0; i < cell.monsters.length; i++) {
-				if (cell.monsters[i].z === chrall.player().z) {
-					chrall.player().cellIsFree = false;
-					break;
-				}
-			}
-		}
-		if (cell.objects) {
-			for (var i = 0; i < cell.objects.length; i++) {
-				if (cell.objects[i].z === chrall.player().z) {
-					objectsOnPlayerCell.push(cell.objects[i]);
-				}
-			}
-		}
-	}
-
-	//> on détermine la zone visible	
-	xmin = chrall.player().x - horizontalGridLimit;
-	xmax = chrall.player().x + horizontalGridLimit;
-	ymin = chrall.player().y - horizontalGridLimit;
-	ymax = chrall.player().y + horizontalGridLimit;
-	return chrall.$tables();
-}
