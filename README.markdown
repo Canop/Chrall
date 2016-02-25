@@ -3,7 +3,9 @@ Présentation :
 
 Chrall est une extension pour Chrome destinée aux joueurs en ligne de www.mountyhall.com.
 
-Le projet est géré par cano.petrole@gmail.com
+Le projet est géré par cano.petrole@gmail.com et est discuté sur [Miaou](http://dystroy.org/miaou/167?Chrall).
+
+[![Build Status](https://travis-ci.org/Canop/Chrall.svg?branch=master)](https://travis-ci.org/Canop/Chrall)
 
 Installation :
 ==============
