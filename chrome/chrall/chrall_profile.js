@@ -191,8 +191,7 @@
 						if (chrall.player().pa >= 2) {
 							if (m0 > 0 && normalPvGain > 0) {
 								let pv0 = Math.ceil(m0 / normalPvGain);
-								chrall.playerAmAbstract.push("" + normalPvGain +
-										" minutes gagnées par PV dépensé.");
+								chrall.playerAmAbstract.push("" + normalPvGain + " minutes gagnées par PV dépensé.");
 								let mpai = "Vous devez dépenser " + pv0 + " PV pour rejouer de suite. ";
 								if (alternatePvGain < normalPvGain) {
 									mpai += "Voire plus. ";
@@ -206,9 +205,9 @@
 									let pv1 = pv0 - 1;
 									g1 = pv1 * normalPvGain;
 									mpai += "<br>Si vous attendez " + Math.ceil(m0 - g1) +
-											" minutes, ce qui vous mènera à " +
-											(chrall.player().getDla().clone().addMinutes(-g1).toString("HH:mm")) +
-											" vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
+										" minutes, ce qui vous mènera à " +
+										(chrall.player().getDla().clone().addMinutes(-g1).toString("HH:mm")) +
+										" vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
 								}
 								for (let osi = 0; osi < optimalStrains.length; osi++) {
 									if (pv0 + normalStrain > optimalStrains[osi]) {
@@ -257,9 +256,9 @@
 								let pv1 = pv0 - 1;
 								let g1 = pv1 * normalPvGain;
 								mpai += "Si vous attendez " + Math.ceil(m1 - g1) +
-										" minutes, ce qui vous mènera à " +
-										(chrall.player().getDla(1).clone().addMinutes(-g1).toString("HH:mm")) +
-										" vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
+									" minutes, ce qui vous mènera à " +
+									(chrall.player().getDla(1).clone().addMinutes(-g1).toString("HH:mm")) +
+									" vous pourrez rejouer en accélérant de " + pv1 + " PV. ";
 							}
 							for (let osi = 0; osi < optimalStrains.length; osi++) {
 								if (pv0 + normalStrain > optimalStrains[osi]) {
@@ -268,11 +267,11 @@
 											normalPvGain);
 									if (dateGoodAcceleration.getTime() < chrall.player().getDla(1).getTime()) {
 										mpai += "Si vous attendez " +
-												dateGoodAcceleration.toString("le dd/MM à HH:mm") +
-												" vous pourrez accélérer de " + goodAcceleration +
-												" PV pour jouer deux fois de suite, ce qui portera votre fatigue à " +
-												optimalStrains[osi] + " (laquelle deviendra négligeable en " +
-												(optimalStrains.length - osi - 1) + " tours). ";
+											dateGoodAcceleration.toString("le dd/MM à HH:mm") +
+											" vous pourrez accélérer de " + goodAcceleration +
+											" PV pour jouer deux fois de suite, ce qui portera votre fatigue à " +
+											optimalStrains[osi] + " (laquelle deviendra négligeable en " +
+											(optimalStrains.length - osi - 1) + " tours). ";
 									}
 									break;
 								}
@@ -326,16 +325,6 @@
 		chrall.player().baseMm = parseInt($("#mm").text());
 		chrall.player().mm = parseInt($("#mm_tot").text());
 		chrall.player().concentration = parseInt($("#conc").text());
-
-		// TODO Infos vraiment utile avec la nouvelle page de profil ?
-		// let r = "<table border=0>"; // je n'ai pas trouvé d'autre moyens d'insérer les totaux que de reconstruire toute la cellule :\
-		// r += "<tr><td>Résistance à la Magie</td><td> : " + chrall.player().baseRm + "</td><td> + " +
-		// 		(chrall.player().rm - chrall.player().baseRm) + "</td><td> = " + chrall.player().rm + " points</td></tr>";
-		// r += "<tr><td>Maîtrise de la Magie</td><td> : " + chrall.player().baseMm + "</td><td> + " + (chrall.player().mm - chrall.player().baseMm) +
-		// 		"</td><td> = " + chrall.player().mm + " points</td></tr>";
-		// r += "<tr><td>Bonus de Concentration</td><td> : " + chrall.player().concentration + " %</td></tr>";
-		// r += "</table>";
-		// return r;
 	};
 
 	chrall.extractMagicalAttackBonuses = function (text) {

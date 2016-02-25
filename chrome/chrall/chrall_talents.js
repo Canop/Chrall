@@ -21,14 +21,7 @@ chrall.talentBubblers = {
 	// ----------------------------------------
 
 	"Accélération du Métabolisme": (player)=>{
-		var html = "";
-		for (var i = 0; i < chrall.playerAmAbstract.length; i++) {
-			if (i > 0) {
-				html += "<br>";
-			}
-			html += chrall.playerAmAbstract[i];
-		}
-		return html;
+		return chrall.playerAmAbstract.join("<br>");
 	},
 
 	"Attaque Précise": (player, compLevel)=>{
