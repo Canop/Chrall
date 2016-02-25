@@ -11,7 +11,7 @@ chrall.getTalentBubbleContent= (name) => {
 	var	player = chrall.player(),
 		level = player.talents[name] ? player.talents[name].level : undefined;
 	return bubbler(player, level);
-}
+};
 
 chrall.talentBubblers = {
 
@@ -69,7 +69,7 @@ chrall.talentBubblers = {
 	"Botte Secrète": (player)=>{
 		var des_att = 2 * Math.floor(player.attac.diceNumber / 3);
 		var att = des_att * 3.5 + Math.floor((player.attac.physicalBonus + player.attac.magicalBonus) / 2);
-		var des_deg = Math.floor(player.attac.diceNumber /  2) 
+		var des_deg = Math.floor(player.attac.diceNumber /  2)
 		var deg = des_deg * 2 + Math.floor((player.damage.physicalBonus + player.damage.magicalBonus) / 2);
 		var degCrit = deg + Math.floor(des_deg / 2) * 2;
 		return "<table><tr><td>Attaque moyenne</td><td> : " + att +
@@ -92,15 +92,15 @@ chrall.talentBubblers = {
 			var result = 1;
 			if (s>49) result = 8;
 			else if (s>39) result = 7;
-			else if (s>30) result = 6;	  	
-			else if (s>22) result = 5;	  	
-			else if (s>15) result = 4;	  	
+			else if (s>30) result = 6;
+			else if (s>22) result = 5;
+			else if (s>15) result = 4;
 			else if (s>9) result = 3;
 			else if (s>4) result = 2;
 			var totalSight = Math.max(0, player.totalSight); // La portée de la vue, ou 0 si négative
 			result = Math.min(result, totalSight); // La charge ne peut pas dépasser la VUE
 			return result;
-		}
+		};
 		// Il est toujours possible de charger à 1 case
 		// (quelle que soit la fatigue) à moins que le maxRange soit de 0
 		var maxRange = computeRange(player.pvMax);
@@ -200,7 +200,7 @@ chrall.talentBubblers = {
 
 	"Lancer de Potions": (player)=>{
 		var	p = Math.floor(2 + player.totalSight / 5),
-			cppc = player.talents[name].mastering + player.concentration,
+			cppc = player.talents["Lancer de Potions"].mastering + player.concentration,
 			s = chrall.player().sight.diceNumber + chrall.player().sight.physicalBonus,
 			html = "<table>";
 		html += "<tr><td>Portée (à l'horizontale)</td>";
@@ -337,7 +337,7 @@ chrall.talentBubblers = {
 	},
 
 	"Explosion": (player)=>{
-		var des = 1 + Math.floor((player.damage.diceNumber + Math.floor(player.pvMax / 10)) / 2); 
+		var des = 1 + Math.floor((player.damage.diceNumber + Math.floor(player.pvMax / 10)) / 2);
 		var html = "<table>";
 		html += "<tr><td>Dégâts infligés si non résistée</td><td> : " + des + " D3</td></tr>";
 		html += "<tr><td>Moyenne</td><td> : " + (2 * des) + " PV</td></tr>";
