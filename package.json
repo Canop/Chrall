@@ -1,0 +1,28 @@
+{
+  "name": "chrall",
+  "version": "1.0.0",
+  "description": "An extension for the French Mounty Hall game",
+  "main": "gulpfile.js",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^2.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Canop/Chrall.git"
+  },
+  "author": "Denys Séguret <denys.seguret@gmail.com> (http://dystroy.org)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Canop/Chrall/issues"
+  },
+  "homepage": "https://github.com/Canop/Chrall#readme"
+}
