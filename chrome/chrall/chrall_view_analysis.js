@@ -306,7 +306,6 @@
 
 		//> initialisation de la grille
 		var grid = chrall.grid = new chrall.Grid(chrall.player().x, chrall.player().y, Math.max(1, horizontalGridLimit));
-		console.log("grid created:", grid);
 
 		chrall.findTable('monstres');
 		chrall.findTable('trolls');
@@ -375,5 +374,4 @@
 	}
 
 })(window.chrall = window.chrall || {});
-
 

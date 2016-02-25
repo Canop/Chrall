@@ -24,7 +24,7 @@
 				"tabs.css"
 			],
 			"js": [
-				"jquery.js",
+				"jquery-2.2.1.min.js",
 				"jquery.sortElements.js",
 				"chrall_form.js",
 				"injected_util_bubble.js",
@@ -87,7 +87,7 @@
 		{
 			"matches": ["*://dystroy.org/miaou/*", "http://127.0.0.1:8204/*"],
 			"js": [
-				"jquery.js",
+				"jquery-2.2.1.min.js",
 				"chrall_db.js",
 				"chrall_miaou.js"
 			]
@@ -98,7 +98,7 @@
 				"chrall.css"
 			],
 			"js": [
-				"jquery.js",
+				"jquery-2.2.1.min.js",
 				"chrall_bubbles.js",
 				"chrall_things.js",
 				"chrall_mhforum.js"
@@ -108,7 +108,7 @@
 			"matches": ["http://canop.org/chrall/*", "http://www.canop.org/chrall/*"],
 			"run_at" : "document_end",
 			"js": [
-				"jquery.js",
+				"jquery-2.2.1.min.js",
 				"chrall_general.js",
 				"chrall_detect.js"
 			]

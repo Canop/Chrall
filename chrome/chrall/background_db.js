@@ -10,7 +10,6 @@ var bgchrall = bgchrall || {};
 	function wrapIdb(){
 		// change the team of the troll, add it if necessary
 		cdb.uspsertTroll = function(num, team, cb){
-			console.log("WRITE");
 			var	trans = db.transaction(["troll"], "readwrite"),
 				s = trans.objectStore("troll");
 			trans.oncomplete = cb;
@@ -52,7 +51,6 @@ var bgchrall = bgchrall || {};
 		// clear all cell infos then add the cells and their teams
 		// cells is an array of {pos:"-54,22",team:'R'} ou {pos:"-8,-3,-33",team:'R'} 
 		cdb.setCells = function(cells, cb){
-			console.log("WRITE CELLS");
 			var	trans = db.transaction(["cell"], "readwrite"),
 				s = trans.objectStore("cell");
 			trans.oncomplete = cb;

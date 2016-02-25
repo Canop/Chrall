@@ -14,12 +14,9 @@
 		if (!chrall.compteChrallActif()) {
 			return;
 		}
-		var text = $('body').text();
-		var lines = text.split('\n');
-		//~ console.log('Texte résultat insulte :');
-		//~ console.log(lines);
-
-		var	result = {},
+		var	text = $('body').text(),
+			lines = text.split('\n'),
+			result = {},
 			atoi = chrall.atoi;
 		for (var i = lines.length; i-- > 0;) {
 			var line = lines[i];

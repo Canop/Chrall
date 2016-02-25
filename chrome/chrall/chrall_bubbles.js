@@ -156,8 +156,9 @@
 	 * @return map avec text, ajaxUrl, ajaxRequestId (plus en optionnel leftCol)
 	 */
 	chrall.bubbleLive = function (selector, cssClass, getArgs){
-		$(selector).live(
+		$(document).on(
 				'mouseenter',
+				selector,
 				function (event){
 					var target = $(this);
 					if (chrall.scrollInProgress || onBubbleDiv || onBubbleTarget) {
@@ -172,8 +173,10 @@
 						chrall.showBubble.call(this, target, event, args.text, cssClass, null, args.leftCol);
 					}
 				}
-		).live(
-				'mouseout', function (event){
+		).on(
+				'mouseout',
+				selector,
+				function (event){
 					onBubbleTarget = false;
 					chrall.hideBubble();
 				}

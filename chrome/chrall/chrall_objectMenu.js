@@ -99,16 +99,20 @@ chrall.objectMenuLive = function(
 	selector,  // un sélecteur jquery, par exemple  "#myObject"
 	getArgs // fonction prenant en argument un objet jquery résultat de $(selector) et renvoyant une map avec html_top, html_bottom
 ) {
-	$(selector).live( // FIXME WTF !? There's still some $.live here ???
-		'mouseenter', function(event) {
+	$(document).on(
+		'mouseenter',
+		selector,
+		function(event) {
 			let target = $(this);
 			let args = getArgs(target);
 			if (chrall.scrollInProgress || onOmTopMenu || onOmBottomMenu) return false;
 			onOmTarget = true;
 			showOm(target, args.html_top, args.html_bottom);
 		}
-	).live(
-		'mouseout', function(event){
+	).on(
+		'mouseout',
+		selector,
+		function(event){
 			if (eventIsOver(event, omTarget)) return;
 			onOmTarget = false;
 			checkHideOm();

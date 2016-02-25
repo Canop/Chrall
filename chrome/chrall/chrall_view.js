@@ -437,17 +437,29 @@
 		$tr.append($("<td/>", {colspan: chrall.xmax - chrall.xmin + 3, align: 'center', text: 'Nordhikan (Y+)'}));
 		$tr.append($("<td/>", {bgcolor: "#BABABA"}));
 
-		$tr = $("<tr/>");
-		$gridTable.append($tr);
-		$tr.append($("<td/>", {rowspan: chrall.ymax - chrall.ymin + 3, style: 'min-width:1em'}).append($("<span/>", {style: 'display:block;-webkit-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;', text: 'Oxhykan (X-)'}))); // TODO span needed?
-		$tr.append($("<td/>", {align: 'center', height: 30, width: 30, text: 'y\\x'}));
+		$tr = $("<tr/>").appendTo($gridTable);
+		$tr.append(
+			$("<td/>", {rowspan: chrall.ymax - chrall.ymin + 3, style: 'min-width:1em'})
+			.append($("<span/>", {
+				style: 'display:block;-webkit-transform:rotate(-90deg);margin-left:-30px;margin-right:-30px;',
+				text: 'Oxhykan (X-)'
+			}))
+		)
+		.append(
+			$("<td/>", {align: 'center', height: 30, width: 30, text: 'y\\x'})
+		);
 
 		var x, y;
 		for (x = chrall.xmin; x <= chrall.xmax; x++) {
 			$tr.append($("<td/>", {class: 'grad', text: x}));
 		}
-		$tr.append($("<td/>", {align: 'center', height: 30, width: 30, text: 'x/y'}));
-		$tr.append($("<td/>", {rowspan: chrall.ymax - chrall.ymin + 3, style: 'min-width:1em'}).append($("<span/>", {style: 'display:block;-webkit-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;', text: 'Orhykan (X+)'}))); // TODO span needed?
+		$tr.append(
+			$("<td/>", {align: 'center', height: 30, width: 30, text: 'x/y'})
+		);
+		$tr.append(
+			$("<td/>", {rowspan: chrall.ymax - chrall.ymin + 3, style: 'min-width:1em'})
+			.append($("<span/>", {style: 'display:block;-webkit-transform:rotate(90deg);margin-left:-30px;margin-right:-30px;', text: 'Orhykan (X+)'}))
+		);
 
 		var compactNames = chrall.isOptionEnabled('view-grid-compact-names');
 		var maxLength = chrall.integerOption('view-grid-compact-names-length', 20);
@@ -554,12 +566,8 @@
 		return $div;
 	};
 
-	// OPTM : le plus long, dans cette opération, est le append de la grille, c'est-à-dire la construction par le browser de la
-	//         page. Il me semble difficile d'optimiser ça.
-	//         "table-layout: fixed;" ne change rien
 	chrall.analyseAndReformatView = function () {
 		var noteRequest = {};
-		//var time_enter = (new Date()).getTime(); // <= prof
 		$(document.body).css('overflow', 'hidden');
 
 		$('#footer2').remove(); // ce truc là se retrouve maintenant par dessus, je le vire carrément
@@ -576,13 +584,9 @@
 		$("table table center").first().remove();
 		$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
 
-		//var time_after_cleaning = (new Date()).getTime(); // <= prof
-
 		//> on colle en haut à droite les liens [Refresh] et [Logout]
 		var refreshLogout = $("table table div");
 		refreshLogout.addClass("floatTopRight");
-
-		//		var time_before_grid = (new Date()).getTime(); // <= prof
 
 		//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 		var $tabs = $("<ul/>", {id: "tabs_view", 'class': "tabs", view: "yes"});
@@ -607,7 +611,8 @@
 			chrall.addTab($tabs, "#tabRecherche", "Recherche");
 		}
 		var $tabContainer = $("<div/>", { 'class': "tab_container", view: "yes"});
-		$tabs = $tabs.after($tabContainer);
+		$("table.mh_tdborder").first().parent().parent().prepend($tabs);
+		$tabContainer.insertAfter($tabs);
 
 		if (chrall.isOptionDisabled('view-disable-grid-view')) {
 			var $tabGrid = $("<div/>", { id: "tabGrid", 'class': "tab_content"}).html(chrall.makeFiltersHtml());
@@ -634,9 +639,6 @@
 			}
 		}
 
-		//		var time_after_grid_building = (new Date()).getTime(); // <= prof
-
-		$("table.mh_tdborder").first().parent().parent().prepend($tabs);
 
 
 
@@ -689,8 +691,6 @@
 		$('a[href$="#cadavre"]').click(function () {
 			changeTab($('#tabs_view').find('a[href="#tabCenotaphs"]').parent());
 		});
-
-		//		var time_after_grid_append = (new Date()).getTime(); // <= prof
 
 		var $grid_holder = $('#grid_holder');
 		$grid_holder.dragscrollable({dragSelector: '#grid'});
@@ -778,17 +778,6 @@
 		$('#goto_player').click(gotoPlayer);
 		//> hook pour le centrage au double-clic
 		$('#grid').dblclick(gotoPlayer);
-
-
-		//		 var time_end = (new Date()).getTime(); // <= prof
-		//		 console.log("Profiling - Vue de " + horizontalViewLimit);
-		//		 console.log("Duration Cleaning : " + (time_after_cleaning-time_enter));
-		//		 console.log("Duration Analysis : " + (time_before_grid-time_after_cleaning));
-		//		console.log("Duration Grid Building: " + (time_after_grid_building - time_before_grid));
-		//		console.log("Duration Grid Append : " + (time_after_grid_append - time_after_grid_building));
-		//		 console.log("Duration Bubbles : " + (time_end-time_after_grid_append));
-		//		 console.log("Total Duration : " + (time_end-time_enter));
-
 
 		// On corrige si nécessaire la position affichée dans le menu de gauche et on signale
 		// cette position au serveur Chrall

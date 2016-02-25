@@ -21,7 +21,7 @@ gulp.task("lint-extension-js", ()=>
 	gulp.src([
 		"chrome/chrall/*.js",
 		// exclusions:
-		"!**/jquery.js", "!**/date-fr-FR.js",
+		"!**/*.min.js", "!**/date-fr-FR.js",
 	])
 	.pipe(eslint({
 		"env": {

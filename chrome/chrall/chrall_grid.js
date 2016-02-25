@@ -160,7 +160,7 @@ chrall.gridLive = function() {
 	});
 
 	//> outillage des liens DE (du menu de la grille)
-	$('a.chrall_de').live('click', function() {
+	$(document).on('click', 'a.chrall_de', function() {
 		var $this = $(this);
 		localStorage['todo'] = 'de';
 		localStorage['todo_args'] = $this.attr('x') + ' ' + $this.attr('y') + ' ' + $this.attr('z');
@@ -173,7 +173,7 @@ chrall.gridLive = function() {
 	};
 
 	// outillage des liens d'ouvertures de vue "zoom"
-	$('a[name="zoom"]').live('click', function() { // FIXME live est mort! virer ça!
+	$(document).on('click', 'a[name="zoom"]', function() {
 		var player = chrall.player();
 		if (chrall.compteChrallActif()) {
 			var $link = $(this);
@@ -209,7 +209,7 @@ chrall.gridLive = function() {
 		}
 	});
 	// lien de fermeture de la "fenêtre" de zoom
-	$('#btn_close_zoom').live('click', function() {
+	$(document).on('click', '#btn_close_zoom', function() {
 		$('#zoom').hide();
 	});
 

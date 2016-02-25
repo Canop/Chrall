@@ -5,7 +5,6 @@
 	if (!ùmessages) return;
 	
 	var observer = new MutationObserver(function(mutations){
-		//~ console.log(mutations);
 		for (var i=0; i<mutations.length; i++) {
 			var nodes = mutations[i].addedNodes;
 			if (!nodes || !nodes.length) continue;
