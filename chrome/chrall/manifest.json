@@ -80,6 +80,7 @@
 				"chrall_messagerie.js",
 				"chrall_db.js",
 				"chrall_miaou.js",
+				"chrall_mission.js",
 				"chrall_main.js"
 			]
 		},
