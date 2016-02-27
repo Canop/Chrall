@@ -132,9 +132,10 @@
 					var outilsDiv = $('#menuOutilsChrall', actionFrame.contentDocument);
 					outilsDiv.replaceWith(chrall.makeLinksDiv());
 				});
-				checkbox = checkbox.after($('<a/>', {target: 'extern', href: link.href, text: link.name}));
-				checkbox = checkbox.after(link.description);
-				$linkOptions.append($("<p/>").append(checkbox));
+				$("<p/>").appendTo($linkOptions)
+				.append(checkbox)
+				.append($('<a/>', {target: 'extern', href: link.href, text: link.name}))
+				.append($("<span>").css("margin", "2px").text(link.description));
 			}
 		}
 		return $linkOptions;
