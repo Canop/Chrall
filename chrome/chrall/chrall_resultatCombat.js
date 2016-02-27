@@ -1,8 +1,8 @@
 "use strict";
-(function(chrall) {
+(function(chrall){
 
 	// notons que le code qui suit est super sensible, il pêtera à la moindre modif (genre nettoyage) du html généré par MH
-	chrall.analyseResultatCombat = function() {
+	chrall.analyseResultatCombat = function(){
 		var atoi = chrall.atoi;
 		if (!chrall.compteChrallActif()) {
 			return;

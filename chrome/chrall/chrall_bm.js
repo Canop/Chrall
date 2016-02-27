@@ -1,10 +1,10 @@
 "use strict";
-(function(chrall) {
+(function(chrall){
 
 	/**
-	 * convertit une chaine du genre "ATT : +3 DEG : -9 en une map 
-	 */ 
-	function parseEffects(s) {
+	 * convertit une chaine du genre "ATT : +3 DEG : -9 en une map
+	 */
+	function parseEffects(s){
 		var map = new Object();
 		var tokens = chrall.tokenize(s);
 		for (var i=0; i<tokens.length-1;) {
@@ -19,7 +19,7 @@
 	/**
 	 * représente en gros une ligne dans le tableau standard des bonus malus
 	 */
-	function BmEffect(name, theoricalEffectsAsString, decumul, type, durationAsString) {
+	function BmEffect(name, theoricalEffectsAsString, decumul, type, durationAsString){
 		this.name = name;
 		this.thEffects = parseEffects(theoricalEffectsAsString);
 		this.decumul = decumul;
@@ -27,13 +27,13 @@
 		this.duration = parseInt(chrall.tokenize(durationAsString)[0]);
 	}
 
-	function CharBmEffect(type, value) {
+	function CharBmEffect(type, value){
 		this.sum = {};
 		this.count = {};
 		this.sum[type] = value;
 		this.count[type] = 1;
 	}
-	CharBmEffect.prototype.add = function(type, value, hasDecumul) {
+	CharBmEffect.prototype.add = function(type, value, hasDecumul){
 		if (this.count[type]) {
 			if (hasDecumul) {
 				this.sum[type] += chrall.decumul(this.count[type]++, value);
@@ -46,10 +46,10 @@
 			this.count[type] = 1;
 		}
 	};
-	CharBmEffect.prototype.str = function() {
+	CharBmEffect.prototype.str = function(){
 		return chrall.itoa(this.sum['Physique']) + "/" + chrall.itoa(this.sum['Magie']);
 	};
-	CharBmEffect.prototype.strMag = function() {
+	CharBmEffect.prototype.strMag = function(){
 		var v = 0;
 		if (this.sum['Physique']) {
 			v += this.sum['Physique'];
@@ -60,9 +60,9 @@
 		return v + " %";
 	};
 
-	chrall.analyseAndReformatBM = function() {
+	chrall.analyseAndReformatBM = function(){
 		var effects = [];
-		$('table table table.mh_tdborder tr.mh_tdpage').each(function() {
+		$('table table table.mh_tdborder tr.mh_tdpage').each(function(){
 			var cells = $(this).find("td");
 			effects.push(new BmEffect(
 				$(cells[0]).text().trim(),

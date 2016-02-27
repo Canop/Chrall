@@ -1,6 +1,6 @@
 "use strict";
 //
-chrall.makeSearchPanel = function($panel) {
+chrall.makeSearchPanel = function($panel){
 	var player = chrall.player();
 	if (!chrall.compteChrallActif()) {
 		return "La recherche nécessite un compte chrall actif. Vous pouvez activer votre compte Chrall dans la page Option.";
@@ -19,7 +19,7 @@ chrall.makeSearchPanel = function($panel) {
 
 	$panel.append(html.join(''));
 
-	var search = function() {
+	var search = function(){
 		var tok = $('#ch_search_pattern').val();
 		$('#search_result').load(chrall.serveurPrive() + 'searchpanel?asker=' + player.id + '&mdpr=' + mdpRestreint + '&tok=' + encodeURIComponent(tok));
 	};

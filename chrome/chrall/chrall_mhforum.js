@@ -2,7 +2,7 @@
 // traite une page du forum MH
 
 $('a[href^="javascript:oT("]').each(
-	function() {
+	function(){
 		var link = $(this);
 		var href = link.attr('href');
 		var trollId = href.split('(')[1].split(')')[0];// la flemme de chercher une formule raisonnable... n'hésite pas à intervenir, Ô lecteur!

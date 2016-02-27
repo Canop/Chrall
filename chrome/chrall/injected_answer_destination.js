@@ -1,7 +1,7 @@
 "use strict";
-(function (chrall) {
+(function(chrall){
 
-	chrall.suggestDestinations = function (destinations) {
+	chrall.suggestDestinations = function(destinations){
 		var div = $('<div align="center" />')
 		var select = $('<select/>');
 		div.append(select)
@@ -9,7 +9,7 @@
 		for (var i in destinations) {
 			select.append($('<option/>', { value : i }).text(destinations[i].Description));
 		}
-		select.bind("change", function(event) {
+		select.bind("change", function(event){
 			var index = parseInt(event.target.value);
 			if (undefined == index) {
 				return;

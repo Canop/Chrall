@@ -1,9 +1,9 @@
 "use strict";
-(function (chrall) {
+(function(chrall){
 
 // construit les tables permettant d'exploiter et visualiser les partages (actuellement
 //  dans l'onglet 'Partages' de la vue)
-	chrall.makePartageTables = function () {
+	chrall.makePartageTables = function(){
 		if (!chrall.compteChrallActif()) {
 			return "Pour partager des informations privées vous devez activer votre compte Chrall dans les options.";
 		}
@@ -40,7 +40,7 @@
 		<p class=small-note>Faire ctrl-C sur cette page, quand rien n'est sélectionné, copie la table du haut dans un format compatible Miaou</p>\
 		</div>");
 
-		$("#partage_proposal", html).click(function() {
+		$("#partage_proposal", html).click(function(){
 			var target = $('#partage_proposal_troll_id').val();
 			target = parseInt(target);
 			$('#partage_proposal_troll_id').val("");
@@ -50,7 +50,7 @@
 		return html;
 	}
 
-	chrall.sendPartageProposal = function(target) {
+	chrall.sendPartageProposal = function(target){
 		if (0 >= target) {
 			return;
 		}

@@ -1,14 +1,14 @@
 "use strict";
-(function(chrall) {
+(function(chrall){
 
-	chrall.askDestinations = function() {
+	chrall.askDestinations = function(){
 		chrall.jsonp(chrall.serveurPrive() + "json?action=get_destinations_jsonp&asker=" + chrall.player().id + "&mdpr=" + chrall.mdpCompteChrall());
 	};
 
-	chrall.warnOnTp = function() {
+	chrall.warnOnTp = function(){
 		var $warn = $('<span>').addClass('mh_tdpage');
 		$('<div>').insertAfter('.Action:eq(0)').css({textAlign: "center", padding: 5}).append($warn);
-		function writeWarning() {
+		function writeWarning(){
 			var x = parseInt(document.getElementsByName('ai_OrigineX')[0].value);
 			var y = parseInt(document.getElementsByName('ai_OrigineY')[0].value);
 			var z = parseInt(document.getElementsByName('ai_OrigineN')[0].value);

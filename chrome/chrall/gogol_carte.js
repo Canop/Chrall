@@ -1,6 +1,6 @@
 "use strict";
 var chrall = chrall || {};
-function CarteHall(canvasId, posmarkid) {
+function CarteHall(canvasId, posmarkid){
 	this.canvas = document.getElementById(canvasId);
 	this.context = this.canvas.getContext("2d");
 	this.posmarkdiv = document.getElementById(posmarkid);
@@ -27,16 +27,16 @@ function CarteHall(canvasId, posmarkid) {
 }
 chrall.CarteHall = CarteHall;
 
-CarteHall.prototype.add = function(o) {
+CarteHall.prototype.add = function(o){
 	this.objects.push(o);
 	return o;
 }
 
-CarteHall.prototype.computeOptimalZoom = function() {
+CarteHall.prototype.computeOptimalZoom = function(){
 
 }
 
-CarteHall.prototype.recomputeCanvasPosition = function() {
+CarteHall.prototype.recomputeCanvasPosition = function(){
 	var pos = $(this.canvas).position();
 	this.canvas_position_x = pos.left;
 	this.canvas_position_y = pos.top;
@@ -51,7 +51,7 @@ CarteHall.prototype.recomputeCanvasPosition = function() {
 	this.canvas.height = this.canvas.clientHeight;
 }
 
-CarteHall.prototype.drawGrid = function() {
+CarteHall.prototype.drawGrid = function(){
 	var x0 = this.zoom * (this.originX);
 	var y0 = this.zoom * (this.originY);
 	var w = this.screenRect.w;
@@ -70,7 +70,7 @@ CarteHall.prototype.drawGrid = function() {
 	chrall.drawThinVerticalLine(this.context, x0, 0, h);
 }
 
-CarteHall.prototype.redraw = function() {
+CarteHall.prototype.redraw = function(){
 	if (this.drawInProgress) {
 		this.redrawStacked = true;
 		return;
@@ -95,7 +95,7 @@ CarteHall.prototype.redraw = function() {
 		setTimeout(this.redraw, 40);
 	}
 }
-CarteHall.prototype.mouseWheel = function(e) {
+CarteHall.prototype.mouseWheel = function(e){
 	if (this.mouseIsDown || !this.zoomIsEnabled) return;
 	var delta = 0;
 	if (!e) e = window.e;
@@ -116,7 +116,7 @@ CarteHall.prototype.mouseWheel = function(e) {
 	this.originY += (e.pageY - this.canvas_position_y) * zr;
 	this.redraw();
 }
-CarteHall.prototype.mouseDown = function(e) {
+CarteHall.prototype.mouseDown = function(e){
 	this.mouseIsDown = true;
 	this.dragStartPageX = e.pageX;
 	this.dragStartPageY = e.pageY;
@@ -125,7 +125,7 @@ CarteHall.prototype.mouseDown = function(e) {
 	this.zoomChangedSinceLastRedraw = true;
 	this.redraw();
 }
-CarteHall.prototype.mouseUp = function(e) {
+CarteHall.prototype.mouseUp = function(e){
 	this.mouseIsDown = false;
 	if (this.onClick) {
 		var x = Math.floor((e.pageX - this.canvas_position_x) / this.zoom - this.originX);
@@ -134,13 +134,13 @@ CarteHall.prototype.mouseUp = function(e) {
 	}
 }
 
-CarteHall.prototype.mouseLeave = function(e) {
+CarteHall.prototype.mouseLeave = function(e){
 	this.mouseIsDown = false;
 	this.posmarkdiv.innerHTML = "Cliquez sur la carte pour donner un ordre de mouvement.";
 	this.redraw();
 }
 
-CarteHall.prototype.mouseMove = function(e) {
+CarteHall.prototype.mouseMove = function(e){
 	var x = Math.floor((e.pageX - this.canvas_position_x) / this.zoom - this.originX);
 	var y = Math.floor(this.originY - (e.pageY - this.canvas_position_y) / this.zoom);
 	this.posmarkdiv.innerHTML = 'X=' + x + ' &nbsp; Y=' + y;
@@ -153,24 +153,24 @@ CarteHall.prototype.mouseMove = function(e) {
 }
 
 
-CarteHall.prototype.naturalToScreen = function(naturalPoint, screenPoint) {
+CarteHall.prototype.naturalToScreen = function(naturalPoint, screenPoint){
 	screenPoint.x = this.zoom * (this.originX + naturalPoint.x + 0.5);
 	screenPoint.y = this.zoom * (this.originY - naturalPoint.y + 0.5);
 };
 
-CarteHall.prototype.screenToNatural = function(screenPoint, naturalPoint) {
+CarteHall.prototype.screenToNatural = function(screenPoint, naturalPoint){
 	naturalPoint.x = screenPoint.x / this.zoom - this.originX;
 	naturalPoint.y = screenPoint.y / this.zoom - this.originY;
 };
 
-CarteHall.prototype.screenRectToNaturalRect = function(screenRect, naturalRect) {
+CarteHall.prototype.screenRectToNaturalRect = function(screenRect, naturalRect){
 	naturalRect.x = screenRect.x / this.zoom - this.originX;
 	naturalRect.y = screenRect.y / this.zoom - this.originY;
 	naturalRect.w = screenRect.w / this.zoom;
 	naturalRect.h = screenRect.h / this.zoom;
 };
 
-CarteHall.prototype.naturalRectToScreenRect = function(naturalRect, screenRect) {
+CarteHall.prototype.naturalRectToScreenRect = function(naturalRect, screenRect){
 	screenRect.x = this.zoom * (this.originX + naturalRect.x);
 	screenRect.y = this.zoom * (this.originY - naturalRect.y);
 	screenRect.w = this.zoom * naturalRect.w;

@@ -1,24 +1,24 @@
 "use strict";
-(function (chrall) {
+(function(chrall){
 
 	var partagesAffichés = [];
 
-	function isPartageActif(partage) {
+	function isPartageActif(partage){
 		return partage.Statut == 'on' && partage.StatutAutreTroll == 'on';
 	}
 
-	function distance(partage, player) {
+	function distance(partage, player){
 		var autreTroll = partage.AutreTroll;
 		return Math.max(Math.max(Math.abs(player.x - autreTroll.X), Math.abs(player.y - autreTroll.Y)), Math.abs(player.z - autreTroll.Z));
 	}
 
-	function createTrollCell(partage) {
+	function createTrollCell(partage){
 		var trollCell = $("<td/>", { class: 'mh_tdpage'});
 		trollCell.append($("<a/>", {text: partage.NomAutreTroll + " (" + partage.IdAutreTroll + ")"}));
 		return trollCell;
 	}
 
-	chrall.updateTablesPartage = function (partages) {
+	chrall.updateTablesPartage = function(partages){
 		var partagesActifs = $('#partagesActifs');
 		var propositionPartage = $('#propositionsPartage');
 		if (!propositionPartage) return;
@@ -26,7 +26,7 @@
 		var playerInfo = chrall.player();
 		partagesActifs.find("tr").remove();
 		propositionPartage.find("tr").remove();
-		
+
 		var nbPartagesActifs = 0;
 		partagesAffichés = [];
 
@@ -35,7 +35,7 @@
 			var partage = partages[i];
 			var isSelf = partage.IdAutreTroll == chrall.player().id;
 			if (isSelf || isPartageActif(partage)) { // ajout dans la table des partages actifs
-				if (!partage.AutreTroll){
+				if (!partage.AutreTroll) {
 					console.log("données de partage manquantes pour", partage.IdAutreTroll);
 					continue;
 				}
@@ -56,7 +56,7 @@
 				}
 				var lastUpdateCell = $("<td/>", { class: 'mh_tdpage', text: chrall.formatDate(partage.AutreTroll.MiseAJour)});
 				actionCell = $("<td/>", { class: 'mh_tdpage'});
-				
+
 				if (!isSelf) actionCell.append($("<a/>", {text: "Rompre", class: 'gogo', idAutreTroll: partage.IdAutreTroll, actionPartage: "Rompre"}).click(chrall.updatePartage));
 				actionCell.append($("<a/>", {text: "Actualiser le profil", class: 'gogo', idAutreTroll: partage.IdAutreTroll}).click(chrall.majProfil));
 				if (!isSelf) actionCell.append($("<a/>", {text: "Actualiser la vue", class: 'gogo', idAutreTroll: partage.IdAutreTroll}).click(chrall.majVue));
@@ -81,7 +81,7 @@
 				propositionPartage.append(row);
 			}
 		}
-		
+
 		var $boutonsMajPartages = $('#boutonsMajPartages').empty();
 		if (nbPartagesActifs>1) {
 			$boutonsMajPartages.append($("<a/>", {text: "Actualiser tous les profils", class: 'gogo'}).click(chrall.majProfil));
@@ -89,10 +89,10 @@
 		$boutonsMajPartages.append(
 			$("<a/>", {text: "Rafraichir la page", class: 'gogo'}).click(()=> location.reload())
 		);
-		
+
 	}
 
-	chrall.updatePartage = function () {
+	chrall.updatePartage = function(){
 		var action = $(this).attr("actionPartage");
 		var autreTroll = parseInt($(this).attr("idAutreTroll"));
 		chrall.sendToChrallServer(action, {"ChangePartage": action, "IdCible": autreTroll});
@@ -105,20 +105,22 @@
 		autreTroll = parseInt(autreTroll);
 		// Operation asynchrone, gogochrall devra attendre la réponse du serveur soap de MH
 		chrall.sendToChrallServer("maj_"+facette, {"IdCible": autreTroll});
-		var notificationText = 'GogoChrall attend la r\u00e9ponse du serveur Mounty Hall' + (0 == autreTroll ? " pour tous vos amis" : "") + '. Cela peut prendre quelques minutes.';
+		var notificationText = 'GogoChrall attend la r\u00e9ponse du serveur Mounty Hall';
+		if (!autreTroll) notificationText += " pour tous vos amis";
+		notificationText += '. Cela peut prendre quelques minutes.';
 		$("#resultat_maj").text(notificationText);
 		chrall.notifyUser({text : notificationText});
-		localStorage['troll.' + chrall.playerId() + '.messageMaj'] = notificationText;	
+		localStorage['troll.' + chrall.playerId() + '.messageMaj'] = notificationText;
 	}
 
-	chrall.majVue = function (idAutreTroll) {
+	chrall.majVue = function(idAutreTroll){
 		chrall.majTroll.call(this, "vue", idAutreTroll);
 	}
 
-	chrall.majProfil = function (idAutreTroll) {
+	chrall.majProfil = function(idAutreTroll){
 		chrall.majTroll.call(this, "profil", idAutreTroll);
 	}
-	
+
 	chrall.bindCopy_tablePartages = function(){
 		$(window).on('copy', function(e){
 			console.log('copy');

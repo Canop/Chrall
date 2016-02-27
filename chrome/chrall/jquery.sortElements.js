@@ -22,17 +22,17 @@
  *   The <td>'s parent (<tr>) will be sorted instead
  *   of the <td> itself.
  */
-jQuery.fn.sortElements = (function (){
+jQuery.fn.sortElements = (function(){
 
 	var sort = [].sort;
 
-	return function (comparator, getSortable){
+	return function(comparator, getSortable){
 
-		getSortable = getSortable || function (){
+		getSortable = getSortable || function(){
 			return this;
 		};
 
-		var placements = this.map(function (){
+		var placements = this.map(function(){
 			var sortElement = getSortable.call(this);
 			var parentNode = sortElement.parentNode;
 			// Since the element itself will change position, we have
@@ -40,7 +40,7 @@ jQuery.fn.sortElements = (function (){
 			// the DOM. The easiest way is to have a 'flag' node:
 			var nextSibling = parentNode.insertBefore(document.createTextNode(''), sortElement.nextSibling);
 
-			return function (){
+			return function(){
 				if (parentNode === this) throw new Error("You can't sort elements if any one is a descendant of another.");
 				// Insert before flag:
 				parentNode.insertBefore(this, nextSibling);
@@ -50,7 +50,7 @@ jQuery.fn.sortElements = (function (){
 
 		});
 
-		return sort.call(this, comparator).each(function (i){
+		return sort.call(this, comparator).each(function(i){
 			placements[i].call(getSortable.call(this));
 		});
 

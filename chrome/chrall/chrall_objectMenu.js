@@ -2,8 +2,7 @@
 /*
  * La méthode objectMenu, la seule publique, permet d'ajouter un ou deux menu(s) (en fait un div
  *  dont le contenu est fourni par l'appelant) au dessus et au dessous d'un objet.
- * 
- */ 
+ */
 
 let onOmTarget = false;
 let onOmTopMenu = false;
@@ -14,7 +13,7 @@ let omTopMenu = null;
 let omBottomMenu = null;
 
 
-function eventIsOver(event, o) {
+function eventIsOver(event, o){
 	// FIXME il y a un problème de décalage vertical de quelques pixels que je ne comprends pas (sur le haut de la zone au moins)
 	if ((!o) || o==null) return false;
 	let pos = o.offset();
@@ -31,17 +30,17 @@ function eventIsOver(event, o) {
 	return false;
 }
 
-function checkHideOm() {
+function checkHideOm(){
 	if (onOmTarget||onOmTopMenu||onOmBottomMenu) return;
 	// avant de fermer, on va laisser le temps de vérifier qu'on n'est pas tout de suite passé
 	// dans un autre objet (par exemple depuis la cible vers un menu)
 	clearTimeout(omCloseTimeoutID);
-	omCloseTimeoutID = setTimeout(function() {
+	omCloseTimeoutID = setTimeout(function(){
 		if (onOmTarget || onOmTopMenu || onOmBottomMenu) return;
 		chrall.hideOm();
 	}, 200);
 }
-chrall.hideOm = function() {
+chrall.hideOm = function(){
 	if (omTopMenu!=null) {
 		omTopMenu.remove();
 		omTopMenu = null;
@@ -52,7 +51,7 @@ chrall.hideOm = function() {
 	}
 }
 
-function showOm(target, text_top, text_bottom) {
+function showOm(target, text_top, text_bottom){
 	let pos =target.offset();
 	chrall.hideOm();
 	omTarget = target;
@@ -84,10 +83,10 @@ function showOm(target, text_top, text_bottom) {
 	}
 }
 
-function enterBottomMenu() {
+function enterBottomMenu(){
 	onOmBottomMenu = true;
 }
-function leaveBottomMenu(event) {
+function leaveBottomMenu(event){
 	if (!onOmBottomMenu) return;
 	// si l'on entre dans un objet du menu (par exemple un lien) l'évenement MouseOut est envoyé, on doit donc filtrer ce cas
 	if (eventIsOver(event, omBottomMenu)) return;
@@ -98,11 +97,11 @@ function leaveBottomMenu(event) {
 chrall.objectMenuLive = function(
 	selector,  // un sélecteur jquery, par exemple  "#myObject"
 	getArgs // fonction prenant en argument un objet jquery résultat de $(selector) et renvoyant une map avec html_top, html_bottom
-) {
+){
 	$(document).on(
 		'mouseenter',
 		selector,
-		function(event) {
+		function(event){
 			let target = $(this);
 			let args = getArgs(target);
 			if (chrall.scrollInProgress || onOmTopMenu || onOmBottomMenu) return false;

@@ -1,11 +1,11 @@
 "use strict";
 // modifie la page du profil, et lit les informations disponibles concernant le troll
 
-(function (chrall) {
+(function(chrall){
 	/**
 	 * renvoie une durée en secondes à partir d'une expression MH de type "3 j 10 h 5 m 1 s"
 	 */
-	chrall.parseDuration = function (text) {
+	chrall.parseDuration = function(text){
 		let tokens = text.split(/\W+/g);
 		let seconds = 0;
 		let unit = null;
@@ -39,13 +39,13 @@
 		return seconds;
 	};
 
-	chrall.extractBasicInfos = function () {
+	chrall.extractBasicInfos = function(){
 		chrall.player().id = parseInt($("#id").text());
 		chrall.player().name = $("#nom").text();
 		chrall.player().race = $("#race").text();
 	};
 
-	chrall.extractXpInfos = function () {
+	chrall.extractXpInfos = function(){
 		chrall.player().level = parseInt($("#niv").text());
 		chrall.player().pi = parseInt($("#pitot").text());
 		chrall.player().px = parseInt($("#px").text());
@@ -53,7 +53,7 @@
 		chrall.player().availablePi = parseInt($("#pi").text());
 	};
 
-	chrall.makeXpComments = function () {
+	chrall.makeXpComments = function(){
 		let nextLevelPi = chrall.getTotalPiForLevel(chrall.player().level + 1);
 		let trainingPx = chrall.player().level > 2 ? chrall.player().level * 2 : 5;
 		let html = "";
@@ -75,7 +75,7 @@
 		$msgentrainer.attr("title", "");
 	};
 
-	chrall.extractPositionAndSight = function () {
+	chrall.extractPositionAndSight = function(){
 		chrall.player().x = parseInt($("#x").text());
 		chrall.player().y = parseInt($("#y").text());
 		chrall.player().z = parseInt($("#n").text());
@@ -85,7 +85,7 @@
 		chrall.player().totalSight = parseInt($("#vue_tot").text());
 	};
 
-	chrall.extractDlaInfos = function () {
+	chrall.extractDlaInfos = function(){
 		// Utilisation du selecteur par attribut car deux elements on l'id "dla"
 		let dlaString = $("td[id='dla']").text();
 		// remarque : on utilise la surcharge de la classe Date définie dans date-fr-FR.js
@@ -95,7 +95,7 @@
 		chrall.player().pa = parseInt($("#pa").text()); // théoriquement doublon (on lit ça dans le menu de gauche). On supprimera peut-être.
 	};
 
-	chrall.extractPvAndFatigue = function () {
+	chrall.extractPvAndFatigue = function(){
 		chrall.player().pv = parseInt($("#pv_courant").text());
 		chrall.player().pvMaxSansBMM = parseInt($("#pv").text());
 		chrall.player().pvMax = parseInt($("#pv_tot").text());
@@ -107,7 +107,7 @@
 	/**
 	 * construit un certain nombre de tables donnant des infos sur la fatigue
 	 */
-	chrall.makeStrainInfos = function () {
+	chrall.makeStrainInfos = function(){
 		let html = "<div class=profileInfos>";
 		let optimalStrains = [29, 23, 18, 14, 11, 8, 6, 4];
 		let m0 = (chrall.player().getDla() - (new Date()).getTime()) / (60 * 1000);
@@ -298,7 +298,7 @@
 		return html;
 	};
 
-	chrall.analyseAndReformatMainCharacteristicsTable = function () {
+	chrall.analyseAndReformatMainCharacteristicsTable = function(){
 		let Characteristic = chrall.Characteristic;
 		chrall.player().regeneration = new Characteristic(parseInt($("#reg").text()), 3, parseInt($("#reg_p").text()), parseInt($("#reg_m").text()));
 		chrall.player().attac = new Characteristic(parseInt($("#att").text()), 6, parseInt($("#att_p").text()), parseInt($("#att_m").text()));
@@ -307,7 +307,7 @@
 		chrall.player().armor = new Characteristic(parseInt($("#arm").text()), 3, parseInt($("#arm_p").text()), parseInt($("#arm_m").text()));
 	};
 
-	chrall.readTalentTable = function (table) {
+	chrall.readTalentTable = function(table){
 		let rows = table.find("tr");
 		for (let i = 0; i < rows.length; i++) {
 			let talent = new chrall.Talent();
@@ -319,7 +319,7 @@
 	};
 
 	// renvoie une version améliorée du texte, pouvant le remplacer
-	chrall.extractMagic = function () {
+	chrall.extractMagic = function(){
 		chrall.player().baseRm = parseInt($("#rm").text());
 		chrall.player().rm = parseInt($("#rm_tot").text());
 		chrall.player().baseMm = parseInt($("#mm").text());
@@ -327,7 +327,7 @@
 		chrall.player().concentration = parseInt($("#conc").text());
 	};
 
-	chrall.extractMagicalAttackBonuses = function (text) {
+	chrall.extractMagicalAttackBonuses = function(text){
 		if (0 > text.indexOf("Attaques Magiques")) {
 			return;
 		}
@@ -339,7 +339,7 @@
 		chrall.player().adjustMagicalDamageMultiplier(damageBonus);
 	};
 
-	chrall.analyseAndReformatProfile = function () {
+	chrall.analyseAndReformatProfile = function(){
 		chrall.extractBasicInfos();
 		chrall.extractDlaInfos();
 		chrall.extractPositionAndSight();
@@ -374,21 +374,21 @@
 			chrall.serveurPublic() + "json?action=check_messages&TrollId="
 			+ chrall.player().id + "&ChrallVersion=" + chrall.version
 		);
-		$("#ch_messageTitle").click(function () {
+		$("#ch_messageTitle").click(function(){
 			$("#ch_messageContent").toggle();
 		});
 
 		console.log("PLAYER:", chrall.player());
 
 		//> ajout des bulles sur les compétences
-		$('a[href*="DetailComp"]').each(function () {
+		$('a[href*="DetailComp"]').each(function(){
 			let link = $(this);
 			let text = chrall.getTalentBubbleContent(link.text().trim());
 			chrall.triggerBubble(link, text, "bub_competence");
 		});
 
 		//> ajout des bulles sur les sorts
-		$('a[href*="DetailSort"]').each(function () {
+		$('a[href*="DetailSort"]').each(function(){
 			let link = $(this);
 			let text = chrall.getTalentBubbleContent(link.text().trim());
 			chrall.triggerBubble(link, text, "bub_sort");

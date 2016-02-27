@@ -10,14 +10,14 @@ var chrall = chrall || {};
  *
  * Le cas des caractéristiques sans dés (par exemple la vue) est simplement couvert par un nombre de dés à 0
  */
-function Characteristic(diceNumber, diceSize, physicalBonus, magicalBonus) {
+function Characteristic(diceNumber, diceSize, physicalBonus, magicalBonus){
 	this.diceNumber = isNaN(diceNumber) ? 0 : diceNumber;
 	this.diceSize = diceSize;
 	this.physicalBonus = isNaN(physicalBonus) ? 0 : physicalBonus;
 	this.magicalBonus = isNaN(magicalBonus) ? 0 : magicalBonus;
 }
 chrall.Characteristic = Characteristic;
-Characteristic.prototype.readRow = function (row) {
+Characteristic.prototype.readRow = function(row){
 	var cells = $(row).find("td");
 	var s = $(cells[1]).text().trim();
 	s = s.split('/')[0]; // pour éliminer la seconde partie dans 1 D3 / 2 D3
@@ -33,10 +33,10 @@ Characteristic.prototype.readRow = function (row) {
 	this.magicalBonus = parseInt($(cells[3]).text().trim());
 	return this;
 };
-Characteristic.prototype.getMean = function () {
+Characteristic.prototype.getMean = function(){
 	return this.diceNumber * (this.diceSize + 1) / 2 + this.physicalBonus + this.magicalBonus;
 };
-Characteristic.prototype.getCriticalMean = function () {
+Characteristic.prototype.getCriticalMean = function(){
 	return Math.floor(this.diceNumber * 1.5) * (this.diceSize + 1) / 2 + this.physicalBonus + this.magicalBonus;
 };
 
@@ -48,10 +48,10 @@ Characteristic.prototype.getCriticalMean = function () {
  *  - level (le niveau max de la compétence)
  *  - mastering (le pourcentage pour le niveau max)
  */
-function Talent() {
+function Talent(){
 }
 chrall.Talent = Talent;
-Talent.prototype.readRow = function ($row) {
+Talent.prototype.readRow = function($row){
 	var $cells = $row.find("td");
 	this.name = $cells.eq(1).find("a").text().trim();
 	this.level = parseInt($cells.eq(-6).text()) || 1;
@@ -67,7 +67,7 @@ Talent.prototype.readRow = function ($row) {
  *  - name ou null
  *  - characName : le nom de la caractéristique impactée [->taip : pas urgent]
  */
-function Fly(type, name) {
+function Fly(type, name){
 	this.type = type;
 	this.name = name ? name : null;
 }
@@ -83,16 +83,16 @@ chrall.Fly = Fly;
  *  - id
  *  - name
  */
-function Thing(x, y, z) {
+function Thing(x, y, z){
 	this.x = x;
 	this.y = y;
 	this.z = z;
 }
 chrall.Thing = Thing;
-Thing.prototype.horizontalDistance = function (x, y) { // distance horizontale
+Thing.prototype.horizontalDistance = function(x, y){ // distance horizontale
 	return Math.max(Math.abs(this.x - x), Math.abs(this.y - y));
 };
-Thing.prototype.setName = function (name) { // méthode surchargée pour les monstres et les lieux
+Thing.prototype.setName = function(name){ // méthode surchargée pour les monstres et les lieux
 	this.name = name;
 };
 
@@ -102,12 +102,12 @@ Thing.prototype.setName = function (name) { // méthode surchargée pour les mon
  * Params :
  *  - trollId : l'id du troll décédé
  */
-function Cenotaphe(x, y, z) {
+function Cenotaphe(x, y, z){
 	Thing.call(this, x, y, z);
 }
 chrall.Cenotaphe = Cenotaphe;
 Cenotaphe.prototype = new Thing();
-Cenotaphe.prototype.setName = function (fullName) {
+Cenotaphe.prototype.setName = function(fullName){
 	this.name = fullName;
 	var i = fullName.lastIndexOf('(');
 	var s = fullName.substring(i + 1, fullName.length - 1);
@@ -124,12 +124,12 @@ Cenotaphe.prototype.setName = function (fullName) {
  *  - isGowap
  *  - isSick (a priori pour les gowaps)
  */
-function Monster(x, y, z) {
+function Monster(x, y, z){
 	Thing.call(this, x, y, z);
 }
 chrall.Monster = Monster;
 Monster.prototype = new Thing();
-Monster.prototype.setName = function (fullName) {
+Monster.prototype.setName = function(fullName){
 	this.fullName = fullName;
 	this.isSick = false;
 	var i1 = fullName.indexOf('[');
@@ -180,7 +180,7 @@ Monster.prototype.setName = function (fullName) {
  *  - cellIsFree (pour le malus de déplacement de case occupée)
  *  - totalSight (parce que suivant les cas on n'a pas toujours le détail)
  */
-function Troll(x, y, z) {
+function Troll(x, y, z){
 	Thing.call(this, x, y, z);
 	this.isIntangible = false;
 	this.magicalAttackMultiplier = 1;
@@ -195,25 +195,25 @@ Troll.prototype = new Thing();
  * je vous laisse deviner pour la suite
  */
 
-Troll.prototype.getDla = function (nbTurnsToAdd) {
+Troll.prototype.getDla = function(nbTurnsToAdd){
 	if (!nbTurnsToAdd) {
 		return new Date(this.dlaTime*1000);
 	}
 	return new Date(this.dlaTime*1000).add({seconds: nbTurnsToAdd * this.turnDuration}); // surcharge de Date définie dans date-fr-FR.js
 };
 
-Troll.prototype.addFly = function (fly) {
+Troll.prototype.addFly = function(fly){
 	if (!this.flies) {
 		this.flies = new Array();
 	}
 	this.flies.push(fly);
 };
 
-Troll.prototype.cleanFlies = function () {
+Troll.prototype.cleanFlies = function(){
 	this.flies = new Array();
 };
 
-Troll.prototype.addTalent = function (t) {
+Troll.prototype.addTalent = function(t){
 	if (!this.talents) {
 		this.talents = new Object();
 	}
@@ -221,7 +221,7 @@ Troll.prototype.addTalent = function (t) {
 };
 
 // permet de construire un troll à partir d'un autre dont le prototype est incomplet (reçu en json depuis le script de fond, pas les méthodes)
-Troll.prototype.fillFrom = function (src) {
+Troll.prototype.fillFrom = function(src){
 	// d'abord les champs de base
 	for (var key in src) {
 		this[key] = src[key];
@@ -229,7 +229,7 @@ Troll.prototype.fillFrom = function (src) {
 };
 
 // sauvegarde localement les infos du troll. Utilisé en particulier pour le passage entre frames
-Troll.prototype.save = function () {
+Troll.prototype.save = function(){
 	if (!this.id) {
 		console.info('no id -> troll non sauvable : from ' + chrall.pageName());
 		return;
@@ -238,7 +238,7 @@ Troll.prototype.save = function () {
 	localStorage['troll.' + this.id] = JSON.stringify(this);
 };
 
-Troll.prototype.restore = function () {
+Troll.prototype.restore = function(){
 	if (!this.id) {
 		var storedId = localStorage['last_saved_troll_id'];
 		if (!storedId || "" == storedId) {
@@ -255,13 +255,13 @@ Troll.prototype.restore = function () {
 	this.fillFrom($.parseJSON(json));
 };
 
-Troll.prototype.adjustMultiplier = function (percentageDelta) {
+Troll.prototype.adjustMultiplier = function(percentageDelta){
 	return (100.0 + percentageDelta) / 100;
 };
-Troll.prototype.adjustMagicalAttackMultiplier = function (percentageDelta) {
+Troll.prototype.adjustMagicalAttackMultiplier = function(percentageDelta){
 	this.magicalAttackMultiplier = this.adjustMultiplier(percentageDelta);
 };
-Troll.prototype.adjustMagicalDamageMultiplier = function (percentageDelta) {
+Troll.prototype.adjustMagicalDamageMultiplier = function(percentageDelta){
 	this.magicalDamageMultiplier = this.adjustMultiplier(percentageDelta);
 };
 
@@ -274,13 +274,13 @@ Troll.prototype.adjustMagicalDamageMultiplier = function (percentageDelta) {
  *  - isHole (trou de météorite)
  *  - hasLink (si oui on le construit automatiquement)
  */
-function Place(x, y, z) {
+function Place(x, y, z){
 	Thing.call(this, x, y, z);
 }
 chrall.Place = Place;
 Place.prototype = new Thing();
 
-Place.prototype.setName = function (fullName) {
+Place.prototype.setName = function(fullName){
 	this.name = fullName;
 	this.isHole = fullName.indexOf("Trou de Météorite") >= 0;
 };
@@ -295,13 +295,13 @@ Place.prototype.setName = function (fullName) {
  *  - isCouloir (on peut se déplacer dedans)
  *  - isMur (on rebondit dessus)
  */
-function LabySquare(x, y, z) {
+function LabySquare(x, y, z){
 	Thing.call(this, x, y, z);
 }
 chrall.LabySquare = LabySquare;
 LabySquare.prototype = new Thing();
 
-LabySquare.prototype.setName = function (fullName) {
+LabySquare.prototype.setName = function(fullName){
 	this.name = fullName;
 	this.isCouloir = fullName.indexOf("Couloir") >= 0;
 	this.isMur = fullName.indexOf("Mur") >= 0;

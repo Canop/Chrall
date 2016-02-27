@@ -80,7 +80,7 @@ chrall.talentBubblers = {
 	},
 
 	"Charger": (player)=>{
-		var computeRange = function (pv) {
+		var computeRange = function(pv){
 			var s = Math.ceil(pv / 10) + player.regeneration.diceNumber;
 			var result = 1;
 			if (s>49) result = 8;
@@ -529,7 +529,7 @@ chrall.talentBubblers = {
 
 	"Télékinésie": (player)=>{
 		var p = Math.floor(player.totalSight / 2);
-		var f = function (p) {
+		var f = function(p){
 			if (p < 0) return " sont trop lourds pour votre vue.";
 			var h = " sont ciblables ";
 			if (p == 0) return h + "sur votre case.";
@@ -546,7 +546,7 @@ chrall.talentBubblers = {
 
 	"Téléportation": (player)=>{
 		var s = player.sight.diceNumber;
-		var f = function (mm) {
+		var f = function(mm){
 			var d = Math.ceil((Math.sqrt(19 + 8 * (Math.floor(mm / 5) + 3)) - 7) / 2);
 			var dh = (d + 20 + s);
 			var dv = Math.floor(d / 3 + 3);

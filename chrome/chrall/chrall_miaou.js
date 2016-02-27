@@ -1,16 +1,16 @@
 "use strict";
-(function (chrall) {
+(function(chrall){
 
 	var ùmessages = document.getElementById("messages");
 	if (!ùmessages) return;
-	
+
 	var observer = new MutationObserver(function(mutations){
 		for (var i=0; i<mutations.length; i++) {
 			var nodes = mutations[i].addedNodes;
 			if (!nodes || !nodes.length) continue;
 			for (var j=0; j<nodes.length; j++) {
 				if (!/\buser-messages\b/.test(nodes[j].className)) continue;
-				var messsageNodes = nodes[j].childNodes;				
+				var messsageNodes = nodes[j].childNodes;
 				for (var k=0; k<messsageNodes.length; k++) {
 					if (!/\bmessage\b/.test(messsageNodes[k].className)) continue;
 					var childs = messsageNodes[k].childNodes;
@@ -77,7 +77,7 @@
 			lines.forEach(function(line){
 				var match = line.match(/^\s*(-?\d+)[\s,;_](-?\d+)[\s,;_]?(-?\d+)?\s*(\w?)/);
 				if (match) cells.push({
-					pos: match.slice(1,4).filter(Boolean).join(','), // exemples : "-8,-3,-30" ou "-8,-3"
+					pos: match.slice(1, 4).filter(Boolean).join(','), // exemples : "-8,-3,-30" ou "-8,-3"
 					team: /^[rvbj]/i.test(match[4]) ? match[4][0].toUpperCase() : 'R'
 				});
 			});
@@ -88,9 +88,9 @@
 			});
 		});
 	}
-	
+
 	chrall.cdb.getTrolls(function(t){
-		console.log("all trolls:",t);
+		console.log("all trolls:", t);
 	});
 
 })(window.chrall = window.chrall || {});

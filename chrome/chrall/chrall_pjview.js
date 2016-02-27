@@ -1,11 +1,11 @@
 "use strict";
-(function(chrall) {
+(function(chrall){
 
-	chrall.analysePJEventsView = function() {
+	chrall.analysePJEventsView = function(){
 		chrall.viewedTrollId = $('input[name="ai_IDPJ"]').val();
 	};
 
-	chrall.analyseAndReformatPJView = function() {
+	chrall.analyseAndReformatPJView = function(){
 		var player = chrall.player();
 		chrall.viewedTrollId = $('input[name="ai_IDPJ"]').val();
 

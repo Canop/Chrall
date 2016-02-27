@@ -1,7 +1,7 @@
 "use strict";
 
-(function (chrall) {
-	chrall.makeDeLink = function (x, y, z) {
+(function(chrall){
+	chrall.makeDeLink = function(x, y, z){
 		var p = chrall.player();
 		var cost = (p.cellIsFree ? 1 : 2) + (z === p.z ? 0 : 1);
 		if (cost > p.pa) return '';
@@ -11,7 +11,7 @@
 	/**
 	 * construit la ligne de boites à cocher permettant de filtrer la grille
 	 */
-	chrall.makeFiltersHtml = function () {
+	chrall.makeFiltersHtml = function(){
 		var	horizontalViewLimit = chrall.horizontalViewLimit,
 			viewFilters = chrall.viewFilters,
 			player = chrall.player();
@@ -45,8 +45,8 @@
 			html += "<span><input type=checkbox id='" + key + "'";
 			if (viewFilters[key]) html += " checked";
 			html += "><label for='" + key + "'>" + key + "</label></span>";
-			(function (key) {
-				$(document).on('change', '#' + key, function (e) {
+			(function(key){
+				$(document).on('change', '#' + key, function(e){
 					localStorage['grid_filter_' + key] = this.checked ? 'inline' : 'none';
 					chrall.gridChangeDisplayByName(key, this.checked ? 'inline' : 'none', true);
 				});
@@ -56,7 +56,7 @@
 		return html;
 	};
 
-	function compactText(name, maxLength) {
+	function compactText(name, maxLength){
 		name = null == name ? "" : name.trim();
 		if (maxLength < name.length) {
 			name = name.substr(0, maxLength) + "..";
@@ -64,7 +64,7 @@
 		return  name;
 	}
 
-	function monsterName(compactNames, maxLength, monsterCell) {
+	function monsterName(compactNames, maxLength, monsterCell){
 		if (!compactNames) {
 			return monsterCell.fullName;
 		}
@@ -72,7 +72,7 @@
 		return compactText(name, maxLength);
 	}
 
-	function distanceStyle(verticalDistanceHint, z) {
+	function distanceStyle(verticalDistanceHint, z){
 		if (!verticalDistanceHint) {
 			return "";
 		}
@@ -82,13 +82,13 @@
 		return "font-size:" + fontSize + "%;";
 	}
 
-	function addPosition(thing, attributes) {
+	function addPosition(thing, attributes){
 		attributes.x = thing.x;
 		attributes.y = thing.y;
 		attributes.z = thing.z;
 	}
 
-	function addCurrentPlayer($cell) {
+	function addCurrentPlayer($cell){
 		var player = chrall.player();
 		var attributes = {
 			id:      player.id,
@@ -108,7 +108,7 @@
 		});
 	}
 
-	function append3D($cell, attributes, differentLevel, actions) {
+	function append3D($cell, attributes, differentLevel, actions){
 		// TODO : span name = 3D // TODO plus tard name ==> class
 		var $a = $("<a/>", attributes);
 		if (actions) {
@@ -122,7 +122,7 @@
 		return $a;
 	}
 
-	function addTrolls(cell, $cell, noteRequest, horizontalDist, verticalDistanceHint, compactNames, maxLength) {
+	function addTrolls(cell, $cell, noteRequest, horizontalDist, verticalDistanceHint, compactNames, maxLength){
 		var player = chrall.player();
 		cell.trolls.forEach(function(troll){
 			noteRequest.NumTrolls.push(troll.id);
@@ -146,7 +146,7 @@
 		});
 	}
 
-	function computeMonsterStacks(cell, monstersByLevel, compactNames, maxLength) {
+	function computeMonsterStacks(cell, monstersByLevel, compactNames, maxLength){
 		for (var i = 0; i < cell.monsters.length; i++) {
 			var monster = cell.monsters[i];
 			var z = monster.z;
@@ -178,7 +178,7 @@
 		}
 	}
 
-	function monsterAttributes(monster, compactNames, maxLength, verticalDistanceHint, horizontalDistance) {
+	function monsterAttributes(monster, compactNames, maxLength, verticalDistanceHint, horizontalDistance){
 		var attributes = {
 			id:      monster.id,
 			name: monster.isGowap ? 'gowaps' : 'monstres',
@@ -191,7 +191,7 @@
 		return attributes;
 	}
 
-	function addMonsters(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames, maxLength) {
+	function addMonsters(cell, $cell, noteRequest, horizontalDistance, verticalDistanceHint, compactNames, maxLength){
 		var player = chrall.player();
 		var compactMonsterStacks = chrall.isOptionEnabled('view-grid-compact-monster-stacks', true);
 		var monstersByLevel = {};
@@ -246,7 +246,7 @@
 
 	}
 
-	function addPlaces(cell, $cell, verticalDistanceHint, compactNames, maxLength) {
+	function addPlaces(cell, $cell, verticalDistanceHint, compactNames, maxLength){
 		var hasHole = false;
 		for (var i = 0; i < cell.places.length; i++) {
 			var place = cell.places[i];
@@ -270,7 +270,7 @@
 		return hasHole;
 	}
 
-	function addMushrooms(cell, $cell, verticalDistanceHint) {
+	function addMushrooms(cell, $cell, verticalDistanceHint){
 		for (var i = 0; i < cell.mushrooms.length; i++) {
 			var mushRoom = cell.mushrooms[i];
 			var differentLevel = chrall.player.z != mushRoom.z;
@@ -285,7 +285,7 @@
 		}
 	}
 
-	function addCenotaphs(cell, verticalDistanceHint, $cell) {
+	function addCenotaphs(cell, verticalDistanceHint, $cell){
 		for (var i = 0; i < cell.cenotaphs.length; i++) {
 			var cenotaph = cell.cenotaphs[i];
 			var differentLevel = chrall.player.z != cenotaph.z;
@@ -301,7 +301,7 @@
 		}
 	}
 
-	function addWalls(cell, $cell) {
+	function addWalls(cell, $cell){
 		// S'il y a un mur, c'est probablement qu'on est dans un labyrinthe et que la vue est limitée à 1.
 		// On va donc se permettre d'afficher toutes les cases de la même taille pour que ce soit plus joli.
 		// Pour bien faire, il faudrait fixer initialement la taille des cases à une certaine taille si on est dans un labyrinthe.
@@ -338,7 +338,7 @@
 		}
 	}
 
-	function addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint, compactNames, maxLength) {
+	function addObjects(cell, $cell, x, y, orderItemsByType, verticalDistanceHint, compactNames, maxLength){
 		// on regroupe les objets par étage et pour chaque étage on les compte afin de ne pas afficher des milliers de lignes quand une tanière est écroulée
 		var objectsByLevel = {};
 		var player = chrall.player();
@@ -394,7 +394,7 @@
 		grid.outOfGrid.forEach(function(o){
 			if (o instanceof chrall.Troll) m.troll=(m.troll||0)+1;
 			else if (o instanceof chrall.Monster) m.monstre=(m.monstre||0)+1;
-			else throw "Hein ? Y a aut'chose ? Faut mettre à jour makeGridErrorDiv.";
+			else throw new Error("Hein ? Y a aut'chose ? Faut mettre à jour makeGridErrorDiv.");
 		});
 		var txt = "Erreur d'affichage pour "+
 			Object.keys(m)
@@ -417,7 +417,7 @@
 	 *
 	 * Remplit au passage un objet contenant des infos sur ce qui est visible (pour les notes)
 	 */
-	chrall.makeGrid = function (noteRequest) {
+	chrall.makeGrid = function(noteRequest){
 		var	player = chrall.player(),
 			grid = chrall.grid;
 		var orderItemsByType = chrall.isOptionEnabled("view-sort-items-per-type");
@@ -550,23 +550,23 @@
 		return $gridTable;
 	};
 
-	chrall.cellNameComparator = function (a, b) {
+	chrall.cellNameComparator = function(a, b){
 		return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
 	};
 
-	chrall.addTab = function ($tabs, href, text, count) {
+	chrall.addTab = function($tabs, href, text, count){
 		text = count ? text + " (" + count + ")" : text;
 		$tabs.append($("<li/>").append($("<a/>", { href: href}).text(text)));
 	};
 
-	chrall.makeTabDiv = function (id) {
+	chrall.makeTabDiv = function(id){
 		var $div = $("<div scroll></div>");
 		$div.attr("id", id);
 		$div.attr("class", "tab_content");
 		return $div;
 	};
 
-	chrall.analyseAndReformatView = function () {
+	chrall.analyseAndReformatView = function(){
 		var noteRequest = {};
 		$(document.body).css('overflow', 'hidden');
 
@@ -660,7 +660,7 @@
 		var $tabs_view = $("#tabs_view");
 		$tabs_view.find("li:first").addClass("active").show();
 		$(".tab_content:first").show();
-		var changeTab = function ($tab) {
+		var changeTab = function($tab){
 			chrall.hideOm(); // fermeture des éventuels objectMenus de la grille
 			$("#tabs_view").find("li").removeClass("active");
 			$tab.addClass("active");
@@ -669,26 +669,26 @@
 			window.scroll(0, 0);
 			$(activeTab).fadeIn("fast");
 		};
-		$tabs_view.find("li").click(function () {
+		$tabs_view.find("li").click(function(){
 			changeTab($(this));
 		});
 		// on corrige les liens internes, pour qu'ils agissent sur les onglets
-		$('a[href$="#monstres"]').click(function () {
+		$('a[href$="#monstres"]').click(function(){
 			changeTab($('#tabs_view').find('a[href="#tabMonsters"]').parent());
 		});
-		$('a[href$="#trolls"]').click(function () {
+		$('a[href$="#trolls"]').click(function(){
 			changeTab($('#tabs_view').find('a[href="#tabTrolls"]').parent());
 		});
-		$('a[href$="#tresors"]').click(function () {
+		$('a[href$="#tresors"]').click(function(){
 			changeTab($('#tabs_view').find('a[href="#tabObjects"]').parent());
 		});
-		$('a[href$="#champignons"]').click(function () {
+		$('a[href$="#champignons"]').click(function(){
 			changeTab($('#tabs_view').find('a[href="#tabMushrooms"]').parent());
 		});
-		$('a[href$="#lieux"]').click(function () {
+		$('a[href$="#lieux"]').click(function(){
 			changeTab($('#tabs_view').find('a[href="#tabPlaces"]').parent());
 		});
-		$('a[href$="#cadavre"]').click(function () {
+		$('a[href$="#cadavre"]').click(function(){
 			changeTab($('#tabs_view').find('a[href="#tabCenotaphs"]').parent());
 		});
 
@@ -709,12 +709,12 @@
 			}
 		}
 
-		$(document.body).on('click', '[toggleName]', function () {
+		$(document.body).on('click', '[toggleName]', function(){
 			chrall.gridChangeDisplayByName($(this).attr('toggleName'));
 		});
 
 		setTimeout(// afin d'accélérer l'affichage initial, on repousse un peu l'ajout des bulles et menus
-				function () {
+				function(){
 					chrall.gridLive();
 
 					//> bulle popup sur le lien du joueur
@@ -729,7 +729,7 @@
 
 					//> on met un popup sur les trésors et les endroits pour afficher leur numéro (utile pour le pilotage de gowap)
 					$grid.find("a.ch_object, a.ch_place").each(
-							function () {
+							function(){
 								var o = $(this);
 								var text = o.attr("bub");
 								if (text) {
@@ -747,7 +747,7 @@
 		);
 
 		//> on outille le select de réduction de vue
-		$('#viewRedux').change(function () {
+		$('#viewRedux').change(function(){
 			var limit = $(this).val();
 			document.getElementsByName("ai_MaxVue")[0].value = limit;
 			document.getElementsByName("ai_MaxVueVert")[0].value = Math.ceil(limit / 2);
@@ -756,7 +756,7 @@
 
 		var $gridHolder = $grid_holder;
 		var $playerCell = $('#cellp0p0');
-		var gotoPlayer = function () {
+		var gotoPlayer = function(){
 			chrall.hideOm();
 			chrall.scrollInProgress = true;
 			$gridHolder.animate(
@@ -765,7 +765,7 @@
 					scrollTop:  ($gridHolder.scrollTop() + $playerCell.offset().top + ($playerCell.innerHeight() - window.innerHeight) / 2)
 				},
 				'slow',
-				function () {
+				function(){
 					chrall.scrollInProgress = false;
 				}
 			);

@@ -1,6 +1,6 @@
 "use strict";
-(function(chrall) {
-	chrall.handleFollowerOrders = function() {
+(function(chrall){
+	chrall.handleFollowerOrders = function(){
 
 		chrall.gridLive(); // <- ça c'est parce qu'on va sans doute ajouter des liens d'ouverture de vues "zoom"
 
@@ -68,7 +68,7 @@
 		}
 		ch.add(chGowap);
 
-		ch.onClick = function(x, y, z) {
+		ch.onClick = function(x, y, z){
 			var toInvoke = chrall.triggerGowapAction(x, y, gowap_z, "move", numGowap, numMaxOrdre);
 			toInvoke();
 		};
@@ -105,7 +105,7 @@
 			}
 		}
 
-		function addMovementNode(nodeText, order, parent, dest) {
+		function addMovementNode(nodeText, order, parent, dest){
 			var $div = $("<div style='padding-top:1ex; padding-bottom:1ex; white-space: nowrap; text-align: center'/>");
 			parent.append($div);
 			var $table = $("<table style='text-align: center; margin: auto'/>");
@@ -130,7 +130,7 @@
 			$tr.append($("<td/>"));
 		}
 
-		function createMovementNode(nodeText, order, toX, toY, toZ) {
+		function createMovementNode(nodeText, order, toX, toY, toZ){
 			var actionNode = $("<a/>", {'class': 'gogo', html: nodeText});
 			var gowapAction = chrall.triggerGowapAction(toX, toY, toZ, order, numGowap, numMaxOrdre);
 			actionNode.bind("click", gowapAction);
@@ -139,8 +139,8 @@
 		}
 	};
 
-	chrall.triggerGowapAction = function(x, y, z, order, numGowap, numMaxOrdre) {
-		return (function() {
+	chrall.triggerGowapAction = function(x, y, z, order, numGowap, numMaxOrdre){
+		return (function(){
 			var movementType = 'move' == order ? '1' : '7'; // move or snort
 			window.frameElement.parentNode.children[1].src = '/mountyhall/MH_Follower/FO_NewOrder.php?ai_IdOrdre=' +
 					movementType + "&ai_IdFollower=" + numGowap + "&ai_NbOrdres=" + numMaxOrdre +
@@ -149,7 +149,7 @@
 		});
 	};
 
-	chrall.fillFollowerNewOrderForm = function() {
+	chrall.fillFollowerNewOrderForm = function(){
 		var order = chrall.getTrollStorage('.gowap-order');
 		if (order) {
 			if ('move' == order || 'snort' == order) {

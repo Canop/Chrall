@@ -5,7 +5,7 @@ if (paragraph.length>0) {
 	var html = "Chrall est déjà installé dans ce navigateur et fonctionne.";
 	if (chrall.version != $("#version").text()) {
 		html += "<br>Votre version est plus ancienne (" + chrall.version + "). Vous devriez cliquer sur le bouton ci-dessus afin de mettre à jour Chrall.";
-		setTimeout(function() {
+		setTimeout(function(){
 			document.location.reload();
 		}, 5000);
 	} else {

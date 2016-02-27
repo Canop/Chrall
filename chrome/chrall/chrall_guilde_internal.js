@@ -1,7 +1,7 @@
 "use strict";
-(function (chrall) {
+(function(chrall){
 
-	chrall.addPartageLinkToAll = function() {
+	chrall.addPartageLinkToAll = function(){
 		var membersTable = $("[name='ActionForm']").get(0).children[0];
 		var lines = membersTable.children[0].children;
 		for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
@@ -11,8 +11,8 @@
 				continue
 			}
 			var $addLink = $("<a/>", {class: "gogo"}).text("Proposer partage");
-			$addLink.click((function(trollId) {
-				return function() {
+			$addLink.click((function(trollId){
+				return function(){
 					chrall.sendPartageProposal(trollId);
 				}
 			})(trollId));

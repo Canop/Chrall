@@ -1,8 +1,8 @@
 "use strict";
-(function(chrall) {
+(function(chrall){
 
-	chrall.addBubblesToLinks = function() {
-		$("a.mh_trolls_1").each(function() {
+	chrall.addBubblesToLinks = function(){
+		$("a.mh_trolls_1").each(function(){
 			var player = chrall.player();
 			var link = $(this);
 			var href = link.attr('href');
@@ -18,7 +18,7 @@
 			}
 		});
 
-		$("a.mh_monstres").each(function() {
+		$("a.mh_monstres").each(function(){
 			var link = $(this);
 			var href = link.attr('href');
 			var numMonstre = href.split('\'')[1];
@@ -33,7 +33,7 @@
 		});
 	};
 
-	chrall.addInfosToMonsterEvents = function() {
+	chrall.addInfosToMonsterEvents = function(){
 		if (!chrall.compteChrallActif()) {
 			return;
 		}

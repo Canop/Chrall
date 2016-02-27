@@ -1,12 +1,12 @@
 "use strict";
-(function (chrall) {
+(function(chrall){
 
-	chrall.handleCdmPage = function () {
+	chrall.handleCdmPage = function(){
 		if ($("#msgAmelioration").text().indexOf("Vous avez RÉUSSI") !== 0) return;
 		var player = chrall.player();
 		var msgEffet = $("#msgEffet");
 		var cdm = msgEffet.find("b").eq(0).text();
-		msgEffet.find("tr").each(function () {
+		msgEffet.find("tr").each(function(){
 			cdm += "\n" + $(this).text();
 		});
 

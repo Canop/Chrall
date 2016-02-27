@@ -1,14 +1,14 @@
 "use strict";
 // Communication authentifiée avec le serveur Chrall.
 
-(function (chrall) {
+(function(chrall){
 
-	chrall.compteChrallActif = function () {
+	chrall.compteChrallActif = function(){
 		if (chrall.playerInvalid()) return false;
 		var key = 'troll.' + chrall.playerId() + '.compteActif';
 		return localStorage[key] == 'yes';
 	}
-	
+
 	chrall.displayComStatusMessage = function(){
 		var txt;
 		if (chrall.compteChrallActif()) {
@@ -24,20 +24,20 @@
 		$("#com_status_message").text(txt);
 	}
 
-	chrall.setStatutCompte = function (newStatus) {
+	chrall.setStatutCompte = function(newStatus){
 		if (chrall.playerInvalid()) return;
 		var key = 'troll.' + chrall.playerId() + '.compteActif';
 		localStorage[key] = newStatus;
 	}
 
 	// renvoie le mot de passe du compte chrall (il faut vérifier avant cet appel que le compte est actif)
-	chrall.mdpCompteChrall = function () {
+	chrall.mdpCompteChrall = function(){
 		var mdpkey = 'troll.' + chrall.playerId() + '.mdp';
 		return localStorage[mdpkey];
 	}
 
 	// met à jour sur le serveur (si le compte chrall est actif) les infos du troll du joueur
-	chrall.sendPlayerInfosToChrallServer = function () {
+	chrall.sendPlayerInfosToChrallServer = function(){
 		if (!chrall.compteChrallActif()) return;
 		var troll = {};
 		var player = chrall.player();
@@ -56,20 +56,20 @@
 		chrall.sendToChrallServer("updateTroll", {"Troll":troll});
 	};
 
-	chrall.initCommunications = function (action) {
+	chrall.initCommunications = function(action){
 		// on réinitialise à chaque page car on peut être sur un autre troll
 		localStorage['com.status.message'] = 'Compte inexistant ou non connecté';
 		if (action && chrall.compteChrallActif()) {
 			chrall.sendToChrallServer(action, {});
 		}
 	};
-	
+
 	// en attendant d'avoir viré le jsonp de Chrall (inutile maintenant que les headers CORS gèrent le problème du cross-domain)
 	//  il faut utiliser ça plutôt que jQUery.ajax pour être compatible avec les manifests 2 des extensions
-	chrall.jsonp = function(url) {
+	chrall.jsonp = function(url){
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", url, true);
-		xhr.onreadystatechange = function() {
+		xhr.onreadystatechange = function(){
 			if (xhr.readyState == 4) {
 				eval(xhr.responseText);
 			}
@@ -78,7 +78,7 @@
 	};
 
 	// envoie au serveur un message authentifié par le mdp restreint
-	chrall.sendToChrallServer = function (action, message) {
+	chrall.sendToChrallServer = function(action, message){
 		if (!chrall.compteChrallActif()) {
 			return false
 		}
@@ -93,13 +93,13 @@
 		message['TrollId'] = parseInt(chrall.playerId());
 		message['MDP'] = mdpRestreint;
 		console.log('Message sortant de ' + chrall.pageName() + ' (action=' + action + ') vers ' + chrall.serveurPrive() + ' : ');
-		console.log(message);	
+		console.log(message);
 		chrall.jsonp(chrall.serveurPrive() + 'json?v=2&action=' + action + '&message=' + JSON.stringify(message));
 		return true;
 	};
 
 	// fonction appelée par le serveur Chrall, ne pas renommer
-	chrall.receiveFromChrallServer = function (message) {
+	chrall.receiveFromChrallServer = function(message){
 		console.log("Message entrant :");
 		console.log(message);
 		//~ chrall.notifyUser({text: JSON.stringify(message)});

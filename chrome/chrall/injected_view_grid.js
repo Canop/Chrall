@@ -1,7 +1,7 @@
 "use strict";
-(function (chrall) {
+(function(chrall){
 
-	chrall.gridChangeDisplayByName = function (key, display, transient) {
+	chrall.gridChangeDisplayByName = function(key, display, transient){
 		var	i,
 			os = document.getElementsByName(key);
 		if (!display) { // mode d'inversion d'un objet unique, non persistent
@@ -22,7 +22,7 @@
 		}
 	}
 
-	chrall.updateTrollInfoInTable = function(partages) {
+	chrall.updateTrollInfoInTable = function(partages){
 		if (chrall.isOptionDisabled('view-display-hit-points-ratio')) return;
 
 		var partageInfo = {};
@@ -49,7 +49,7 @@
 	}
 
 	// Private -- not linked to the chrall instance
-	function createPvBlock(pvActuels, pvMax) {
+	function createPvBlock(pvActuels, pvMax){
 		// To show long bars for trolls with many hit points
 		// minimum width: 30 px (for 30 hit points)
 		// maximum width: 300px (for (500 hit points)

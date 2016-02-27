@@ -1,5 +1,5 @@
 "use strict";
-(function (chrall) {
+(function(chrall){
 
 	// --------------------------------------------------------
 	// -- Constantes globales à reconfigurer pour développement
@@ -18,11 +18,11 @@
 		}
 	}
 
-	chrall.serveurPublic = function () {
+	chrall.serveurPublic = function(){
 		return SERVEUR_CHRALL_PUBLIC;
 	}
 
-	chrall.serveurPrive = function () {
+	chrall.serveurPrive = function(){
 		return SERVEUR_CHRALL_PRIVE;
 	}
 
@@ -33,31 +33,31 @@
 	var TRACE = 0, DEBUG = 1, INFO = 2, WARN = 3, ERROR = 4; //eslint-disable-line
 	var log_level = INFO;
 
-	console.log_trace = function (item) {
+	console.log_trace = function(item){
 		if (TRACE < log_level) {
 			return;
 		}
 		console.log(item);
 	}
-	console.log_debug = function (item) {
+	console.log_debug = function(item){
 		if (DEBUG < log_level) {
 			return;
 		}
 		console.log(item);
 	}
-	console.log_info = function (item) {
+	console.log_info = function(item){
 		if (INFO < log_level) {
 			return;
 		}
 		console.log(item);
 	}
-	console.log_warn = function (item) {
+	console.log_warn = function(item){
 		if (WARN < log_level) {
 			return;
 		}
 		console.warn(item);
 	}
-	console.log_error = function (item) {
+	console.log_error = function(item){
 		console.error(item);
 	}
 
@@ -68,14 +68,14 @@
 	var pageName;
 	var hallIsAccro = document.location.host == "accro.mountyhall.com"; // est-ce qu'on est dans le PH spécial des accros ?
 
-	chrall.pageName = function () {
+	chrall.pageName = function(){
 		if (!pageName) {
 			pageName = document.location.pathname.split('/').pop();
 		}
 		return pageName;
 	}
 
-	chrall.hallIsAccro = function () {
+	chrall.hallIsAccro = function(){
 		return hallIsAccro;
 	}
 
@@ -83,7 +83,7 @@
 	// -- Helpers génériques
 	// --------------------------------------------------------
 
-	chrall.formatDuration = function (seconds) {
+	chrall.formatDuration = function(seconds){
 		if (seconds == 0) {
 			return "";
 		}
@@ -94,7 +94,7 @@
 	};
 
 	// le timestamp passé peut l'être en secondes ou en millisecondes
-	chrall.formatDate = function (timestamp) {
+	chrall.formatDate = function(timestamp){
 		if (timestamp == 0) {
 			return "";
 		}
@@ -104,11 +104,11 @@
 				d.getHours() + "h" + (d.getMinutes() < 10 ? ("0" + d.getMinutes()) : d.getMinutes());
 	};
 
-	chrall.isOptionDisabled = function (key) {
+	chrall.isOptionDisabled = function(key){
 		return "yes" != localStorage[key];
 	};
 
-	chrall.isOptionEnabled = function (key, defaultChoice) {
+	chrall.isOptionEnabled = function(key, defaultChoice){
 		var enabled = localStorage[key];
 		if (undefined === enabled && undefined !== defaultChoice) {
 			localStorage[key] = defaultChoice;
@@ -117,7 +117,7 @@
 		return "yes" == enabled;
 	};
 
-	chrall.integerOption = function (key, defaultChoice) {
+	chrall.integerOption = function(key, defaultChoice){
 		var value = localStorage[key];
 		value = parseInt(value);
 		if ((undefined === value || isNaN(value)) && undefined !== defaultChoice) {
@@ -138,7 +138,7 @@
 	 * </ul>
 	 * @param options
 	 */
-	chrall.notifyUser = function (options) {
+	chrall.notifyUser = function(options){
 		var delay = options['delay'] ? options['delay'] : 5000;
 
 		// besoin d'un div où placer les notifications
@@ -157,25 +157,25 @@
 				options["text"] + '</div>');
 
 		// Affichage
-		$("div#" + notificationId).slideDown("fast").delay(delay).slideUp("fast", function () {
+		$("div#" + notificationId).slideDown("fast").delay(delay).slideUp("fast", function(){
 			$(this).remove()
 		});
 	};
 
 
 	// Fonction pour initialiser en masse une série de valeurs dans le local storage, liées à un troll particulier
-	chrall.setTrollStorage = function (valueMap) {
+	chrall.setTrollStorage = function(valueMap){
 		for (var key in valueMap) {
 			localStorage['troll.' + chrall.playerId() + key] = valueMap[key];
 		}
 	};
 
-	chrall.getTrollStorage = function (key) {
+	chrall.getTrollStorage = function(key){
 		return localStorage['troll.' + chrall.playerId() + key];
 	};
 
 	// Pendant de setTrollStorage, pour nettoyer après usage
-	chrall.clearTrollStorage = function () {
+	chrall.clearTrollStorage = function(){
 		for (var i = 0; i < arguments.length; i++) {
 			localStorage.removeItem('troll.' + chrall.playerId() + arguments[i]);
 		}
@@ -189,15 +189,15 @@
 	// le troll du joueur. Sera éventuellement récupéré de la page de fond dans getBackgroundInfosThenExecute
 	var currentPlayer = new Troll();
 
-	chrall.player = function () {
+	chrall.player = function(){
 		return currentPlayer;
 	};
 
-	chrall.playerId = function () {
+	chrall.playerId = function(){
 		return currentPlayer.id;
 	};
 
-	chrall.playerInvalid = function () {
+	chrall.playerInvalid = function(){
 		return (!chrall.playerId()) || (chrall.playerId() == 0);
 	};
 

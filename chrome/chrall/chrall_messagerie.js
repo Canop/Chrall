@@ -1,7 +1,7 @@
 "use strict";
-(function (chrall) {
+(function(chrall){
 
-	chrall.compactMessageTitle = function() {
+	chrall.compactMessageTitle = function(){
 		var $titleInput = $('input[name="Titre"]');
 		if (0 == $titleInput.length) return;
 		var titleText = $titleInput.val();

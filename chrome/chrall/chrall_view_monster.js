@@ -1,13 +1,13 @@
 "use strict";
-(function (chrall){
+(function(chrall){
 
 	if (typeof String.prototype.endsWith !== 'function') {
-		String.prototype.endsWith = function (suffix){
+		String.prototype.endsWith = function(suffix){
 			return this.indexOf(suffix, this.length - suffix.length) !== -1;
 		};
 	}
 
-	chrall.addMonsterInfo = function (){
+	chrall.addMonsterInfo = function(){
 		if (!chrall.isOptionEnabled('view-display-monster-level', 'yes')) {
 			return;
 		}
@@ -19,7 +19,7 @@
 		$nivalTitle.append($("<b/>", {text: "Nival"}));
 		$($monsterTitle[0].children[1]).after($nivalTitle);
 
-		$monsterRows.each(function (index, row){
+		$monsterRows.each(function(index, row){
 			var tokens = row.children[3].textContent.split(/\[|\]/);
 			var monsterName = tokens[0].trim();
 			var monsterAge = tokens[1].trim();
@@ -44,7 +44,7 @@
 			templateText = template[0];
 			var prefix = template[2];
 			if (prefix) {
-				templateText = templateText + " ";
+				templateText += " ";
 				if (0 == monsterName.indexOf(templateText)) {
 					level += template[1];
 					newMonsterName = monsterName.substring(templateText.length).trim();
@@ -108,121 +108,121 @@
 	const PREFIX = true, SUFFIX = false;
 
 	const templates = [
-		["Agressif", 1 , SUFFIX],
-		["Agressive", 1 , SUFFIX],
-		["Alchimiste", 2 , SUFFIX],
-		["Alpha", 11 , PREFIX],
-		["Archaïque", -1 , SUFFIX],
-		["Archi-", 5 , PREFIX],
-		["Archiatre", 2 , PREFIX],
-		["Attentionné", 2 , SUFFIX],
-		["Attentionnée", 2 , SUFFIX],
-		["Barbare", 1 , PREFIX],
-		["Berserker", 2 , SUFFIX],
-		["Berserkere", 2 , SUFFIX],
-		["Champion", 4 , PREFIX],
-		["Championne", 4 , PREFIX],
-		["Cogneur", 2 , SUFFIX],
-		["Cogneuse", 2 , SUFFIX],
-		["Colossal", 7 , SUFFIX],
-		["Colossale", 7 , SUFFIX],
-		["Coriace", 1 , SUFFIX],
-		["Corrompu", 1 , SUFFIX],
-		["Corrompue", 1 , SUFFIX],
-		["Cracheur", 2 , SUFFIX],
-		["Cracheuse", 2 , SUFFIX],
-		["de Cinquième Cercle", 5 , SUFFIX],
-		["de Premier Cercle", -1 , SUFFIX],
-		["de Quatrième Cercle", 4 , SUFFIX],
-		["de Second Cercle", 0 , SUFFIX],
-		["de Troisième Cercle", 2 , SUFFIX],
-		["des Abysses", 3 , SUFFIX],
-		["Effrayé", -1 , SUFFIX],
-		["Effrayée", -1 , SUFFIX],
-		["Enragé", 3 , SUFFIX],
-		["Enragée", 3 , SUFFIX],
-		["Esculape", 2 , SUFFIX],
-		["Ethéré", 3 , SUFFIX],
-		["Ethérée", 3 , SUFFIX],
-		["Fanatique", 2 , SUFFIX],
-		["Folle", 1 , SUFFIX],
-		["Fou", 1 , SUFFIX],
-		["Fouisseur", 0 , SUFFIX],
-		["Fouisseuse", 0 , SUFFIX],
-		["Frénétique", 3 , SUFFIX],
-		["Frondeur", 2 , PREFIX],
-		["Frondeuse", 2 , PREFIX],
-		["Fustigateur", 2 , SUFFIX],
-		["Fustigatrice", 2 , SUFFIX],
-		["Gardien", 20 , PREFIX],
-		["Gardienne", 20 , PREFIX],
-		["Gargantuesque", 3 , SUFFIX],
-		["Gigantesque", 1 , SUFFIX],
-		["Grand Frondeur", 4 , PREFIX],
-		["Grande Frondeuse", 4 , PREFIX],
-		["Gros", 0 , PREFIX],
-		["Grosse", 0 , PREFIX],
-		["Guérisseur", 2 , SUFFIX],
-		["Guérisseuse", 2 , SUFFIX],
-		["Guerrière", 1 , PREFIX],
-		["Guerrier", 1 , PREFIX],
-		["Héros", 5 , PREFIX],
-		["Homochrome", 2 , SUFFIX],
-		["Homomorphe", 3 , SUFFIX],
-		["Implacable", 3 , SUFFIX],
-		["Invocateur", 5 , SUFFIX],
-		["Invocatrice", 5 , SUFFIX],
-		["Lobotomisateur", 2 , SUFFIX],
-		["Lobotomisatrice", 2 , SUFFIX],
-		["Médicastre", 2 , SUFFIX],
-		["Maître", 8 , PREFIX],
-		["Maîtresse", 8 , PREFIX],
-		["Malade", -1 , SUFFIX],
-		["Mentat", 2 , SUFFIX],
-		["Morticole", 2 , SUFFIX],
-		["Mutant", 2 , SUFFIX],
-		["Mutante", 2 , SUFFIX],
-		["Ouvrière", 0 , SUFFIX],
-		["Ouvrier", 0 , SUFFIX],
-		["Paysan", -1 , PREFIX],
-		["Paysanne", -1 , PREFIX],
-		["Petit", -1 , PREFIX],
-		["Petite", -1 , PREFIX],
-		["Planqué", 1 , SUFFIX],
-		["Planquée", 1 , SUFFIX],
-		["Prince", 8 , PREFIX],
-		["Princesse", 8 , PREFIX],
-		["Psychophage", 2 , SUFFIX],
-		["Reine", 11 , PREFIX],
-		["Roi", 11 , PREFIX],
-		["Ronfleur", 2 , SUFFIX],
-		["Ronfleuse", 2 , SUFFIX],
-		["Scout", 2 , PREFIX],
-		["Shaman", 0 , PREFIX],
-		["Soldat", 2 , SUFFIX],
-		["Spectral", 3 , SUFFIX],
-		["Spectrale", 3 , SUFFIX],
-		["Strident", 3 , SUFFIX],
-		["Stridente", 3 , SUFFIX],
-		["Traqueur", 1 , SUFFIX],
-		["Traqueuse", 1 , SUFFIX],
-		["Voleur", 2 , PREFIX],
-		["Voleuse", 2 , PREFIX],
-		["Vorace", 1 , SUFFIX],
-		["Sorcière", 0 , PREFIX], // Ordre alphabétique pas respecté, parce que Nécromant et Sorcière sont à la fois template et monstre.
-		["Sorcier", 0 , PREFIX],
-		["Nécromant", 5 , SUFFIX],
-		["Nécromante", 5 , SUFFIX]
+		["Agressif", 1, SUFFIX],
+		["Agressive", 1, SUFFIX],
+		["Alchimiste", 2, SUFFIX],
+		["Alpha", 11, PREFIX],
+		["Archaïque", -1, SUFFIX],
+		["Archi-", 5, PREFIX],
+		["Archiatre", 2, PREFIX],
+		["Attentionné", 2, SUFFIX],
+		["Attentionnée", 2, SUFFIX],
+		["Barbare", 1, PREFIX],
+		["Berserker", 2, SUFFIX],
+		["Berserkere", 2, SUFFIX],
+		["Champion", 4, PREFIX],
+		["Championne", 4, PREFIX],
+		["Cogneur", 2, SUFFIX],
+		["Cogneuse", 2, SUFFIX],
+		["Colossal", 7, SUFFIX],
+		["Colossale", 7, SUFFIX],
+		["Coriace", 1, SUFFIX],
+		["Corrompu", 1, SUFFIX],
+		["Corrompue", 1, SUFFIX],
+		["Cracheur", 2, SUFFIX],
+		["Cracheuse", 2, SUFFIX],
+		["de Cinquième Cercle", 5, SUFFIX],
+		["de Premier Cercle", -1, SUFFIX],
+		["de Quatrième Cercle", 4, SUFFIX],
+		["de Second Cercle", 0, SUFFIX],
+		["de Troisième Cercle", 2, SUFFIX],
+		["des Abysses", 3, SUFFIX],
+		["Effrayé", -1, SUFFIX],
+		["Effrayée", -1, SUFFIX],
+		["Enragé", 3, SUFFIX],
+		["Enragée", 3, SUFFIX],
+		["Esculape", 2, SUFFIX],
+		["Ethéré", 3, SUFFIX],
+		["Ethérée", 3, SUFFIX],
+		["Fanatique", 2, SUFFIX],
+		["Folle", 1, SUFFIX],
+		["Fou", 1, SUFFIX],
+		["Fouisseur", 0, SUFFIX],
+		["Fouisseuse", 0, SUFFIX],
+		["Frénétique", 3, SUFFIX],
+		["Frondeur", 2, PREFIX],
+		["Frondeuse", 2, PREFIX],
+		["Fustigateur", 2, SUFFIX],
+		["Fustigatrice", 2, SUFFIX],
+		["Gardien", 20, PREFIX],
+		["Gardienne", 20, PREFIX],
+		["Gargantuesque", 3, SUFFIX],
+		["Gigantesque", 1, SUFFIX],
+		["Grand Frondeur", 4, PREFIX],
+		["Grande Frondeuse", 4, PREFIX],
+		["Gros", 0, PREFIX],
+		["Grosse", 0, PREFIX],
+		["Guérisseur", 2, SUFFIX],
+		["Guérisseuse", 2, SUFFIX],
+		["Guerrière", 1, PREFIX],
+		["Guerrier", 1, PREFIX],
+		["Héros", 5, PREFIX],
+		["Homochrome", 2, SUFFIX],
+		["Homomorphe", 3, SUFFIX],
+		["Implacable", 3, SUFFIX],
+		["Invocateur", 5, SUFFIX],
+		["Invocatrice", 5, SUFFIX],
+		["Lobotomisateur", 2, SUFFIX],
+		["Lobotomisatrice", 2, SUFFIX],
+		["Médicastre", 2, SUFFIX],
+		["Maître", 8, PREFIX],
+		["Maîtresse", 8, PREFIX],
+		["Malade", -1, SUFFIX],
+		["Mentat", 2, SUFFIX],
+		["Morticole", 2, SUFFIX],
+		["Mutant", 2, SUFFIX],
+		["Mutante", 2, SUFFIX],
+		["Ouvrière", 0, SUFFIX],
+		["Ouvrier", 0, SUFFIX],
+		["Paysan", -1, PREFIX],
+		["Paysanne", -1, PREFIX],
+		["Petit", -1, PREFIX],
+		["Petite", -1, PREFIX],
+		["Planqué", 1, SUFFIX],
+		["Planquée", 1, SUFFIX],
+		["Prince", 8, PREFIX],
+		["Princesse", 8, PREFIX],
+		["Psychophage", 2, SUFFIX],
+		["Reine", 11, PREFIX],
+		["Roi", 11, PREFIX],
+		["Ronfleur", 2, SUFFIX],
+		["Ronfleuse", 2, SUFFIX],
+		["Scout", 2, PREFIX],
+		["Shaman", 0, PREFIX],
+		["Soldat", 2, SUFFIX],
+		["Spectral", 3, SUFFIX],
+		["Spectrale", 3, SUFFIX],
+		["Strident", 3, SUFFIX],
+		["Stridente", 3, SUFFIX],
+		["Traqueur", 1, SUFFIX],
+		["Traqueuse", 1, SUFFIX],
+		["Voleur", 2, PREFIX],
+		["Voleuse", 2, PREFIX],
+		["Vorace", 1, SUFFIX],
+		["Sorcière", 0, PREFIX], // Ordre alphabétique pas respecté, parce que Nécromant et Sorcière sont à la fois template et monstre.
+		["Sorcier", 0, PREFIX],
+		["Nécromant", 5, SUFFIX],
+		["Nécromante", 5, SUFFIX]
 	];
 
 	const ANIMAL = 0, MONSTRE = 1, HUMANOIDE = 2, MORT_VIVANT = 3, INSECTE = 4, DEMON = 5;
 
 	const ages = [
 		[ "Bébé", "Enfançon", "Jeune", "Adulte", "Mature", "Chef de harde", "Ancien", "Ancêtre" ],
-		[ "Nouve", "Jeune", "Adulte", "Vétéran", "Briscard", "Doyen", "Légendaire", "Mythique" ] ,
-		[ "Nouve", "Jeune", "Adulte", "Vétéran", "Briscard", "Doyen", "Légendaire", "Mythique" ]   ,
+		[ "Nouve", "Jeune", "Adulte", "Vétéran", "Briscard", "Doyen", "Légendaire", "Mythique" ],
+		[ "Nouve", "Jeune", "Adulte", "Vétéran", "Briscard", "Doyen", "Légendaire", "Mythique" ],
 		[ "Naissant", "Récent", "Ancien", "Vénérable", "Séculaire", "Antique", "Ancestral", "Antédiluvien" ],
-		[ "Larve", "Immature", "Juvénile", "Imago", "Développé", "Mûr", "Accompli", "Achevé" ]  ,
+		[ "Larve", "Immature", "Juvénile", "Imago", "Développé", "Mûr", "Accompli", "Achevé" ],
 		[ "Initial", "Novice", "Mineur", "Favori", "Majeur", "Supérieur", "Suprême", "Ultime" ]
 	];
 
@@ -424,7 +424,7 @@
 	];
 
 
-	chrall.testLevelComputation = function (){
+	chrall.testLevelComputation = function(){
 		var valuesToTest = [
 			["Héros Caillouteux [Vétéran]", 9],
 			["Hurleur [Jeune]", 9],

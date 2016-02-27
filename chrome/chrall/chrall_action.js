@@ -1,9 +1,9 @@
 "use strict";
-(function(chrall) {
+(function(chrall){
 
 	// Verifie simplement si l'action "Creuser" est presente, et affiche que c'est possible s'il y a lieu.
 	// Pas besoin de verifier d'abord que la DLA est activee.
-	chrall.displayDiggingIsPossible = function() {
+	chrall.displayDiggingIsPossible = function(){
 		if ($('option:contains("Creuser")').length > 0) {
 			$('select + br').remove();
 			var htmlDiggingIsPossible = '<div><font color="#FF9933"><b>Il est possible de creuser!<b></font></div>';
@@ -11,7 +11,7 @@
 		}
 	};
 
-	chrall.handleActionPage = function() {
+	chrall.handleActionPage = function(){
 		//> on va essayer de lire les PA disponibles
 		var	player = chrall.player(),
 			sentence = $('b:contains("Il me reste ")');

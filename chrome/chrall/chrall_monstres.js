@@ -147,7 +147,7 @@ var monster_data = [
 	["7", "Zombie", "un", "http://www.mountyhall.com/images/Monstres/Zombie.jpg"]
 ];
 
-chrall.getMonsterMhImageUrl = function(monsterName) {
+chrall.getMonsterMhImageUrl = function(monsterName){
 	var emn = " "+monsterName.replace('%20', ' ')+" ";// attention : on peut recevoir le nom urlencodé
 	for (var i=monster_data.length; i-->0;) {
 		if (~emn.indexOf(" "+monster_data[i][1]+" ")) {

@@ -1,8 +1,8 @@
 "use strict";
-(function (chrall) {
+(function(chrall){
 
 	function doBindings(){
-		$('#save_private_chrall_server').click(function () {
+		$('#save_private_chrall_server').click(function(){
 			var s = $('#input_private_chrall_server').val();
 			if (s.length > 3) {
 				localStorage['private_chrall_server'] = s;
@@ -11,24 +11,24 @@
 			}
 		});
 
-		$(".toggle-option").each(function () {
+		$(".toggle-option").each(function(){
 			var id = $(this).attr("id");
 			var checked = chrall.isOptionEnabled(id);
 			this.checked = checked;
 			$(this).change(toggleOption);
 		});
-		$(".toggle-option-default-active").each(function () {
+		$(".toggle-option-default-active").each(function(){
 			var id = $(this).attr("id");
 			this.checked = chrall.isOptionEnabled(id, "yes");
 			$(this).change(toggleOption);
 		});
-		$(".integer-option").each(function () {
+		$(".integer-option").each(function(){
 			var $this = $(this);
 			var id = $this.attr("id");
 			var defaultValue = parseInt($this.attr("default"));
 			var value = chrall.integerOption(id, defaultValue);
 			$this.val(value);
-			$this.bind("propertychange keyup input paste", function () {
+			$this.bind("propertychange keyup input paste", function(){
 				var $this = $(this);
 				var id = $this.attr("id");
 
@@ -41,12 +41,12 @@
 				value = value > max ? max : value;
 				localStorage[id] = value;
 			});
-		});		
+		});
 	}
 
 	// ajoute quelques pages aux options
-	chrall.reformatOptionsView = function () {
-		
+	chrall.reformatOptionsView = function(){
+
 		var addedPages = {
 			"Compte Chrall":"\
 					<h3 class='option-section'>Qu'est-ce que Chrall?</h3>\
@@ -75,7 +75,7 @@
 				<p>Serveur Chrall alternatif pour les données partagées : <input size=30 id=input_private_chrall_server></p>\
 			<a href='#' class=gogo id=save_private_chrall_server>sauver</a> (laisser vide pour exploiter le serveur par défaut, n'utilisez un serveur alternatif que si vous lui faites pleine confiance)</p>\
 			</div>",
-			
+
 			"Options Chrall": "\
 			<h3 class='option-section'>Vue</h3>\
 			<div class='option-section'>\
@@ -113,7 +113,7 @@
 			"Liens": chrall.makeLinkOptionPage()
 
 		};
-		
+
 		$.each(addedPages, function(key, page){
 			$("#menu-evt ul").append(
 				$("<li data-wrapperels=span data-shadow=true>").append(
@@ -183,8 +183,8 @@
 		location.reload();
 	}
 	*/
-	
-	function toggleOption() {
+
+	function toggleOption(){
 		var id = $(this).attr('id');
 		localStorage[id] = this.checked ? "yes" : "no";
 	}

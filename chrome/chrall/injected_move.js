@@ -2,16 +2,16 @@
 /* TODO: les injected_xxx.js contiennent du code qui est exécuté directement, or ce n'est pas systématiquement pertinent, à nettoyer */
 // code injecté et exécuté lorsque l'on affiche le formulaire de mouvement dans la frame d'action
 
-(function(chrall) {
+(function(chrall){
 
-	function ch_check(name, required) {
+	function ch_check(name, required){
 		var radios = document.getElementsByName(name);
 		for (var i in radios) {
 			if (radios[i].value == required) radios[i].checked = true;
 		}
 	}
 
-	chrall.injectMove = function() {
+	chrall.injectMove = function(){
 
 		// TODO: pick a proper name for the args
 		// TODO: check if we still need to pass through local storage now that the handling of the extension is different

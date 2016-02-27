@@ -2,40 +2,40 @@
 var chrall = chrall || {};
 
 // cellule dans la grille (correspond à une colonne du jeu : x et y fixés mais z variable)
-function Cell() {
+function Cell(){
 }
-Cell.prototype.addPlace = function (o) {
+Cell.prototype.addPlace = function(o){
 	if (!this.places) this.places = [];
 	this.places.push(o);
 };
-Cell.prototype.addWall = function (o) {
+Cell.prototype.addWall = function(o){
 	if (!this.walls) this.walls = [];
 	this.walls.push(o);
 };
-Cell.prototype.addTroll = function (o) {
+Cell.prototype.addTroll = function(o){
 	if (!this.trolls) this.trolls = [];
 	this.trolls.push(o);
 };
-Cell.prototype.addMonster = function (o) {
+Cell.prototype.addMonster = function(o){
 	if (!this.monsters) this.monsters = [];
 	this.monsters.push(o);
 };
-Cell.prototype.addObject = function (o) {
+Cell.prototype.addObject = function(o){
 	if (!this.objects) this.objects = [];
 	this.objects.push(o);
 };
-Cell.prototype.addMushroom = function (o) {
+Cell.prototype.addMushroom = function(o){
 	if (!this.mushrooms) this.mushrooms = [];
 	this.mushrooms.push(o);
 };
-Cell.prototype.addCenotaph = function (o) {
+Cell.prototype.addCenotaph = function(o){
 	if (!this.cenotaphs) this.cenotaphs = [];
 	this.cenotaphs.push(o);
 };
 
 
 // une grille correspond à la vue passée (et donc de taille (2*vue+1)²)
-var Grid = chrall.Grid = function(xp, yp, sight) {
+var Grid = chrall.Grid = function(xp, yp, sight){
 	this.sight = sight;
 	this.dx = xp - sight;
 	this.dy = yp - sight;
@@ -53,24 +53,24 @@ var Grid = chrall.Grid = function(xp, yp, sight) {
 
 // renvoie la cellule de coordonnées passées.
 // Renvoie undefined s'il n'y a rien
-Grid.prototype.getCellOrNull = function(x, y) {
+Grid.prototype.getCellOrNull = function(x, y){
 	return this.cells[x - this.dx][y - this.dy];
 };
 
 // renvoie la cellule de coordonnées passées.
 // La crée si elle n'existe pas (et qu'elle est dans la grille)
-Grid.prototype.getCellNotNull = function (x, y) {
+Grid.prototype.getCellNotNull = function(x, y){
 	x -= this.dx;
 	y -= this.dy;
 	if (x<0||x>=this.cells.length||y<0||y>=this.cells.length) {
 		console.log("bad coordinates:", x+this.dx, y+this.dy);
 		return null; // out of grid
-	} 
+	}
 	return this.cells[x][y] || (this.cells[x][y] = new Cell());
 };
 
 // enregistre les modifications 'live' (au sens jquery)
-chrall.gridLive = function() {
+chrall.gridLive = function(){
 
 	// ajout de la fenêtre de zoom et de quelques fonctions
 	var html = "<div id=zoom>";
@@ -87,7 +87,7 @@ chrall.gridLive = function() {
 	$(html).appendTo('body');
 
 	//> on ajoute le popup sur les monstres
-	function getMonsterArgs(link) {
+	function getMonsterArgs(link){
 		var player = chrall.player();
 		var args = {};
 		var monsterId = parseInt(link.attr('id'));
@@ -109,7 +109,7 @@ chrall.gridLive = function() {
 	chrall.bubbleLive('a[href*="EMV"]', 'bub_monster', getMonsterArgs);
 
 	//> popup sur les trolls
-	function getTrollArgs(link) {
+	function getTrollArgs(link){
 		var player = chrall.player();
 		var trollId = parseInt(link.attr('id'));
 		return {
@@ -124,7 +124,7 @@ chrall.gridLive = function() {
 	);
 
 	//> on ajoute le menu des DE, le titre de chaque cellule
-	chrall.objectMenuLive('table.grid td[grid_x]', function(o) {
+	chrall.objectMenuLive('table.grid td[grid_x]', function(o){
 		var x = parseInt(o.attr('grid_x'));
 		var y = parseInt(o.attr('grid_y'));
 		var links = '';
@@ -160,7 +160,7 @@ chrall.gridLive = function() {
 	});
 
 	//> outillage des liens DE (du menu de la grille)
-	$(document).on('click', 'a.chrall_de', function() {
+	$(document).on('click', 'a.chrall_de', function(){
 		var $this = $(this);
 		localStorage['todo'] = 'de';
 		localStorage['todo_args'] = $this.attr('x') + ' ' + $this.attr('y') + ' ' + $this.attr('z');
@@ -168,12 +168,12 @@ chrall.gridLive = function() {
 	});
 
 	//> le défilement à la molette perturbe objectMenu
-	document.onmousewheel = function(e) {
+	document.onmousewheel = function(e){
 		chrall.hideOm();
 	};
 
 	// outillage des liens d'ouvertures de vue "zoom"
-	$(document).on('click', 'a[name="zoom"]', function() {
+	$(document).on('click', 'a[name="zoom"]', function(){
 		var player = chrall.player();
 		if (chrall.compteChrallActif()) {
 			var $link = $(this);
@@ -183,8 +183,8 @@ chrall.gridLive = function() {
 			var url = chrall.serveurPrive() + "vue?asker=" + player.id + "&mdpr=" + chrall.mdpCompteChrall() + "&x=" + x + "&y=" + y + "&z=" + z + "&tresors=1";
 			var $zoom = $('#zoom');
 			$zoom.show();
-			$('#zoom_content').load(url, function() {
-				setTimeout(function() {
+			$('#zoom_content').load(url, function(){
+				setTimeout(function(){
 					// centrage de la vue
 					chrall.hideOm();
 					chrall.scrollInProgress = true;
@@ -196,7 +196,7 @@ chrall.gridLive = function() {
 							scrollTop: ($grid_holder.scrollTop() + $targetCell.offset().top + ($targetCell.innerHeight() - window.innerHeight) / 2)
 						},
 						'slow',
-						function() {
+						function(){
 							chrall.scrollInProgress = false;
 						}
 					);
@@ -209,7 +209,7 @@ chrall.gridLive = function() {
 		}
 	});
 	// lien de fermeture de la "fenêtre" de zoom
-	$(document).on('click', '#btn_close_zoom', function() {
+	$(document).on('click', '#btn_close_zoom', function(){
 		$('#zoom').hide();
 	});
 

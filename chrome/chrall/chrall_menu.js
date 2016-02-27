@@ -1,10 +1,10 @@
 "use strict";
-(function(chrall) {
+(function(chrall){
 
 	/*
 	 * agit sur la frame de gauche (le "menu" de MH)
 	 */
-	chrall.handleMenuPage = function() {
+	chrall.handleMenuPage = function(){
 		var player = chrall.player();
 		//> lecture et transmission au background du numéro du troll et de sa position
 		var trollId = $('input[name="ai_IdPJ"]').val();

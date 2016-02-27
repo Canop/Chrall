@@ -5,7 +5,7 @@
 var bgchrall = bgchrall || {};
 (function(){
 	var	db, cdb = bgchrall.cdb = {};
-		
+
 	// construit l'objet public CDB
 	function wrapIdb(){
 		// change the team of the troll, add it if necessary
@@ -49,7 +49,7 @@ var bgchrall = bgchrall || {};
 			}
 		}
 		// clear all cell infos then add the cells and their teams
-		// cells is an array of {pos:"-54,22",team:'R'} ou {pos:"-8,-3,-33",team:'R'} 
+		// cells is an array of {pos:"-54,22",team:'R'} ou {pos:"-8,-3,-33",team:'R'}
 		cdb.setCells = function(cells, cb){
 			var	trans = db.transaction(["cell"], "readwrite"),
 				s = trans.objectStore("cell");
@@ -94,7 +94,7 @@ var bgchrall = bgchrall || {};
 				cellstore.createIndex("team", "team", { unique:false });
 			}
 		}
-		request.onerror = onerror;		
+		request.onerror = onerror;
 	}
 
 	init();

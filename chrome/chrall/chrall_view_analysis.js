@@ -3,25 +3,25 @@
 /**
  * ce fichier contient les fonctions d'analyse de la vue reçue de MH.
  */
-(function (chrall) {
+(function(chrall){
 
 	// --- Utilitaires --------------------------------------------
 
 	// Renvoie vers la messagerie ou le partage de px
-	chrall.redirectToMailbox = function () {
+	chrall.redirectToMailbox = function(){
 		var checked = $("[name='cb_troll']:checked");
 		if (0 == checked.length) {
 			return;
 		}
 		var dests = [];
-		checked.each(function() {
+		checked.each(function(){
 			dests.push(this.value);
 		});
 		var cat = this.attributes["cat"].value;
 		document.location.href = "../Messagerie/MH_Messagerie.php?cat=" + cat + "&dest=" + dests.join(',');
 	};
 
-	chrall.distanceFromPlayer = function(targetX, targetY, targetN) {
+	chrall.distanceFromPlayer = function(targetX, targetY, targetN){
 		// TODO: compute the cost of movement through surface, to know when it's cheaper
 		var playerX = chrall.player().x;
 		var playerY = chrall.player().y;
@@ -53,7 +53,7 @@
 		return cost;
 	};
 
-	chrall.addActionPointDistance = function($table, distColumn, xColumn) {
+	chrall.addActionPointDistance = function($table, distColumn, xColumn){
 		var table = $table.get(0);
 		if (chrall.isOptionDisabled('view-show-distance-in-view') || "undefined" == typeof table) {
 			return;
@@ -74,7 +74,7 @@
 
 	// ------------------ Analyse des composants de la vue --------------------
 
-	chrall.analyseMonsterTable = function (table) {
+	chrall.analyseMonsterTable = function(table){
 		var grid = chrall.grid;
 		table = table.get(0);
 		if (table === undefined) return;
@@ -92,14 +92,14 @@
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
-			item.hasLink = nameCell.children[0].href ? true : false;
+			item.hasLink = !!nameCell.children[0].href;
 			var cell = grid.getCellNotNull(item.x, item.y);
 			if (cell) cell.addMonster(item);
 			else grid.outOfGrid.push(item);
 		}
 	};
 
-	chrall.analyseTrollTable = function (table) {
+	chrall.analyseTrollTable = function(table){
 		var grid = chrall.grid;
 		// en même temps qu'on analyse la table, on ajoute les cases à cocher
 		// de sélection des trolls pour l'envoi de MP.
@@ -125,7 +125,7 @@
 				if (t && t.team) $a.attr('team', item.team = t.team);
 			});
 			// les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
-			item.isIntangible = $(nameCell).html().indexOf("mh_trolls_0")>=0; 
+			item.isIntangible = $(nameCell).html().indexOf("mh_trolls_0")>=0;
 			item.level = cells[i++].textContent;
 			item.race = cells[i++].textContent;
 			item.guilde = cells[i++].textContent;
@@ -154,7 +154,7 @@
 		$(table.children[0]).prepend(actions);
 	};
 
-	chrall.analyseMushroomTable = function (table) {
+	chrall.analyseMushroomTable = function(table){
 		var grid = chrall.grid;
 		table = table.get(0);
 		if (table===undefined) return;
@@ -174,7 +174,7 @@
 		}
 	};
 
-	chrall.analysePlaceTable = function (table) {
+	chrall.analysePlaceTable = function(table){
 		var grid = chrall.grid;
 		table = table.get(0);
 		if (table===undefined) return;
@@ -191,13 +191,13 @@
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
-			item.hasLink = nameCell.children[0].href ? true : false;
+			item.hasLink = !!nameCell.children[0].href;
 			grid.getCellNotNull(item.x, item.y).addPlace(item);
 		}
 	};
 
 
-	chrall.analyseObjectTable = function (table) {
+	chrall.analyseObjectTable = function(table){
 		var grid = chrall.grid;
 		table = table.get(0);
 		if (table===undefined) return;
@@ -214,12 +214,12 @@
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
-			item.hasLink = nameCell.children.length && nameCell.children[0].href ? true : false;
+			item.hasLink = !!nameCell.children.length && nameCell.children[0].href;
 			grid.getCellNotNull(item.x, item.y).addObject(item);
 		}
 	};
 
-	chrall.analyseCenotaphTable = function (table) {
+	chrall.analyseCenotaphTable = function(table){
 		var grid = chrall.grid;
 		table = table.get(0);
 		if (table===undefined) return;
@@ -240,7 +240,7 @@
 		}
 	};
 
-	chrall.analyseWallTable = function (table) {
+	chrall.analyseWallTable = function(table){
 		var grid = chrall.grid;
 		if ("undefined" == typeof table) {
 			return;
@@ -267,19 +267,19 @@
 	//> chargement des trucs en vue (monstres, trolls, etc.).
 	var jq_tables = {};
 
-	chrall.findTable = function(key) {
+	chrall.findTable = function(key){
 		var $t = $('#mh_vue_hidden_' + key + ' table');
 		jq_tables[key] = $t;
 		$t.attr("id", "table_" + key); // plus facile pour les récupérer ailleurs plus tard
 		$t.detach();
 	};
 
-	chrall.$tables = function() {
+	chrall.$tables = function(){
 		return jq_tables;
 	};
 
 	// renvoie les tables
-	chrall.analyseView = function() {
+	chrall.analyseView = function(){
 		chrall.isInLaby = false;
 
 		//> recherche de la position du joueur
@@ -296,7 +296,7 @@
 		//> recherche de l'horizon (pour dessiner la grille ensuite)
 		try {
 			chrall.horizontalViewLimit = parseInt(document.getElementsByName("ai_MaxVue")[0].value);
-		} catch(error) {
+		} catch (error) {
 			console.log("horizontal view limit not found");
 		}
 		chrall.horizontalViewLimit = Math.max(chrall.horizontalViewLimit, 0);
@@ -323,7 +323,7 @@
 		chrall.analyseCenotaphTable(chrall.$tables()['cadavres']);
 		if (chrall.horizontalViewLimit > 0) {
 			// Si on est aveugle, on sait que les infos des murs et couloirs sont incorrectes
-			chrall.analyseWallTable(chrall.$tables()['murs']); 
+			chrall.analyseWallTable(chrall.$tables()['murs']);
 		}
 
 		chrall.addActionPointDistance(chrall.$tables()['monstres'], 0, 3);
@@ -365,7 +365,7 @@
 			}
 		}
 
-		//> on détermine la zone visible	
+		//> on détermine la zone visible
 		chrall. xmin = chrall.player().x - horizontalGridLimit;
 		chrall. xmax = chrall.player().x + horizontalGridLimit;
 		chrall. ymin = chrall.player().y - horizontalGridLimit;

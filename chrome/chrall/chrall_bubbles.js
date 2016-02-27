@@ -1,5 +1,5 @@
 "use strict";
-(function (chrall){
+(function(chrall){
 
 	/*
 	 * Après avoir testé une foultitude de librairies de bulles (jquery ou non), je me suis résolu à en écrire une qui
@@ -27,7 +27,7 @@
 	var bubbleExists = false;
 	var bubbleCloseTimeoutID;
 
-	chrall.hideBubble = function (){
+	chrall.hideBubble = function(){
 		clearTimeout(bubbleCloseTimeoutID);
 		if (bubbleExists && !onBubbleDiv) {
 			$("#bubble").remove();
@@ -52,7 +52,7 @@
 		}
 	}
 
-	chrall.showBubble = function (target, event, text, cssClass, ajaxRequestId, leftCol){
+	chrall.showBubble = function(target, event, text, cssClass, ajaxRequestId, leftCol){
 		cssClass = chrall.isOptionEnabled('bubble-use-mountyhall-styles') ? 'mh_tdtitre' : cssClass;
 		if (bubbleExists) {
 			chrall.hideBubble();
@@ -111,11 +111,11 @@
 		}
 	};
 
-	chrall.keepBubbleOpen = function (){
+	chrall.keepBubbleOpen = function(){
 		onBubbleDiv = true;
 	};
 
-	chrall.letBubbleClose = function (){
+	chrall.letBubbleClose = function(){
 		onBubbleDiv = false;
 		chrall.hideBubble();
 	};
@@ -128,8 +128,8 @@
 	 * @param ajaxUrl une url pour l'appel ajax jsonp optionnel (si pas d'ajaxUrl, pas d'appel ajax)
 	 * @param ajaxRequestId
 	 */
-	chrall.triggerBubble = function (target, text, cssClass, ajaxUrl, ajaxRequestId){
-		target.mouseenter(function (event){
+	chrall.triggerBubble = function(target, text, cssClass, ajaxUrl, ajaxRequestId){
+		target.mouseenter(function(event){
 			if (chrall.scrollInProgress || onBubbleDiv || onBubbleTarget) {
 				return false;
 			}
@@ -141,7 +141,7 @@
 				chrall.showBubble.call(this, $(this), event, text, cssClass);
 			}
 		});
-		target.mouseout(function (event){
+		target.mouseout(function(event){
 			onBubbleTarget = false;
 			chrall.hideBubble();
 			//bubbleCloseTimeoutID = setTimeout(chrall.hideBubble, 150);  <= remettre cette ligne si on veut permettre le passage de la souris dans la bulle sans qu'elle se ferme
@@ -155,11 +155,11 @@
 	 * @param getArgs
 	 * @return map avec text, ajaxUrl, ajaxRequestId (plus en optionnel leftCol)
 	 */
-	chrall.bubbleLive = function (selector, cssClass, getArgs){
+	chrall.bubbleLive = function(selector, cssClass, getArgs){
 		$(document).on(
 				'mouseenter',
 				selector,
-				function (event){
+				function(event){
 					var target = $(this);
 					if (chrall.scrollInProgress || onBubbleDiv || onBubbleTarget) {
 						return false;
@@ -176,14 +176,14 @@
 		).on(
 				'mouseout',
 				selector,
-				function (event){
+				function(event){
 					onBubbleTarget = false;
 					chrall.hideBubble();
 				}
 		);
 	};
 
-	chrall.clipboardOverride = function (e){
+	chrall.clipboardOverride = function(e){
 		console.log_trace("clipboard override called");
 		if (null === chrall.copiableContent || undefined === chrall.copiableContent) {
 			return true;
@@ -197,7 +197,7 @@
 		rng.selectNodeContents($div.get(0));
 		window.getSelection().removeAllRanges();
 		window.getSelection().addRange(rng);
-		setTimeout(function (){
+		setTimeout(function(){
 			$div.remove()
 		}, 100);
 		chrall.notifyUser({text: "Contenu de l'info-bulle copié dans le clipboard"});
@@ -208,7 +208,7 @@
 		return true;
 	};
 
-	chrall.receiveBubbleContent = function (answer){
+	chrall.receiveBubbleContent = function(answer){
 		// on vérifie que la réponse correspond à la bulle actuelle (et pas à une bulle fermée)
 		var $bubbleRequestId = $('#bubbleRequestId');
 		if ($bubbleRequestId.val() != answer.RequestId) {

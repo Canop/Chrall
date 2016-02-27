@@ -1,6 +1,6 @@
 "use strict";
 var chrall = chrall || {};
-chrall.addActionsToMonsterEvents = function(actions) {
+chrall.addActionsToMonsterEvents = function(actions){
 	var et = document.getElementById("monster_events");
 	var etb = et.tBodies[0];
 	var td = document.createElement("td");

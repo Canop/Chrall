@@ -5,13 +5,13 @@
 var chrall = chrall || {};
 chrall.version = "3.16";
 
-chrall.changeLocationOtherFrame = function(frameKey, href) {
+chrall.changeLocationOtherFrame = function(frameKey, href){
 	localStorage['frame_new_location_' + frameKey] = href;
 }
 
-chrall.listenForChangeLocation = function(frameKey) {
+chrall.listenForChangeLocation = function(frameKey){
 	var localStorageKey = 'frame_new_location_' + frameKey;
-	var interval = setInterval(function() {
+	var interval = setInterval(function(){
 		var new_href = localStorage[localStorageKey];
 		if (new_href) {
 			localStorage.removeItem(localStorageKey);
@@ -26,7 +26,7 @@ chrall.listenForChangeLocation = function(frameKey) {
  *
  * Attention : si vous corrigez le comportement de la ligne ci-dessus il faudra modifier chrall.extractBasicInfos et pas mal d'autres méthodes
  */
-chrall.tokenize = function(text) {
+chrall.tokenize = function(text){
 	return text.trim().split(/[\s\/|,.:=()]+/g);
 }
 
@@ -34,7 +34,7 @@ chrall.tokenize = function(text) {
  * les alarmes, dont la durée de vie peut dépasser celle de la page MH, doivent être gérées
  *  dans l'extension (la page en background).
  */
-chrall.sendDlaToExtension = function(dlaTime, cumulTime) {
+chrall.sendDlaToExtension = function(dlaTime, cumulTime){
 	chrome.extension.sendMessage({
 		"dla": dlaTime,
 		"cumul": cumulTime
@@ -44,11 +44,11 @@ chrall.sendDlaToExtension = function(dlaTime, cumulTime) {
 /**
  * calcul du nombre de PI (totaux) nécessaires pour atteindre un niveau
  */
-chrall.getTotalPiForLevel = function(level) {
+chrall.getTotalPiForLevel = function(level){
 	return 5 * level * (level + 1) - 10;
 }
 
-chrall.itoa = function(o) {
+chrall.itoa = function(o){
 	if (o) {
 		if (o > 0) return "+" + o;
 		else return "" + o;
@@ -57,11 +57,11 @@ chrall.itoa = function(o) {
 	}
 }
 
-chrall.decumul = function(i, val) {
+chrall.decumul = function(i, val){
 	return Math.floor(val - val * ([0, .33, .6, .75, .85, .9][Math.min(i, 4)]));
 }
 
-chrall.turnName = function(turn) {
+chrall.turnName = function(turn){
 	if (turn == 0) {
 		return "en cours";
 	} else if (turn == 1) {
@@ -74,7 +74,7 @@ chrall.turnName = function(turn) {
 }
 
 // Traite des cas spéciaux de Chrall.
-chrall.atoi = function(s) {
+chrall.atoi = function(s){
 	if (!s) return undefined; // à valider
 	s = s.trim();
 	while (s.charAt(0) == '0' || s.charAt(0) == ':') {
@@ -86,7 +86,7 @@ chrall.atoi = function(s) {
 
 // appelée depuis l'une des sous-frame de droite (la grande, ou bien celle d'actions), cette méthode met à jour
 // la position affichée dans le menu et signale la position au serveur Chrall
-chrall.updateTroll = function() {
+chrall.updateTroll = function(){
 	var player = chrall.player();
 	if (player.x) {
 		player.save();
@@ -96,7 +96,7 @@ chrall.updateTroll = function() {
 
 // récupère la date de génération de la page et renvoie ça sous forme de secondes depuis 1970
 // Renvoie 0 si pas trouvé
-chrall.findMHSeconds = function() {
+chrall.findMHSeconds = function(){
 	var date = $("#hserveur");
 	return date.length > 0 ? Date.parse(date.text().replace(" GMT+0100]", "")).getTime() / 1000 : 0;
 }

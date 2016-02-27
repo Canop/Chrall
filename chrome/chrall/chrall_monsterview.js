@@ -1,7 +1,7 @@
 "use strict";
-(function (chrall) {
+(function(chrall){
 
-	chrall.analyseAndReformatMonsterView = function() {
+	chrall.analyseAndReformatMonsterView = function(){
 		var player = chrall.player();
 		var monsterId = $('input[name="ai_IDPJ"]').val();
 		var titre = $('div.titre2').text();

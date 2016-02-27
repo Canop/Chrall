@@ -3,7 +3,7 @@
 //  (laquelle n'est pas en content script)
 
 window.chrall = window.chrall || {};
-(function (cdb) {
+(function(cdb){
 	
 	// change the team of the troll, add it if necessary
 	cdb.uspsertTroll = function(num, team, cb){

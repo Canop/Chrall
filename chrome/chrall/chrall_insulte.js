@@ -1,16 +1,16 @@
 "use strict";
-(function(chrall) {
+(function(chrall){
 
 	// il faut stocker le numéro du monstre sélectionné car on ne l'a pas dans les résultats de l'insulte
-	chrall.prepareInsulte = function() {
-		$('select[name="ai_IDTarget"]').change(function() {
+	chrall.prepareInsulte = function(){
+		$('select[name="ai_IDTarget"]').change(function(){
 			var s = $(this).val();
 			s = s.substring(3, s.length);
 			localStorage['cible_insulte'] = s;
 		});
 	};
 
-	chrall.analyseResultatInsulte = function() {
+	chrall.analyseResultatInsulte = function(){
 		if (!chrall.compteChrallActif()) {
 			return;
 		}

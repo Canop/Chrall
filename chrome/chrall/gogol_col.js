@@ -2,7 +2,7 @@
 var gowapIcon;
 
 
-var ChCol = chrall.ChCol = function(x, y) {
+var ChCol = chrall.ChCol = function(x, y){
 	this.x = x;
 	this.y = y;
 	this.color = "blue";
@@ -10,21 +10,21 @@ var ChCol = chrall.ChCol = function(x, y) {
 	this.minZoomForLabel = 10;
 	this.screenRect = new chrall.Rect();
 }
-ChCol.prototype.draw = function(carte) {
+ChCol.prototype.draw = function(carte){
 	this.screenRect.fill(carte.context, this.color);
 	if (this.label!=null && this.minZoomForLabel<=carte.zoom) {
 		carte.context.font = "14px Ubuntu, Verdana, Arial";
 		carte.context.fillText(this.label, this.screenRect.x+this.screenRect.w+3, this.screenRect.y+this.screenRect.h*0.4+7);
 	}
 }
-ChCol.prototype.computeScreenRect = function(carte) {
+ChCol.prototype.computeScreenRect = function(carte){
 	this.screenRect.x = carte.zoom*(carte.originX+this.x);
 	this.screenRect.y = carte.zoom*(carte.originY-this.y);
 	this.screenRect.w = carte.zoom;
 	this.screenRect.h = carte.zoom;
 }
 
-var ChLabel = chrall.ChLabel = function(x, y, z,  color, label) {
+var ChLabel = chrall.ChLabel = function(x, y, z,  color, label){
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -32,7 +32,7 @@ var ChLabel = chrall.ChLabel = function(x, y, z,  color, label) {
 	this.label = label;
 }
 ChLabel.prototype = new ChCol();
-ChLabel.prototype.draw = function(carte) {
+ChLabel.prototype.draw = function(carte){
 	this.screenRect.fill(carte.context, this.color);
 	if (this.label!=null && this.minZoomForLabel<=carte.zoom) {
 		carte.context.font = "14px Ubuntu, Verdana, Arial";
@@ -40,7 +40,7 @@ ChLabel.prototype.draw = function(carte) {
 	}
 }
 
-var ChTroll = chrall.ChTroll = function(x, y, z, color, nom, vue) {
+var ChTroll = chrall.ChTroll = function(x, y, z, color, nom, vue){
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -50,7 +50,7 @@ var ChTroll = chrall.ChTroll = function(x, y, z, color, nom, vue) {
 	this.minZoomForLabel = 7;
 }
 ChTroll.prototype = new ChCol();
-ChTroll.prototype.draw = function(carte) {
+ChTroll.prototype.draw = function(carte){
 	carte.context.strokeStyle=this.color;
 	if (carte.zoom>5) {
 		this.screenRect.fill(carte.context, this.color);
@@ -78,7 +78,7 @@ ChTroll.prototype.draw = function(carte) {
 	}
 }
 
-var ChTrou = chrall.ChTrou = function(x, y) {
+var ChTrou = chrall.ChTrou = function(x, y){
 	this.x = x;
 	this.y = y;
 	this.color = "black";
@@ -86,7 +86,7 @@ var ChTrou = chrall.ChTrou = function(x, y) {
 ChTrou.prototype = new ChCol();
 chrall.ChTrou = ChTrou;
 
-var ChGrotte = chrall.ChGrotte = function(x, y, z) {
+var ChGrotte = chrall.ChGrotte = function(x, y, z){
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -94,7 +94,7 @@ var ChGrotte = chrall.ChGrotte = function(x, y, z) {
 ChGrotte.prototype = new ChCol();
 
 
-var ChGowap = chrall.ChGowap = function(x, y, z, nom) {
+var ChGowap = chrall.ChGowap = function(x, y, z, nom){
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -107,7 +107,7 @@ var ChGowap = chrall.ChGowap = function(x, y, z, nom) {
 //	}
 }
 ChGowap.prototype = new ChCol();
-ChGowap.prototype.draw = function(carte) {
+ChGowap.prototype.draw = function(carte){
 	var d, l;
 	carte.context.strokeStyle=this.color;
 	if (carte.zoom<2) {

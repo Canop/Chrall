@@ -1,8 +1,8 @@
 "use strict";
-(function(chrall) {
+(function(chrall){
 
 	// modifie la frame d'action en bas lorsque l'action en cours de paramétrage est le minage
-	chrall.handleBeforeMinage = function() {
+	chrall.handleBeforeMinage = function(){
 		var player = chrall.player();
 		if (player.totalSight) {
 			var hs = Math.floor(player.totalSight / 2);
@@ -15,7 +15,7 @@
 		}
 	};
 
-	chrall.handleMinagePage = function() {
+	chrall.handleMinagePage = function(){
 		var player = chrall.player();
 		if (player.totalSight) {
 			var hs = Math.floor(player.totalSight / 2);
