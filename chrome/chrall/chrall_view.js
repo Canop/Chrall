@@ -585,8 +585,7 @@
 		$('td[height="1000"]').removeAttr('height'); // c'est compliqué souvent de déperversifier les pages MH...
 
 		//> on colle en haut à droite les liens [Refresh] et [Logout]
-		var refreshLogout = $("table table div");
-		refreshLogout.addClass("floatTopRight");
+		$("#mhPlay div:first-child").addClass("floatTopRight");
 
 		//> on reconstruit la vue en répartissant les tables dans des onglets et en mettant la grille dans le premier
 		var $tabs = $("<ul/>", {id: "tabs_view", 'class': "tabs", view: "yes"});
