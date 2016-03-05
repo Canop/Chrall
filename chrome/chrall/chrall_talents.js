@@ -13,6 +13,19 @@ chrall.getTalentBubbleContent= (name) => {
 	return bubbler(player, level);
 };
 
+/**
+ * Fonction recursive calculant la portee du projectile magique en fonction de la vue
+ */
+chrall.rangeProjo = (view, viewMax, range) => {
+	if (!viewMax) {
+		viewMax = 4;
+	}
+	if (!range) {
+		range = 1;
+	}
+	return view <= viewMax ? range : chrall.rangeProjo(view, viewMax + range + 4, range + 1);
+};
+
 chrall.talentBubblers = {
 
 	// ----------------------------------------
@@ -443,23 +456,12 @@ chrall.talentBubblers = {
 	},
 
 	"Projectile Magique": (player)=>{
-		var s = player.totalSight;
-		var range = 30;
-		var threeshold = 1;
-		var step = 4;
-		for (var i = 0; i < range; i++) { // si on atteind 30... ben c'est qu'on a trop de vue!
-			if (s < threeshold) {
-				range = i;
-				break;
-			}
-			threeshold += step;
-			step++;
-		}
+		var range = chrall.rangeProjo(chrall.player().totalSight);
 		var html = "<table>";
 		html += "<tr><td>Portée</td><td> : " + range + " cases</td></tr>";
 		var projectileDiceNumber = Math.floor(player.sight.diceNumber * player.magicalAttackMultiplier);
 		var att = 3.5 * projectileDiceNumber + player.attac.magicalBonus;
-		html += "<tr><td>Attaque moyenne</td><td> : " + att + "</td></tr>";
+		html += "<tr><td>Attaque moyenne</td><td> : " + att + " (" + projectileDiceNumber + "D6 + " + chrall.player().attac.magicalBonus + ")</td></tr>";
 		for (var d = 0; d <= range; d++) {
 			var projectileDamageDiceNumber = Math.floor(player.sight.diceNumber * player.magicalDamageMultiplier);
 			var deg = 2 * (Math.floor(projectileDamageDiceNumber / 2) + range - d) +
