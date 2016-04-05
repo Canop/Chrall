@@ -98,7 +98,7 @@ chrall.updateTroll = function(){
 // Renvoie 0 si pas trouvé
 chrall.findMHSeconds = function(){
 	var date = $("#hserveur");
-	return date.length > 0 ? Date.parse(date.text().replace(/ GMT\+\d{4}\]/, "")).getTime() / 1000 : 0;
+	return date.length > 0 ? Date.parse(date.text().replace(/ GMT|\]/g, "")).getTime() / 1000 : 0;
 }
 
 // Retourne combien de PX seront obtenu lors du kill du niveau en parametre
