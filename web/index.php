@@ -30,6 +30,9 @@ Chrall est une extension Chrome pour le jeu <a href=http://www.mountyhall.com>Mo
 <p>Une vue que vous glissez à la souris, qui vous indique qui est TK ou ATK, vous donne les caractéristiques des monstres, vous permet de partager vos infos avec d'autres joueurs...</p>
 <p>Une extension qui vous fait les menus calculs pratiques tels la récupération de la fatigue ou des malus sur les prochaines DLA ou encore l'extension de portée de votre TP par des BUM...</p>
 
+<p>
+	</p><a href=http://127.0.0.1:8204/12?blablaroom alt="Chat on Miaou" title="Chat on Miaou"><img src=http://127.0.0.1:8204/static/shields/room-it.svg?v=1></a>
+</p>
 
 <h2>Installation</h2>
 
