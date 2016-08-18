@@ -75,7 +75,11 @@
 			var item = new chrall.Monster();
 			var cells = lines[lineIndex].children;
 			var i = 1;
-			item.actions = cells[i++].innerHTML;
+			item.actions = cells[i++].innerHTML.trim();
+			if (item.actions == +item.actions) {
+				i--;
+				item.actions = null;
+			}
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
@@ -108,6 +112,10 @@
 			var cells = line.children;
 			var i = 1;
 			item.actions = cells[i++].innerHTML;
+			if (item.actions == +item.actions) {
+				i--;
+				item.actions = null;
+			}
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.name = nameCell.textContent;
@@ -158,7 +166,9 @@
 			var item = new chrall.Thing();
 			var cells = lines[lineIndex].children;
 			var i = 1;
-			item.actions = cells[i++].innerHTML;
+			if (cells.length>=6) {
+				item.actions = cells[i++].innerHTML;
+			}
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
 			item.x = parseInt(cells[i++].textContent);
@@ -180,6 +190,10 @@
 			var cells = lines[lineIndex].children;
 			var i = 1;
 			item.actions = cells[i++].innerHTML;
+			if (item.actions == +item.actions) {
+				i--;
+				item.actions = null;
+			}
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
@@ -204,6 +218,10 @@
 			var cells = lines[lineIndex].children;
 			var i = 1;
 			item.actions = cells[i++].innerHTML;
+			if (item.actions == +item.actions) {
+				i--;
+				item.actions = null;
+			}
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
@@ -227,6 +245,10 @@
 			var cells = lines[lineIndex].children;
 			var i = 1;
 			item.actions = cells[i++].innerHTML;
+			if (item.actions == +item.actions) {
+				i--;
+				item.actions = null;
+			}
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
