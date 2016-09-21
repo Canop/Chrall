@@ -75,10 +75,8 @@
 			var item = new chrall.Monster();
 			var cells = lines[lineIndex].children;
 			var i = 1;
-			item.actions = cells[i++].innerHTML.trim();
-			if (item.actions == +item.actions) {
-				i--;
-				item.actions = null;
+			if (cells.length>=7) {
+				item.actions = cells[i++].innerHTML.trim();
 			}
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
@@ -111,10 +109,8 @@
 			var item = new Troll();
 			var cells = line.children;
 			var i = 1;
-			item.actions = cells[i++].innerHTML;
-			if (item.actions == +item.actions) {
-				i--;
-				item.actions = null;
+			if (cells.length>=10) {
+				item.actions = cells[i++].innerHTML.trim();
 			}
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
@@ -189,10 +185,8 @@
 			var item = new chrall.Place();
 			var cells = lines[lineIndex].children;
 			var i = 1;
-			item.actions = cells[i++].innerHTML;
-			if (item.actions == +item.actions) {
-				i--;
-				item.actions = null;
+			if (cells.length>=7) {
+				item.actions = cells[i++].innerHTML.trim();
 			}
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
@@ -217,10 +211,8 @@
 			var item = new chrall.Thing();
 			var cells = lines[lineIndex].children;
 			var i = 1;
-			item.actions = cells[i++].innerHTML;
-			if (item.actions == +item.actions) {
-				i--;
-				item.actions = null;
+			if (cells.length>=7) {
+				item.actions = cells[i++].innerHTML.trim();
 			}
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
@@ -244,10 +236,8 @@
 			var item = new chrall.Cenotaphe();
 			var cells = lines[lineIndex].children;
 			var i = 1;
-			item.actions = cells[i++].innerHTML;
-			if (item.actions == +item.actions) {
-				i--;
-				item.actions = null;
+			if (cells.length>=7) {
+				item.actions = cells[i++].innerHTML;
 			}
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
