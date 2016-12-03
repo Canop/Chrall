@@ -53,12 +53,12 @@
 			<div class='option-section'>\
 				<p class='informational-text'>Chrall est une extension pour Chrome visant à enrichir l'interface du jeu.</p>\
 				<p class='informational-text'>Si vous souhaitez retrouver l'interface standard de Mounty Hall, vous pouvez la désactiver via le menu <i>Outils/Extensions</i> de Chrome.</p>\
-				<p class='informational-text'>Pour plus d'informations sur le projet Chrall : <a target=newWin href=http://canop.org/chrall>canop.org/chrall</a>.</p>\
+				<p class='informational-text'>Pour plus d'informations sur le projet Chrall : <a target=newWin href=https://canop.org/chrall>canop.org/chrall</a>.</p>\
 			</div>\
 			<p/>\
 			<h3 class='option-section'>Que fait Chrall exactement?</h3>\
 			<div class='option-section'>\
-				<p class='informational-text'>Chrall modifie les pages que vous recevez depuis *.mountyhall.com et quelques adresses alternatives du jeu. Chrall enrichit également <a href=http://dystroy.org/miaou>le chat Miaou</a> pour y ajouter des fonctions de modification de Chrall. Chrall ne voit ni ne change les autres pages.</p>\
+				<p class='informational-text'>Chrall modifie les pages que vous recevez depuis *.mountyhall.com et quelques adresses alternatives du jeu. Chrall enrichit également <a href=https://dystroy.org/miaou>le chat Miaou</a> pour y ajouter des fonctions de modification de Chrall. Chrall ne voit ni ne change les autres pages.</p>\
 				<p class='informational-text'>Chrall affiche, sur la vue, des estimations des caractéristiques des monstres, en exploitant son bestiaire (lien plus bas). De même pour les trolls en exploitant des informations publiques (par exemple la liste des kills).</p>\
 				<p class='informational-text'>Chrall transmet les CDM que vous effectuez à ce bestiaire, afin de l'enrichir (si vous l'acceptez).</p>\
 			</div>\
