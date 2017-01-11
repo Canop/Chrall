@@ -91,7 +91,7 @@ table.grid {
 }
 
 table.grid td[uncharted] {
-	background-image: url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/null.gif);
+	background-image: url(https://games.mountyhall.com/mountyhall/View/IMG_LABY/null.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
 	height: 160;
@@ -556,7 +556,7 @@ img.illus {
 }
 
 #menuOutilsChrall {
-	background-image: url(http://canop.org/chrall/fondDante3.jpg);
+	background-image: url(https://canop.org/chrall/fondDante3.jpg);
 	position: fixed;
 	right: 0;
 	bottom: 0;

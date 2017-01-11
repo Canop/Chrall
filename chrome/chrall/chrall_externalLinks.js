@@ -43,17 +43,17 @@
 			"Mounty-Hall": [
 				new ExternalLink("Forum MH",
 					true,
-					"http://www.mountyhall.com/Forum/",
+					"https://www.mountyhall.com/Forum/",
 					"Le forum indispensable."
 				),
 				new ExternalLink("Règles",
 					false,
-					"http://www.mountyhall.com/MH_Rules/Rules_1.php",
+					"https://www.mountyhall.com/MH_Rules/Rules_1.php",
 					"Même un vieux joueur a parfois besoin de vérifier une formule."
 				),
 				new ExternalLink("Annuaire",
 					false,
-					"http://www.mountyhall.com/ListeTrolls.php",
+					"https://www.mountyhall.com/ListeTrolls.php",
 					"La liste de tous les trolls, avec une fonction de recherche."
 				)
 			],
