@@ -22,7 +22,7 @@
 				),
 				new ExternalLink("Bestiaire",
 					true,
-					"https://canop.org:8000/chrall/bestiaire",
+					"https://canop.org/8000/chrall/bestiaire",
 					"Ce bestiaire permet de rechercher les monstres apparentés à votre cible,"
 					+ " au cas où la bulle ne vous renseignerait pas."
 				),
