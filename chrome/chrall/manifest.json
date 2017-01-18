@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Chrall",
-	"version": "4.1.18",
+	"version": "4.1.21",
 	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"icons": {
 		"128": "icone_naze.png"
@@ -16,7 +16,15 @@
 	"web_accessible_resources": ["player_target.png"],
 	"content_scripts": [
 		{
-			"matches": ["*://accro.mountyhall.com/*", "*://games.mountyhall.com/*", "*://mh.fr.nf/*", "*://109.69.220.90/*"],
+			"matches": [
+				"*://accro.mountyhall.com/*",
+				"*://games.mountyhall.com/*",
+				"*://mh.home.raistlin.fr/*",
+				"*://mh.mh.raistlin.fr/*",
+				"*://mh.fr.nf/*",
+				"*://mhty.fr.nf/mountyhall/MH_Play/*",
+				"*://109.69.220.90/*"
+			],
 			"all_frames" : true,
 			"run_at" : "document_end",
 			"css": [

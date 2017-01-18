@@ -194,7 +194,7 @@
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
-			item.hasLink = !!nameCell.children[0].href;
+			item.hasLink = nameCell.children.length && !!nameCell.children[0].href;
 			grid.getCellNotNull(item.x, item.y).addPlace(item);
 			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
 		}
