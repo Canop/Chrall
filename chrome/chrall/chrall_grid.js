@@ -107,6 +107,7 @@ chrall.gridLive = function(){
 		return args;
 	}
 	chrall.bubbleLive('a[href*="EMV"]', 'bub_monster', getMonsterArgs);
+	chrall.triggerBubble($('img.vlc'), 'Voit le caché !', 'bub_monster');
 
 	//> popup sur les trolls
 	function getTrollArgs(link){

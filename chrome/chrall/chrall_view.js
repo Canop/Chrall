@@ -108,16 +108,19 @@
 		});
 	}
 
-	function append3D($cell, attributes, differentLevel, actions){
+	function append3D($cell, attributes, differentLevel, actions, icons){
 		// TODO : span name = 3D // TODO plus tard name ==> class
 		var $a = $("<a/>", attributes);
-		if (actions) {
-			$a.prepend(actions);
-		}
+		var $div = $("<div/>");
 		if (differentLevel) {
-			$cell.append($("<div/>").append($("<span/>", {name: "3D"}).append($a)));
-		} else {
-			$cell.append($("<div/>").append($a));
+			$div.append($("<span/>", {name: "3D"}));
+		}
+		$cell.append($div.append($a));
+		if (actions) {
+			$div.prepend(actions);
+		}
+		if (icons) {
+			$div.append(icons);
 		}
 		return $a;
 	}
@@ -240,7 +243,7 @@
 				attributes = monsterAttributes(monster, compactNames, maxLength, verticalDistanceHint, horizontalDistance);
 				addPosition(monster, attributes);
 				if (!monster.isGowap) attributes.nom_complet_monstre = monster.fullName;
-				append3D($cell, attributes, differentLevel, monster.actions);
+				append3D($cell, attributes, differentLevel, monster.actions, monster.icons);
 			}
 		}
 

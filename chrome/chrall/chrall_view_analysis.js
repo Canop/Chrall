@@ -81,7 +81,12 @@
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
-			$(nameCell.children[0]).attr("id", item.id + "_monster"); // !! Analyze AND modify : inject monster id
+			nameCell.children[0].id = item.id + "_monster"; // !! Analyze AND modify : inject monster id
+			if (chrall.isSeeingHidden(nameCell.innerText)) {
+				var vlcImg = " <img class='vlc' style='vertical-align:middle' width='20' src='" + chrome.extension.getURL("/images/vlc.png") + "' />";
+				nameCell.innerHTML += vlcImg;
+				item.icons = vlcImg;
+			}
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
