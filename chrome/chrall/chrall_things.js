@@ -88,6 +88,7 @@ function Thing(x, y, z){
 	this.x = x;
 	this.y = y;
 	this.z = z;
+	this.icons = "";
 }
 chrall.Thing = Thing;
 Thing.prototype.horizontalDistance = function(x, y){ // distance horizontale

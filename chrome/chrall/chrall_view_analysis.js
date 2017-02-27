@@ -85,7 +85,7 @@
 			if (chrall.isSeeingHidden(nameCell.innerText)) {
 				var vlcImg = " <img class='vlc' style='vertical-align:middle' width='20' src='" + chrome.extension.getURL("/images/vlc.png") + "' />";
 				nameCell.innerHTML += vlcImg;
-				item.icons = vlcImg;
+				item.icons += vlcImg;
 			}
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
