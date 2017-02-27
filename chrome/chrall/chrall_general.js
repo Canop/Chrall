@@ -110,5 +110,5 @@ chrall.getPxOnKill = function(level){
 	if (!chrall.player().level) {
 		return "Vous devez vous rendre tout d'abord dans votre profil afin que Chrall<br>connaisse votre niveau pour savoir combien de PX vous rapportera ce kill";
 	}
-	return (10 + 2 * (level - chrall.player().level) + level) + " PX lors du kill";
+	return Math.max(0, 10 + 2 * (level - chrall.player().level) + level) + " PX lors du kill";
 }
