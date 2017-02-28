@@ -583,3 +583,8 @@ img.illus {
 .small-note {
 	font-size: 10px;
 }
+
+img.vlc, img.projo {
+	vertical-align: middle;
+	width: 20px;
+}

@@ -187,6 +187,7 @@ function Troll(x, y, z){
 	this.isIntangible = false;
 	this.magicalAttackMultiplier = 1;
 	this.magicalDamageMultiplier = 1;
+	this.talents = {};
 }
 chrall.Troll = Troll;
 Troll.prototype = new Thing();
@@ -216,9 +217,6 @@ Troll.prototype.cleanFlies = function(){
 };
 
 Troll.prototype.addTalent = function(t){
-	if (!this.talents) {
-		this.talents = new Object();
-	}
 	this.talents[t.name] = t;
 };
 

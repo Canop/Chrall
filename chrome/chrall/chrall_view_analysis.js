@@ -63,6 +63,19 @@
 		}
 	};
 
+	// Popup contenant les infos pour l'icone de projo
+	chrall.bubbleProjoIcon = function(dist){
+		var html = "<table>";
+		html += "<tr><td>Portée du projo</td><td> : " + dist + "</td></tr>";
+		var projectileDiceNumber = Math.floor(chrall.player().sight.diceNumber * chrall.player().magicalAttackMultiplier);
+		var att = 3.5 * projectileDiceNumber + chrall.player().attac.magicalBonus;
+		html += "<tr><td>Attaque moyenne</td><td> : " + att + " (" + projectileDiceNumber + " D6 " + chrall.itoa(chrall.player().attac.magicalBonus) + ")</td></tr>";
+		var damages = chrall.projoDamage(chrall.player().talents["Projectile Magique"].range - dist);
+		html += "<tr><td>Dégâts moyens</td><td> : " + damages.damage + " / " + damages.damageCrit + "</td></tr>";
+		html += "</table>";
+		return html;
+	};
+
 	// ------------------ Analyse des composants de la vue --------------------
 
 	chrall.analyseMonsterTable = function(table){
@@ -83,9 +96,15 @@
 			item.setName(nameCell.textContent);
 			nameCell.children[0].id = item.id + "_monster"; // !! Analyze AND modify : inject monster id
 			if (chrall.isSeeingHidden(nameCell.innerText)) {
-				var vlcImg = " <img class='vlc' style='vertical-align:middle' width='20' src='" + chrome.extension.getURL("/images/vlc.png") + "' />";
+				var vlcImg = " <img class='vlc' src='" + chrome.extension.getURL("/images/vlc.png") + "' />";
 				nameCell.innerHTML += vlcImg;
 				item.icons += vlcImg;
+			}
+			if ($("span.cm-attDist", cells[1]).length > 0) {
+				var dist = parseInt(cells[0].innerHTML);
+				var projoImg = " <img class='projo' data-dist='" + dist + "' src='" + chrome.extension.getURL("/images/projo.png") + "' />";
+				nameCell.innerHTML += projoImg;
+				item.icons += projoImg;
 			}
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
@@ -125,6 +144,12 @@
 			chrall.cdb.getTroll(item.id, function(t){
 				if (t && t.team) $a.attr('team', item.team = t.team);
 			});
+			if ($("span.cm-attDist", cells[1]).length > 0) {
+				var dist = parseInt(cells[0].innerHTML);
+				var projoImg = " <img class='projo' data-dist='" + dist + "' src='" + chrome.extension.getURL("/images/projo.png") + "' />";
+				nameCell.innerHTML += projoImg;
+				item.icons += projoImg;
+			}
 			// les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
 			item.isIntangible = $(nameCell).html().indexOf("mh_trolls_0")>=0;
 			chrall.triggerBubble($(cells[i]), chrall.getPxOnKill(cells[i].textContent), "bub_troll");
