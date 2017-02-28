@@ -90,7 +90,7 @@ chrall.gridLive = function(){
 	function getMonsterArgs(link){
 		var player = chrall.player();
 		var args = {};
-		var monsterId = parseInt(link.attr('id'));
+		var monsterId = parseInt(link[0].href.replace("javascript:EMV(", ""));
 		var tokens = link.text().split(':');
 		var linkText = null == link.attr("nom_complet_monstre") ? tokens[tokens.length - 1].trim() : link.attr("nom_complet_monstre").trim();
 		var nomMonstre = encodeURIComponent(linkText);
