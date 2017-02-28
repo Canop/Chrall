@@ -26,6 +26,17 @@ chrall.rangeProjo = (view, viewMax, range) => {
 	return view <= viewMax ? range : chrall.rangeProjo(view, viewMax + range + 4, range + 1);
 };
 
+/**
+ * Retourne un object contenant les degats/degats critique du projo
+ */
+chrall.projoDamage = (diffRange) => {
+	var damages = {};
+	var projectileDamageDiceNumber = Math.floor(chrall.player().sight.diceNumber * chrall.player().magicalDamageMultiplier);
+	damages.damage = 2 * (Math.floor(projectileDamageDiceNumber * 0.5) + diffRange) + chrall.player().damage.magicalBonus;
+	damages.damageCrit = damages.damage + 2 * Math.floor(projectileDamageDiceNumber * 0.25);
+	return damages;
+};
+
 chrall.talentBubblers = {
 
 	// ----------------------------------------
@@ -679,27 +690,3 @@ chrall.talentBubblers = {
 		return html;
 	},
 };
-
-/**
- * Fonction recursive calculant la portee du projectile magique en fonction de la vue
- */
-chrall.rangeProjo = function(view, viewMax, range){
-	if (!viewMax) {
-		viewMax = 4;
-	}
-	if (!range) {
-		range = 1;
-	}
-	return view <= viewMax ? range : chrall.rangeProjo(view, viewMax + range + 4, range + 1);
-}
-
-/**
- * Retourne un object contenant les degats/degats critique du projo
- */
-chrall.projoDamage = function(diffRange){
-	var damages = {};
-	var projectileDamageDiceNumber = Math.floor(chrall.player().sight.diceNumber * chrall.player().magicalDamageMultiplier);
-	damages.damage = 2 * (Math.floor(projectileDamageDiceNumber * 0.5) + diffRange) + chrall.player().damage.magicalBonus;
-	damages.damageCrit = damages.damage + 2 * Math.floor(projectileDamageDiceNumber * 0.25);
-	return damages;
-}
