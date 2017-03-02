@@ -95,6 +95,10 @@ chrall.gridLive = function(){
 		var linkText = null == link.attr("nom_complet_monstre") ? tokens[tokens.length - 1].trim() : link.attr("nom_complet_monstre").trim();
 		var nomMonstre = encodeURIComponent(linkText);
 		args.text = link.attr('message');
+		if (args.text) {
+			var level = parseInt($("#" + monsterId + "_monster").closest("tr").find("td.level").text());
+			args.text += "<br>" + chrall.getPxOnKill(level);
+		}
 		var imgUrl = chrall.getMonsterMhImageUrl(linkText);
 		if (imgUrl != null) {
 			args.leftCol = "<img class=illus src=\"" + imgUrl + "\">";

@@ -137,7 +137,7 @@
 				class: 'ch_troll',
 				href:    'javascript:EPV(' + troll.id + ');',
 				style:   distanceStyle(verticalDistanceHint, troll.z),
-				message: "en X=" + troll.x + " Y=" + troll.y + " Z=" + troll.z + "<br>Distance horizontale : " + horizontalDist
+				message: "en X=" + troll.x + " Y=" + troll.y + " Z=" + troll.z + "<br>Distance horizontale : " + horizontalDist + " (" + chrall.distanceFromPlayer(troll.x, troll.y, troll.z) + " PA)<br>" + chrall.getPxOnKill(troll.level)
 			};
 			addPosition(troll, attributes);
 			if (troll.team) attributes.team = troll.team;
@@ -189,7 +189,7 @@
 			text:    monster.z + ": " + monsterName(compactNames, maxLength, monster),
 			href:    'javascript:EMV(' + monster.id + ',750,550);',
 			style:   distanceStyle(verticalDistanceHint, monster.z),
-			message: monster.fullName + ' ( ' + monster.id + ' ) en X=' + monster.x + ' Y=' + monster.y + ' Z=' + monster.z + '<br>Distance horizontale : ' + horizontalDistance
+			message: monster.fullName + ' ( ' + monster.id + ' ) en X=' + monster.x + ' Y=' + monster.y + ' Z=' + monster.z + '<br>Distance horizontale : ' + horizontalDistance + " (" + chrall.distanceFromPlayer(monster.x, monster.y, monster.z) + " PA)"
 		};
 		return attributes;
 	}
