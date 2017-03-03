@@ -50,10 +50,9 @@ chrall.getTotalPiForLevel = function(level){
 
 chrall.itoa = function(o){
 	if (o) {
-		if (o > 0) return "+" + o;
-		else return "" + o;
+		return (o > 0) ? "+" + o : o;
 	} else {
-		return "-";
+		return "0";
 	}
 }
 
