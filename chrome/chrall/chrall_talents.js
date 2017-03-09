@@ -267,7 +267,7 @@ chrall.talentBubblers = {
 		html += "<br><table><tr><td>Sssrileur: </td><td>seuil 6, rend visible</td></tr>";
 		html += "<tr><td>Tagadagada: </td><td>seuil 2, rend l'effet actif pendant 2 tours</td></tr>";
 		html += "<tr><td>Ytseukayndof: </td><td>seuil 2, rend les bonus magiques</td></tr>";
-		html += "<tr><td>Whaaag: </td><td>seuil 4, rend l'effet actif dans les cavernes voisines</td></tr>"; 
+		html += "<tr><td>Whaaag: </td><td>seuil 4, rend l'effet actif dans les cavernes voisines</td></tr>";
 		html += "</table>";
 
 		html += "<br>Puissance de la mélodie";
