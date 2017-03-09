@@ -250,6 +250,14 @@ chrall.talentBubblers = {
 		return "Si l'on vous frappe, vous prenez votre retraite.<br>Sauf si c'est une botte secrète : ils sont fourbes les skrims.";
 	},
 	
+	"S'interposer": (player)=>{
+		var stab = 3.5 * Math.floor(2 * (player.dodge.diceNumber + player.regeneration.diceNumber) / 3) +  player.dodge.physicalBonus + player.dodge.magicalBonus;
+		var html = "<table>";
+		html += "<tr><td>Jet de stabilité moyen</td><td> : " + stab + "</td></tr>";
+		html += "</table>";
+		return html;
+	},
+	
 	"Baroufle": (player)=>{
 		var html = "Liste des sons qui procurent un effet proportionnel à la puissance dans la mélodie (bonus/malus sur la durée, ou directs)";
 		html += "<br><table><tr><td>Badaboum: </td><td>att +1</td></tr>";
@@ -670,4 +678,3 @@ chrall.talentBubblers = {
 		return html;
 	},
 };
-
