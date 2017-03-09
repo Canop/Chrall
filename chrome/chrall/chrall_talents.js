@@ -60,7 +60,7 @@ chrall.talentBubblers = {
 	},
 
 	"Botte Secrète": (player)=>{
-		var des_att = 2 * Math.floor(player.attac.diceNumber / 3);
+		var des_att = Math.floor(2 * player.attac.diceNumber / 3);
 		var att = des_att * 3.5 + Math.floor((player.attac.physicalBonus + player.attac.magicalBonus) / 2);
 		var des_deg = Math.floor(player.attac.diceNumber /  2)
 		var deg = des_deg * 2 + Math.floor((player.damage.physicalBonus + player.damage.magicalBonus) / 2);
@@ -238,7 +238,7 @@ chrall.talentBubblers = {
 	},
 
 	"Régénération Accrue": (player)=>{
-		var desRA = Math.floor(player.pvMax / 20);
+		var desRA = Math.floor(2 * player.pvMax / 30);
 		var html = "<table>";
 		html += "<tr><td>Régénération Accrue</td><td> : " + desRA + " D3</td></tr>";
 		html += "<tr><td>Moyenne</td><td> : " + (desRA * 2) + "</td></tr>";
@@ -248,6 +248,38 @@ chrall.talentBubblers = {
 
 	"Retraite": (player)=>{
 		return "Si l'on vous frappe, vous prenez votre retraite.<br>Sauf si c'est une botte secrète : ils sont fourbes les skrims.";
+	},
+	
+	"Baroufle": (player)=>{
+		var html = "Liste des sons qui procurent un effet proportionnel à la puissance dans la mélodie (bonus/malus sur la durée, ou directs)";
+		html += "<br><table><tr><td>Badaboum: </td><td>att +1</td></tr>";
+		html += "<tr><td>Booong: </td><td>deg +1 / esq -1</td></tr>";
+		html += "<tr><td>Gaaaw: </td><td>Fatigue +1</td></tr>";
+		html += "<tr><td>Huitsch: </td><td>deg -1</td></tr>";
+		html += "<tr><td>Kliketiiik: </td><td>esq -1 / concentration -1</td></tr>";
+		html += "<tr><td>Krouiiik: </td><td>concentration -2</td></tr>";
+		html += "<tr><td>Kssksss: </td><td>esq +1</td></tr>";
+		html += "<tr><td>Praaaouuut: </td><td>reg-1</td></tr>";
+		html += "<tr><td>Tuutuuuut: </td><td>att -1</td></tr>";
+		html += "<tr><td>Whoooom: </td><td>concentration +2</td></tr>";
+		html += "<tr><td>Zbouing : </td><td>reg +1</td></tr>";
+		html += "<br>Liste des sons dont l'effet se déclenche à partir d'un seuil (variations sur bonus/malus, ou effets directs sur le public)";
+		html += "<br><table><tr><td>Sssrileur: </td><td>seuil 6, rend visible</td></tr>";
+		html += "<tr><td>Tagadagada: </td><td>seuil 2, rend l'effet actif pendant 2 tours</td></tr>";
+		html += "<tr><td>Ytseukayndof: </td><td>seuil 2, rend les bonus magiques</td></tr>";
+		html += "<tr><td>Whaaag: </td><td>seuil 4, rend l'effet actif dans les cavernes voisines</td></tr>"; 
+		html += "</table>";
+
+		html += "<br>Puissance de la mélodie";
+		html += "<br>La puissance d'une note est déterminée par sa position dans la mélodie:";
+		html += "<br><table><tr><td>Note 1: +1</td></tr>";
+		html += "<tr><td>Note 2: +2</td></tr>";
+		html += "<tr><td>Note 3: +3 (total: 6)</td></tr>";
+		html += "<tr><td>Note 4: +4 (total: 10)</td></tr>";
+		html += "<tr><td>Note 5: +5 (total: 15)</td></tr>";
+		html += "<tr><td>Note 6: +6 (total: 21)</td></tr>";
+		html += "</table>";
+		return html;
 	},
 
 
@@ -546,8 +578,8 @@ chrall.talentBubblers = {
 
 	"Téléportation": (player)=>{
 		var s = player.sight.diceNumber;
-		var f = function(mm){
-			var d = Math.ceil((Math.sqrt(19 + 8 * (Math.floor(mm / 5) + 3)) - 7) / 2);
+		var f = function(pi){
+			var d = Math.ceil((Math.sqrt(19 + 8 * (Math.floor(pi / 5) + 3)) - 7) / 2);
 			var dh = (d + 20 + s);
 			var dv = Math.floor(d / 3 + 3);
 			var html = "<table>";
@@ -561,16 +593,9 @@ chrall.talentBubblers = {
 			html += "</table>";
 			return html;
 		}
-		if (player.talents["Bulle Magique"]) {
-			var html = f(player.mm);
-			html += "<br>Si vous n'avez pas fait de BuM, en faire une donnerait :";
-			html += f(player.mm + player.baseMm);
-			html += "<br>Si vous n'avez pas fait de BuM, en faire deux donnerait :";
-			html += f(player.mm + 1.67 * player.baseMm);
-			return html
-		} else {
-			return f(player.mm);
-		}
+		
+		return f(player.pi);
+		
 	},
 
 	"Vampirisme": (player)=>{
