@@ -90,7 +90,7 @@
 	}
 
 	chrall.cdb.getTrolls(function(t){
-		console.log("all trolls:", t);
+		// console.log("all trolls:", t);
 	});
 
 })(window.chrall = window.chrall || {});
