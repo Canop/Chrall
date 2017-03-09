@@ -263,6 +263,7 @@ chrall.talentBubblers = {
 		html += "<tr><td>Tuutuuuut: </td><td>att -1</td></tr>";
 		html += "<tr><td>Whoooom: </td><td>concentration +2</td></tr>";
 		html += "<tr><td>Zbouing : </td><td>reg +1</td></tr>";
+		html += "</table>";
 		html += "<br>Liste des sons dont l'effet se déclenche à partir d'un seuil (variations sur bonus/malus, ou effets directs sur le public)";
 		html += "<br><table><tr><td>Sssrileur: </td><td>seuil 6, rend visible</td></tr>";
 		html += "<tr><td>Tagadagada: </td><td>seuil 2, rend l'effet actif pendant 2 tours</td></tr>";
