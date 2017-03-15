@@ -2,7 +2,7 @@
 //  with eslint.
 // Usage:
 // > gulp: run the check, fails (returns not 0) when the code isn't compliant
-// > gulp watch: continuously run the checks on every file save 
+// > gulp watch: continuously run the checks on every file save
 // > gulp fix-extension-js: automatically fix the code if the only remaining problems are fixable
 // Be careful with automatic fix, it may break the code...
 
@@ -29,6 +29,8 @@ function extensionGlobals(){
 		"Troll",
 		// chrome extension environment
 		"chrome",
+		// trucs qui sont dans les browsers maintenant
+		"Set", "Map"
 	].reduce((s,v)=>{s[v]=true; return s;},{});
 }
 
@@ -70,7 +72,7 @@ function eslintOptions() {
 			"no-throw-literal": 2,
 			"no-useless-call": 2,
 			"no-void": 2,
-			"max-depth": [ 2, 8], 
+			"max-depth": [ 2, 8],
 			"no-unneeded-ternary": 2,
 			"operator-assignment": [ 2, "always" ],
 			"space-before-function-paren": [ 2, "never" ],
