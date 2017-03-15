@@ -51,15 +51,21 @@
 		$('<button>').text("Définir les équipes dans Chrall").prependTo(ùc).click(function(){
 			var $ok = $('<div><i>Trolls ajoutés</i></div>').hide();
 			$(this).replaceWith($ok);
+			var set = new Set; // to remove duplicates
 			var trolls = lines.map(function(line){
 				var match = line.match(/^\s*(\d+)\W+(\w)/);
 				if (!match) return;
-				console.log("match", match);
+				var trollId = +match[1];
+				if (set.has(trollId)) {
+					console.log("doublon supprimé:", trollId);
+					return;
+				}
 				if (!/[rvbj]/i.test(match[2])) {
 					console.log("invalid team:", line);
 					return;
 				}
-				return {num:+match[1], team:match[2].toUpperCase()};
+				set.add(trollId);
+				return {num:trollId, team:match[2].toUpperCase()};
 			}).filter(Boolean);
 			console.log("Trolls to set :", trolls);
 			chrall.cdb.setTrolls(trolls, function(){
