@@ -5,13 +5,17 @@
 	 * convertit une chaine du genre "ATT : +3 DEG : -9 en une map
 	 */
 	function parseEffects(s){
-		var map = new Object();
+		var map = {};
 		var tokens = chrall.tokenize(s);
-		for (var i=0; i<tokens.length-1;) {
+		for (var i = 0; i < tokens.length - 1;) {
 			var name = tokens[i++].trim();
-			if (name=='%') name = tokens[i++].trim();
+			if (name == '%') {
+				name = tokens[i++].trim();
+			}
 			var value = parseInt(tokens[i++]);
-			if ((name.length>0) && value)	map[name] = value;
+			if ((name.length > 0) && value) {
+				map[name] = value;
+			}
 		}
 		return map;
 	}
@@ -47,7 +51,7 @@
 		}
 	};
 	CharBmEffect.prototype.str = function(){
-		return chrall.itoa(this.sum['Physique']) + "/" + chrall.itoa(this.sum['Magie']);
+		return chrall.itoa(this.sum['Physique']) + " / " + chrall.itoa(this.sum['Magie']);
 	};
 	CharBmEffect.prototype.strMag = function(){
 		var v = 0;
@@ -62,14 +66,15 @@
 
 	chrall.analyseAndReformatBM = function(){
 		var effects = [];
-		$('table table table.mh_tdborder tr.mh_tdpage').each(function(){
+		var $bmm = $('#bmm');
+		$bmm.find('tr.mh_tdpage').each(function(){
 			var cells = $(this).find("td");
 			effects.push(new BmEffect(
-				$(cells[0]).text().trim(),
-				$(cells[2]).text().trim(),
-				$(cells[3]).html().indexOf('bullet_red.jpg') >= 0, // marqueur du décumul
-				$(cells[4]).text().trim(),
-				$(cells[5]).text().trim()
+				cells.eq(0).text().trim(),
+				cells.eq(2).text().trim(),
+				cells.eq(3).html().indexOf('bullet_red.jpg') >= 0, // marqueur du décumul
+				cells.eq(4).text().trim(),
+				cells.eq(5).text().trim()
 			));
 		});
 		const NB_TURNS_MAX = 20;
@@ -117,8 +122,8 @@
 				}
 			}
 			var html = "";
-			html += '<br><table border="0" cellspacing="1" cellpadding="5" align="center" class="mh_tdborder">';
-			html += '<tr><td align="center" class=mh_tdtitre>DLA</td><td class=mh_tdtitre>Effet total</td></tr>';
+			html += '<br><table border="0" cellspacing="1" cellpadding="5" align="center" class="mh_tdborder" style="margin-top:10px;">';
+			html += '<tr><td align="center" class="mh_tdtitre">DLA</td><td align="center" class="mh_tdtitre">Effet total</td></tr>';
 			for (turn = 0; turn < lines.length - nbIdenticalLines; turn++) {
 				html += "<tr class=mh_tdpage><td align=center>";
 				if (nbIdenticalLines > 0 && turn == lines.length - nbIdenticalLines - 1) {
@@ -135,7 +140,7 @@
 				html += "</td></tr>";
 			}
 			html += "</table>";
-			$(html).appendTo($('form[name="ActionForm"]'));
+			$bmm.after(html);
 		}
 	}
 
