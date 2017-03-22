@@ -63,6 +63,16 @@
 		}
 	};
 
+	// Icone du projo
+	chrall.projoIcon = function(cells, nameCell, item){
+		if ($("span.cm-attDist,span.cm-attCac", cells[1]).length > 0) {
+			var dist = parseInt(cells[0].innerHTML);
+			var projoImg = " <img class='projo' data-dist='" + dist + "' src='" + chrome.extension.getURL("/images/projo.png") + "' />";
+			nameCell.innerHTML += projoImg;
+			item.icons += projoImg;
+		}
+	};
+
 	// Popup contenant les infos pour l'icone de projo
 	chrall.bubbleProjoIcon = function(dist){
 		var html = "<table>";
@@ -100,12 +110,7 @@
 				nameCell.innerHTML += vlcImg;
 				item.icons += vlcImg;
 			}
-			if ($("span.cm-attDist", cells[1]).length > 0) {
-				var dist = parseInt(cells[0].innerHTML);
-				var projoImg = " <img class='projo' data-dist='" + dist + "' src='" + chrome.extension.getURL("/images/projo.png") + "' />";
-				nameCell.innerHTML += projoImg;
-				item.icons += projoImg;
-			}
+			chrall.projoIcon(cells, nameCell, item);
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
@@ -144,12 +149,7 @@
 			chrall.cdb.getTroll(item.id, function(t){
 				if (t && t.team) $a.attr('team', item.team = t.team);
 			});
-			if ($("span.cm-attDist", cells[1]).length > 0) {
-				var dist = parseInt(cells[0].innerHTML);
-				var projoImg = " <img class='projo' data-dist='" + dist + "' src='" + chrome.extension.getURL("/images/projo.png") + "' />";
-				nameCell.innerHTML += projoImg;
-				item.icons += projoImg;
-			}
+			chrall.projoIcon(cells, nameCell, item);
 			// les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
 			item.isIntangible = $(nameCell).html().indexOf("mh_trolls_0")>=0;
 			chrall.triggerBubble($(cells[i]), chrall.getPxOnKill(cells[i].textContent), "bub_troll");

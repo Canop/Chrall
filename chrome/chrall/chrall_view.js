@@ -142,7 +142,7 @@
 			addPosition(troll, attributes);
 			if (troll.team) attributes.team = troll.team;
 			if (troll.isIntangible) attributes.intangible = 1;
-			var $a = append3D($cell, attributes, differentLevel, troll.actions);
+			var $a = append3D($cell, attributes, differentLevel, troll.actions, troll.icons);
 			chrall.cdb.getTroll(troll.id, function(t){
 				if (t && t.team) $a.attr('team', t.team);
 			});
@@ -231,7 +231,7 @@
 						var attributes = monsterAttributes(monster, compactNames, maxLength, verticalDistanceHint, horizontalDistance);
 						addPosition(monster, attributes);
 						if (!monster.isGowap) attributes.nom_complet_monstre = monster.fullName;
-						append3D($monsterContainer, attributes, differentLevel, monster.actions);
+						append3D($monsterContainer, attributes, differentLevel, monster.actions, monster.icons);
 					}
 				}
 			}
