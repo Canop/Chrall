@@ -378,8 +378,7 @@
 					'class': 'ch_object',
 					bub:     treasure.id + " : " + treasure.name,
 					text:    treasure.z + ": " + (compactNames ? compactText(treasure.name, maxLength) : treasure.name),
-					display: 'block',
-					style:   distanceStyle(verticalDistanceHint, level)
+					style:   distanceStyle(verticalDistanceHint, level) + 'display:inline;'
 				};
 				addPosition(treasure, attributes);
 				if (treasure.hasLink) attributes.href = "javascript:Enter('/mountyhall/View/TresorHistory2.php?ai_IDTresor=" + treasure.id + "',750,500);";
