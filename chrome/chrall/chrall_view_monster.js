@@ -420,7 +420,7 @@
 		["Vampire", 29, MORT_VIVANT],
 		["Ver Carnivore Géant", 12, MONSTRE],
 		["Ver Carnivore", 11, MONSTRE],
-		["Veskan Du Chaos", 14, HUMANOIDE],
+		["Veskan du Chaos", 14, HUMANOIDE],
 		["Vouivre", 33, MONSTRE],
 		["Worg", 5, MONSTRE],
 		["Xorn", 14, DEMON],
