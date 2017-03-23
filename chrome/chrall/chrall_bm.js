@@ -37,22 +37,16 @@
 		this.sum[type] = value;
 		this.count[type] = 1;
 	}
+
 	CharBmEffect.prototype.add = function(type, value, hasDecumul){
-		if (this.count[type]) {
-			if (hasDecumul) {
-				this.sum[type] += chrall.decumul(this.count[type]++, value);
-			} else {
-				this.sum[type] += value;
-				this.count[type]++
-			}
-		} else {
-			this.sum[type] = value;
-			this.count[type] = 1;
-		}
+		this.sum[type] += (hasDecumul) ? chrall.decumul(this.count[type], value) : value;
+		this.count[type]++;
 	};
+
 	CharBmEffect.prototype.str = function(){
 		return chrall.itoa(this.sum['Physique']) + " / " + chrall.itoa(this.sum['Magie']);
 	};
+
 	CharBmEffect.prototype.strMag = function(){
 		var v = 0;
 		if (this.sum['Physique']) {

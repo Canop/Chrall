@@ -57,7 +57,8 @@ chrall.itoa = function(o){
 }
 
 chrall.decumul = function(i, val){
-	return Math.floor(val - val * ([0, .33, .6, .75, .85, .9][Math.min(i, 4)]));
+	val = val * (1 - ([0, .33, .6, .75, .85, .9][Math.min(i, 5)]));
+	return val > 0 ? Math.floor(val) : Math.ceil(val);
 }
 
 chrall.turnName = function(turn){
