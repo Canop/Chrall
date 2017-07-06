@@ -123,9 +123,9 @@
 			// les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
 			item.isIntangible = $(nameCell).html().indexOf("mh_trolls_0")>=0;
 			chrall.triggerBubble($(cells[i]), chrall.getPxOnKill(cells[i].textContent), "bub_troll");
+			item.guilde = cells[i++].textContent;
 			item.level = cells[i++].textContent;
 			item.race = cells[i++].textContent;
-			item.guilde = cells[i++].textContent;
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
