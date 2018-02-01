@@ -381,7 +381,7 @@ chrall.talentBubblers = {
 
 	"Faiblesse Passagère": (player)=>{
 		var a = 1 + Math.floor((Math.floor((player.pv - 30) / 10) + player.damage.diceNumber - 3) / 2);
-		var html = "Affecte les monstres et trolls sur la case ou sur la case voisine d'un malus soumis au décumul :<table>";
+		var html = "Affecte le monstre ou troll ciblé (sur la case ou une voisine) d'un malus soumis au décumul :<table>";
 		html += "<tr><td>Premier FP</td><td> : dégâts -" + a + "</td></tr>";
 		html += "<tr><td>Deuxième FP</td><td> : dégâts -" + chrall.decumul(1, a) + "</td></tr>";
 		html += "<tr><td>Troisième FP</td><td> : dégâts -" + chrall.decumul(2, a) + "</td></tr>";
