@@ -1,0 +1,29 @@
+# compose file for the normal prod application:
+#     docker-compose
+#
+# use mysql cli:
+#     docker-compose exec mysql mysql -uroot -p
+# (the docker/trav directory is mounted for easier sourcing and export)
+#
+version: "3"
+services:
+        app:
+                build:
+                        context: .
+                        dockerfile: ./docker/go/Dockerfile
+                restart: always
+                ports:
+                        - "9090:9090"
+                links:
+                        - mysql
+        mysql:
+                image: mysql:5.7
+                restart: always
+                environment:
+                        MYSQL_ROOT_PASSWORD: able
+                volumes:
+                        - chrall-mysql:/var/lib/mysql
+                        - ./docker/trav:/trav
+volumes:
+        chrall-mysql:
+

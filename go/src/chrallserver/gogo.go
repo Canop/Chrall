@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	port             = 8000
+	port             = 9090
 	ALLOW_SP         = true // cette constante permet de désactiver tout accès aux scripts publics de MH
 	COUNT_MDP_CHECKS = true // le problème de compter ces appels est qu'on impacte le nombre d'appels
 	//  d'un trolls sans avoir pu vérifier qu'il était réellement à l'origine
@@ -78,6 +78,7 @@ func (server *GogoServer) Start(tksManager *TksManager) {
 }
 
 func main() {
+	fmt.Println("START GOGO")
 	gogo := new(GogoServer)
 	cheminDonnées := flag.String("dir", "", "chemin du répertoire des données")
 	flag.Parse()

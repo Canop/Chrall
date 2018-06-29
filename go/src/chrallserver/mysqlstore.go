@@ -26,5 +26,5 @@ func NewStore(user string, password string) *MysqlStore {
 // renvoie une instance de DB connectée.
 func (store *MysqlStore) DB() (*sql.DB, error) {
 	//return sql.Open("mymysql", store.database+"/"+store.user+"/"+store.password)
-	return sql.Open("mysql", store.user+":"+store.password+"@/"+store.database)
+	return sql.Open("mysql", store.user+":"+store.password+"@tcp(127.0.0.1:3306)/"+store.database)
 }

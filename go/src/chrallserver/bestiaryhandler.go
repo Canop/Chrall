@@ -20,7 +20,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			$("#cleanBtn").show();
 			sentValue = name
 			$.getJSON(
-				"/8000/chrall/json?action=get_extract&timestamp="+(new Date()).getTime()+"&name="+name,
+				"../chrall/json?action=get_extract&timestamp="+(new Date()).getTime()+"&name="+name,
 				function(data) {
 					$("p#resultContent").html(data);
 					$("#result").show("slow");
@@ -56,7 +56,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			});
 		});
 		</script>
-		<p>Vous faites face au <span class=emphase>Bestiaire</span> de <a class=gogo href=/8000/chrall>gOgOchrall</a></p>
+		<p>Vous faites face au <span class=emphase>Bestiaire</span> de <a class=gogo href=../chrall>gOgOchrall</a></p>
 	`))
 
 	var be *BestiaryExtract
