@@ -20,7 +20,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			$("#cleanBtn").show();
 			sentValue = name
 			$.getJSON(
-				"../chrall/json?action=get_extract&timestamp="+(new Date()).getTime()+"&name="+name,
+				"json?action=get_extract&timestamp="+(new Date()).getTime()+"&name="+name,
 				function(data) {
 					$("p#resultContent").html(data);
 					$("#result").show("slow");
@@ -48,7 +48,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		$(document).ready(function() {
 			$("#monster_name").focus();
 			$("input#monster_name").autocomplete({
-				source: "/8000/chrall/json?action=get_monster_names&limit=20"
+				source: "json?action=get_monster_names&limit=20"
 			});
 			$("input#monster_name").change(function(){
 				inputValue = $(this).val();
@@ -56,7 +56,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			});
 		});
 		</script>
-		<p>Vous faites face au <span class=emphase>Bestiaire</span> de <a class=gogo href=../chrall>gOgOchrall</a></p>
+		<p>Vous faites face au <span class=emphase>Bestiaire</span> de <a class=gogo href=..>gOgOchrall</a></p>
 	`))
 
 	var be *BestiaryExtract

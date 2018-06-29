@@ -7,10 +7,12 @@ COPY ./go/src/chrallserver/ /go/src/chrallserver/
 RUN go install chrall
 RUN go install chrallserver
 
+FROM alpine:3.7
+COPY --from=builder /go/bin/chrallserver /chrallserver
+
 ENV	GOGO_PORT="9090"
-ENV	DB_USERNAME="temp_user"
-ENV	DB_PASSWORD="temp_password"
+ENV	GOGO_DB_CONNECTION="temp_user:temp_password@tcp(mysql:3306)/chrall"
 
 EXPOSE 9090
 
-ENTRYPOINT ["/go/bin/chrallserver", "-dir", "/"]
+ENTRYPOINT ["./chrallserver", "-dir", "/"]

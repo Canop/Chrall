@@ -26,7 +26,7 @@ type JsonMessageOut struct {
 	AnswersTo  int // reprise de l'id de message entrant (celui auquel on répond, donc)
 	Error      string
 	Text       string
-	TextMaj	   string
+	TextMaj    string
 	MiPartages []*MiPartage
 	Actions    []*Action
 	Notes      []*Note
@@ -182,10 +182,10 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			return
 		}
 		out.MiPartages = h.store.PartagesToMiPartages(db, in.TrollId, partages, h.tksManager)
-		
+
 		log.Printf("Compte/Troll: %+v\n", c.Troll)
 		out.MiPartages = append(out.MiPartages, h.store.CompteAsMiPartage(c, h.tksManager))
-		
+
 	} else if action == "getMonsterEvents" {
 		amis, err = h.store.GetPartageurs(db, int(in.TrollId))
 		if err != nil {
@@ -204,7 +204,7 @@ func (h *JsonGetHandler) serveAuthenticatedMessage(w http.ResponseWriter, action
 			for _, ami := range amis {
 				// récupérer les comptes des amis
 				compteAmi, err := h.store.GetCompte(db, int(ami))
-				if err!=nil {
+				if err != nil {
 					log.Printf("Erreur récupération compte ami %d : %s\n", int(ami), err.Error())
 					continue
 				}

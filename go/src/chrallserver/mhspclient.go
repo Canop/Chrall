@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	SP_VUE = "http://sp.mountyhall.com/SP_Vue2.php?Numero=%d&Motdepasse=%s&Tresors=%d&Lieux=%d"
+	SP_VUE    = "http://sp.mountyhall.com/SP_Vue2.php?Numero=%d&Motdepasse=%s&Tresors=%d&Lieux=%d"
 	SP_PROFIL = "http://sp.mountyhall.com/SP_Profil2.php?Numero=%d&Motdepasse=%s"
 )
 
@@ -46,7 +46,7 @@ func CheckPasswordSp(numero int, mdp_restreint string) (ok bool, errorDetails st
 
 // interroge le serveur pour récupérer le profil
 // td est optionnel. Passer nil permet de vérifier que le mdp est correct
-func FillTrollDataSp(numero int, mdp_restreint string, td *TrollData)  (ok bool, errorDetails string) {
+func FillTrollDataSp(numero int, mdp_restreint string, td *TrollData) (ok bool, errorDetails string) {
 	fmt.Printf("FillTrollDataSp %d / %s\n", numero, mdp_restreint)
 	httpClient := new(http.Client)
 	request := fmt.Sprintf(SP_PROFIL, numero, mdp_restreint)
@@ -62,7 +62,7 @@ func FillTrollDataSp(numero int, mdp_restreint string, td *TrollData)  (ok bool,
 	log.Println("Answer:", line)
 	if strings.HasPrefix(line, fmt.Sprintf("%d;", numero)) {
 		if td != nil {
-			// SP_Profil2.php?Numero=XXX&Motdepasse=YYY : 
+			// SP_Profil2.php?Numero=XXX&Motdepasse=YYY :
 			// Ordre des champs --> ID, Position X ; Position Y ; Position N ; PV Actuels; PV Max ; PA Restant;
 			//  					DLA ; Nb Dés d'Attaque ; Nb Dés d'Esquive ; Nb Dés de Dégat ; Nb Dés de Régénération ;
 			//                       Vue ; Armure ; MM ; RM ; attaques subies ; fatigue ; camouflage ? ; invisible ? ; intangible ? ;
@@ -84,7 +84,7 @@ func FillTrollDataSp(numero int, mdp_restreint string, td *TrollData)  (ok bool,
 			td.ProchainTour = timeProchainTour.Unix()
 			fmt.Printf("td.ProchainTour (secondes): %d\n", timeProchainTour.Unix())
 			dureeTourMin, _ := strconv.ParseInt(tokens[23], 10, 64) // reçu en minutes
-			td.DureeTour = dureeTourMin*60
+			td.DureeTour = dureeTourMin * 60
 		}
 		log.Printf("filled TrollData: %+v\n", td)
 		return true, ""
@@ -92,6 +92,7 @@ func FillTrollDataSp(numero int, mdp_restreint string, td *TrollData)  (ok bool,
 		return false, "Unexpected answer, probably a wrong password"
 	}
 }
+
 /*
 récupère la vue d'un troll.
 Renvoie des SoapItem pour la compatibilité avec la fonction FetchVueSoap.

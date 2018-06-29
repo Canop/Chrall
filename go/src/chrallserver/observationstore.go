@@ -158,7 +158,7 @@ func (store *MysqlStore) majProfil(db *sql.DB, compteCible *Compte, pour int) st
 		return "Trop d'appels en 24h, appel soap refusé"
 	}
 	ok, strerr := FillTrollDataSp(compteCible.trollId, compteCible.mdpRestreint, compteCible.Troll)
-	if strerr!="" {
+	if strerr != "" {
 		return strerr
 	}
 	if !ok {

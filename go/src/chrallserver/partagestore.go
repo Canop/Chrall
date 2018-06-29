@@ -53,7 +53,7 @@ func (store *MysqlStore) PartagesToMiPartages(db *sql.DB, observer int, partages
 	return
 }
 
-func (store *MysqlStore) CompteAsMiPartage(c *Compte,  m *TksManager) *MiPartage {
+func (store *MysqlStore) CompteAsMiPartage(c *Compte, m *TksManager) *MiPartage {
 	mp := new(MiPartage)
 	mp.IdAutreTroll = c.trollId
 	mp.NomAutreTroll, mp.RaceAutreTroll, mp.NiveauAutreTroll = m.GetNomRaceNiveauTroll(int(c.trollId))

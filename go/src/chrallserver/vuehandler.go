@@ -38,12 +38,12 @@ func (h *VueHandler) getVueHtml(hr *http.Request) string {
 		fmt.Println("Compte non authentifié (getVueHtml)")
 		return "Compte non authentifié"
 	}
-	
+
 	compte, err = h.store.GetCompte(db, askerId)
 	if err != nil {
 		return fmt.Sprintf("Erreur récupération compte : %s\n", err.Error())
 	}
-	
+
 	amis, err := h.store.GetPartageurs(db, askerId)
 	if err != nil {
 		return fmt.Sprintf("Erreur récupération amis : %s\n", err.Error())
