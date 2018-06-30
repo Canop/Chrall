@@ -24,48 +24,43 @@ type GogoServer struct {
 }
 
 func (server *GogoServer) Start(tksManager *TksManager) {
-	rootHandler := new(RootHandler)
-	rootHandler.parent = &server.Hitter
-	http.Handle("/", rootHandler)
-
 	store := NewStore()
 
 	chrallHandler := new(ChrallHandler)
-	chrallHandler.parent = &rootHandler.Hitter
 	chrallHandler.store = store
-	http.Handle("/chrall/", chrallHandler)
+	http.Handle("/", chrallHandler)
 
 	wellHandler := new(WellHandler)
 	wellHandler.parent = &chrallHandler.Hitter
 	wellHandler.store = store
-	http.Handle("/chrall/puits", wellHandler)
+	http.Handle("/puits", wellHandler)
 
 	searchPanelHandler := new(SearchPanelHandler)
 	searchPanelHandler.parent = &chrallHandler.Hitter
 	searchPanelHandler.store = store
-	http.Handle("/chrall/searchpanel", searchPanelHandler)
+	http.Handle("/searchpanel", searchPanelHandler)
 
 	vueHandler := new(VueHandler)
 	vueHandler.parent = &chrallHandler.Hitter
 	vueHandler.store = store
-	http.Handle("/chrall/vue", vueHandler)
+	http.Handle("/vue", vueHandler)
 
 	bestiaryHandler := new(BestiaryHandler)
 	bestiaryHandler.parent = &chrallHandler.Hitter
 	bestiaryHandler.store = store
-	http.Handle("/chrall/bestiaire", bestiaryHandler)
+	http.Handle("/bestiaire", bestiaryHandler)
 
 	jsonPostHandler := new(JsonPostHandler)
 	jsonPostHandler.store = store
 	jsonPostHandler.tksManager = tksManager
 	jsonPostHandler.parent = &chrallHandler.Hitter
-	http.Handle("/chrall/jsonp", jsonPostHandler)
+	http.Handle("/jsonp", jsonPostHandler)
 
 	jsonGetHandler := new(JsonGetHandler)
 	jsonGetHandler.store = store
 	jsonGetHandler.tksManager = tksManager
 	jsonGetHandler.parent = &chrallHandler.Hitter
-	http.Handle("/chrall/json", jsonGetHandler)
+	http.Handle("/json", jsonGetHandler)
 
 	testHandler := new(TestHandler)
 	testHandler.parent = &chrallHandler.Hitter

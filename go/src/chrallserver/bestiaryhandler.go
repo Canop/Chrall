@@ -56,7 +56,7 @@ func (h *BestiaryHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			});
 		});
 		</script>
-		<p>Vous faites face au <span class=emphase>Bestiaire</span> de <a class=gogo href=..>gOgOchrall</a></p>
+		<p>Vous faites face au <span class=emphase>Bestiaire</span> de <a class=gogo href=.>gOgOchrall</a></p>
 	`))
 
 	var be *BestiaryExtract

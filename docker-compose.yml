@@ -1,9 +1,9 @@
-# compose file for the normal prod application:
-#     docker-compose
+# start the server:
+#     docker-compose up --build
 #
 # use mysql cli:
 #     docker-compose exec mysql mysql -uroot -p
-# (the docker/trav directory is mounted for easier sourcing and export)
+# (the /docker/trav directory is mounted for easier sourcing and export)
 #
 version: "3"
 services:

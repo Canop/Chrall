@@ -1,14 +1,14 @@
 <html>
 <head>
 	<title>Le Kill-O-Mètre de Chrall</title>
+	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="chrall.css"/>
-	<meta http-equiv=content-type content="text/html; charset=UTF8"> 
 	<meta name="description" content="Un Kill-O-Mètre à pied, ça use, ça use..."/>
 	<meta name="keywords" content="chrall, chrome, extension, mounty hall">
 	<script src="jquery.js"></script>
-	
+
 	<style type="text/css">
-		div#km_title_stripe {
+		#km_title_stripe {
 			z-index:2;
 			position: absolute;
 			top: 10px;
@@ -24,12 +24,12 @@
 			color: white;
 			font-size: 20px;
 		}
-		div#km_title_stripe a {
+		#km_title_stripe a {
 			color: white;
 			font-size: 20px;
 			text-decoration: none;
 		}
-		div#km_content_column_wrapper {
+		#km_content_column_wrapper {
 			position:absolute;
 			width:820px;
 			top:0;
@@ -48,11 +48,11 @@
 			padding-bottom: 10px;
 		}
 
-		div#kmTabHolder {
+		#kmTabHolder {
 			padding:0;
 			width: 100%;
 		}
-		div#kmTabs {
+		#kmTabs {
 			padding-top:10px;
 			padding-bottom:2px;
 			-o-background-size: 100% 100%;
@@ -72,7 +72,7 @@
 			);
 			line-height: 20px;
 		}
-		div#kmTabs span.Tab {
+		#kmTabs span.Tab {
 			font-size:14px;
 			margin-left:4px;
 			line-height: 14px;
@@ -86,30 +86,30 @@
 			background:#CCD;
 			cursor: pointer;
 		}
-		div#kmTabs span.Tab[active], div#kmTabs span.Tab:hover{
+		#kmTabs span.Tab[active], #kmTabs span.Tab:hover{
 			background-color: white;
 			padding-top:6px;
 			padding-bottom:5px;
 			border-top-left-radius:3px;
 			border-top-right-radius:3px;
 		}
-		div#kmPage {
+		#kmPage {
 			z-index:2;
 			background-color: white;
 			padding-top:10px;
 		}
-		table#kmTable {
+		#kmTable {
 			width:100%;
 			border-collapse: collapse;
 		}
-		table#kmTable th {
+		#kmTable th {
 			text-decoration: none;
 			font-weight:normal;
 			color: black;
 			font-size: 14px;
 			padding:4px;
 		}
-		table#kmTable td {
+		#kmTable td {
 			text-decoration: none;
 			font-weight:normal;
 			color: black;
@@ -118,21 +118,21 @@
 			border:none;
 			padding:3px;
 		}
-		table#kmTable td.left {
+		#kmTable td.left {
 			text-align:left;
 		}
-		table#kmTable td.right {
+		#kmTable td.right {
 			text-align:right;
 		}
-		table#kmTable tr[found]:nth-child(odd) td, table#kmTable tr[found] td, table#kmTable tr[found]:nth-child(odd) td a, table#kmTable tr[found] td a{
+		#kmTable tr[found]:nth-child(odd) td, #kmTable tr[found] td, #kmTable tr[found]:nth-child(odd) td a, #kmTable tr[found] td a{
 			background-color: darkorange;
 			color:white;
 		}
-		table#kmTable tr:nth-child(odd) td{
+		#kmTable tr:nth-child(odd) td{
 			background-color: #DCDCFF;
 		}
-		table#kmTable td.lb {
-			border-left: 1px solid #99F;	
+		#kmTable td.lb {
+			border-left: 1px solid #99F;
 		}
 		a.kmButton {
 			-o-background-size: 100% 100%;
@@ -171,7 +171,7 @@
 
 
 <div id="km_title_stripe">
-	<a href="/">canop.org</a> &gt; <a href=index.php>Chrall</a> &gt; <a href=killometre.html>Killomètre</a>
+	<a href="/">chrall</a> &gt; <a href=killometre.html>Killomètre</a>
 </div>
 
 <div id="km_content_column_wrapper">
@@ -186,7 +186,7 @@
 		<span class=Tab cat=AtkByKillsTrolls>ATK par kills de trolls</span>
 	</div>
 	<div id=kmPage>
-		
+
 		<table width=100%>
 			<tr>
 				<td align=left><input id=trollPattern> <a class=kmButton id=searchButton>Chercher</a></td>
@@ -197,7 +197,7 @@
 					<a class=kmButton id=nextPage>&gt;</a></td>
 			</tr>
 		</table>
-		
+
 		<table id=kmTable>
 			<thead>
 				<tr>
@@ -212,17 +212,17 @@
 		</table>
 	</div>
 </div>
-	
+
 </div> <!-- content_wrapper -->
 </div> <!-- content_column_wrapper -->
 
 <br><br>
 
 <script type="text/javascript">
-	
+
 	var races = ["?", "Da", "D", "K", "S", "T"];
 	var pageSize = 20;
-	
+
 	function getUrlParameter(name, defaultValue) {
 		name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 		var regexS = "[\\?&]"+name+"=([^&#]*)";
@@ -231,7 +231,7 @@
 		if( results == null ) return defaultValue;
 		else return results[1];
 	}
-	
+
 	var state = {
 		cat: getUrlParameter('cat', 'TrollsByKills'),
 		searched: getUrlParameter('search'),
@@ -244,7 +244,7 @@
 			return url;
 		},
 		apply: function() {
-			var url = 'http://canop.org/8000/chrall/json?action=get_page_killometre&cat='+this.cat+'&startIndex='+((this.indexStartPage-1)*pageSize)+'&pageSize='+pageSize;
+			var url = 'gogo/json?action=get_page_killometre&cat='+this.cat+'&startIndex='+((this.indexStartPage-1)*pageSize)+'&pageSize='+pageSize;
 			if (this.searched) {
 				url += '&searched='+encodeURIComponent(this.searched);
 				this.searched=null;
@@ -256,7 +256,7 @@
 			});
 		}
 	};
-	
+
 	window.onpopstate = function(event) {
 		if (!event.state) return;
 		state.cat = event.state['cat'];
@@ -267,7 +267,7 @@
 		$('#kmTabs span.Tab[cat="'+state.cat+'"]').attr('active', true);
 		state.apply();
 	};
-	
+
 	function search() {
 		updatePage($('#trollPattern').val());
 	}
@@ -281,7 +281,7 @@
 		}
 		state.apply();
 	}
-	
+
 	function chrall_receiveKillometreExtract(list) { // méthode appelée (jsonp) par le serveur
 		var html = '';
 		state.indexStartPage = 1+list.StartIndex/pageSize;
@@ -290,7 +290,7 @@
 			var t = list.Trolls[i];
 			if (list.SearchedTrollIndex==i) html += '<tr found>';
 			else html += '<tr>';
-			html += '<td class=right><a target=newTab href="http://games.mountyhall.com/mountyhall/View/PJView.php?ai_IDPJ='+t.Num+'">'+t.Nom+'</a></td>';
+			html += '<td class=right><a target=newTab href="https://games.mountyhall.com/mountyhall/View/PJView.php?ai_IDPJ='+t.Num+'">'+t.Nom+'</a></td>';
 			html += '<td>'+races[t.Race]+'</td>';
 			html += '<td>'+t.Niveau+'</td>';
 			html += '<td class=lb>'+(t.NbKillsMonstres+t.NbKillsTrolls)+'</td><td># '+t.ClassementKills+'</td>';
@@ -301,7 +301,7 @@
 		}
 		$('#kmTable tbody').html(html);
 	}
-	
+
 	$(document).ready(function() {
 		if (state.searched) $('#trollPattern').val(state.searched);
 		$('#kmTabs span.Tab[cat="'+state.cat+'"]').attr('active', true);
@@ -331,20 +331,10 @@
 		});
 		$('#searchButton').click(search);
 		$('#trollPattern').change(search);
-		
+
 		state.apply();
 	});
 
-	//> google analytics
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-15064357-4']);
-	_gaq.push(['_trackPageview']);
-
-	(function() {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
 </script>
 
 </body>
