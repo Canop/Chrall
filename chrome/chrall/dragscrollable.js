@@ -17,30 +17,6 @@
 var chrall = chrall || {};
 chrall.scrollInProgress = false; // addition Canop
 
-/**
- * Adds the ability to manage elements scroll by dragging
- * one or more of its descendant elements. Options parameter
- * allow to specifically select which inner elements will
- * respond to the drag events.
- *
- * options properties:
- * ------------------------------------------------------------------------
- *  dragSelector         | jquery selector to apply to each wrapped element
- *                       | to find which will be the dragging elements.
- *                       | Defaults to '>:first' which is the first child of
- *                       | scrollable element
- * ------------------------------------------------------------------------
- *  preventDefault       | Prevents the event to propagate further effectivey
- *                       | dissabling other default actions. Defaults to true
- * ------------------------------------------------------------------------
- *
- *  usage examples:
- *
- *  To add the scroll by drag to the element id=viewport when dragging its
- *  first child accepting any propagated events
- *	$('#viewport').dragscrollable();
- */
-
 $.fn.dragscrollable = function( options ){
 
 	var settings = $.extend({
@@ -50,8 +26,8 @@ $.fn.dragscrollable = function( options ){
 
 	var dragscroll= {
 		mouseDownHandler : function(event){
-			chrall.scrollInProgress = true; // addition Canop
-			chrall.hideOm(); // addition Canop
+			chrall.scrollInProgress = true;
+			chrall.hideOm();
 
 			// Initial coordinates will be the last when dragging
 			event.data.lastCoord = {left: event.clientX, top: event.clientY};
@@ -82,7 +58,7 @@ $.fn.dragscrollable = function( options ){
 			}
 		},
 		mouseUpHandler : function(event){ // Stop scrolling
-			chrall.scrollInProgress = false; // addition Canop
+			chrall.scrollInProgress = false;
 			$.event.remove( document, "mousemove", dragscroll.mouseMoveHandler);
 			$.event.remove( document, "mouseup", dragscroll.mouseUpHandler);
 			if (event.data.preventDefault) {

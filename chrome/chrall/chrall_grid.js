@@ -173,41 +173,41 @@ chrall.gridLive = function(){
 	};
 
 	// outillage des liens d'ouvertures de vue "zoom"
-	$(document).on('click', 'a[name="zoom"]', function(){
-		var player = chrall.player();
-		if (chrall.compteChrallActif()) {
-			var $link = $(this);
-			var x = $link.attr('x');
-			var y = $link.attr('y');
-			var z = $link.attr('z');
-			var url = chrall.serveurPrive() + "vue?asker=" + player.id + "&mdpr=" + chrall.mdpCompteChrall() + "&x=" + x + "&y=" + y + "&z=" + z + "&tresors=1";
-			var $zoom = $('#zoom');
-			$zoom.show();
-			$('#zoom_content').load(url, function(){
-				setTimeout(function(){
-					// centrage de la vue
-					chrall.hideOm();
-					chrall.scrollInProgress = true;
-					var $targetCell = $('#zoom_content').find('td[grid_x="' + x + '"][grid_y="' + y + '"]');
-					var $grid_holder = $('#zoom');
-					$grid_holder.animate(
-						{
-							scrollLeft: ($grid_holder.scrollLeft() + $targetCell.offset().left + ($targetCell.innerWidth() - window.innerWidth) / 2),
-							scrollTop: ($grid_holder.scrollTop() + $targetCell.offset().top + ($targetCell.innerHeight() - window.innerHeight) / 2)
-						},
-						'slow',
-						function(){
-							chrall.scrollInProgress = false;
-						}
-					);
-				}, 200);
-			});
-			$('#3D').attr("checked", "checked"); // à chaque ouverture on est en 3D initialement
-			$zoom.dragscrollable({dragSelector: '#zoom_content'});
-		} else {
-			alert("Un compte Chrall actif est nécessaire pour utiliser cette fonction.");
-		}
-	});
+	//$(document).on('click', 'a[name="zoom"]', function(){
+	//	var player = chrall.player();
+	//	if (chrall.compteChrallActif()) {
+	//		var $link = $(this);
+	//		var x = $link.attr('x');
+	//		var y = $link.attr('y');
+	//		var z = $link.attr('z');
+	//		var url = chrall.serveurPrive() + "vue?asker=" + player.id + "&mdpr=" + chrall.mdpCompteChrall() + "&x=" + x + "&y=" + y + "&z=" + z + "&tresors=1";
+	//		var $zoom = $('#zoom');
+	//		$zoom.show();
+	//		$('#zoom_content').load(url, function(){
+	//			setTimeout(function(){
+	//				// centrage de la vue
+	//				chrall.hideOm();
+	//				chrall.scrollInProgress = true;
+	//				var $targetCell = $('#zoom_content').find('td[grid_x="' + x + '"][grid_y="' + y + '"]');
+	//				var $grid_holder = $('#zoom');
+	//				$grid_holder.animate(
+	//					{
+	//						scrollLeft: ($grid_holder.scrollLeft() + $targetCell.offset().left + ($targetCell.innerWidth() - window.innerWidth) / 2),
+	//						scrollTop: ($grid_holder.scrollTop() + $targetCell.offset().top + ($targetCell.innerHeight() - window.innerHeight) / 2)
+	//					},
+	//					'slow',
+	//					function(){
+	//						chrall.scrollInProgress = false;
+	//					}
+	//				);
+	//			}, 200);
+	//		});
+	//		$('#3D').attr("checked", "checked"); // à chaque ouverture on est en 3D initialement
+	//		$zoom.dragscrollable({dragSelector: '#zoom_content'});
+	//	} else {
+	//		alert("Un compte Chrall actif est nécessaire pour utiliser cette fonction.");
+	//	}
+	//});
 	// lien de fermeture de la "fenêtre" de zoom
 	$(document).on('click', '#btn_close_zoom', function(){
 		$('#zoom').hide();

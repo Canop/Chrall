@@ -556,7 +556,7 @@ img.illus {
 }
 
 #menuOutilsChrall {
-	background-image: url(https://canop.org/chrall/fondDante3.jpg);
+	background-image: url(https://chrall.dystroy.org/fondDante3.jpg);
 	position: fixed;
 	right: 0;
 	bottom: 0;
@@ -577,11 +577,6 @@ img.illus {
 	max-height: 12px;
 	max-width: 12px;
 	margin-right: 1px;
-}
-
-#boutonsMajPartages {
-	margin-top: 7px;
-	font-size: 12px;
 }
 
 .small-note {

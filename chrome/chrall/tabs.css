@@ -5,7 +5,7 @@ ul.tabs {
 	height: 27px; /*--Set height of tabs--*/
 	border-bottom: 1px solid #999;
 	border-left: 1px solid #999;
-	background-image:url("http://games.mountyhall.com/MH_Packs/packMH_parchemin/fond/fond2.jpg");
+	background-image:url("https://games.mountyhall.com/MH_Packs/packMH_parchemin/fond/fond2.jpg");
 }
 ul.tabs[view] {
 	position : fixed;

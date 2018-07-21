@@ -313,7 +313,7 @@
 			var wall = cell.walls[i];
 			if (wall.name == "Mur") {
 				//On met une image de mur en background et on n'affiche rien dans la case, chrall suffit pour obtenir les coordonnées.
-				$cell.append($("<div/>", {style: "background-image:url(http://games.mountyhall.com/mountyhall/View/IMG_LABY/mur.gif);background-repeat:repeat;min-height:160;min-width:160"}));
+				$cell.append($("<div/>", {style: "background-image:url(https://games.mountyhall.com/mountyhall/View/IMG_LABY/mur.gif);background-repeat:repeat;min-height:160;min-width:160"}));
 			} else {
 				// Compte le nombre d'éléments dans la case. L'utilité sera d'estimer plus ou moins la hauteur de la case en fonction de ce qu'elle contient.
 				// On aurait pu le faire avec un compteur tout au long du parcours global des éléments, mais comme l'utilité sera très spécifique au labyrinthe, autant le faire ici.
@@ -606,10 +606,11 @@
 		chrall.addTab($tabs, "#tabSettings", "Réglages");
 
 
-		if (!chrall.hallIsAccro()) {
-			chrall.addTab($tabs, "#tabPartages", "Partages");
-			chrall.addTab($tabs, "#tabRecherche", "Recherche");
-		}
+		// temporary removal, will be totally gone if nobody complains
+		//if (!chrall.hallIsAccro()) {
+		//	chrall.addTab($tabs, "#tabPartages", "Partages");
+		//	chrall.addTab($tabs, "#tabRecherche", "Recherche");
+		//}
 		var $tabContainer = $("<div/>", { 'class': "tab_container", view: "yes"});
 		$("table.mh_tdborder").first().parent().parent().prepend($tabs);
 		$tabContainer.insertAfter($tabs);
@@ -632,8 +633,8 @@
 		$tabContainer.append(chrall.makeTabDiv("tabCenotaphs"));
 		$tabContainer.append(chrall.makeTabDiv("tabSettings"));
 		if (!chrall.hallIsAccro()) {
-			$tabContainer.append(chrall.makeTabDiv("tabPartages"));
-			$tabContainer.append(chrall.makeTabDiv("tabRecherche"));
+			//$tabContainer.append(chrall.makeTabDiv("tabPartages"));
+			//$tabContainer.append(chrall.makeTabDiv("tabRecherche"));
 			if (chrall.isInLaby) {
 				$tabContainer.append(chrall.makeTabDiv("tabWalls"));
 			}

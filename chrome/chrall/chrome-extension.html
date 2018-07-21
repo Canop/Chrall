@@ -7,7 +7,7 @@
 <body>
 <!--
 This extension is mainly made by cano.petrole@gmail.org
-More info : http://canop.org/chrall
+More info : https://chrall.dystroy.org
 -->
 
 <script type="text/javascript">
@@ -34,7 +34,7 @@ More info : http://canop.org/chrall
 		// les alarmes à chaque chargement de page (ce qui n'a sans doute pas d'autre effet que d'ajouter un ou deux setTimeout sans conséquence
 		// à chaque affichage du profil).
 		var timeNow = (new Date()).getTime();
-		for (var key in alarms) {			
+		for (var key in alarms) {
 			var alarm = alarms[key];
 			if (alarm.time>timeNow) {
 				setTimeout(checkAlarms, alarm.time-timeNow+2);
@@ -60,7 +60,7 @@ More info : http://canop.org/chrall
 		}
 	}
 
-	
+
 </script>
 
 <audio id=alarm>

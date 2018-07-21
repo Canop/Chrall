@@ -48,12 +48,12 @@
 	chrall.reformatOptionsView = function(){
 
 		var addedPages = {
-			"Compte Chrall":"\
-					<h3 class='option-section'>Qu'est-ce que Chrall?</h3>\
+			"Options Chrall": "\
+			<h3 class='option-section'>Qu'est-ce que Chrall?</h3>\
 			<div class='option-section'>\
 				<p class='informational-text'>Chrall est une extension pour Chrome visant à enrichir l'interface du jeu.</p>\
 				<p class='informational-text'>Si vous souhaitez retrouver l'interface standard de Mounty Hall, vous pouvez la désactiver via le menu <i>Outils/Extensions</i> de Chrome.</p>\
-				<p class='informational-text'>Pour plus d'informations sur le projet Chrall : <a target=newWin href=https://canop.org/chrall>canop.org/chrall</a>.</p>\
+				<p class='informational-text'>Pour plus d'informations sur le projet Chrall : <a target=newWin href=https://chrall.dystroy.org>chrall.dystroy.org</a>.</p>\
 			</div>\
 			<p/>\
 			<h3 class='option-section'>Que fait Chrall exactement?</h3>\
@@ -63,20 +63,6 @@
 				<p class='informational-text'>Chrall transmet les CDM que vous effectuez à ce bestiaire, afin de l'enrichir (si vous l'acceptez).</p>\
 			</div>\
 			<p/>\
-			<h3 class='option-section'>Compte Chrall</h3>\
-			<div class='option-section'>\
-				<p>Etat du compte Chrall : <b><span id=com_status_message></span></b></p>\
-				<p class='informational-text'>Un compte Chrall vous permet de partager des informations avec d'autres joueurs. Il n'est nullement nécessaire d'avoir un compte sur Chrall pour exploiter l'extension. Ce compte n'a d'intérêt que si vous chassez avec d'autres.</p>\
-				<p>Afin d'authentifier les requêtes provenant au serveur Chrall, un code d'accès est nécessaire (voir &quot;Options Troll&quot;) :</p>\
-				<p><input type=password id=ch_mdp_restreint value=''></p>\
-				<a class=gogo id=changeMdp>Modifier le mot de passe</a> &nbsp; <a id=activationButton class=gogo />\
-				<p class='informational-text'>Notez que vous ne transmettez pas d'informations confidentielles tant que vous n'activez pas le compte.</p>\
-				<p class='informational-text'>Si votre compte est actif, l'extension communique par défaut les données partagées avec le serveur canop.org mais vous pouvez spécifier un autre serveur si vous lui accordez confiance : </p>\
-				<p>Serveur Chrall alternatif pour les données partagées : <input size=30 id=input_private_chrall_server></p>\
-			<a href='#' class=gogo id=save_private_chrall_server>sauver</a> (laisser vide pour exploiter le serveur par défaut, n'utilisez un serveur alternatif que si vous lui faites pleine confiance)</p>\
-			</div>",
-
-			"Options Chrall": "\
 			<h3 class='option-section'>Vue</h3>\
 			<div class='option-section'>\
 				<p class='informational-text'>Modifiez ici le comportement de l'extension en ce qui concerne l'affichage de la vue (grille 2D et tables). Chaque option est susceptible de ralentir la vitesse d'affichage de la grille. Choisissez les plus pertinentes.</p>\
@@ -127,62 +113,6 @@
 		});
 
 	};
-
-	// Private -- not linked to the chrall instance
-	/*
-	function changeMdpRestreint() {
-		var nm = document.getElementById('ch_mdp_restreint').value;
-		var mdpkey = passwordKey();
-		localStorage[mdpkey] = nm;
-		chrall.notifyUser({text: "Mot de passe modifié"});
-		location.reload();
-	}
-	*/
-
-	// Private -- not linked to the chrall instance
-	/*
-	function isPasswordValid() {
-		var mdpkey = passwordKey();
-		var mdp = localStorage[mdpkey];
-		return !!mdp;
-	}
-
-	function passwordKey() {
-		var mdpkey = 'troll.' + chrall.playerId() + '.mdp';
-		return mdpkey;
-	}
-
-	// Private -- not linked to the chrall instance
-	function refreshActivation() {
-		if (isPasswordValid()) {
-			$('#activationButton').removeClass("invisible");
-		} else {
-			$('#activationButton').addClass("invisible");
-		}
-		if (chrall.compteChrallActif()) {
-			$('#activationButton').text("Désactiver le compte");
-		} else {
-			$('#activationButton').text("Activer le compte");
-		}
-	}
-
-	// Private -- not linked to the chrall instance
-	function toggleActivation() {
-		var compteActif = chrall.compteChrallActif();
-		if (compteActif) {
-			chrall.notifyUser({ text: "Connexion au Compte désactivée"});
-			localStorage["troll." + chrall.playerId() + ".compteActif"] = "no";
-			localStorage['com.status.message'] = 'Compte inexistant ou non connecté';
-			chrall.displayComStatusMessage();
-		} else {
-			chrall.notifyUser({ text: "Connexion au Compte activée"});
-			localStorage["troll." + chrall.playerId() + ".compteActif"] = "yes";
-			chrall.initCommunications('check_account');
-		}
-		//~ refreshActivation();
-		location.reload();
-	}
-	*/
 
 	function toggleOption(){
 		var id = $(this).attr('id');

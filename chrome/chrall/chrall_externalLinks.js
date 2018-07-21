@@ -22,20 +22,20 @@
 				),
 				new ExternalLink("Bestiaire",
 					true,
-					"https://canop.org/8000/chrall/bestiaire",
+					"https://chrall.dystroy.org/gogo/bestiaire",
 					"Ce bestiaire permet de rechercher les monstres apparentés à votre cible,"
 					+ " au cas où la bulle ne vous renseignerait pas."
 				),
-				new ExternalLink("Kill-O-Mètre",
-					false,
-					"https://canop.org/chrall/killometre.html",
-					"Le Kill-O-Mètre classe les trolls en fonctions de leur kills,"
-					+ " qualitativement et quantitativement. Il vous permet de connaitre les orientations"
-					+ " d'un troll qui n'est pas dans votre vue."
-				),
+				//new ExternalLink("Kill-O-Mètre",
+				//	false,
+				//	"https://canop.org/chrall/killometre.html",
+				//	"Le Kill-O-Mètre classe les trolls en fonctions de leur kills,"
+				//	+ " qualitativement et quantitativement. Il vous permet de connaitre les orientations"
+				//	+ " d'un troll qui n'est pas dans votre vue."
+				//),
 				new ExternalLink("Chrall",
 					false,
-					"https://canop.org/chrall/",
+					"https://chrall.dystroy.org/gogo/",
 					"La page d'accueil de Chrall, avec ses divers liens,"
 					+ " en particulier pour le développement ou pour enrichir le bestiaire."
 				)
