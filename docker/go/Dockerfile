@@ -11,7 +11,7 @@ FROM alpine:3.7
 COPY --from=builder /go/bin/chrallserver /chrallserver
 
 ENV	GOGO_PORT="9090"
-ENV	GOGO_DB_CONNECTION="temp_user:temp_password@tcp(mysql:3306)/chrall"
+ENV	GOGO_DB_CONNECTION="temp_user:temp_password@tcp(mysql:3306)/chrall?collation=utf8mb4_unicode_ci&charset=utf8mb4,utf8"
 
 EXPOSE 9090
 

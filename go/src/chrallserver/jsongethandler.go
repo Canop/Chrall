@@ -225,7 +225,7 @@ func (h *JsonGetHandler) serveAcceptCdmJsonp(w http.ResponseWriter, hr *http.Req
 }
 
 func (h *JsonGetHandler) serveAutocompleteMonsterNames(w http.ResponseWriter, hr *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json;charset=utf-8")
 	monsterPartialName := GetFormValue(hr, "term")
 	if monsterPartialName == "" {
 		log.Println(" no monster partial name in request")

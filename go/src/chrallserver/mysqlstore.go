@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"os"
+	"strings"
 )
 
 type MysqlStore struct {
@@ -20,3 +21,4 @@ func (store *MysqlStore) DB() (*sql.DB, error) {
 	//return sql.Open("mysql", store.user+":"+store.password+"@tcp(mysql:3306)/"+store.database)
 	return sql.Open("mysql", con)
 }
+
