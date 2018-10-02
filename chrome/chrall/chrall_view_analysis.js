@@ -161,10 +161,10 @@
 		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			var item = new chrall.Thing();
 			var cells = lines[lineIndex].children;
-			var i = 1;
-			if (cells.length>=6) {
-				item.actions = cells[i++].innerHTML;
+			if (cells.length>=7) {
+				item.actions = cells[1].innerHTML;
 			}
+			var i = 3;
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
 			item.x = parseInt(cells[i++].textContent);
