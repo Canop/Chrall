@@ -126,8 +126,7 @@
 				var checkbox = $('<input/>', { name : link.name, class: "externalLinkActivator", type: "checkbox", checked: link.display});
 				checkbox.change(function(){
 					var name = $(this).attr('name');
-					var checked = $(this).attr('checked');
-					localStorage['dysplayLink_' + name] = checked ? 'yes' : 'no';
+					localStorage['dysplayLink_' + name] = this.checked ? 'yes' : 'no';
 					var actionFrame = $('frame[name="Action"]', window.frames.frameElement.parentElement)[0];
 					var outilsDiv = $('#menuOutilsChrall', actionFrame.contentDocument);
 					outilsDiv.replaceWith(chrall.makeLinksDiv());

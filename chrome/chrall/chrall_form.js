@@ -23,15 +23,15 @@
 			pageMemo[this.name] = $(this).val();
 		});
 		$("input[type=checkbox]").each(function(){
-			pageMemo[this.name] = $(this).is(":checked");
+			pageMemo[this.name] = this.checked;
 		});
 		$("input[type=radio]").each(function(){
-			if ($(this).is(":checked")) {
+			if (this.checked) {
 				pageMemo[this.name] = $(this).val();
 			}
 		});
 		$("textarea").each(function(){
-			pageMemo[this.name] = $(this).val();
+			pageMemo[this.name] = this.value;
 		});
 
 		chrall.setTrollStorage({ ".form-memoized": JSON.stringify(memo)});

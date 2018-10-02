@@ -704,9 +704,8 @@
 				for (var i = 0; i < os.length; i++) {
 					os[i].style.display = display;
 				}
-				var $viewFilter = $('#' + key);
-				if (display != 'none') $viewFilter.attr("checked", "checked");
-				else $viewFilter.removeAttr("checked");
+				var viewFilter = document.getElementById(key);
+				viewFilter.checked = display != "none";
 			}
 		}
 
