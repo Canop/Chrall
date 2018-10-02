@@ -45,7 +45,7 @@
 		if (match) {
 			minLevel = chrall.atoi(match[1]);
 		}
-		var levelRangeExtract = /niveau.* (\d) \+ ou \-/i;
+		var levelRangeExtract = /niveau.* (\d+) \+ ou \-/i;
 		match = levelRangeExtract.exec(text);
 		if (match) {
 			var center = chrall.atoi(match[1]);
