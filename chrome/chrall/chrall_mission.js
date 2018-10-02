@@ -1,9 +1,9 @@
 "use strict";
-(function(chrall){
+(function(chrall) {
 
-	chrall.addTroogleLinks = function(){
+	chrall.addTroogleLinks = function() {
 		var $mission_lines = $("[name='ActionForm'] tr");
-		$mission_lines.each(function(){
+		$mission_lines.each(function() {
 			var stepText = this.childNodes[1].textContent;
 			if (0 < stepText.indexOf("monstre")) {
 				addTroogleForMonster(this, stepText);
@@ -17,7 +17,7 @@
 	};
 
 	// Add a link to Troogle for the chosen text, including the current troll's current position
-	function addTroogleLink(row, mainSearch){
+	function addTroogleLink(row, mainSearch) {
 		var url = "http://troogle.iktomi.eu/entities/?entity_search[search]=" + mainSearch + playerPositionParameters();
 		var $link = $("<a/>", {'class': 'gogo', href: url, target: 'troogle', html: "Troogle"});
 		var actionNode = row.childNodes[2];
@@ -25,13 +25,13 @@
 	}
 
 	// Search parameters for the current troll's position
-	function playerPositionParameters(){
+	function playerPositionParameters() {
 		return "&entity_search[position_x]=" + chrall.player().x
 				+ "&entity_search[position_y]=" + chrall.player().y
 				+ "&entity_search[position_z]=" + chrall.player().z;
 	}
 
-	function addTroogleForMonster(row, text){
+	function addTroogleForMonster(row, text) {
 		var mainSearch = "@monstre ";
 		var raceExtract = /de la race des "(.*?)"/i;
 		var match = raceExtract.exec(text);
@@ -53,11 +53,33 @@
 			maxLevel = center + 1;
 		}
 
+		mainSearch = removeAccent(mainSearch);
 		mainSearch += " level:" + minLevel + ".." + maxLevel;
 		addTroogleLink(row, mainSearch);
 	}
 
-	function addTroogleForMushroom(row, text){
+	function removeAccent(text) {
+		var accent = [
+			/[\300-\306]/g, /[\340-\346]/g, // A, a
+			/[\310-\313]/g, /[\350-\353]/g, // E, e
+			/[\314-\317]/g, /[\354-\357]/g, // I, i
+			/[\322-\330]/g, /[\362-\370]/g, // O, o
+			/[\331-\334]/g, /[\371-\374]/g, // U, u
+			/[\321]/g, /[\361]/g, // N, n
+			/[\307]/g, /[\347]/g, // C, c
+		];
+		var noaccent = ['A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u', 'N', 'n', 'C', 'c'];
+
+		var str = text;
+		for (var i = 0; i < accent.length; i++) {
+			str = str.replace(accent[i], noaccent[i]);
+		}
+
+		return str;
+	}
+
+
+	function addTroogleForMushroom(row, text) {
 		var mainSearch = "@tresor:champignon";
 		addTroogleLink(row, mainSearch);
 	}
