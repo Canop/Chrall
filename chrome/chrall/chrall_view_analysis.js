@@ -158,6 +158,7 @@
 		if (table===undefined) return;
 		var lines = table.querySelectorAll("tbody tr");
 		grid.nbMushroomsInView = lines.length;
+		// NOTE : ceci crashe si le "menu d'actions contextuelles" n'est pas pas coché dans les options de vue de MH
 		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			var item = new chrall.Thing();
 			var cells = lines[lineIndex].children;

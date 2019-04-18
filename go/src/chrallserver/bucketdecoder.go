@@ -57,7 +57,8 @@ func (bd *BucketDecoder) Decode(input string, store *MysqlStore) {
 				currentCdm = cdm
 				bd.addCdm(currentCdm)
 				numLineAtCdmStart = numLine
-			} else if currentCdm != nil && numLine-numLineAtCdmStart < 40 { // 40 : nombre de lignes maximal d'une cdm (à déterminer)
+			} else if currentCdm != nil && numLine-numLineAtCdmStart < 40 {
+				// 40 : nombre de lignes maximal d'une cdm (à déterminer)
 				name, char = AnalyseLineAsCdmChar(line)
 				if name != "" {
 					currentCdm.SetChar(name, char)

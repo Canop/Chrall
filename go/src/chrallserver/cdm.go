@@ -119,8 +119,6 @@ func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 	char = new(CdmChar)
 	name = strings.Trim(fields[0], " ")
 	char.Text = strings.Trim(strings.Join(fields[1:len(fields)], ":"), " ")
-	fmt.Println("name:" + name)
-	fmt.Println(" char.Text:" + char.Text)
 	if indexPc := strings.Index(char.Text, "%"); indexPc >= 0 {
 		// c'est le cas uniquement de la blessure
 		fields = strings.Fields(char.Text[0 : indexPc-1])
@@ -132,7 +130,6 @@ func AnalyseLineAsCdmChar(line string) (name string, char *CdmChar) {
 		if valuesText[len(valuesText)-1] == ')' {
 			valuesText = valuesText[0 : len(valuesText)-1]
 		}
-		fmt.Println(" valuesText=\"" + valuesText + "\"")
 		fields = strings.Fields(valuesText)
 		if len(fields) == 4 && fields[0] == "entre" && fields[2] == "et" {
 			char.Min, _ = strconv.Atoi(fields[1])
@@ -299,7 +296,7 @@ func NewCdm(lines []string) *CDM {
 	var nomComplet string
 	var male boolean
 	var famille string
-	if strings.Contains(lines[0], "CONNAISSANCE DES MONSTRES") {
+	if strings.Contains(strings.ToUpper(lines[0]), "CONNAISSANCE DES MONSTRES") {
 		fields = strings.Fields(line)
 		fieldUn := -1
 		for i, f := range fields {
@@ -310,6 +307,10 @@ func NewCdm(lines []string) *CDM {
 			} else if f == "une" {
 				fieldUn = i
 				male = b_false
+				break
+			} else if f == ":" {
+				fieldUn = i
+				male = b_false // well...
 				break
 			}
 		}

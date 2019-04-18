@@ -32,7 +32,7 @@ func (h *WellHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 				}
 				var bucketText = $("#bucket").val().replace(/\?/g, "-"); // si je ne fais pas cette élimination des "?", jquery fait des trucs bizarres à l'envoi
 				$.post(
-					"/chrall/jsonp",
+					"jsonp",
 					JSON.stringify(
 						{
 							action: "pour",
