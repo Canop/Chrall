@@ -20,7 +20,19 @@
 		$($monsterTitle[0].children[1]).after($nivalTitle);
 
 		$monsterRows.each(function(index, row){
-			var tokens = row.children[3].textContent.split(/\[|\]/);
+			let monsterCompleteName = row.children[3];
+			let tokens = monsterCompleteName.textContent.split(/\[|\]/);
+			if (tokens.length<2) {
+				// maybe there's one cell less in this row ?
+				// Ceci arrive si l'utilisateur décoche "menu d'actions contextuelles"
+				// dans les options de vue
+				monsterCompleteName = row.children[2];
+				tokens = monsterCompleteName.textContent.split(/\[|\]/);
+				if (tokens.length<2) {
+					console.warn("Monster name parsing failed", row);
+					return;
+				}
+			}
 			var monsterName = tokens[0].trim();
 			var monsterAge = tokens[1].trim();
 			var addedText = computeLevel(monsterName, monsterAge);
