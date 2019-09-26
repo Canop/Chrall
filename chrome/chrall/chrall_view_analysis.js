@@ -65,8 +65,11 @@
 
 	// Icone du projo
 	chrall.projoIcon = function(cells, nameCell, item){
-		if ($("span.cm-attDist,span.cm-attCac", cells[1]).length > 0) {
-			var dist = parseInt(cells[0].innerHTML);
+		if (chrall.player().race !== "Tomawak"){
+			return;
+		}
+		var dist = parseInt(cells[0].innerHTML);
+		if (dist <= chrall.player().talents["Projectile Magique"].range && item.z === chrall.player().z) {
 			var projoImg = " <img class='projo' data-dist='" + dist + "' src='" + chrome.extension.getURL("/images/projo.png") + "' />";
 			nameCell.innerHTML += projoImg;
 			item.icons += projoImg;
@@ -110,7 +113,6 @@
 				nameCell.innerHTML += vlcImg;
 				item.icons += vlcImg;
 			}
-			chrall.projoIcon(cells, nameCell, item);
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
@@ -119,6 +121,7 @@
 			if (cell) cell.addMonster(item);
 			else grid.outOfGrid.push(item);
 			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
+			chrall.projoIcon(cells, nameCell, item);
 		}
 	};
 
@@ -149,7 +152,6 @@
 			chrall.cdb.getTroll(item.id, function(t){
 				if (t && t.team) $a.attr('team', item.team = t.team);
 			});
-			chrall.projoIcon(cells, nameCell, item);
 			// les trolls intangibles sont marqués par le style 'mh_trolls_0' au lieu de 'mh_trolls_1'
 			item.isIntangible = $(nameCell).html().indexOf("mh_trolls_0")>=0;
 			chrall.triggerBubble($(cells[i]), chrall.getPxOnKill(cells[i].textContent), "bub_troll");
@@ -160,6 +162,7 @@
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
 			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
+			chrall.projoIcon(cells, nameCell, item);
 			var selectBox = $('<td>', { align: 'center'})
 			.append($('<input/>', {type: 'checkbox', name: 'cb_troll', value: item.id}));
 			$(line).prepend(selectBox);
