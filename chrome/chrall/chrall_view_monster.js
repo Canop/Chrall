@@ -256,6 +256,7 @@
 		["Anoploure Purpurin", 36, INSECTE],
 		["Araignée Géante", 2, INSECTE],
 		["Araignée", 1, INSECTE],
+		["Aragnarok du Chaos", 16, INSECTE],
 		["Ashashin", 35, HUMANOIDE],
 		["Balrog", 50, DEMON],
 		["Banshee", 16, MORT_VIVANT],
