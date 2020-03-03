@@ -315,7 +315,7 @@
 			let physicalBonus = parseInt($(c.id + "_p").text());
 			let magicalBonus = parseInt($idM.text());
 			chrall.player()[c.name] = new Characteristic(diceNumber, c.dice, physicalBonus, magicalBonus, turnBonus);
-			$idM.next().append(chrall.player()[c.name].getMean());
+			$idM.next().append(" (" + chrall.player()[c.name].getMean() + ")");
 		}
 	};
 
