@@ -132,7 +132,11 @@
 		table = table.get(0);
 		if (!table) return;
 		var	$headRow = $(table).find("thead tr").eq(0);
-		$headRow.prepend("<td>");
+		var $checkAll = $("<td align='center'><input type='checkbox'/></td>");
+		$checkAll.children().click(function () {
+			$("input[name='cb_troll']").click();
+		});
+		$headRow.prepend($checkAll);
 		var	nbCols = $headRow.find("td,th").length;
 
 		var lines = table.querySelectorAll("tbody tr");
