@@ -63,6 +63,32 @@
 		}
 	};
 
+	// Icone du projo
+	chrall.projoIcon = function(cells, nameCell, item){
+		if (chrall.player().race !== "Tomawak"){
+			return;
+		}
+		var dist = parseInt(cells[0].innerHTML);
+		if (dist <= chrall.player().talents["Projectile Magique"].range && item.z === chrall.player().z) {
+			var projoImg = " <img class='projo' data-dist='" + dist + "' src='" + chrome.extension.getURL("/images/projo.png") + "' />";
+			nameCell.innerHTML += projoImg;
+			item.icons += projoImg;
+		}
+	};
+
+	// Popup contenant les infos pour l'icone de projo
+	chrall.bubbleProjoIcon = function(dist){
+		var html = "<table>";
+		html += "<tr><td>Portée du projo</td><td> : " + dist + "</td></tr>";
+		var projectileDiceNumber = Math.floor(chrall.player().sight.diceNumber * chrall.player().magicalAttackMultiplier);
+		var att = 3.5 * projectileDiceNumber + chrall.player().attac.magicalBonus;
+		html += "<tr><td>Attaque moyenne</td><td> : " + att + " (" + projectileDiceNumber + " D6 " + chrall.itoa(chrall.player().attac.magicalBonus) + ")</td></tr>";
+		var damages = chrall.projoDamage(chrall.player().talents["Projectile Magique"].range - dist);
+		html += "<tr><td>Dégâts moyens</td><td> : " + damages.damage + " / " + damages.damageCrit + "</td></tr>";
+		html += "</table>";
+		return html;
+	};
+
 	// ------------------ Analyse des composants de la vue --------------------
 
 	chrall.analyseMonsterTable = function(table){
@@ -81,7 +107,12 @@
 			item.id = parseInt(cells[i++].textContent);
 			var nameCell = cells[i++];
 			item.setName(nameCell.textContent);
-			$(nameCell.children[0]).attr("id", item.id + "_monster"); // !! Analyze AND modify : inject monster id
+			nameCell.children[0].id = item.id + "_monster"; // !! Analyze AND modify : inject monster id
+			if (chrall.isSeeingHidden(nameCell.innerText)) {
+				var vlcImg = " <img class='vlc' src='" + chrome.extension.getURL("/images/vlc.png") + "' />";
+				nameCell.innerHTML += vlcImg;
+				item.icons += vlcImg;
+			}
 			item.x = parseInt(cells[i++].textContent);
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
@@ -90,6 +121,7 @@
 			if (cell) cell.addMonster(item);
 			else grid.outOfGrid.push(item);
 			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
+			chrall.projoIcon(cells, nameCell, item);
 		}
 	};
 
@@ -100,7 +132,11 @@
 		table = table.get(0);
 		if (!table) return;
 		var	$headRow = $(table).find("thead tr").eq(0);
-		$headRow.prepend("<td>");
+		var $checkAll = $("<td align='center'><input type='checkbox'/></td>");
+		$checkAll.children().click(function () {
+			$("input[name='cb_troll']").click();
+		});
+		$headRow.prepend($checkAll);
 		var	nbCols = $headRow.find("td,th").length;
 
 		var lines = table.querySelectorAll("tbody tr");
@@ -130,6 +166,7 @@
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
 			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
+			chrall.projoIcon(cells, nameCell, item);
 			var selectBox = $('<td>', { align: 'center'})
 			.append($('<input/>', {type: 'checkbox', name: 'cb_troll', value: item.id}));
 			$(line).prepend(selectBox);

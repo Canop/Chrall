@@ -50,15 +50,15 @@ chrall.getTotalPiForLevel = function(level){
 
 chrall.itoa = function(o){
 	if (o) {
-		if (o > 0) return "+" + o;
-		else return "" + o;
+		return (o > 0) ? "+" + o : o;
 	} else {
-		return "-";
+		return "0";
 	}
 }
 
 chrall.decumul = function(i, val){
-	return Math.floor(val - val * ([0, .33, .6, .75, .85, .9][Math.min(i, 4)]));
+	val = val * (1 - ([0, .33, .6, .75, .85, .9][Math.min(i, 5)]));
+	return val > 0 ? Math.floor(val) : Math.ceil(val);
 }
 
 chrall.turnName = function(turn){
@@ -110,5 +110,5 @@ chrall.getPxOnKill = function(level){
 	if (!chrall.player().level) {
 		return "Vous devez vous rendre tout d'abord dans votre profil afin que Chrall<br>connaisse votre niveau pour savoir combien de PX vous rapportera ce kill";
 	}
-	return (10 + 2 * (level - chrall.player().level) + level) + " PX lors du kill";
+	return Math.max(0, 10 + 2 * (level - chrall.player().level) + level) + " PX lors du kill";
 }

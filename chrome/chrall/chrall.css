@@ -573,12 +573,18 @@ img.illus {
 	font-size: 12px;
 }
 
-#grid a img {
-	max-height: 12px;
-	max-width: 12px;
+#grid img {
+	max-height: 15px;
+	max-width: 15px;
 	margin-right: 1px;
+	vertical-align: middle;
 }
 
 .small-note {
 	font-size: 10px;
+}
+
+img.vlc, img.projo {
+	vertical-align: middle;
+	width: 20px;
 }

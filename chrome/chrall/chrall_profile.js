@@ -300,11 +300,23 @@
 
 	chrall.analyseAndReformatMainCharacteristicsTable = function(){
 		let Characteristic = chrall.Characteristic;
-		chrall.player().regeneration = new Characteristic(parseInt($("#reg").text()), 3, parseInt($("#reg_p").text()), parseInt($("#reg_m").text()));
-		chrall.player().attac = new Characteristic(parseInt($("#att").text()), 6, parseInt($("#att_p").text()), parseInt($("#att_m").text()));
-		chrall.player().dodge = new Characteristic(parseInt($("#esq").text()), 6, parseInt($("#esq_p").text()), parseInt($("#esq_m").text()));
-		chrall.player().damage = new Characteristic(parseInt($("#deg").text()), 3, parseInt($("#deg_p").text()), parseInt($("#deg_m").text()));
-		chrall.player().armor = new Characteristic(parseInt($("#arm").text()), 3, parseInt($("#arm_p").text()), parseInt($("#arm_m").text()));
+		let characteristics = [
+			{id: "#reg", name: "regeneration", dice: 3},
+			{id: "#att", name: "attac", dice: 6},
+			{id: "#esq", name: "dodge", dice: 6},
+			{id: "#deg", name: "damage", dice: 3},
+			{id: "#arm", name: "armor", dice: 3}
+		];
+		for (let i in characteristics) {
+			let c = characteristics[i];
+			let $idM = $(c.id + "_m");
+			let diceNumber = parseInt($(c.id).text());
+			let turnBonus = parseInt($(c.id + "_tour_d").text());
+			let physicalBonus = parseInt($(c.id + "_p").text());
+			let magicalBonus = parseInt($idM.text());
+			chrall.player()[c.name] = new Characteristic(diceNumber, c.dice, physicalBonus, magicalBonus, turnBonus);
+			$idM.next().append(" (" + chrall.player()[c.name].getMean() + ")");
+		}
 	};
 
 	chrall.readTalentTable = function(table){

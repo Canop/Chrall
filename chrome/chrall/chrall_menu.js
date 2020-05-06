@@ -7,7 +7,7 @@
 	chrall.handleMenuPage = function(){
 		var player = chrall.player();
 		//> lecture et transmission au background du numéro du troll et de sa position
-		var trollId = $('input[name="ai_IdPJ"]').val();
+		var trollId = $('a').eq(0).attr('onclick').replace('EnterPJView(', '');
 		var infoMenuDiv = $('div.infoMenu');
 		var html = infoMenuDiv.html();
 		var ibr1 = html.indexOf('<br>');

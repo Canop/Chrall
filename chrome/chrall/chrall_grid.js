@@ -90,11 +90,15 @@ chrall.gridLive = function(){
 	function getMonsterArgs(link){
 		var player = chrall.player();
 		var args = {};
-		var monsterId = parseInt(link.attr('id'));
+		var monsterId = parseInt(link[0].href.replace("javascript:EMV(", ""));
 		var tokens = link.text().split(':');
 		var linkText = null == link.attr("nom_complet_monstre") ? tokens[tokens.length - 1].trim() : link.attr("nom_complet_monstre").trim();
 		var nomMonstre = encodeURIComponent(linkText);
 		args.text = link.attr('message');
+		if (args.text) {
+			var level = parseInt($("#" + monsterId + "_monster").closest("tr").find("td.level").text());
+			args.text += "<br>" + chrall.getPxOnKill(level);
+		}
 		var imgUrl = chrall.getMonsterMhImageUrl(linkText);
 		if (imgUrl != null) {
 			args.leftCol = "<img class=illus src=\"" + imgUrl + "\">";
@@ -107,6 +111,12 @@ chrall.gridLive = function(){
 		return args;
 	}
 	chrall.bubbleLive('a[href*="EMV"]', 'bub_monster', getMonsterArgs);
+	chrall.bubbleLive('img.vlc', 'bub_monster', function(){
+		return {text: 'Voit le caché !'};
+	});
+	chrall.bubbleLive('img.projo', 'bub_monster', function(img){
+		return {text: chrall.bubbleProjoIcon(img.data('dist'))};
+	});
 
 	//> popup sur les trolls
 	function getTrollArgs(link){
