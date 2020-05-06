@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Chrall",
-	"version": "4.2.4",
+	"version": "4.2.5",
 	"description": "Une extension Chrome open-source pour Mounty Hall",
 	"icons": {
 		"128": "icone_naze.png"
