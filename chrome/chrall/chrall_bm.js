@@ -2,7 +2,7 @@
 (function(chrall){
 
 	/**
-	 * convertit une chaine du genre "ATT : +3 DEG : -9 en une map
+	 * convertit une chaine du genre "ATT : +0\-5 | ESQ : -6 | Fatigue : +15" en une map
 	 */
 	function parseEffects(s){
 		var map = {};
@@ -12,10 +12,11 @@
 			if (name == '%') {
 				name = tokens[i++].trim();
 			}
-			var value = parseInt(tokens[i++]);
-			if ((name.length > 0) && value) {
-				map[name] = value;
-			}
+			map[name] = tokens[i++].split('\\').map(function(v){
+				return parseInt(v);
+			}).filter(function(v){
+				return v !== 0;
+			})[0];
 		}
 		return map;
 	}
@@ -31,9 +32,10 @@
 		this.duration = parseInt(chrall.tokenize(durationAsString)[0]);
 	}
 
-	function CharBmEffect(type, value){
+	function CharBmEffect(name, type, value){
 		this.sum = {};
 		this.count = {};
+		this.name = name;
 		this.sum[type] = value;
 		this.count[type] = 1;
 	}
@@ -44,18 +46,19 @@
 	};
 
 	CharBmEffect.prototype.str = function(){
-		return chrall.itoa(this.sum['Physique']) + " / " + chrall.itoa(this.sum['Magie']);
-	};
-
-	CharBmEffect.prototype.strMag = function(){
-		var v = 0;
-		if (this.sum['Physique']) {
-			v += this.sum['Physique'];
+		var sum = chrall.itoa((this.sum['Physique'] || 0) + (this.sum['Magique'] || 0));
+		switch(this.name){
+			case 'MM':
+			case 'RM':
+				return sum + ' %';
+			case 'TOUR':
+				return sum + ' min';
+			case 'PVMax':
+			case 'Fatigue':
+				return sum;
+			default:
+				return chrall.itoa(this.sum['Physique']) + " / " + chrall.itoa(this.sum['Magique']);
 		}
-		if (this.sum['Magie']) {
-			v += this.sum['Magie'];
-		}
-		return v + " %";
 	};
 
 	chrall.analyseAndReformatBM = function(){
@@ -76,7 +79,7 @@
 		var name, turn, i;
 		for (turn = 0; turn < NB_TURNS_MAX; turn++) {
 			// bm contient pour chaque nom (exemple : "Armure")
-			// le compte et les valeurs d'effets séparés par type ('Physique' ou 'Magie')
+			// le compte et les valeurs d'effets séparés par type ('Physique' ou 'Magique')
 			var	bm = {},
 				nb = 0;
 			for (i in effects) {
@@ -87,7 +90,7 @@
 						if (bm[name]) {
 							bm[name].add(e.type, e.thEffects[name], e.decumul);
 						} else {
-							bm[name] = new CharBmEffect(e.type, e.thEffects[name]);
+							bm[name] = new CharBmEffect(name, e.type, e.thEffects[name]);
 						}
 					}
 				}
@@ -95,14 +98,11 @@
 			if (nb == 0) {
 				break;
 			}
-			var line = "";
+			var line = [];
 			for (name in bm) {
-				if (line.length > 0) {
-					line += " | ";
-				}
-				line += name + " : " + ((name == 'MM' || name == 'RM') ? bm[name].strMag() : bm[name].str());
+				line.push(name + " : " + bm[name].str());
 			}
-			lines.push(line);
+			lines.push(line.join(' | '));
 		}
 		if (lines.length > 0) {
 			var nbIdenticalLines = 0;

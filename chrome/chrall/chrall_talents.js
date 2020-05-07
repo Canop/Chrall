@@ -464,7 +464,7 @@ chrall.talentBubblers = {
 		return html;
 	},
 
-	"Identification des trésors": (player)=>{
+	"Identification des Trésors": (player)=>{
 		return "Ce sort permet, parait-il, d'identifier des trésors.";
 	},
 
