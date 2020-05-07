@@ -369,14 +369,33 @@ chrall.talentBubblers = {
 	},
 
 	"Augmentation des Dégats": (player)=>{
-		var a = 1 + Math.floor((player.damage.diceNumber - 3) / 2);
 		var html = "<table>";
-		html += "<tr><td>Premier ADD</td><td> : dégâts +" + a + "</td></tr>";
-		html += "<tr><td>Deuxième ADD</td><td> : dégâts +" + chrall.decumul(1, a) + "</td></tr>";
-		html += "<tr><td>Troisième ADD</td><td> : dégâts +" + chrall.decumul(2, a) + "</td></tr>";
-		html += "<tr><td>Quatrième ADD</td><td> : dégâts +" + chrall.decumul(3, a) + "</td></tr>";
-		html += "<tr><td>Cinquième ADD</td><td> : dégâts +" + chrall.decumul(4, a) + "</td></tr>";
-		html += "<tr><td>Sixième et suivants</td><td> : dégâts +" + chrall.decumul(5, a) + "</td></tr>";
+		var bonusDices = [0, 0, 0, 0, 0, 0];
+		['Premiere ADD', 'Deuxième ADD', 'Troisième ADD', 'Quatrième VA', 'Cinquième VA', 'Sixième et suivantes'].forEach(function (count, i){
+			html += `<tr><th colspan="2">${count} (+${chrall.decumul(i, 100)}%)</th></tr>`;
+			bonusDices[0] = bonusDices[0] + chrall.decumul(i, 1 + player.damage.diceNumber / 5);
+			html += `<tr><td>AN, AP, Charge, CA, Frénésie, RP, Vampi</td><td>+${bonusDices[0]}D3 (+${bonusDices[0] * 2})</td></tr>`;
+			if (player.talents['Coup de Butoir']){
+				bonusDices[1] = bonusDices[1] + chrall.decumul(i, 1 + (player.damage.diceNumber + Math.min(3 * player.damage.diceNumber / 2, player.talents['Coup de Butoir'].level * 3)) / 5);
+				html += `<tr><td>Coup de Butoir</td><td>+${bonusDices[1]}D3 (+${bonusDices[1] * 2})</td></tr>`;
+			}
+			if (player.talents['Explosion']){
+				bonusDices[2] = bonusDices[2] + chrall.decumul(i, 1 + (player.damage.diceNumber + player.pvMax / 10) / 10);
+				html += `<tr><td>Explosion</td><td>+${bonusDices[2]}D3 (+${bonusDices[2] * 2})</td></tr>`;
+			}
+			if (player.talents['Griffe du Sorcier']){
+				bonusDices[3] = bonusDices[3] + chrall.decumul(i, 1 + player.damage.diceNumber / 10);
+				html += `<tr><td>Griffe du Sorcier</td><td>+${bonusDices[3]}D3 (+${bonusDices[3] * 2})</td></tr>`;
+			}
+			if (player.talents['Projectile Magique']){
+				bonusDices[4] = bonusDices[4] + chrall.decumul(i, 1 + chrall.player().sight.diceNumber / 10);
+				html += `<tr><td>Projectile Magique</td><td>+${bonusDices[4]}D3 (+${bonusDices[4] * 2})</td></tr>`;
+			}
+			if (player.talents['Siphon des âmes']){
+				bonusDices[5] = bonusDices[5] + chrall.decumul(i, 1 + player.regeneration.diceNumber / 5);
+				html += `<tr><td>Siphon des âmes</td><td>+${bonusDices[5]}D3 (+${bonusDices[5] * 2})</td></tr>`;
+			}
+		});
 		html += "</table>";
 		return html;
 	},
