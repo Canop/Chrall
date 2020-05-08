@@ -105,7 +105,9 @@
 		// Ajoute PV pouvant etre perdu sans malus de temps
 		let extraTime = chrall.parseDuration($("#bm").text()) - chrall.parseDuration($("#blessure").text()) - chrall.parseDuration($("#poids").text());
 		let extraPv = Math.floor(extraTime * chrall.player().pvMax / (250 * 60));
-		$("#pos").find("div.barre").closest("td").append(`<span>Perdre <strong>${extraPv}PV</strong> ne créera pas un malus de temps</span>`);
+		if (extraPv > 0){
+			$("#pos").find("div.barre").closest("td").append(`<span>Perdre <strong>${extraPv}PV</strong> ne créera pas un malus de temps</span>`);
+		}
 	};
 
 	/**
