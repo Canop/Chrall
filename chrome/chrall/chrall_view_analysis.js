@@ -70,8 +70,8 @@
 		}
 		var dist = parseInt(cells[0].innerHTML);
 		if (dist <= chrall.player().talents["Projectile Magique"].range && item.z === chrall.player().z) {
-			var projoImg = " <img class='projo' data-dist='" + dist + "' src='" + chrome.extension.getURL("/images/projo.png") + "' />";
-			nameCell.innerHTML += projoImg;
+			var projoImg = `<img class='projo' data-dist='${dist}' src='${chrome.extension.getURL("/images/projo.png")}' />`;
+			$(nameCell).append(projoImg);
 			item.icons += projoImg;
 		}
 	};
