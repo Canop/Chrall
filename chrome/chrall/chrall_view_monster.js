@@ -11,42 +11,7 @@
 		return seeing_hidden_regexp.test(name);
 	};
 
-	chrall.addMonsterInfo = function(){
-		if (!chrall.isOptionEnabled('view-display-monster-level', 'yes')) {
-			return;
-		}
-
-		var $monsterTitle = chrall.$tables().monstres.find("tr[class='mh_tdtitre']");
-		var $monsterRows = chrall.$tables().monstres.find("tr[class='mh_tdpage']");
-
-		var $nivalTitle = $("<td/>", {style: "width: 5em"});
-		$nivalTitle.append($("<b/>", {text: "Nival"}));
-		$($monsterTitle[0].children[1]).after($nivalTitle);
-
-		$monsterRows.each(function(index, row){
-			let monsterCompleteName = row.children[3];
-			let tokens = monsterCompleteName.textContent.split(/\[|\]/);
-			if (tokens.length<2) {
-				// maybe there's one cell less in this row ?
-				// Ceci arrive si l'utilisateur décoche "menu d'actions contextuelles"
-				// dans les options de vue
-				monsterCompleteName = row.children[2];
-				tokens = monsterCompleteName.textContent.split(/\[|\]/);
-				if (tokens.length<2) {
-					console.warn("Monster name parsing failed", row);
-					return;
-				}
-			}
-			var monsterName = tokens[0].trim();
-			var monsterAge = tokens[1].trim();
-			var addedText = computeLevel(monsterName, monsterAge);
-			var $nivalCell = $("<td/>", { text: addedText, class: "level"});
-			chrall.triggerBubble($nivalCell, chrall.getPxOnKill(addedText), "bub_monster");
-			$(row.children[1]).after($nivalCell);
-		});
-	};
-
-	function computeLevel(monsterName, monsterAge){
+	chrall.computeLevel = function(monsterName, monsterAge){
 		var level = 0;
 		var i, index, newMonsterName, monsterFamily, templateText, actualTemplate;
 
@@ -3390,7 +3355,7 @@
 			var tokens = row[0].split(/\[|\]/);
 			var monsterName = tokens[0].trim();
 			var monsterAge = tokens[1].trim();
-			var level = computeLevel(monsterName, monsterAge);
+			var level = chrall.computeLevel(monsterName, monsterAge);
 			if (level != row[1]) {
 				console.log(row[0] + " : computed: " + level + " actual: " + row[1]);
 				invalid++;

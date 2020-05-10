@@ -188,6 +188,7 @@ function Troll(x, y, z){
 	this.magicalAttackMultiplier = 1;
 	this.magicalDamageMultiplier = 1;
 	this.talents = {};
+	this.missions = {};
 }
 chrall.Troll = Troll;
 Troll.prototype = new Thing();

@@ -13,7 +13,7 @@
 			"background_mess.js"
 		]
 	},
-	"web_accessible_resources": ["player_target.png", "images/vlc.png", "images/projo.png"],
+	"web_accessible_resources": ["player_target.png", "images/vlc.png", "images/projo.png", "images/mission.png"],
 	"content_scripts": [
 		{
 			"matches": [

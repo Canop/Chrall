@@ -117,6 +117,12 @@ chrall.gridLive = function(){
 	chrall.bubbleLive('img.projo', 'bub_monster', function(img){
 		return {text: chrall.bubbleProjoIcon(img.data('dist'))};
 	});
+	chrall.bubbleLive('img.mission', 'bub_monster', function(img){
+		return {text: `Mission ${img.data('id')}`};
+	});
+	$('img.mission').click(function() {
+		document.location = `https://games.mountyhall.com/mountyhall/MH_Missions/Mission_Equipe.php?ai_idMission=${$(this).data('id')}`;
+	});
 
 	//> popup sur les trolls
 	function getTrollArgs(link){

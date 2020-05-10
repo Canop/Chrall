@@ -76,6 +76,20 @@
 		}
 	};
 
+	// Icone de mission
+	chrall.missionIcon = function (nameCell, item) {
+		for (var id in chrall.player().missions) {
+			var mission = chrall.player().missions[id];
+			var isRace = !mission.race || item.name.indexOf(mission.race) > -1;
+			var isLevel = mission.minLevel <= item.level && item.level <= mission.maxLevel;
+			if (isRace && isLevel) {
+				var missionImg = ` <img class='mission' data-id='${id}' src='${chrome.extension.getURL("/images/mission.png")}' />`;
+				nameCell.innerHTML += missionImg;
+				item.icons += missionImg;
+			}
+		}
+	};
+
 	// Popup contenant les infos pour l'icone de projo
 	chrall.bubbleProjoIcon = function(dist){
 		var html = "<table>";
@@ -97,6 +111,14 @@
 		if (table === undefined) return;
 		var lines = table.querySelectorAll("tbody tr");
 		chrall.grid.nbMonstersInView = lines.length;
+
+		// Add level cell
+		if (chrall.isOptionEnabled('view-display-monster-level', 'yes')) {
+			var $nivalTitle = $("<td/>", { style: "width: 5em" });
+			$nivalTitle.append($("<b/>", { text: "Nival" }));
+			$('tr.mh_tdtitre', table).find('th').eq(0).after($nivalTitle);
+		}
+
 		for (var lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 			var item = new chrall.Monster();
 			var cells = lines[lineIndex].children;
@@ -117,11 +139,19 @@
 			item.y = parseInt(cells[i++].textContent);
 			item.z = parseInt(cells[i++].textContent);
 			item.hasLink = !!nameCell.children[0].href;
+			item.level = chrall.computeLevel(item.name, item.ageTag);
 			var cell = grid.getCellNotNull(item.x, item.y);
 			if (cell) cell.addMonster(item);
 			else grid.outOfGrid.push(item);
 			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
 			chrall.projoIcon(cells, nameCell, item);
+			chrall.missionIcon(nameCell, item);
+			// Add monster's level
+			if (chrall.isOptionEnabled('view-display-monster-level', 'yes')) {
+				var $nivalCell = $("<td/>", { text: item.level, class: "level" });
+				chrall.triggerBubble($nivalCell, chrall.getPxOnKill(item.level), "bub_monster");
+				$(cells[0]).after($nivalCell);
+			}
 		}
 	};
 
