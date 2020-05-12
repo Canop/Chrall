@@ -38,7 +38,6 @@ case "Play_profil.php":
 	break;
 case "Play_vue.php":
 	chrall.analyseAndReformatView();
-	chrall.addMonsterInfo();
 	chrall.initCommunications('get_partages');
 	chrall.bindCopy_tablePartages();
 	break;
@@ -128,8 +127,11 @@ case "Guilde_Membres.php":
 case "MH_Messagerie.php":
 	chrall.compactMessageTitle();
 	break;
+case "Mission_Liste.php":
+	chrall.saveMissions();
+	break;
 case "Mission_Etape.php":
-	chrall.addTroogleLinks();
+	chrall.addLinksAndUpdateMissions();
 	break;
 }
 
