@@ -14,20 +14,14 @@ chrall.getTalentBubbleContent= (name) => {
 };
 
 /**
- * Fonction recursive calculant la portee du projectile magique en fonction de la vue
+ * Calcule la portee du projectile magique en fonction de la vue
  */
-chrall.rangeProjo = (view, viewMax, range) => {
-	if (!viewMax) {
-		viewMax = 4;
-	}
-	if (!range) {
-		range = 1;
-	}
-	return view <= viewMax ? range : chrall.rangeProjo(view, viewMax + range + 4, range + 1);
+chrall.projoRange = (view) => {
+	return Math.ceil((Math.sqrt(8 * view + 49) - 7) / 2);
 };
 
 /**
- * Retourne un object contenant les degats/degats critique du projo
+ * Retourne un objet contenant les degats/degats critique du projo
  */
 chrall.projoDamage = (diffRange) => {
 	var damages = {};
@@ -35,6 +29,13 @@ chrall.projoDamage = (diffRange) => {
 	damages.damage = 2 * (Math.floor(projectileDamageDiceNumber * 0.5) + diffRange) + chrall.player().damage.magicalBonus;
 	damages.damageCrit = damages.damage + 2 * Math.floor(projectileDamageDiceNumber * 0.25);
 	return damages;
+};
+
+/**
+ * Retourne la vue necessaire pour atteindre la portee
+ */
+chrall.projoRequiredSight = (range) => {
+	return 1 + (range * range + 5 * range - 6) / 2;
 };
 
 chrall.talentBubblers = {
@@ -218,7 +219,7 @@ chrall.talentBubblers = {
 	"Lancer de Potions": (player)=>{
 		var	p = Math.floor(2 + player.totalSight / 5),
 			cppc = player.talents["Lancer de Potions"].mastering + player.concentration,
-			s = chrall.player().sight.diceNumber + chrall.player().sight.physicalBonus,
+			s = player.sight.diceNumber + player.sight.physicalBonus,
 			html = "<table>";
 		html += "<tr><td>Portée (à l'horizontale)</td>";
 		html += "<td> : " + p + (p > 1 ? " cases" : " case") + "</td></tr>";
@@ -508,24 +509,22 @@ chrall.talentBubblers = {
 	},
 
 	"Projectile Magique": (player)=>{
-		var range = chrall.rangeProjo(chrall.player().totalSight);
-		chrall.player().talents["Projectile Magique"].range = range;
-		var html = "<table>";
-		html += "<tr><td>Portée</td><td> : " + range + " cases</td></tr>";
-		var projectileDiceNumber = Math.floor(chrall.player().sight.diceNumber * chrall.player().magicalAttackMultiplier);
-		var att = 3.5 * projectileDiceNumber + chrall.player().attac.magicalBonus;
-		html += "<tr><td>Attaque moyenne</td><td> : " + att + " (" + projectileDiceNumber + " D6 " + chrall.itoa(chrall.player().attac.magicalBonus) + ")</td></tr>";
+		var range = chrall.projoRange(player.totalSight);
+		player.talents["Projectile Magique"].range = range;
+		var html = `<tr><td>Portée</td><td> : ${range} cases (${chrall.projoRequiredSight(range + 1)} de vue totale augmentera la portée)</td></tr>`;
+		var projectileDiceNumber = Math.floor(player.sight.diceNumber * player.magicalAttackMultiplier);
+		var att = 3.5 * projectileDiceNumber + player.attac.magicalBonus;
+		html += `<tr><td>Attaque moyenne</td><td> : ${att} (${projectileDiceNumber} D6 ${chrall.itoa(player.attac.magicalBonus)})</td></tr>`;
 		for (var d = 0; d <= range; d++) {
 			var damages = chrall.projoDamage(range - d);
 			if (d === 0) {
 				html += "<tr><td>Dégâts moyens sur votre case";
 			} else {
-				html += "<tr><td>Dégâts moyens à " + d + (d > 1 ? " cases" : " case");
+				html += `<tr><td>Dégâts moyens à ${d} case${(d > 1 ? 's' : '')}`;
 			}
-			html += "</td><td> : " + damages.damage + " / " + damages.damageCrit + "</td></tr>";
+			html += `</td><td> : ${damages.damage} / ${damages.damageCrit}</td></tr>`;
 		}
-		html += "</table>";
-		return html;
+		return `<table>${html}</table>`;
 	},
 
 	"Puissance Magique": (player)=>{
@@ -649,30 +648,28 @@ chrall.talentBubblers = {
 
 	"Vision Accrue": (player)=>{
 		var a = Math.floor(player.sight.diceNumber / 2);
-		var html = "<table>";
-		html += "<tr><td>Premier VA</td><td> : vue +" + a + "</td></tr>";
-		html += "<tr><td>Deuxième VA</td><td> : vue +" + chrall.decumul(1, a) + "</td></tr>";
-		html += "<tr><td>Troisième VA</td><td> : vue +" + chrall.decumul(2, a) + "</td></tr>";
-		html += "<tr><td>Quatrième VA</td><td> : vue +" + chrall.decumul(3, a) + "</td></tr>";
-		html += "<tr><td>Cinquième VA</td><td> : vue +" + chrall.decumul(4, a) + "</td></tr>";
-		html += "<tr><td>Sixième et suivants</td><td> : vue +" + chrall.decumul(5, a) + "</td></tr>";
-		html += "</table>";
-		if (player.race == "Tomawak") {
-			html += "Vision Accrue augmente la portée du Projectile Magique mais pas l'attaque ni les dégâts.";
-		}
-		return html;
+		var tempTotalSight = player.totalSight;
+		var range = chrall.projoRange(player.totalSight);
+		var html = ['Premiere VA', 'Deuxième VA', 'Troisième VA', 'Quatrième VA', 'Cinquième VA', 'Sixième et suivantes'].map(function (count, i){
+			tempTotalSight += chrall.decumul(i, a);
+			var bonusProjo = '';
+			if (player.race === 'Tomawak'){
+				bonusProjo = `, Projectile Magique +${chrall.projoRange(tempTotalSight) - range}D3`;
+			}
+			return `<tr><td>${count}</td><td> : +${chrall.decumul(i, a)} (${tempTotalSight} cases${bonusProjo})</td></tr>`;
+		}).join('');
+		return `<table>${html}</table>`;
 	},
 
 	"Voir le Caché": (player)=>{
 		var s = player.totalSight;
 		// flemme de chercher une formule, j'implémente tous les tests de la doc...
-		var range;
-		if (s>34) range=5;
-		else if (s>21) range=4;
-		else if (s>11) range=3;
-		else if (s>5) range=2;
-		else if (s>2) range=1;
-		else range=0;
+		var range = 0;
+		if (s > 22) range = 5;
+		else if (s > 15) range = 4;
+		else if (s > 9) range = 3;
+		else if (s > 4) range = 2;
+		else if (s > 0) range = 1;
 		var html = "Permet de voir et cibler les trolls et monstres ";
 		if (range == 0) {
 			html += "sur votre case<br>(ce serait mieux si vous voyiez un peu mieux le visible pour commencer)."
