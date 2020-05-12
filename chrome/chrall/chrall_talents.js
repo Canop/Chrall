@@ -14,16 +14,10 @@ chrall.getTalentBubbleContent= (name) => {
 };
 
 /**
- * Fonction recursive calculant la portee du projectile magique en fonction de la vue
+ * Calcule la portee du projectile magique en fonction de la vue
  */
-chrall.projoRange = (view, viewMax, range) => {
-	if (!viewMax) {
-		viewMax = 4;
-	}
-	if (!range) {
-		range = 1;
-	}
-	return view <= viewMax ? range : chrall.projoRange(view, viewMax + range + 4, range + 1);
+chrall.projoRange = (view) => {
+	return Math.ceil((Math.sqrt(8 * view + 49) - 7) / 2);
 };
 
 /**
@@ -41,11 +35,7 @@ chrall.projoDamage = (diffRange) => {
  * Retourne la vue necessaire pour atteindre la portee
  */
 chrall.projoRequiredSight = (range) => {
-	var sight = 1;
-	while (chrall.projoRange(sight) < range) {
-		++sight;
-	}
-	return sight;
+	return 1 + (range * range + 5 * range - 6) / 2;
 };
 
 chrall.talentBubblers = {
