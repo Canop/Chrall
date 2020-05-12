@@ -60,6 +60,7 @@ case "Play_o_css.php":
 case "Play_o_Divers.php":
 case "Play_o_Divers1.php":
 case "Play_o_Divers2.php":
+case "Play_o_MMC1.php":
 	chrall.initCommunications('check_account');
 	chrall.reformatOptionsView();
 	break;

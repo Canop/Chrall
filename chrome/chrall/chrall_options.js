@@ -77,6 +77,7 @@
 				<div style='display:block'><input id='view-show-distance-in-view' type='checkbox' class='toggle-option'><span class='option-description'>Afficher la distance en PA (via DE) dans les tables</span></div>\
 				<div style='display:block'><input id='view-display-hit-points-ratio' type='checkbox' class='toggle-option'><span class='option-description'>Afficher la barre de points de vie dans les tables (uniquement pour les partages actifs).</span></div>\
 				<div style='display:block'><input id='view-display-monster-level' type='checkbox' class='toggle-option-default-active'><span class='option-description'>Afficher un nival pour les monstres (calculé sur base de son type, son âge, son template).</span></div>\
+				<div style='display:block'><input id='view-display-colored-cell' type='checkbox' class='toggle-option-default-active'><span class='option-description'>Affichage des cases colorées configurées avec Miaou (une vue importante baisse les perfomances).</span></div>\
 				<div style='display:block'><input id='view-sort-items-per-type' type='checkbox' class='toggle-option'><span class='option-description'>Trier les items par type dans la grille 2D (caverne par caverne).</span></div>\
 			</div>\
 			<br/>\
@@ -104,6 +105,8 @@
 			$("#menu-evt ul").append(
 				$("<li data-wrapperels=span data-shadow=true>").append(
 					$("<a href=#>").text(key).click(function(){
+						$('#menu-evt a').removeClass('ui-btn-active ui-state-persist');
+						$(this).addClass('ui-btn-active ui-state-persist');
 						$("#titre2").text(key).nextAll().remove();
 						$("#titre2").after(page);
 						doBindings();
