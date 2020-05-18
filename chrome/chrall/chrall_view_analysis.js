@@ -54,12 +54,13 @@
 	};
 
 	chrall.addActionPointDistance = function(cells, x, y, z){
+		var $cell = $(cells[0]).attr({ width: 75, align: 'center'});
 		if (chrall.isOptionDisabled('view-show-distance-in-view')) {
 			return;
 		}
 		var dist = chrall.distanceFromPlayer(x, y, z);
 		if (dist > 0) {
-			$(cells[0]).append(" (" + dist + " PA)").width("10ex");
+			$cell.append(` (${dist} PA)`);
 		}
 	};
 
@@ -114,8 +115,7 @@
 
 		// Add level cell
 		if (chrall.isOptionEnabled('view-display-monster-level', 'yes')) {
-			var $nivalTitle = $("<td/>", { style: "width: 5em" });
-			$nivalTitle.append($("<b/>", { text: "Nival" }));
+			var $nivalTitle = $("<th/>", { width: '5em', text: 'Nival' });
 			$('tr.mh_tdtitre', table).find('th').eq(0).after($nivalTitle);
 		}
 
@@ -148,7 +148,7 @@
 			chrall.missionIcon(nameCell, item);
 			// Add monster's level
 			if (chrall.isOptionEnabled('view-display-monster-level', 'yes')) {
-				var $nivalCell = $("<td/>", { text: item.level, class: "level" });
+				var $nivalCell = $("<td/>", { text: item.level, class: "level", align: "center" });
 				chrall.triggerBubble($nivalCell, chrall.getPxOnKill(item.level), "bub_monster");
 				$(cells[0]).after($nivalCell);
 			}
@@ -162,7 +162,7 @@
 		table = table.get(0);
 		if (!table) return;
 		var	$headRow = $(table).find("thead tr").eq(0);
-		var $checkAll = $("<td align='center'><input type='checkbox'/></td>");
+		var $checkAll = $("<td align='center' width='18'><input type='checkbox'/></td>");
 		$checkAll.children().click(function () {
 			$("input[name='cb_troll']").click();
 		});
