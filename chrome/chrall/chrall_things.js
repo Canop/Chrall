@@ -57,6 +57,10 @@ Talent.prototype.readRow = function($row){
 	this.name = $cells.eq(1).find("a").text().trim();
 	this.level = parseInt($cells.eq(-6).text()) || 1;
 	this.mastering = parseInt($cells.eq(-5).text());
+
+	if (this.name === 'Lancer de Potions'){
+		this.range = Math.floor(2 + chrall.player().totalSight / 5);
+	}
 };
 
 //////////////////////////////////////////////////////////////////////// Mouche

@@ -38,6 +38,13 @@ chrall.projoRequiredSight = (range) => {
 	return 1 + (range * range + 5 * range - 6) / 2;
 };
 
+/**
+ * Retourne le jet de toucher pour lancer de potions
+ */
+chrall.potionJetToucher = (range) => {
+	return chrall.player().talents["Lancer de Potions"].mastering + chrall.player().concentration + Math.min(10, (1 - range) * 10 + chrall.player().totalSight);
+};
+
 chrall.talentBubblers = {
 
 	// ----------------------------------------
