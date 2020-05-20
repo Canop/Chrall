@@ -61,6 +61,9 @@ Talent.prototype.readRow = function($row){
 	if (this.name === 'Lancer de Potions'){
 		this.range = Math.floor(2 + chrall.player().totalSight / 5);
 	}
+	if (this.name === 'Projectile Magique'){
+		this.range = chrall.projoRange(chrall.player().totalSight);
+	}
 };
 
 //////////////////////////////////////////////////////////////////////// Mouche
