@@ -54,7 +54,7 @@
 	};
 
 	chrall.addActionPointDistance = function(cells, x, y, z){
-		var $cell = $(cells[0]).attr({ width: '75rem', align: 'center'});
+		var $cell = $(cells[0]).attr({ style: 'width:5rem', align: 'center'});
 		if (chrall.isOptionDisabled('view-show-distance-in-view')) {
 			return;
 		}
@@ -162,7 +162,7 @@
 		table = table.get(0);
 		if (!table) return;
 		var	$headRow = $(table).find("thead tr").eq(0);
-		var $checkAll = $("<td align='center' width='18rem'><input type='checkbox'/></td>");
+		var $checkAll = $("<td align='center' style='width:1rem'><input type='checkbox'/></td>");
 		$checkAll.children().click(function () {
 			$("input[name='cb_troll']").click();
 		});
