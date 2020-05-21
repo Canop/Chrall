@@ -65,7 +65,8 @@
 		chrall.player().missions[missionId] = {
 			race: race,
 			minLevel: minLevel,
-			maxLevel: maxLevel
+			maxLevel: maxLevel,
+			step: text
 		};
 	}
 
