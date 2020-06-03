@@ -14,6 +14,8 @@
 
 	chrall.addLinksAndUpdateMissions = function(){
 		var missionId = $('div.titre2').text().match(/\d+/g);
+		// Remove obsolete step
+		delete chrall.player().missions[missionId];
 		var row = $('img[src*="orange"]').closest('tr');
 		var stepText = row.find('td').eq(1).text();
 		if (0 < stepText.indexOf("monstre")) {
