@@ -2,22 +2,22 @@
 (function(chrall){
 
 	/**
-	 * convertit une chaine du genre "ATT : +0\-5 | ESQ : -6 | Fatigue : +15" en une map
+	 * convertit une chaine du genre "ATT : +0\-5 | ESQ : -6 | Fatigue : +15 | Vision Accrue : -80 %" en une map
 	 */
 	function parseEffects(s){
 		var map = {};
-		var tokens = chrall.tokenize(s);
-		for (var i = 0; i < tokens.length - 1;) {
-			var name = tokens[i++].trim();
-			if (name == '%') {
-				name = tokens[i++].trim();
+		s.split(' | ').forEach(function (bm) {
+			var effect = bm.split(' : ');
+			if (effect.length !== 2) {
+				console.warn('invalid bm:', bm);
+			} else {
+				map[effect[0]] = effect[1].split('\\').map(function (v) {
+					return parseInt(v);
+				}).filter(function (v) {
+					return v !== 0;
+				})[0];
 			}
-			map[name] = tokens[i++].split('\\').map(function(v){
-				return parseInt(v);
-			}).filter(function(v){
-				return v !== 0;
-			})[0];
-		}
+		});
 		return map;
 	}
 
@@ -48,16 +48,20 @@
 	CharBmEffect.prototype.str = function(){
 		var sum = chrall.itoa((this.sum['Physique'] || 0) + (this.sum['Magique'] || 0));
 		switch(this.name){
-			case 'MM':
-			case 'RM':
-				return sum + ' %';
 			case 'TOUR':
 				return sum + ' min';
 			case 'PVMax':
 			case 'Fatigue':
+			case 'Vue':
 				return sum;
+			case 'ATT':
+			case 'ESQ':
+			case 'DEG':
+			case 'REG':
+			case 'Armure':
+				return `${chrall.itoa(this.sum['Physique'])}\\${chrall.itoa(this.sum['Magique'])}`;
 			default:
-				return chrall.itoa(this.sum['Physique']) + " / " + chrall.itoa(this.sum['Magique']);
+				return sum + ' %';
 		}
 	};
 
