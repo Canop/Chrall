@@ -53,6 +53,7 @@
 			case 'PVMax':
 			case 'Fatigue':
 			case 'Vue':
+			case 'PV':
 				return sum;
 			case 'ATT':
 			case 'ESQ':
