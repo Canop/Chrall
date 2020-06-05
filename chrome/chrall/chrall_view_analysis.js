@@ -71,7 +71,7 @@
 		}
 		var dist = parseInt(cells[0].innerHTML);
 		if (dist <= chrall.player().talents["Projectile Magique"].range && item.z === chrall.player().z) {
-			var projoImg = `<img class='projo' data-dist='${dist}' src='${chrome.extension.getURL("/images/projo.png")}' />`;
+			var projoImg = ` <img class='projo' data-dist='${dist}' src='${chrome.extension.getURL("/images/projo.png")}' />`;
 			$(nameCell).append(projoImg);
 			item.icons += projoImg;
 		}
@@ -85,23 +85,23 @@
 			var isLevel = mission.minLevel <= item.level && item.level <= mission.maxLevel;
 			if (isRace && isLevel) {
 				var missionImg = ` <img class='mission' data-id='${id}' src='${chrome.extension.getURL("/images/mission.png")}' />`;
-				nameCell.innerHTML += missionImg;
+				$(nameCell).append(missionImg);
 				item.icons += missionImg;
 			}
 		}
 	};
 
-	// Popup contenant les infos pour l'icone de projo
-	chrall.bubbleProjoIcon = function(dist){
-		var html = "<table>";
-		html += "<tr><td>Portée du projo</td><td> : " + dist + "</td></tr>";
-		var projectileDiceNumber = Math.floor(chrall.player().sight.diceNumber * chrall.player().magicalAttackMultiplier);
-		var att = 3.5 * projectileDiceNumber + chrall.player().attac.magicalBonus;
-		html += "<tr><td>Attaque moyenne</td><td> : " + att + " (" + projectileDiceNumber + " D6 " + chrall.itoa(chrall.player().attac.magicalBonus) + ")</td></tr>";
-		var damages = chrall.projoDamage(chrall.player().talents["Projectile Magique"].range - dist);
-		html += "<tr><td>Dégâts moyens</td><td> : " + damages.damage + " / " + damages.damageCrit + "</td></tr>";
-		html += "</table>";
-		return html;
+	// Icone de lancer de potions
+	chrall.potionIcon = function (cells, nameCell, item) {
+		if (!chrall.player().talents["Lancer de Potions"]){
+			return;
+		}
+		var dist = parseInt(cells[0].innerHTML);
+		if (dist <= chrall.player().talents["Lancer de Potions"].range && item.z === chrall.player().z){
+			var potionImg = ` <img class='potion' data-dist='${dist}' src='${chrome.extension.getURL("/images/potion.png")}' />`;
+			$(nameCell).append(potionImg);
+			item.icons += potionImg;
+		}
 	};
 
 	// ------------------ Analyse des composants de la vue --------------------
@@ -146,6 +146,7 @@
 			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
 			chrall.projoIcon(cells, nameCell, item);
 			chrall.missionIcon(nameCell, item);
+			chrall.potionIcon(cells, nameCell, item);
 			// Add monster's level
 			if (chrall.isOptionEnabled('view-display-monster-level', 'yes')) {
 				var $nivalCell = $("<td/>", { text: item.level, class: "level", align: "center" });
@@ -197,6 +198,7 @@
 			item.z = parseInt(cells[i++].textContent);
 			chrall.addActionPointDistance(cells, item.x, item.y, item.z);
 			chrall.projoIcon(cells, nameCell, item);
+			chrall.potionIcon(cells, nameCell, item);
 			var selectBox = $('<td>', { align: 'center'})
 			.append($('<input/>', {type: 'checkbox', name: 'cb_troll', value: item.id}));
 			$(line).prepend(selectBox);
