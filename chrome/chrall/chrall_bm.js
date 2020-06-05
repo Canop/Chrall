@@ -32,12 +32,16 @@
 		this.duration = parseInt(chrall.tokenize(durationAsString)[0]);
 	}
 
-	function CharBmEffect(name, type, value){
-		this.sum = {};
-		this.count = {};
+	function CharBmEffect(name){
+		this.sum = {
+			Physique: 0,
+			Magique: 0
+		};
+		this.count = {
+			Physique: 0,
+			Magique: 0
+		};
 		this.name = name;
-		this.sum[type] = value;
-		this.count[type] = 1;
 	}
 
 	CharBmEffect.prototype.add = function(type, value, hasDecumul){
@@ -61,19 +65,23 @@
 		}
 	};
 
+	function createBmEffect(tr){
+		var cells = $(tr).find('td'),
+			isActive = cells.closest('table').attr('id') === 'bmm';
+
+		return new BmEffect(
+			cells.eq(0).text().trim(),
+			cells.eq(2).text().trim(),
+			isActive ? cells.eq(3).html().indexOf('bullet_red.jpg') >= 0 : false, // marqueur du décumul (false pour bm non actifs)
+			cells.eq(isActive ? 4 : 3).text().trim(),
+			cells.eq(isActive ? 5 : 4).text().trim()
+		);
+	}
+
 	chrall.analyseAndReformatBM = function(){
-		var effects = [];
-		var $bmm = $('#bmm');
-		$bmm.find('tr.mh_tdpage').each(function(){
-			var cells = $(this).find("td");
-			effects.push(new BmEffect(
-				cells.eq(0).text().trim(),
-				cells.eq(2).text().trim(),
-				cells.eq(3).html().indexOf('bullet_red.jpg') >= 0, // marqueur du décumul
-				cells.eq(4).text().trim(),
-				cells.eq(5).text().trim()
-			));
-		});
+		var effects = $('#bmm').add($('#ibmm')).find('tr.mh_tdpage').map(function(){
+			return createBmEffect(this);
+		}).get();
 		const NB_TURNS_MAX = 20;
 		var lines = [];
 		var name, turn, i;
@@ -87,11 +95,10 @@
 				if (turn <= e.duration) {
 					nb++;
 					for (name in e.thEffects) {
-						if (bm[name]) {
-							bm[name].add(e.type, e.thEffects[name], e.decumul);
-						} else {
-							bm[name] = new CharBmEffect(name, e.type, e.thEffects[name]);
+						if (!bm[name]) {
+							bm[name] = new CharBmEffect(name);
 						}
+						bm[name].add(e.type, e.thEffects[name], e.decumul);
 					}
 				}
 			}
@@ -134,7 +141,7 @@
 				html += "</td></tr>";
 			}
 			html += "</table>";
-			$bmm.after(html);
+			$('#footer1').before(html);
 		}
 	}
 
