@@ -124,8 +124,8 @@ chrall.gridLive = function(){
 		<tr><td>Dégâts moyens</td><td> : ${damages.damage} / ${damages.damageCrit}</td></tr>
 		</table>`};
 	});
-	chrall.bubbleLive('img.mission', 'bub_monster', function(img){
-		return {text: `Mission ${img.data('id')}`};
+	chrall.bubbleLive('img.mission', 'bub_monster', function (img) {
+		return {text: `<div class=bubbleTitle>Mission ${img.data('id')}</div>${chrall.player().missions[img.data('id')].step}`};
 	});
 	chrall.bubbleLive('img.potion', 'bub_monster', function(img){
 		var bv = Math.min(10, (1 - img.data('dist')) * 10 + chrall.player().totalSight);
