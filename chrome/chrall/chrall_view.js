@@ -466,6 +466,7 @@
 		var compactNames = chrall.isOptionEnabled('view-grid-compact-names');
 		var maxLength = chrall.integerOption('view-grid-compact-names-length', 20);
 		var verticalDistanceHint = chrall.isOptionEnabled('view-grid-vertical-distance-hint');
+		var coloredCell = chrall.isOptionEnabled('view-display-colored-cell');
 
 		for (y = chrall.ymax; y >= chrall.ymin; y--) {
 			$tr = $("<tr/>");
@@ -481,14 +482,16 @@
 				};
 				var $cell = $("<td/>", cellAttributes);
 
-				(function($cell){
-					// on va éventuellement colorier la case si un message #chrall set cells dans miaou nous l'a demandé
-					chrall.cdb.getCell(x+','+y, function(cell){
-						if (cell && cell.team) {
-							$cell.attr('team', cell.team);
-						}
-					});
-				})($cell);
+				if (coloredCell){
+					(function($cell){
+						// on va éventuellement colorier la case si un message #chrall set cells dans miaou nous l'a demandé
+						chrall.cdb.getCell(x+','+y, function(cell){
+							if (cell && cell.team) {
+								$cell.attr('team', cell.team);
+							}
+						});
+					})($cell);
+				}
 
 				$tr.append($cell);
 				if ((chrall.horizontalViewLimit == 0) && ( (player.x != x) || (player.y != y) )) {

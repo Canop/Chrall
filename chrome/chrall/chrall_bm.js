@@ -2,21 +2,22 @@
 (function(chrall){
 
 	/**
-	 * convertit une chaine du genre "ATT : +3 DEG : -9 en une map
+	 * convertit une chaine du genre "ATT : +0\-5 | ESQ : -6 | Fatigue : +15 | Vision Accrue : -80 %" en une map
 	 */
 	function parseEffects(s){
 		var map = {};
-		var tokens = chrall.tokenize(s);
-		for (var i = 0; i < tokens.length - 1;) {
-			var name = tokens[i++].trim();
-			if (name == '%') {
-				name = tokens[i++].trim();
+		s.split(' | ').forEach(function (bm) {
+			var effect = bm.split(' : ');
+			if (effect.length !== 2) {
+				console.warn('invalid bm:', bm);
+			} else {
+				map[effect[0]] = effect[1].split('\\').map(function (v) {
+					return parseInt(v);
+				}).filter(function (v) {
+					return v !== 0;
+				})[0];
 			}
-			var value = parseInt(tokens[i++]);
-			if ((name.length > 0) && value) {
-				map[name] = value;
-			}
-		}
+		});
 		return map;
 	}
 
@@ -31,11 +32,16 @@
 		this.duration = parseInt(chrall.tokenize(durationAsString)[0]);
 	}
 
-	function CharBmEffect(type, value){
-		this.sum = {};
-		this.count = {};
-		this.sum[type] = value;
-		this.count[type] = 1;
+	function CharBmEffect(name){
+		this.sum = {
+			Physique: 0,
+			Magique: 0
+		};
+		this.count = {
+			Physique: 0,
+			Magique: 0
+		};
+		this.name = name;
 	}
 
 	CharBmEffect.prototype.add = function(type, value, hasDecumul){
@@ -44,39 +50,49 @@
 	};
 
 	CharBmEffect.prototype.str = function(){
-		return chrall.itoa(this.sum['Physique']) + " / " + chrall.itoa(this.sum['Magie']);
+		var sum = chrall.itoa((this.sum['Physique'] || 0) + (this.sum['Magique'] || 0));
+		switch(this.name){
+			case 'TOUR':
+				return sum + ' min';
+			case 'PVMax':
+			case 'Fatigue':
+			case 'Vue':
+			case 'PV':
+				return sum;
+			case 'ATT':
+			case 'ESQ':
+			case 'DEG':
+			case 'REG':
+			case 'Armure':
+				return `${chrall.itoa(this.sum['Physique'])}\\${chrall.itoa(this.sum['Magique'])}`;
+			default:
+				return sum + ' %';
+		}
 	};
 
-	CharBmEffect.prototype.strMag = function(){
-		var v = 0;
-		if (this.sum['Physique']) {
-			v += this.sum['Physique'];
-		}
-		if (this.sum['Magie']) {
-			v += this.sum['Magie'];
-		}
-		return v + " %";
-	};
+	function createBmEffect(tr){
+		var cells = $(tr).find('td'),
+			isActive = cells.closest('table').attr('id') === 'bmm';
+
+		return new BmEffect(
+			cells.eq(0).text().trim(),
+			cells.eq(2).text().trim(),
+			isActive ? cells.eq(3).html().indexOf('bullet_red.jpg') >= 0 : false, // marqueur du décumul (false pour bm non actifs)
+			cells.eq(isActive ? 4 : 3).text().trim(),
+			cells.eq(isActive ? 5 : 4).text().trim()
+		);
+	}
 
 	chrall.analyseAndReformatBM = function(){
-		var effects = [];
-		var $bmm = $('#bmm');
-		$bmm.find('tr.mh_tdpage').each(function(){
-			var cells = $(this).find("td");
-			effects.push(new BmEffect(
-				cells.eq(0).text().trim(),
-				cells.eq(2).text().trim(),
-				cells.eq(3).html().indexOf('bullet_red.jpg') >= 0, // marqueur du décumul
-				cells.eq(4).text().trim(),
-				cells.eq(5).text().trim()
-			));
-		});
+		var effects = $('#bmm').add($('#ibmm')).find('tr.mh_tdpage').map(function(){
+			return createBmEffect(this);
+		}).get();
 		const NB_TURNS_MAX = 20;
 		var lines = [];
 		var name, turn, i;
 		for (turn = 0; turn < NB_TURNS_MAX; turn++) {
 			// bm contient pour chaque nom (exemple : "Armure")
-			// le compte et les valeurs d'effets séparés par type ('Physique' ou 'Magie')
+			// le compte et les valeurs d'effets séparés par type ('Physique' ou 'Magique')
 			var	bm = {},
 				nb = 0;
 			for (i in effects) {
@@ -84,25 +100,21 @@
 				if (turn <= e.duration) {
 					nb++;
 					for (name in e.thEffects) {
-						if (bm[name]) {
-							bm[name].add(e.type, e.thEffects[name], e.decumul);
-						} else {
-							bm[name] = new CharBmEffect(e.type, e.thEffects[name]);
+						if (!bm[name]) {
+							bm[name] = new CharBmEffect(name);
 						}
+						bm[name].add(e.type, e.thEffects[name], e.decumul);
 					}
 				}
 			}
 			if (nb == 0) {
 				break;
 			}
-			var line = "";
+			var line = [];
 			for (name in bm) {
-				if (line.length > 0) {
-					line += " | ";
-				}
-				line += name + " : " + ((name == 'MM' || name == 'RM') ? bm[name].strMag() : bm[name].str());
+				line.push(name + " : " + bm[name].str());
 			}
-			lines.push(line);
+			lines.push(line.join(' | '));
 		}
 		if (lines.length > 0) {
 			var nbIdenticalLines = 0;
@@ -134,7 +146,7 @@
 				html += "</td></tr>";
 			}
 			html += "</table>";
-			$bmm.after(html);
+			$('#footer1').before(html);
 		}
 	}
 

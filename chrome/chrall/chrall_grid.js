@@ -115,7 +115,28 @@ chrall.gridLive = function(){
 		return {text: 'Voit le caché !'};
 	});
 	chrall.bubbleLive('img.projo', 'bub_monster', function(img){
-		return {text: chrall.bubbleProjoIcon(img.data('dist'))};
+		var damages = chrall.projoDamage(chrall.player().talents["Projectile Magique"].range - img.data('dist'));
+		var att = 3.5 * chrall.player().sight.diceNumber + chrall.player().attac.magicalBonus;
+		return {text: `<table>
+		<tr><td colspan='2' align='center'>Projectile Magique</td></tr>
+		<tr><td>Portée</td><td> : ${img.data('dist')}</td></tr>
+		<tr><td>Attaque moyenne</td><td> : ${att} (${chrall.player().sight.diceNumber} D6 ${chrall.itoa(chrall.player().attac.magicalBonus)})</td></tr>
+		<tr><td>Dégâts moyens</td><td> : ${damages.damage} / ${damages.damageCrit}</td></tr>
+		</table>`};
+	});
+	chrall.bubbleLive('img.mission', 'bub_monster', function (img) {
+		return {text: `<div class=bubbleTitle>Mission ${img.data('id')}</div>${chrall.player().missions[img.data('id')].step}`};
+	});
+	chrall.bubbleLive('img.potion', 'bub_monster', function(img){
+		var bv = Math.min(10, (1 - img.data('dist')) * 10 + chrall.player().totalSight);
+		var cppc = chrall.player().talents["Lancer de Potions"].mastering + chrall.player().concentration;
+		return {text: `<table>
+		<tr><td colspan='2' align='center'>Lancer de Potions</td></tr>
+		<tr><td>Jet de toucher</td><td> : ${cppc + bv} %</td></tr>
+		</table>`};
+	});
+	$('img.mission').click(function() {
+		document.location = `https://games.mountyhall.com/mountyhall/MH_Missions/Mission_Equipe.php?ai_idMission=${$(this).data('id')}`;
 	});
 
 	//> popup sur les trolls

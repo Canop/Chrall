@@ -1,27 +1,37 @@
 "use strict";
 (function(chrall){
 
-	chrall.addTroogleLinks = function(){
-		var $mission_lines = $("[name='ActionForm'] tr");
-		$mission_lines.each(function(){
-			var stepText = this.childNodes[1].textContent;
-			if (0 < stepText.indexOf("monstre")) {
-				addTroogleForMonster(this, stepText);
-				return;
+	chrall.saveMissions = function(){
+		var missions = $('.mh_titre3').text().match(/\d+/g);
+		// Remove obsolete missions
+		for (var id in chrall.player().missions){
+			if (!missions.includes(id)){
+				delete chrall.player().missions[id];
 			}
-			if (0 < stepText.indexOf("hampignon")) {
-				addTroogleForMushroom(this, stepText);
-				return;
-			}
-		});
+		}
+		chrall.updateTroll();
+	};
+
+	chrall.addLinksAndUpdateMissions = function(){
+		var missionId = $('div.titre2').text().match(/\d+/g);
+		// Remove obsolete step
+		delete chrall.player().missions[missionId];
+		var row = $('img[src*="orange"]').closest('tr');
+		var stepText = row.find('td').eq(1).text();
+		if (0 < stepText.indexOf("monstre")) {
+			addTroogleForMonster(row, stepText, missionId);
+		}
+		if (0 < stepText.indexOf("hampignon")) {
+			addTroogleForMushroom(row, stepText);
+		}
+		chrall.updateTroll();
 	};
 
 	// Add a link to Troogle for the chosen text, including the current troll's current position
 	function addTroogleLink(row, mainSearch){
 		var url = "http://troogle.iktomi.eu/entities/?entity_search[search]=" + mainSearch + playerPositionParameters();
 		var $link = $("<a/>", {'class': 'gogo', href: url, target: 'troogle', html: "Troogle"});
-		var actionNode = row.childNodes[2];
-		$(actionNode).append("  ").append($link);
+		row.find('td').eq(2).append('  ').append($link);
 	}
 
 	// Search parameters for the current troll's position
@@ -31,12 +41,12 @@
 				+ "&entity_search[position_z]=" + chrall.player().z;
 	}
 
-	function addTroogleForMonster(row, text){
-		var mainSearch = "@monstre ";
-		var raceExtract = /de la race des "(.*?)"/i;
+	function addTroogleForMonster(row, text, missionId){
+		var raceExtract = /de la race des '(.*?)'/i;
 		var match = raceExtract.exec(text);
+		var race = "";
 		if (match) {
-			mainSearch += match[1];
+			race = match[1];
 		}
 		var minLevelExtract = /niveau.* (\d+) au moins/i;
 		var minLevel = 0;
@@ -53,9 +63,13 @@
 			maxLevel = center + 1;
 		}
 
-		mainSearch = removeAccent(mainSearch);
-		mainSearch += " level:" + minLevel + ".." + maxLevel;
-		addTroogleLink(row, mainSearch);
+		addTroogleLink(row, removeAccent(`@monstre ${race} level:${minLevel}..${maxLevel}`));
+		chrall.player().missions[missionId] = {
+			race: race,
+			minLevel: minLevel,
+			maxLevel: maxLevel,
+			step: text
+		};
 	}
 
 	function removeAccent(text){

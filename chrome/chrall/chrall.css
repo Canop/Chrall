@@ -584,7 +584,11 @@ img.illus {
 	font-size: 10px;
 }
 
-img.vlc, img.projo {
+img.vlc, img.projo, img.mission, img.potion {
 	vertical-align: middle;
 	width: 20px;
+}
+
+img.mission:hover {
+	cursor: pointer;
 }

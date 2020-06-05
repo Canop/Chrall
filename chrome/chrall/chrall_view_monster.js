@@ -11,42 +11,7 @@
 		return seeing_hidden_regexp.test(name);
 	};
 
-	chrall.addMonsterInfo = function(){
-		if (!chrall.isOptionEnabled('view-display-monster-level', 'yes')) {
-			return;
-		}
-
-		var $monsterTitle = chrall.$tables().monstres.find("tr[class='mh_tdtitre']");
-		var $monsterRows = chrall.$tables().monstres.find("tr[class='mh_tdpage']");
-
-		var $nivalTitle = $("<td/>", {style: "width: 5em"});
-		$nivalTitle.append($("<b/>", {text: "Nival"}));
-		$($monsterTitle[0].children[1]).after($nivalTitle);
-
-		$monsterRows.each(function(index, row){
-			let monsterCompleteName = row.children[3];
-			let tokens = monsterCompleteName.textContent.split(/\[|\]/);
-			if (tokens.length<2) {
-				// maybe there's one cell less in this row ?
-				// Ceci arrive si l'utilisateur décoche "menu d'actions contextuelles"
-				// dans les options de vue
-				monsterCompleteName = row.children[2];
-				tokens = monsterCompleteName.textContent.split(/\[|\]/);
-				if (tokens.length<2) {
-					console.warn("Monster name parsing failed", row);
-					return;
-				}
-			}
-			var monsterName = tokens[0].trim();
-			var monsterAge = tokens[1].trim();
-			var addedText = computeLevel(monsterName, monsterAge);
-			var $nivalCell = $("<td/>", { text: addedText, class: "level"});
-			chrall.triggerBubble($nivalCell, chrall.getPxOnKill(addedText), "bub_monster");
-			$(row.children[1]).after($nivalCell);
-		});
-	};
-
-	function computeLevel(monsterName, monsterAge){
+	chrall.computeLevel = function(monsterName, monsterAge){
 		var level = 0;
 		var i, index, newMonsterName, monsterFamily, templateText, actualTemplate;
 
@@ -451,7 +416,7 @@
 		"Abishaii", "Ame-en-peine", "Aragnarok du Chaos", "Banshee", "Barghest", "Behemoth", "Beholder", "Bouj'Dla Placide", "Champi-Glouton",
 		"Chauve-Souris Géante", "Chevalier du Chaos", "Chimère", "Daemonite", "Diablotin", "Ectoplasme", "Effrit", "Elémentaire d'Air", "Erinyes",
 		"Essaim Cratérien", "Essaim Sanguinaire", "Fantôme", "Fumeux", "Fungus", "Gnu Sauvage", "Goule", "Gritche", "Hellrot", "Incube", "Liche",
-		"Marilith", "Molosse Satanique", "Momie", "Nécrochore", "Nécromant", "Ombre", "Palefroi Infernal", "Pititabeille", "Plante Carnivore",
+		"Marilith", "Molosse Satanique", "Momie", "Nécrochore", "Nécromant", "Ombre", "Palefroi Infernal", "Phoenix", "Pititabeille", "Plante Carnivore",
 		"Shai", "Sphinx", "Squelette", "Succube", "Tertre Errant", "Tubercule Tueur", "Vampire", "Zombi"].join('|'), "i");
 
 	chrall.testLevelComputation = function(){
@@ -3390,7 +3355,7 @@
 			var tokens = row[0].split(/\[|\]/);
 			var monsterName = tokens[0].trim();
 			var monsterAge = tokens[1].trim();
-			var level = computeLevel(monsterName, monsterAge);
+			var level = chrall.computeLevel(monsterName, monsterAge);
 			if (level != row[1]) {
 				console.log(row[0] + " : computed: " + level + " actual: " + row[1]);
 				invalid++;
